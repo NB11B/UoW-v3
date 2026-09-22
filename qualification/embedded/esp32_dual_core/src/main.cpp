@@ -16,6 +16,10 @@
 #include "esp_log.h"
 #endif
 
+#include "nvs.h"
+#include "nvs_flash.h"
+#include "esp_system.h"
+
 #include "uow_embedded.hpp"
 
 using namespace uow_embedded;
@@ -50,6 +54,12 @@ enum class ControlType : uint8_t {
     RUN,
     CLOCKS,
     FREEZE,
+    PERSIST,
+    REBOOT,
+    REBOOT_AFTER,
+    STALL,
+    TIMEOUT,
+    BURST,
 };
 
 struct ControlMsg {
@@ -75,6 +85,112 @@ SemaphoreHandle_t gSerialMutex = nullptr;
 TaskHandle_t gProposerTask = nullptr;
 TaskHandle_t gAuthorityTask = nullptr;
 uint32_t gRequestId = 1;
+bool gPersistenceEnabled = false;
+bool gRecoveredOnBoot = false;
+uint32_t gProposerStallMs = 0;
+uint32_t gProposalTimeoutMs = 5000;
+uint32_t gRebootAfterCommits = 0;
+
+constexpr uint32_t SNAPSHOT_MAGIC = 0x554f5731U;
+constexpr uint32_t SNAPSHOT_VERSION = 1U;
+
+struct PersistedSnapshot {
+    uint32_t magic{SNAPSHOT_MAGIC};
+    uint32_t version{SNAPSHOT_VERSION};
+    uint64_t r0{0};
+    uint64_t r1{0};
+    uint32_t pc{0};
+    uint64_t sequence{0};
+    uint8_t halted{0};
+    uint64_t evidence_steps{0};
+    uint8_t evidence_root[32]{};
+    uint64_t proposer_ticks{0};
+    uint64_t authority_ticks{0};
+    uint8_t checksum[32]{};
+};
+
+std::array<uint8_t, 32> snapshot_digest(const PersistedSnapshot& snap) {
+    std::string body =
+        std::to_string(snap.magic) + ";" +
+        std::to_string(snap.version) + ";" +
+        std::to_string(snap.r0) + ";" +
+        std::to_string(snap.r1) + ";" +
+        std::to_string(snap.pc) + ";" +
+        std::to_string(snap.sequence) + ";" +
+        std::to_string(static_cast<unsigned>(snap.halted)) + ";" +
+        std::to_string(snap.evidence_steps) + ";";
+    std::array<uint8_t, 32> root{};
+    memcpy(root.data(), snap.evidence_root, root.size());
+    body += hex_digest(root) + ";" +
+            std::to_string(snap.proposer_ticks) + ";" +
+            std::to_string(snap.authority_ticks);
+    return sha256(body);
+}
+
+bool init_persistence() {
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        nvs_flash_erase();
+        err = nvs_flash_init();
+    }
+    return err == ESP_OK;
+}
+
+bool checkpoint_save() {
+    if (!gPersistenceEnabled) return true;
+    PersistedSnapshot snap{};
+    snap.r0 = gAuthorityState.r0;
+    snap.r1 = gAuthorityState.r1;
+    snap.pc = gAuthorityState.pc;
+    snap.sequence = gAuthorityState.sequence;
+    snap.halted = gAuthorityState.halted ? 1 : 0;
+    snap.evidence_steps = static_cast<uint64_t>(gLedger.size());
+    const auto root = gLedger.root();
+    memcpy(snap.evidence_root, root.data(), root.size());
+    snap.proposer_ticks = gProposerClock.ticks;
+    snap.authority_ticks = gAuthorityClock.ticks;
+    const auto digest = snapshot_digest(snap);
+    memcpy(snap.checksum, digest.data(), digest.size());
+
+    nvs_handle_t handle;
+    if (nvs_open("uowq", NVS_READWRITE, &handle) != ESP_OK) return false;
+    const esp_err_t set_err = nvs_set_blob(handle, "snapshot", &snap, sizeof(snap));
+    const esp_err_t commit_err = set_err == ESP_OK ? nvs_commit(handle) : set_err;
+    nvs_close(handle);
+    return set_err == ESP_OK && commit_err == ESP_OK;
+}
+
+bool checkpoint_load() {
+    nvs_handle_t handle;
+    if (nvs_open("uowq", NVS_READONLY, &handle) != ESP_OK) return false;
+    PersistedSnapshot snap{};
+    size_t len = sizeof(snap);
+    const esp_err_t err = nvs_get_blob(handle, "snapshot", &snap, &len);
+    nvs_close(handle);
+    if (err != ESP_OK || len != sizeof(snap)) return false;
+    if (snap.magic != SNAPSHOT_MAGIC || snap.version != SNAPSHOT_VERSION) return false;
+    const auto expected = snapshot_digest(snap);
+    if (memcmp(expected.data(), snap.checksum, expected.size()) != 0) return false;
+
+    gAuthorityState = State{snap.r0, snap.r1, snap.pc, snap.sequence, snap.halted != 0};
+    std::array<uint8_t, 32> root{};
+    memcpy(root.data(), snap.evidence_root, root.size());
+    gLedger.restore_checkpoint(root, static_cast<size_t>(snap.evidence_steps));
+    gProposerClock.ticks = snap.proposer_ticks;
+    gAuthorityClock.ticks = snap.authority_ticks;
+    gPersistenceEnabled = true;
+    gRecoveredOnBoot = true;
+    return true;
+}
+
+void checkpoint_clear() {
+    nvs_handle_t handle;
+    if (nvs_open("uowq", NVS_READWRITE, &handle) == ESP_OK) {
+        nvs_erase_key(handle, "snapshot");
+        nvs_commit(handle);
+        nvs_close(handle);
+    }
+}
 
 std::string u64_string(uint64_t value) {
     char buf[24];
@@ -119,6 +235,13 @@ void emit_status(const char* event, uint32_t request_id, const char* note = null
     s += ",\"evidence_steps\":" + u64_string(static_cast<uint64_t>(gLedger.size()));
     s += ",\"proposal_clock\":" + u64_string(gProposerClock.read());
     s += ",\"authority_clock\":" + u64_string(gAuthorityClock.read());
+    s += ",\"persistence_enabled\":" + std::string(gPersistenceEnabled ? "true" : "false");
+    s += ",\"recovered_on_boot\":" + std::string(gRecoveredOnBoot ? "true" : "false");
+    s += ",\"proposer_stall_ms\":" + std::to_string(gProposerStallMs);
+    s += ",\"proposal_timeout_ms\":" + std::to_string(gProposalTimeoutMs);
+    s += ",\"work_queue_depth\":" + std::to_string(gWorkQ ? uxQueueMessagesWaiting(gWorkQ) : 0);
+    s += ",\"proposal_queue_depth\":" + std::to_string(gProposalQ ? uxQueueMessagesWaiting(gProposalQ) : 0);
+    s += ",\"control_queue_depth\":" + std::to_string(gControlQ ? uxQueueMessagesWaiting(gControlQ) : 0);
     if (note) s += ",\"note\":\"" + json_escape(note) + "\"";
     s += "}";
     emit_line(s);
@@ -144,6 +267,9 @@ void proposer_task(void*) {
     for (;;) {
         if (xQueueReceive(gWorkQ, &w, portMAX_DELAY) != pdTRUE) continue;
         gProposerClock.advance();
+        if (gProposerStallMs > 0) {
+            vTaskDelay(pdMS_TO_TICKS(gProposerStallMs));
+        }
         ProposalMsg msg{};
         msg.request_id = w.request_id;
         msg.proposal = propose(gProgram, w.snapshot, gProposerClock, w.fault);
@@ -164,9 +290,28 @@ bool authority_step(uint32_t request_id, FaultMode fault) {
     xQueueSend(gWorkQ, &w, portMAX_DELAY);
 
     ProposalMsg pm{};
-    if (xQueueReceive(gProposalQ, &pm, pdMS_TO_TICKS(5000)) != pdTRUE) {
-        emit_status("error", request_id, "proposal timeout");
-        return false;
+    const TickType_t started = xTaskGetTickCount();
+    const TickType_t timeout_ticks = pdMS_TO_TICKS(gProposalTimeoutMs);
+    bool matched = false;
+    while (!matched) {
+        const TickType_t now = xTaskGetTickCount();
+        const TickType_t elapsed = now - started;
+        if (elapsed >= timeout_ticks) {
+            emit_status("error", request_id, "proposal timeout");
+            return false;
+        }
+        const TickType_t remaining = timeout_ticks - elapsed;
+        if (xQueueReceive(gProposalQ, &pm, remaining) != pdTRUE) {
+            emit_status("error", request_id, "proposal timeout");
+            return false;
+        }
+        if (pm.request_id != request_id) {
+            emit_line("{\"event\":\"discarded_proposal\",\"request_id\":" +
+                      std::to_string(request_id) +
+                      ",\"stale_request_id\":" + std::to_string(pm.request_id) + "}");
+            continue;
+        }
+        matched = true;
     }
 
     gAuthorityClock.advance();
@@ -174,12 +319,26 @@ bool authority_step(uint32_t request_id, FaultMode fault) {
     const auto result = commit(gProgram, gAuthorityState, pm.proposal, gLedger);
     if (result.committed) {
         gAuthorityState = result.state;
+        if (gPersistenceEnabled && !checkpoint_save()) {
+            emit_status("fatal", request_id, "checkpoint save failed");
+            return false;
+        }
     } else if (hash_state(gAuthorityState) != before_hash) {
         emit_status("fatal", request_id, "rejected proposal mutated authority state");
         return false;
     }
 
     emit_decision(request_id, pm.proposal, result);
+
+    if (result.committed && gRebootAfterCommits > 0) {
+        --gRebootAfterCommits;
+        if (gRebootAfterCommits == 0) {
+            if (gPersistenceEnabled) checkpoint_save();
+            emit_status("rebooting", request_id, "scheduled reboot after commit");
+            vTaskDelay(pdMS_TO_TICKS(50));
+            esp_restart();
+        }
+    }
     return result.committed;
 }
 
@@ -222,12 +381,80 @@ void authority_task(void*) {
                 else if (c.which == 'A') gAuthorityClock.frozen = c.flag;
                 emit_status("freeze", c.request_id);
                 break;
+            case ControlType::PERSIST:
+                gPersistenceEnabled = c.flag;
+                if (gPersistenceEnabled) {
+                    if (!checkpoint_save()) {
+                        emit_status("error", c.request_id, "checkpoint save failed");
+                        break;
+                    }
+                } else {
+                    checkpoint_clear();
+                    gRecoveredOnBoot = false;
+                }
+                emit_status("persist", c.request_id);
+                break;
+            case ControlType::REBOOT:
+                if (gPersistenceEnabled) checkpoint_save();
+                emit_status("rebooting", c.request_id, "operator requested reboot");
+                vTaskDelay(pdMS_TO_TICKS(50));
+                esp_restart();
+                break;
+            case ControlType::REBOOT_AFTER:
+                gRebootAfterCommits = static_cast<uint32_t>(c.a);
+                emit_status("reboot_after", c.request_id);
+                break;
+            case ControlType::STALL:
+                gProposerStallMs = static_cast<uint32_t>(c.a);
+                emit_status("stall", c.request_id);
+                break;
+            case ControlType::TIMEOUT:
+                gProposalTimeoutMs = static_cast<uint32_t>(c.a);
+                emit_status("timeout", c.request_id);
+                break;
+            case ControlType::BURST: {
+                const uint32_t requested = static_cast<uint32_t>(std::min<uint64_t>(c.a, 64));
+                uint32_t enqueued = 0;
+                for (uint32_t i = 0; i < requested; ++i) {
+                    WorkItem w{};
+                    w.snapshot = gAuthorityState;
+                    w.fault = FaultMode::NONE;
+                    w.request_id = c.request_id;
+                    if (xQueueSend(gWorkQ, &w, 0) != pdTRUE) break;
+                    ++enqueued;
+                }
+                uint32_t committed = 0;
+                uint32_t rejected = 0;
+                for (uint32_t i = 0; i < enqueued; ++i) {
+                    ProposalMsg pm{};
+                    if (xQueueReceive(gProposalQ, &pm, pdMS_TO_TICKS(gProposalTimeoutMs)) != pdTRUE) break;
+                    gAuthorityClock.advance();
+                    const auto result = commit(gProgram, gAuthorityState, pm.proposal, gLedger);
+                    if (result.committed) {
+                        gAuthorityState = result.state;
+                        ++committed;
+                        if (gPersistenceEnabled) checkpoint_save();
+                    } else {
+                        ++rejected;
+                    }
+                    emit_decision(c.request_id, pm.proposal, result);
+                }
+                emit_line("{\"event\":\"burst_complete\",\"request_id\":" +
+                          std::to_string(c.request_id) +
+                          ",\"requested\":" + std::to_string(requested) +
+                          ",\"enqueued\":" + std::to_string(enqueued) +
+                          ",\"committed\":" + std::to_string(committed) +
+                          ",\"rejected\":" + std::to_string(rejected) +
+                          ",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) +
+                          "\",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
+                break;
+            }
         }
     }
 }
 
 void print_help() {
-    emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\"]}");
+    emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\",\"PERSIST <0|1>\",\"REBOOT\",\"REBOOT_AFTER <commits>\",\"STALL <ms>\",\"TIMEOUT <ms>\",\"BURST <count>\"]}");
 }
 
 bool parse_u64(const std::string& s, uint64_t& out) {
@@ -290,6 +517,31 @@ void handle_command(std::string line) {
         }
         c.which = target[0];
         c.flag = parts[2] == "1";
+    } else if (parts[0] == "PERSIST" && parts.size() >= 2) {
+        c.type = ControlType::PERSIST;
+        c.flag = parts[1] == "1";
+    } else if (parts[0] == "REBOOT") {
+        c.type = ControlType::REBOOT;
+    } else if (parts[0] == "REBOOT_AFTER" && parts.size() >= 2) {
+        c.type = ControlType::REBOOT_AFTER;
+        if (!parse_u64(parts[1], c.a)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad REBOOT_AFTER argument\"}"); return;
+        }
+    } else if (parts[0] == "STALL" && parts.size() >= 2) {
+        c.type = ControlType::STALL;
+        if (!parse_u64(parts[1], c.a)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad STALL argument\"}"); return;
+        }
+    } else if (parts[0] == "TIMEOUT" && parts.size() >= 2) {
+        c.type = ControlType::TIMEOUT;
+        if (!parse_u64(parts[1], c.a) || c.a == 0) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad TIMEOUT argument\"}"); return;
+        }
+    } else if (parts[0] == "BURST" && parts.size() >= 2) {
+        c.type = ControlType::BURST;
+        if (!parse_u64(parts[1], c.a) || c.a == 0) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad BURST argument\"}"); return;
+        }
     } else {
         emit_line("{\"event\":\"error\",\"reason\":\"unknown command; send HELP\"}");
         return;
@@ -314,6 +566,9 @@ void setup() {
     usb_serial_jtag_driver_install(&d_cfg);
     vTaskDelay(pdMS_TO_TICKS(750));
 #endif
+
+    init_persistence();
+    checkpoint_load();
 
     gSerialMutex = xSemaphoreCreateMutex();
     gWorkQ = xQueueCreate(4, sizeof(WorkItem));

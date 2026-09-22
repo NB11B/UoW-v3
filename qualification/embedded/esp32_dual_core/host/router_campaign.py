@@ -15,7 +15,7 @@ Evaluates 8 Capability Gates:
   G2: Adaptation convergence (rejection falls <= 5% within 40 jobs)
   G3: Heterogeneous execution (CPU, GPU, NPU all execute >= 100 jobs)
   G4: Latency regret reduction (adaptive router beats static baselines)
-  G5: Hardware verification & Merkle ledger continuity
+  G5: independently verified SHA-256 evidence-chain continuity
   G6: Transactional canary safety (no degraded model promoted)
   G7: Retention / Fast reacquisition in Phase 6 within 25 jobs
 """
@@ -890,19 +890,19 @@ class RouterCampaignRunner:
                         self.engine.set_gpu_contention(False)
                         self.engine.set_npu_contention(False)
                     elif phase_idx == 2:  # P3: GPU Contention
-                        print("  [Simulator] Activating heavy background GPU GEMM contention loop...")
+                        print("  [Environment] Activating heavy background GPU GEMM contention loop...")
                         self.engine.set_gpu_contention(True)
                         self.engine.set_npu_contention(False)
                     elif phase_idx == 3:  # P4: NPU Contention
-                        print("  [Simulator] Deactivating GPU contention, activating background NPU contention loop...")
+                        print("  [Environment] Deactivating GPU contention, activating background NPU contention loop...")
                         self.engine.set_gpu_contention(False)
                         self.engine.set_npu_contention(True)
                     elif phase_idx == 4:  # P5: Device Outage (GPU Offline)
-                        print("  [Simulator] Deactivating NPU contention, instructing Authority: GPU OFFLINE...")
+                        print("  [Environment] Deactivating NPU contention, instructing Authority: GPU OFFLINE...")
                         self.engine.set_npu_contention(False)
                         snap = self.authority.set_online(DEVICE_GPU, False)
                     elif phase_idx == 5:  # P6: Nominal Restoration
-                        print("  [Simulator] Restoring GPU ONLINE and clearing all contention (testing retention)...")
+                        print("  [Environment] Restoring GPU ONLINE and clearing all contention (testing retention)...")
                         self.engine.set_gpu_contention(False)
                         self.engine.set_npu_contention(False)
                         snap = self.authority.set_online(DEVICE_GPU, True)
@@ -1029,7 +1029,7 @@ class RouterCampaignRunner:
                 avg_regret = sum(r.regret_us for r in recent_50) / max(1, len(recent_50))
                 print(f"Job {job_id:4d}/{self.total_jobs} | Phase: {phase_name[:16]:16s} | "
                       f"Rej(last50): {rej_cnt:2d}/50 | AvgLat: {avg_lat:6.1f}us | "
-                      f"AvgRegret: {avg_regret:6.1f}us | Merkle: {self.prev_evidence_root[:10]}...")
+                      f"AvgRegret: {avg_regret:6.1f}us | Evidence: {self.prev_evidence_root[:10]}...")
 
         # Drain all remaining in-flight tasks
         if executor is not None:

@@ -534,6 +534,7 @@ class ExternalAuthorityClient:
             initial_r1=initial_r1,
             max_steps=max_steps,
         )
+        evidence, qualified = self._qualification_evidence(backend)
         return CapabilityReport(
             schema_version="uow-esp32-external-capability-v0.1",
             backend=backend.name,
@@ -546,6 +547,10 @@ class ExternalAuthorityClient:
             external_evidence_root=external.final_evidence_root,
             state_parity=external.final_state_hash == baseline["state_hash"],
             evidence_parity=external.final_evidence_root == baseline["evidence_root"],
+            evidence_level=evidence.level.label,
+            qualified=qualified,
+            actual_components=dict(evidence.actual_components),
+            substitutions=dict(evidence.substitutions),
         )
 
     def qualify(
@@ -629,6 +634,7 @@ class ExternalAuthorityClient:
                 ):
                     no_mutation = False
 
+        evidence, qualified = self._qualification_evidence(backend)
         return ExternalQualificationReport(
             schema_version="uow-esp32-external-proposer-v0.1",
             backend=backend.name,
@@ -644,6 +650,10 @@ class ExternalAuthorityClient:
             baseline_evidence_root=str(baseline["evidence_root"]),
             external_state_hash=external.final_state_hash,
             external_evidence_root=external.final_evidence_root,
+            evidence_level=evidence.level.label,
+            qualified=qualified,
+            actual_components=dict(evidence.actual_components),
+            substitutions=dict(evidence.substitutions),
         )
 
 
@@ -715,13 +725,21 @@ def main() -> int:
                 initial_r1=args.r1,
                 max_steps=args.max_steps,
             )
-            print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+            print(json.dumps(
+                asdict(report) | {"observed_pass": report.observed_pass, "passed": report.passed},
+                indent=2,
+                sort_keys=True,
+            ))
             if args.report:
                 report.save(args.report)
             return 0 if report.passed else 2
 
         report = client.qualify(backend, backend_trials=args.backend_trials)
-        print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+        print(json.dumps(
+                asdict(report) | {"observed_pass": report.observed_pass, "passed": report.passed},
+                indent=2,
+                sort_keys=True,
+            ))
         if args.report:
             report.save(args.report)
         return 0 if report.passed else 2

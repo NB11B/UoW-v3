@@ -145,6 +145,8 @@ def test_stochastic_campaign_with_adversarial_injection_mock():
         summary = runner.run()
 
         assert summary["wrong_authoritative_commits"] == 0
-        assert summary["gates"]["G0_zero_wrong_commits"]["passed"] is True
-        assert summary["gates"]["G8_adversarial_rollback"]["passed"] is True
+        g0 = summary["gates"]["G0_zero_wrong_commits"]
+        g8 = summary["gates"]["G8_adversarial_rollback"]
+        assert g0["observed_pass"] is True and g0["qualified"] is False and g0["passed"] is False
+        assert g8["observed_pass"] is True and g8["qualified"] is False and g8["passed"] is False
         assert len(summary["golden_benchmarks"]) >= 1

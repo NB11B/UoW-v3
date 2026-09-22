@@ -119,3 +119,12 @@ When qualification semantics or wire protocols change materially, a new physical
 `qualification/evidence.py` provides the common evidence contract used by qualification harnesses.
 
 New qualification code should use that contract rather than inventing independent pass/fail semantics.
+
+
+## Knowledgebase alignment
+
+This repository's executable policy implements the architecture-level evidence-substrate semantics maintained in `NB11B/Hybrid-systems-architecture-`.
+
+The code-level names `SIMULATED`, `PORTABLE`, and `PHYSICAL` are an executable evidence profile. In the broader architecture, `PHYSICAL` includes real operational boundaries such as human approval paths, live business systems, external services, and distributed nodes—not only electronic hardware.
+
+Claim semantics belong in the knowledgebase. Concrete claim enforcement and evidence generation belong in executable repositories.

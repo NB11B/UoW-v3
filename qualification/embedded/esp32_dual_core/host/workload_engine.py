@@ -22,6 +22,12 @@ import threading
 import time
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import EvidenceContext, EvidenceLevel
+
 # Ensure UTF-8 output encoding on Windows
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -70,6 +76,8 @@ class WorkloadReceipt:
     output_digest: str
     timestamp_ns: int
     error: str | None = None
+    actual_backend: str = ""
+    substituted: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -78,7 +86,13 @@ class WorkloadReceipt:
 class WorkloadEngine:
     """Manages multi-device execution, contention generation, and receipt telemetry."""
 
-    def __init__(self, cache_dir: Path | None = None):
+    def __init__(
+        self,
+        cache_dir: Path | None = None,
+        *,
+        require_gpu: bool = False,
+        require_npu: bool = False,
+    ):
         self.cache_dir = cache_dir or (Path(__file__).resolve().parent / ".workload_cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
@@ -91,18 +105,28 @@ class WorkloadEngine:
             self.net_gpu = None
             self.gpu_device_name = "None"
 
-        # Initialize OpenVINO core
+        if require_gpu and not self.has_gpu:
+            raise RuntimeError("physical qualification requires an actual CUDA GPU; none is available")
+
+        # Initialize OpenVINO core. Never silently substitute CPU for a claimed NPU.
         self.ov_core = ov.Core()
         available = self.ov_core.available_devices
-        self.npu_target = "NPU" if "NPU" in available else "CPU"
-        try:
-            self.npu_device_name = self.ov_core.get_property(self.npu_target, "FULL_DEVICE_NAME")
-        except Exception:
-            self.npu_device_name = self.npu_target
+        self.has_npu = "NPU" in available
+        if require_npu and not self.has_npu:
+            raise RuntimeError("physical qualification requires an actual OpenVINO NPU device; none is available")
+        self.npu_target = "NPU" if self.has_npu else None
+        if self.has_npu:
+            try:
+                self.npu_device_name = self.ov_core.get_property("NPU", "FULL_DEVICE_NAME")
+            except Exception:
+                self.npu_device_name = "NPU"
+        else:
+            self.npu_device_name = "UNAVAILABLE"
 
-        # Compile static models for supported batch sizes on NPU
+        # Compile static models only when a real NPU exists
         self.compiled_npu_models: dict[int, Any] = {}
-        self._prepare_npu_models()
+        if self.has_npu:
+            self._prepare_npu_models()
 
         # Contention state and background threads
         self.gpu_contention_active = False
@@ -130,7 +154,29 @@ class WorkloadEngine:
                     output_names=["output"],
                 )
             model = self.ov_core.read_model(str(onnx_path))
-            self.compiled_npu_models[b] = self.ov_core.compile_model(model, self.npu_target)
+            self.compiled_npu_models[b] = self.ov_core.compile_model(model, "NPU")
+
+    def evidence_context(self) -> EvidenceContext:
+        actual = {"cpu": "PyTorch CPU"}
+        substitutions: dict[str, str] = {}
+        if self.has_gpu:
+            actual["gpu"] = f"CUDA:{self.gpu_device_name}"
+        else:
+            substitutions["gpu"] = "unavailable"
+        if self.has_npu:
+            actual["npu"] = f"OpenVINO NPU:{self.npu_device_name}"
+        else:
+            substitutions["npu"] = "unavailable"
+        level = EvidenceLevel.PHYSICAL if (self.has_gpu and self.has_npu) else EvidenceLevel.PORTABLE
+        return EvidenceContext(level, "WorkloadEngine", actual, substitutions)
+
+    def available_actual_devices(self) -> list[int]:
+        devices = [DEVICE_CPU]
+        if self.has_gpu:
+            devices.append(DEVICE_GPU)
+        if self.has_npu:
+            devices.append(DEVICE_NPU)
+        return devices
 
     def _warmup(self) -> None:
         """Warm up execution paths across CPU, GPU, and NPU for all supported batch sizes."""
@@ -175,6 +221,8 @@ class WorkloadEngine:
 
     def set_npu_contention(self, enabled: bool) -> None:
         """Toggle background NPU inference contention loop."""
+        if not self.has_npu:
+            return
         if enabled and not self.npu_contention_active:
             self.npu_contention_active = True
 
@@ -252,6 +300,8 @@ class WorkloadEngine:
                 out_np = out.cpu().numpy()
 
             elif target_device == DEVICE_NPU:
+                if not self.has_npu:
+                    raise RuntimeError("NPU requested but no actual OpenVINO NPU device is available")
                 device_name = f"NPU: {self.npu_device_name}"
                 compiled = self.compiled_npu_models.get(b)
                 if compiled is None:
@@ -277,6 +327,12 @@ class WorkloadEngine:
                 latency_us=int(latency_us),
                 output_digest=digest,
                 timestamp_ns=t_start_ns,
+                actual_backend=(
+                    "CPU" if target_device == DEVICE_CPU
+                    else "CUDA" if target_device == DEVICE_GPU
+                    else "OPENVINO_NPU"
+                ),
+                substituted=False,
             )
 
         except Exception as exc:
@@ -291,6 +347,8 @@ class WorkloadEngine:
                 output_digest="0" * 64,
                 timestamp_ns=t_start_ns,
                 error=str(exc),
+                actual_backend="UNAVAILABLE",
+                substituted=False,
             )
 
     def benchmark_oracle(self, job_id: int, batch_size: int, active_devices: list[int]) -> dict[int, int]:

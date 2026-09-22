@@ -385,8 +385,11 @@ def test_gate_u14_9_objective_performance_dominance():
 # Gate U14.10: NPU Proposer Swappability
 # ===========================================================================
 
-class QuantizedEdgeNPUProposer(BaseProposer):
-    """Custom simulated quantized edge NPU proposer demonstrating zero-modification pluggability."""
+class SimulatedEdgePolicyProposer(BaseProposer):
+    """Portable simulated edge-policy proposer demonstrating zero-modification pluggability.
+
+    This is not NPU evidence. It exercises only the BaseProposer integration seam.
+    """
 
     def model_id(self) -> str:
         return "QuantizedEdgeNPU_INT8_v4"
@@ -423,11 +426,14 @@ class QuantizedEdgeNPUProposer(BaseProposer):
         )
 
 
-def test_gate_u14_10_npu_proposer_swappability():
-    """Custom NPU proposer plugs seamlessly into ProposerOrchestrationEngine without modifying kernel."""
+def test_gate_u14_10_proposer_swappability_portable():
+    """A simulated edge-policy proposer plugs into the engine without modifying the kernel.
+
+    Portable interface compatibility is the claim here; no hardware accelerator is exercised.
+    """
     registry, init_state = create_u14_falsification_dag()
 
-    custom_proposer = QuantizedEdgeNPUProposer()
+    custom_proposer = SimulatedEdgePolicyProposer()
     engine = ProposerOrchestrationEngine(proposer=custom_proposer)
 
     out, seq, telemetry = engine.run_dag(registry, init_state)
@@ -439,8 +445,40 @@ def test_gate_u14_10_npu_proposer_swappability():
     assert telemetry[0].proposal.metadata.get("accelerator") == "EdgeNPU"
 
 
-def test_tfwr_runtime_adapter_integration():
-    """Optional TFWR hardware adapter connects to BaseProposer and executes through deterministic Judge."""
+
+
+def test_tfwr_runtime_adapter_external_client_marks_actual_backend():
+    """Only an attached external client may produce TFWR/NPU-target telemetry."""
+    from integrations.tfwr import TFWRRuntimeAdapter
+
+    calls = []
+
+    def external_client(**kwargs):
+        calls.append(kwargs)
+        candidates = tuple(kwargs["candidates"])
+        return {
+            "candidate_schedule": candidates[:1],
+            "predicted_metrics": {"latency_us": 321.0},
+            "metadata": {"hardware_executed": True, "device_name": "test-npu"},
+        }
+
+    registry, init_state = create_u14_falsification_dag()
+    adapter = TFWRRuntimeAdapter(hardware_client=external_client)
+    ready = OrchestrationState(init_state).ready_frontier()
+    proposal = adapter.propose(ready, registry, init_state)
+
+    assert calls
+    assert proposal.metadata.get("backend") == "TFWR"
+    assert proposal.metadata.get("device_target") == "NPU_ACCELERATED"
+    assert proposal.metadata.get("hardware_executed") is True
+    assert proposal.metadata.get("device_name") == "test-npu"
+
+def test_tfwr_runtime_adapter_portable_fallback_integration():
+    """TFWR adapter portable fallback connects to BaseProposer and remains non-authoritative.
+
+    With no external client attached this must identify itself as a reference fallback,
+    not as TFWR/NPU hardware execution.
+    """
     from integrations.tfwr import TFWRAdapterProposer, TFWRRuntimeAdapter
 
     assert TFWRAdapterProposer is TFWRRuntimeAdapter
@@ -454,6 +492,8 @@ def test_tfwr_runtime_adapter_integration():
     assert out.status == "HALTED"
     assert len(OrchestrationState(out).completed) == 8
     assert seq.ledger.verify_integrity()
-    assert telemetry[0].proposal.metadata.get("backend") == "TFWR"
-    assert telemetry[0].proposal.metadata.get("device_target") == "NPU_ACCELERATED"
+    assert telemetry[0].proposal.metadata.get("backend") == "REFERENCE_HEURISTIC"
+    assert telemetry[0].proposal.metadata.get("device_target") == "PORTABLE_REFERENCE"
+    assert telemetry[0].proposal.metadata.get("substituted_for") == "NPU_ACCELERATED"
+    assert telemetry[0].proposal.metadata.get("hardware_executed") is False
 

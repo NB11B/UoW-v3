@@ -7,11 +7,24 @@ from .policies import (
     PriorityDeadlineSchedulingPolicy,
     filter_feasible_candidates,
 )
-from .requirement import ResourceRequirement
+from .requirement import (
+    ResourceBoundTask,
+    ResourceRequirement,
+    make_resource_domain_task,
+    verify_requirement_binding,
+)
+from .runtime import (
+    ResourceAwareCompletionMaterializer,
+    ResourceAwareSchedulerMaterializer,
+    run_resource_orchestration,
+)
 from .state import (
     DEFAULT_HOST_CAPACITIES,
+    ORCH_RESOURCES_KEY,
     ResourceLease,
     ResourceState,
+    get_authoritative_resource_state,
+    set_authoritative_resource_state,
 )
 
 __all__ = [
@@ -20,9 +33,18 @@ __all__ = [
     "DEFAULT_HOST_CAPACITIES",
     "FIFOSchedulingPolicy",
     "GreedyCapacitySchedulingPolicy",
+    "ORCH_RESOURCES_KEY",
     "PriorityDeadlineSchedulingPolicy",
+    "ResourceAwareCompletionMaterializer",
+    "ResourceAwareSchedulerMaterializer",
+    "ResourceBoundTask",
     "ResourceLease",
     "ResourceRequirement",
     "ResourceState",
     "filter_feasible_candidates",
+    "get_authoritative_resource_state",
+    "make_resource_domain_task",
+    "run_resource_orchestration",
+    "set_authoritative_resource_state",
+    "verify_requirement_binding",
 ]

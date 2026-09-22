@@ -1,8 +1,14 @@
-﻿"""Pluggable resource-aware certified scheduling policies.
+﻿"""Pluggable resource-aware scheduling heuristics.
 
 Enforces Legality Dominance:
-Policy choices may only select subsets of ready candidates that satisfy
-available resource capacities.
+Policy choices propose candidate schedules, but only candidates that satisfy
+available resource capacities (leased and consumable) may be selected.
+
+These policies are greedy heuristics:
+- FIFOSchedulingPolicy: preserves arrival order
+- GreedyCapacitySchedulingPolicy: greedy heuristic favoring smaller footprints
+- PriorityDeadlineSchedulingPolicy: heuristic prioritizing urgent deadlines and priorities with anti-starvation aging
+- CostEnergySchedulingPolicy: heuristic prioritizing lower cost and energy consumption
 """
 from __future__ import annotations
 
@@ -28,7 +34,7 @@ class BaseSchedulingPolicy(ABC):
         get_requirement: Callable[[str], ResourceRequirement],
         resources: ResourceState,
     ) -> List[str]:
-        """Selects a subset of ready_candidates to dispatch under resource state R_t.
+        """Proposes a subset of ready_candidates to dispatch under resource state R_t.
 
         INVARIANT (Legality Dominance):
         Selected subset S must satisfy sum_{u in S} rho(u) <= R_t^avail.
@@ -55,7 +61,7 @@ def filter_feasible_candidates(
 
 
 class FIFOSchedulingPolicy(BaseSchedulingPolicy):
-    """First-In, First-Out policy respecting available resource capacities."""
+    """First-In, First-Out proposal heuristic respecting available resource capacities."""
 
     def name(self) -> str:
         return "FIFO"
@@ -70,10 +76,10 @@ class FIFOSchedulingPolicy(BaseSchedulingPolicy):
 
 
 class GreedyCapacitySchedulingPolicy(BaseSchedulingPolicy):
-    """Maximizes task throughput by prioritizing tasks with smallest resource footprints."""
+    """Greedy packing heuristic prioritizing tasks with smaller resource footprints."""
 
     def name(self) -> str:
-        return "GreedyCapacity"
+        return "GreedyCapacityPacking"
 
     def select_schedule(
         self,
@@ -90,13 +96,13 @@ class GreedyCapacitySchedulingPolicy(BaseSchedulingPolicy):
 
 
 class PriorityDeadlineSchedulingPolicy(BaseSchedulingPolicy):
-    """Prioritizes tasks with earlier deadlines and higher priorities, with anti-starvation aging."""
+    """Priority and deadline ordering heuristic with dynamic anti-starvation aging."""
 
     def __init__(self, starvation_threshold: int = 3) -> None:
         self.starvation_threshold = starvation_threshold
 
     def name(self) -> str:
-        return f"PriorityDeadline(starvation_threshold={self.starvation_threshold})"
+        return f"PriorityDeadlineAging(starvation_threshold={self.starvation_threshold})"
 
     def select_schedule(
         self,
@@ -121,10 +127,10 @@ class PriorityDeadlineSchedulingPolicy(BaseSchedulingPolicy):
 
 
 class CostEnergySchedulingPolicy(BaseSchedulingPolicy):
-    """Minimizes financial cost and energy usage."""
+    """Heuristic preference prioritizing lower financial cost and consumable energy consumption."""
 
     def name(self) -> str:
-        return "CostEnergy"
+        return "CostEnergyPreference"
 
     def select_schedule(
         self,

@@ -80,22 +80,30 @@ other probabilistic proposal systems.
 ### 2. `uow.orchestration` (Self-Hosted DAG Control)
 - **Typed Orchestration State**:
   - `OrchestrationState` wraps `WorldState`, managing pending queue $Q_t$, active set $A_t$, DAG dependencies $D_t$, and completed set $C_t$ as typed views over immutable state attributes.
-- **Native Scheduler UoW**:
-  - Pure native scheduling step under `(RULES, PROCESSES)`.
-  - Dynamically dispatches ready tasks, detects clean terminal completion, and detects cyclic/missing prerequisite deadlocks.
+- **Certified Scheduler Materialization**:
+  - `SchedulerMaterializer` lowers the ready frontier into an ordinary native UoW under `(RULES, PROCESSES)`.
+  - `CompletionMaterializer` lowers task completion into `complete::<task>` under `(PROCESSES, RULES)`.
+  - Zero privileged state mutations: all scheduling and completion transitions are verified by materialization certification and core `PROPOSE -> CERTIFY -> COMMIT`.
+  - Deadlock is cleanly represented as generic `status="HALTED"` plus `__termination__="DEADLOCKED"`.
 
-### 3. `uow.resources` (Resource Governance & Legality Dominance)
-- **Typed Resource Envelope**:
-  - `ResourceRequirement` declares multi-dimensional capacity needs: CPU cores, RAM units, GPU slots, NPU slots, energy budgets, deadlines, and priorities.
-- **Authoritative Capacity State & Leases**:
-  - `ResourceState` tracks available vs allocated capacity and active `ResourceLease` records.
-  - Atomic certified lease acquisition upon dispatch and lease release upon commit/abort. Strict rejection on overallocation.
+### 3. `uow.resources` (Authoritative Resource Governance & Legality Dominance)
+- **Authoritative Hash-Bound State**:
+  - Resource state $R_t \subset S_t$ is stored canonically in `state.attributes["__resources__"]`, directly altering $H(S_t)$ upon any lease, capacity, or counter change.
+- **Leased Capacities vs. Consumable Budgets**:
+  - $R^{lease} = \{\text{CPU, RAM, GPU, NPU slots}\}$ are temporarily allocated and return upon certified task completion.
+  - $R^{consume} = \{\text{energy budget, financial cost}\}$ are permanently debited against host capacity upon dispatch.
+- **Work-Bound Requirements**:
+  - `ResourceBoundTask` binds the cryptographic requirement hash directly into `Header.parent_context`.
+  - Direct invariant `verify_requirement_binding(task)` prevents forged registry requirements from being scheduled.
+- **Certified Lease Lifecycle**:
+  - `ResourceAwareSchedulerMaterializer` lowers dispatch into an ordinary UoW atomically updating $(Q, A, R) \to (Q', A', R')$.
+  - `ResourceAwareCompletionMaterializer` lowers completion into an ordinary UoW releasing the task's exact lease.
 - **Legality Dominance**:
-  - Policy choice $\pi(O_t, R_t)$ may select among valid execution plans, but may *never* violate host resource bounds $\sum_{u \in S} \rho(u) \le R_t^{\text{avail}}$.
-- **Starvation Freedom**:
+  - Policy choice $\pi(O_t, R_t)$ proposes candidates, but independent deterministic certification recomputes $\sum_{u \in \Pi} \rho(u) \le R_t^{\text{avail}}$ before materialization.
+- **Anti-Starvation Aging**:
   - Dynamic aging boosts starved tasks to urgency rank 0 after a configurable threshold of scheduling rounds.
-- **Swappable Scheduling Policies**:
-  - `FIFOSchedulingPolicy`, `GreedyCapacitySchedulingPolicy`, `PriorityDeadlineSchedulingPolicy`, and `CostEnergySchedulingPolicy` can be swapped interchangeably without altering correctness or certification machinery.
+- **Swappable Heuristics**:
+  - Pluggable proposal heuristics (`FIFOSchedulingPolicy`, `GreedyCapacitySchedulingPolicy`, `PriorityDeadlineSchedulingPolicy`, `CostEnergySchedulingPolicy`) can be swapped interchangeably without altering correctness, certification, or replay determinism.
 
 Dependency rule remains strictly invariant:
 ```

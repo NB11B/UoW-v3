@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 import hashlib
-from typing import Any, Mapping, Optional
+from typing import Any, Mapping, Optional, Set
 
 from ..state import canonical_json
 
@@ -20,6 +20,27 @@ class EffectStatus(str, Enum):
     COMPENSATING = "COMPENSATING"
     COMPENSATED = "COMPENSATED"
     COMPENSATION_FAILED = "COMPENSATION_FAILED"
+
+
+LEGAL_EFFECT_TRANSITIONS: Mapping[EffectStatus, Set[EffectStatus]] = {
+    EffectStatus.INTENDED: {EffectStatus.COMMITTED_INTENT},
+    EffectStatus.COMMITTED_INTENT: {
+        EffectStatus.PENDING_EXTERNAL,
+        EffectStatus.COMMITTED_RESULT,
+        EffectStatus.COMPENSATING,
+    },
+    EffectStatus.PENDING_EXTERNAL: {
+        EffectStatus.COMMITTED_RESULT,
+        EffectStatus.COMPENSATING,
+    },
+    EffectStatus.COMMITTED_RESULT: {EffectStatus.COMPENSATING},
+    EffectStatus.COMPENSATING: {
+        EffectStatus.COMPENSATED,
+        EffectStatus.COMPENSATION_FAILED,
+    },
+    EffectStatus.COMPENSATED: set(),
+    EffectStatus.COMPENSATION_FAILED: set(),
+}
 
 
 @dataclass(frozen=True)
@@ -133,6 +154,7 @@ class EffectDescriptor:
     observation: Optional[Mapping[str, Any]] = None
     receipt: Optional[EffectReceipt] = None
     compensation: Optional[CompensationSpec] = None
+    compensation_effect_id: Optional[str] = None
     pre_state_hash: str = ""
 
     def to_dict(self) -> dict:
@@ -146,6 +168,7 @@ class EffectDescriptor:
             "observation": dict(self.observation) if self.observation is not None else None,
             "receipt": self.receipt.to_dict() if self.receipt is not None else None,
             "compensation": self.compensation.to_dict() if self.compensation is not None else None,
+            "compensation_effect_id": self.compensation_effect_id,
             "pre_state_hash": self.pre_state_hash,
         }
 
@@ -163,6 +186,7 @@ class EffectDescriptor:
             observation=dict(data["observation"]) if data.get("observation") is not None else None,
             receipt=EffectReceipt.from_dict(receipt_data) if receipt_data is not None else None,
             compensation=CompensationSpec.from_dict(comp_data) if comp_data is not None else None,
+            compensation_effect_id=str(data["compensation_effect_id"]) if data.get("compensation_effect_id") is not None else None,
             pre_state_hash=str(data.get("pre_state_hash", "")),
         )
 

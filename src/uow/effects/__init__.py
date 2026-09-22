@@ -1,9 +1,13 @@
-﻿"""Public API for Pass 4: External Effects & Sagas."""
+"""Public API for Pass 4: External Effects & Sagas."""
 from .certification import (
+    HMACReceiptAuthenticator,
+    PrefixReceiptAuthenticator,
+    ReceiptAuthenticator,
     verify_effect_intent_binding,
     verify_effect_receipt_binding,
 )
 from .descriptor import (
+    LEGAL_EFFECT_TRANSITIONS,
     CompensationSpec,
     EffectDescriptor,
     EffectReceipt,
@@ -21,9 +25,13 @@ from .runner import (
 )
 from .saga import (
     ORCH_COMPENSATION_FAILED_KEY,
+    ORCH_SAGAS_KEY,
     SagaCompensationError,
     SagaCoordinator,
+    SagaRecord,
+    SagaStatus,
     SagaStep,
+    get_sagas_map,
 )
 
 __all__ = [
@@ -34,15 +42,23 @@ __all__ = [
     "EffectRunner",
     "EffectStatus",
     "ExternalClientProtocol",
+    "HMACReceiptAuthenticator",
+    "LEGAL_EFFECT_TRANSITIONS",
     "MockExternalClient",
     "ORCH_COMPENSATION_FAILED_KEY",
     "ORCH_EFFECTS_KEY",
+    "ORCH_SAGAS_KEY",
+    "PrefixReceiptAuthenticator",
+    "ReceiptAuthenticator",
     "SagaCompensationError",
     "SagaCoordinator",
+    "SagaRecord",
+    "SagaStatus",
     "SagaStep",
     "compute_idempotency_key",
     "create_effect_descriptor",
     "get_effects_map",
+    "get_sagas_map",
     "verify_effect_intent_binding",
     "verify_effect_receipt_binding",
 ]

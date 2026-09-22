@@ -172,6 +172,7 @@ class SuccessorKind(str, Enum):
     STATIC = "STATIC"
     FROM_ATTRIBUTE = "FROM_ATTRIBUTE"
     HALT = "HALT"
+    PRESERVE = "PRESERVE"
 
 
 @dataclass(frozen=True)
@@ -179,6 +180,7 @@ class Successor:
     """First-class successor reference.
 
     FROM_ATTRIBUTE replaces the research runtime's magic '@DISPATCHED' sentinel.
+    PRESERVE preserves enclosing orchestration cursor and status without halting.
     """
 
     kind: SuccessorKind
@@ -196,9 +198,15 @@ class Successor:
     def halt(cls) -> "Successor":
         return cls(SuccessorKind.HALT, None)
 
+    @classmethod
+    def preserve(cls) -> "Successor":
+        return cls(SuccessorKind.PRESERVE, None)
+
     def resolve(self, state: WorldState) -> Optional[str]:
         if self.kind is SuccessorKind.HALT:
             return None
+        if self.kind is SuccessorKind.PRESERVE:
+            return state.cursor
         if not self.value:
             raise ValueError(f"Successor {self.kind.value} requires a value.")
         if self.kind is SuccessorKind.STATIC:
@@ -262,7 +270,10 @@ class UoW:
         if not self.Gamma.routes:
             raise ValueError("Contract must contain at least one route.")
         for route in self.Gamma.routes:
-            if route.successor.kind is not SuccessorKind.HALT and not route.successor.value:
+            if (
+                route.successor.kind not in (SuccessorKind.HALT, SuccessorKind.PRESERVE)
+                and not route.successor.value
+            ):
                 raise ValueError("Non-halting successor must declare a target.")
 
 

@@ -162,6 +162,8 @@ def propose(uow: UoW, state: WorldState) -> Proposal:
     if halted:
         status = mutated.status if mutated.status != "RUNNING" else "HALTED"
         proposed_state = mutated.with_status(status).with_cursor(None)
+    elif route.successor.kind is SuccessorKind.PRESERVE:
+        proposed_state = mutated.with_status(state.status).with_cursor(state.cursor)
     else:
         proposed_state = mutated.with_cursor(successor)
 

@@ -23,6 +23,12 @@ import sys
 import time
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import EvidenceContext, EvidenceLevel
+
 # Ensure UTF-8 output encoding on Windows
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -129,11 +135,12 @@ class DualReplayBuffer:
 class TransactionalCanaryDeployer:
     """Coordinates GPU training, Intel NPU compilation, regression validation, and canary promotion."""
 
-    def __init__(self, cache_dir: Path, target_npu_device: str = "NPU"):
+    def __init__(self, cache_dir: Path, target_npu_device: str | None = None):
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
-        self.target_npu = target_npu_device
         self.ov_core = ov.Core()
+        self.target_npu = target_npu_device if target_npu_device is not None else "CPU"
+        self.using_npu_substitute = self.target_npu != "NPU"
 
         self.current_onnx_path = self.cache_dir / "active_router.onnx"
         self.candidate_onnx_path = self.cache_dir / "candidate_router.onnx"
@@ -267,11 +274,19 @@ class TransactionalCanaryDeployer:
 class AdaptiveRoutingPolicy:
     """Full closed-loop routing policy manager combining GPU training and NPU inference."""
 
-    def __init__(self, cache_dir: Path | None = None):
+    def __init__(
+        self,
+        cache_dir: Path | None = None,
+        *,
+        require_gpu: bool = False,
+        require_npu: bool = False,
+    ):
         self.cache_dir = cache_dir or (Path(__file__).resolve().parent / ".router_cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
         self.has_gpu = torch.cuda.is_available()
+        if require_gpu and not self.has_gpu:
+            raise RuntimeError("physical qualification requires GPU-backed policy training")
         self.device = torch.device("cuda" if self.has_gpu else "cpu")
 
         # PyTorch model for GPU training
@@ -281,10 +296,15 @@ class AdaptiveRoutingPolicy:
         # Dual replay buffer
         self.buffer = DualReplayBuffer(recent_capacity=500, retention_capacity=200)
 
-        # Intel NPU canary deployer
+        # Intel NPU canary deployer. CPU fallback is permitted only as an
+        # explicitly portable substitute and can never satisfy a physical NPU claim.
         core = ov.Core()
-        target_npu = "NPU" if "NPU" in core.available_devices else "CPU"
+        has_npu = "NPU" in core.available_devices
+        if require_npu and not has_npu:
+            raise RuntimeError("physical qualification requires Intel/OpenVINO NPU policy inference")
+        target_npu = "NPU" if has_npu else None
         self.deployer = TransactionalCanaryDeployer(self.cache_dir, target_npu_device=target_npu)
+        self.has_npu = has_npu
 
         # Cold-start bootstrap: compile initial model
         self.deployer.compile_candidate(self.net)
@@ -293,6 +313,20 @@ class AdaptiveRoutingPolicy:
         # Telemetry tracking
         self.training_steps: int = 0
         self.last_observed_latencies: dict[int, float] = {0: 3000.0, 1: 1000.0, 2: 800.0}
+
+    def evidence_context(self) -> EvidenceContext:
+        actual: dict[str, str] = {}
+        substitutions: dict[str, str] = {}
+        if self.has_gpu:
+            actual["gpu_training"] = torch.cuda.get_device_name(0)
+        else:
+            substitutions["gpu_training"] = "CPU training substitute"
+        if self.has_npu and not self.deployer.using_npu_substitute:
+            actual["npu_policy"] = "OpenVINO NPU"
+        else:
+            substitutions["npu_policy"] = "OpenVINO CPU policy substitute"
+        level = EvidenceLevel.PHYSICAL if (self.has_gpu and self.has_npu) else EvidenceLevel.PORTABLE
+        return EvidenceContext(level, "AdaptiveRoutingPolicy", actual, substitutions)
 
     def featurize(
         self,

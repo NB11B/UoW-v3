@@ -41,6 +41,7 @@ from external_proposer import (
     Snapshot,
     state_hash_fields,
 )
+from qualification.evidence import EvidenceContext, EvidenceLevel
 from interrogator import Interrogator, SerialTransport
 
 
@@ -90,7 +91,12 @@ def export_and_compile_npu(
 
     core = ov.Core()
     available = core.available_devices
-    target = device if device in available else "CPU"
+    if device not in available:
+        raise RuntimeError(
+            f"requested physical inference device {device!r} is unavailable; "
+            "fallback is forbidden for a substrate-specific qualification"
+        )
+    target = device
     try:
         dev_name = core.get_property(target, "FULL_DEVICE_NAME")
     except Exception:
@@ -142,6 +148,49 @@ def propose_with_compiled_model(
         sequence=seq,
         halted=next_halt,
         selected_pc=next_pc,
+    )
+
+
+def expected_transition(snapshot: Snapshot) -> tuple[int, int, int, bool]:
+    """Return the exact candidate delta used only to construct a proposal for certification."""
+    if snapshot.pc == 0:
+        return (
+            -1 if snapshot.r0 > 0 else 0,
+            0,
+            1 if snapshot.r0 > 0 else 2,
+            False,
+        )
+    if snapshot.pc == 1:
+        return (0, 1, 0, False)
+    if snapshot.pc == 2:
+        return (0, 0, 2, True)
+    raise ValueError(f"unsupported pc {snapshot.pc}")
+
+
+def certify_training_transition(
+    client: ExternalAuthorityClient,
+    snapshot: Snapshot,
+) -> tuple[list[float], list[float]]:
+    """Submit the exact transition to ESP32 and only return it if physically certified."""
+    dr0, dr1, next_pc, next_halt = expected_transition(snapshot)
+    candidate = Candidate.build(
+        pre_state_hash=snapshot.state_hash,
+        r0=snapshot.r0 + dr0,
+        r1=snapshot.r1 + dr1,
+        pc=next_pc,
+        sequence=snapshot.sequence + 1,
+        halted=next_halt,
+        selected_pc=next_pc,
+    )
+    decision = client.submit(candidate).terminal
+    if not decision.get("committed", False):
+        raise RuntimeError(
+            f"ESP32 rejected training transition at "
+            f"(r0={snapshot.r0}, r1={snapshot.r1}, pc={snapshot.pc})"
+        )
+    return (
+        [float(snapshot.r0), float(snapshot.r1), float(snapshot.pc)],
+        [float(dr0), float(dr1), float(next_pc), float(next_halt)],
     )
 
 
@@ -243,13 +292,16 @@ def main() -> int:
     parser.add_argument("--report", default="artifacts/npu-adaptation.json", help="Report file")
     args = parser.parse_args()
 
-    # Hardware detection
-    gpu_available = torch.cuda.is_available()
-    gpu_device = torch.cuda.get_device_name(0) if gpu_available else "CPU"
-    train_device = torch.device("cuda" if gpu_available else "cpu")
+    # Physical qualification must fail closed when named hardware is absent.
+    if not torch.cuda.is_available():
+        raise RuntimeError("physical adaptation qualification requires an actual CUDA GPU")
+    gpu_device = torch.cuda.get_device_name(0)
+    train_device = torch.device("cuda")
 
     core = ov.Core()
-    npu_name = core.get_property("NPU", "FULL_DEVICE_NAME") if "NPU" in core.available_devices else "CPU"
+    if "NPU" not in core.available_devices:
+        raise RuntimeError("physical adaptation qualification requires an actual OpenVINO NPU")
+    npu_name = core.get_property("NPU", "FULL_DEVICE_NAME")
 
     print("=" * 70)
     print("HETEROGENEOUS CLOSED-LOOP ADAPTATION")
@@ -305,87 +357,52 @@ def main() -> int:
     training_data_X = []
     training_data_Y = []
 
-    # Query ESP32 authority to certify true transitions across the distribution
+    # Query ESP32 authority to physically certify every training transition.
+    # For pc=1 and pc=2 we first drive the real device into that reachable state.
     for i in range(args.trials):
         r0 = (i * 17 + 3) % 61
         r1 = (i * 97 + 11) % 1000
-        for pc in (0, 1, 2):
-            client.iq.reset(r0, r1)
-            # Force pc on ESP32 if pc != 0 by taking initial steps if needed or querying authority
-            # We explore the transition for (r0, r1, pc)
-            snap = Snapshot(
-                r0=r0,
-                r1=r1,
-                pc=pc,
-                sequence=0,
-                halted=(pc == 2),
-                state_hash=state_hash_fields(r0, r1, pc, 0, (pc == 2)),
-                evidence_root="0" * 64,
-            )
-            # Active exploration certified by the ESP32
-            # Since the authority logic on ESP32 is fixed, client verifies candidates
-            if pc == 0:
-                exp_dr0 = -1 if r0 > 0 else 0
-                exp_dr1 = 0
-                exp_pc = 1 if r0 > 0 else 2
-                exp_halt = False
-            elif pc == 1:
-                exp_dr0 = 0
-                exp_dr1 = 1
-                exp_pc = 0
-                exp_halt = False
-            else:
-                exp_dr0 = 0
-                exp_dr1 = 0
-                exp_pc = 2
-                exp_halt = True
 
-            # Verify candidate against ESP32 to demonstrate authority confirmation
-            client.iq.reset(r0, r1)
-            before = client.snapshot()
-            if pc == 0:
-                # Test direct submit to ESP32
-                test_cand = Candidate.build(
-                    pre_state_hash=before.state_hash,
-                    r0=r0 + exp_dr0,
-                    r1=r1 + exp_dr1,
-                    pc=exp_pc,
-                    sequence=1,
-                    halted=exp_halt,
-                    selected_pc=exp_pc,
-                )
-                dec = client.submit(test_cand).terminal
-                assert dec["committed"], f"Authority rejected valid candidate at {r0}, {r1}"
+        # pc=0: reset lands directly at the desired state.
+        client.iq.reset(r0, r1)
+        x, y = certify_training_transition(client, client.snapshot())
+        training_data_X.append(x)
+        training_data_Y.append(y)
 
-            training_data_X.append([float(r0), float(r1), float(pc)])
-            training_data_Y.append([float(exp_dr0), float(exp_dr1), float(exp_pc), float(exp_halt)])
+        # pc=1: reset with at least one unit in r0, then one certified internal step.
+        client.iq.reset(max(1, r0), r1)
+        step_to_pc1 = client.iq.step("NONE").terminal
+        if not step_to_pc1.get("committed", False):
+            raise RuntimeError("failed to reach pc=1 through ESP32 authority")
+        pc1_snapshot = client.snapshot()
+        if pc1_snapshot.pc != 1:
+            raise RuntimeError(f"expected reachable pc=1, got pc={pc1_snapshot.pc}")
+        x, y = certify_training_transition(client, pc1_snapshot)
+        training_data_X.append(x)
+        training_data_Y.append(y)
 
-    # Also include the canonical transfer trajectory to prevent catastrophic forgetting
-    r0_c, r1_c, pc_c = 50, 25, 0
+        # pc=2: reset with r0=0, then one certified internal step takes pc=0 -> pc=2.
+        client.iq.reset(0, r1)
+        step_to_pc2 = client.iq.step("NONE").terminal
+        if not step_to_pc2.get("committed", False):
+            raise RuntimeError("failed to reach pc=2 through ESP32 authority")
+        pc2_snapshot = client.snapshot()
+        if pc2_snapshot.pc != 2:
+            raise RuntimeError(f"expected reachable pc=2, got pc={pc2_snapshot.pc}")
+        x, y = certify_training_transition(client, pc2_snapshot)
+        training_data_X.append(x)
+        training_data_Y.append(y)
+
+    # Canonical retention trajectory: every one of the 102 transitions is also
+    # collected only after the ESP32 certifies it.
+    client.iq.reset(50, 25)
     while True:
-        if pc_c == 0:
-            c_dr0 = -1 if r0_c > 0 else 0
-            c_dr1 = 0
-            c_npc = 1 if r0_c > 0 else 2
-            c_halt = False
-        elif pc_c == 1:
-            c_dr0 = 0
-            c_dr1 = 1
-            c_npc = 0
-            c_halt = False
-        else:
-            c_dr0 = 0
-            c_dr1 = 0
-            c_npc = 2
-            c_halt = True
-
-        training_data_X.append([float(r0_c), float(r1_c), float(pc_c)])
-        training_data_Y.append([float(c_dr0), float(c_dr1), float(c_npc), float(c_halt)])
-        r0_c += c_dr0
-        r1_c += c_dr1
-        pc_c = c_npc
-        if c_halt:
+        snap = client.snapshot()
+        if snap.halted:
             break
+        x, y = certify_training_transition(client, snap)
+        training_data_X.append(x)
+        training_data_Y.append(y)
 
     print(f"Collected {len(training_data_X)} authoritative transitions certified by ESP32.")
 
@@ -453,6 +470,14 @@ def main() -> int:
     class AdaptedNPUBackend:
         name = "npu-adapted"
 
+        def evidence_context(self) -> EvidenceContext:
+            return EvidenceContext(
+                EvidenceLevel.PHYSICAL,
+                "AdaptedNPUBackend",
+                {"proposer": adapted_desc, "npu_proposer": adapted_desc},
+                {},
+            )
+
         def propose(self, snap: Snapshot) -> Candidate:
             return propose_with_compiled_model(compiled_adapted_npu, snap)
 
@@ -492,11 +517,12 @@ def main() -> int:
             "terminal_state_hash": canonical_report.external_state_hash,
             "terminal_evidence_root": canonical_report.external_evidence_root,
         },
+        "evidence_level": canonical_report.evidence_level,
+        "qualified": canonical_report.qualified,
         "passed": (
-            r1_eval["rejection_rate"] == 0.0
+            canonical_report.passed
+            and r1_eval["rejection_rate"] == 0.0
             and (r0_eval["wrong_authoritative_commits"] + r1_eval["wrong_authoritative_commits"] == 0)
-            and canonical_report.state_parity
-            and canonical_report.evidence_parity
         ),
     }
 

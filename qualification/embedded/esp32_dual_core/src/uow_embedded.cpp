@@ -157,6 +157,23 @@ std::string hex_digest(const std::array<uint8_t, 32>& d) {
     return out;
 }
 
+bool parse_hex_digest(const std::string& text, std::array<uint8_t, 32>& out) {
+    if (text.size() != 64) return false;
+    auto nibble = [](char c) -> int {
+        if (c >= '0' && c <= '9') return c - '0';
+        if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
+        if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
+        return -1;
+    };
+    for (size_t i = 0; i < 32; ++i) {
+        const int hi = nibble(text[i * 2]);
+        const int lo = nibble(text[i * 2 + 1]);
+        if (hi < 0 || lo < 0) return false;
+        out[i] = static_cast<uint8_t>((hi << 4) | lo);
+    }
+    return true;
+}
+
 std::array<uint8_t, 32> hash_state(const State& s) {
     return sha256(state_canonical(s));
 }

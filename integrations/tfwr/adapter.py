@@ -23,7 +23,8 @@ class TFWRRuntimeAdapter(BaseProposer):
 
     Accepts an optional hardware dispatch callable or inference client. If no external
     hardware client is attached, delegates proposal generation to the reference
-    heuristic scheduling algorithm while labeling telemetry with hardware target tags.
+    heuristic scheduling algorithm and explicitly labels the proposal as a portable
+    reference fallback. A fallback is never labeled as hardware/NPU execution.
     """
 
     def __init__(
@@ -77,11 +78,14 @@ class TFWRRuntimeAdapter(BaseProposer):
                 metadata=meta,
             )
 
-        # Reference heuristic simulation path
+        # Portable reference fallback. This path validates adapter/kernel
+        # compatibility only; it is not TFWR/NPU hardware evidence.
         base_proposal = self._fallback_heuristic.propose(ready_candidates, graph, state)
         meta = dict(base_proposal.metadata)
-        meta["device_target"] = self._device_target
-        meta["backend"] = "TFWR"
+        meta["device_target"] = "PORTABLE_REFERENCE"
+        meta["backend"] = "REFERENCE_HEURISTIC"
+        meta["substituted_for"] = self._device_target
+        meta["hardware_executed"] = False
         return ModelProposal(
             model_id=self.model_id(),
             model_version=self.model_version(),

@@ -1,0 +1,14 @@
+{
+  "backend": "reference",
+  "baseline_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "baseline_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "commits": 102,
+  "evidence_parity": true,
+  "external_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "external_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "halted": true,
+  "passed": true,
+  "rejections": 0,
+  "schema_version": "uow-esp32-external-capability-v0.1",
+  "state_parity": true
+}

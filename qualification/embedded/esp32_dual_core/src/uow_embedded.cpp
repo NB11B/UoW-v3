@@ -366,4 +366,35 @@ FaultMode parse_fault_mode(const std::string& text) {
     return FaultMode::NONE;
 }
 
+std::string sched_canonical_state(const SchedState& s) {
+    std::ostringstream o;
+    o << "epoch=" << s.epoch
+      << ";res_seq=" << s.reservation_seq
+      << ";comp_seq=" << s.completion_seq
+      << ";online=" << static_cast<uint32_t>(s.online_mask)
+      << ";inflight=" << s.inflight[0] << "," << s.inflight[1] << "," << s.inflight[2]
+      << ";max=" << s.max_inflight[0] << "," << s.max_inflight[1] << "," << s.max_inflight[2]
+      << ";tokens=" << s.resource_tokens;
+    return o.str();
+}
+
+std::array<uint8_t, 32> hash_sched_state(const SchedState& s) {
+    return sha256(sched_canonical_state(s));
+}
+
+const char* sched_reject_reason_string(SchedRejectReason reason) {
+    switch (reason) {
+        case SchedRejectReason::NONE: return "NONE";
+        case SchedRejectReason::STALE_STATE_HASH: return "STALE_STATE_HASH";
+        case SchedRejectReason::INVALID_TARGET: return "INVALID_TARGET";
+        case SchedRejectReason::DEVICE_OFFLINE: return "DEVICE_OFFLINE";
+        case SchedRejectReason::DEVICE_CAPACITY_EXCEEDED: return "DEVICE_CAPACITY_EXCEEDED";
+        case SchedRejectReason::INSUFFICIENT_TOKENS: return "INSUFFICIENT_TOKENS";
+        case SchedRejectReason::INVALID_RESERVATION: return "INVALID_RESERVATION";
+        case SchedRejectReason::ALREADY_COMPLETED: return "ALREADY_COMPLETED";
+        case SchedRejectReason::PROPOSAL_HASH_MISMATCH: return "PROPOSAL_HASH_MISMATCH";
+    }
+    return "UNKNOWN";
+}
+
 } // namespace uow_embedded

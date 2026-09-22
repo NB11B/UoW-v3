@@ -37,9 +37,9 @@ def validate_occ(
     """Purely validates a transaction against current authoritative state using OCC.
 
     Checks:
-    1. Read/Write Hazard (stale read): Did another transaction commit a write to any key in tx.read_set?
-    2. Write/Write Hazard (lost update): Did another transaction commit a write to any key in tx.write_set?
-    3. Hidden Coupling Hazard: Did another transaction modify an invariant-coupled key?
+    1. Hidden State Coupling check: Did another transaction modify an invariant-coupled key?
+    2. Read/Write Hazard (stale read): Did another transaction commit a write to any key in tx.read_set?
+    3. Write/Write Hazard (lost update): Did another transaction commit a write to any key in tx.write_set?
 
     Returns: (is_valid, hazard_type, details)
     """
@@ -51,7 +51,28 @@ def validate_occ(
     if not isinstance(couplings_map, Mapping):
         couplings_map = {}
 
-    # 1. Read/Write Hazard check (stale read)
+    # 1. Hidden State Coupling check
+    for w_key in tx.write_set:
+        coupled_keys = couplings_map.get(w_key, ())
+        if isinstance(coupled_keys, (list, tuple)):
+            for c_key in coupled_keys:
+                c_key_str = str(c_key)
+                curr_c_ver = int(versions_map.get(c_key_str, 0))
+                # Check snapshot version recorded in coupled_versions, falling back to read_versions
+                base_c_ver = int(
+                    tx.coupled_versions.get(
+                        c_key_str,
+                        tx.read_versions.get(c_key_str, tx.write_versions.get(c_key_str, 0)),
+                    )
+                )
+                if curr_c_ver > base_c_ver:
+                    return (
+                        False,
+                        HazardType.HIDDEN_COUPLING_HAZARD,
+                        f"Coupled invariant violated: '{w_key}' is coupled to '{c_key_str}' which evolved concurrently",
+                    )
+
+    # 2. Read/Write Hazard check (stale read)
     for key in tx.read_set:
         curr_ver = int(versions_map.get(key, 0))
         base_ver = int(tx.read_versions.get(key, 0))
@@ -62,7 +83,7 @@ def validate_occ(
                 f"State key '{key}' was modified by a concurrent commit (base ver {base_ver} < current ver {curr_ver})",
             )
 
-    # 2. Write/Write Hazard check (lost update)
+    # 3. Write/Write Hazard check (lost update)
     for key in tx.write_set:
         curr_ver = int(versions_map.get(key, 0))
         base_ver = int(tx.write_versions.get(key, 0))
@@ -72,21 +93,6 @@ def validate_occ(
                 HazardType.WRITE_WRITE_HAZARD,
                 f"Concurrent update conflict on target '{key}' (base ver {base_ver} < current ver {curr_ver})",
             )
-
-    # 3. Hidden State Coupling check
-    for w_key in tx.write_set:
-        coupled_keys = couplings_map.get(w_key, ())
-        if isinstance(coupled_keys, (list, tuple)):
-            for c_key in coupled_keys:
-                c_key_str = str(c_key)
-                curr_c_ver = int(versions_map.get(c_key_str, 0))
-                base_c_ver = int(tx.read_versions.get(c_key_str, tx.write_versions.get(c_key_str, 0)))
-                if curr_c_ver > base_c_ver:
-                    return (
-                        False,
-                        HazardType.HIDDEN_COUPLING_HAZARD,
-                        f"Coupled invariant violated: '{w_key}' is coupled to '{c_key_str}' which evolved concurrently",
-                    )
 
     return True, None, None
 

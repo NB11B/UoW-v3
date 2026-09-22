@@ -1,4 +1,4 @@
-﻿"""Canonical UoW public API."""
+"""Canonical UoW public API."""
 
 from .contracts import (
     Boundary,
@@ -69,6 +69,7 @@ from .transactions import (
     create_transaction_descriptor,
     infer_footprint,
     validate_occ,
+    verify_commit_bindings,
 )
 from .resources import (
     BaseSchedulingPolicy,
@@ -175,5 +176,6 @@ __all__ = [
     "uow_fingerprint",
     "validate_graph",
     "validate_occ",
+    "verify_commit_bindings",
     "verify_requirement_binding",
 ]

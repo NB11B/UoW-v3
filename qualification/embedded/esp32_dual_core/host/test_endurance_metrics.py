@@ -106,7 +106,9 @@ def test_gate_g12_evaluation_in_mock_runner(tmp_path: Path):
     # Portable CI runs on arbitrary hosted CPU hardware and cannot be required
     # to satisfy the physical campaign's absolute latency/regret envelope.
     # The physical G12 pass/fail is sealed in the recorded hardware artifacts.
-    assert isinstance(g12["passed"], bool)
+    assert g12["qualified"] is False
+    assert g12["passed"] is False
+    assert isinstance(g12["observed_pass"], bool)
     assert math.isfinite(float(g12["p50_regret_us"]))
     assert math.isfinite(float(g12["p99_regret_us"]))
     assert math.isfinite(float(g12["variance_ratio"]))

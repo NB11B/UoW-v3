@@ -218,6 +218,18 @@ class ExternalProposerTests(unittest.TestCase):
         self.assertEqual(report.final_state_hash, baseline["state_hash"])
         self.assertEqual(report.final_evidence_root, baseline["evidence_root"])
 
+    def test_capability_gate_reference_passes(self):
+        report = self.make_client().capability(ReferenceBackend())
+        self.assertTrue(report.passed)
+        self.assertTrue(report.halted)
+        self.assertTrue(report.state_parity)
+        self.assertTrue(report.evidence_parity)
+
+    def test_capability_gate_bad_backend_fails_without_wrong_commit(self):
+        report = self.make_client().capability(AlwaysBadBackend())
+        self.assertFalse(report.passed)
+        self.assertGreater(report.rejections, 0)
+
     def test_full_external_qualification_reference_backend(self):
         report = self.make_client().qualify(ReferenceBackend(), backend_trials=10)
         self.assertTrue(report.passed)

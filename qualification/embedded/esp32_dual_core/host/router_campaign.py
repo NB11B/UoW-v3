@@ -266,7 +266,8 @@ class MockAuthorityClient:
                 res_id = self.reservation_seq
                 self.reservations[res_id] = {"job_id": job_id, "target": target, "tokens": tokens}
                 post_hash = self._state_hash()
-                ev_str = f"{self.evidence_root}:RESERVE:{res_id}:{job_id}:{target}:{tokens}:{post_hash}"
+                prev_evidence_root = self.evidence_root
+                ev_str = f"{prev_evidence_root}:RESERVE:{res_id}:{job_id}:{target}:{tokens}:{post_hash}"
                 self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
                 return {
                     "event": "sched_decision",
@@ -276,6 +277,7 @@ class MockAuthorityClient:
                     "job_id": job_id,
                     "target": target,
                     "post_state_hash": post_hash,
+                    "prev_evidence_root": prev_evidence_root,
                     "evidence_root": self.evidence_root,
                 }
             else:
@@ -328,7 +330,8 @@ class MockAuthorityClient:
             self.completion_seq += 1
             del self.reservations[reservation_id]
             post_hash = self._state_hash()
-            ev_str = f"{self.evidence_root}:RECEIPT:{reservation_id}:{status}:{latency_us}:{output_digest}:{post_hash}"
+            prev_evidence_root = self.evidence_root
+            ev_str = f"{prev_evidence_root}:RECEIPT:{reservation_id}:{status}:{latency_us}:{output_digest}:{post_hash}"
             self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
 
             return {
@@ -339,6 +342,7 @@ class MockAuthorityClient:
                 "completion_seq": self.completion_seq,
                 "latency_us": latency_us,
                 "post_state_hash": post_hash,
+                "prev_evidence_root": prev_evidence_root,
                 "evidence_root": self.evidence_root,
             }
 

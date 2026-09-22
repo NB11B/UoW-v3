@@ -93,7 +93,10 @@ def test_async_router_campaign_mock_run():
         assert summary["wrong_authoritative_commits"] == 0
         assert summary["total_jobs"] == 40
         assert summary["records_count"] == 40
-        assert summary["gates"]["G0_zero_wrong_commits"]["passed"] is True
-        assert summary["gates"]["G8_adversarial_rollback"]["passed"] is True
-        assert summary["gates"]["G11_occ_concurrency"]["passed"] is True
-        assert summary["gates"]["G11_occ_concurrency"]["concurrency"] == 4
+        g0 = summary["gates"]["G0_zero_wrong_commits"]
+        g8 = summary["gates"]["G8_adversarial_rollback"]
+        g11 = summary["gates"]["G11_occ_concurrency"]
+        assert g0["observed_pass"] is True and g0["qualified"] is False and g0["passed"] is False
+        assert g8["observed_pass"] is True and g8["qualified"] is False and g8["passed"] is False
+        assert g11["observed_pass"] is True and g11["qualified"] is False and g11["passed"] is False
+        assert g11["concurrency"] == 4

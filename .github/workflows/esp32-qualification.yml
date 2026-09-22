@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - "qualification/esp32-dual-core-v0"
+      - "qualification/continuous-adaptation-v1"
     paths:
       - "qualification/embedded/esp32_dual_core/**"
       - ".github/workflows/esp32-qualification.yml"

@@ -38,7 +38,8 @@ jobs:
             test_router_campaign.py \
             test_stochastic_environment.py \
             test_concurrency_pipeline.py \
-            test_endurance_metrics.py
+            test_endurance_metrics.py \
+            test_evidence_substrate.py
 
   portable-authority:
     runs-on: ubuntu-latest

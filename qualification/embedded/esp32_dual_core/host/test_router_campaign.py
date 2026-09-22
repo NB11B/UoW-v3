@@ -104,5 +104,8 @@ def test_mock_router_campaign_short_run():
         )
         summary = runner.run()
         assert summary["wrong_authoritative_commits"] == 0
-        assert summary["gates"]["G0_zero_wrong_commits"]["passed"] is True
+        g0 = summary["gates"]["G0_zero_wrong_commits"]
+        assert g0["observed_pass"] is True
+        assert g0["qualified"] is False
+        assert g0["passed"] is False
         assert (artifacts_path / "router_campaign_report.json").exists()

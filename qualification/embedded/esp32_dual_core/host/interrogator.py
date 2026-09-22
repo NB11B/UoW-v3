@@ -13,8 +13,15 @@ import json
 from pathlib import Path
 import random
 import statistics
+import sys
 import time
 from typing import Any, Protocol
+
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import EvidenceContext, EvidenceLevel
 
 
 class LineTransport(Protocol):
@@ -66,6 +73,17 @@ class SerialTransport:
             if raw:
                 return raw.decode("utf-8", errors="replace").strip()
         return None
+
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PHYSICAL,
+            "SerialTransport",
+            {
+                "authority": f"ESP32-S3 endpoint:{self.port}",
+                "transport": f"serial:{self.port}@{self.baud}",
+            },
+            {},
+        )
 
     def close(self) -> None:
         if self._ser is not None:
@@ -446,6 +464,29 @@ class Interrogator:
         self.transport = transport
         self.echo = echo
         self.transcript = Transcript()
+        evidence_fn = getattr(transport, "evidence_context", None)
+        if callable(evidence_fn):
+            self.evidence_context = evidence_fn()
+        else:
+            self.evidence_context = EvidenceContext(
+                EvidenceLevel.SIMULATED,
+                type(transport).__name__,
+                {},
+                {
+                    "authority": "non-serial test transport",
+                    "transport": type(transport).__name__,
+                },
+            )
+
+    def _report_evidence_kwargs(self) -> dict[str, Any]:
+        qualified = self.evidence_context.satisfies(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "transport"),
+        )
+        return {
+            "evidence_level": self.evidence_context.level.label,
+            "qualified": qualified,
+        }
 
     def _read_json(self, timeout: float) -> dict[str, Any]:
         deadline = time.monotonic() + timeout

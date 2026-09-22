@@ -278,6 +278,39 @@ class ExternalRunReport:
 
 
 @dataclass(frozen=True)
+class CapabilityReport:
+    schema_version: str
+    backend: str
+    halted: bool
+    commits: int
+    rejections: int
+    baseline_state_hash: str
+    baseline_evidence_root: str
+    external_state_hash: str
+    external_evidence_root: str
+    state_parity: bool
+    evidence_parity: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.halted
+            and self.rejections == 0
+            and self.state_parity
+            and self.evidence_parity
+        )
+
+    def save(self, path: str | Path) -> None:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(
+            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True)
+            + "\n",
+            encoding="utf-8",
+        )
+
+
+@dataclass(frozen=True)
 class ExternalQualificationReport:
     schema_version: str
     backend: str
@@ -385,6 +418,38 @@ class ExternalAuthorityClient:
             final_state_hash=snap.state_hash,
             final_evidence_root=snap.evidence_root,
             halted=snap.halted,
+        )
+
+    def capability(
+        self,
+        backend: ProposerBackend,
+        *,
+        initial_r0: int = 50,
+        initial_r1: int = 25,
+        max_steps: int = 10000,
+    ) -> CapabilityReport:
+        self.iq.persist(False)
+        self.iq.reset(initial_r0, initial_r1)
+        baseline = self.iq.run(max_steps).terminal
+
+        external = self.run_external(
+            backend,
+            initial_r0=initial_r0,
+            initial_r1=initial_r1,
+            max_steps=max_steps,
+        )
+        return CapabilityReport(
+            schema_version="uow-esp32-external-capability-v0.1",
+            backend=backend.name,
+            halted=external.halted,
+            commits=external.commits,
+            rejections=external.rejections,
+            baseline_state_hash=str(baseline["state_hash"]),
+            baseline_evidence_root=str(baseline["evidence_root"]),
+            external_state_hash=external.final_state_hash,
+            external_evidence_root=external.final_evidence_root,
+            state_parity=external.final_state_hash == baseline["state_hash"],
+            evidence_parity=external.final_evidence_root == baseline["evidence_root"],
         )
 
     def qualify(
@@ -518,6 +583,13 @@ def main() -> int:
     runp.add_argument("--r1", type=int, default=25)
     runp.add_argument("--max-steps", type=int, default=10000)
 
+    capability = sub.add_parser("capability")
+    add_backend_args(capability)
+    capability.add_argument("--r0", type=int, default=50)
+    capability.add_argument("--r1", type=int, default=25)
+    capability.add_argument("--max-steps", type=int, default=10000)
+    capability.add_argument("--report")
+
     qual = sub.add_parser("qualify")
     add_backend_args(qual)
     qual.add_argument("--backend-trials", type=int, default=50)
@@ -539,6 +611,18 @@ def main() -> int:
             )
             print(json.dumps(asdict(report), indent=2, sort_keys=True))
             return 0 if report.halted else 2
+
+        if args.cmd == "capability":
+            report = client.capability(
+                backend,
+                initial_r0=args.r0,
+                initial_r1=args.r1,
+                max_steps=args.max_steps,
+            )
+            print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+            if args.report:
+                report.save(args.report)
+            return 0 if report.passed else 2
 
         report = client.qualify(backend, backend_trials=args.backend_trials)
         print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))

@@ -1,6 +1,27 @@
 # Architecture
 
-## Invariant decomposition
+## 4-Tier Architectural Decomposition
+
+The repository organizes the Unit-of-Work system into four strictly separated tiers:
+
+```
+Tier 1: Core Primitives (src/uow/)
+        Defines UoW itself: Ontology, Envelope, State, Authority Loop
+            │
+            ▼
+Tier 2: Foundational Constructions (foundations/)
+        Proves what the algebra expresses: Universal Computation, Minsky Lowering, Bounded Control
+            │
+            ▼
+Tier 3: Derived Runtime (src/uow/...)
+        Orchestration, OCC Transactions, Resource Governance, External Effects, Proposers
+            │
+            ▼
+Tier 4: Qualification Scenarios (qualification/ & tests/)
+        Logistics benchmarks, synthetic hosts, adversarial models, differential campaign
+```
+
+### Invariant decomposition
 
 The canonical architecture separates four primitive concerns:
 
@@ -9,7 +30,7 @@ The canonical architecture separates four primitive concerns:
 3. **State** — immutable, hash-bound authoritative data.
 4. **Authority** — PROPOSE -> CERTIFY -> COMMIT with append-only evidence.
 
-Everything else is derived.
+Everything else is derived or foundational evidence.
 
 ## Semantic ontology
 

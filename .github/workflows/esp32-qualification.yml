@@ -1,0 +1,42 @@
+name: ESP32 Dual-Core Qualification
+
+on:
+  pull_request:
+    paths:
+      - "qualification/embedded/esp32_dual_core/**"
+      - ".github/workflows/esp32-qualification.yml"
+  push:
+    branches:
+      - "qualification/esp32-dual-core-v0"
+    paths:
+      - "qualification/embedded/esp32_dual_core/**"
+      - ".github/workflows/esp32-qualification.yml"
+
+jobs:
+  embedded:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Host C++ qualification
+        run: |
+          cmake -S qualification/embedded/esp32_dual_core/host -B /tmp/uow-esp32-host
+          cmake --build /tmp/uow-esp32-host --parallel
+          /tmp/uow-esp32-host/uow_embedded_tests
+
+      - name: Interrogator protocol tests
+        working-directory: qualification/embedded/esp32_dual_core/host
+        run: python -m unittest -v test_interrogator.py
+
+      - name: Install PlatformIO
+        run: python -m pip install platformio
+
+      - name: Build proposer core 0 / authority core 1
+        run: pio run -d qualification/embedded/esp32_dual_core -e esp32s3_p0_a1
+
+      - name: Build proposer core 1 / authority core 0
+        run: pio run -d qualification/embedded/esp32_dual_core -e esp32s3_p1_a0

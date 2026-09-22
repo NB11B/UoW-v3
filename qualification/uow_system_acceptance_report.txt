@@ -1,0 +1,44 @@
+UoW CANONICAL REPOSITORY ACCEPTANCE
+===================================
+
+FOUNDATION
+[PASS] randomized single-step reference/native equivalence — 20,000 transitions
+[PASS] terminating whole-program equivalence — 500 programs
+[PASS] semantic-cell computational orthogonality
+[PASS] bounded-state negative control
+[PASS] extensible memory beyond 1024 bits
+[PASS] forged core proposal rejected
+
+AUTHORITY
+[PASS] proposer has zero authority
+[PASS] stale proposal rejected without state mutation
+[PASS] unsatisfied dependency rejected
+[PASS] intra-batch OCC collision rejected
+[PASS] resource over-capacity proposal rejected
+
+ORCHESTRATION
+[PASS] legal DAG completed
+[PASS] domain result is correct
+[PASS] evidence chain integral
+[PASS] model/judge telemetry emitted
+[PASS] proposer crash falls back to certified legal scheduling
+
+DURABILITY
+[PASS] recovered state equals continuous state
+[PASS] recovered evidence root equals continuous
+[PASS] torn WAL tail ignored
+
+EXTERNAL WORLD
+[PASS] post-success crash reconciles without duplicate side effect
+[PASS] saga compensation executes exact reverse order
+[PASS] saga progress is authoritative state
+
+REPLAY
+[PASS] final recovered state identical
+[PASS] final recovered evidence root identical
+[PASS] recovery performs zero external re-execution
+
+RESULT: 25/25 qualification assertions passed
+
+CANONICAL CLAIM:
+The extracted UoW repository behaved as specified by this acceptance campaign.

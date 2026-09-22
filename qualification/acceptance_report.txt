@@ -1,0 +1,43 @@
+UoW CANONICAL SYSTEM QUALIFICATION
+==================================
+
+FOUNDATION
+[PASS] reference/native Minsky equivalence
+[PASS] 250 randomized Minsky differential cases
+[PASS] semantic-cell computational orthogonality
+[PASS] 8-bit bounded negative control period=256
+[PASS] extensible integer state beyond 1024 bits
+[PASS] tampered proposal rejected
+
+AUTHORITY
+[PASS] proposer has zero state authority
+[PASS] stale proposal rejected
+[PASS] unsatisfied dependency rejected
+[PASS] intra-batch OCC conflict rejected
+[PASS] resource overallocation rejected
+
+ORCHESTRATION
+[PASS] DAG completed
+[PASS] evidence chain integral
+[PASS] expected domain state
+
+DURABILITY
+[PASS] recovered state equals continuous state
+[PASS] recovered evidence root equals continuous
+[PASS] torn WAL tail ignored
+
+EXTERNAL WORLD
+[PASS] crash reconciliation prevents duplicate effect
+[PASS] forged/wrong receipt rejected
+[PASS] saga compensation exact reverse order
+[PASS] compensation retry is idempotent
+
+REPLAY
+[PASS] final state identical
+[PASS] evidence root identical
+[PASS] zero external re-execution
+
+RESULT: 24/24 qualification assertions passed
+
+CANONICAL CLAIM:
+UoW behaved as specified by the acceptance campaign.

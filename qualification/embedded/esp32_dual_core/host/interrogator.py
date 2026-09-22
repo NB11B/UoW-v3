@@ -296,10 +296,16 @@ class StressReport:
     authority_core: int
     checks: dict[str, bool]
     trials: tuple[StressTrial, ...]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return self.trials_completed == self.trials_requested and all(self.checks.values()) and all(t.passed for t in self.trials)
 
     @property
     def passed(self) -> bool:
-        return self.trials_completed == self.trials_requested and all(self.checks.values()) and all(t.passed for t in self.trials)
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
@@ -325,16 +331,22 @@ class FaultMatrixReport:
     authority_core: int
     cases: tuple[FaultMatrixCase, ...]
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values()) and all(case.passed for case in self.cases)
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values()) and all(case.passed for case in self.cases)
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -359,20 +371,26 @@ class SoakReport:
     authority_core: int
     rounds: tuple[SoakRound, ...]
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
 
     @property
-    def passed(self) -> bool:
+    def observed_pass(self) -> bool:
         return (
             self.rounds_completed == self.rounds_requested
             and all(self.checks.values())
             and all(r.passed for r in self.rounds)
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.observed_pass and self.qualified
+
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -386,16 +404,22 @@ class ResilienceReport:
     baseline_state_hash: str
     checks: dict[str, bool]
     observations: dict[str, Any]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values())
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values())
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -410,16 +434,22 @@ class FullQualificationReport:
     transcript_audit_passed: bool
     transcript_root: str
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values())
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values())
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -435,16 +465,22 @@ class CampaignReport:
     final_r1: int
     final_sequence: int
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values())
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values())
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -452,6 +488,7 @@ class CampaignReport:
     def load(cls, path: str | Path) -> "CampaignReport":
         data = json.loads(Path(path).read_text(encoding="utf-8"))
         data.pop("passed", None)
+        data.pop("observed_pass", None)
         return cls(**data)
 
 

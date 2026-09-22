@@ -14,27 +14,66 @@ class FakeDevice:
         self.a = authority_core
         self.r0 = 10
         self.r1 = 0
+        self.pc = 0
         self.sequence = 0
         self.halted = False
         self.request_id = 1
         self.queue: list[str] = []
+        self.persistence_enabled = False
+        self.recovered_on_boot = False
+        self.reboot_after = 0
+        self.stall_ms = 0
+        self.timeout_ms = 5000
 
     def _root(self):
-        return f"root-{self.r0}-{self.r1}-{self.sequence}-{int(self.halted)}"
+        return f"root-{self.r0}-{self.r1}-{self.pc}-{self.sequence}-{int(self.halted)}"
 
-    def _status(self, event, rid):
-        return {
+    def _state_hash(self):
+        return f"state-{self.r0}-{self.r1}-{self.pc}-{self.sequence}-{int(self.halted)}"
+
+    def _status(self, event, rid, note=None):
+        out = {
             "event": event,
             "request_id": rid,
             "proposer_core": self.p,
             "authority_core": self.a,
             "r0": self.r0,
             "r1": self.r1,
+            "pc": self.pc,
             "sequence": self.sequence,
             "halted": self.halted,
-            "state_hash": f"state-{self.r0}-{self.r1}-{self.sequence}-{int(self.halted)}",
+            "state_hash": self._state_hash(),
             "evidence_root": self._root(),
+            "evidence_steps": self.sequence,
+            "persistence_enabled": self.persistence_enabled,
+            "recovered_on_boot": self.recovered_on_boot,
+            "proposer_stall_ms": self.stall_ms,
+            "proposal_timeout_ms": self.timeout_ms,
+            "work_queue_depth": 0,
+            "proposal_queue_depth": 0,
+            "control_queue_depth": 0,
         }
+        if note is not None:
+            out["note"] = note
+        return out
+
+    def _step_once(self):
+        if self.halted:
+            return
+        if self.pc == 0:
+            self.sequence += 1
+            if self.r0 == 0:
+                self.pc = 2
+            else:
+                self.r0 -= 1
+                self.pc = 1
+        elif self.pc == 1:
+            self.sequence += 1
+            self.r1 += 1
+            self.pc = 0
+        elif self.pc == 2:
+            self.sequence += 1
+            self.halted = True
 
     def handle(self, line: str):
         rid = self.request_id
@@ -42,52 +81,120 @@ class FakeDevice:
         parts = line.split()
         op = parts[0]
         events = []
+
         if op == "STATUS":
             events.append(self._status("status", rid))
         elif op == "RESET":
             self.r0, self.r1 = int(parts[1]), int(parts[2])
+            self.pc = 0
             self.sequence = 0
             self.halted = False
+            self.recovered_on_boot = False
             events.append(self._status("reset", rid))
         elif op == "CLOCKS":
             events.append(self._status("clocks", rid))
         elif op == "FREEZE":
             events.append(self._status("freeze", rid))
+        elif op == "PERSIST":
+            self.persistence_enabled = parts[1] == "1"
+            if not self.persistence_enabled:
+                self.recovered_on_boot = False
+            events.append(self._status("persist", rid))
+        elif op == "REBOOT_AFTER":
+            self.reboot_after = int(parts[1])
+            events.append(self._status("reboot_after", rid))
+        elif op == "STALL":
+            self.stall_ms = int(parts[1])
+            events.append(self._status("stall", rid))
+        elif op == "TIMEOUT":
+            self.timeout_ms = int(parts[1])
+            events.append(self._status("timeout", rid))
+        elif op == "BURST":
+            requested = int(parts[1])
+            enqueued = min(requested, 4)
+            committed = 0
+            if enqueued and not self.halted:
+                self._step_once()
+                committed = 1
+            rejected = max(0, enqueued - committed)
+            events.append({
+                "event": "burst_complete",
+                "request_id": rid,
+                "requested": requested,
+                "enqueued": enqueued,
+                "committed": committed,
+                "rejected": rejected,
+                "state_hash": self._state_hash(),
+                "evidence_root": self._root(),
+            })
         elif op == "STEP":
             fault = parts[1] if len(parts) > 1 else "NONE"
-            reason = {
-                "TAMPER_STATE": "STATE_DIVERGENCE",
-                "TAMPER_PREHASH": "STALE_PRE_STATE",
-                "TAMPER_ROUTE": "ROUTE_DIVERGENCE",
-            }.get(fault)
-            if reason:
-                events.append({"event": "decision", "request_id": rid, "committed": False, "reason": reason})
+            if self.stall_ms > self.timeout_ms:
+                events.append(self._status("error", rid, "proposal timeout"))
             else:
-                events.append({"event": "decision", "request_id": rid, "committed": True, "reason": "NONE"})
+                reason = {
+                    "TAMPER_STATE": "STATE_DIVERGENCE",
+                    "TAMPER_PREHASH": "STALE_PRE_STATE",
+                    "TAMPER_ROUTE": "ROUTE_DIVERGENCE",
+                }.get(fault)
+                if reason:
+                    events.append({
+                        "event": "decision",
+                        "request_id": rid,
+                        "committed": False,
+                        "reason": reason,
+                    })
+                else:
+                    self._step_once()
+                    events.append({
+                        "event": "decision",
+                        "request_id": rid,
+                        "committed": True,
+                        "reason": "NONE",
+                    })
         elif op == "RUN":
-            initial_total = self.r0 + self.r1
-            self.sequence += 2 * self.r0 + 2
-            self.r0 = 0
-            self.r1 = initial_total
-            self.halted = True
-            events.append(self._status("run_complete", rid))
+            budget = int(parts[1])
+            attempted = 0
+            while not self.halted and attempted < budget:
+                self._step_once()
+                attempted += 1
+                if self.reboot_after > 0:
+                    self.reboot_after -= 1
+                    if self.reboot_after == 0:
+                        self.recovered_on_boot = self.persistence_enabled
+                        events.append(self._status("rebooting", rid, "scheduled reboot after commit"))
+                        break
+            else:
+                events.append(self._status("run_complete", rid))
+        elif op == "REBOOT":
+            self.recovered_on_boot = self.persistence_enabled
+            events.append(self._status("rebooting", rid, "operator requested reboot"))
         else:
             events.append({"event": "error", "request_id": rid, "reason": "unknown"})
+
         self.queue.extend(json.dumps(x) for x in events)
 
 
 class FakeTransport:
     def __init__(self, device: FakeDevice):
         self.device = device
+        self.closed = False
 
     def write_line(self, text: str):
+        if self.closed:
+            raise RuntimeError("fake transport closed")
         self.device.handle(text)
 
     def read_line(self, timeout: float):
+        if self.closed:
+            return None
         return self.device.queue.pop(0) if self.device.queue else None
 
     def close(self):
-        pass
+        self.closed = True
+
+    def reconnect(self, timeout: float = 15.0):
+        self.closed = False
 
 
 class InterrogatorTests(unittest.TestCase):
@@ -132,6 +239,19 @@ class InterrogatorTests(unittest.TestCase):
         self.assertTrue(report.passed)
         self.assertEqual(report.rounds_completed, 3)
         self.assertTrue(iq.transcript.verify())
+
+    def test_resilience_campaign(self):
+        iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
+        report = iq.resilience()
+        self.assertTrue(report.passed)
+        self.assertTrue(all(report.checks.values()))
+
+    def test_full_qualification(self):
+        iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
+        report = iq.qualify_all(stress_trials=3, seed=777)
+        self.assertTrue(report.passed)
+        self.assertTrue(report.resilience_passed)
+        self.assertTrue(report.transcript_audit_passed)
 
     def test_transcript_hash_chain_roundtrip_and_tamper_detection(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)

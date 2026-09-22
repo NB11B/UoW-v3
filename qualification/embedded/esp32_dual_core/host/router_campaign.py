@@ -1127,12 +1127,19 @@ class RouterCampaignRunner:
         avg_regret = sum(r.regret_us for r in self.records) / max(1, len(self.records))
         g4_pass = (avg_regret < 4000.0)
 
-        # G5: Merkle ledger continuity & verification
-        # Committed records advance root monotonically and uniquely; rejected records preserve root (zero mutation)
+        # G5: independently verified SHA-256 evidence-chain continuity.
+        # Coverage must equal every authoritative RESERVE + RECEIPT link.
         committed_roots = [r.evidence_root for r in self.records if r.proposed_committed]
-        all_unique_committed = (len(set(committed_roots)) == len(committed_roots))
-        all_nonzero = all(r != "0" * 64 for r in committed_roots)
-        g5_pass = (all_unique_committed and all_nonzero and len(committed_roots) > 0)
+        final_sched_snapshot = self.authority.get_snapshot()
+        expected_evidence_links = (
+            int(final_sched_snapshot.get("reservation_seq", 0))
+            + int(final_sched_snapshot.get("completion_seq", 0))
+        )
+        g5_pass = (
+            expected_evidence_links > 0
+            and self.evidence_verification_failures == 0
+            and self.evidence_links_verified == expected_evidence_links
+        )
 
         # G6: Transactional canary safety (deployer promotions occurred, no runaway regressions)
         promotions = self.policy.deployer.promotions_count
@@ -1256,7 +1263,10 @@ class RouterCampaignRunner:
             ),
             "G5_evidence_chain_continuity": evaluate_claim(
                 g5_pass, self.evidence_context, physical_authority,
-                unique_committed_roots=len(set(committed_roots)),
+                links_verified=self.evidence_links_verified,
+                expected_links=expected_evidence_links,
+                verification_failures=self.evidence_verification_failures,
+                final_evidence_root=final_sched_snapshot.get("evidence_root"),
             ),
             "G6_canary_safety": evaluate_claim(
                 g6_pass, self.evidence_context, physical_adaptation,

@@ -26,6 +26,7 @@ import concurrent.futures
 from dataclasses import asdict, dataclass
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import random
@@ -334,6 +335,88 @@ class JobRecord:
     canary_active: bool
 
 
+class DistributionTracker:
+    """Calculates statistical percentiles, tail metrics, and variance convergence across jobs."""
+
+    @staticmethod
+    def compute_percentiles(values: list[float]) -> dict[str, float]:
+        if not values:
+            return {"mean": 0.0, "std": 0.0, "p50": 0.0, "p90": 0.0, "p95": 0.0, "p99": 0.0, "count": 0}
+        s = sorted(values)
+        n = len(s)
+        mean_val = sum(s) / n
+        variance = sum((x - mean_val) ** 2 for x in s) / n
+        std_val = math.sqrt(variance)
+
+        def pct(p: float) -> float:
+            idx = int(round((p / 100.0) * (n - 1)))
+            return float(s[max(0, min(n - 1, idx))])
+
+        return {
+            "mean": float(mean_val),
+            "std": float(std_val),
+            "p50": pct(50),
+            "p90": pct(90),
+            "p95": pct(95),
+            "p99": pct(99),
+            "count": n,
+        }
+
+    @classmethod
+    def analyze_records(cls, records: list[Any]) -> dict[str, Any]:
+        """Aggregate global, per-device, and per-regime distribution statistics."""
+        if not records:
+            return {}
+
+        latencies = [float(r.latency_us) for r in records if r.proposed_committed]
+        regrets = [float(r.regret_us) for r in records]
+
+        # First half vs Second half variance convergence
+        n = len(regrets)
+        h = n // 2
+        early_regrets = regrets[:h] if h > 0 else regrets
+        late_regrets = regrets[h:] if h > 0 else regrets
+
+        early_std = cls.compute_percentiles(early_regrets)["std"]
+        late_std = cls.compute_percentiles(late_regrets)["std"]
+        variance_ratio = (late_std / max(1e-3, early_std)) if early_std > 0 else 1.0
+
+        # Per-device breakdown
+        device_stats = {}
+        for dev_id, dev_name in [(DEVICE_CPU, "CPU"), (DEVICE_GPU, "GPU"), (DEVICE_NPU, "NPU")]:
+            dev_lats = [float(r.latency_us) for r in records if r.proposed_committed and r.target_device == dev_id]
+            dev_regs = [float(r.regret_us) for r in records if r.proposed_committed and r.target_device == dev_id]
+            device_stats[dev_name] = {
+                "count": len(dev_lats),
+                "latency": cls.compute_percentiles(dev_lats),
+                "regret": cls.compute_percentiles(dev_regs),
+            }
+
+        # Per-regime breakdown
+        regimes = sorted(list(set(r.phase for r in records)))
+        regime_stats = {}
+        for reg in regimes:
+            reg_lats = [float(r.latency_us) for r in records if r.proposed_committed and r.phase == reg]
+            reg_regs = [float(r.regret_us) for r in records if r.phase == reg]
+            regime_stats[reg] = {
+                "count": len(reg_regs),
+                "latency": cls.compute_percentiles(reg_lats),
+                "regret": cls.compute_percentiles(reg_regs),
+            }
+
+        return {
+            "global_latency": cls.compute_percentiles(latencies),
+            "global_regret": cls.compute_percentiles(regrets),
+            "variance_reduction": {
+                "early_std_us": early_std,
+                "late_std_us": late_std,
+                "variance_ratio": variance_ratio,
+            },
+            "device_distributions": device_stats,
+            "regime_distributions": regime_stats,
+        }
+
+
 class RouterCampaignRunner:
     """Orchestrates the 1,200-job continuous adaptation campaign."""
 
@@ -347,6 +430,7 @@ class RouterCampaignRunner:
         stochastic_mode: bool = False,
         adversarial_injection_job: int | None = None,
         concurrency: int = 1,
+        seed: int = 42,
     ):
         self.authority = authority_client
         self.engine = workload_engine
@@ -357,6 +441,7 @@ class RouterCampaignRunner:
         self.stochastic_mode = stochastic_mode
         self.adversarial_injection_job = adversarial_injection_job
         self.concurrency = max(1, concurrency)
+        self.seed = seed
 
         self.records: list[JobRecord] = []
         self.wrong_authoritative_commits = 0
@@ -367,7 +452,11 @@ class RouterCampaignRunner:
         self.occ_retries_successful = 0
 
         self.stochastic_env = (
-            StochasticEnvironmentGenerator(workload_engine=self.engine, authority_client=self.authority)
+            StochasticEnvironmentGenerator(
+                workload_engine=self.engine,
+                authority_client=self.authority,
+                seed=self.seed,
+            )
             if self.stochastic_mode
             else None
         )
@@ -790,13 +879,18 @@ class RouterCampaignRunner:
         # Clean up
         self.engine.shutdown()
 
+        # Distribution metrics
+        dist_metrics = DistributionTracker.analyze_records(self.records)
+
         # Audit Capability Gates
         gate_results = self.audit_capability_gates()
         stochastic_metrics = self.stochastic_env.compute_summary_metrics() if self.stochastic_env else {}
         summary = {
             "total_jobs": self.total_jobs,
+            "seed": self.seed,
             "wrong_authoritative_commits": self.wrong_authoritative_commits,
             "gates": gate_results,
+            "distribution_metrics": dist_metrics,
             "stochastic_metrics": stochastic_metrics,
             "golden_benchmarks": self.golden_benchmark_results,
             "final_evidence_root": self.prev_evidence_root,
@@ -816,7 +910,7 @@ class RouterCampaignRunner:
         return summary
 
     def audit_capability_gates(self) -> dict[str, Any]:
-        """Audit Capability Gates (G0 through G10)."""
+        """Audit Capability Gates (G0 through G12)."""
         # G0: wrong_authoritative_commits == 0
         g0_pass = (self.wrong_authoritative_commits == 0)
 
@@ -920,6 +1014,30 @@ class RouterCampaignRunner:
         else:
             g11_pass = True
 
+        # G12: Distribution Stability & Tail Regret Bound
+        dist_analysis = DistributionTracker.analyze_records(self.records)
+        glob_reg = dist_analysis.get("global_regret", {})
+        var_red = dist_analysis.get("variance_reduction", {})
+        p50_reg = glob_reg.get("p50", 0.0)
+        p95_reg = glob_reg.get("p95", 0.0)
+        p99_reg = glob_reg.get("p99", 0.0)
+        var_ratio = var_red.get("variance_ratio", 1.0)
+        late_std = var_red.get("late_std_us", 0.0)
+
+        if self.total_jobs >= 200:
+            g12_pass = (
+                self.wrong_authoritative_commits == 0
+                and p50_reg <= 2500.0
+                and p95_reg <= 10000.0
+                and (var_ratio <= 1.40 or late_std <= 12000.0)
+            )
+        else:
+            g12_pass = (
+                self.wrong_authoritative_commits == 0
+                and p50_reg <= 3000.0
+                and p95_reg <= 15000.0
+            )
+
         return {
             "G0_zero_wrong_commits": {"passed": g0_pass, "wrong_commits": self.wrong_authoritative_commits},
             "G1_phase_shift_rejections": {"passed": g1_pass, "total_rejections": total_rejections, "p5_rejections": p5_rejections},
@@ -943,7 +1061,17 @@ class RouterCampaignRunner:
                 "occ_conflicts": self.occ_conflicts,
                 "occ_retries_successful": self.occ_retries_successful,
             },
-            "all_gates_passed": all([g0_pass, g1_pass, g2_pass, g3_pass, g4_pass, g5_pass, g6_pass, g7_pass, g8_pass, g9_pass, g10_pass, g11_pass]),
+            "G12_distribution_stability": {
+                "passed": g12_pass,
+                "p50_regret_us": p50_reg,
+                "p95_regret_us": p95_reg,
+                "p99_regret_us": p99_reg,
+                "variance_ratio": var_ratio,
+            },
+            "all_gates_passed": all([
+                g0_pass, g1_pass, g2_pass, g3_pass, g4_pass, g5_pass,
+                g6_pass, g7_pass, g8_pass, g9_pass, g10_pass, g11_pass, g12_pass
+            ]),
         }
 
 
@@ -951,8 +1079,10 @@ def main():
     parser = argparse.ArgumentParser(description="Adaptive Heterogeneous Workload Router Campaign")
     parser.add_argument("--port", type=str, default=None, help="Serial port to physical ESP32 (e.g. COM10)")
     parser.add_argument("--baud", type=int, default=115200, help="Serial baud rate")
-    parser.add_argument("--jobs", type=int, default=1200, help="Total number of jobs to execute")
+    parser.add_argument("--jobs", type=int, default=1200, help="Total number of jobs to execute per run")
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent in-flight jobs in asynchronous pipeline")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed for single run")
+    parser.add_argument("--seeds", nargs="+", type=int, default=None, help="List of random seeds to execute multi-seed campaign")
     parser.add_argument("--mock", action="store_true", help="Run with mock simulated authority (no serial port)")
     parser.add_argument("--stochastic", action="store_true", help="Run with stochastic semi-Markov environment generator")
     parser.add_argument("--adversarial-at", type=int, default=None, help="Job ID at which to inject adversarial canary test")
@@ -974,27 +1104,58 @@ def main():
     print("[Campaign] Running bootstrap hardware calibration...")
     policy.bootstrap_calibration(engine)
 
-    runner = RouterCampaignRunner(
-        authority_client=authority,
-        workload_engine=engine,
-        routing_policy=policy,
-        artifacts_dir=args.artifacts,
-        total_jobs=args.jobs,
-        stochastic_mode=args.stochastic,
-        adversarial_injection_job=args.adversarial_at,
-        concurrency=args.concurrency,
-    )
+    seeds = args.seeds if args.seeds is not None else [args.seed]
+    all_seed_summaries = {}
 
     try:
-        summary = runner.run()
-        print("\n================= CAMPAIGN AUDIT SUMMARY =================")
-        for g_name, g_val in summary["gates"].items():
-            if isinstance(g_val, dict):
-                status = "PASS" if g_val.get("passed") else "FAIL"
-                print(f"  [{status}] {g_name}: {g_val}")
-            else:
-                print(f"  {g_name}: {g_val}")
-        print("==========================================================\n")
+        for s_idx, current_seed in enumerate(seeds):
+            if len(seeds) > 1:
+                print(f"\n=======================================================")
+                print(f" Executing Campaign Iteration {s_idx + 1}/{len(seeds)} (Seed: {current_seed})")
+                print(f"=======================================================\n")
+
+            runner = RouterCampaignRunner(
+                authority_client=authority,
+                workload_engine=engine,
+                routing_policy=policy,
+                artifacts_dir=args.artifacts,
+                total_jobs=args.jobs,
+                stochastic_mode=args.stochastic,
+                adversarial_injection_job=args.adversarial_at,
+                concurrency=args.concurrency,
+                seed=current_seed,
+            )
+
+            summary = runner.run()
+            all_seed_summaries[current_seed] = summary
+
+            # If multi-seed, also write individual seed report
+            if len(seeds) > 1:
+                seed_report_path = args.artifacts / f"router_campaign_report_seed_{current_seed}.json"
+                with open(seed_report_path, "w", encoding="utf-8") as f:
+                    json.dump(summary, f, indent=2)
+
+            print(f"\n================= CAMPAIGN AUDIT SUMMARY (Seed {current_seed}) =================")
+            for g_name, g_val in summary["gates"].items():
+                if isinstance(g_val, dict):
+                    status = "PASS" if g_val.get("passed") else "FAIL"
+                    print(f"  [{status}] {g_name}: {g_val}")
+                else:
+                    print(f"  {g_name}: {g_val}")
+            print("========================================================================\n")
+
+        if len(seeds) > 1:
+            multi_seed_report = {
+                "seeds": seeds,
+                "total_runs": len(seeds),
+                "all_runs_passed": all(s["gates"]["all_gates_passed"] for s in all_seed_summaries.values()),
+                "runs": {str(s): s_summary["gates"] for s, s_summary in all_seed_summaries.items()},
+            }
+            multi_report_path = args.artifacts / "multi_seed_report.json"
+            with open(multi_report_path, "w", encoding="utf-8") as f:
+                json.dump(multi_seed_report, f, indent=2)
+            print(f"[Campaign] Multi-seed aggregate report saved to: {multi_report_path}")
+
     finally:
         authority.close()
 

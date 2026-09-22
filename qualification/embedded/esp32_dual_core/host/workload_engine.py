@@ -181,8 +181,12 @@ class WorkloadEngine:
             def _npu_worker():
                 dummy = np.random.randn(16, 3, 32, 32).astype(np.float32)
                 model = self.compiled_npu_models.get(16) or self.compiled_npu_models[1]
+                req = model.create_infer_request()
                 while self.npu_contention_active and not self._stop_event.is_set():
-                    _ = model([dummy])
+                    try:
+                        _ = req.infer([dummy])
+                    except Exception:
+                        pass
                     time.sleep(0.002)
 
             self._npu_contention_thread = threading.Thread(target=_npu_worker, daemon=True)
@@ -252,7 +256,8 @@ class WorkloadEngine:
                 compiled = self.compiled_npu_models.get(b)
                 if compiled is None:
                     raise ValueError(f"No compiled NPU model for batch size {b}")
-                res = compiled([input_np])
+                req = compiled.create_infer_request()
+                res = req.infer([input_np])
                 out_np = res[compiled.output(0)]
 
             else:

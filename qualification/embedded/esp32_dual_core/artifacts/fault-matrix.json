@@ -1,0 +1,60 @@
+{
+  "authority_core": 1,
+  "cases": [
+    {
+      "expected_reason": "STATE_DIVERGENCE",
+      "fault": "TAMPER_STATE",
+      "initial_r0": 7,
+      "initial_r1": 3,
+      "name": "state_nonzero",
+      "passed": true
+    },
+    {
+      "expected_reason": "STALE_PRE_STATE",
+      "fault": "TAMPER_PREHASH",
+      "initial_r0": 7,
+      "initial_r1": 3,
+      "name": "prehash_nonzero",
+      "passed": true
+    },
+    {
+      "expected_reason": "ROUTE_DIVERGENCE",
+      "fault": "TAMPER_ROUTE",
+      "initial_r0": 7,
+      "initial_r1": 3,
+      "name": "route_nonzero",
+      "passed": true
+    },
+    {
+      "expected_reason": "STATE_DIVERGENCE",
+      "fault": "TAMPER_STATE",
+      "initial_r0": 0,
+      "initial_r1": 9,
+      "name": "state_zero_branch",
+      "passed": true
+    },
+    {
+      "expected_reason": "STALE_PRE_STATE",
+      "fault": "TAMPER_PREHASH",
+      "initial_r0": 0,
+      "initial_r1": 9,
+      "name": "prehash_zero_branch",
+      "passed": true
+    },
+    {
+      "expected_reason": "ROUTE_DIVERGENCE",
+      "fault": "TAMPER_ROUTE",
+      "initial_r0": 0,
+      "initial_r1": 9,
+      "name": "route_zero_branch",
+      "passed": true
+    }
+  ],
+  "checks": {
+    "all_rejections_preserve_authority": true,
+    "core_roles_distinct": true
+  },
+  "passed": true,
+  "proposer_core": 0,
+  "schema_version": "uow-esp32-fault-matrix-v0.3"
+}

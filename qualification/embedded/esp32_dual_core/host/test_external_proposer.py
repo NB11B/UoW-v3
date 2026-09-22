@@ -245,6 +245,8 @@ class ExternalProposerTests(unittest.TestCase):
 
     def test_intel_npu_adapter_step(self):
         try:
+            import numpy
+            import openvino
             from intel_npu_adapter import propose
         except Exception:
             self.skipTest("intel_npu_adapter dependencies not available")

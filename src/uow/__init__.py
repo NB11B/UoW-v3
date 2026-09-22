@@ -1,4 +1,4 @@
-﻿"""Canonical UoW public API."""
+"""Canonical UoW public API."""
 
 from .contracts import (
     Boundary,
@@ -32,6 +32,27 @@ from .engine import (
     validate_graph,
 )
 from .ontology import ALL_MATRIX_CELLS, MatrixCell, WorkCategory
+from .orchestration import (
+    COMPLETION_PREFIX,
+    ORCH_TERMINATION_KEY,
+    CompletionMaterializer,
+    MaterializedUoW,
+    OrchestrationState,
+    SCHEDULER_CELL,
+    SCHEDULER_ID,
+    SchedulerMaterializer,
+    TASK_CELL,
+    bind_materialization,
+    canonical_uow_payload,
+    certify_materialization,
+    create_initial_orchestration_state,
+    evaluate_scheduler_step,
+    execute_domain_task,
+    execute_materialized,
+    make_domain_task,
+    run_orchestration,
+    uow_fingerprint,
+)
 from .state import WorldState
 from .transactions import (
     CommitSequencer,
@@ -45,20 +66,14 @@ from .transactions import (
     infer_footprint,
     validate_occ,
 )
-from .orchestration import (
-    OrchestrationState,
-    SCHEDULER_CELL,
-    TASK_CELL,
-    create_initial_orchestration_state,
-    evaluate_scheduler_step,
-    make_domain_task,
-)
 
 __all__ = [
     "ALL_MATRIX_CELLS",
     "Boundary",
+    "COMPLETION_PREFIX",
     "CertificateResult",
     "CommitSequencer",
+    "CompletionMaterializer",
     "Contract",
     "DeterministicSequencer",
     "EvidenceLedger",
@@ -70,14 +85,18 @@ __all__ = [
     "Header",
     "Lifecycle",
     "LifecyclePhase",
+    "MaterializedUoW",
     "MatrixCell",
     "Mutation",
     "MutationOp",
+    "ORCH_TERMINATION_KEY",
     "OrchestrationState",
     "Proposal",
     "Realization",
     "Route",
     "SCHEDULER_CELL",
+    "SCHEDULER_ID",
+    "SchedulerMaterializer",
     "Successor",
     "SuccessorKind",
     "TASK_CELL",
@@ -89,17 +108,24 @@ __all__ = [
     "WorkCategory",
     "WorldState",
     "apply_transaction",
-    "commit",
+    "bind_materialization",
+    "canonical_uow_payload",
     "certify",
+    "certify_materialization",
+    "commit",
     "create_initial_orchestration_state",
     "create_transaction_descriptor",
     "evaluate_scheduler_step",
+    "execute_domain_task",
+    "execute_materialized",
     "execute_one",
     "infer_footprint",
     "make_domain_task",
     "make_uow",
     "propose",
     "run",
+    "run_orchestration",
+    "uow_fingerprint",
     "validate_graph",
     "validate_occ",
 ]

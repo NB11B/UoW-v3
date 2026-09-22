@@ -220,25 +220,33 @@ class ExternalProposerTests(unittest.TestCase):
 
     def test_capability_gate_reference_passes(self):
         report = self.make_client().capability(ReferenceBackend())
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertTrue(report.halted)
         self.assertTrue(report.state_parity)
         self.assertTrue(report.evidence_parity)
 
     def test_capability_gate_bad_backend_fails_without_wrong_commit(self):
         report = self.make_client().capability(AlwaysBadBackend())
+        self.assertFalse(report.observed_pass)
+        self.assertFalse(report.qualified)
         self.assertFalse(report.passed)
         self.assertGreater(report.rejections, 0)
 
     def test_full_external_qualification_reference_backend(self):
         report = self.make_client().qualify(ReferenceBackend(), backend_trials=10)
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertEqual(report.wrong_authoritative_commits, 0)
         self.assertEqual(report.backend_rejects, 0)
 
     def test_bad_backend_is_contained(self):
         report = self.make_client().qualify(AlwaysBadBackend(), backend_trials=10)
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertEqual(report.backend_accepts, 0)
         self.assertEqual(report.backend_rejects, 10)
         self.assertEqual(report.wrong_authoritative_commits, 0)
@@ -247,9 +255,10 @@ class ExternalProposerTests(unittest.TestCase):
         try:
             import numpy
             import openvino
-            from intel_npu_adapter import propose
+            from intel_npu_adapter import evidence_context, propose
+            evidence_context()
         except Exception:
-            self.skipTest("intel_npu_adapter dependencies not available")
+            self.skipTest("actual Intel/OpenVINO NPU not available")
 
         snapshot = {
             "r0": 50,

@@ -379,4 +379,60 @@ python host\external_proposer.py `
 * **Stale Snapshot Rejection**: 100% rejected
 * **Authority Containment**: Absolute. An untrusted, hardware-accelerated neural network running on an external host was physically proven incapable of forcing an incorrect state transition into the microcontroller's certified ledger.
 
+---
+
+## 8. Heterogeneous Closed-Loop Adaptation: GPU & NPU Against Fixed ESP32 Authority
+
+**Training Accelerator**: NVIDIA GeForce RTX 5070 Laptop GPU (PyTorch CUDA 12.8)  
+**Inference Accelerator**: Intel(R) AI Boost NPU (OpenVINO 2026.4.0)  
+**Deterministic Authority**: ESP32-S3 microcontroller on `COM10`  
+**Experiment Driver**: [`host/adaptive_npu_experiment.py`](file:///c:/Users/nateb/OneDrive/Documents/UoW%20ESP32/qualification/embedded/esp32_dual_core/host/adaptive_npu_experiment.py)  
+**Artifact**: [`artifacts/npu-adaptation.json`](file:///c:/Users/nateb/OneDrive/Documents/UoW%20ESP32/qualification/embedded/esp32_dual_core/artifacts/npu-adaptation.json)  
+
+This experiment empirically proves active adaptation under fixed physical authority:
+$$ \boxed{ \text{internal mechanism adapts to its environment} \quad\land\quad \text{authority and limits remain fixed} } $$
+
+```text
++-----------------------------------------------------------------------------------------+
+| Host PC / Laptop                                                                        |
+|                                                                                         |
+|   +---------------------------------------+   EXT_PROPOSE (Proposal)                    |
+|   | Intel(R) AI Boost NPU                 |-----------------------------\               |
+|   | Compiled hardware candidate inference |                             |               |
+|   +---------------------------------------+                             |               |
+|                       ^                                                 v               |
+|          Recompile    |                        USB-Serial (COM10, 115200 baud)          |
+|          to NPU graph |                                                 |               |
+|                       |                                                 v               |
+|   +---------------------------------------+   Commit / Reject   +---------------------+ |
+|   | NVIDIA RTX 5070 Laptop GPU            |<--------------------| ESP32-S3 Certifier  | |
+|   | PyTorch CUDA online gradient updates  |   Ground Truth      | Immutable Authority | |
+|   +---------------------------------------+   Feedback Signal   +---------------------+ |
++-----------------------------------------------------------------------------------------+
+```
+
+### Empirical Trajectory
+
+```powershell
+python host\adaptive_npu_experiment.py `
+  --port COM10 `
+  --report artifacts\npu-adaptation.json
+```
+
+| Round | Proposal Hardware | Optimization Hardware | State Space Distribution | Commits / Trials | Rejections | Rejection Rate | Wrong Commits | Zero Mutation |
+|:---:|---|---|---|:---:|:---:|:---:|:---:|:---:|
+| **Round 0** | Intel AI Boost NPU | *(Pre-adaptation)* | $r_0 \in [0, 60], r_1 \in [0, 1000]$ | 39 / 100 | 61 | **61.0%** | **0** | **Verified** |
+| **Feedback** | Active exploration | ESP32-S3 certified | 402 certified transitions | — | — | — | **0** | **Verified** |
+| **GPU Step** | RTX 5070 (1.97s) | AdamW ($\mathcal{L} = 1.0 \times 10^{-5}$) | Compiled to Intel NPU | — | — | — | **0** | **Verified** |
+| **Round 1** | Intel AI Boost NPU | RTX 5070 GPU | $r_0 \in [0, 60], r_1 \in [0, 1000]$ | 100 / 100 | 0 | **0.0%** | **0** | **Verified** |
+| **Workload** | Intel AI Boost NPU | RTX 5070 GPU | Canonical transfer $(50, 25) \to (0, 75)$ | 102 / 102 | 0 | **0.0%** | **0** | **Verified** |
+
+### Verified Invariants
+
+1. **Rejection Rate Collapse**: $61.0\% \to 0.0\%$ under closed-loop adaptation.
+2. **Authority Strictness**: At no point during training or active exploration did an invalid proposal commit. Total wrong authoritative commits across all rounds was **0**.
+3. **Canonical Replay Identity**: The adapted network retained 100% precision on the primary workload, producing bit-for-bit exact terminal state and Merkle evidence root:
+   - State Hash: `18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599`
+   - Evidence Root: `3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc`
+
 

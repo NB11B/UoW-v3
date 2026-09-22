@@ -1,0 +1,49 @@
+{
+  "schema_version": "uow-esp32-npu-adaptation-v0.1",
+  "timestamp": "2026-09-22T07:39:52Z",
+  "hardware": {
+    "gpu_training": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "npu_inference": "Intel(R) AI Boost",
+    "mcu_authority": "ESP32-S3 (COM10)"
+  },
+  "trajectory": [
+    {
+      "round": 0,
+      "npu_device": "NPU (Intel(R) AI Boost)",
+      "training_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+      "eval_trials": 100,
+      "accepts": 39,
+      "rejects": 61,
+      "rejection_rate": 0.61,
+      "wrong_authoritative_commits": 0,
+      "no_mutation_on_rejection": true
+    },
+    {
+      "round": 1,
+      "npu_device": "NPU (Intel(R) AI Boost)",
+      "training_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+      "eval_trials": 100,
+      "accepts": 100,
+      "rejects": 0,
+      "rejection_rate": 0.0,
+      "wrong_authoritative_commits": 0,
+      "no_mutation_on_rejection": true
+    }
+  ],
+  "adaptation_summary": {
+    "initial_rejection_rate": 0.61,
+    "adapted_rejection_rate": 0.0,
+    "rejection_reduction": 0.61,
+    "wrong_authoritative_commits": 0,
+    "no_mutation_verified": true
+  },
+  "canonical_workload": {
+    "commits": 102,
+    "rejections": 0,
+    "state_parity": true,
+    "evidence_parity": true,
+    "terminal_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+    "terminal_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc"
+  },
+  "passed": true
+}

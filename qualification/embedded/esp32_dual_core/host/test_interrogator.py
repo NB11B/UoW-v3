@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from interrogator import CampaignReport, Interrogator, compare_reports
+from interrogator import CampaignReport, Interrogator, Transcript, compare_reports
 
 
 class FakeDevice:
@@ -118,6 +118,45 @@ class InterrogatorTests(unittest.TestCase):
         self.assertTrue(report.passed)
         self.assertEqual(report.trials_completed, 8)
         self.assertTrue(all(t.passed for t in report.trials))
+
+    def test_fault_matrix(self):
+        iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
+        report = iq.fault_matrix()
+        self.assertTrue(report.passed)
+        self.assertEqual(len(report.cases), 6)
+        self.assertTrue(all(case.passed for case in report.cases))
+
+    def test_soak_campaign(self):
+        iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
+        report = iq.soak(rounds=3, trials_per_round=4, seed=900)
+        self.assertTrue(report.passed)
+        self.assertEqual(report.rounds_completed, 3)
+        self.assertTrue(iq.transcript.verify())
+
+    def test_transcript_hash_chain_roundtrip_and_tamper_detection(self):
+        iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
+        iq.status()
+        iq.reset(3, 4)
+        iq.run(20)
+        self.assertTrue(iq.transcript.verify())
+        audit = iq.transcript.audit()
+        self.assertTrue(audit.passed)
+        self.assertGreater(audit.event_count, 0)
+
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "transcript.jsonl"
+            iq.transcript.save_jsonl(p)
+            loaded = Transcript.load_jsonl(p)
+            self.assertTrue(loaded.verify())
+            self.assertEqual(loaded.root_hash, iq.transcript.root_hash)
+
+            lines = p.read_text(encoding="utf-8").splitlines()
+            first = json.loads(lines[0])
+            first["payload"] = "STATUS_TAMPERED"
+            lines[0] = json.dumps(first, sort_keys=True)
+            p.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            tampered = Transcript.load_jsonl(p)
+            self.assertFalse(tampered.verify())
 
 
 if __name__ == "__main__":

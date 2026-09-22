@@ -1,4 +1,4 @@
-﻿"""Orchestration state model and DAG dependency evaluation."""
+"""Orchestration state model and DAG dependency evaluation."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -51,6 +51,10 @@ class OrchestrationState:
             if all(d in completed_set for d in task_deps):
                 ready.append(task_id)
         return tuple(ready)
+
+    def ready_frontier(self) -> Tuple[str, ...]:
+        """Alias for get_ready_tasks."""
+        return self.get_ready_tasks()
 
     def is_queue_empty(self) -> bool:
         return len(self.queue) == 0 and len(self.active) == 0

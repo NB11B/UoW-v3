@@ -155,6 +155,28 @@ other probabilistic proposal systems.
 - **Replay Determinism**:
   - Replaying a certified history never re-executes external calls; cached certified receipts in the ledger provide deterministic transition outcomes.
 
+### 5. `uow.proposer` (Proposer Seam, Reference Heuristic & Deterministic Judge)
+- **Proposal Has Zero Authority**:
+  - The model proposer emits pure speculative `ModelProposal` objects containing candidate schedules and predicted metrics.
+  - Proposers possess zero direct authority over `WorldState`; all mutations must be materialized, certified, and committed through the authoritative engine.
+  - Anything affecting authority or certification is hash-bound (`proposal_hash`); non-authoritative observational telemetry (e.g. accelerator device tags, debug logs) lives in `metadata` and is excluded from `proposal_hash`.
+- **Deterministic Judge (Legality Dominance)**:
+  - `certify_proposal(proposal, ready_tasks, graph, state)` independently validates candidate schedules against four strict invariants:
+    1. *Freshness Check*: `input_state_hash` and `input_sequence` match current authoritative `WorldState` (Gate U14.6).
+    2. *Dependency Readiness*: candidate tasks exist in graph and are present in the pending ready frontier (Gate U14.3).
+    3. *Intra-Batch OCC Hazard Freedom*: concurrently proposed tasks have disjoint read/write footprints without write-write or read-write hazards (Gate U14.4).
+    4. *Resource Capacity Bounds*: aggregate batch resource demand $\le$ available host capacities (Gate U14.5).
+- **Deterministic Fallback Scheduler**:
+  - The deterministic fallback provides a certified deterministic schedule whenever a legal ready task exists; correctness does not depend on proposer availability.
+  - If a model proposer crashes, times out, or emits an empty or fully rejected schedule, the runtime immediately engages `DeterministicFallbackScheduler` (`PriorityDeadlineSchedulingPolicy`) (Gate U14.7).
+- **Replay Determinism & Telemetry**:
+  - Proposals and certificates are recorded in hash-bound `TelemetryRecord` objects. Replaying identical proposals reproduces byte-for-byte identical evidence roots and telemetry hashes (Gate U14.8).
+- **Reference Heuristic & External Hardware Integrations**:
+  - `HeuristicSchedulingProposer` provides a reference scheduling heuristic integrating priority ranking, deadline sensitivity, multidimensional bin-packing, and intra-batch OCC hazard avoidance.
+  - External learned models and hardware accelerators (e.g. TFWR / NPU runtimes) plug in via `BaseProposer` (e.g. `integrations/tfwr/adapter.py`) without modifying the kernel (Gate U14.9, U14.10).
+  - Gate U14 separates canonical executable qualification tests (reference heuristic vs random) from historical research campaign benchmarks (learned NPU model: 4.21 ms vs 2.61 ms, 2 rounds vs 3, 0 rejections vs 1).
+
+
 Dependency rule remains strictly invariant:
 ```
 ontology -> state / contracts -> certification / evidence (kernel)
@@ -167,5 +189,8 @@ uow.transactions   uow.orchestration
                           ^
                           |
                       uow.effects
+                          ^
+                          |
+                      uow.proposer
 ```
 The kernel never imports derived layers.

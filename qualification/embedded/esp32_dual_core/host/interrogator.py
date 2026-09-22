@@ -751,6 +751,7 @@ class Interrogator:
             baseline_state_hash=baseline_state_hash,
             checks=checks,
             observations=observations,
+            **self._report_evidence_kwargs(),
         )
 
     def qualify_all(self, *, stress_trials: int = 25, seed: int = 20260922) -> FullQualificationReport:
@@ -760,21 +761,22 @@ class Interrogator:
         resilience = self.resilience()
         audit = self.transcript.audit()
         checks = {
-            "campaign": campaign.passed,
-            "fault_matrix": faults.passed,
-            "stress": stress.passed,
-            "resilience": resilience.passed,
+            "campaign": campaign.observed_pass,
+            "fault_matrix": faults.observed_pass,
+            "stress": stress.observed_pass,
+            "resilience": resilience.observed_pass,
             "transcript_integrity": audit.passed,
         }
         return FullQualificationReport(
             schema_version="uow-esp32-full-qualification-v0.4",
-            campaign_passed=campaign.passed,
-            fault_matrix_passed=faults.passed,
-            stress_passed=stress.passed,
-            resilience_passed=resilience.passed,
+            campaign_passed=campaign.observed_pass,
+            fault_matrix_passed=faults.observed_pass,
+            stress_passed=stress.observed_pass,
+            resilience_passed=resilience.observed_pass,
             transcript_audit_passed=audit.passed,
             transcript_root=audit.root_hash,
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
     def fault_matrix(self) -> FaultMatrixReport:
@@ -825,6 +827,7 @@ class Interrogator:
             authority_core=int(mapping["authority_core"]),
             cases=tuple(cases),
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
     def soak(
@@ -853,11 +856,11 @@ class Interrogator:
                     round_index=round_index,
                     seed=round_seed,
                     trials=report.trials_completed,
-                    passed=report.passed,
+                    passed=report.observed_pass,
                     transcript_root=round_root,
                 )
             )
-            if not report.passed:
+            if not report.observed_pass:
                 raise AssertionError(f"soak round {round_index} failed")
 
         checks = {
@@ -875,6 +878,7 @@ class Interrogator:
             authority_core=int(mapping["authority_core"]),
             rounds=tuple(results),
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
     def stress(self, *, trials: int = 25, seed: int = 20260922) -> StressReport:
@@ -975,6 +979,7 @@ class Interrogator:
             authority_core=authority_core,
             checks=checks,
             trials=tuple(records),
+            **self._report_evidence_kwargs(),
         )
 
     def campaign(self) -> CampaignReport:
@@ -1052,11 +1057,14 @@ class Interrogator:
             final_r1=int(baseline["r1"]),
             final_sequence=int(baseline["sequence"]),
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
 
 def compare_reports(left: CampaignReport, right: CampaignReport) -> dict[str, bool]:
     return {
+        "both_observed_passed": left.observed_pass and right.observed_pass,
+        "both_qualified": left.qualified and right.qualified,
         "both_passed": left.passed and right.passed,
         "core_mapping_inverted": (
             left.proposer_core == right.authority_core

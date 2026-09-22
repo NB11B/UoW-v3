@@ -1,4 +1,4 @@
-"""Canonical UoW core API."""
+"""Canonical UoW public API."""
 
 from .contracts import (
     Boundary,
@@ -19,13 +19,28 @@ from .contracts import (
     UoW,
     make_uow,
 )
+from .engine import (
+    CertificateResult,
+    EvidenceLedger,
+    EvidenceRecord,
+    Proposal,
+    commit,
+    certify,
+    execute_one,
+    propose,
+    run,
+    validate_graph,
+)
 from .ontology import ALL_MATRIX_CELLS, MatrixCell, WorkCategory
 from .state import WorldState
 
 __all__ = [
     "ALL_MATRIX_CELLS",
     "Boundary",
+    "CertificateResult",
     "Contract",
+    "EvidenceLedger",
+    "EvidenceRecord",
     "EvidenceSpec",
     "Guard",
     "GuardOp",
@@ -35,6 +50,7 @@ __all__ = [
     "MatrixCell",
     "Mutation",
     "MutationOp",
+    "Proposal",
     "Realization",
     "Route",
     "Successor",
@@ -43,5 +59,11 @@ __all__ = [
     "UoW",
     "WorkCategory",
     "WorldState",
+    "commit",
+    "certify",
+    "execute_one",
     "make_uow",
+    "propose",
+    "run",
+    "validate_graph",
 ]

@@ -269,6 +269,13 @@ const std::array<uint8_t, 32>& EvidenceLedger::root() const {
     return root_;
 }
 
+void EvidenceLedger::restore_checkpoint(const std::array<uint8_t, 32>& root, size_t size) {
+    root_ = root;
+    size_ = size;
+    valid_ = true;
+    records_.clear();
+}
+
 StepResult commit(
     const Program& program,
     const State& authoritative_state,

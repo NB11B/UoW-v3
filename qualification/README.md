@@ -13,6 +13,8 @@ The campaign covers:
 - native UoW realization of a 2-counter Minsky machine;
 - randomized differential equivalence against an independent reference machine;
 - semantic-cell/computational orthogonality;
+- independent local clocks with no shared mutable execution timer;
+- causal ordering under randomized clock drift;
 - bounded-state negative control;
 - proposal isolation from state authority;
 - stale/dependency/OCC/resource rejection;
@@ -55,3 +57,27 @@ backend calls with imports from the canonical repository:
 
 That local run is the decisive repository qualification. The standalone run here validates
 that the acceptance scenario is coherent and that all required fault injections are executable.
+
+
+## Timing-independence fidelity gate
+
+The integrated repository acceptance includes the original Orchestrator timing
+requirement. It runs 1,000 randomized independent clock-drift realizations by
+default, verifies causal ordering, detects a deliberately shared mutable clock,
+checks nested parent/child clock isolation, and executes canonical orchestration
+with common host wall-clock APIs forbidden.
+
+Run the timing regression directly:
+
+```bash
+python -m pytest -v tests/test_timing_independence.py
+```
+
+Change the integrated stress count with:
+
+```bash
+python qualification/uow_system_acceptance.py --timing-seeds 1000
+```
+
+This tests local timer independence. It does not claim arbitrary distributed
+physical-clock synchronization.

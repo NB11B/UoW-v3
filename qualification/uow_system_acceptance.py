@@ -76,6 +76,7 @@ from uow import (
     set_authoritative_resource_state,
 )
 from uow.effects import EffectRunner, EffectStatus, MockExternalClient
+from qualification.timing_independence import run_timing_independence_campaign
 
 
 class Acceptance:
@@ -223,6 +224,44 @@ def foundation_gate(a: Acceptance, args: argparse.Namespace) -> None:
     prop = propose(uow, state)
     forged = replace(prop, proposed_state=prop.proposed_state.with_attribute("r0", 999))
     a.check("foundation", "forged core proposal rejected", certify(uow, state, forged).is_valid is False)
+
+
+
+def timing_gate(a: Acceptance, args: argparse.Namespace) -> None:
+    """Reproduce the original local-clock independence invariant."""
+
+    result = run_timing_independence_campaign(args.timing_seeds)
+    a.check(
+        "timing independence",
+        "independent clock drift preserves certified domain state",
+        result.state_invariant,
+        f"{result.drift_trials:,} drift realizations",
+    )
+    a.check(
+        "timing independence",
+        "transition ordering is invariant to local clock drift",
+        result.transition_order_invariant,
+    )
+    a.check(
+        "timing independence",
+        "causal dependency order dominates local clock readings",
+        result.causal_order_dominates_clock_order,
+    )
+    a.check(
+        "timing independence",
+        "shared mutable clock mutant is rejected",
+        result.shared_clock_mutant_rejected,
+    )
+    a.check(
+        "timing independence",
+        "nested parent/child clocks remain isolated",
+        result.nested_clock_isolation,
+    )
+    a.check(
+        "timing independence",
+        "canonical orchestration requires no host wall clock",
+        result.wall_clock_independent,
+    )
 
 
 def authority_gate(a: Acceptance) -> Tuple[Mapping[str, ResourceBoundTask], WorldState]:
@@ -463,11 +502,13 @@ def main() -> None:
     p.add_argument("--step-programs", type=int, default=25)
     p.add_argument("--steps-per-program", type=int, default=20)
     p.add_argument("--terminating-runs", type=int, default=50)
+    p.add_argument("--timing-seeds", type=int, default=1000)
     p.add_argument("--output", default="qualification/uow_system_acceptance_report.txt")
     args = p.parse_args()
 
     a = Acceptance()
     foundation_gate(a, args)
+    timing_gate(a, args)
     registry, state = authority_gate(a)
     runtime_gate(a, registry, state)
 

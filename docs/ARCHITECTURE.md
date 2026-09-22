@@ -72,6 +72,29 @@ The core state intentionally does not contain dedicated queue, active-set,
 transaction, resource, model, or external-effect fields. Derived layers compose
 those structures over the primitive state model.
 
+## Timing independence
+
+Timing is part of the canonical UoW envelope through `T`, but it does not
+grant state authority. The original Orchestrator requirement is preserved as:
+
+[
+oxed{
+	ext{local clocks are locally owned}
+land
+	ext{coordination is causal}
+land
+	ext{authority does not depend on one global timer}
+}
+]
+
+The canonical regression campaign perturbs independently owned lifecycle,
+realization, evidence, port, parent, and child timing domains while requiring
+the same certified computational result and legal transition ordering. It also
+runs canonical orchestration with common host wall-clock APIs disabled.
+
+This is a local-clock independence claim, not a claim that arbitrary distributed
+physical clocks can always be synchronized. See `docs/TIMING_INDEPENDENCE.md`.
+
 ## Successors
 
 Dynamic routing is represented explicitly with `Successor.from_attribute(...)`.

@@ -135,12 +135,19 @@ class DualReplayBuffer:
 class TransactionalCanaryDeployer:
     """Coordinates GPU training, Intel NPU compilation, regression validation, and canary promotion."""
 
-    def __init__(self, cache_dir: Path, target_npu_device: str | None = None):
+    def __init__(
+        self,
+        cache_dir: Path,
+        target_npu_device: str | None = None,
+        *,
+        strict_backend: bool = False,
+    ):
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.ov_core = ov.Core()
         self.target_npu = target_npu_device if target_npu_device is not None else "CPU"
         self.using_npu_substitute = self.target_npu != "NPU"
+        self.strict_backend = strict_backend
 
         self.current_onnx_path = self.cache_dir / "active_router.onnx"
         self.candidate_onnx_path = self.cache_dir / "candidate_router.onnx"
@@ -171,6 +178,8 @@ class TransactionalCanaryDeployer:
         except Exception as exc:
             print(f"[CanaryDeployer] NPU compilation failed: {exc}", file=sys.stderr)
             self.candidate_compiled_model = None
+            if self.strict_backend:
+                raise RuntimeError("required NPU policy compilation failed") from exc
             return False
 
     def validate_regression(self, validation_suite: list[RoutingExperience]) -> bool:
@@ -260,10 +269,14 @@ class TransactionalCanaryDeployer:
                 lat = res[runner.output(0)][0]
                 rej = res[runner.output(1)][0]
                 return lat, rej
-            except Exception:
-                pass
+            except Exception as exc:
+                if self.strict_backend:
+                    raise RuntimeError("required NPU policy inference failed") from exc
 
-        # Fallback heuristic if NPU model not yet compiled
+        if self.strict_backend:
+            raise RuntimeError("required NPU policy model is unavailable")
+
+        # Portable-only fallback heuristic if no accelerator model is available
         batch_size = features[0] * 64.0
         # Heuristic: CPU ~ 2-5ms, GPU ~ 0.5-2ms, NPU ~ 0.6-2.5ms
         lat = np.array([3.0 + batch_size * 0.05, 0.8 + batch_size * 0.02, 0.7 + batch_size * 0.03], dtype=np.float32)
@@ -303,7 +316,11 @@ class AdaptiveRoutingPolicy:
         if require_npu and not has_npu:
             raise RuntimeError("physical qualification requires Intel/OpenVINO NPU policy inference")
         target_npu = "NPU" if has_npu else None
-        self.deployer = TransactionalCanaryDeployer(self.cache_dir, target_npu_device=target_npu)
+        self.deployer = TransactionalCanaryDeployer(
+            self.cache_dir,
+            target_npu_device=target_npu,
+            strict_backend=require_npu,
+        )
         self.has_npu = has_npu
 
         # Cold-start bootstrap: compile initial model
@@ -395,8 +412,9 @@ class AdaptiveRoutingPolicy:
         # Find best action
         valid_devs = [d for d in (DEVICE_CPU, DEVICE_GPU, DEVICE_NPU) if scores[d] < 1e6]
         if not valid_devs:
-            # Fallback to least loaded device
-            best_dev = min((DEVICE_CPU, DEVICE_GPU, DEVICE_NPU), key=lambda d: inflight[d])
+            raise RuntimeError(
+                "no eligible execution target: every device is offline, full, or lacks resources"
+            )
         else:
             if random.random() < epsilon:
                 best_dev = random.choice(valid_devs)

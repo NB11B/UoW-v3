@@ -473,7 +473,13 @@ class Acceptance:
         sections: Dict[str,List[Tuple[str,str]]] = {}
         for sec,name,status in self.rows:
             sections.setdefault(sec,[]).append((name,status))
-        out = ["UoW CANONICAL SYSTEM QUALIFICATION","="*34,""]
+        out = [
+            "UoW CANONICAL SYSTEM QUALIFICATION",
+            "="*34,
+            "EVIDENCE LEVEL: SIMULATED",
+            "This standalone harness uses its own reference backend and mock external service.",
+            "",
+        ]
         for sec, entries in sections.items():
             out.append(sec.upper())
             for name,status in entries:
@@ -484,8 +490,9 @@ class Acceptance:
         out.extend([
             f"RESULT: {passed}/{total} qualification assertions passed",
             "",
-            "CANONICAL CLAIM:",
-            "UoW behaved as specified by the acceptance campaign." if passed == total else "Qualification failed.",
+            "REFERENCE-HARNESS CLAIM:",
+            "The standalone acceptance scenario behaved as specified." if passed == total else "Qualification failed.",
+            "This does not qualify the repository implementation or any physical substrate.",
         ])
         return "\n".join(out)
 
@@ -641,12 +648,12 @@ def run_system(a: Acceptance):
         reconciled=external.reconcile(key)
         if reconciled is None:
             reconciled=external.invoke("charge",{"task":"D"},key)
-        a.check("external world","crash reconciliation prevents duplicate effect",
+        a.check("external-effect protocol (simulated service)","crash reconciliation prevents duplicate effect",
                 len(external.calls)==calls_before and reconciled is not None)
 
         # forged receipt rejected
         forged=Receipt("charge","wrong-key",{"ok":True})
-        a.check("external world","forged/wrong receipt rejected",
+        a.check("external-effect protocol (simulated service)","forged/wrong receipt rejected",
                 not (forged.idempotency_key==key and forged.effect_id=="charge"))
 
         # saga compensation reverse order, with two effects
@@ -661,14 +668,14 @@ def run_system(a: Acceptance):
         external.invoke("undo_charge2",{"n":2},ck2)
         external.invoke("undo_reserve",{"n":1},ck1)
         comp_calls=[c[0] for c in external.calls[calls_before:]]
-        a.check("external world","saga compensation exact reverse order",
+        a.check("external-effect protocol (simulated service)","saga compensation exact reverse order",
                 comp_calls==["undo_charge2","undo_reserve"])
 
         # retry same compensation keys => no new side effect objects
         count_objects=len(external.executed)
         external.invoke("undo_charge2",{"n":2},ck2)
         external.invoke("undo_reserve",{"n":1},ck1)
-        a.check("external world","compensation retry is idempotent",
+        a.check("external-effect protocol (simulated service)","compensation retry is idempotent",
                 len(external.executed)==count_objects)
 
         # Replay from initial state using recorded completed order.
@@ -711,6 +718,9 @@ def main():
 
     if args.json:
         payload={
+            "evidence_level":"simulated",
+            "qualified_repository":False,
+            "qualified_physical":False,
             "passed":sum(1 for _,_,s in a.rows if s=="PASS"),
             "total":len(a.rows),
             "assertions":[{"section":s,"name":n,"status":st} for s,n,st in a.rows],

@@ -25,6 +25,11 @@ import subprocess
 import sys
 from typing import Any, Callable, Protocol
 
+from qualification.evidence import (
+    EvidenceContext,
+    EvidenceLevel,
+    combine_contexts,
+)
 from interrogator import Interrogator, SerialTransport
 
 
@@ -144,6 +149,14 @@ class ProposerBackend(Protocol):
 class ReferenceBackend:
     name = "reference"
 
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PHYSICAL,
+            "ReferenceBackend",
+            {"proposer": "host CPU reference proposer"},
+            {},
+        )
+
     def propose(self, snapshot: Snapshot) -> Candidate:
         if snapshot.halted:
             return Candidate.build(
@@ -199,6 +212,14 @@ class CommandBackend:
             raise ValueError("command backend requires a command")
         self.name = "command:" + self.argv[0]
 
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            self.name,
+            {},
+            {"proposer": "unattested subprocess backend"},
+        )
+
     def propose(self, snapshot: Snapshot) -> Candidate:
         payload = json.dumps(asdict(snapshot), sort_keys=True)
         proc = subprocess.run(
@@ -231,11 +252,23 @@ class ModuleBackend:
             if p not in sys.path:
                 sys.path.insert(0, p)
         module = importlib.import_module(module_name)
+        self.module = module
         func = getattr(module, func_name)
         if not callable(func):
             raise TypeError(f"{target!r} is not callable")
         self.func: Callable[[dict[str, Any]], dict[str, Any]] = func
         self.name = "module:" + target
+
+    def evidence_context(self) -> EvidenceContext:
+        evidence_fn = getattr(self.module, "evidence_context", None)
+        if callable(evidence_fn):
+            return evidence_fn()
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            self.name,
+            {},
+            {"proposer": "module backend supplied no attestation"},
+        )
 
     def propose(self, snapshot: Snapshot) -> Candidate:
         data = self.func(asdict(snapshot))
@@ -251,6 +284,17 @@ class CorruptingBackend:
         self.base = base
         self.mode = mode
         self.name = f"{base.name}+{mode}"
+
+    def evidence_context(self) -> EvidenceContext:
+        evidence_fn = getattr(self.base, "evidence_context", None)
+        if callable(evidence_fn):
+            return evidence_fn()
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            self.name,
+            {},
+            {"proposer": "unattested corrupting backend"},
+        )
 
     def propose(self, snapshot: Snapshot) -> Candidate:
         c = self.base.propose(snapshot)
@@ -295,9 +339,13 @@ class CapabilityReport:
     external_evidence_root: str
     state_parity: bool
     evidence_parity: bool
+    evidence_level: str = "simulated"
+    qualified: bool = False
+    actual_components: dict[str, str] | None = None
+    substitutions: dict[str, str] | None = None
 
     @property
-    def passed(self) -> bool:
+    def observed_pass(self) -> bool:
         return (
             self.halted
             and self.rejections == 0
@@ -305,11 +353,19 @@ class CapabilityReport:
             and self.evidence_parity
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.observed_pass and self.qualified
+
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True)
+            json.dumps(
+                asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed},
+                indent=2,
+                sort_keys=True,
+            )
             + "\n",
             encoding="utf-8",
         )
@@ -331,9 +387,13 @@ class ExternalQualificationReport:
     baseline_evidence_root: str
     external_state_hash: str
     external_evidence_root: str
+    evidence_level: str = "simulated"
+    qualified: bool = False
+    actual_components: dict[str, str] | None = None
+    substitutions: dict[str, str] | None = None
 
     @property
-    def passed(self) -> bool:
+    def observed_pass(self) -> bool:
         return (
             self.reference_parity
             and self.authority_rejects_corruption
@@ -342,11 +402,19 @@ class ExternalQualificationReport:
             and self.wrong_authoritative_commits == 0
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.observed_pass and self.qualified
+
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True)
+            json.dumps(
+                asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed},
+                indent=2,
+                sort_keys=True,
+            )
             + "\n",
             encoding="utf-8",
         )
@@ -355,6 +423,29 @@ class ExternalQualificationReport:
 class ExternalAuthorityClient:
     def __init__(self, iq: Interrogator):
         self.iq = iq
+
+    def _backend_evidence_context(self, backend: ProposerBackend) -> EvidenceContext:
+        evidence_fn = getattr(backend, "evidence_context", None)
+        if callable(evidence_fn):
+            return evidence_fn()
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            type(backend).__name__,
+            {},
+            {"proposer": "backend supplied no evidence attestation"},
+        )
+
+    def _qualification_evidence(self, backend: ProposerBackend) -> tuple[EvidenceContext, bool]:
+        context = combine_contexts(
+            self.iq.evidence_context,
+            self._backend_evidence_context(backend),
+            source="ExternalAuthorityClient",
+        )
+        qualified = context.satisfies(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "transport", "proposer"),
+        )
+        return context, qualified
 
     def snapshot(self) -> Snapshot:
         event = self.iq.execute("SNAPSHOT", "snapshot").terminal
@@ -443,6 +534,7 @@ class ExternalAuthorityClient:
             initial_r1=initial_r1,
             max_steps=max_steps,
         )
+        evidence, qualified = self._qualification_evidence(backend)
         return CapabilityReport(
             schema_version="uow-esp32-external-capability-v0.1",
             backend=backend.name,
@@ -455,6 +547,10 @@ class ExternalAuthorityClient:
             external_evidence_root=external.final_evidence_root,
             state_parity=external.final_state_hash == baseline["state_hash"],
             evidence_parity=external.final_evidence_root == baseline["evidence_root"],
+            evidence_level=evidence.level.label,
+            qualified=qualified,
+            actual_components=dict(evidence.actual_components),
+            substitutions=dict(evidence.substitutions),
         )
 
     def qualify(
@@ -538,6 +634,7 @@ class ExternalAuthorityClient:
                 ):
                     no_mutation = False
 
+        evidence, qualified = self._qualification_evidence(backend)
         return ExternalQualificationReport(
             schema_version="uow-esp32-external-proposer-v0.1",
             backend=backend.name,
@@ -553,6 +650,10 @@ class ExternalAuthorityClient:
             baseline_evidence_root=str(baseline["evidence_root"]),
             external_state_hash=external.final_state_hash,
             external_evidence_root=external.final_evidence_root,
+            evidence_level=evidence.level.label,
+            qualified=qualified,
+            actual_components=dict(evidence.actual_components),
+            substitutions=dict(evidence.substitutions),
         )
 
 
@@ -624,13 +725,21 @@ def main() -> int:
                 initial_r1=args.r1,
                 max_steps=args.max_steps,
             )
-            print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+            print(json.dumps(
+                asdict(report) | {"observed_pass": report.observed_pass, "passed": report.passed},
+                indent=2,
+                sort_keys=True,
+            ))
             if args.report:
                 report.save(args.report)
             return 0 if report.passed else 2
 
         report = client.qualify(backend, backend_trials=args.backend_trials)
-        print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+        print(json.dumps(
+                asdict(report) | {"observed_pass": report.observed_pass, "passed": report.passed},
+                indent=2,
+                sort_keys=True,
+            ))
         if args.report:
             report.save(args.report)
         return 0 if report.passed else 2

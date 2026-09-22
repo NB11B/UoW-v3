@@ -23,6 +23,12 @@ import sys
 import time
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import EvidenceContext, EvidenceLevel
+
 # Ensure UTF-8 output encoding on Windows
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -129,11 +135,19 @@ class DualReplayBuffer:
 class TransactionalCanaryDeployer:
     """Coordinates GPU training, Intel NPU compilation, regression validation, and canary promotion."""
 
-    def __init__(self, cache_dir: Path, target_npu_device: str = "NPU"):
+    def __init__(
+        self,
+        cache_dir: Path,
+        target_npu_device: str | None = None,
+        *,
+        strict_backend: bool = False,
+    ):
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
-        self.target_npu = target_npu_device
         self.ov_core = ov.Core()
+        self.target_npu = target_npu_device if target_npu_device is not None else "CPU"
+        self.using_npu_substitute = self.target_npu != "NPU"
+        self.strict_backend = strict_backend
 
         self.current_onnx_path = self.cache_dir / "active_router.onnx"
         self.candidate_onnx_path = self.cache_dir / "candidate_router.onnx"
@@ -164,6 +178,8 @@ class TransactionalCanaryDeployer:
         except Exception as exc:
             print(f"[CanaryDeployer] NPU compilation failed: {exc}", file=sys.stderr)
             self.candidate_compiled_model = None
+            if self.strict_backend:
+                raise RuntimeError("required NPU policy compilation failed") from exc
             return False
 
     def validate_regression(self, validation_suite: list[RoutingExperience]) -> bool:
@@ -253,10 +269,14 @@ class TransactionalCanaryDeployer:
                 lat = res[runner.output(0)][0]
                 rej = res[runner.output(1)][0]
                 return lat, rej
-            except Exception:
-                pass
+            except Exception as exc:
+                if self.strict_backend:
+                    raise RuntimeError("required NPU policy inference failed") from exc
 
-        # Fallback heuristic if NPU model not yet compiled
+        if self.strict_backend:
+            raise RuntimeError("required NPU policy model is unavailable")
+
+        # Portable-only fallback heuristic if no accelerator model is available
         batch_size = features[0] * 64.0
         # Heuristic: CPU ~ 2-5ms, GPU ~ 0.5-2ms, NPU ~ 0.6-2.5ms
         lat = np.array([3.0 + batch_size * 0.05, 0.8 + batch_size * 0.02, 0.7 + batch_size * 0.03], dtype=np.float32)
@@ -267,11 +287,19 @@ class TransactionalCanaryDeployer:
 class AdaptiveRoutingPolicy:
     """Full closed-loop routing policy manager combining GPU training and NPU inference."""
 
-    def __init__(self, cache_dir: Path | None = None):
+    def __init__(
+        self,
+        cache_dir: Path | None = None,
+        *,
+        require_gpu: bool = False,
+        require_npu: bool = False,
+    ):
         self.cache_dir = cache_dir or (Path(__file__).resolve().parent / ".router_cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
         self.has_gpu = torch.cuda.is_available()
+        if require_gpu and not self.has_gpu:
+            raise RuntimeError("physical qualification requires GPU-backed policy training")
         self.device = torch.device("cuda" if self.has_gpu else "cpu")
 
         # PyTorch model for GPU training
@@ -281,10 +309,19 @@ class AdaptiveRoutingPolicy:
         # Dual replay buffer
         self.buffer = DualReplayBuffer(recent_capacity=500, retention_capacity=200)
 
-        # Intel NPU canary deployer
+        # Intel NPU canary deployer. CPU fallback is permitted only as an
+        # explicitly portable substitute and can never satisfy a physical NPU claim.
         core = ov.Core()
-        target_npu = "NPU" if "NPU" in core.available_devices else "CPU"
-        self.deployer = TransactionalCanaryDeployer(self.cache_dir, target_npu_device=target_npu)
+        has_npu = "NPU" in core.available_devices
+        if require_npu and not has_npu:
+            raise RuntimeError("physical qualification requires Intel/OpenVINO NPU policy inference")
+        target_npu = "NPU" if has_npu else None
+        self.deployer = TransactionalCanaryDeployer(
+            self.cache_dir,
+            target_npu_device=target_npu,
+            strict_backend=require_npu,
+        )
+        self.has_npu = has_npu
 
         # Cold-start bootstrap: compile initial model
         self.deployer.compile_candidate(self.net)
@@ -293,6 +330,20 @@ class AdaptiveRoutingPolicy:
         # Telemetry tracking
         self.training_steps: int = 0
         self.last_observed_latencies: dict[int, float] = {0: 3000.0, 1: 1000.0, 2: 800.0}
+
+    def evidence_context(self) -> EvidenceContext:
+        actual: dict[str, str] = {}
+        substitutions: dict[str, str] = {}
+        if self.has_gpu:
+            actual["gpu_training"] = torch.cuda.get_device_name(0)
+        else:
+            substitutions["gpu_training"] = "CPU training substitute"
+        if self.has_npu and not self.deployer.using_npu_substitute:
+            actual["npu_policy"] = "OpenVINO NPU"
+        else:
+            substitutions["npu_policy"] = "OpenVINO CPU policy substitute"
+        level = EvidenceLevel.PHYSICAL if (self.has_gpu and self.has_npu) else EvidenceLevel.PORTABLE
+        return EvidenceContext(level, "AdaptiveRoutingPolicy", actual, substitutions)
 
     def featurize(
         self,
@@ -338,9 +389,13 @@ class AdaptiveRoutingPolicy:
         # Build candidate score list
         scores = {}
         for dev in (DEVICE_CPU, DEVICE_GPU, DEVICE_NPU):
+            is_online = bool(online_mask & (1 << dev))
             has_capacity = inflight[dev] < max_inflight[dev]
             has_tokens = tokens >= 1
 
+            if not is_online:
+                scores[dev] = 1e9
+                continue
             if not has_capacity:
                 scores[dev] = 1e8  # Hard penalty for full queue
                 continue
@@ -357,8 +412,9 @@ class AdaptiveRoutingPolicy:
         # Find best action
         valid_devs = [d for d in (DEVICE_CPU, DEVICE_GPU, DEVICE_NPU) if scores[d] < 1e6]
         if not valid_devs:
-            # Fallback to least loaded device
-            best_dev = min((DEVICE_CPU, DEVICE_GPU, DEVICE_NPU), key=lambda d: inflight[d])
+            raise RuntimeError(
+                "no eligible execution target: every device is offline, full, or lacks resources"
+            )
         else:
             if random.random() < epsilon:
                 best_dev = random.choice(valid_devs)
@@ -479,7 +535,13 @@ class AdaptiveRoutingPolicy:
                 receipt = engine.execute(job_id=9000 + dev * 100 + b, target_device=dev, batch_size=b)
                 job = JobDescriptor(job_id=9000, batch_size=b, priority=0.5, latency_budget_us=10000)
                 feats = self.featurize(job, snap, load)
-                self.record_feedback(feats, dev, latency_us=receipt.latency_us, rejected=False, phase="Bootstrap")
+                self.record_feedback(
+                    feats,
+                    dev,
+                    latency_us=receipt.latency_us,
+                    rejected=receipt.error is not None,
+                    phase="Bootstrap",
+                )
         self.train_step(batch_size=12, epochs=80)
         self.deployer.compile_candidate(self.net)
         self.deployer.promote_candidate()

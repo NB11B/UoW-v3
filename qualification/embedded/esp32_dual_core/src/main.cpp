@@ -607,8 +607,9 @@ void authority_task(void*) {
 
                     const auto post_hash = hash_sched_state(gSchedState);
 
+                    const auto prev_evidence_root = gSchedEvidenceRoot;
                     std::ostringstream ev;
-                    ev << hex_digest(gSchedEvidenceRoot) << ":RESERVE:" << res_id << ":" << p.job_id
+                    ev << hex_digest(prev_evidence_root) << ":RESERVE:" << res_id << ":" << p.job_id
                        << ":" << static_cast<uint32_t>(p.target_device) << ":" << p.tokens << ":" << hex_digest(post_hash);
                     gSchedEvidenceRoot = sha256(ev.str());
 
@@ -620,6 +621,7 @@ void authority_task(void*) {
                     s += ",\"job_id\":" + std::to_string(p.job_id);
                     s += ",\"target\":" + std::to_string(p.target_device);
                     s += ",\"post_state_hash\":\"" + hex_digest(post_hash) + "\"";
+                    s += ",\"prev_evidence_root\":\"" + hex_digest(prev_evidence_root) + "\"";
                     s += ",\"evidence_root\":\"" + hex_digest(gSchedEvidenceRoot) + "\"}";
                     emit_line(s);
                 } else {
@@ -657,8 +659,9 @@ void authority_task(void*) {
 
                     const auto post_hash = hash_sched_state(gSchedState);
 
+                    const auto prev_evidence_root = gSchedEvidenceRoot;
                     std::ostringstream ev;
-                    ev << hex_digest(gSchedEvidenceRoot) << ":RECEIPT:" << r.reservation_id << ":"
+                    ev << hex_digest(prev_evidence_root) << ":RECEIPT:" << r.reservation_id << ":"
                        << static_cast<uint32_t>(r.status) << ":" << r.latency_us << ":"
                        << hex_digest(r.output_digest) << ":" << hex_digest(post_hash);
                     gSchedEvidenceRoot = sha256(ev.str());
@@ -671,6 +674,7 @@ void authority_task(void*) {
                     s += ",\"completion_seq\":" + std::to_string(gSchedState.completion_seq);
                     s += ",\"latency_us\":" + std::to_string(r.latency_us);
                     s += ",\"post_state_hash\":\"" + hex_digest(post_hash) + "\"";
+                    s += ",\"prev_evidence_root\":\"" + hex_digest(prev_evidence_root) + "\"";
                     s += ",\"evidence_root\":\"" + hex_digest(gSchedEvidenceRoot) + "\"}";
                     emit_line(s);
                 } else {

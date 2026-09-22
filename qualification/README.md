@@ -81,3 +81,12 @@ python qualification/uow_system_acceptance.py --timing-seeds 1000
 
 This tests local timer independence. It does not claim arbitrary distributed
 physical-clock synchronization.
+
+
+## Evidence policy
+
+All qualification code is governed by [EVIDENCE_POLICY.md](EVIDENCE_POLICY.md).
+
+A mock, simulation, portable fallback, proxy metric, or substituted device may validate logic, but it cannot satisfy a claim about a different physical substrate. Substrate-sensitive gates must distinguish `observed_pass`, `qualified`, and `passed`.
+
+The shared implementation is `qualification/evidence.py`.

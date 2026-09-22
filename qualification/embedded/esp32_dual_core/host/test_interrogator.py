@@ -203,7 +203,9 @@ class InterrogatorTests(unittest.TestCase):
     def test_campaign_and_report(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
         report = iq.campaign()
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertEqual((report.final_r0, report.final_r1, report.final_sequence), (0, 75, 102))
         self.assertGreater(len(iq.transcript.events), 10)
 
@@ -211,7 +213,13 @@ class InterrogatorTests(unittest.TestCase):
         left = Interrogator(FakeTransport(FakeDevice(0, 1)), echo=False).campaign()
         right = Interrogator(FakeTransport(FakeDevice(1, 0)), echo=False).campaign()
         result = compare_reports(left, right)
-        self.assertTrue(all(result.values()))
+        self.assertTrue(result["both_observed_passed"])
+        self.assertFalse(result["both_qualified"])
+        self.assertFalse(result["both_passed"])
+        self.assertTrue(result["core_mapping_inverted"])
+        self.assertTrue(result["evidence_root_identical"])
+        self.assertTrue(result["state_hash_identical"])
+        self.assertTrue(result["terminal_state_identical"])
 
     def test_report_roundtrip(self):
         report = Interrogator(FakeTransport(FakeDevice()), echo=False).campaign()
@@ -224,34 +232,44 @@ class InterrogatorTests(unittest.TestCase):
     def test_stress_campaign(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
         report = iq.stress(trials=8, seed=12345)
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertEqual(report.trials_completed, 8)
         self.assertTrue(all(t.passed for t in report.trials))
 
     def test_fault_matrix(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
         report = iq.fault_matrix()
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertEqual(len(report.cases), 6)
         self.assertTrue(all(case.passed for case in report.cases))
 
     def test_soak_campaign(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
         report = iq.soak(rounds=3, trials_per_round=4, seed=900)
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertEqual(report.rounds_completed, 3)
         self.assertTrue(iq.transcript.verify())
 
     def test_resilience_campaign(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
         report = iq.resilience()
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertTrue(all(report.checks.values()))
 
     def test_full_qualification(self):
         iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
         report = iq.qualify_all(stress_trials=3, seed=777)
-        self.assertTrue(report.passed)
+        self.assertTrue(report.observed_pass)
+        self.assertFalse(report.qualified)
+        self.assertFalse(report.passed)
         self.assertTrue(report.resilience_passed)
         self.assertTrue(report.transcript_audit_passed)
 

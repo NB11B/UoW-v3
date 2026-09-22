@@ -15,7 +15,7 @@ Evaluates 8 Capability Gates:
   G2: Adaptation convergence (rejection falls <= 5% within 40 jobs)
   G3: Heterogeneous execution (CPU, GPU, NPU all execute >= 100 jobs)
   G4: Latency regret reduction (adaptive router beats static baselines)
-  G5: Hardware verification & Merkle ledger continuity
+  G5: independently verified SHA-256 evidence-chain continuity
   G6: Transactional canary safety (no degraded model promoted)
   G7: Retention / Fast reacquisition in Phase 6 within 25 jobs
 """
@@ -34,6 +34,18 @@ import sys
 import threading
 import time
 from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import (
+    ClaimRequirement,
+    EvidenceContext,
+    EvidenceLevel,
+    combine_contexts,
+    evaluate_claim,
+)
 
 # Ensure UTF-8 output encoding on Windows
 if hasattr(sys.stdout, "reconfigure"):
@@ -67,6 +79,14 @@ class PhysicalAuthorityClient:
         time.sleep(1.0)
         with self._lock:
             self.ser.reset_input_buffer()
+
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PHYSICAL,
+            "PhysicalAuthorityClient",
+            {"authority": f"ESP32-S3 serial:{self.ser.port}"},
+            {},
+        )
 
     def close(self) -> None:
         with self._lock:
@@ -154,6 +174,14 @@ class MockAuthorityClient:
         s = f"{self.epoch}:{self.online_mask}:{self.inflight[0]}:{self.inflight[1]}:{self.inflight[2]}:{self.tokens}:{self.reservation_seq}:{self.completion_seq}"
         return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.SIMULATED,
+            "MockAuthorityClient",
+            {},
+            {"authority": "in-process mock authority"},
+        )
+
     def close(self) -> None:
         pass
 
@@ -238,7 +266,8 @@ class MockAuthorityClient:
                 res_id = self.reservation_seq
                 self.reservations[res_id] = {"job_id": job_id, "target": target, "tokens": tokens}
                 post_hash = self._state_hash()
-                ev_str = f"{self.evidence_root}:RESERVE:{res_id}:{job_id}:{target}:{tokens}:{post_hash}"
+                prev_evidence_root = self.evidence_root
+                ev_str = f"{prev_evidence_root}:RESERVE:{res_id}:{job_id}:{target}:{tokens}:{post_hash}"
                 self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
                 return {
                     "event": "sched_decision",
@@ -248,6 +277,7 @@ class MockAuthorityClient:
                     "job_id": job_id,
                     "target": target,
                     "post_state_hash": post_hash,
+                    "prev_evidence_root": prev_evidence_root,
                     "evidence_root": self.evidence_root,
                 }
             else:
@@ -300,7 +330,8 @@ class MockAuthorityClient:
             self.completion_seq += 1
             del self.reservations[reservation_id]
             post_hash = self._state_hash()
-            ev_str = f"{self.evidence_root}:RECEIPT:{reservation_id}:{status}:{latency_us}:{output_digest}:{post_hash}"
+            prev_evidence_root = self.evidence_root
+            ev_str = f"{prev_evidence_root}:RECEIPT:{reservation_id}:{status}:{latency_us}:{output_digest}:{post_hash}"
             self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
 
             return {
@@ -311,6 +342,7 @@ class MockAuthorityClient:
                 "completion_seq": self.completion_seq,
                 "latency_us": latency_us,
                 "post_state_hash": post_hash,
+                "prev_evidence_root": prev_evidence_root,
                 "evidence_root": self.evidence_root,
             }
 
@@ -333,6 +365,8 @@ class JobRecord:
     post_state_hash: str
     evidence_root: str
     canary_active: bool
+    actual_backend: str = ""
+    execution_error: str | None = None
 
 
 class DistributionTracker:
@@ -368,7 +402,11 @@ class DistributionTracker:
         if not records:
             return {}
 
-        latencies = [float(r.latency_us) for r in records if r.proposed_committed]
+        latencies = [
+            float(r.latency_us)
+            for r in records
+            if r.proposed_committed and r.receipt_committed and not r.execution_error
+        ]
         regrets = [float(r.regret_us) for r in records]
 
         # First half vs Second half variance convergence
@@ -384,8 +422,18 @@ class DistributionTracker:
         # Per-device breakdown
         device_stats = {}
         for dev_id, dev_name in [(DEVICE_CPU, "CPU"), (DEVICE_GPU, "GPU"), (DEVICE_NPU, "NPU")]:
-            dev_lats = [float(r.latency_us) for r in records if r.proposed_committed and r.target_device == dev_id]
-            dev_regs = [float(r.regret_us) for r in records if r.proposed_committed and r.target_device == dev_id]
+            dev_lats = [
+                float(r.latency_us)
+                for r in records
+                if r.proposed_committed and r.receipt_committed
+                and not r.execution_error and r.target_device == dev_id
+            ]
+            dev_regs = [
+                float(r.regret_us)
+                for r in records
+                if r.proposed_committed and r.receipt_committed
+                and not r.execution_error and r.target_device == dev_id
+            ]
             device_stats[dev_name] = {
                 "count": len(dev_lats),
                 "latency": cls.compute_percentiles(dev_lats),
@@ -396,7 +444,12 @@ class DistributionTracker:
         regimes = sorted(list(set(r.phase for r in records)))
         regime_stats = {}
         for reg in regimes:
-            reg_lats = [float(r.latency_us) for r in records if r.proposed_committed and r.phase == reg]
+            reg_lats = [
+                float(r.latency_us)
+                for r in records
+                if r.proposed_committed and r.receipt_committed
+                and not r.execution_error and r.phase == reg
+            ]
             reg_regs = [float(r.regret_us) for r in records if r.phase == reg]
             regime_stats[reg] = {
                 "count": len(reg_regs),
@@ -450,6 +503,15 @@ class RouterCampaignRunner:
 
         self.occ_conflicts = 0
         self.occ_retries_successful = 0
+        self.evidence_links_verified = 0
+        self.evidence_verification_failures = 0
+        self.authority_negative_control: dict[str, Any] = {}
+        self.evidence_context = combine_contexts(
+            self.authority.evidence_context(),
+            self.engine.evidence_context(),
+            self.policy.evidence_context(),
+            source="RouterCampaignRunner",
+        )
 
         self.stochastic_env = (
             StochasticEnvironmentGenerator(
@@ -460,6 +522,91 @@ class RouterCampaignRunner:
             if self.stochastic_mode
             else None
         )
+
+    def _run_authority_negative_control(self) -> dict[str, Any]:
+        """Force an offline-target proposal through the actual authority path."""
+        self.authority.reset(
+            online_mask=7,
+            max_cpu=16,
+            max_gpu=16,
+            max_npu=16,
+            tokens=1000,
+        )
+        offline = self.authority.set_online(DEVICE_GPU, False)
+        before = self.authority.get_snapshot()
+        before_hash = before.get("state_hash", "")
+        before_root = before.get("evidence_root", "")
+        forced = self.authority.propose(
+            pre_state_hash=before_hash,
+            job_id=0x7FFF0001,
+            target=DEVICE_GPU,
+            tokens=1,
+        )
+        after = self.authority.get_snapshot()
+        observed_pass = (
+            forced.get("committed") is False
+            and forced.get("reason") == "DEVICE_OFFLINE"
+            and after.get("state_hash") == before_hash
+            and after.get("evidence_root") == before_root
+        )
+        return {
+            "observed_pass": observed_pass,
+            "forced_reason": forced.get("reason"),
+            "committed": bool(forced.get("committed", False)),
+            "state_unchanged": after.get("state_hash") == before_hash,
+            "evidence_unchanged": after.get("evidence_root") == before_root,
+            "offline_mask": offline.get("online_mask"),
+        }
+
+    def _verify_reservation_evidence(
+        self,
+        job: JobDescriptor,
+        target: int,
+        prop_res: dict[str, Any],
+    ) -> None:
+        if not prop_res.get("committed", False):
+            return
+        prev_root = prop_res.get("prev_evidence_root")
+        post_hash = prop_res.get("post_state_hash")
+        actual_root = prop_res.get("evidence_root")
+        res_id = int(prop_res.get("reservation_id", 0))
+        if not prev_root or not post_hash or not actual_root or res_id <= 0:
+            self.evidence_verification_failures += 1
+            return
+        body = (
+            f"{prev_root}:RESERVE:{res_id}:{job.job_id}:"
+            f"{target}:{job.tokens}:{post_hash}"
+        )
+        expected = hashlib.sha256(body.encode("utf-8")).hexdigest()
+        if expected == actual_root:
+            self.evidence_links_verified += 1
+        else:
+            self.evidence_verification_failures += 1
+
+    def _verify_receipt_evidence(
+        self,
+        reservation_id: int,
+        w_receipt: Any,
+        rec_res: dict[str, Any],
+    ) -> None:
+        if not rec_res.get("committed", False):
+            return
+        prev_root = rec_res.get("prev_evidence_root")
+        post_hash = rec_res.get("post_state_hash")
+        actual_root = rec_res.get("evidence_root")
+        if not prev_root or not post_hash or not actual_root:
+            self.evidence_verification_failures += 1
+            return
+        status = 0 if w_receipt.error is None else 1
+        body = (
+            f"{prev_root}:RECEIPT:{reservation_id}:{status}:"
+            f"{w_receipt.latency_us}:{w_receipt.output_digest}:{post_hash}"
+        )
+        expected = hashlib.sha256(body.encode("utf-8")).hexdigest()
+        if expected == actual_root:
+            self.evidence_links_verified += 1
+        else:
+            self.evidence_verification_failures += 1
 
     def _execute_and_receipt(self, job: JobDescriptor, target: int, res_id: int) -> tuple[Any, dict[str, Any]]:
         w_receipt = self.engine.execute(job_id=job.job_id, target_device=target, batch_size=job.batch_size)
@@ -485,25 +632,43 @@ class RouterCampaignRunner:
     ) -> None:
         measured_latency_us = w_receipt.latency_us
         receipt_committed = rec_res.get("committed", False)
+        self._verify_receipt_evidence(
+            prop_res.get("reservation_id", 0),
+            w_receipt,
+            rec_res,
+        )
         post_state_hash = rec_res.get("post_state_hash", prop_res.get("post_state_hash", ""))
         ev_root = rec_res.get("evidence_root", prop_res.get("evidence_root", self.prev_evidence_root))
         res_id = prop_res.get("reservation_id", 0)
 
-        base_lat = {1: (2500, 400, 600), 4: (1200, 500, 700), 16: (1900, 500, 1050), 64: (3100, 2100, 2500)}
-        b_lat = base_lat.get(job.batch_size, (2000, 1000, 1000))
-        c_mult = 3.0 if self.engine.cpu_contention_active else 1.0
-        g_mult = 5.0 if self.engine.gpu_contention_active else 1.0
-        n_mult = 4.0 if self.engine.npu_contention_active else 1.0
-        proxy = {0: int(b_lat[0] * c_mult), 1: int(b_lat[1] * g_mult), 2: int(b_lat[2] * n_mult)}
-        best_oracle_dev = min(proxy.keys(), key=lambda d: proxy[d])
-        best_oracle_lat = proxy.get(best_oracle_dev, measured_latency_us)
-        regret_us = max(0, measured_latency_us - best_oracle_lat)
+        # Measure the shadow oracle on the actual currently-online hardware.
+        # No hand-written latency proxy may satisfy a physical performance claim.
+        online_mask = int(meta.get("authority_online_mask", 7))
+        active_devices = [
+            dev
+            for dev in self.engine.available_actual_devices()
+            if online_mask & (1 << dev)
+        ]
+        oracle = self.engine.benchmark_oracle(
+            job_id=job.job_id,
+            batch_size=job.batch_size,
+            active_devices=active_devices,
+        )
+        if oracle:
+            best_oracle_dev = min(oracle, key=oracle.get)
+            best_oracle_lat = oracle[best_oracle_dev]
+        else:
+            best_oracle_dev = target
+            best_oracle_lat = measured_latency_us
+
+        execution_failed = bool(w_receipt.error) or not receipt_committed
+        regret_us = 15000 if execution_failed else max(0, measured_latency_us - best_oracle_lat)
 
         self.policy.record_feedback(
             features=feats,
             action=target,
             latency_us=measured_latency_us,
-            rejected=False,
+            rejected=execution_failed,
             phase=phase_name,
         )
 
@@ -518,12 +683,14 @@ class RouterCampaignRunner:
             reservation_id=res_id,
             receipt_committed=receipt_committed,
             latency_us=measured_latency_us,
-            oracle_latencies_us=proxy,
+            oracle_latencies_us=oracle,
             oracle_best_device=best_oracle_dev,
             regret_us=regret_us,
             post_state_hash=post_state_hash,
             evidence_root=ev_root,
             canary_active=meta.get("canary_active", False),
+            actual_backend=w_receipt.actual_backend,
+            execution_error=w_receipt.error,
         )
         self.records.append(record)
         self.prev_evidence_root = ev_root
@@ -532,7 +699,7 @@ class RouterCampaignRunner:
             self.stochastic_env.record_job_result(
                 job_id=job.job_id,
                 target_device=target,
-                committed=True,
+                committed=not execution_failed,
                 latency_us=measured_latency_us,
                 regret_us=regret_us,
             )
@@ -649,7 +816,11 @@ class RouterCampaignRunner:
         print(f" Total Jobs: {self.total_jobs} | Concurrency: {self.concurrency}")
         print(f"=======================================================\n")
 
-        # 1. Reset authority state
+        # 0. Required negative control: policy avoidance is not evidence that the
+        # authority can reject an illegal offline-device proposal.
+        self.authority_negative_control = self._run_authority_negative_control()
+
+        # 1. Reset authority state after the negative control.
         snap = self.authority.reset(online_mask=7, max_cpu=16, max_gpu=16, max_npu=16, tokens=1000)
         self.prev_evidence_root = snap.get("evidence_root", "0" * 64)
         current_state_hash = snap.get("state_hash", "")
@@ -719,19 +890,19 @@ class RouterCampaignRunner:
                         self.engine.set_gpu_contention(False)
                         self.engine.set_npu_contention(False)
                     elif phase_idx == 2:  # P3: GPU Contention
-                        print("  [Simulator] Activating heavy background GPU GEMM contention loop...")
+                        print("  [Environment] Activating heavy background GPU GEMM contention loop...")
                         self.engine.set_gpu_contention(True)
                         self.engine.set_npu_contention(False)
                     elif phase_idx == 3:  # P4: NPU Contention
-                        print("  [Simulator] Deactivating GPU contention, activating background NPU contention loop...")
+                        print("  [Environment] Deactivating GPU contention, activating background NPU contention loop...")
                         self.engine.set_gpu_contention(False)
                         self.engine.set_npu_contention(True)
                     elif phase_idx == 4:  # P5: Device Outage (GPU Offline)
-                        print("  [Simulator] Deactivating NPU contention, instructing Authority: GPU OFFLINE...")
+                        print("  [Environment] Deactivating NPU contention, instructing Authority: GPU OFFLINE...")
                         self.engine.set_npu_contention(False)
                         snap = self.authority.set_online(DEVICE_GPU, False)
                     elif phase_idx == 5:  # P6: Nominal Restoration
-                        print("  [Simulator] Restoring GPU ONLINE and clearing all contention (testing retention)...")
+                        print("  [Environment] Restoring GPU ONLINE and clearing all contention (testing retention)...")
                         self.engine.set_gpu_contention(False)
                         self.engine.set_npu_contention(False)
                         snap = self.authority.set_online(DEVICE_GPU, True)
@@ -765,6 +936,7 @@ class RouterCampaignRunner:
 
             feats = self.policy.featurize(job, snap, system_load)
             target, meta = self.policy.select_target(feats, snap, epsilon=eps)
+            meta["authority_online_mask"] = int(snap.get("online_mask", 7))
 
             # Submit proposal to ESP32 Scheduling Authority with OCC retry on stale state hash
             prop_res = self.authority.propose_with_occ_retry(
@@ -792,6 +964,7 @@ class RouterCampaignRunner:
                 print(f"CRITICAL FAULT: Authority committed proposal for offline device {target}!", file=sys.stderr)
 
             if prop_committed:
+                self._verify_reservation_evidence(job, target, prop_res)
                 if self.concurrency > 1 and executor is not None:
                     fut = executor.submit(
                         self._execute_and_receipt,
@@ -856,7 +1029,7 @@ class RouterCampaignRunner:
                 avg_regret = sum(r.regret_us for r in recent_50) / max(1, len(recent_50))
                 print(f"Job {job_id:4d}/{self.total_jobs} | Phase: {phase_name[:16]:16s} | "
                       f"Rej(last50): {rej_cnt:2d}/50 | AvgLat: {avg_lat:6.1f}us | "
-                      f"AvgRegret: {avg_regret:6.1f}us | Merkle: {self.prev_evidence_root[:10]}...")
+                      f"AvgRegret: {avg_regret:6.1f}us | Evidence: {self.prev_evidence_root[:10]}...")
 
         # Drain all remaining in-flight tasks
         if executor is not None:
@@ -889,6 +1062,8 @@ class RouterCampaignRunner:
             "total_jobs": self.total_jobs,
             "seed": self.seed,
             "wrong_authoritative_commits": self.wrong_authoritative_commits,
+            "evidence_context": self.evidence_context.to_dict(),
+            "authority_negative_control": self.authority_negative_control,
             "gates": gate_results,
             "distribution_metrics": dist_metrics,
             "stochastic_metrics": stochastic_metrics,
@@ -914,10 +1089,10 @@ class RouterCampaignRunner:
         # G0: wrong_authoritative_commits == 0
         g0_pass = (self.wrong_authoritative_commits == 0)
 
-        # G1: Non-zero rejection during phase shifts (e.g. Phase 5 outage)
+        # G1: Explicit authority enforcement. Adaptive avoidance does not count.
         total_rejections = sum(1 for r in self.records if not r.proposed_committed)
         p5_rejections = sum(1 for r in self.records if r.phase_index == 4 and not r.proposed_committed)
-        g1_pass = (total_rejections > 0)
+        g1_pass = bool(self.authority_negative_control.get("observed_pass", False))
 
         # G2: Adaptation convergence (rejection rate in second half of each phase drops <= 5%)
         if self.stochastic_mode:
@@ -938,10 +1113,13 @@ class RouterCampaignRunner:
                         g2_pass = False
 
         # G3: Heterogeneous execution: CPU, GPU, NPU all execute >= 2% of total jobs
-        committed_recs = [r for r in self.records if r.proposed_committed]
-        cpu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_CPU)
-        gpu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_GPU)
-        npu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_NPU)
+        committed_recs = [
+            r for r in self.records
+            if r.proposed_committed and r.receipt_committed and not r.execution_error
+        ]
+        cpu_count = sum(1 for r in committed_recs if r.actual_backend == "CPU")
+        gpu_count = sum(1 for r in committed_recs if r.actual_backend == "CUDA")
+        npu_count = sum(1 for r in committed_recs if r.actual_backend == "OPENVINO_NPU")
         min_expected = max(1, int(self.total_jobs * 0.02))
         g3_pass = (cpu_count >= min_expected and gpu_count >= min_expected and npu_count >= min_expected)
 
@@ -949,12 +1127,19 @@ class RouterCampaignRunner:
         avg_regret = sum(r.regret_us for r in self.records) / max(1, len(self.records))
         g4_pass = (avg_regret < 4000.0)
 
-        # G5: Merkle ledger continuity & verification
-        # Committed records advance root monotonically and uniquely; rejected records preserve root (zero mutation)
+        # G5: independently verified SHA-256 evidence-chain continuity.
+        # Coverage must equal every authoritative RESERVE + RECEIPT link.
         committed_roots = [r.evidence_root for r in self.records if r.proposed_committed]
-        all_unique_committed = (len(set(committed_roots)) == len(committed_roots))
-        all_nonzero = all(r != "0" * 64 for r in committed_roots)
-        g5_pass = (all_unique_committed and all_nonzero and len(committed_roots) > 0)
+        final_sched_snapshot = self.authority.get_snapshot()
+        expected_evidence_links = (
+            int(final_sched_snapshot.get("reservation_seq", 0))
+            + int(final_sched_snapshot.get("completion_seq", 0))
+        )
+        g5_pass = (
+            expected_evidence_links > 0
+            and self.evidence_verification_failures == 0
+            and self.evidence_links_verified == expected_evidence_links
+        )
 
         # G6: Transactional canary safety (deployer promotions occurred, no runaway regressions)
         promotions = self.policy.deployer.promotions_count
@@ -1038,41 +1223,90 @@ class RouterCampaignRunner:
                 and p95_reg <= 15000.0
             )
 
-        return {
-            "G0_zero_wrong_commits": {"passed": g0_pass, "wrong_commits": self.wrong_authoritative_commits},
-            "G1_phase_shift_rejections": {"passed": g1_pass, "total_rejections": total_rejections, "p5_rejections": p5_rejections},
-            "G2_adaptation_convergence": {"passed": g2_pass},
-            "G3_heterogeneous_execution": {
-                "passed": g3_pass,
-                "cpu_jobs": cpu_count,
-                "gpu_jobs": gpu_count,
-                "npu_jobs": npu_count,
-            },
-            "G4_latency_regret_reduction": {"passed": g4_pass, "avg_regret_us": avg_regret},
-            "G5_merkle_continuity": {"passed": g5_pass, "unique_committed_roots": len(set(committed_roots))},
-            "G6_canary_safety": {"passed": g6_pass, "npu_promotions": promotions},
-            "G7_retention_reacquisition": {"passed": g7_pass},
-            "G8_adversarial_rollback": {"passed": g8_pass, "rollbacks": self.policy.deployer.rollbacks_count},
-            "G9_stochastic_recovery": {"passed": g9_pass},
-            "G10_retention_memory_ratio": {"passed": g10_pass},
-            "G11_occ_concurrency": {
-                "passed": g11_pass,
-                "concurrency": self.concurrency,
-                "occ_conflicts": self.occ_conflicts,
-                "occ_retries_successful": self.occ_retries_successful,
-            },
-            "G12_distribution_stability": {
-                "passed": g12_pass,
-                "p50_regret_us": p50_reg,
-                "p95_regret_us": p95_reg,
-                "p99_regret_us": p99_reg,
-                "variance_ratio": var_ratio,
-            },
-            "all_gates_passed": all([
-                g0_pass, g1_pass, g2_pass, g3_pass, g4_pass, g5_pass,
-                g6_pass, g7_pass, g8_pass, g9_pass, g10_pass, g11_pass, g12_pass
-            ]),
+        physical_authority = ClaimRequirement(
+            EvidenceLevel.PHYSICAL,
+            ("authority",),
+        )
+        physical_heterogeneous = ClaimRequirement(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "cpu", "gpu", "npu"),
+        )
+        physical_adaptation = ClaimRequirement(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "cpu", "gpu", "npu", "gpu_training", "npu_policy"),
+        )
+
+        gates = {
+            "G0_zero_wrong_commits": evaluate_claim(
+                g0_pass, self.evidence_context, physical_authority,
+                wrong_commits=self.wrong_authoritative_commits,
+            ),
+            "G1_offline_target_authority": evaluate_claim(
+                g1_pass, self.evidence_context, physical_authority,
+                total_rejections=total_rejections,
+                p5_rejections=p5_rejections,
+                negative_control=self.authority_negative_control,
+            ),
+            "G2_adaptation_convergence": evaluate_claim(
+                g2_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G3_heterogeneous_execution": evaluate_claim(
+                g3_pass, self.evidence_context, physical_heterogeneous,
+                cpu_jobs=cpu_count,
+                gpu_jobs=gpu_count,
+                npu_jobs=npu_count,
+            ),
+            "G4_latency_regret_reduction": evaluate_claim(
+                g4_pass, self.evidence_context, physical_heterogeneous,
+                avg_regret_us=avg_regret,
+                oracle="measured_actual_hardware",
+            ),
+            "G5_evidence_chain_continuity": evaluate_claim(
+                g5_pass, self.evidence_context, physical_authority,
+                links_verified=self.evidence_links_verified,
+                expected_links=expected_evidence_links,
+                verification_failures=self.evidence_verification_failures,
+                final_evidence_root=final_sched_snapshot.get("evidence_root"),
+            ),
+            "G6_canary_safety": evaluate_claim(
+                g6_pass, self.evidence_context, physical_adaptation,
+                npu_promotions=promotions,
+            ),
+            "G7_retention_reacquisition": evaluate_claim(
+                g7_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G8_adversarial_rollback": evaluate_claim(
+                g8_pass, self.evidence_context, physical_adaptation,
+                rollbacks=self.policy.deployer.rollbacks_count,
+            ),
+            "G9_stochastic_recovery": evaluate_claim(
+                g9_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G10_retention_memory_ratio": evaluate_claim(
+                g10_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G11_occ_concurrency": evaluate_claim(
+                g11_pass, self.evidence_context, physical_authority,
+                concurrency=self.concurrency,
+                occ_conflicts=self.occ_conflicts,
+                occ_retries_successful=self.occ_retries_successful,
+            ),
+            "G12_distribution_stability": evaluate_claim(
+                g12_pass, self.evidence_context, physical_heterogeneous,
+                p50_regret_us=p50_reg,
+                p95_regret_us=p95_reg,
+                p99_regret_us=p99_reg,
+                variance_ratio=var_ratio,
+                oracle="measured_actual_hardware",
+            ),
         }
+        gates["all_gates_passed"] = all(
+            gate["passed"] for gate in gates.values() if isinstance(gate, dict)
+        )
+        gates["all_logic_observed"] = all(
+            gate["observed_pass"] for gate in gates.values() if isinstance(gate, dict)
+        )
+        return gates
 
 
 def main():
@@ -1083,24 +1317,38 @@ def main():
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent in-flight jobs in asynchronous pipeline")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for single run")
     parser.add_argument("--seeds", nargs="+", type=int, default=None, help="List of random seeds to execute multi-seed campaign")
-    parser.add_argument("--mock", action="store_true", help="Run with mock simulated authority (no serial port)")
+    parser.add_argument("--mock", action="store_true", help="Run a simulated/portable logic test; cannot satisfy physical gates")
+    parser.add_argument("--physical", action="store_true", help="Require actual ESP32 + CUDA GPU + OpenVINO NPU; enables physical qualification claims")
     parser.add_argument("--stochastic", action="store_true", help="Run with stochastic semi-Markov environment generator")
     parser.add_argument("--adversarial-at", type=int, default=None, help="Job ID at which to inject adversarial canary test")
     parser.add_argument("--artifacts", type=Path, default=Path(__file__).resolve().parent / "artifacts", help="Artifacts directory")
     args = parser.parse_args()
 
-    if args.mock or args.port is None:
-        print("[Campaign] Initializing with MockAuthorityClient...")
-        authority = MockAuthorityClient()
-    else:
-        print(f"[Campaign] Connecting to physical ESP32 on {args.port} at {args.baud} baud...")
+    if args.physical and args.mock:
+        parser.error("--physical and --mock are mutually exclusive")
+    if args.physical and not args.port:
+        parser.error("--physical requires --port for the actual ESP32 authority")
+    if args.port and not args.physical:
+        parser.error("a serial port alone does not authorize a physical claim; add --physical or use --mock")
+
+    if args.physical:
+        print(f"[Campaign] PHYSICAL qualification: ESP32 on {args.port} at {args.baud} baud")
         authority = PhysicalAuthorityClient(port=args.port, baud=args.baud)
+    else:
+        print("[Campaign] SIMULATED/PORTABLE logic test with MockAuthorityClient; physical gates are blocked")
+        authority = MockAuthorityClient()
 
-    print("[Campaign] Initializing WorkloadEngine (CPU, RTX 5070 GPU, Intel AI Boost NPU)...")
-    engine = WorkloadEngine()
+    print("[Campaign] Initializing WorkloadEngine...")
+    engine = WorkloadEngine(
+        require_gpu=args.physical,
+        require_npu=args.physical,
+    )
 
-    print("[Campaign] Initializing AdaptiveRoutingPolicy (Dual Replay Buffer, Canary Deployer)...")
-    policy = AdaptiveRoutingPolicy()
+    print("[Campaign] Initializing AdaptiveRoutingPolicy...")
+    policy = AdaptiveRoutingPolicy(
+        require_gpu=args.physical,
+        require_npu=args.physical,
+    )
     print("[Campaign] Running bootstrap hardware calibration...")
     policy.bootstrap_calibration(engine)
 

@@ -13,8 +13,15 @@ import json
 from pathlib import Path
 import random
 import statistics
+import sys
 import time
 from typing import Any, Protocol
+
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import EvidenceContext, EvidenceLevel
 
 
 class LineTransport(Protocol):
@@ -66,6 +73,17 @@ class SerialTransport:
             if raw:
                 return raw.decode("utf-8", errors="replace").strip()
         return None
+
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PHYSICAL,
+            "SerialTransport",
+            {
+                "authority": f"ESP32-S3 endpoint:{self.port}",
+                "transport": f"serial:{self.port}@{self.baud}",
+            },
+            {},
+        )
 
     def close(self) -> None:
         if self._ser is not None:
@@ -278,10 +296,16 @@ class StressReport:
     authority_core: int
     checks: dict[str, bool]
     trials: tuple[StressTrial, ...]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return self.trials_completed == self.trials_requested and all(self.checks.values()) and all(t.passed for t in self.trials)
 
     @property
     def passed(self) -> bool:
-        return self.trials_completed == self.trials_requested and all(self.checks.values()) and all(t.passed for t in self.trials)
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
@@ -307,16 +331,22 @@ class FaultMatrixReport:
     authority_core: int
     cases: tuple[FaultMatrixCase, ...]
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values()) and all(case.passed for case in self.cases)
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values()) and all(case.passed for case in self.cases)
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -341,20 +371,26 @@ class SoakReport:
     authority_core: int
     rounds: tuple[SoakRound, ...]
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
 
     @property
-    def passed(self) -> bool:
+    def observed_pass(self) -> bool:
         return (
             self.rounds_completed == self.rounds_requested
             and all(self.checks.values())
             and all(r.passed for r in self.rounds)
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.observed_pass and self.qualified
+
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -368,16 +404,22 @@ class ResilienceReport:
     baseline_state_hash: str
     checks: dict[str, bool]
     observations: dict[str, Any]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values())
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values())
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -392,16 +434,22 @@ class FullQualificationReport:
     transcript_audit_passed: bool
     transcript_root: str
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values())
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values())
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -417,16 +465,22 @@ class CampaignReport:
     final_r1: int
     final_sequence: int
     checks: dict[str, bool]
+    evidence_level: str = "simulated"
+    qualified: bool = False
+
+    @property
+    def observed_pass(self) -> bool:
+        return all(self.checks.values())
 
     @property
     def passed(self) -> bool:
-        return all(self.checks.values())
+        return self.observed_pass and self.qualified
 
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            json.dumps(asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed}, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
@@ -434,6 +488,7 @@ class CampaignReport:
     def load(cls, path: str | Path) -> "CampaignReport":
         data = json.loads(Path(path).read_text(encoding="utf-8"))
         data.pop("passed", None)
+        data.pop("observed_pass", None)
         return cls(**data)
 
 
@@ -446,6 +501,29 @@ class Interrogator:
         self.transport = transport
         self.echo = echo
         self.transcript = Transcript()
+        evidence_fn = getattr(transport, "evidence_context", None)
+        if callable(evidence_fn):
+            self.evidence_context = evidence_fn()
+        else:
+            self.evidence_context = EvidenceContext(
+                EvidenceLevel.SIMULATED,
+                type(transport).__name__,
+                {},
+                {
+                    "authority": "non-serial test transport",
+                    "transport": type(transport).__name__,
+                },
+            )
+
+    def _report_evidence_kwargs(self) -> dict[str, Any]:
+        qualified = self.evidence_context.satisfies(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "transport"),
+        )
+        return {
+            "evidence_level": self.evidence_context.level.label,
+            "qualified": qualified,
+        }
 
     def _read_json(self, timeout: float) -> dict[str, Any]:
         deadline = time.monotonic() + timeout
@@ -673,6 +751,7 @@ class Interrogator:
             baseline_state_hash=baseline_state_hash,
             checks=checks,
             observations=observations,
+            **self._report_evidence_kwargs(),
         )
 
     def qualify_all(self, *, stress_trials: int = 25, seed: int = 20260922) -> FullQualificationReport:
@@ -682,21 +761,22 @@ class Interrogator:
         resilience = self.resilience()
         audit = self.transcript.audit()
         checks = {
-            "campaign": campaign.passed,
-            "fault_matrix": faults.passed,
-            "stress": stress.passed,
-            "resilience": resilience.passed,
+            "campaign": campaign.observed_pass,
+            "fault_matrix": faults.observed_pass,
+            "stress": stress.observed_pass,
+            "resilience": resilience.observed_pass,
             "transcript_integrity": audit.passed,
         }
         return FullQualificationReport(
             schema_version="uow-esp32-full-qualification-v0.4",
-            campaign_passed=campaign.passed,
-            fault_matrix_passed=faults.passed,
-            stress_passed=stress.passed,
-            resilience_passed=resilience.passed,
+            campaign_passed=campaign.observed_pass,
+            fault_matrix_passed=faults.observed_pass,
+            stress_passed=stress.observed_pass,
+            resilience_passed=resilience.observed_pass,
             transcript_audit_passed=audit.passed,
             transcript_root=audit.root_hash,
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
     def fault_matrix(self) -> FaultMatrixReport:
@@ -747,6 +827,7 @@ class Interrogator:
             authority_core=int(mapping["authority_core"]),
             cases=tuple(cases),
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
     def soak(
@@ -775,11 +856,11 @@ class Interrogator:
                     round_index=round_index,
                     seed=round_seed,
                     trials=report.trials_completed,
-                    passed=report.passed,
+                    passed=report.observed_pass,
                     transcript_root=round_root,
                 )
             )
-            if not report.passed:
+            if not report.observed_pass:
                 raise AssertionError(f"soak round {round_index} failed")
 
         checks = {
@@ -797,6 +878,7 @@ class Interrogator:
             authority_core=int(mapping["authority_core"]),
             rounds=tuple(results),
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
     def stress(self, *, trials: int = 25, seed: int = 20260922) -> StressReport:
@@ -897,6 +979,7 @@ class Interrogator:
             authority_core=authority_core,
             checks=checks,
             trials=tuple(records),
+            **self._report_evidence_kwargs(),
         )
 
     def campaign(self) -> CampaignReport:
@@ -974,11 +1057,14 @@ class Interrogator:
             final_r1=int(baseline["r1"]),
             final_sequence=int(baseline["sequence"]),
             checks=checks,
+            **self._report_evidence_kwargs(),
         )
 
 
 def compare_reports(left: CampaignReport, right: CampaignReport) -> dict[str, bool]:
     return {
+        "both_observed_passed": left.observed_pass and right.observed_pass,
+        "both_qualified": left.qualified and right.qualified,
         "both_passed": left.passed and right.passed,
         "core_mapping_inverted": (
             left.proposer_core == right.authority_core

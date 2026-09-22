@@ -218,7 +218,29 @@ class TransactionalCanaryDeployer:
         self.candidate_compiled_model = None
         self.rollbacks_count += 1
         self.canary_window_remaining = 0
-        print("[CanaryDeployer] Rolled back degraded candidate policy.")
+        print("[CanaryDeployer] Rolled back degraded candidate policy. Active policy preserved.")
+
+    def inject_adversarial_candidate(self, corruption_type: str = "inverted") -> bool:
+        """Deliberately compile a corrupted/inverted policy to test live failure detection and rollback."""
+        corrupted_net = RouterNet(input_dim=12)
+        with torch.no_grad():
+            if corruption_type == "inverted":
+                # Invert latency predictions so CPU looks 0.1ms and GPU/NPU look 50ms
+                corrupted_net.latency_head.bias.copy_(torch.tensor([0.1, 50.0, 50.0]))
+                # Force rejection prediction on valid devices to high rate
+                corrupted_net.rejection_head[0].bias.copy_(torch.tensor([0.1, 10.0, 10.0]))
+            else:
+                # Add strong noise to all parameters
+                for p in corrupted_net.parameters():
+                    p.add_(torch.randn_like(p) * 5.0)
+
+        ok = self.compile_candidate(corrupted_net)
+        if ok:
+            # Bypass pre-validation to test LIVE canary runtime rollback
+            self.start_canary(window_size=15)
+            print(f"[CanaryDeployer] Adversarial candidate ({corruption_type}) injected into live canary window.")
+            return True
+        return False
 
     def infer(self, features: list[float]) -> tuple[np.ndarray, np.ndarray]:
         """Run policy inference on Intel NPU using active (or candidate if in canary) model."""
@@ -381,11 +403,19 @@ class AdaptiveRoutingPolicy:
                 m["rejections"] = m.get("rejections", 0) + 1
             m["latencies"].append(lat_ms)
             self.deployer.canary_window_remaining -= 1
-            if self.deployer.canary_window_remaining == 0:
-                rej_rate = m["rejections"] / max(1, m["proposals"])
-                if rej_rate < 0.15:
+            rej_rate = m["rejections"] / max(1, m["proposals"])
+            avg_canary_lat = sum(m["latencies"]) / max(1, len(m["latencies"]))
+
+            # Early abort on acute rejection spike
+            if m["proposals"] >= 5 and rej_rate > 0.25:
+                print(f"[CanaryDeployer] Acute canary rejection spike ({rej_rate*100:.1f}%), aborting canary early!")
+                self.deployer.rollback()
+            elif self.deployer.canary_window_remaining == 0:
+                is_valid = self.deployer.validate_regression(self.buffer.retention_buffer)
+                if rej_rate < 0.15 and avg_canary_lat < 3.5 and is_valid:
                     self.deployer.promote_candidate()
                 else:
+                    print(f"[CanaryDeployer] Canary metrics degraded (rej_rate={rej_rate*100:.1f}%, avg_lat={avg_canary_lat:.1f}ms, valid={is_valid}). Executing rollback!")
                     self.deployer.rollback()
 
     def train_step(self, batch_size: int = 64, epochs: int = 5) -> dict[str, float]:
@@ -453,4 +483,8 @@ class AdaptiveRoutingPolicy:
         self.train_step(batch_size=12, epochs=80)
         self.deployer.compile_candidate(self.net)
         self.deployer.promote_candidate()
+
+    def inject_adversarial_test(self, corruption_type: str = "inverted") -> bool:
+        """Inject a degraded/adversarial model to test runtime rollback behavior."""
+        return self.deployer.inject_adversarial_candidate(corruption_type=corruption_type)
 

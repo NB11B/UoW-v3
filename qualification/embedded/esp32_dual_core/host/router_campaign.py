@@ -538,21 +538,34 @@ class RouterCampaignRunner:
         ev_root = rec_res.get("evidence_root", prop_res.get("evidence_root", self.prev_evidence_root))
         res_id = prop_res.get("reservation_id", 0)
 
-        base_lat = {1: (2500, 400, 600), 4: (1200, 500, 700), 16: (1900, 500, 1050), 64: (3100, 2100, 2500)}
-        b_lat = base_lat.get(job.batch_size, (2000, 1000, 1000))
-        c_mult = 3.0 if self.engine.cpu_contention_active else 1.0
-        g_mult = 5.0 if self.engine.gpu_contention_active else 1.0
-        n_mult = 4.0 if self.engine.npu_contention_active else 1.0
-        proxy = {0: int(b_lat[0] * c_mult), 1: int(b_lat[1] * g_mult), 2: int(b_lat[2] * n_mult)}
-        best_oracle_dev = min(proxy.keys(), key=lambda d: proxy[d])
-        best_oracle_lat = proxy.get(best_oracle_dev, measured_latency_us)
-        regret_us = max(0, measured_latency_us - best_oracle_lat)
+        # Measure the shadow oracle on the actual currently-online hardware.
+        # No hand-written latency proxy may satisfy a physical performance claim.
+        online_mask = int(meta.get("authority_online_mask", 7))
+        active_devices = [
+            dev
+            for dev in self.engine.available_actual_devices()
+            if online_mask & (1 << dev)
+        ]
+        oracle = self.engine.benchmark_oracle(
+            job_id=job.job_id,
+            batch_size=job.batch_size,
+            active_devices=active_devices,
+        )
+        if oracle:
+            best_oracle_dev = min(oracle, key=oracle.get)
+            best_oracle_lat = oracle[best_oracle_dev]
+        else:
+            best_oracle_dev = target
+            best_oracle_lat = measured_latency_us
+
+        execution_failed = bool(w_receipt.error) or not receipt_committed
+        regret_us = 15000 if execution_failed else max(0, measured_latency_us - best_oracle_lat)
 
         self.policy.record_feedback(
             features=feats,
             action=target,
             latency_us=measured_latency_us,
-            rejected=False,
+            rejected=execution_failed,
             phase=phase_name,
         )
 
@@ -567,12 +580,14 @@ class RouterCampaignRunner:
             reservation_id=res_id,
             receipt_committed=receipt_committed,
             latency_us=measured_latency_us,
-            oracle_latencies_us=proxy,
+            oracle_latencies_us=oracle,
             oracle_best_device=best_oracle_dev,
             regret_us=regret_us,
             post_state_hash=post_state_hash,
             evidence_root=ev_root,
             canary_active=meta.get("canary_active", False),
+            actual_backend=w_receipt.actual_backend,
+            execution_error=w_receipt.error,
         )
         self.records.append(record)
         self.prev_evidence_root = ev_root
@@ -581,7 +596,7 @@ class RouterCampaignRunner:
             self.stochastic_env.record_job_result(
                 job_id=job.job_id,
                 target_device=target,
-                committed=True,
+                committed=not execution_failed,
                 latency_us=measured_latency_us,
                 regret_us=regret_us,
             )

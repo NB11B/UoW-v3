@@ -3,10 +3,10 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-from typing import Optional, Protocol
+from typing import Mapping, Optional, Protocol
 
 from ..state import WorldState, canonical_json
-from .descriptor import EffectDescriptor, EffectReceipt, compute_idempotency_key
+from .descriptor import EffectDescriptor, EffectReceipt, EffectStatus, compute_idempotency_key
 
 
 class ReceiptAuthenticator(Protocol):
@@ -71,12 +71,45 @@ def verify_effect_intent_binding(state: WorldState, effect: EffectDescriptor) ->
             f"Effect idempotency key mismatch: {effect.idempotency_key!r} != {expected_idemp!r}"
         )
 
-    # For child compensation effects, verify parent effect exists in authoritative state
+    # For child compensation effects, verify parent effect authorization and state
     if effect.effect_id.startswith("comp::"):
         parent_id = effect.effect_id[len("comp::"):]
         raw_effects = state.attributes.get("__effects__", {})
         if parent_id not in raw_effects:
             raise ValueError(f"Compensation effect {effect.effect_id!r} has no parent effect in state.")
+        raw_parent = raw_effects[parent_id]
+        parent = EffectDescriptor.from_dict(raw_parent) if isinstance(raw_parent, Mapping) else raw_parent
+
+        if parent.compensation is None:
+            raise ValueError(
+                f"Parent effect {parent_id!r} does not declare a compensation specification."
+            )
+
+        if parent.status not in (EffectStatus.COMPENSATING, EffectStatus.COMPENSATION_FAILED):
+            raise ValueError(
+                f"Parent effect {parent_id!r} is in state {parent.status.value!r}, not COMPENSATING or COMPENSATION_FAILED."
+            )
+
+        expected_uow_id = f"{parent.uow_id}::comp"
+        if effect.uow_id != expected_uow_id:
+            raise ValueError(
+                f"Compensation UoW identity mismatch: {effect.uow_id!r} != {expected_uow_id!r}"
+            )
+
+        if effect.intent != parent.compensation.intent:
+            raise ValueError(
+                f"Compensation intent mismatch: {effect.intent!r} != {parent.compensation.intent!r}"
+            )
+
+        if dict(effect.request) != dict(parent.compensation.request):
+            raise ValueError(
+                f"Compensation request mismatch: {dict(effect.request)} != {dict(parent.compensation.request)}"
+            )
+
+        if effect.idempotency_key != parent.compensation.idempotency_key:
+            raise ValueError(
+                f"Compensation idempotency key mismatch: {effect.idempotency_key!r} != {parent.compensation.idempotency_key!r}"
+            )
         return
 
     if effect.pre_state_hash != state.state_hash:

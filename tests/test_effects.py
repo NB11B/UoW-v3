@@ -551,3 +551,152 @@ def test_compensation_failure_retains_unresolved_compensating_state():
     assert retained_failed[0]["effect_id"] == eff1.effect_id
     assert get_sagas_map(curr_state)["fail_saga"].status == SagaStatus.COMPENSATION_FAILED
 
+
+# ===========================================================================
+# Pass 4.2: Compensation-Child Authorization Falsification
+# ===========================================================================
+
+def test_compensation_child_authorization_falsification():
+    """Compensation child effects must strictly match registered compensation and parent status."""
+    s0 = WorldState(attributes={})
+    seq = DeterministicSequencer(s0)
+    runner = EffectRunner(seq, MockExternalClient())
+    coordinator = SagaCoordinator(runner)
+
+    # 1. Authentic parent: book_flight with cancel_flight compensation
+    parent = runner.execute_effect(
+        create_effect_descriptor(
+            uow_id="flight_step",
+            pre_state_hash=s0.state_hash,
+            intent="book_flight",
+            request={"flight": "AA100"},
+            compensation_intent="cancel_flight",
+            compensation_request={"flight": "AA100"},
+        )
+    )
+    assert parent.status == EffectStatus.COMMITTED_RESULT
+
+    # Case A: Parent is COMMITTED_RESULT (not COMPENSATING or COMPENSATION_FAILED) -> reject
+    comp_spec = parent.compensation
+    assert comp_spec is not None
+
+    valid_comp_child = EffectDescriptor(
+        effect_id=f"comp::{parent.effect_id}",
+        uow_id=f"{parent.uow_id}::comp",
+        intent=comp_spec.intent,
+        idempotency_key=comp_spec.idempotency_key,
+        request=comp_spec.request,
+        status=EffectStatus.INTENDED,
+        pre_state_hash=parent.pre_state_hash,
+    )
+    with pytest.raises(ValueError, match="not COMPENSATING or COMPENSATION_FAILED"):
+        runner.commit_intent(valid_comp_child)
+
+    # Now durably transition parent into COMPENSATING
+    coordinator._set_effect_status(parent, EffectStatus.COMPENSATING)
+
+    # Case B: Malicious replacement (refund_card $50,000) with self-consistent idempotency key -> reject
+    malicious_request = {"amount": 50000}
+    malicious_idemp = compute_idempotency_key(
+        f"{parent.uow_id}::comp",
+        parent.pre_state_hash,
+        "refund_card",
+        malicious_request,
+    )
+    malicious_child = EffectDescriptor(
+        effect_id=f"comp::{parent.effect_id}",
+        uow_id=f"{parent.uow_id}::comp",
+        intent="refund_card",
+        idempotency_key=malicious_idemp,
+        request=malicious_request,
+        status=EffectStatus.INTENDED,
+        pre_state_hash=parent.pre_state_hash,
+    )
+    with pytest.raises(ValueError, match="Compensation intent mismatch"):
+        runner.commit_intent(malicious_child)
+
+    # Case C: Wrong compensation intent -> reject
+    bad_intent_child = replace(
+        valid_comp_child,
+        intent="wrong_intent",
+        idempotency_key=compute_idempotency_key(
+            valid_comp_child.uow_id,
+            valid_comp_child.pre_state_hash,
+            "wrong_intent",
+            valid_comp_child.request,
+        ),
+    )
+    with pytest.raises(ValueError, match="Compensation intent mismatch"):
+        runner.commit_intent(bad_intent_child)
+
+    # Case D: Wrong request -> reject
+    bad_req = {"flight": "UA999"}
+    bad_req_child = replace(
+        valid_comp_child,
+        request=bad_req,
+        idempotency_key=compute_idempotency_key(
+            valid_comp_child.uow_id,
+            valid_comp_child.pre_state_hash,
+            valid_comp_child.intent,
+            bad_req,
+        ),
+    )
+    with pytest.raises(ValueError, match="Compensation request mismatch"):
+        runner.commit_intent(bad_req_child)
+
+    # Case E: Wrong compensation idempotency key -> reject
+    bad_idemp_child = replace(valid_comp_child, idempotency_key="forged_key_" + "0" * 53)
+    with pytest.raises(ValueError, match="Effect idempotency key mismatch"):
+        runner.commit_intent(bad_idemp_child)
+
+    # Case F: Wrong compensation UoW identity -> reject
+    bad_uow_idemp = compute_idempotency_key(
+        "wrong_uow::comp",
+        parent.pre_state_hash,
+        comp_spec.intent,
+        comp_spec.request,
+    )
+    bad_uow_child = replace(
+        valid_comp_child,
+        uow_id="wrong_uow::comp",
+        idempotency_key=bad_uow_idemp,
+    )
+    with pytest.raises(ValueError, match="Compensation UoW identity mismatch"):
+        runner.commit_intent(bad_uow_child)
+
+    # Case G: Parent without compensation spec -> reject
+    no_comp_parent = runner.execute_effect(
+        create_effect_descriptor(
+            uow_id="no_comp_step",
+            pre_state_hash=seq.current_state.state_hash,
+            intent="read_only_op",
+            request={},
+        )
+    )
+    coordinator._set_effect_status(no_comp_parent, EffectStatus.COMPENSATING)
+    child_for_no_comp = EffectDescriptor(
+        effect_id=f"comp::{no_comp_parent.effect_id}",
+        uow_id=f"{no_comp_parent.uow_id}::comp",
+        intent="undo",
+        idempotency_key=compute_idempotency_key(
+            f"{no_comp_parent.uow_id}::comp",
+            no_comp_parent.pre_state_hash,
+            "undo",
+            {},
+        ),
+        request={},
+        status=EffectStatus.INTENDED,
+        pre_state_hash=no_comp_parent.pre_state_hash,
+    )
+    with pytest.raises(ValueError, match="does not declare a compensation specification"):
+        runner.commit_intent(child_for_no_comp)
+
+    # Case H: Exact registered compensation -> accept
+    committed_comp = runner.commit_intent(valid_comp_child)
+    assert committed_comp.status == EffectStatus.COMMITTED_INTENT
+
+    # Case I: Retry from COMPENSATION_FAILED -> accept same exact child
+    coordinator._set_effect_status(parent, EffectStatus.COMPENSATION_FAILED)
+    retried_child = runner.commit_intent(valid_comp_child)
+    assert retried_child.status == EffectStatus.COMMITTED_INTENT
+

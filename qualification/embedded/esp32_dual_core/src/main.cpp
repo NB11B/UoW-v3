@@ -1,8 +1,20 @@
+#ifdef ARDUINO
 #include <Arduino.h>
-#include <inttypes.h>
+#else
+#include <cinttypes>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
+#include "freertos/semphr.h"
+#include "driver/usb_serial_jtag.h"
+#include "esp_system.h"
+#include "esp_log.h"
+#endif
 
 #include "uow_embedded.hpp"
 
@@ -64,59 +76,63 @@ TaskHandle_t gProposerTask = nullptr;
 TaskHandle_t gAuthorityTask = nullptr;
 uint32_t gRequestId = 1;
 
-String u64_string(uint64_t value) {
+std::string u64_string(uint64_t value) {
     char buf[24];
     snprintf(buf, sizeof(buf), "%" PRIu64, value);
-    return String(buf);
+    return std::string(buf);
 }
 
-String json_escape(const String& s) {
-    String out;
-    for (size_t i = 0; i < s.length(); ++i) {
-        const char c = s[i];
+std::string json_escape(const std::string& s) {
+    std::string out;
+    for (char c : s) {
         if (c == '\\' || c == '"') out += '\\';
         out += c;
     }
     return out;
 }
 
-void emit_line(const String& line) {
+void emit_line(const std::string& line) {
     if (gSerialMutex) xSemaphoreTake(gSerialMutex, portMAX_DELAY);
-    Serial.println(line);
+#ifdef ARDUINO
+    Serial.println(line.c_str());
+#else
+    usb_serial_jtag_write_bytes(line.data(), line.size(), portMAX_DELAY);
+    usb_serial_jtag_write_bytes("\n", 1, portMAX_DELAY);
+#endif
     if (gSerialMutex) xSemaphoreGive(gSerialMutex);
 }
 
 void emit_status(const char* event, uint32_t request_id, const char* note = nullptr) {
     const auto state_hash = hex_digest(hash_state(gAuthorityState));
     const auto root = hex_digest(gLedger.root());
-    String s = "{\"event\":\"" + String(event) + "\"";
-    s += ",\"request_id\":" + String(request_id);
-    s += ",\"proposer_core\":" + String(UOW_PROPOSER_CORE);
-    s += ",\"authority_core\":" + String(UOW_AUTHORITY_CORE);
+    std::string s = "{\"event\":\"" + std::string(event) + "\"";
+    s += ",\"request_id\":" + std::to_string(request_id);
+    s += ",\"proposer_core\":" + std::to_string(UOW_PROPOSER_CORE);
+    s += ",\"authority_core\":" + std::to_string(UOW_AUTHORITY_CORE);
     s += ",\"r0\":" + u64_string(gAuthorityState.r0);
     s += ",\"r1\":" + u64_string(gAuthorityState.r1);
-    s += ",\"pc\":" + String(gAuthorityState.pc);
+    s += ",\"pc\":" + std::to_string(gAuthorityState.pc);
     s += ",\"sequence\":" + u64_string(gAuthorityState.sequence);
-    s += ",\"halted\":" + String(gAuthorityState.halted ? "true" : "false");
-    s += ",\"state_hash\":\"" + String(state_hash.c_str()) + "\"";
-    s += ",\"evidence_root\":\"" + String(root.c_str()) + "\"";
+    s += ",\"halted\":" + std::string(gAuthorityState.halted ? "true" : "false");
+    s += ",\"state_hash\":\"" + state_hash + "\"";
+    s += ",\"evidence_root\":\"" + root + "\"";
     s += ",\"evidence_steps\":" + u64_string(static_cast<uint64_t>(gLedger.size()));
     s += ",\"proposal_clock\":" + u64_string(gProposerClock.read());
     s += ",\"authority_clock\":" + u64_string(gAuthorityClock.read());
-    if (note) s += ",\"note\":\"" + json_escape(String(note)) + "\"";
+    if (note) s += ",\"note\":\"" + json_escape(note) + "\"";
     s += "}";
     emit_line(s);
 }
 
 void emit_decision(uint32_t request_id, const Proposal& p, const StepResult& r) {
-    String s = "{\"event\":\"decision\"";
-    s += ",\"request_id\":" + String(request_id);
-    s += ",\"committed\":" + String(r.committed ? "true" : "false");
-    s += ",\"reason\":\"" + String(reject_reason_string(r.certificate.reason)) + "\"";
-    s += ",\"proposal_hash\":\"" + String(hex_digest(p.proposal_hash).c_str()) + "\"";
-    s += ",\"certificate_hash\":\"" + String(hex_digest(r.certificate.certificate_hash).c_str()) + "\"";
-    s += ",\"post_state_hash\":\"" + String(hex_digest(hash_state(r.state)).c_str()) + "\"";
-    s += ",\"evidence_root\":\"" + String(hex_digest(gLedger.root()).c_str()) + "\"";
+    std::string s = "{\"event\":\"decision\"";
+    s += ",\"request_id\":" + std::to_string(request_id);
+    s += ",\"committed\":" + std::string(r.committed ? "true" : "false");
+    s += ",\"reason\":\"" + std::string(reject_reason_string(r.certificate.reason)) + "\"";
+    s += ",\"proposal_hash\":\"" + hex_digest(p.proposal_hash) + "\"";
+    s += ",\"certificate_hash\":\"" + hex_digest(r.certificate.certificate_hash) + "\"";
+    s += ",\"post_state_hash\":\"" + hex_digest(hash_state(r.state)) + "\"";
+    s += ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"";
     s += ",\"proposal_clock\":" + u64_string(p.proposer_clock);
     s += ",\"authority_clock\":" + u64_string(gAuthorityClock.read());
     s += "}";
@@ -214,28 +230,30 @@ void print_help() {
     emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\"]}");
 }
 
-bool parse_u64(const String& s, uint64_t& out) {
-    if (!s.length()) return false;
+bool parse_u64(const std::string& s, uint64_t& out) {
+    if (s.empty()) return false;
     char* end = nullptr;
     out = strtoull(s.c_str(), &end, 10);
     return end && *end == '\0';
 }
 
-void handle_command(String line) {
-    line.trim();
-    if (!line.length()) return;
+void handle_command(std::string line) {
+    while (!line.empty() && (line.front() == ' ' || line.front() == '\t' || line.front() == '\r' || line.front() == '\n')) line.erase(0, 1);
+    while (!line.empty() && (line.back() == ' ' || line.back() == '\t' || line.back() == '\r' || line.back() == '\n')) line.pop_back();
+    if (line.empty()) return;
 
-    String parts[4];
-    int count = 0;
-    int start = 0;
-    while (count < 4 && start < (int)line.length()) {
-        int space = line.indexOf(' ', start);
-        if (space < 0) space = line.length();
-        parts[count++] = line.substring(start, space);
-        start = space + 1;
-        while (start < (int)line.length() && line[start] == ' ') ++start;
+    std::vector<std::string> parts;
+    size_t start = 0;
+    while (parts.size() < 4 && start < line.size()) {
+        while (start < line.size() && line[start] == ' ') ++start;
+        if (start >= line.size()) break;
+        size_t space = line.find(' ', start);
+        if (space == std::string::npos) space = line.size();
+        parts.push_back(line.substr(start, space - start));
+        start = space;
     }
-    parts[0].toUpperCase();
+    if (parts.empty()) return;
+    for (char& ch : parts[0]) ch = (char)toupper((unsigned char)ch);
 
     if (parts[0] == "HELP") { print_help(); return; }
 
@@ -244,32 +262,33 @@ void handle_command(String line) {
 
     if (parts[0] == "STATUS") {
         c.type = ControlType::STATUS;
-    } else if (parts[0] == "RESET" && count >= 3) {
+    } else if (parts[0] == "RESET" && parts.size() >= 3) {
         c.type = ControlType::RESET;
         if (!parse_u64(parts[1], c.a) || !parse_u64(parts[2], c.b)) {
             emit_line("{\"event\":\"error\",\"reason\":\"bad RESET arguments\"}"); return;
         }
     } else if (parts[0] == "STEP") {
         c.type = ControlType::STEP;
-        if (count >= 2) c.fault = parse_fault_mode(std::string(parts[1].c_str()));
-    } else if (parts[0] == "RUN" && count >= 2) {
+        if (parts.size() >= 2) c.fault = parse_fault_mode(parts[1]);
+    } else if (parts[0] == "RUN" && parts.size() >= 2) {
         c.type = ControlType::RUN;
         if (!parse_u64(parts[1], c.a)) {
             emit_line("{\"event\":\"error\",\"reason\":\"bad RUN budget\"}"); return;
         }
-        if (count >= 3) c.fault = parse_fault_mode(std::string(parts[2].c_str()));
-    } else if (parts[0] == "CLOCKS" && count >= 3) {
+        if (parts.size() >= 3) c.fault = parse_fault_mode(parts[2]);
+    } else if (parts[0] == "CLOCKS" && parts.size() >= 3) {
         c.type = ControlType::CLOCKS;
         if (!parse_u64(parts[1], c.a) || !parse_u64(parts[2], c.b)) {
             emit_line("{\"event\":\"error\",\"reason\":\"bad CLOCKS arguments\"}"); return;
         }
-    } else if (parts[0] == "FREEZE" && count >= 3) {
+    } else if (parts[0] == "FREEZE" && parts.size() >= 3) {
         c.type = ControlType::FREEZE;
-        parts[1].toUpperCase();
-        if (parts[1] != "P" && parts[1] != "A") {
+        std::string target = parts[1];
+        for (char& ch : target) ch = (char)toupper((unsigned char)ch);
+        if (target != "P" && target != "A") {
             emit_line("{\"event\":\"error\",\"reason\":\"FREEZE target must be P or A\"}"); return;
         }
-        c.which = parts[1][0];
+        c.which = target[0];
         c.flag = parts[2] == "1";
     } else {
         emit_line("{\"event\":\"error\",\"reason\":\"unknown command; send HELP\"}");
@@ -284,8 +303,17 @@ void handle_command(String line) {
 } // namespace
 
 void setup() {
+#ifdef ARDUINO
     Serial.begin(SERIAL_BAUD);
     delay(750);
+#else
+    esp_log_level_set("*", ESP_LOG_NONE);
+    usb_serial_jtag_driver_config_t d_cfg = USB_SERIAL_JTAG_DRIVER_CONFIG_DEFAULT();
+    d_cfg.rx_buffer_size = 4096;
+    d_cfg.tx_buffer_size = 4096;
+    usb_serial_jtag_driver_install(&d_cfg);
+    vTaskDelay(pdMS_TO_TICKS(750));
+#endif
 
     gSerialMutex = xSemaphoreCreateMutex();
     gWorkQ = xQueueCreate(4, sizeof(WorkItem));
@@ -293,8 +321,14 @@ void setup() {
     gControlQ = xQueueCreate(8, sizeof(ControlMsg));
 
     if (!gSerialMutex || !gWorkQ || !gProposalQ || !gControlQ) {
-        Serial.println("{\"event\":\"fatal\",\"reason\":\"FreeRTOS allocation failed\"}");
-        for (;;) delay(1000);
+        emit_line("{\"event\":\"fatal\",\"reason\":\"FreeRTOS allocation failed\"}");
+        for (;;) {
+#ifdef ARDUINO
+            delay(1000);
+#else
+            vTaskDelay(pdMS_TO_TICKS(1000));
+#endif
+        }
     }
 
     xTaskCreatePinnedToCore(
@@ -311,12 +345,17 @@ void setup() {
 void loop() {
     static char buf[COMMAND_BUF];
     static size_t pos = 0;
+#ifdef ARDUINO
     while (Serial.available()) {
         const char c = (char)Serial.read();
+#else
+    char c = 0;
+    while (usb_serial_jtag_read_bytes(&c, 1, 0) > 0) {
+#endif
         if (c == '\r') continue;
         if (c == '\n') {
             buf[pos] = '\0';
-            handle_command(String(buf));
+            handle_command(std::string(buf));
             pos = 0;
         } else if (pos + 1 < sizeof(buf)) {
             buf[pos++] = c;
@@ -325,5 +364,18 @@ void loop() {
             emit_line("{\"event\":\"error\",\"reason\":\"command too long\"}");
         }
     }
+#ifdef ARDUINO
     delay(2);
+#else
+    vTaskDelay(pdMS_TO_TICKS(2));
+#endif
 }
+
+#ifndef ARDUINO
+extern "C" void app_main(void) {
+    setup();
+    for (;;) {
+        loop();
+    }
+}
+#endif

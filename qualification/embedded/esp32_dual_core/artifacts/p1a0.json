@@ -1,0 +1,32 @@
+{
+  "authority_core": 0,
+  "baseline_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "baseline_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "checks": {
+    "baseline_halts": true,
+    "baseline_state": true,
+    "baseline_transition_count": true,
+    "clock_root_invariant_17_17": true,
+    "clock_root_invariant_1_1000003": true,
+    "clock_root_invariant_3_29": true,
+    "clock_root_invariant_999983_1": true,
+    "clock_state_invariant_17_17": true,
+    "clock_state_invariant_1_1000003": true,
+    "clock_state_invariant_3_29": true,
+    "clock_state_invariant_999983_1": true,
+    "frozen_A_root_invariant": true,
+    "frozen_A_state_invariant": true,
+    "frozen_P_root_invariant": true,
+    "frozen_P_state_invariant": true,
+    "rejection_no_mutation": true,
+    "route_tamper_rejected": true,
+    "stale_prehash_rejected": true,
+    "tampered_state_rejected": true
+  },
+  "final_r0": 0,
+  "final_r1": 75,
+  "final_sequence": 102,
+  "passed": true,
+  "proposer_core": 1,
+  "schema_version": "uow-esp32-interrogator-v0.1"
+}

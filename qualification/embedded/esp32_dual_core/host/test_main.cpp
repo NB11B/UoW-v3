@@ -37,6 +37,16 @@ static void test_sha256() {
            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
 }
 
+static void test_hex_digest_parser() {
+    const auto expected = sha256(std::string("external-proposal"));
+    const auto hex = hex_digest(expected);
+    std::array<uint8_t, 32> parsed{};
+    assert(parse_hex_digest(hex, parsed));
+    assert(parsed == expected);
+    assert(!parse_hex_digest("deadbeef", parsed));
+    assert(!parse_hex_digest(std::string(64, 'z'), parsed));
+}
+
 static State run_direct(uint64_t r0, uint64_t r1, uint64_t pstride, uint64_t astride,
                         EvidenceLedger& ledger) {
     Program program = Program::transfer_r0_to_r1();
@@ -190,6 +200,7 @@ static void test_dual_context_inversion() {
 
 int main() {
     test_sha256();
+    test_hex_digest_parser();
     test_reference_parity();
     test_fault_rejection();
     test_stale_rejection();

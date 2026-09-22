@@ -16,6 +16,11 @@
 #include "esp_log.h"
 #endif
 
+#include <algorithm>
+#include <cstring>
+#include <string>
+#include <vector>
+
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "esp_system.h"
@@ -353,6 +358,11 @@ void authority_task(void*) {
             case ControlType::RESET:
                 gAuthorityState = State{c.a, c.b, 0, 0, false};
                 gLedger = EvidenceLedger(false);
+                gRecoveredOnBoot = false;
+                if (gPersistenceEnabled && !checkpoint_save()) {
+                    emit_status("error", c.request_id, "checkpoint save failed");
+                    break;
+                }
                 emit_status("reset", c.request_id);
                 break;
             case ControlType::STEP:

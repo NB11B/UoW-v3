@@ -148,3 +148,51 @@ Rightarrow
 ]
 
 The stress report is deterministic for a supplied host seed and records every initial state, both clock profiles, terminal state hash, evidence root, and pass/fail result.
+
+
+## Transcript integrity
+
+Every laptop-side transcript event is now hash-linked:
+
+```text
+event_hash_n = SHA256(index || host_monotonic || direction || payload || event_hash_(n-1))
+```
+
+This protects the **interrogation record**, not device authority. Host timestamps remain observational metadata.
+
+Save a transcript during any serial run with `--transcript`, then verify it offline:
+
+```powershell
+python host\interrogator.py verify-transcript artifacts\p0a1.jsonl
+```
+
+The audit checks hash-chain integrity, host timestamp monotonicity, fatal/error event counts, command/event counts, and observational command-latency statistics.
+
+## Fault matrix
+
+Run every currently supported forged-proposal path from both zero and nonzero Minsky states:
+
+```powershell
+python host\interrogator.py --port COM10 fault-matrix --report artifacts\fault-matrix.json
+```
+
+Every rejection must preserve registers, sequence, state hash, and evidence root.
+
+## Soak qualification
+
+A soak run composes multiple seeded stress rounds:
+
+```powershell
+python host\interrogator.py \
+  --port COM10 \
+  --transcript artifacts\soak.jsonl \
+  soak \
+  --rounds 20 \
+  --trials-per-round 25 \
+  --seed 20260922 \
+  --report artifacts\soak.json
+```
+
+That example executes 500 randomized paired clock/state trials plus a forged proposal in every trial. Each round stores its seed and transcript root so failures can be reproduced exactly.
+
+The laptop interrogator is intentionally non-authoritative: it may command, observe, record, compare, and falsify, but only the ESP32 authority task can commit device state.

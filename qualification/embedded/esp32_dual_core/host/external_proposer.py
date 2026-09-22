@@ -339,9 +339,13 @@ class CapabilityReport:
     external_evidence_root: str
     state_parity: bool
     evidence_parity: bool
+    evidence_level: str = "simulated"
+    qualified: bool = False
+    actual_components: dict[str, str] | None = None
+    substitutions: dict[str, str] | None = None
 
     @property
-    def passed(self) -> bool:
+    def observed_pass(self) -> bool:
         return (
             self.halted
             and self.rejections == 0
@@ -349,11 +353,19 @@ class CapabilityReport:
             and self.evidence_parity
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.observed_pass and self.qualified
+
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True)
+            json.dumps(
+                asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed},
+                indent=2,
+                sort_keys=True,
+            )
             + "\n",
             encoding="utf-8",
         )
@@ -375,9 +387,13 @@ class ExternalQualificationReport:
     baseline_evidence_root: str
     external_state_hash: str
     external_evidence_root: str
+    evidence_level: str = "simulated"
+    qualified: bool = False
+    actual_components: dict[str, str] | None = None
+    substitutions: dict[str, str] | None = None
 
     @property
-    def passed(self) -> bool:
+    def observed_pass(self) -> bool:
         return (
             self.reference_parity
             and self.authority_rejects_corruption
@@ -386,11 +402,19 @@ class ExternalQualificationReport:
             and self.wrong_authoritative_commits == 0
         )
 
+    @property
+    def passed(self) -> bool:
+        return self.observed_pass and self.qualified
+
     def save(self, path: str | Path) -> None:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(
-            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True)
+            json.dumps(
+                asdict(self) | {"observed_pass": self.observed_pass, "passed": self.passed},
+                indent=2,
+                sort_keys=True,
+            )
             + "\n",
             encoding="utf-8",
         )
@@ -399,6 +423,29 @@ class ExternalQualificationReport:
 class ExternalAuthorityClient:
     def __init__(self, iq: Interrogator):
         self.iq = iq
+
+    def _backend_evidence_context(self, backend: ProposerBackend) -> EvidenceContext:
+        evidence_fn = getattr(backend, "evidence_context", None)
+        if callable(evidence_fn):
+            return evidence_fn()
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            type(backend).__name__,
+            {},
+            {"proposer": "backend supplied no evidence attestation"},
+        )
+
+    def _qualification_evidence(self, backend: ProposerBackend) -> tuple[EvidenceContext, bool]:
+        context = combine_contexts(
+            self.iq.evidence_context,
+            self._backend_evidence_context(backend),
+            source="ExternalAuthorityClient",
+        )
+        qualified = context.satisfies(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "transport", "proposer"),
+        )
+        return context, qualified
 
     def snapshot(self) -> Snapshot:
         event = self.iq.execute("SNAPSHOT", "snapshot").terminal

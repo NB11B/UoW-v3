@@ -100,6 +100,7 @@ public:
     bool append(const EvidenceRecord& record);
     bool verify() const;
     const std::array<uint8_t, 32>& root() const;
+    void restore_checkpoint(const std::array<uint8_t, 32>& root, size_t size);
     size_t size() const { return size_; }
     const std::vector<EvidenceRecord>& records() const { return records_; }
 

@@ -35,6 +35,18 @@ import threading
 import time
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import (
+    ClaimRequirement,
+    EvidenceContext,
+    EvidenceLevel,
+    combine_contexts,
+    evaluate_claim,
+)
+
 # Ensure UTF-8 output encoding on Windows
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -67,6 +79,14 @@ class PhysicalAuthorityClient:
         time.sleep(1.0)
         with self._lock:
             self.ser.reset_input_buffer()
+
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PHYSICAL,
+            "PhysicalAuthorityClient",
+            {"authority": f"ESP32-S3 serial:{self.ser.port}"},
+            {},
+        )
 
     def close(self) -> None:
         with self._lock:
@@ -153,6 +173,14 @@ class MockAuthorityClient:
     def _state_hash(self) -> str:
         s = f"{self.epoch}:{self.online_mask}:{self.inflight[0]}:{self.inflight[1]}:{self.inflight[2]}:{self.tokens}:{self.reservation_seq}:{self.completion_seq}"
         return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.SIMULATED,
+            "MockAuthorityClient",
+            {},
+            {"authority": "in-process mock authority"},
+        )
 
     def close(self) -> None:
         pass

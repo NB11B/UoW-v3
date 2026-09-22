@@ -8,121 +8,409 @@
   "runs": {
     "42": {
       "G0_zero_wrong_commits": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
         "wrong_commits": 0
       },
-      "G1_phase_shift_rejections": {
+      "G1_offline_target_authority": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "total_rejections": 17,
-        "p5_rejections": 0
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
+        "total_rejections": 0,
+        "p5_rejections": 0,
+        "negative_control": {
+          "observed_pass": true,
+          "forced_reason": "DEVICE_OFFLINE",
+          "committed": false,
+          "state_unchanged": true,
+          "evidence_unchanged": true,
+          "offline_mask": 5
+        }
       },
       "G2_adaptation_convergence": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G3_heterogeneous_execution": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "cpu_jobs": 615,
-        "gpu_jobs": 418,
-        "npu_jobs": 150
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu"
+        ],
+        "cpu_jobs": 584,
+        "gpu_jobs": 549,
+        "npu_jobs": 67
       },
       "G4_latency_regret_reduction": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "avg_regret_us": 2188.4375
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu"
+        ],
+        "avg_regret_us": 667.3266666666667,
+        "oracle": "measured_actual_hardware"
       },
-      "G5_merkle_continuity": {
+      "G5_evidence_chain_continuity": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "unique_committed_roots": 1183
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
+        "links_verified": 2400,
+        "expected_links": 2400,
+        "verification_failures": 0,
+        "final_evidence_root": "747bef32a88f44cace8c2ac8a823fe5bd2048df1e257e44edfc9e4b8e27b490b"
       },
       "G6_canary_safety": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "npu_promotions": 39
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ],
+        "npu_promotions": 54
       },
       "G7_retention_reacquisition": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G8_adversarial_rollback": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "rollbacks": 7
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ],
+        "rollbacks": 2
       },
       "G9_stochastic_recovery": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G10_retention_memory_ratio": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G11_occ_concurrency": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
         "concurrency": 6,
-        "occ_conflicts": 1034,
-        "occ_retries_successful": 1034
+        "occ_conflicts": 77,
+        "occ_retries_successful": 77
       },
       "G12_distribution_stability": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "p50_regret_us": 1048.0,
-        "p95_regret_us": 3778.0,
-        "p99_regret_us": 15000.0,
-        "variance_ratio": 0.04208480278651712
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu"
+        ],
+        "p50_regret_us": 395.0,
+        "p95_regret_us": 1919.0,
+        "p99_regret_us": 5065.0,
+        "variance_ratio": 3.1057472551233865,
+        "oracle": "measured_actual_hardware"
       },
-      "all_gates_passed": true
+      "all_gates_passed": true,
+      "all_logic_observed": true
     },
     "101": {
       "G0_zero_wrong_commits": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
         "wrong_commits": 0
       },
-      "G1_phase_shift_rejections": {
+      "G1_offline_target_authority": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "total_rejections": 1,
-        "p5_rejections": 0
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
+        "total_rejections": 0,
+        "p5_rejections": 0,
+        "negative_control": {
+          "observed_pass": true,
+          "forced_reason": "DEVICE_OFFLINE",
+          "committed": false,
+          "state_unchanged": true,
+          "evidence_unchanged": true,
+          "offline_mask": 5
+        }
       },
       "G2_adaptation_convergence": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G3_heterogeneous_execution": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "cpu_jobs": 1141,
-        "gpu_jobs": 26,
-        "npu_jobs": 32
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu"
+        ],
+        "cpu_jobs": 1021,
+        "gpu_jobs": 111,
+        "npu_jobs": 68
       },
       "G4_latency_regret_reduction": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "avg_regret_us": 828.795
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu"
+        ],
+        "avg_regret_us": 411.31666666666666,
+        "oracle": "measured_actual_hardware"
       },
-      "G5_merkle_continuity": {
+      "G5_evidence_chain_continuity": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "unique_committed_roots": 1199
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
+        "links_verified": 2400,
+        "expected_links": 2400,
+        "verification_failures": 0,
+        "final_evidence_root": "ce557b336f94fbd8bf80752c7b1aa0caa634222f939704fdc3b911a01ad9d497"
       },
       "G6_canary_safety": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "npu_promotions": 98
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ],
+        "npu_promotions": 89
       },
       "G7_retention_reacquisition": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G8_adversarial_rollback": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "rollbacks": 8
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ],
+        "rollbacks": 5
       },
       "G9_stochastic_recovery": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G10_retention_memory_ratio": {
-        "passed": true
+        "observed_pass": true,
+        "qualified": true,
+        "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu",
+          "gpu_training",
+          "npu_policy"
+        ]
       },
       "G11_occ_concurrency": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority"
+        ],
         "concurrency": 6,
-        "occ_conflicts": 1059,
-        "occ_retries_successful": 1059
+        "occ_conflicts": 62,
+        "occ_retries_successful": 62
       },
       "G12_distribution_stability": {
+        "observed_pass": true,
+        "qualified": true,
         "passed": true,
-        "p50_regret_us": 682.0,
-        "p95_regret_us": 1994.0,
-        "p99_regret_us": 4363.0,
-        "variance_ratio": 2.0166033740378335
+        "evidence_level": "physical",
+        "required_evidence_level": "physical",
+        "required_components": [
+          "authority",
+          "cpu",
+          "gpu",
+          "npu"
+        ],
+        "p50_regret_us": 146.0,
+        "p95_regret_us": 1464.0,
+        "p99_regret_us": 4527.0,
+        "variance_ratio": 0.5646359788244211,
+        "oracle": "measured_actual_hardware"
       },
-      "all_gates_passed": true
+      "all_gates_passed": true,
+      "all_logic_observed": true
     }
   }
 }

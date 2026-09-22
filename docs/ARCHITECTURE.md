@@ -65,9 +65,7 @@ the exact UoW, pre-state, route, post-state, successor, and halt decision.
 This boundary is the stable seam for heuristic, optimization, learned, NPU, or
 other probabilistic proposal systems.
 
-## Derived layers: Transactions & Orchestration (Pass 2)
-
-Pass 2 adds two foundational derived layers:
+## Derived layers
 
 ### 1. `uow.transactions` (OCC & Commit Sequencing)
 - **Mathematical OCC Hazard Detection**:
@@ -86,11 +84,27 @@ Pass 2 adds two foundational derived layers:
   - Pure native scheduling step under `(RULES, PROCESSES)`.
   - Dynamically dispatches ready tasks, detects clean terminal completion, and detects cyclic/missing prerequisite deadlocks.
 
+### 3. `uow.resources` (Resource Governance & Legality Dominance)
+- **Typed Resource Envelope**:
+  - `ResourceRequirement` declares multi-dimensional capacity needs: CPU cores, RAM units, GPU slots, NPU slots, energy budgets, deadlines, and priorities.
+- **Authoritative Capacity State & Leases**:
+  - `ResourceState` tracks available vs allocated capacity and active `ResourceLease` records.
+  - Atomic certified lease acquisition upon dispatch and lease release upon commit/abort. Strict rejection on overallocation.
+- **Legality Dominance**:
+  - Policy choice $\pi(O_t, R_t)$ may select among valid execution plans, but may *never* violate host resource bounds $\sum_{u \in S} \rho(u) \le R_t^{\text{avail}}$.
+- **Starvation Freedom**:
+  - Dynamic aging boosts starved tasks to urgency rank 0 after a configurable threshold of scheduling rounds.
+- **Swappable Scheduling Policies**:
+  - `FIFOSchedulingPolicy`, `GreedyCapacitySchedulingPolicy`, `PriorityDeadlineSchedulingPolicy`, and `CostEnergySchedulingPolicy` can be swapped interchangeably without altering correctness or certification machinery.
+
 Dependency rule remains strictly invariant:
 ```
 ontology -> state / contracts -> certification / evidence (kernel)
     ^                 ^
     |                 |
 uow.transactions   uow.orchestration
+                          ^
+                          |
+                    uow.resources
 ```
-The kernel never imports `transactions` or `orchestration`.
+The kernel never imports derived layers.

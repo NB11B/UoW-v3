@@ -1000,6 +1000,8 @@ class RouterCampaignRunner:
             "total_jobs": self.total_jobs,
             "seed": self.seed,
             "wrong_authoritative_commits": self.wrong_authoritative_commits,
+            "evidence_context": self.evidence_context.to_dict(),
+            "authority_negative_control": self.authority_negative_control,
             "gates": gate_results,
             "distribution_metrics": dist_metrics,
             "stochastic_metrics": stochastic_metrics,
@@ -1243,24 +1245,38 @@ def main():
     parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent in-flight jobs in asynchronous pipeline")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for single run")
     parser.add_argument("--seeds", nargs="+", type=int, default=None, help="List of random seeds to execute multi-seed campaign")
-    parser.add_argument("--mock", action="store_true", help="Run with mock simulated authority (no serial port)")
+    parser.add_argument("--mock", action="store_true", help="Run a simulated/portable logic test; cannot satisfy physical gates")
+    parser.add_argument("--physical", action="store_true", help="Require actual ESP32 + CUDA GPU + OpenVINO NPU; enables physical qualification claims")
     parser.add_argument("--stochastic", action="store_true", help="Run with stochastic semi-Markov environment generator")
     parser.add_argument("--adversarial-at", type=int, default=None, help="Job ID at which to inject adversarial canary test")
     parser.add_argument("--artifacts", type=Path, default=Path(__file__).resolve().parent / "artifacts", help="Artifacts directory")
     args = parser.parse_args()
 
-    if args.mock or args.port is None:
-        print("[Campaign] Initializing with MockAuthorityClient...")
-        authority = MockAuthorityClient()
-    else:
-        print(f"[Campaign] Connecting to physical ESP32 on {args.port} at {args.baud} baud...")
+    if args.physical and args.mock:
+        parser.error("--physical and --mock are mutually exclusive")
+    if args.physical and not args.port:
+        parser.error("--physical requires --port for the actual ESP32 authority")
+    if args.port and not args.physical:
+        parser.error("a serial port alone does not authorize a physical claim; add --physical or use --mock")
+
+    if args.physical:
+        print(f"[Campaign] PHYSICAL qualification: ESP32 on {args.port} at {args.baud} baud")
         authority = PhysicalAuthorityClient(port=args.port, baud=args.baud)
+    else:
+        print("[Campaign] SIMULATED/PORTABLE logic test with MockAuthorityClient; physical gates are blocked")
+        authority = MockAuthorityClient()
 
-    print("[Campaign] Initializing WorkloadEngine (CPU, RTX 5070 GPU, Intel AI Boost NPU)...")
-    engine = WorkloadEngine()
+    print("[Campaign] Initializing WorkloadEngine...")
+    engine = WorkloadEngine(
+        require_gpu=args.physical,
+        require_npu=args.physical,
+    )
 
-    print("[Campaign] Initializing AdaptiveRoutingPolicy (Dual Replay Buffer, Canary Deployer)...")
-    policy = AdaptiveRoutingPolicy()
+    print("[Campaign] Initializing AdaptiveRoutingPolicy...")
+    policy = AdaptiveRoutingPolicy(
+        require_gpu=args.physical,
+        require_npu=args.physical,
+    )
     print("[Campaign] Running bootstrap hardware calibration...")
     policy.bootstrap_calibration(engine)
 

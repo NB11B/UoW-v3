@@ -1025,10 +1025,10 @@ class RouterCampaignRunner:
         # G0: wrong_authoritative_commits == 0
         g0_pass = (self.wrong_authoritative_commits == 0)
 
-        # G1: Non-zero rejection during phase shifts (e.g. Phase 5 outage)
+        # G1: Explicit authority enforcement. Adaptive avoidance does not count.
         total_rejections = sum(1 for r in self.records if not r.proposed_committed)
         p5_rejections = sum(1 for r in self.records if r.phase_index == 4 and not r.proposed_committed)
-        g1_pass = (total_rejections > 0)
+        g1_pass = bool(self.authority_negative_control.get("observed_pass", False))
 
         # G2: Adaptation convergence (rejection rate in second half of each phase drops <= 5%)
         if self.stochastic_mode:
@@ -1049,10 +1049,13 @@ class RouterCampaignRunner:
                         g2_pass = False
 
         # G3: Heterogeneous execution: CPU, GPU, NPU all execute >= 2% of total jobs
-        committed_recs = [r for r in self.records if r.proposed_committed]
-        cpu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_CPU)
-        gpu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_GPU)
-        npu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_NPU)
+        committed_recs = [
+            r for r in self.records
+            if r.proposed_committed and r.receipt_committed and not r.execution_error
+        ]
+        cpu_count = sum(1 for r in committed_recs if r.actual_backend == "CPU")
+        gpu_count = sum(1 for r in committed_recs if r.actual_backend == "CUDA")
+        npu_count = sum(1 for r in committed_recs if r.actual_backend == "OPENVINO_NPU")
         min_expected = max(1, int(self.total_jobs * 0.02))
         g3_pass = (cpu_count >= min_expected and gpu_count >= min_expected and npu_count >= min_expected)
 
@@ -1149,41 +1152,87 @@ class RouterCampaignRunner:
                 and p95_reg <= 15000.0
             )
 
-        return {
-            "G0_zero_wrong_commits": {"passed": g0_pass, "wrong_commits": self.wrong_authoritative_commits},
-            "G1_phase_shift_rejections": {"passed": g1_pass, "total_rejections": total_rejections, "p5_rejections": p5_rejections},
-            "G2_adaptation_convergence": {"passed": g2_pass},
-            "G3_heterogeneous_execution": {
-                "passed": g3_pass,
-                "cpu_jobs": cpu_count,
-                "gpu_jobs": gpu_count,
-                "npu_jobs": npu_count,
-            },
-            "G4_latency_regret_reduction": {"passed": g4_pass, "avg_regret_us": avg_regret},
-            "G5_merkle_continuity": {"passed": g5_pass, "unique_committed_roots": len(set(committed_roots))},
-            "G6_canary_safety": {"passed": g6_pass, "npu_promotions": promotions},
-            "G7_retention_reacquisition": {"passed": g7_pass},
-            "G8_adversarial_rollback": {"passed": g8_pass, "rollbacks": self.policy.deployer.rollbacks_count},
-            "G9_stochastic_recovery": {"passed": g9_pass},
-            "G10_retention_memory_ratio": {"passed": g10_pass},
-            "G11_occ_concurrency": {
-                "passed": g11_pass,
-                "concurrency": self.concurrency,
-                "occ_conflicts": self.occ_conflicts,
-                "occ_retries_successful": self.occ_retries_successful,
-            },
-            "G12_distribution_stability": {
-                "passed": g12_pass,
-                "p50_regret_us": p50_reg,
-                "p95_regret_us": p95_reg,
-                "p99_regret_us": p99_reg,
-                "variance_ratio": var_ratio,
-            },
-            "all_gates_passed": all([
-                g0_pass, g1_pass, g2_pass, g3_pass, g4_pass, g5_pass,
-                g6_pass, g7_pass, g8_pass, g9_pass, g10_pass, g11_pass, g12_pass
-            ]),
+        physical_authority = ClaimRequirement(
+            EvidenceLevel.PHYSICAL,
+            ("authority",),
+        )
+        physical_heterogeneous = ClaimRequirement(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "cpu", "gpu", "npu"),
+        )
+        physical_adaptation = ClaimRequirement(
+            EvidenceLevel.PHYSICAL,
+            ("authority", "cpu", "gpu", "npu", "gpu_training", "npu_policy"),
+        )
+
+        gates = {
+            "G0_zero_wrong_commits": evaluate_claim(
+                g0_pass, self.evidence_context, physical_authority,
+                wrong_commits=self.wrong_authoritative_commits,
+            ),
+            "G1_offline_target_authority": evaluate_claim(
+                g1_pass, self.evidence_context, physical_authority,
+                total_rejections=total_rejections,
+                p5_rejections=p5_rejections,
+                negative_control=self.authority_negative_control,
+            ),
+            "G2_adaptation_convergence": evaluate_claim(
+                g2_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G3_heterogeneous_execution": evaluate_claim(
+                g3_pass, self.evidence_context, physical_heterogeneous,
+                cpu_jobs=cpu_count,
+                gpu_jobs=gpu_count,
+                npu_jobs=npu_count,
+            ),
+            "G4_latency_regret_reduction": evaluate_claim(
+                g4_pass, self.evidence_context, physical_heterogeneous,
+                avg_regret_us=avg_regret,
+                oracle="measured_actual_hardware",
+            ),
+            "G5_evidence_chain_continuity": evaluate_claim(
+                g5_pass, self.evidence_context, physical_authority,
+                unique_committed_roots=len(set(committed_roots)),
+            ),
+            "G6_canary_safety": evaluate_claim(
+                g6_pass, self.evidence_context, physical_adaptation,
+                npu_promotions=promotions,
+            ),
+            "G7_retention_reacquisition": evaluate_claim(
+                g7_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G8_adversarial_rollback": evaluate_claim(
+                g8_pass, self.evidence_context, physical_adaptation,
+                rollbacks=self.policy.deployer.rollbacks_count,
+            ),
+            "G9_stochastic_recovery": evaluate_claim(
+                g9_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G10_retention_memory_ratio": evaluate_claim(
+                g10_pass, self.evidence_context, physical_adaptation,
+            ),
+            "G11_occ_concurrency": evaluate_claim(
+                g11_pass, self.evidence_context, physical_authority,
+                concurrency=self.concurrency,
+                occ_conflicts=self.occ_conflicts,
+                occ_retries_successful=self.occ_retries_successful,
+            ),
+            "G12_distribution_stability": evaluate_claim(
+                g12_pass, self.evidence_context, physical_heterogeneous,
+                p50_regret_us=p50_reg,
+                p95_regret_us=p95_reg,
+                p99_regret_us=p99_reg,
+                variance_ratio=var_ratio,
+                oracle="measured_actual_hardware",
+            ),
         }
+        gates["all_gates_passed"] = all(
+            gate["passed"] for gate in gates.values() if isinstance(gate, dict)
+        )
+        gates["all_logic_observed"] = all(
+            gate["observed_pass"] for gate in gates.values() if isinstance(gate, dict)
+        )
+        return gates
 
 
 def main():

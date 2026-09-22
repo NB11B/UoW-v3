@@ -1,7 +1,7 @@
-﻿"""Native self-hosted scheduler and task UoW construction."""
+"""Certified self-hosted scheduler materialization."""
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import List, Sequence
 
 from ..contracts import (
     Contract,
@@ -17,43 +17,182 @@ from ..contracts import (
 )
 from ..ontology import MatrixCell, WorkCategory
 from ..state import WorldState
+from .materialization import MaterializedUoW, bind_materialization
 from .state import (
     ORCH_ACTIVE_KEY,
     ORCH_COMPLETED_KEY,
-    ORCH_DEPS_KEY,
     ORCH_QUEUE_KEY,
     OrchestrationState,
 )
 
 SCHEDULER_CELL: MatrixCell = MatrixCell(WorkCategory.RULES, WorkCategory.PROCESSES)
 TASK_CELL: MatrixCell = MatrixCell(WorkCategory.PROCESSES, WorkCategory.DATA)
+ORCH_TERMINATION_KEY = "__termination__"
+SCHEDULER_ID = "uow_scheduler"
+COMPLETION_PREFIX = "complete::"
 
 
-def evaluate_scheduler_step(state: WorldState) -> WorldState:
-    """Evaluates one step of native scheduling over the orchestration state attributes.
+class SchedulerMaterializer:
+    """Lower the current ready frontier into an ordinary scheduler UoW.
 
-    - If ready tasks exist in queue, dispatches the first ready task (setting it in active
-      and setting state cursor to that task).
-    - If queue is empty and active is empty, halts cleanly.
-    - If queue has pending tasks but none are ready and active is empty, marks DEADLOCKED.
+    The materializer itself never mutates state. Its output must pass independent
+    materialization certification and then the normal UoW certification boundary.
     """
-    orch = OrchestrationState(state)
-    ready = orch.get_ready_tasks()
 
-    if ready:
-        top_task = ready[0]
-        dispatched_orch = orch.dispatch_tasks([top_task])
-        # Direct cursor to dispatched task
-        return dispatched_orch.state.with_cursor(top_task)
+    @property
+    def materializer_id(self) -> str:
+        return SCHEDULER_ID
 
-    if orch.is_queue_empty():
-        return state.with_status("HALTED").with_cursor(None)
+    def materialize(self, state: WorldState) -> MaterializedUoW:
+        orch = OrchestrationState(state)
+        ready = orch.get_ready_tasks()
 
-    if orch.is_deadlocked():
-        return state.with_status("DEADLOCKED").with_cursor(None)
+        if ready:
+            task_id = ready[0]
+            new_queue = tuple(task for task in orch.queue if task != task_id)
+            new_active = tuple(sorted(set(orch.active) | {task_id}))
+            uow = UoW(
+                H=Header(
+                    identity=SCHEDULER_ID,
+                    source_category=SCHEDULER_CELL.source,
+                    target_category=SCHEDULER_CELL.target,
+                    layer="orchestration",
+                    parent_context="scheduler-materialization",
+                ),
+                Gamma=Contract(
+                    (
+                        Route(
+                            guard=Guard(GuardOp.ALWAYS),
+                            mutations=(
+                                Mutation(MutationOp.SET, ORCH_QUEUE_KEY, new_queue),
+                                Mutation(MutationOp.SET, ORCH_ACTIVE_KEY, new_active),
+                            ),
+                            successor=Successor.static(task_id),
+                        ),
+                    )
+                ),
+            )
+            uow.validate()
+            return bind_materialization(self.materializer_id, state, uow)
 
-    # Active tasks are in-flight, waiting for completion
-    return state
+        if orch.is_queue_empty():
+            uow = UoW(
+                H=Header(
+                    identity=SCHEDULER_ID,
+                    source_category=SCHEDULER_CELL.source,
+                    target_category=SCHEDULER_CELL.target,
+                    layer="orchestration",
+                    parent_context="scheduler-materialization",
+                ),
+                Gamma=Contract(
+                    (
+                        Route(
+                            guard=Guard(GuardOp.ALWAYS),
+                            successor=Successor.halt(),
+                        ),
+                    )
+                ),
+            )
+            uow.validate()
+            return bind_materialization(self.materializer_id, state, uow)
+
+        if orch.is_deadlocked():
+            uow = UoW(
+                H=Header(
+                    identity=SCHEDULER_ID,
+                    source_category=SCHEDULER_CELL.source,
+                    target_category=SCHEDULER_CELL.target,
+                    layer="orchestration",
+                    parent_context="scheduler-materialization",
+                ),
+                Gamma=Contract(
+                    (
+                        Route(
+                            guard=Guard(GuardOp.ALWAYS),
+                            mutations=(
+                                Mutation(
+                                    MutationOp.SET,
+                                    ORCH_TERMINATION_KEY,
+                                    "DEADLOCKED",
+                                ),
+                            ),
+                            successor=Successor.halt(),
+                        ),
+                    )
+                ),
+            )
+            uow.validate()
+            return bind_materialization(self.materializer_id, state, uow)
+
+        # Scheduler execution while work remains active indicates a control-flow error.
+        uow = UoW(
+            H=Header(
+                identity=SCHEDULER_ID,
+                source_category=SCHEDULER_CELL.source,
+                target_category=SCHEDULER_CELL.target,
+                layer="orchestration",
+                parent_context="scheduler-materialization",
+            ),
+            Gamma=Contract(
+                (
+                    Route(
+                        guard=Guard(GuardOp.ALWAYS),
+                        mutations=(
+                            Mutation(
+                                MutationOp.SET,
+                                ORCH_TERMINATION_KEY,
+                                "ACTIVE_WORK_PRESENT",
+                            ),
+                        ),
+                        successor=Successor.halt(),
+                    ),
+                )
+            ),
+        )
+        uow.validate()
+        return bind_materialization(self.materializer_id, state, uow)
+
+
+class CompletionMaterializer:
+    """Materialize certified completion of one active task."""
+
+    def __init__(self, task_id: str) -> None:
+        self.task_id = task_id
+
+    @property
+    def materializer_id(self) -> str:
+        return f"{COMPLETION_PREFIX}{self.task_id}"
+
+    def materialize(self, state: WorldState) -> MaterializedUoW:
+        orch = OrchestrationState(state)
+        if self.task_id not in orch.active:
+            raise ValueError(f"Cannot complete inactive task {self.task_id!r}.")
+
+        new_active = tuple(task for task in orch.active if task != self.task_id)
+        new_completed = tuple(sorted(set(orch.completed) | {self.task_id}))
+        uow = UoW(
+            H=Header(
+                identity=self.materializer_id,
+                source_category=SCHEDULER_CELL.source,
+                target_category=SCHEDULER_CELL.target,
+                layer="orchestration",
+                parent_context="completion-materialization",
+            ),
+            Gamma=Contract(
+                (
+                    Route(
+                        guard=Guard(GuardOp.ALWAYS),
+                        mutations=(
+                            Mutation(MutationOp.SET, ORCH_ACTIVE_KEY, new_active),
+                            Mutation(MutationOp.SET, ORCH_COMPLETED_KEY, new_completed),
+                        ),
+                        successor=Successor.static(SCHEDULER_ID),
+                    ),
+                )
+            ),
+        )
+        uow.validate()
+        return bind_materialization(self.materializer_id, state, uow)
 
 
 def make_domain_task(
@@ -61,25 +200,24 @@ def make_domain_task(
     routes: Sequence[Route],
     *,
     matrix_cell: MatrixCell = TASK_CELL,
-    return_to: str = "uow_scheduler",
 ) -> UoW:
-    """Creates a domain task UoW that executes its mutations and transitions back to scheduler.
-
-    When the task completes, the scheduler or transaction commit marks it completed.
-    """
+    """Create a domain task whose successful route proceeds to certified completion."""
     wrapped_routes: List[Route] = []
-    for r in routes:
-        # If route halts, redirect to scheduler return
-        succ = Successor.static(return_to) if r.successor.kind == SuccessorKind.HALT else r.successor
+    for route in routes:
+        successor = (
+            Successor.static(f"{COMPLETION_PREFIX}{identity}")
+            if route.successor.kind is SuccessorKind.HALT
+            else route.successor
+        )
         wrapped_routes.append(
             Route(
-                guard=r.guard,
-                mutations=r.mutations,
-                successor=succ,
+                guard=route.guard,
+                mutations=route.mutations,
+                successor=successor,
             )
         )
 
-    return UoW(
+    uow = UoW(
         H=Header(
             identity=identity,
             source_category=matrix_cell.source,
@@ -89,3 +227,29 @@ def make_domain_task(
         ),
         Gamma=Contract(tuple(wrapped_routes)),
     )
+    uow.validate()
+    return uow
+
+
+def evaluate_scheduler_step(state: WorldState) -> WorldState:
+    """Pure compatibility/reference helper.
+
+    This function does not have commit authority. Canonical authoritative execution
+    uses SchedulerMaterializer -> materialization certification -> UoW certification
+    -> commit. It remains useful for differential testing of scheduler semantics.
+    """
+    orch = OrchestrationState(state)
+    ready = orch.get_ready_tasks()
+
+    if ready:
+        task_id = ready[0]
+        return orch.dispatch_tasks([task_id]).state.with_cursor(task_id)
+    if orch.is_queue_empty():
+        return state.with_status("HALTED").with_cursor(None)
+    if orch.is_deadlocked():
+        return (
+            state.with_attribute(ORCH_TERMINATION_KEY, "DEADLOCKED")
+            .with_status("HALTED")
+            .with_cursor(None)
+        )
+    return state

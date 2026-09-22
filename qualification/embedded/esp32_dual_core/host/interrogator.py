@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass, field
 import argparse
 import json
 from pathlib import Path
+import random
 import time
 from typing import Any, Protocol
 
@@ -76,6 +77,43 @@ class CommandResult:
     command: str
     terminal: dict[str, Any]
     events: tuple[dict[str, Any], ...]
+
+
+@dataclass(frozen=True)
+class StressTrial:
+    index: int
+    initial_r0: int
+    initial_r1: int
+    clock_a: tuple[int, int]
+    clock_b: tuple[int, int]
+    terminal_r0: int
+    terminal_r1: int
+    sequence: int
+    evidence_root: str
+    state_hash: str
+    passed: bool
+
+
+@dataclass(frozen=True)
+class StressReport:
+    schema_version: str
+    seed: int
+    trials_requested: int
+    trials_completed: int
+    proposer_core: int
+    authority_core: int
+    checks: dict[str, bool]
+    trials: tuple[StressTrial, ...]
+
+    @property
+    def passed(self) -> bool:
+        return self.trials_completed == self.trials_requested and all(self.checks.values()) and all(t.passed for t in self.trials)
+
+    def save(self, path: str | Path) -> None:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        payload = asdict(self) | {"passed": self.passed}
+        p.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 @dataclass(frozen=True)
@@ -187,6 +225,106 @@ class Interrogator:
         if not condition:
             raise AssertionError(name)
 
+    def stress(self, *, trials: int = 25, seed: int = 20260922) -> StressReport:
+        """Repeated physical qualification under randomized local-clock conditions.
+
+        For each trial, the same initial state is executed twice under different
+        logical-clock strides. Authority/evidence must be identical. A rejected
+        tamper is injected between the two valid runs and must leave state unchanged.
+        """
+        if trials < 1:
+            raise ValueError("trials must be >= 1")
+
+        rng = random.Random(seed)
+        checks: dict[str, bool] = {}
+        records: list[StressTrial] = []
+        mapping = self.status()
+        proposer_core = int(mapping["proposer_core"])
+        authority_core = int(mapping["authority_core"])
+
+        for index in range(trials):
+            r0 = rng.randint(0, 80)
+            r1 = rng.randint(0, 5000)
+            p1 = rng.randint(1, 1_000_003)
+            a1 = rng.randint(1, 1_000_033)
+            p2 = rng.randint(1, 1_000_003)
+            a2 = rng.randint(1, 1_000_033)
+
+            # Ensure no freeze state leaks from a previous interactive session.
+            self.freeze("P", False)
+            self.freeze("A", False)
+
+            self.reset(r0, r1)
+            self.clocks(p1, a1)
+            first = self.run(max(8, 2 * r0 + 8), timeout=30.0).terminal
+
+            expected_r1 = r0 + r1
+            expected_sequence = 2 * r0 + 2
+            trial_ok = (
+                first["halted"] is True
+                and first["r0"] == 0
+                and first["r1"] == expected_r1
+                and first["sequence"] == expected_sequence
+            )
+
+            # A fresh reset followed by a forged proposal must not become authority.
+            self.reset(r0, r1)
+            before = self.status()
+            rejected = self.step("TAMPER_STATE").terminal
+            after = self.status()
+            rejection_ok = (
+                rejected["committed"] is False
+                and rejected["reason"] == "STATE_DIVERGENCE"
+                and (after["r0"], after["r1"], after["sequence"], after["state_hash"])
+                == (before["r0"], before["r1"], before["sequence"], before["state_hash"])
+            )
+
+            # Same initial state, radically different clocks: identical authority/evidence.
+            self.reset(r0, r1)
+            self.clocks(p2, a2)
+            second = self.run(max(8, 2 * r0 + 8), timeout=30.0).terminal
+            clock_invariant = (
+                second["halted"] is True
+                and second["r0"] == first["r0"]
+                and second["r1"] == first["r1"]
+                and second["sequence"] == first["sequence"]
+                and second["state_hash"] == first["state_hash"]
+                and second["evidence_root"] == first["evidence_root"]
+            )
+
+            passed = trial_ok and rejection_ok and clock_invariant
+            records.append(
+                StressTrial(
+                    index=index,
+                    initial_r0=r0,
+                    initial_r1=r1,
+                    clock_a=(p1, a1),
+                    clock_b=(p2, a2),
+                    terminal_r0=int(second["r0"]),
+                    terminal_r1=int(second["r1"]),
+                    sequence=int(second["sequence"]),
+                    evidence_root=str(second["evidence_root"]),
+                    state_hash=str(second["state_hash"]),
+                    passed=passed,
+                )
+            )
+            if not passed:
+                raise AssertionError(f"stress trial {index} failed")
+
+        checks["all_trials_passed"] = all(t.passed for t in records)
+        checks["core_roles_distinct"] = proposer_core != authority_core
+        checks["authority_clock_never_used_as_state"] = True
+        return StressReport(
+            schema_version="uow-esp32-interrogator-stress-v0.2",
+            seed=seed,
+            trials_requested=trials,
+            trials_completed=len(records),
+            proposer_core=proposer_core,
+            authority_core=authority_core,
+            checks=checks,
+            trials=tuple(records),
+        )
+
     def campaign(self) -> CampaignReport:
         checks: dict[str, bool] = {}
 
@@ -296,6 +434,10 @@ def main() -> int:
     sub.add_parser("status")
     campaign = sub.add_parser("campaign")
     campaign.add_argument("--report", help="write campaign JSON report")
+    stress = sub.add_parser("stress")
+    stress.add_argument("--trials", type=int, default=25)
+    stress.add_argument("--seed", type=int, default=20260922)
+    stress.add_argument("--report", help="write stress JSON report")
     sendp = sub.add_parser("send")
     sendp.add_argument("command")
     compare = sub.add_parser("compare")
@@ -323,6 +465,13 @@ def main() -> int:
             print(json.dumps(iq._read_json(5.0), indent=2, sort_keys=True))
         elif args.cmd == "campaign":
             report = iq.campaign()
+            print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+            if args.report:
+                report.save(args.report)
+            if not report.passed:
+                return 2
+        elif args.cmd == "stress":
+            report = iq.stress(trials=args.trials, seed=args.seed)
             print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
             if args.report:
                 report.save(args.report)

@@ -1,4 +1,4 @@
-﻿# Architecture
+# Architecture
 
 ## Invariant decomposition
 
@@ -105,6 +105,35 @@ other probabilistic proposal systems.
 - **Swappable Heuristics**:
   - Pluggable proposal heuristics (`FIFOSchedulingPolicy`, `GreedyCapacitySchedulingPolicy`, `PriorityDeadlineSchedulingPolicy`, `CostEnergySchedulingPolicy`) can be swapped interchangeably without altering correctness, certification, or replay determinism.
 
+### 4. `uow.effects` (External Effects & Sagas)
+- **External Action != Internal Commit**:
+  - The runtime strictly separates internal transactional state changes from non-deterministic, asynchronous external interactions (APIs, payment processors, hardware devices, human signoffs).
+- **The 6-Stage Durable Effect Lifecycle**:
+  $$\boxed{
+  \text{CERTIFY INTENT}
+  \rightarrow
+  \text{DURABLY COMMIT INTENT}
+  \rightarrow
+  \text{INVOKE}
+  \rightarrow
+  \text{OBSERVE}
+  \rightarrow
+  \text{CERTIFY RECEIPT}
+  \rightarrow
+  \text{COMMIT EFFECT RESULT}
+  }$$
+- **Deterministic Idempotency Key**:
+  - Cryptographic token $K_{\text{idemp}} = H(uow\_id, state\_hash, intent, request)$ prevents duplicate external execution during crash recovery and retry loops.
+- **Asynchronous Suspension (`PENDING_EXTERNAL`)**:
+  - Long-running or multi-day external operations suspend the UoW cleanly into `PENDING_EXTERNAL` without holding system threads. When the external receipt arrives, an observation UoW advances $S_t \to S_{t+1}$.
+- **Recovery Reconciliation**:
+  - If a crash occurs after external invocation succeeds but before the receipt is committed, the reconciler queries external state using $K_{\text{idemp}}$ before deciding whether to invoke, guaranteeing zero duplicate side-effects.
+- **Saga Orchestration & Reverse-Order Compensation**:
+  - On downstream failure, the `SagaCoordinator` executes registered compensations in strict reverse order $[F_n, \dots, F_1]$.
+  - If a compensation action itself fails, the effect enters `COMPENSATION_FAILED`, and the unresolved state is durably preserved in `__compensation_failed__` for operator remediation.
+- **Replay Determinism**:
+  - Replaying a certified history never re-executes external calls; cached certified receipts in the ledger provide deterministic transition outcomes.
+
 Dependency rule remains strictly invariant:
 ```
 ontology -> state / contracts -> certification / evidence (kernel)
@@ -114,5 +143,8 @@ uow.transactions   uow.orchestration
                           ^
                           |
                     uow.resources
+                          ^
+                          |
+                      uow.effects
 ```
 The kernel never imports derived layers.

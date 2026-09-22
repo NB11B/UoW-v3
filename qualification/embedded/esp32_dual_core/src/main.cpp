@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -69,6 +70,19 @@ enum class ControlType : uint8_t {
     BURST,
     SNAPSHOT,
     EXTERNAL_PROPOSAL,
+    SCHED_SNAPSHOT,
+    SCHED_RESET,
+    SCHED_SET_ONLINE,
+    SCHED_PROPOSE,
+    SCHED_RECEIPT,
+};
+
+struct SchedReservationSlot {
+    uint32_t reservation_id{0};
+    uint32_t job_id{0};
+    uint8_t target{0};
+    uint16_t tokens{0};
+    bool active{false};
 };
 
 struct ControlMsg {
@@ -80,6 +94,12 @@ struct ControlMsg {
     char which{'P'};
     bool flag{false};
     Proposal external_proposal{};
+    SchedProposal sched_proposal{};
+    SchedReceiptMsg sched_receipt{};
+    uint8_t sched_online_mask{0x07};
+    uint16_t sched_max_inflight[3]{4, 8, 4};
+    uint32_t sched_tokens{1000};
+    uint8_t sched_device_id{0};
 };
 
 Program gProgram = Program::transfer_r0_to_r1();
@@ -87,6 +107,10 @@ State gAuthorityState{10, 0, 0, 0, false};
 EvidenceLedger gLedger(false);
 LocalClock gProposerClock{0, 3, false};
 LocalClock gAuthorityClock{1000, 17, false};
+
+SchedState gSchedState;
+std::array<uint8_t, 32> gSchedEvidenceRoot{};
+SchedReservationSlot gActiveReservations[128]{};
 
 QueueHandle_t gWorkQ = nullptr;
 QueueHandle_t gProposalQ = nullptr;
@@ -269,6 +293,27 @@ void emit_snapshot(uint32_t request_id) {
     s += ",\"state_hash\":\"" + state_hash + "\"";
     s += ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"";
     s += "}";
+    emit_line(s);
+}
+
+void emit_sched_snapshot(uint32_t request_id) {
+    const auto state_hash = hex_digest(hash_sched_state(gSchedState));
+    const auto root = hex_digest(gSchedEvidenceRoot);
+    std::string s = "{\"event\":\"sched_snapshot\"";
+    s += ",\"request_id\":" + std::to_string(request_id);
+    s += ",\"epoch\":" + std::to_string(gSchedState.epoch);
+    s += ",\"reservation_seq\":" + std::to_string(gSchedState.reservation_seq);
+    s += ",\"completion_seq\":" + std::to_string(gSchedState.completion_seq);
+    s += ",\"online_mask\":" + std::to_string(static_cast<uint32_t>(gSchedState.online_mask));
+    s += ",\"inflight_cpu\":" + std::to_string(gSchedState.inflight[0]);
+    s += ",\"inflight_gpu\":" + std::to_string(gSchedState.inflight[1]);
+    s += ",\"inflight_npu\":" + std::to_string(gSchedState.inflight[2]);
+    s += ",\"max_cpu\":" + std::to_string(gSchedState.max_inflight[0]);
+    s += ",\"max_gpu\":" + std::to_string(gSchedState.max_inflight[1]);
+    s += ",\"max_npu\":" + std::to_string(gSchedState.max_inflight[2]);
+    s += ",\"resource_tokens\":" + std::to_string(gSchedState.resource_tokens);
+    s += ",\"state_hash\":\"" + state_hash + "\"";
+    s += ",\"evidence_root\":\"" + root + "\"}";
     emit_line(s);
 }
 
@@ -500,12 +545,155 @@ void authority_task(void*) {
                           "\",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
                 break;
             }
+            case ControlType::SCHED_SNAPSHOT:
+                emit_sched_snapshot(c.request_id);
+                break;
+            case ControlType::SCHED_RESET:
+                gSchedState.epoch++;
+                gSchedState.reservation_seq = 0;
+                gSchedState.completion_seq = 0;
+                gSchedState.online_mask = c.sched_online_mask;
+                gSchedState.inflight[0] = gSchedState.inflight[1] = gSchedState.inflight[2] = 0;
+                gSchedState.max_inflight[0] = c.sched_max_inflight[0];
+                gSchedState.max_inflight[1] = c.sched_max_inflight[1];
+                gSchedState.max_inflight[2] = c.sched_max_inflight[2];
+                gSchedState.resource_tokens = c.sched_tokens;
+                for (size_t i = 0; i < 128; ++i) gActiveReservations[i].active = false;
+                gSchedEvidenceRoot.fill(0);
+                emit_sched_snapshot(c.request_id);
+                break;
+            case ControlType::SCHED_SET_ONLINE: {
+                const uint8_t dev = c.sched_device_id;
+                if (dev < 3) {
+                    if (c.flag) {
+                        gSchedState.online_mask |= (1 << dev);
+                    } else {
+                        gSchedState.online_mask &= ~(1 << dev);
+                    }
+                    gSchedState.epoch++;
+                }
+                emit_sched_snapshot(c.request_id);
+                break;
+            }
+            case ControlType::SCHED_PROPOSE: {
+                const auto& p = c.sched_proposal;
+                const auto current_hash = hash_sched_state(gSchedState);
+                SchedRejectReason reason = SchedRejectReason::NONE;
+
+                if (p.pre_state_hash != current_hash) {
+                    reason = SchedRejectReason::STALE_STATE_HASH;
+                } else if (p.target_device >= 3) {
+                    reason = SchedRejectReason::INVALID_TARGET;
+                } else if ((gSchedState.online_mask & (1 << p.target_device)) == 0) {
+                    reason = SchedRejectReason::DEVICE_OFFLINE;
+                } else if (gSchedState.inflight[p.target_device] >= gSchedState.max_inflight[p.target_device]) {
+                    reason = SchedRejectReason::DEVICE_CAPACITY_EXCEEDED;
+                } else if (gSchedState.resource_tokens < p.tokens) {
+                    reason = SchedRejectReason::INSUFFICIENT_TOKENS;
+                }
+
+                if (reason == SchedRejectReason::NONE) {
+                    gSchedState.inflight[p.target_device]++;
+                    gSchedState.resource_tokens -= p.tokens;
+                    gSchedState.reservation_seq++;
+                    const uint32_t res_id = gSchedState.reservation_seq;
+
+                    const size_t slot = res_id % 128;
+                    gActiveReservations[slot].reservation_id = res_id;
+                    gActiveReservations[slot].job_id = p.job_id;
+                    gActiveReservations[slot].target = p.target_device;
+                    gActiveReservations[slot].tokens = p.tokens;
+                    gActiveReservations[slot].active = true;
+
+                    const auto post_hash = hash_sched_state(gSchedState);
+
+                    std::ostringstream ev;
+                    ev << hex_digest(gSchedEvidenceRoot) << ":RESERVE:" << res_id << ":" << p.job_id
+                       << ":" << static_cast<uint32_t>(p.target_device) << ":" << p.tokens << ":" << hex_digest(post_hash);
+                    gSchedEvidenceRoot = sha256(ev.str());
+
+                    std::string s = "{\"event\":\"sched_decision\"";
+                    s += ",\"request_id\":" + std::to_string(c.request_id);
+                    s += ",\"committed\":true";
+                    s += ",\"reason\":\"NONE\"";
+                    s += ",\"reservation_id\":" + std::to_string(res_id);
+                    s += ",\"job_id\":" + std::to_string(p.job_id);
+                    s += ",\"target\":" + std::to_string(p.target_device);
+                    s += ",\"post_state_hash\":\"" + hex_digest(post_hash) + "\"";
+                    s += ",\"evidence_root\":\"" + hex_digest(gSchedEvidenceRoot) + "\"}";
+                    emit_line(s);
+                } else {
+                    std::string s = "{\"event\":\"sched_decision\"";
+                    s += ",\"request_id\":" + std::to_string(c.request_id);
+                    s += ",\"committed\":false";
+                    s += ",\"reason\":\"" + std::string(sched_reject_reason_string(reason)) + "\"";
+                    s += ",\"reservation_id\":0";
+                    s += ",\"job_id\":" + std::to_string(p.job_id);
+                    s += ",\"target\":" + std::to_string(p.target_device);
+                    s += ",\"post_state_hash\":\"" + hex_digest(current_hash) + "\"";
+                    s += ",\"evidence_root\":\"" + hex_digest(gSchedEvidenceRoot) + "\"}";
+                    emit_line(s);
+                }
+                break;
+            }
+            case ControlType::SCHED_RECEIPT: {
+                const auto& r = c.sched_receipt;
+                const size_t slot = r.reservation_id % 128;
+                SchedRejectReason reason = SchedRejectReason::NONE;
+
+                if (r.reservation_id == 0 || r.reservation_id > gSchedState.reservation_seq ||
+                    !gActiveReservations[slot].active ||
+                    gActiveReservations[slot].reservation_id != r.reservation_id) {
+                    reason = SchedRejectReason::INVALID_RESERVATION;
+                }
+
+                if (reason == SchedRejectReason::NONE) {
+                    const uint8_t target = gActiveReservations[slot].target;
+                    const uint16_t tokens = gActiveReservations[slot].tokens;
+                    if (gSchedState.inflight[target] > 0) gSchedState.inflight[target]--;
+                    gSchedState.resource_tokens += tokens;
+                    gSchedState.completion_seq++;
+                    gActiveReservations[slot].active = false;
+
+                    const auto post_hash = hash_sched_state(gSchedState);
+
+                    std::ostringstream ev;
+                    ev << hex_digest(gSchedEvidenceRoot) << ":RECEIPT:" << r.reservation_id << ":"
+                       << static_cast<uint32_t>(r.status) << ":" << r.latency_us << ":"
+                       << hex_digest(r.output_digest) << ":" << hex_digest(post_hash);
+                    gSchedEvidenceRoot = sha256(ev.str());
+
+                    std::string s = "{\"event\":\"sched_receipt\"";
+                    s += ",\"request_id\":" + std::to_string(c.request_id);
+                    s += ",\"committed\":true";
+                    s += ",\"reason\":\"NONE\"";
+                    s += ",\"reservation_id\":" + std::to_string(r.reservation_id);
+                    s += ",\"completion_seq\":" + std::to_string(gSchedState.completion_seq);
+                    s += ",\"latency_us\":" + std::to_string(r.latency_us);
+                    s += ",\"post_state_hash\":\"" + hex_digest(post_hash) + "\"";
+                    s += ",\"evidence_root\":\"" + hex_digest(gSchedEvidenceRoot) + "\"}";
+                    emit_line(s);
+                } else {
+                    const auto current_hash = hash_sched_state(gSchedState);
+                    std::string s = "{\"event\":\"sched_receipt\"";
+                    s += ",\"request_id\":" + std::to_string(c.request_id);
+                    s += ",\"committed\":false";
+                    s += ",\"reason\":\"" + std::string(sched_reject_reason_string(reason)) + "\"";
+                    s += ",\"reservation_id\":" + std::to_string(r.reservation_id);
+                    s += ",\"completion_seq\":" + std::to_string(gSchedState.completion_seq);
+                    s += ",\"latency_us\":0";
+                    s += ",\"post_state_hash\":\"" + hex_digest(current_hash) + "\"";
+                    s += ",\"evidence_root\":\"" + hex_digest(gSchedEvidenceRoot) + "\"}";
+                    emit_line(s);
+                }
+                break;
+            }
         }
     }
 }
 
 void print_help() {
-    emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"SNAPSHOT\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"EXT_PROPOSE <prehash> <r0> <r1> <pc> <sequence> <halted> <selected_pc> <proposal_hash>\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\",\"PERSIST <0|1>\",\"REBOOT\",\"REBOOT_AFTER <commits>\",\"STALL <ms>\",\"TIMEOUT <ms>\",\"BURST <count>\"]}");
+    emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"SNAPSHOT\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"EXT_PROPOSE <prehash> <r0> <r1> <pc> <sequence> <halted> <selected_pc> <proposal_hash>\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\",\"PERSIST <0|1>\",\"REBOOT\",\"REBOOT_AFTER <commits>\",\"STALL <ms>\",\"TIMEOUT <ms>\",\"BURST <count>\",\"SCHED_SNAPSHOT\",\"SCHED_RESET <online_mask> <max_cpu> <max_gpu> <max_npu> <tokens>\",\"SCHED_SET_ONLINE <dev> <0|1>\",\"SCHED_PROPOSE <prehash> <job_id> <target> <tokens> <proposal_hash>\",\"SCHED_RECEIPT <reservation_id> <status> <latency_us> <digest>\"]}");
 }
 
 bool parse_u64(const std::string& s, uint64_t& out) {
@@ -522,7 +710,7 @@ void handle_command(std::string line) {
 
     std::vector<std::string> parts;
     size_t start = 0;
-    while (parts.size() < 12 && start < line.size()) {
+    while (parts.size() < 16 && start < line.size()) {
         while (start < line.size() && line[start] == ' ') ++start;
         if (start >= line.size()) break;
         size_t space = line.find(' ', start);
@@ -617,6 +805,58 @@ void handle_command(std::string line) {
         if (!parse_u64(parts[1], c.a) || c.a == 0) {
             emit_line("{\"event\":\"error\",\"reason\":\"bad BURST argument\"}"); return;
         }
+    } else if (parts[0] == "SCHED_SNAPSHOT" || parts[0] == "SCHED_STATUS") {
+        c.type = ControlType::SCHED_SNAPSHOT;
+    } else if (parts[0] == "SCHED_RESET" && parts.size() >= 6) {
+        c.type = ControlType::SCHED_RESET;
+        uint64_t mask = 7, mc = 4, mg = 8, mn = 4, tokens = 1000;
+        if (!parse_u64(parts[1], mask) || !parse_u64(parts[2], mc) ||
+            !parse_u64(parts[3], mg) || !parse_u64(parts[4], mn) ||
+            !parse_u64(parts[5], tokens)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad SCHED_RESET arguments\"}"); return;
+        }
+        c.sched_online_mask = static_cast<uint8_t>(mask);
+        c.sched_max_inflight[0] = static_cast<uint16_t>(mc);
+        c.sched_max_inflight[1] = static_cast<uint16_t>(mg);
+        c.sched_max_inflight[2] = static_cast<uint16_t>(mn);
+        c.sched_tokens = static_cast<uint32_t>(tokens);
+    } else if (parts[0] == "SCHED_SET_ONLINE" && parts.size() >= 3) {
+        c.type = ControlType::SCHED_SET_ONLINE;
+        uint64_t dev = 0, online = 0;
+        if (!parse_u64(parts[1], dev) || !parse_u64(parts[2], online)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad SCHED_SET_ONLINE arguments\"}"); return;
+        }
+        c.sched_device_id = static_cast<uint8_t>(dev);
+        c.flag = (online != 0);
+    } else if (parts[0] == "SCHED_PROPOSE" && parts.size() >= 6) {
+        c.type = ControlType::SCHED_PROPOSE;
+        SchedProposal p{};
+        uint64_t job_id = 0, target = 0, tokens = 1;
+        if (!parse_hex_digest(parts[1], p.pre_state_hash)
+            || !parse_u64(parts[2], job_id)
+            || !parse_u64(parts[3], target)
+            || !parse_u64(parts[4], tokens)
+            || !parse_hex_digest(parts[5], p.proposal_hash)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad SCHED_PROPOSE arguments\"}"); return;
+        }
+        p.job_id = static_cast<uint32_t>(job_id);
+        p.target_device = static_cast<uint8_t>(target);
+        p.tokens = static_cast<uint16_t>(tokens);
+        c.sched_proposal = p;
+    } else if (parts[0] == "SCHED_RECEIPT" && parts.size() >= 5) {
+        c.type = ControlType::SCHED_RECEIPT;
+        SchedReceiptMsg r{};
+        uint64_t res_id = 0, status = 0, latency_us = 0;
+        if (!parse_u64(parts[1], res_id)
+            || !parse_u64(parts[2], status)
+            || !parse_u64(parts[3], latency_us)
+            || !parse_hex_digest(parts[4], r.output_digest)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad SCHED_RECEIPT arguments\"}"); return;
+        }
+        r.reservation_id = static_cast<uint32_t>(res_id);
+        r.status = static_cast<uint8_t>(status);
+        r.latency_us = static_cast<uint32_t>(latency_us);
+        c.sched_receipt = r;
     } else {
         emit_line("{\"event\":\"error\",\"reason\":\"unknown command; send HELP\"}");
         return;

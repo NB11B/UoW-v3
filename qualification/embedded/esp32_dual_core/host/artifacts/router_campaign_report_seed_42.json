@@ -1,0 +1,380 @@
+{
+  "total_jobs": 1200,
+  "seed": 42,
+  "wrong_authoritative_commits": 0,
+  "gates": {
+    "G0_zero_wrong_commits": {
+      "passed": true,
+      "wrong_commits": 0
+    },
+    "G1_phase_shift_rejections": {
+      "passed": true,
+      "total_rejections": 17,
+      "p5_rejections": 0
+    },
+    "G2_adaptation_convergence": {
+      "passed": true
+    },
+    "G3_heterogeneous_execution": {
+      "passed": true,
+      "cpu_jobs": 615,
+      "gpu_jobs": 418,
+      "npu_jobs": 150
+    },
+    "G4_latency_regret_reduction": {
+      "passed": true,
+      "avg_regret_us": 2188.4375
+    },
+    "G5_merkle_continuity": {
+      "passed": true,
+      "unique_committed_roots": 1183
+    },
+    "G6_canary_safety": {
+      "passed": true,
+      "npu_promotions": 39
+    },
+    "G7_retention_reacquisition": {
+      "passed": true
+    },
+    "G8_adversarial_rollback": {
+      "passed": true,
+      "rollbacks": 7
+    },
+    "G9_stochastic_recovery": {
+      "passed": true
+    },
+    "G10_retention_memory_ratio": {
+      "passed": true
+    },
+    "G11_occ_concurrency": {
+      "passed": true,
+      "concurrency": 6,
+      "occ_conflicts": 1034,
+      "occ_retries_successful": 1034
+    },
+    "G12_distribution_stability": {
+      "passed": true,
+      "p50_regret_us": 1048.0,
+      "p95_regret_us": 3778.0,
+      "p99_regret_us": 15000.0,
+      "variance_ratio": 0.04208480278651712
+    },
+    "all_gates_passed": true
+  },
+  "distribution_metrics": {
+    "global_latency": {
+      "mean": 2968.6973795435333,
+      "std": 11112.022954821885,
+      "p50": 1773.0,
+      "p90": 3337.0,
+      "p95": 4902.0,
+      "p99": 8026.0,
+      "count": 1183
+    },
+    "global_regret": {
+      "mean": 2188.4375,
+      "std": 11015.265510921367,
+      "p50": 1048.0,
+      "p90": 2534.0,
+      "p95": 3778.0,
+      "p99": 15000.0,
+      "count": 1200
+    },
+    "variance_reduction": {
+      "early_std_us": 15496.024849179512,
+      "late_std_us": 652.1471497526885,
+      "variance_ratio": 0.04208480278651712
+    },
+    "device_distributions": {
+      "CPU": {
+        "count": 615,
+        "latency": {
+          "mean": 2107.8032520325205,
+          "std": 1041.5645714079317,
+          "p50": 1762.0,
+          "p90": 3134.0,
+          "p95": 3455.0,
+          "p99": 7093.0,
+          "count": 615
+        },
+        "regret": {
+          "mean": 1123.7723577235772,
+          "std": 772.4140514505034,
+          "p50": 1059.0,
+          "p90": 1558.0,
+          "p95": 1966.0,
+          "p99": 5249.0,
+          "count": 615
+        }
+      },
+      "GPU": {
+        "count": 418,
+        "latency": {
+          "mean": 4236.77033492823,
+          "std": 18572.048898078338,
+          "p50": 1446.0,
+          "p90": 4130.0,
+          "p95": 5928.0,
+          "p99": 138664.0,
+          "count": 418
+        },
+        "regret": {
+          "mean": 3258.1004784688994,
+          "std": 18379.183494977606,
+          "p50": 693.0,
+          "p90": 3467.0,
+          "p95": 4619.0,
+          "p99": 136664.0,
+          "count": 418
+        }
+      },
+      "NPU": {
+        "count": 150,
+        "latency": {
+          "mean": 2964.6666666666665,
+          "std": 821.541361642181,
+          "p50": 2856.0,
+          "p90": 4139.0,
+          "p95": 4624.0,
+          "p99": 5480.0,
+          "count": 150
+        },
+        "regret": {
+          "mean": 2120.7933333333335,
+          "std": 692.5083421559307,
+          "p50": 2207.0,
+          "p90": 2847.0,
+          "p95": 3101.0,
+          "p99": 3380.0,
+          "count": 150
+        }
+      }
+    },
+    "regime_distributions": {
+      "Stochastic_COMPOUND_CONTENTION": {
+        "count": 208,
+        "latency": {
+          "mean": 5485.75,
+          "std": 22841.816538192033,
+          "p50": 1686.0,
+          "p90": 3077.0,
+          "p95": 5516.0,
+          "p99": 150657.0,
+          "count": 208
+        },
+        "regret": {
+          "mean": 3914.326923076923,
+          "std": 22715.438449663015,
+          "p50": 0.0,
+          "p90": 1162.0,
+          "p95": 2416.0,
+          "p99": 149457.0,
+          "count": 208
+        }
+      },
+      "Stochastic_DEVICE_OUTAGE": {
+        "count": 101,
+        "latency": {
+          "mean": 2415.4285714285716,
+          "std": 935.5138298551979,
+          "p50": 2357.0,
+          "p90": 3455.0,
+          "p95": 3834.0,
+          "p99": 5292.0,
+          "count": 84
+        },
+        "regret": {
+          "mean": 3593.029702970297,
+          "std": 5154.468140458231,
+          "p50": 1243.0,
+          "p90": 15000.0,
+          "p95": 15000.0,
+          "p99": 15000.0,
+          "count": 101
+        }
+      },
+      "Stochastic_GPU_CONTENTION": {
+        "count": 120,
+        "latency": {
+          "mean": 2479.4,
+          "std": 2762.4913134101735,
+          "p50": 1964.0,
+          "p90": 3185.0,
+          "p95": 3410.0,
+          "p99": 7739.0,
+          "count": 120
+        },
+        "regret": {
+          "mean": 1275.9083333333333,
+          "std": 2607.1544321853835,
+          "p50": 894.0,
+          "p90": 2118.0,
+          "p95": 2365.0,
+          "p99": 5239.0,
+          "count": 120
+        }
+      },
+      "Stochastic_LARGE_BATCH_BURST": {
+        "count": 60,
+        "latency": {
+          "mean": 2270.05,
+          "std": 2529.9687641352416,
+          "p50": 1846.0,
+          "p90": 3087.0,
+          "p95": 3191.0,
+          "p99": 5056.0,
+          "count": 60
+        },
+        "regret": {
+          "mean": 1124.1666666666667,
+          "std": 2274.1974640640938,
+          "p50": 802.0,
+          "p90": 1647.0,
+          "p95": 2447.0,
+          "p99": 2956.0,
+          "count": 60
+        }
+      },
+      "Stochastic_NOMINAL": {
+        "count": 558,
+        "latency": {
+          "mean": 2127.2311827956987,
+          "std": 1131.1945229292144,
+          "p50": 1721.0,
+          "p90": 3317.0,
+          "p95": 4161.0,
+          "p99": 5987.0,
+          "count": 558
+        },
+        "regret": {
+          "mean": 1421.2885304659499,
+          "std": 961.8368707083924,
+          "p50": 1146.0,
+          "p90": 2524.0,
+          "p95": 2979.0,
+          "p99": 5487.0,
+          "count": 558
+        }
+      },
+      "Stochastic_NPU_CONTENTION": {
+        "count": 153,
+        "latency": {
+          "mean": 3577.1960784313724,
+          "std": 14821.163407299271,
+          "p50": 1724.0,
+          "p90": 5720.0,
+          "p95": 5972.0,
+          "p99": 7349.0,
+          "count": 153
+        },
+        "regret": {
+          "mean": 2845.823529411765,
+          "std": 14590.32481377548,
+          "p50": 1202.0,
+          "p90": 3805.0,
+          "p95": 4619.0,
+          "p99": 5590.0,
+          "count": 153
+        }
+      }
+    }
+  },
+  "stochastic_metrics": {
+    "NOMINAL": {
+      "occurrences": 8,
+      "mean_t_detect_jobs": null,
+      "mean_t_recover_jobs": 6.714285714285714,
+      "memory_reacquire_ratios": [
+        0.8,
+        1.2,
+        1.4,
+        1.6,
+        2.6,
+        0.8
+      ],
+      "mean_memory_reacquire_ratio": 1.4000000000000001
+    },
+    "LARGE_BATCH_BURST": {
+      "occurrences": 2,
+      "mean_t_detect_jobs": null,
+      "mean_t_recover_jobs": 5.5,
+      "memory_reacquire_ratios": [
+        2.6666666666666665
+      ],
+      "mean_memory_reacquire_ratio": 2.6666666666666665
+    },
+    "GPU_CONTENTION": {
+      "occurrences": 4,
+      "mean_t_detect_jobs": 0.0,
+      "mean_t_recover_jobs": 3.5,
+      "memory_reacquire_ratios": [
+        1.0,
+        0.75,
+        0.75
+      ],
+      "mean_memory_reacquire_ratio": 0.8333333333333334
+    },
+    "NPU_CONTENTION": {
+      "occurrences": 2,
+      "mean_t_detect_jobs": -1.0,
+      "mean_t_recover_jobs": 5.0,
+      "memory_reacquire_ratios": [
+        0.42857142857142855
+      ],
+      "mean_memory_reacquire_ratio": 0.42857142857142855
+    },
+    "COMPOUND_CONTENTION": {
+      "occurrences": 2,
+      "mean_t_detect_jobs": null,
+      "mean_t_recover_jobs": 4.0,
+      "memory_reacquire_ratios": [
+        0.6
+      ],
+      "mean_memory_reacquire_ratio": 0.6
+    },
+    "DEVICE_OUTAGE": {
+      "occurrences": 2,
+      "mean_t_detect_jobs": -0.5,
+      "mean_t_recover_jobs": 7.0,
+      "memory_reacquire_ratios": [
+        0.4
+      ],
+      "mean_memory_reacquire_ratio": 0.4
+    }
+  },
+  "golden_benchmarks": [
+    {
+      "job_id": 500,
+      "mean_suite_latency_us": 2202.5,
+      "per_batch_latencies": [
+        1937,
+        1475,
+        1738,
+        3660
+      ]
+    },
+    {
+      "job_id": 1000,
+      "mean_suite_latency_us": 2025.5,
+      "per_batch_latencies": [
+        1655,
+        1688,
+        1879,
+        2880
+      ]
+    },
+    {
+      "job_id": 1200,
+      "mean_suite_latency_us": 2171.25,
+      "per_batch_latencies": [
+        1732,
+        1933,
+        2054,
+        2966
+      ]
+    }
+  ],
+  "final_evidence_root": "67dbb0ea5ac4e296c1e2811fbb331966588e9d12fca26c7eac62f4a5ddb3f4a7",
+  "final_state_hash": "e1d7bcd550c608c5b16e7583c4c3bf3c5630214bfd7f6f1ac0f2b12fd84c18fb",
+  "records_count": 1200
+}

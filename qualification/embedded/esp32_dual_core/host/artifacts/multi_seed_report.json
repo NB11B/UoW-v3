@@ -1,0 +1,128 @@
+{
+  "seeds": [
+    42,
+    101
+  ],
+  "total_runs": 2,
+  "all_runs_passed": true,
+  "runs": {
+    "42": {
+      "G0_zero_wrong_commits": {
+        "passed": true,
+        "wrong_commits": 0
+      },
+      "G1_phase_shift_rejections": {
+        "passed": true,
+        "total_rejections": 17,
+        "p5_rejections": 0
+      },
+      "G2_adaptation_convergence": {
+        "passed": true
+      },
+      "G3_heterogeneous_execution": {
+        "passed": true,
+        "cpu_jobs": 615,
+        "gpu_jobs": 418,
+        "npu_jobs": 150
+      },
+      "G4_latency_regret_reduction": {
+        "passed": true,
+        "avg_regret_us": 2188.4375
+      },
+      "G5_merkle_continuity": {
+        "passed": true,
+        "unique_committed_roots": 1183
+      },
+      "G6_canary_safety": {
+        "passed": true,
+        "npu_promotions": 39
+      },
+      "G7_retention_reacquisition": {
+        "passed": true
+      },
+      "G8_adversarial_rollback": {
+        "passed": true,
+        "rollbacks": 7
+      },
+      "G9_stochastic_recovery": {
+        "passed": true
+      },
+      "G10_retention_memory_ratio": {
+        "passed": true
+      },
+      "G11_occ_concurrency": {
+        "passed": true,
+        "concurrency": 6,
+        "occ_conflicts": 1034,
+        "occ_retries_successful": 1034
+      },
+      "G12_distribution_stability": {
+        "passed": true,
+        "p50_regret_us": 1048.0,
+        "p95_regret_us": 3778.0,
+        "p99_regret_us": 15000.0,
+        "variance_ratio": 0.04208480278651712
+      },
+      "all_gates_passed": true
+    },
+    "101": {
+      "G0_zero_wrong_commits": {
+        "passed": true,
+        "wrong_commits": 0
+      },
+      "G1_phase_shift_rejections": {
+        "passed": true,
+        "total_rejections": 1,
+        "p5_rejections": 0
+      },
+      "G2_adaptation_convergence": {
+        "passed": true
+      },
+      "G3_heterogeneous_execution": {
+        "passed": true,
+        "cpu_jobs": 1141,
+        "gpu_jobs": 26,
+        "npu_jobs": 32
+      },
+      "G4_latency_regret_reduction": {
+        "passed": true,
+        "avg_regret_us": 828.795
+      },
+      "G5_merkle_continuity": {
+        "passed": true,
+        "unique_committed_roots": 1199
+      },
+      "G6_canary_safety": {
+        "passed": true,
+        "npu_promotions": 98
+      },
+      "G7_retention_reacquisition": {
+        "passed": true
+      },
+      "G8_adversarial_rollback": {
+        "passed": true,
+        "rollbacks": 8
+      },
+      "G9_stochastic_recovery": {
+        "passed": true
+      },
+      "G10_retention_memory_ratio": {
+        "passed": true
+      },
+      "G11_occ_concurrency": {
+        "passed": true,
+        "concurrency": 6,
+        "occ_conflicts": 1059,
+        "occ_retries_successful": 1059
+      },
+      "G12_distribution_stability": {
+        "passed": true,
+        "p50_regret_us": 682.0,
+        "p95_regret_us": 1994.0,
+        "p99_regret_us": 4363.0,
+        "variance_ratio": 2.0166033740378335
+      },
+      "all_gates_passed": true
+    }
+  }
+}

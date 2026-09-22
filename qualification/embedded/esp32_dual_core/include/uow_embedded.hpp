@@ -154,4 +154,48 @@ const char* reject_reason_string(RejectReason reason);
 const char* fault_mode_string(FaultMode mode);
 FaultMode parse_fault_mode(const std::string& text);
 
+// -----------------------------------------------------------------------------
+// Heterogeneous Workload Scheduling Authority
+// -----------------------------------------------------------------------------
+enum class SchedRejectReason : uint8_t {
+    NONE = 0,
+    STALE_STATE_HASH = 1,
+    INVALID_TARGET = 2,
+    DEVICE_OFFLINE = 3,
+    DEVICE_CAPACITY_EXCEEDED = 4,
+    INSUFFICIENT_TOKENS = 5,
+    INVALID_RESERVATION = 6,
+    ALREADY_COMPLETED = 7,
+    PROPOSAL_HASH_MISMATCH = 8,
+};
+
+struct SchedState {
+    uint32_t epoch{0};
+    uint32_t reservation_seq{0};
+    uint32_t completion_seq{0};
+    uint8_t online_mask{0x07}; // bit 0: CPU, bit 1: GPU, bit 2: NPU
+    uint16_t inflight[3]{0, 0, 0};
+    uint16_t max_inflight[3]{4, 8, 4};
+    uint32_t resource_tokens{1000};
+};
+
+struct SchedProposal {
+    std::array<uint8_t, 32> pre_state_hash{};
+    std::array<uint8_t, 32> proposal_hash{};
+    uint32_t job_id{0};
+    uint8_t target_device{0};
+    uint16_t tokens{1};
+};
+
+struct SchedReceiptMsg {
+    uint32_t reservation_id{0};
+    uint8_t status{0};
+    uint32_t latency_us{0};
+    std::array<uint8_t, 32> output_digest{};
+};
+
+std::string sched_canonical_state(const SchedState& s);
+std::array<uint8_t, 32> hash_sched_state(const SchedState& s);
+const char* sched_reject_reason_string(SchedRejectReason reason);
+
 } // namespace uow_embedded

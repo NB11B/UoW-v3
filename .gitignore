@@ -3,4 +3,7 @@ __pycache__/
 .pytest_cache/
 *.wal
 *.egg-info/
+.*_cache/
+build/
+
 

@@ -1,5 +1,16 @@
 # ESP32-S3 Dual-Core UoW Qualification
 
+## Sealed continuous-adaptation lineage
+
+The completed physical ESP32 + CPU/GPU/NPU research lineage is sealed in:
+
+- `QUALIFICATION_SEAL.md` — claims, scope boundaries, and canonicalization notes.
+- `QUALIFICATION_MANIFEST.json` — commit-pinned evidence/source blob inventory.
+- `ROUTER_CAMPAIGN_RESULTS.md` — Step 1–3 continuous-adaptation results.
+
+The physically qualified research head is `1f1f53f6c269f87bf23a9a8643766cb2927f0f0b`. Later documentation/CI commits do not alter that physical evidence unless a new hardware run is explicitly recorded.
+
+
 This is a **hardware falsification target** for the canonical UoW architecture. It is not a new runtime layer.
 
 The experiment maps the hybrid authority boundary onto two physical execution contexts:

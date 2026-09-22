@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project(uow_esp32_host_tests LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(uow_embedded_tests ../src/uow_embedded.cpp test_main.cpp)
+target_include_directories(uow_embedded_tests PRIVATE ../include)
+find_package(Threads REQUIRED)
+target_link_libraries(uow_embedded_tests PRIVATE Threads::Threads)

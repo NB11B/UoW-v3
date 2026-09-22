@@ -372,9 +372,13 @@ class AdaptiveRoutingPolicy:
         # Build candidate score list
         scores = {}
         for dev in (DEVICE_CPU, DEVICE_GPU, DEVICE_NPU):
+            is_online = bool(online_mask & (1 << dev))
             has_capacity = inflight[dev] < max_inflight[dev]
             has_tokens = tokens >= 1
 
+            if not is_online:
+                scores[dev] = 1e9
+                continue
             if not has_capacity:
                 scores[dev] = 1e8  # Hard penalty for full queue
                 continue
@@ -513,7 +517,13 @@ class AdaptiveRoutingPolicy:
                 receipt = engine.execute(job_id=9000 + dev * 100 + b, target_device=dev, batch_size=b)
                 job = JobDescriptor(job_id=9000, batch_size=b, priority=0.5, latency_budget_us=10000)
                 feats = self.featurize(job, snap, load)
-                self.record_feedback(feats, dev, latency_us=receipt.latency_us, rejected=False, phase="Bootstrap")
+                self.record_feedback(
+                    feats,
+                    dev,
+                    latency_us=receipt.latency_us,
+                    rejected=receipt.error is not None,
+                    phase="Bootstrap",
+                )
         self.train_step(batch_size=12, epochs=80)
         self.deployer.compile_candidate(self.net)
         self.deployer.promote_candidate()

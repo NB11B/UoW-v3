@@ -115,6 +115,7 @@ private:
 std::array<uint8_t, 32> sha256(const uint8_t* data, size_t len);
 std::array<uint8_t, 32> sha256(const std::string& text);
 std::string hex_digest(const std::array<uint8_t, 32>& d);
+bool parse_hex_digest(const std::string& text, std::array<uint8_t, 32>& out);
 
 std::array<uint8_t, 32> hash_state(const State& s);
 std::array<uint8_t, 32> hash_proposal_body(const Proposal& p);

@@ -175,27 +175,51 @@ wrong_authoritative_commits = 0
 
 The stronger capability requirement is that the same NPU backend also passes the full `capability` gate.
 
+### 3. Intel AI Boost NPU Adapter
+
+The adapter [`host/intel_npu_adapter.py`](file:///c:/Users/nateb/OneDrive/Documents/UoW%20ESP32/qualification/embedded/esp32_dual_core/host/intel_npu_adapter.py) connects the local on-die **Intel(R) AI Boost NPU** via OpenVINO:
+
+```powershell
+python host\external_proposer.py `
+  --port COM10 `
+  capability `
+  --backend module `
+  --target host.intel_npu_adapter:propose `
+  --report artifacts\real-npu-capability.json
+```
+
+And for 100-trial authority containment:
+
+```powershell
+python host\external_proposer.py `
+  --port COM10 `
+  qualify `
+  --backend module `
+  --target host.intel_npu_adapter:propose `
+  --backend-trials 100 `
+  --report artifacts\real-npu-safety.json
+```
+
 ## Decisive claim
 
 If both gates pass with the actual laptop/NPU backend:
 
-[
-oxed{
-	ext{compute domain on laptop/NPU}
-
-eq
-	ext{authority domain on ESP32}
+$$
+\boxed{
+\text{compute domain on laptop/NPU}
+\neq
+\text{authority domain on ESP32}
 }
-]
+$$
 
 while:
 
-[
-oxed{
-	ext{same initial state + same program}
-Rightarrow
-	ext{same certified terminal state + same evidence root}
+$$
+\boxed{
+\text{same initial state + same program}
+\Rightarrow
+\text{same certified terminal state + same evidence root}
 }
-]
+$$
 
 That is a direct test of authority/compute separation across independent physical machines.

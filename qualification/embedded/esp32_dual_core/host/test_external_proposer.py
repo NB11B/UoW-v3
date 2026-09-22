@@ -243,6 +243,28 @@ class ExternalProposerTests(unittest.TestCase):
         self.assertEqual(report.backend_rejects, 10)
         self.assertEqual(report.wrong_authoritative_commits, 0)
 
+    def test_intel_npu_adapter_step(self):
+        try:
+            from intel_npu_adapter import propose
+        except Exception:
+            self.skipTest("intel_npu_adapter dependencies not available")
+
+        snapshot = {
+            "r0": 50,
+            "r1": 25,
+            "pc": 0,
+            "sequence": 0,
+            "halted": False,
+            "state_hash": "dummy",
+            "evidence_root": ZERO,
+        }
+        res = propose(snapshot)
+        self.assertEqual(res["r0"], 49)
+        self.assertEqual(res["r1"], 25)
+        self.assertEqual(res["pc"], 1)
+        self.assertEqual(res["sequence"], 1)
+        self.assertFalse(res["halted"])
+
 
 if __name__ == "__main__":
     unittest.main()

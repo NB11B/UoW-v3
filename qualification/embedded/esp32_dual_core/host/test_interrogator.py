@@ -195,6 +195,8 @@ class FakeTransport:
 
     def reconnect(self, timeout: float = 15.0):
         self.closed = False
+        # Match SerialTransport.reconnect(): stale pre-disconnect USB input is discarded.
+        self.device.queue.clear()
 
 
 class InterrogatorTests(unittest.TestCase):

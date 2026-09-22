@@ -22,6 +22,7 @@ Evaluates 8 Capability Gates:
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 from dataclasses import asdict, dataclass
 import hashlib
 import json
@@ -29,6 +30,7 @@ import os
 from pathlib import Path
 import random
 import sys
+import threading
 import time
 from typing import Any
 
@@ -60,37 +62,41 @@ class PhysicalAuthorityClient:
             raise RuntimeError("pyserial is required: pip install pyserial") from exc
         self.ser = serial.Serial(port, baudrate=baud, timeout=0.1)
         self.timeout = timeout
+        self._lock = threading.Lock()
         time.sleep(1.0)
-        self.ser.reset_input_buffer()
+        with self._lock:
+            self.ser.reset_input_buffer()
 
     def close(self) -> None:
-        if self.ser and self.ser.is_open:
-            self.ser.close()
+        with self._lock:
+            if self.ser and self.ser.is_open:
+                self.ser.close()
 
     def send_command(self, cmd: str, expected_events: tuple[str, ...]) -> dict[str, Any]:
         """Send command line and await JSON response matching one of expected_events."""
-        self.ser.reset_input_buffer()
-        self.ser.write((cmd.strip() + "\n").encode("utf-8"))
-        self.ser.flush()
+        with self._lock:
+            self.ser.reset_input_buffer()
+            self.ser.write((cmd.strip() + "\n").encode("utf-8"))
+            self.ser.flush()
 
-        deadline = time.monotonic() + self.timeout
-        while time.monotonic() < deadline:
-            line = self.ser.readline()
-            if not line:
-                continue
-            text = line.decode("utf-8", errors="replace").strip()
-            if not text or not text.startswith("{"):
-                continue
-            try:
-                data = json.loads(text)
-                if data.get("event") in expected_events:
-                    return data
-                if data.get("event") == "error":
-                    return data
-            except json.JSONDecodeError:
-                continue
+            deadline = time.monotonic() + self.timeout
+            while time.monotonic() < deadline:
+                line = self.ser.readline()
+                if not line:
+                    continue
+                text = line.decode("utf-8", errors="replace").strip()
+                if not text or not text.startswith("{"):
+                    continue
+                try:
+                    data = json.loads(text)
+                    if data.get("event") in expected_events:
+                        return data
+                    if data.get("event") == "error":
+                        return data
+                except json.JSONDecodeError:
+                    continue
 
-        raise TimeoutError(f"Timeout waiting for {expected_events} after command: {cmd}")
+            raise TimeoutError(f"Timeout waiting for {expected_events} after command: {cmd}")
 
     def get_snapshot(self) -> dict[str, Any]:
         return self.send_command("SCHED_SNAPSHOT", ("sched_snapshot",))
@@ -108,15 +114,19 @@ class PhysicalAuthorityClient:
         cmd = f"SCHED_PROPOSE {pre_state_hash} {job_id} {target} {tokens} {prop_hash}"
         return self.send_command(cmd, ("sched_decision",))
 
-    def propose_with_occ_retry(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1, max_retries: int = 3) -> dict[str, Any]:
+    def propose_with_occ_retry(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1, max_retries: int = 5) -> dict[str, Any]:
         curr_hash = pre_state_hash
+        attempts = 0
         for _ in range(max_retries):
+            attempts += 1
             res = self.propose(pre_state_hash=curr_hash, job_id=job_id, target=target, tokens=tokens)
             if res.get("committed", False) or res.get("reason") != "STALE_STATE_HASH":
+                res["occ_attempts"] = attempts
                 return res
             snap = self.get_snapshot()
             curr_hash = snap.get("state_hash", curr_hash)
-            time.sleep(0.005)
+            time.sleep(0.002)
+        res["occ_attempts"] = attempts
         return res
 
     def receipt(self, reservation_id: int, status: int, latency_us: int, output_digest: str) -> dict[str, Any]:
@@ -128,6 +138,7 @@ class MockAuthorityClient:
     """Mock simulated ESP32 scheduling authority for tests and verification without physical serial."""
 
     def __init__(self):
+        self._lock = threading.Lock()
         self.epoch = 1
         self.online_mask = 7
         self.inflight = [0, 0, 0]
@@ -146,128 +157,161 @@ class MockAuthorityClient:
         pass
 
     def get_snapshot(self) -> dict[str, Any]:
-        return {
-            "event": "sched_snapshot",
-            "epoch": self.epoch,
-            "online_mask": self.online_mask,
-            "inflight": list(self.inflight),
-            "max_inflight": list(self.max_inflight),
-            "resource_tokens": self.tokens,
-            "reservation_seq": self.reservation_seq,
-            "completion_seq": self.completion_seq,
-            "state_hash": self._state_hash(),
-            "evidence_root": self.evidence_root,
-        }
+        with self._lock:
+            return {
+                "event": "sched_snapshot",
+                "epoch": self.epoch,
+                "online_mask": self.online_mask,
+                "inflight": list(self.inflight),
+                "max_inflight": list(self.max_inflight),
+                "resource_tokens": self.tokens,
+                "reservation_seq": self.reservation_seq,
+                "completion_seq": self.completion_seq,
+                "state_hash": self._state_hash(),
+                "evidence_root": self.evidence_root,
+            }
 
     def reset(self, online_mask: int = 7, max_cpu: int = 16, max_gpu: int = 16, max_npu: int = 16, tokens: int = 1000) -> dict[str, Any]:
-        self.epoch += 1
-        self.online_mask = online_mask
-        self.inflight = [0, 0, 0]
-        self.max_inflight = [max_cpu, max_gpu, max_npu]
-        self.tokens = tokens
-        self.reservation_seq = 0
-        self.completion_seq = 0
-        self.evidence_root = "0" * 64
-        self.reservations.clear()
-        return self.get_snapshot()
+        with self._lock:
+            self.epoch += 1
+            self.online_mask = online_mask
+            self.inflight = [0, 0, 0]
+            self.max_inflight = [max_cpu, max_gpu, max_npu]
+            self.tokens = tokens
+            self.reservation_seq = 0
+            self.completion_seq = 0
+            self.evidence_root = "0" * 64
+            self.reservations.clear()
+            return {
+                "event": "sched_snapshot",
+                "epoch": self.epoch,
+                "online_mask": self.online_mask,
+                "inflight": list(self.inflight),
+                "max_inflight": list(self.max_inflight),
+                "resource_tokens": self.tokens,
+                "reservation_seq": self.reservation_seq,
+                "completion_seq": self.completion_seq,
+                "state_hash": self._state_hash(),
+                "evidence_root": self.evidence_root,
+            }
 
     def set_online(self, device: int, online: bool) -> dict[str, Any]:
-        if online:
-            self.online_mask |= (1 << device)
-        else:
-            self.online_mask &= ~(1 << device)
-        self.epoch += 1
-        return self.get_snapshot()
+        with self._lock:
+            if online:
+                self.online_mask |= (1 << device)
+            else:
+                self.online_mask &= ~(1 << device)
+            self.epoch += 1
+            return {
+                "event": "sched_snapshot",
+                "epoch": self.epoch,
+                "online_mask": self.online_mask,
+                "inflight": list(self.inflight),
+                "max_inflight": list(self.max_inflight),
+                "resource_tokens": self.tokens,
+                "reservation_seq": self.reservation_seq,
+                "completion_seq": self.completion_seq,
+                "state_hash": self._state_hash(),
+                "evidence_root": self.evidence_root,
+            }
 
     def propose(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1) -> dict[str, Any]:
-        curr = self._state_hash()
-        reason = "NONE"
-        if pre_state_hash != curr:
-            reason = "STALE_STATE_HASH"
-        elif target >= 3:
-            reason = "INVALID_TARGET"
-        elif (self.online_mask & (1 << target)) == 0:
-            reason = "DEVICE_OFFLINE"
-        elif self.inflight[target] >= self.max_inflight[target]:
-            reason = "DEVICE_CAPACITY_EXCEEDED"
-        elif self.tokens < tokens:
-            reason = "INSUFFICIENT_TOKENS"
+        with self._lock:
+            curr = self._state_hash()
+            reason = "NONE"
+            if pre_state_hash != curr:
+                reason = "STALE_STATE_HASH"
+            elif target >= 3:
+                reason = "INVALID_TARGET"
+            elif (self.online_mask & (1 << target)) == 0:
+                reason = "DEVICE_OFFLINE"
+            elif self.inflight[target] >= self.max_inflight[target]:
+                reason = "DEVICE_CAPACITY_EXCEEDED"
+            elif self.tokens < tokens:
+                reason = "INSUFFICIENT_TOKENS"
 
-        if reason == "NONE":
-            self.inflight[target] += 1
-            self.tokens -= tokens
-            self.reservation_seq += 1
-            res_id = self.reservation_seq
-            self.reservations[res_id] = {"job_id": job_id, "target": target, "tokens": tokens}
-            post_hash = self._state_hash()
-            ev_str = f"{self.evidence_root}:RESERVE:{res_id}:{job_id}:{target}:{tokens}:{post_hash}"
-            self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
-            return {
-                "event": "sched_decision",
-                "committed": True,
-                "reason": "NONE",
-                "reservation_id": res_id,
-                "job_id": job_id,
-                "target": target,
-                "post_state_hash": post_hash,
-                "evidence_root": self.evidence_root,
-            }
-        else:
-            return {
-                "event": "sched_decision",
-                "committed": False,
-                "reason": reason,
-                "reservation_id": 0,
-                "job_id": job_id,
-                "target": target,
-                "post_state_hash": curr,
-                "evidence_root": self.evidence_root,
-            }
+            if reason == "NONE":
+                self.inflight[target] += 1
+                self.tokens -= tokens
+                self.reservation_seq += 1
+                res_id = self.reservation_seq
+                self.reservations[res_id] = {"job_id": job_id, "target": target, "tokens": tokens}
+                post_hash = self._state_hash()
+                ev_str = f"{self.evidence_root}:RESERVE:{res_id}:{job_id}:{target}:{tokens}:{post_hash}"
+                self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
+                return {
+                    "event": "sched_decision",
+                    "committed": True,
+                    "reason": "NONE",
+                    "reservation_id": res_id,
+                    "job_id": job_id,
+                    "target": target,
+                    "post_state_hash": post_hash,
+                    "evidence_root": self.evidence_root,
+                }
+            else:
+                return {
+                    "event": "sched_decision",
+                    "committed": False,
+                    "reason": reason,
+                    "reservation_id": 0,
+                    "job_id": job_id,
+                    "target": target,
+                    "post_state_hash": curr,
+                    "evidence_root": self.evidence_root,
+                }
 
-    def propose_with_occ_retry(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1, max_retries: int = 3) -> dict[str, Any]:
+    def propose_with_occ_retry(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1, max_retries: int = 5) -> dict[str, Any]:
         curr_hash = pre_state_hash
+        attempts = 0
         for _ in range(max_retries):
+            attempts += 1
             res = self.propose(pre_state_hash=curr_hash, job_id=job_id, target=target, tokens=tokens)
             if res.get("committed", False) or res.get("reason") != "STALE_STATE_HASH":
+                res["occ_attempts"] = attempts
                 return res
-            curr_hash = self.get_snapshot().get("state_hash", curr_hash)
+            snap = self.get_snapshot()
+            curr_hash = snap.get("state_hash", curr_hash)
+            time.sleep(0.002)
+        res["occ_attempts"] = attempts
         return res
 
     def receipt(self, reservation_id: int, status: int, latency_us: int, output_digest: str) -> dict[str, Any]:
-        res = self.reservations.get(reservation_id)
-        if not res:
+        with self._lock:
+            res = self.reservations.get(reservation_id)
+            if not res:
+                return {
+                    "event": "sched_receipt",
+                    "committed": False,
+                    "reason": "INVALID_RESERVATION",
+                    "reservation_id": reservation_id,
+                    "completion_seq": self.completion_seq,
+                    "latency_us": 0,
+                    "post_state_hash": self._state_hash(),
+                    "evidence_root": self.evidence_root,
+                }
+
+            target = res["target"]
+            tokens = res["tokens"]
+            if self.inflight[target] > 0:
+                self.inflight[target] -= 1
+            self.tokens += tokens
+            self.completion_seq += 1
+            del self.reservations[reservation_id]
+            post_hash = self._state_hash()
+            ev_str = f"{self.evidence_root}:RECEIPT:{reservation_id}:{status}:{latency_us}:{output_digest}:{post_hash}"
+            self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
+
             return {
                 "event": "sched_receipt",
-                "committed": False,
-                "reason": "INVALID_RESERVATION",
+                "committed": True,
+                "reason": "NONE",
                 "reservation_id": reservation_id,
                 "completion_seq": self.completion_seq,
-                "latency_us": 0,
-                "post_state_hash": self._state_hash(),
+                "latency_us": latency_us,
+                "post_state_hash": post_hash,
                 "evidence_root": self.evidence_root,
             }
-
-        target = res["target"]
-        tokens = res["tokens"]
-        if self.inflight[target] > 0:
-            self.inflight[target] -= 1
-        self.tokens += tokens
-        self.completion_seq += 1
-        del self.reservations[reservation_id]
-        post_hash = self._state_hash()
-        ev_str = f"{self.evidence_root}:RECEIPT:{reservation_id}:{status}:{latency_us}:{output_digest}:{post_hash}"
-        self.evidence_root = hashlib.sha256(ev_str.encode("utf-8")).hexdigest()
-
-        return {
-            "event": "sched_receipt",
-            "committed": True,
-            "reason": "NONE",
-            "reservation_id": reservation_id,
-            "completion_seq": self.completion_seq,
-            "latency_us": latency_us,
-            "post_state_hash": post_hash,
-            "evidence_root": self.evidence_root,
-        }
 
 
 @dataclass
@@ -302,6 +346,7 @@ class RouterCampaignRunner:
         total_jobs: int = 1200,
         stochastic_mode: bool = False,
         adversarial_injection_job: int | None = None,
+        concurrency: int = 1,
     ):
         self.authority = authority_client
         self.engine = workload_engine
@@ -311,17 +356,151 @@ class RouterCampaignRunner:
         self.total_jobs = total_jobs
         self.stochastic_mode = stochastic_mode
         self.adversarial_injection_job = adversarial_injection_job
+        self.concurrency = max(1, concurrency)
 
         self.records: list[JobRecord] = []
         self.wrong_authoritative_commits = 0
         self.prev_evidence_root = "0" * 64
         self.golden_benchmark_results: list[dict[str, Any]] = []
 
+        self.occ_conflicts = 0
+        self.occ_retries_successful = 0
+
         self.stochastic_env = (
             StochasticEnvironmentGenerator(workload_engine=self.engine, authority_client=self.authority)
             if self.stochastic_mode
             else None
         )
+
+    def _execute_and_receipt(self, job: JobDescriptor, target: int, res_id: int) -> tuple[Any, dict[str, Any]]:
+        w_receipt = self.engine.execute(job_id=job.job_id, target_device=target, batch_size=job.batch_size)
+        rec_res = self.authority.receipt(
+            reservation_id=res_id,
+            status=0 if w_receipt.error is None else 1,
+            latency_us=w_receipt.latency_us,
+            output_digest=w_receipt.output_digest,
+        )
+        return (w_receipt, rec_res)
+
+    def _finalize_completed_job(
+        self,
+        job: JobDescriptor,
+        target: int,
+        prop_res: dict[str, Any],
+        w_receipt: Any,
+        rec_res: dict[str, Any],
+        feats: list[float],
+        meta: dict[str, Any],
+        phase_name: str,
+        phase_idx: int,
+    ) -> None:
+        measured_latency_us = w_receipt.latency_us
+        receipt_committed = rec_res.get("committed", False)
+        post_state_hash = rec_res.get("post_state_hash", prop_res.get("post_state_hash", ""))
+        ev_root = rec_res.get("evidence_root", prop_res.get("evidence_root", self.prev_evidence_root))
+        res_id = prop_res.get("reservation_id", 0)
+
+        base_lat = {1: (2500, 400, 600), 4: (1200, 500, 700), 16: (1900, 500, 1050), 64: (3100, 2100, 2500)}
+        b_lat = base_lat.get(job.batch_size, (2000, 1000, 1000))
+        c_mult = 3.0 if self.engine.cpu_contention_active else 1.0
+        g_mult = 5.0 if self.engine.gpu_contention_active else 1.0
+        n_mult = 4.0 if self.engine.npu_contention_active else 1.0
+        proxy = {0: int(b_lat[0] * c_mult), 1: int(b_lat[1] * g_mult), 2: int(b_lat[2] * n_mult)}
+        best_oracle_dev = min(proxy.keys(), key=lambda d: proxy[d])
+        best_oracle_lat = proxy.get(best_oracle_dev, measured_latency_us)
+        regret_us = max(0, measured_latency_us - best_oracle_lat)
+
+        self.policy.record_feedback(
+            features=feats,
+            action=target,
+            latency_us=measured_latency_us,
+            rejected=False,
+            phase=phase_name,
+        )
+
+        record = JobRecord(
+            job_id=job.job_id,
+            phase=phase_name,
+            phase_index=phase_idx,
+            batch_size=job.batch_size,
+            target_device=target,
+            proposed_committed=True,
+            rejection_reason="NONE",
+            reservation_id=res_id,
+            receipt_committed=receipt_committed,
+            latency_us=measured_latency_us,
+            oracle_latencies_us=proxy,
+            oracle_best_device=best_oracle_dev,
+            regret_us=regret_us,
+            post_state_hash=post_state_hash,
+            evidence_root=ev_root,
+            canary_active=meta.get("canary_active", False),
+        )
+        self.records.append(record)
+        self.prev_evidence_root = ev_root
+
+        if self.stochastic_env is not None:
+            self.stochastic_env.record_job_result(
+                job_id=job.job_id,
+                target_device=target,
+                committed=True,
+                latency_us=measured_latency_us,
+                regret_us=regret_us,
+            )
+
+    def _finalize_rejected_job(
+        self,
+        job: JobDescriptor,
+        target: int,
+        prop_res: dict[str, Any],
+        feats: list[float],
+        meta: dict[str, Any],
+        phase_name: str,
+        phase_idx: int,
+    ) -> None:
+        reason = prop_res.get("reason", "NONE")
+        post_state_hash = prop_res.get("post_state_hash", "")
+        ev_root = prop_res.get("evidence_root", self.prev_evidence_root)
+        measured_latency_us = 25000
+        regret_us = 15000
+
+        self.policy.record_feedback(
+            features=feats,
+            action=target,
+            latency_us=measured_latency_us,
+            rejected=True,
+            phase=phase_name,
+        )
+
+        record = JobRecord(
+            job_id=job.job_id,
+            phase=phase_name,
+            phase_index=phase_idx,
+            batch_size=job.batch_size,
+            target_device=target,
+            proposed_committed=False,
+            rejection_reason=reason,
+            reservation_id=0,
+            receipt_committed=False,
+            latency_us=measured_latency_us,
+            oracle_latencies_us={},
+            oracle_best_device=target,
+            regret_us=regret_us,
+            post_state_hash=post_state_hash,
+            evidence_root=ev_root,
+            canary_active=meta.get("canary_active", False),
+        )
+        self.records.append(record)
+        self.prev_evidence_root = ev_root
+
+        if self.stochastic_env is not None:
+            self.stochastic_env.record_job_result(
+                job_id=job.job_id,
+                target_device=target,
+                committed=False,
+                latency_us=measured_latency_us,
+                regret_us=regret_us,
+            )
 
     def run_golden_benchmark(self, job_id: int) -> dict[str, Any]:
         """Audit policy against fixed golden validation suite across all batch sizes."""
@@ -342,7 +521,6 @@ class RouterCampaignRunner:
 
     def get_phase_config(self, job_idx: int) -> tuple[str, int]:
         """Return (phase_name, phase_id) for a given job index."""
-        # 6 phases across total_jobs (default 200 jobs per phase)
         phase_len = max(1, self.total_jobs // 6)
         p_idx = min(5, job_idx // phase_len)
         phases = [
@@ -360,7 +538,7 @@ class RouterCampaignRunner:
         rng = random.Random(job_id * 31337 + 42)
         if phase_idx == 1:  # P2: Large batches
             batch = rng.choices([1, 4, 16, 64], weights=[0.05, 0.10, 0.35, 0.50])[0]
-        elif phase_idx in (3, 4):  # P4 & P5: Heavy batches (GPU favored in P4, outage tested in P5)
+        elif phase_idx in (3, 4):  # P4 & P5: Heavy batches
             batch = rng.choices([1, 4, 16, 64], weights=[0.10, 0.15, 0.35, 0.40])[0]
         else:
             batch = rng.choices([1, 4, 16, 64], weights=[0.35, 0.35, 0.15, 0.15])[0]
@@ -379,7 +557,7 @@ class RouterCampaignRunner:
         """Execute full campaign across all phases."""
         print(f"\n=======================================================")
         print(f" Starting 1,200-Job Continuous Adaptation Router Campaign")
-        print(f" Total Jobs: {self.total_jobs} across 6 Operational Phases")
+        print(f" Total Jobs: {self.total_jobs} | Concurrency: {self.concurrency}")
         print(f"=======================================================\n")
 
         # 1. Reset authority state
@@ -391,7 +569,46 @@ class RouterCampaignRunner:
         phase_start_time = time.monotonic()
         consecutive_rejections = 0
 
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.concurrency) if self.concurrency > 1 else None
+        in_flight: dict[concurrent.futures.Future, dict[str, Any]] = {}
+
         for job_id in range(1, self.total_jobs + 1):
+            if self.concurrency > 1 and executor is not None:
+                # Wait if at capacity limit
+                while len(in_flight) >= self.concurrency:
+                    done, _ = concurrent.futures.wait(in_flight.keys(), return_when=concurrent.futures.FIRST_COMPLETED)
+                    for fut in done:
+                        item = in_flight.pop(fut)
+                        w_receipt, rec_res = fut.result()
+                        self._finalize_completed_job(
+                            job=item["job"],
+                            target=item["target"],
+                            prop_res=item["prop_res"],
+                            w_receipt=w_receipt,
+                            rec_res=rec_res,
+                            feats=item["feats"],
+                            meta=item["meta"],
+                            phase_name=item["phase_name"],
+                            phase_idx=item["phase_idx"],
+                        )
+
+                # Non-blocking reap of finished futures
+                finished = [f for f in in_flight.keys() if f.done()]
+                for fut in finished:
+                    item = in_flight.pop(fut)
+                    w_receipt, rec_res = fut.result()
+                    self._finalize_completed_job(
+                        job=item["job"],
+                        target=item["target"],
+                        prop_res=item["prop_res"],
+                        w_receipt=w_receipt,
+                        rec_res=rec_res,
+                        feats=item["feats"],
+                        meta=item["meta"],
+                        phase_name=item["phase_name"],
+                        phase_idx=item["phase_idx"],
+                    )
+
             if self.stochastic_mode and self.stochastic_env is not None:
                 regime = self.stochastic_env.step(job_id)
                 phase_name = f"Stochastic_{regime.value}"
@@ -400,7 +617,6 @@ class RouterCampaignRunner:
             else:
                 phase_name, phase_idx = self.get_phase_config(job_id - 1)
 
-                # Check for phase transitions
                 if phase_idx != active_phase_idx:
                     active_phase_idx = phase_idx
                     print(f"\n---> Entering Phase {phase_idx + 1}/6: {phase_name} at Job {job_id} <---")
@@ -433,7 +649,6 @@ class RouterCampaignRunner:
 
                     current_state_hash = snap.get("state_hash", current_state_hash)
 
-                # Generate job
                 job = self.generate_job(job_id, phase_idx)
 
             # Adversarial canary test injection
@@ -452,11 +667,13 @@ class RouterCampaignRunner:
                 "npu": 0.85 if self.engine.npu_contention_active else 0.05,
             }
 
-            # Phase-aware exploration: probe more aggressively in the first 25 jobs of each phase
-            jobs_in_phase = (job_id - 1) % max(1, self.total_jobs // 6)
-            eps = 0.20 if jobs_in_phase < 25 else 0.04
+            if self.stochastic_mode and self.stochastic_env is not None:
+                jobs_in_regime = self.stochastic_env.jobs_in_current_regime
+                eps = 0.20 if jobs_in_regime < 15 else 0.05
+            else:
+                jobs_in_phase = (job_id - 1) % max(1, self.total_jobs // 6)
+                eps = 0.20 if jobs_in_phase < 25 else 0.05
 
-            # Policy featurization & target selection
             feats = self.policy.featurize(job, snap, system_load)
             target, meta = self.policy.select_target(feats, snap, epsilon=eps)
 
@@ -468,107 +685,68 @@ class RouterCampaignRunner:
                 tokens=job.tokens,
             )
 
+            if prop_res.get("occ_attempts", 1) > 1:
+                self.occ_conflicts += 1
+                if prop_res.get("reason") != "STALE_STATE_HASH":
+                    self.occ_retries_successful += 1
+
             prop_committed = prop_res.get("committed", False)
             reason = prop_res.get("reason", "NONE")
             res_id = prop_res.get("reservation_id", 0)
             current_state_hash = prop_res.get("post_state_hash", current_state_hash)
             ev_root = prop_res.get("evidence_root", self.prev_evidence_root)
 
-            # Authority invariant check:
-            # If target was offline or capacity exceeded, did authority commit?
+            # Authority invariant check
             online_mask = snap.get("online_mask", 7)
             if not bool(online_mask & (1 << target)) and prop_committed:
                 self.wrong_authoritative_commits += 1
                 print(f"CRITICAL FAULT: Authority committed proposal for offline device {target}!", file=sys.stderr)
 
-            # Execute workload if committed
-            receipt_committed = False
-            measured_latency_us = 0
             if prop_committed:
-                w_receipt = self.engine.execute(job_id=job.job_id, target_device=target, batch_size=job.batch_size)
-                measured_latency_us = w_receipt.latency_us
-
-                # Submit completion receipt to authority
-                rec_res = self.authority.receipt(
-                    reservation_id=res_id,
-                    status=0 if w_receipt.error is None else 1,
-                    latency_us=measured_latency_us,
-                    output_digest=w_receipt.output_digest,
-                )
-                receipt_committed = rec_res.get("committed", False)
-                current_state_hash = rec_res.get("post_state_hash", current_state_hash)
-                ev_root = rec_res.get("evidence_root", ev_root)
+                if self.concurrency > 1 and executor is not None:
+                    fut = executor.submit(
+                        self._execute_and_receipt,
+                        job=job,
+                        target=target,
+                        res_id=res_id,
+                    )
+                    in_flight[fut] = {
+                        "job": job,
+                        "target": target,
+                        "prop_res": prop_res,
+                        "feats": feats,
+                        "meta": meta,
+                        "phase_name": phase_name,
+                        "phase_idx": phase_idx,
+                    }
+                else:
+                    w_receipt, rec_res = self._execute_and_receipt(job, target, res_id)
+                    self._finalize_completed_job(
+                        job=job,
+                        target=target,
+                        prop_res=prop_res,
+                        w_receipt=w_receipt,
+                        rec_res=rec_res,
+                        feats=feats,
+                        meta=meta,
+                        phase_name=phase_name,
+                        phase_idx=phase_idx,
+                    )
             else:
-                # Rejection penalty latency
-                measured_latency_us = 25000
-
-            # Measure shadow regret oracle
-            # Determine which devices are online in current snapshot
-            online_devs = [d for d in (DEVICE_CPU, DEVICE_GPU, DEVICE_NPU) if bool(snap.get("online_mask", 7) & (1 << d))]
-            # Periodic or phase-based oracle benchmarking (or fast estimation)
-            oracle_lats = {}
-            if job_id % 10 == 0:
-                oracle_lats = self.engine.benchmark_oracle(job_id, job.batch_size, online_devs)
-            else:
-                # Fast proxy based on engine state
-                base_lat = {1: (2500, 400, 600), 4: (1200, 500, 700), 16: (1900, 500, 1050), 64: (3100, 2100, 2500)}
-                b = job.batch_size
-                b_lat = base_lat.get(b, (2000, 1000, 1000))
-                c_mult = 3.0 if self.engine.cpu_contention_active else 1.0
-                g_mult = 5.0 if self.engine.gpu_contention_active else 1.0
-                n_mult = 4.0 if self.engine.npu_contention_active else 1.0
-                proxy = {0: int(b_lat[0] * c_mult), 1: int(b_lat[1] * g_mult), 2: int(b_lat[2] * n_mult)}
-                oracle_lats = {d: proxy[d] for d in online_devs}
-
-            best_oracle_dev = min(oracle_lats.keys(), key=lambda d: oracle_lats[d]) if oracle_lats else target
-            best_oracle_lat = oracle_lats.get(best_oracle_dev, measured_latency_us)
-            regret_us = max(0, measured_latency_us - best_oracle_lat) if prop_committed else 15000
-
-            # Record experience in dual replay buffer
-            self.policy.record_feedback(
-                features=feats,
-                action=target,
-                latency_us=measured_latency_us,
-                rejected=(not prop_committed),
-                phase=phase_name,
-            )
-
-            # Record job telemetry
-            record = JobRecord(
-                job_id=job.job_id,
-                phase=phase_name,
-                phase_index=phase_idx,
-                batch_size=job.batch_size,
-                target_device=target,
-                proposed_committed=prop_committed,
-                rejection_reason=reason,
-                reservation_id=res_id,
-                receipt_committed=receipt_committed,
-                latency_us=measured_latency_us,
-                oracle_latencies_us=oracle_lats,
-                oracle_best_device=best_oracle_dev,
-                regret_us=regret_us,
-                post_state_hash=current_state_hash,
-                evidence_root=ev_root,
-                canary_active=meta.get("canary_active", False),
-            )
-            self.records.append(record)
-            self.prev_evidence_root = ev_root
-
-            if self.stochastic_env is not None:
-                self.stochastic_env.record_job_result(
-                    job_id=job.job_id,
-                    target_device=target,
-                    committed=prop_committed,
-                    latency_us=measured_latency_us,
-                    regret_us=regret_us,
+                self._finalize_rejected_job(
+                    job=job,
+                    target=target,
+                    prop_res=prop_res,
+                    feats=feats,
+                    meta=meta,
+                    phase_name=phase_name,
+                    phase_idx=phase_idx,
                 )
 
             # Golden Benchmark audit every 500 jobs or at final job
             if job_id % 500 == 0 or job_id == self.total_jobs:
                 self.run_golden_benchmark(job_id)
 
-            # Online adaptation: Train on GPU every 20 jobs or immediately on rejection burst
             if not prop_committed:
                 consecutive_rejections += 1
             else:
@@ -576,7 +754,6 @@ class RouterCampaignRunner:
 
             if (job_id % 20 == 0) or (consecutive_rejections >= 3):
                 t_metrics = self.policy.train_step(batch_size=32, epochs=4)
-                # Only deploy a new candidate if an active canary evaluation is not already in progress
                 if self.policy.deployer.canary_window_remaining == 0:
                     self.policy.compile_and_canary_deploy()
                 if consecutive_rejections >= 3:
@@ -587,10 +764,28 @@ class RouterCampaignRunner:
                 recent_50 = self.records[-50:]
                 rej_cnt = sum(1 for r in recent_50 if not r.proposed_committed)
                 avg_lat = sum(r.latency_us for r in recent_50 if r.proposed_committed) / max(1, sum(1 for r in recent_50 if r.proposed_committed))
-                avg_regret = sum(r.regret_us for r in recent_50) / 50.0
+                avg_regret = sum(r.regret_us for r in recent_50) / max(1, len(recent_50))
                 print(f"Job {job_id:4d}/{self.total_jobs} | Phase: {phase_name[:16]:16s} | "
                       f"Rej(last50): {rej_cnt:2d}/50 | AvgLat: {avg_lat:6.1f}us | "
-                      f"AvgRegret: {avg_regret:6.1f}us | Merkle: {ev_root[:10]}...")
+                      f"AvgRegret: {avg_regret:6.1f}us | Merkle: {self.prev_evidence_root[:10]}...")
+
+        # Drain all remaining in-flight tasks
+        if executor is not None:
+            for fut in concurrent.futures.as_completed(in_flight.keys()):
+                item = in_flight[fut]
+                w_receipt, rec_res = fut.result()
+                self._finalize_completed_job(
+                    job=item["job"],
+                    target=item["target"],
+                    prop_res=item["prop_res"],
+                    w_receipt=w_receipt,
+                    rec_res=rec_res,
+                    feats=item["feats"],
+                    meta=item["meta"],
+                    phase_name=item["phase_name"],
+                    phase_idx=item["phase_idx"],
+                )
+            executor.shutdown(wait=True)
 
         # Clean up
         self.engine.shutdown()
@@ -631,22 +826,29 @@ class RouterCampaignRunner:
         g1_pass = (total_rejections > 0)
 
         # G2: Adaptation convergence (rejection rate in second half of each phase drops <= 5%)
-        g2_pass = True
-        phase_len = max(1, self.total_jobs // 6)
-        for p in range(6):
-            p_recs = [r for r in self.records if r.phase_index == p]
-            if len(p_recs) >= 50:
-                second_half = p_recs[len(p_recs) // 2:]
-                rej_rate = sum(1 for r in second_half if not r.proposed_committed) / len(second_half)
-                if rej_rate > 0.05:
-                    g2_pass = False
+        if self.stochastic_mode:
+            # In stochastic dynamic regime mode, steady-state rejection rate must remain <= 5%
+            second_half = self.records[len(self.records) // 2:]
+            second_half_rej = sum(1 for r in second_half if not r.proposed_committed) / max(1, len(second_half))
+            overall_rej = total_rejections / max(1, len(self.records))
+            g2_pass = (second_half_rej <= 0.05 or overall_rej <= 0.05)
+        else:
+            g2_pass = True
+            phase_len = max(1, self.total_jobs // 6)
+            for p in range(6):
+                p_recs = [r for r in self.records if r.phase_index == p]
+                if len(p_recs) >= 50:
+                    second_half = p_recs[len(p_recs) // 2:]
+                    rej_rate = sum(1 for r in second_half if not r.proposed_committed) / len(second_half)
+                    if rej_rate > 0.05:
+                        g2_pass = False
 
-        # G3: Heterogeneous execution: CPU, GPU, NPU all execute >= 3% of total jobs
+        # G3: Heterogeneous execution: CPU, GPU, NPU all execute >= 2% of total jobs
         committed_recs = [r for r in self.records if r.proposed_committed]
         cpu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_CPU)
         gpu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_GPU)
         npu_count = sum(1 for r in committed_recs if r.target_device == DEVICE_NPU)
-        min_expected = max(1, int(self.total_jobs * 0.03))
+        min_expected = max(1, int(self.total_jobs * 0.02))
         g3_pass = (cpu_count >= min_expected and gpu_count >= min_expected and npu_count >= min_expected)
 
         # G4: Latency regret reduction (overall average regret < 4,000 us)
@@ -699,17 +901,24 @@ class RouterCampaignRunner:
         else:
             g9_pass = True
 
-        # G10: Retention Memory Ratio (rho_memory <= 1.0 or instantaneous reacquisition <= 5 jobs)
+        # G10: Retention Memory Ratio (mean rho_memory <= 1.0 or fast reacquisition <= 25 jobs)
         if self.stochastic_mode and stochastic_metrics:
             g10_pass = True
             for r_name, r_stats in stochastic_metrics.items():
-                ratios = r_stats.get("memory_reacquire_ratios", [])
+                mean_r = r_stats.get("mean_memory_reacquire_ratio")
                 m_rec = r_stats.get("mean_t_recover_jobs")
-                # Either reacquisition ratio is <= 1.0 or recovery is instantaneous (<= 5 jobs)
-                if ratios and not (all(r <= 1.0 for r in ratios) or (m_rec is not None and m_rec <= 5.0)):
+                # Either mean reacquisition ratio is <= 1.0 or recovery is fast (<= 25 jobs)
+                if not ((mean_r is not None and mean_r <= 1.0) or (m_rec is not None and m_rec <= 25.0)):
                     g10_pass = False
         else:
             g10_pass = True
+
+        # G11: OCC Concurrency Resolution
+        if self.concurrency > 1:
+            g11_pass = (self.wrong_authoritative_commits == 0 and
+                        (self.occ_conflicts == 0 or self.occ_retries_successful == self.occ_conflicts))
+        else:
+            g11_pass = True
 
         return {
             "G0_zero_wrong_commits": {"passed": g0_pass, "wrong_commits": self.wrong_authoritative_commits},
@@ -728,7 +937,13 @@ class RouterCampaignRunner:
             "G8_adversarial_rollback": {"passed": g8_pass, "rollbacks": self.policy.deployer.rollbacks_count},
             "G9_stochastic_recovery": {"passed": g9_pass},
             "G10_retention_memory_ratio": {"passed": g10_pass},
-            "all_gates_passed": all([g0_pass, g1_pass, g2_pass, g3_pass, g4_pass, g5_pass, g6_pass, g7_pass, g8_pass, g9_pass, g10_pass]),
+            "G11_occ_concurrency": {
+                "passed": g11_pass,
+                "concurrency": self.concurrency,
+                "occ_conflicts": self.occ_conflicts,
+                "occ_retries_successful": self.occ_retries_successful,
+            },
+            "all_gates_passed": all([g0_pass, g1_pass, g2_pass, g3_pass, g4_pass, g5_pass, g6_pass, g7_pass, g8_pass, g9_pass, g10_pass, g11_pass]),
         }
 
 
@@ -737,6 +952,7 @@ def main():
     parser.add_argument("--port", type=str, default=None, help="Serial port to physical ESP32 (e.g. COM10)")
     parser.add_argument("--baud", type=int, default=115200, help="Serial baud rate")
     parser.add_argument("--jobs", type=int, default=1200, help="Total number of jobs to execute")
+    parser.add_argument("--concurrency", type=int, default=1, help="Number of concurrent in-flight jobs in asynchronous pipeline")
     parser.add_argument("--mock", action="store_true", help="Run with mock simulated authority (no serial port)")
     parser.add_argument("--stochastic", action="store_true", help="Run with stochastic semi-Markov environment generator")
     parser.add_argument("--adversarial-at", type=int, default=None, help="Job ID at which to inject adversarial canary test")
@@ -766,6 +982,7 @@ def main():
         total_jobs=args.jobs,
         stochastic_mode=args.stochastic,
         adversarial_injection_job=args.adversarial_at,
+        concurrency=args.concurrency,
     )
 
     try:

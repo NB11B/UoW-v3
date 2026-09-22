@@ -25,6 +25,11 @@ import subprocess
 import sys
 from typing import Any, Callable, Protocol
 
+from qualification.evidence import (
+    EvidenceContext,
+    EvidenceLevel,
+    combine_contexts,
+)
 from interrogator import Interrogator, SerialTransport
 
 
@@ -144,6 +149,14 @@ class ProposerBackend(Protocol):
 class ReferenceBackend:
     name = "reference"
 
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PHYSICAL,
+            "ReferenceBackend",
+            {"proposer": "host CPU reference proposer"},
+            {},
+        )
+
     def propose(self, snapshot: Snapshot) -> Candidate:
         if snapshot.halted:
             return Candidate.build(
@@ -199,6 +212,14 @@ class CommandBackend:
             raise ValueError("command backend requires a command")
         self.name = "command:" + self.argv[0]
 
+    def evidence_context(self) -> EvidenceContext:
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            self.name,
+            {},
+            {"proposer": "unattested subprocess backend"},
+        )
+
     def propose(self, snapshot: Snapshot) -> Candidate:
         payload = json.dumps(asdict(snapshot), sort_keys=True)
         proc = subprocess.run(
@@ -231,11 +252,23 @@ class ModuleBackend:
             if p not in sys.path:
                 sys.path.insert(0, p)
         module = importlib.import_module(module_name)
+        self.module = module
         func = getattr(module, func_name)
         if not callable(func):
             raise TypeError(f"{target!r} is not callable")
         self.func: Callable[[dict[str, Any]], dict[str, Any]] = func
         self.name = "module:" + target
+
+    def evidence_context(self) -> EvidenceContext:
+        evidence_fn = getattr(self.module, "evidence_context", None)
+        if callable(evidence_fn):
+            return evidence_fn()
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            self.name,
+            {},
+            {"proposer": "module backend supplied no attestation"},
+        )
 
     def propose(self, snapshot: Snapshot) -> Candidate:
         data = self.func(asdict(snapshot))
@@ -251,6 +284,17 @@ class CorruptingBackend:
         self.base = base
         self.mode = mode
         self.name = f"{base.name}+{mode}"
+
+    def evidence_context(self) -> EvidenceContext:
+        evidence_fn = getattr(self.base, "evidence_context", None)
+        if callable(evidence_fn):
+            return evidence_fn()
+        return EvidenceContext(
+            EvidenceLevel.PORTABLE,
+            self.name,
+            {},
+            {"proposer": "unattested corrupting backend"},
+        )
 
     def propose(self, snapshot: Snapshot) -> Candidate:
         c = self.base.propose(snapshot)

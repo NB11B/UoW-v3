@@ -4,7 +4,7 @@
 Hardware Topology:
 - GPU: NVIDIA GeForce RTX 5070 Laptop GPU (PyTorch CUDA 12.8) -> Rapid local gradient updates
 - NPU: Intel(R) AI Boost NPU (OpenVINO 2026.4.0) -> Compiled hardware proposal inference
-- MCU: ESP32-S3 (USB-Serial COM10) -> Fixed immutable deterministic authority & Merkle evidence ledger
+- MCU: ESP32-S3 (USB-Serial COM10) -> Fixed immutable deterministic authority & SHA-256 hash-chained evidence ledger
 
 Feedback Loop:
   [Intel NPU Proposal] --EXT_PROPOSE--> [ESP32 Authority]

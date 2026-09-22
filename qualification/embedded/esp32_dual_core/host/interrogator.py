@@ -21,6 +21,7 @@ class LineTransport(Protocol):
     def write_line(self, text: str) -> None: ...
     def read_line(self, timeout: float) -> str | None: ...
     def close(self) -> None: ...
+    def reconnect(self, timeout: float = 15.0) -> None: ...
 
 
 class SerialTransport:
@@ -29,24 +30,57 @@ class SerialTransport:
             import serial  # type: ignore
         except ImportError as exc:
             raise RuntimeError("pyserial is required: python -m pip install pyserial") from exc
-        self._ser = serial.Serial(port, baudrate=baud, timeout=0.1)
-        time.sleep(settle)
+        self._serial = serial
+        self.port = port
+        self.baud = baud
+        self.settle = settle
+        self._ser = None
+        self.reconnect(timeout=10.0)
+
+    def _open(self):
+        self._ser = self._serial.Serial(self.port, baudrate=self.baud, timeout=0.1)
+        time.sleep(self.settle)
         self._ser.reset_input_buffer()
 
     def write_line(self, text: str) -> None:
+        if self._ser is None:
+            raise RuntimeError("serial transport is closed")
         self._ser.write((text.strip() + "\n").encode("utf-8"))
         self._ser.flush()
 
     def read_line(self, timeout: float) -> str | None:
+        if self._ser is None:
+            return None
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
-            raw = self._ser.readline()
+            try:
+                raw = self._ser.readline()
+            except Exception:
+                return None
             if raw:
                 return raw.decode("utf-8", errors="replace").strip()
         return None
 
     def close(self) -> None:
-        self._ser.close()
+        if self._ser is not None:
+            try:
+                self._ser.close()
+            finally:
+                self._ser = None
+
+    def reconnect(self, timeout: float = 15.0) -> None:
+        self.close()
+        deadline = time.monotonic() + timeout
+        last_error: Exception | None = None
+        while time.monotonic() < deadline:
+            try:
+                self._open()
+                return
+            except Exception as exc:
+                last_error = exc
+                self._ser = None
+                time.sleep(0.25)
+        raise TimeoutError(f"could not reconnect serial port {self.port!r}: {last_error}")
 
 
 TRANSCRIPT_ZERO_HASH = "0" * 64
@@ -118,6 +152,9 @@ class Transcript:
 
     def received(self, payload: Any) -> None:
         self._append("device->host", payload)
+
+    def marker(self, name: str, payload: Any = None) -> None:
+        self._append("host-marker", {"name": name, "payload": payload})
 
     def verify(self) -> bool:
         previous = TRANSCRIPT_ZERO_HASH
@@ -317,6 +354,53 @@ class SoakReport:
 
 
 @dataclass(frozen=True)
+class ResilienceReport:
+    schema_version: str
+    proposer_core: int
+    authority_core: int
+    baseline_evidence_root: str
+    baseline_state_hash: str
+    checks: dict[str, bool]
+    observations: dict[str, Any]
+
+    @property
+    def passed(self) -> bool:
+        return all(self.checks.values())
+
+    def save(self, path: str | Path) -> None:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(
+            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+
+@dataclass(frozen=True)
+class FullQualificationReport:
+    schema_version: str
+    campaign_passed: bool
+    fault_matrix_passed: bool
+    stress_passed: bool
+    resilience_passed: bool
+    transcript_audit_passed: bool
+    transcript_root: str
+    checks: dict[str, bool]
+
+    @property
+    def passed(self) -> bool:
+        return all(self.checks.values())
+
+    def save(self, path: str | Path) -> None:
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(
+            json.dumps(asdict(self) | {"passed": self.passed}, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+
+@dataclass(frozen=True)
 class CampaignReport:
     schema_version: str
     proposer_core: int
@@ -419,11 +503,192 @@ class Interrogator:
     def run(self, budget: int, fault: str = "NONE", *, timeout: float = 30.0) -> CommandResult:
         return self.execute(f"RUN {budget} {fault}", "run_complete", timeout=timeout)
 
+    def persist(self, enabled: bool) -> dict[str, Any]:
+        return self.execute(f"PERSIST {1 if enabled else 0}", "persist").terminal
+
+    def reboot_after(self, commits: int) -> dict[str, Any]:
+        return self.execute(f"REBOOT_AFTER {commits}", "reboot_after").terminal
+
+    def stall(self, milliseconds: int) -> dict[str, Any]:
+        return self.execute(f"STALL {milliseconds}", "stall").terminal
+
+    def set_timeout(self, milliseconds: int) -> dict[str, Any]:
+        return self.execute(f"TIMEOUT {milliseconds}", "timeout").terminal
+
+    def burst(self, count: int) -> CommandResult:
+        return self.execute(f"BURST {count}", "burst_complete", timeout=15.0)
+
+    def reconnect(self, timeout: float = 15.0) -> None:
+        self.transcript.marker("serial-reconnect-start")
+        self.transport.reconnect(timeout=timeout)
+        self.transcript.marker("serial-reconnect-complete")
+
+    def disconnect_for(self, seconds: float, *, reconnect_timeout: float = 15.0) -> None:
+        self.transcript.marker("serial-disconnect", {"seconds": seconds})
+        self.transport.close()
+        time.sleep(seconds)
+        self.reconnect(timeout=reconnect_timeout)
+
     @staticmethod
     def _assert(condition: bool, name: str, checks: dict[str, bool]) -> None:
         checks[name] = bool(condition)
         if not condition:
             raise AssertionError(name)
+
+    def resilience(self) -> ResilienceReport:
+        """Qualify communication loss, proposer stalls, queue pressure, and reboot recovery."""
+        checks: dict[str, bool] = {}
+        observations: dict[str, Any] = {}
+
+        # Clean baseline with persistence disabled.
+        self.persist(False)
+        self.stall(0)
+        self.set_timeout(2000)
+        self.reset(50, 25)
+        self.clocks(3, 17)
+        baseline = self.run(1000).terminal
+        baseline_root = str(baseline["evidence_root"])
+        baseline_state_hash = str(baseline["state_hash"])
+        mapping = baseline
+
+        # 1. Host transport disappears while device continues authoritative work.
+        self.reset(50, 25)
+        self.stall(5)
+        self.transcript.sent("RUN 1000 NONE")
+        self.transport.write_line("RUN 1000 NONE")
+        self.disconnect_for(1.0)
+        contact = self.status()
+        if not contact.get("halted"):
+            contact = self.run(1000).terminal
+        checks["host_disconnect_reconciles"] = (
+            contact["halted"] is True
+            and contact["state_hash"] == baseline_state_hash
+            and contact["evidence_root"] == baseline_root
+        )
+        observations["disconnect_state"] = contact
+
+        # 2. Bounded proposer delay below timeout remains legal.
+        self.reset(5, 2)
+        self.stall(100)
+        self.set_timeout(1000)
+        delayed = self.step("NONE").terminal
+        checks["bounded_proposer_stall_commits"] = delayed["committed"] is True
+        observations["bounded_stall"] = delayed
+
+        # 3. Proposer delay beyond timeout cannot mutate state; late response is discarded.
+        self.reset(5, 2)
+        before_timeout = self.status()
+        self.stall(500)
+        self.set_timeout(100)
+        timeout_result = self.execute("STEP NONE", "error", timeout=2.0).terminal
+        time.sleep(0.55)
+        after_timeout = self.status()
+        checks["proposer_timeout_preserves_authority"] = (
+            timeout_result.get("note") == "proposal timeout"
+            or timeout_result.get("reason") == "proposal timeout"
+            or timeout_result.get("event") == "error"
+        ) and (
+            after_timeout["state_hash"] == before_timeout["state_hash"]
+            and after_timeout["evidence_root"] == before_timeout["evidence_root"]
+            and after_timeout["sequence"] == before_timeout["sequence"]
+        )
+
+        self.stall(0)
+        self.set_timeout(1000)
+        recovered_step = self.step("NONE")
+        checks["late_proposal_does_not_poison_next_step"] = recovered_step.terminal["committed"] is True
+        observations["timeout_recovery_events"] = list(recovered_step.events)
+
+        # 4. Queue pressure: repeated same-snapshot proposals allow at most one commit.
+        self.reset(10, 0)
+        self.stall(0)
+        self.set_timeout(1000)
+        burst = self.burst(64).terminal
+        checks["queue_pressure_saturates"] = int(burst["enqueued"]) < int(burst["requested"])
+        checks["queue_pressure_single_authoritative_commit"] = (
+            int(burst["committed"]) == 1
+            and int(burst["rejected"]) == max(0, int(burst["enqueued"]) - 1)
+        )
+        observations["burst"] = burst
+
+        # 5. Reboot in the middle of execution with NVS checkpoint continuity.
+        self.persist(True)
+        self.reset(50, 25)
+        self.clocks(3, 17)
+        self.reboot_after(25)
+        self.transcript.sent("RUN 1000 NONE")
+        self.transport.write_line("RUN 1000 NONE")
+
+        reboot_seen = False
+        reboot_deadline = time.monotonic() + 10.0
+        while time.monotonic() < reboot_deadline:
+            try:
+                obj = self._read_json(0.5)
+            except TimeoutError:
+                continue
+            if obj.get("event") == "rebooting":
+                reboot_seen = True
+                break
+
+        self.reconnect(timeout=20.0)
+        recovered = self.status()
+        checks["midrun_reboot_observed"] = reboot_seen
+        checks["nvs_checkpoint_recovered"] = (
+            recovered.get("recovered_on_boot") is True
+            and 0 < int(recovered["sequence"]) < 102
+            and int(recovered["evidence_steps"]) == int(recovered["sequence"])
+        )
+        observations["recovered_after_reboot"] = recovered
+
+        completed = self.run(1000).terminal if not recovered["halted"] else recovered
+        checks["reboot_recovery_reaches_baseline_state"] = (
+            completed["state_hash"] == baseline_state_hash
+            and completed["evidence_root"] == baseline_root
+            and completed["sequence"] == 102
+        )
+        observations["completed_after_reboot"] = completed
+
+        self.persist(False)
+        self.stall(0)
+        self.set_timeout(5000)
+
+        if not all(checks.values()):
+            failed = [name for name, ok in checks.items() if not ok]
+            raise AssertionError("resilience qualification failed: " + ", ".join(failed))
+
+        return ResilienceReport(
+            schema_version="uow-esp32-resilience-v0.4",
+            proposer_core=int(mapping["proposer_core"]),
+            authority_core=int(mapping["authority_core"]),
+            baseline_evidence_root=baseline_root,
+            baseline_state_hash=baseline_state_hash,
+            checks=checks,
+            observations=observations,
+        )
+
+    def qualify_all(self, *, stress_trials: int = 25, seed: int = 20260922) -> FullQualificationReport:
+        campaign = self.campaign()
+        faults = self.fault_matrix()
+        stress = self.stress(trials=stress_trials, seed=seed)
+        resilience = self.resilience()
+        audit = self.transcript.audit()
+        checks = {
+            "campaign": campaign.passed,
+            "fault_matrix": faults.passed,
+            "stress": stress.passed,
+            "resilience": resilience.passed,
+            "transcript_integrity": audit.passed,
+        }
+        return FullQualificationReport(
+            schema_version="uow-esp32-full-qualification-v0.4",
+            campaign_passed=campaign.passed,
+            fault_matrix_passed=faults.passed,
+            stress_passed=stress.passed,
+            resilience_passed=resilience.passed,
+            transcript_audit_passed=audit.passed,
+            transcript_root=audit.root_hash,
+            checks=checks,
+        )
 
     def fault_matrix(self) -> FaultMatrixReport:
         """Exercise rejection paths across zero/nonzero machine states.
@@ -740,6 +1005,12 @@ def main() -> int:
     stress.add_argument("--report", help="write stress JSON report")
     faults = sub.add_parser("fault-matrix")
     faults.add_argument("--report", help="write fault-matrix JSON report")
+    resilience = sub.add_parser("resilience")
+    resilience.add_argument("--report", help="write resilience JSON report")
+    full = sub.add_parser("qualify-all")
+    full.add_argument("--stress-trials", type=int, default=25)
+    full.add_argument("--seed", type=int, default=20260922)
+    full.add_argument("--report", help="write full qualification JSON report")
     soak = sub.add_parser("soak")
     soak.add_argument("--rounds", type=int, default=10)
     soak.add_argument("--trials-per-round", type=int, default=25)
@@ -793,6 +1064,20 @@ def main() -> int:
                 return 2
         elif args.cmd == "fault-matrix":
             report = iq.fault_matrix()
+            print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+            if args.report:
+                report.save(args.report)
+            if not report.passed:
+                return 2
+        elif args.cmd == "resilience":
+            report = iq.resilience()
+            print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
+            if args.report:
+                report.save(args.report)
+            if not report.passed:
+                return 2
+        elif args.cmd == "qualify-all":
+            report = iq.qualify_all(stress_trials=args.stress_trials, seed=args.seed)
             print(json.dumps(asdict(report) | {"passed": report.passed}, indent=2, sort_keys=True))
             if args.report:
                 report.save(args.report)

@@ -119,3 +119,32 @@ python host/serial_interrogate.py --port COM10 campaign
 The campaign checks valid transfer parity, tamper rejection without mutation, stale/prehash rejection, route rejection, extreme clock asymmetry, and frozen proposal clock behavior.
 
 A later two-board campaign can test independent oscillators and transport faults. This single-board campaign tests execution-domain isolation, timer independence, core-affinity independence, and deterministic authority under constrained hardware.
+
+
+## Repeated hardware stress
+
+After the baseline campaign passes, run repeated randomized trials from the laptop:
+
+```powershell
+python host\interrogator.py --port COM10 stress --trials 100 --seed 20260922 --report artifacts\stress-p0a1.json
+```
+
+For each trial the interrogator:
+
+1. chooses a randomized initial `R0/R1` state;
+2. executes it under one randomized proposal/authority clock pair;
+3. injects a forged state proposal and verifies zero authority mutation;
+4. reruns the same initial state under a second unrelated clock pair;
+5. requires identical terminal state hash and cryptographic evidence root.
+
+This directly tests the hardware invariant:
+
+[
+oxed{
+	ext{same initial state + same UoW program}
+Rightarrow
+	ext{same certified state/evidence despite local clock variation}
+}
+]
+
+The stress report is deterministic for a supplied host seed and records every initial state, both clock profiles, terminal state hash, evidence root, and pass/fail result.

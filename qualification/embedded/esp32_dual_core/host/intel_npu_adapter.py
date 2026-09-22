@@ -25,6 +25,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parents[4]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from qualification.evidence import EvidenceContext, EvidenceLevel
+
 _COMPILED_MODEL = None
 _DEVICE_NAME = None
 
@@ -44,14 +50,18 @@ def get_npu_runner():
     core = ov.Core()
     available = core.available_devices
 
-    # Target the NPU (Intel(R) AI Boost) if available
-    target_device = "NPU" if "NPU" in available else "CPU"
+    if "NPU" not in available:
+        raise RuntimeError(
+            "Intel NPU qualification requested, but OpenVINO reports no NPU device; "
+            "CPU fallback is forbidden for an NPU claim"
+        )
+    target_device = "NPU"
     try:
-        device_full_name = core.get_property(target_device, "FULL_DEVICE_NAME")
+        device_full_name = core.get_property("NPU", "FULL_DEVICE_NAME")
     except Exception:
-        device_full_name = target_device
+        device_full_name = "NPU"
 
-    _DEVICE_NAME = f"{target_device} ({device_full_name})"
+    _DEVICE_NAME = f"NPU ({device_full_name})"
 
     onnx_path = Path(__file__).resolve().parent / "minsky_npu.onnx"
     if not onnx_path.exists():
@@ -65,6 +75,17 @@ def get_npu_runner():
     model = core.read_model(str(onnx_path))
     _COMPILED_MODEL = core.compile_model(model, target_device)
     return _COMPILED_MODEL, _DEVICE_NAME
+
+
+def evidence_context() -> EvidenceContext:
+    """Attest that this adapter can only qualify when the actual NPU loads."""
+    _, device_name = get_npu_runner()
+    return EvidenceContext(
+        EvidenceLevel.PHYSICAL,
+        "intel_npu_adapter",
+        {"proposer": device_name, "npu_proposer": device_name},
+        {},
+    )
 
 
 def propose(snapshot: dict[str, Any]) -> dict[str, Any]:

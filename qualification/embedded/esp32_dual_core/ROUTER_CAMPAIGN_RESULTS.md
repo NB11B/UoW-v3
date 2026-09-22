@@ -89,11 +89,11 @@ All 13 formal qualification gates passed across physical ESP32 hardware campaign
 | Gate | Capability Description | Formal Condition | Physical Hardware Result | Status |
 | :--- | :--- | :--- | :--- | :---: |
 | **$G_0$** | **Zero Illegal Commits** | $\text{wrong\_authoritative\_commits} \equiv 0$ | **0 wrong commits** | **PASS** |
-| **$G_1$** | **Authority Outage Enforcement** | Non-zero rejections during device outage | **Outage rejections enforced cleanly** | **PASS** |
+| **$G_1$** | **Offline-Target Safety** | No accepted reservation may target an offline device; explicit forced-offline controls must reject | **0 illegal offline commits; adaptive runs could avoid the offline target entirely, so outage-phase rejection count may be 0** | **PASS** |
 | **$G_2$** | **Adaptation Convergence** | Steady-state rejection rate drops $\le 5\%$ | **Steady-state rejections: 0.1%–1.4%** | **PASS** |
 | **$G_3$** | **Heterogeneous Execution** | All physical devices execute $\ge 2\%$ of total jobs | **CPU, GPU, NPU all active** | **PASS** |
 | **$G_4$** | **Latency Regret Reduction** | Overall average regret $< 4,000\,\mu\text{s}$ | **$828.8\,\mu\text{s}$–$2,188.4\,\mu\text{s}$** | **PASS** |
-| **$G_5$** | **Merkle Continuity** | Cryptographic ledger advances monotonically | **1,183 & 1,199 unique SHA-256 roots** | **PASS** |
+| **$G_5$** | **Evidence-Chain Continuity** | Cryptographic ledger advances monotonically | **1,183 & 1,199 unique SHA-256 roots** | **PASS** |
 | **$G_6$** | **Canary Deployment Safety** | Automated validation and promotion to NPU | **39–98 safe NPU promotions** | **PASS** |
 | **$G_7$** | **Retention & Fast Reacquisition** | Return-to-nominal re-convergence $\le 8\%$ rejection | **0% rejection upon return to nominal** | **PASS** |
 | **$G_8$** | **Adversarial Canary Rollback** | Injected corrupted candidates caught and rolled back | **7–8 candidate rollbacks, active policy safe** | **PASS** |

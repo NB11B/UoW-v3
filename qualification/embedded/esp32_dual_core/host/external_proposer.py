@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import importlib
 import json
+import os
 from pathlib import Path
 import shlex
 import subprocess
@@ -192,7 +193,7 @@ class CommandBackend:
     """
 
     def __init__(self, command: str):
-        self.argv = shlex.split(command)
+        self.argv = shlex.split(command, posix=(os.name != "nt"))
         if not self.argv:
             raise ValueError("command backend requires a command")
         self.name = "command:" + self.argv[0]

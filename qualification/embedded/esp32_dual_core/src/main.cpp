@@ -41,7 +41,7 @@ using namespace uow_embedded;
 namespace {
 
 constexpr uint32_t SERIAL_BAUD = 115200;
-constexpr size_t COMMAND_BUF = 160;
+constexpr size_t COMMAND_BUF = 384;
 
 struct WorkItem {
     State snapshot{};
@@ -67,6 +67,8 @@ enum class ControlType : uint8_t {
     STALL,
     TIMEOUT,
     BURST,
+    SNAPSHOT,
+    EXTERNAL_PROPOSAL,
 };
 
 struct ControlMsg {
@@ -77,6 +79,7 @@ struct ControlMsg {
     FaultMode fault{FaultMode::NONE};
     char which{'P'};
     bool flag{false};
+    Proposal external_proposal{};
 };
 
 Program gProgram = Program::transfer_r0_to_r1();
@@ -254,9 +257,25 @@ void emit_status(const char* event, uint32_t request_id, const char* note = null
     emit_line(s);
 }
 
-void emit_decision(uint32_t request_id, const Proposal& p, const StepResult& r) {
+void emit_snapshot(uint32_t request_id) {
+    const auto state_hash = hex_digest(hash_state(gAuthorityState));
+    std::string s = "{\"event\":\"snapshot\"";
+    s += ",\"request_id\":" + std::to_string(request_id);
+    s += ",\"r0\":" + u64_string(gAuthorityState.r0);
+    s += ",\"r1\":" + u64_string(gAuthorityState.r1);
+    s += ",\"pc\":" + std::to_string(gAuthorityState.pc);
+    s += ",\"sequence\":" + u64_string(gAuthorityState.sequence);
+    s += ",\"halted\":" + std::string(gAuthorityState.halted ? "true" : "false");
+    s += ",\"state_hash\":\"" + state_hash + "\"";
+    s += ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"";
+    s += "}";
+    emit_line(s);
+}
+
+void emit_decision(uint32_t request_id, const Proposal& p, const StepResult& r, const char* origin = "internal") {
     std::string s = "{\"event\":\"decision\"";
     s += ",\"request_id\":" + std::to_string(request_id);
+    s += ",\"origin\":\"" + std::string(origin) + "\"";
     s += ",\"committed\":" + std::string(r.committed ? "true" : "false");
     s += ",\"reason\":\"" + std::string(reject_reason_string(r.certificate.reason)) + "\"";
     s += ",\"proposal_hash\":\"" + hex_digest(p.proposal_hash) + "\"";
@@ -424,6 +443,26 @@ void authority_task(void*) {
                 gProposalTimeoutMs = static_cast<uint32_t>(c.a);
                 emit_status("timeout", c.request_id);
                 break;
+            case ControlType::SNAPSHOT:
+                emit_snapshot(c.request_id);
+                break;
+            case ControlType::EXTERNAL_PROPOSAL: {
+                gAuthorityClock.advance();
+                const auto before_hash = hash_state(gAuthorityState);
+                const auto result = commit(gProgram, gAuthorityState, c.external_proposal, gLedger);
+                if (result.committed) {
+                    gAuthorityState = result.state;
+                    if (gPersistenceEnabled && !checkpoint_save()) {
+                        emit_status("fatal", c.request_id, "checkpoint save failed");
+                        break;
+                    }
+                } else if (hash_state(gAuthorityState) != before_hash) {
+                    emit_status("fatal", c.request_id, "external rejection mutated authority state");
+                    break;
+                }
+                emit_decision(c.request_id, c.external_proposal, result, "external");
+                break;
+            }
             case ControlType::BURST: {
                 const uint32_t requested = static_cast<uint32_t>(std::min<uint64_t>(c.a, 64));
                 uint32_t enqueued = 0;
@@ -466,7 +505,7 @@ void authority_task(void*) {
 }
 
 void print_help() {
-    emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\",\"PERSIST <0|1>\",\"REBOOT\",\"REBOOT_AFTER <commits>\",\"STALL <ms>\",\"TIMEOUT <ms>\",\"BURST <count>\"]}");
+    emit_line("{\"event\":\"help\",\"commands\":[\"HELP\",\"STATUS\",\"SNAPSHOT\",\"RESET <r0> <r1>\",\"STEP [NONE|TAMPER_STATE|TAMPER_PREHASH|TAMPER_ROUTE]\",\"RUN <budget> [fault]\",\"EXT_PROPOSE <prehash> <r0> <r1> <pc> <sequence> <halted> <selected_pc> <proposal_hash>\",\"CLOCKS <proposal_stride> <authority_stride>\",\"FREEZE <P|A> <0|1>\",\"PERSIST <0|1>\",\"REBOOT\",\"REBOOT_AFTER <commits>\",\"STALL <ms>\",\"TIMEOUT <ms>\",\"BURST <count>\"]}");
 }
 
 bool parse_u64(const std::string& s, uint64_t& out) {
@@ -483,7 +522,7 @@ void handle_command(std::string line) {
 
     std::vector<std::string> parts;
     size_t start = 0;
-    while (parts.size() < 4 && start < line.size()) {
+    while (parts.size() < 12 && start < line.size()) {
         while (start < line.size() && line[start] == ' ') ++start;
         if (start >= line.size()) break;
         size_t space = line.find(' ', start);
@@ -501,6 +540,8 @@ void handle_command(std::string line) {
 
     if (parts[0] == "STATUS") {
         c.type = ControlType::STATUS;
+    } else if (parts[0] == "SNAPSHOT") {
+        c.type = ControlType::SNAPSHOT;
     } else if (parts[0] == "RESET" && parts.size() >= 3) {
         c.type = ControlType::RESET;
         if (!parse_u64(parts[1], c.a) || !parse_u64(parts[2], c.b)) {
@@ -515,6 +556,28 @@ void handle_command(std::string line) {
             emit_line("{\"event\":\"error\",\"reason\":\"bad RUN budget\"}"); return;
         }
         if (parts.size() >= 3) c.fault = parse_fault_mode(parts[2]);
+    } else if (parts[0] == "EXT_PROPOSE" && parts.size() >= 9) {
+        c.type = ControlType::EXTERNAL_PROPOSAL;
+        Proposal p{};
+        uint64_t r0 = 0, r1 = 0, pc = 0, sequence = 0, halted = 0, selected_pc = 0;
+        if (!parse_hex_digest(parts[1], p.pre_state_hash)
+            || !parse_u64(parts[2], r0)
+            || !parse_u64(parts[3], r1)
+            || !parse_u64(parts[4], pc)
+            || !parse_u64(parts[5], sequence)
+            || !parse_u64(parts[6], halted)
+            || !parse_u64(parts[7], selected_pc)
+            || !parse_hex_digest(parts[8], p.proposal_hash)
+            || halted > 1
+            || pc > UINT32_MAX
+            || selected_pc > UINT32_MAX) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad EXT_PROPOSE envelope\"}"); return;
+        }
+        p.proposed = State{r0, r1, static_cast<uint32_t>(pc), sequence, halted != 0};
+        p.selected_pc = static_cast<uint32_t>(selected_pc);
+        p.halted = halted != 0;
+        p.proposer_clock = 0;
+        c.external_proposal = p;
     } else if (parts[0] == "CLOCKS" && parts.size() >= 3) {
         c.type = ControlType::CLOCKS;
         if (!parse_u64(parts[1], c.a) || !parse_u64(parts[2], c.b)) {

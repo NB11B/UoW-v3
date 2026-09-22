@@ -112,6 +112,13 @@ class InterrogatorTests(unittest.TestCase):
             loaded = CampaignReport.load(p)
             self.assertEqual(report, loaded)
 
+    def test_stress_campaign(self):
+        iq = Interrogator(FakeTransport(FakeDevice()), echo=False)
+        report = iq.stress(trials=8, seed=12345)
+        self.assertTrue(report.passed)
+        self.assertEqual(report.trials_completed, 8)
+        self.assertTrue(all(t.passed for t in report.trials))
+
 
 if __name__ == "__main__":
     unittest.main()

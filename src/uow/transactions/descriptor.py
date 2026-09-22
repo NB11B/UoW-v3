@@ -12,8 +12,8 @@ from ..state import WorldState
 class TransactionDescriptor:
     """In-flight transaction envelope: X_i = (U_i, S_base, R_i, W_i, P_i, C_i).
 
-    Records the base sequence version, the read set and base versions read,
-    the write set, and the proposed state hash before commit validation.
+    Records the base sequence version, read set, write set, coupled keys,
+    read/write/coupled versions, and proposed state hash.
     """
 
     uow_id: str
@@ -23,6 +23,8 @@ class TransactionDescriptor:
     write_set: Tuple[str, ...]
     write_versions: Mapping[str, int]
     proposed_state_hash: str
+    coupled_set: Tuple[str, ...] = ()
+    coupled_versions: Mapping[str, int] = ()
     status: str = "PROPOSED"
 
 
@@ -56,11 +58,14 @@ def create_transaction_descriptor(
     read_set: Optional[Sequence[str]] = None,
     write_set: Optional[Sequence[str]] = None,
     version_key: str = "__versions__",
+    coupling_key: str = "__couplings__",
 ) -> TransactionDescriptor:
     """Constructs a TransactionDescriptor from a UoW and a base WorldState.
 
-    If read_set or write_set are not provided, they are automatically inferred from
-    the selected Route in the UoW contract.
+    Explicitly snapshots versions for:
+    1. read_set
+    2. write_set
+    3. coupled_set (keys coupled to any key in write_set)
     """
     _idx, route = uow.Gamma.select_route(base_state)
 
@@ -68,12 +73,23 @@ def create_transaction_descriptor(
     actual_reads = tuple(sorted(set(read_set if read_set is not None else inferred_reads)))
     actual_writes = tuple(sorted(set(write_set if write_set is not None else inferred_writes)))
 
+    couplings_map = base_state.get(coupling_key, {})
+    if not isinstance(couplings_map, Mapping):
+        couplings_map = {}
+
+    coupled_keys: set[str] = set()
+    for w_key in actual_writes:
+        for c_key in couplings_map.get(w_key, ()):
+            coupled_keys.add(str(c_key))
+    coupled_tuple = tuple(sorted(coupled_keys))
+
     versions_map = base_state.get(version_key, {})
     if not isinstance(versions_map, Mapping):
         versions_map = {}
 
     read_versions = {k: int(versions_map.get(k, 0)) for k in actual_reads}
     write_versions = {k: int(versions_map.get(k, 0)) for k in actual_writes}
+    coupled_versions = {k: int(versions_map.get(k, 0)) for k in coupled_tuple}
 
     from ..engine import propose
 
@@ -87,5 +103,7 @@ def create_transaction_descriptor(
         write_set=actual_writes,
         write_versions=write_versions,
         proposed_state_hash=proposal.proposed_state.state_hash,
+        coupled_set=coupled_tuple,
+        coupled_versions=coupled_versions,
         status="PROPOSED",
     )

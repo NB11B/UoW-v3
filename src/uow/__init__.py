@@ -65,6 +65,7 @@ from .transactions import (
     create_transaction_descriptor,
     infer_footprint,
     validate_occ,
+    verify_commit_bindings,
 )
 
 __all__ = [
@@ -128,4 +129,5 @@ __all__ = [
     "uow_fingerprint",
     "validate_graph",
     "validate_occ",
+    "verify_commit_bindings",
 ]

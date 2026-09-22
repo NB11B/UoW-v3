@@ -1,4 +1,4 @@
-﻿"""Public API for transactions and optimistic concurrency control."""
+"""Public API for transactions and optimistic concurrency control."""
 from .descriptor import (
     TransactionDescriptor,
     create_transaction_descriptor,
@@ -14,6 +14,7 @@ from .sequencer import (
     CommitSequencer,
     DeterministicSequencer,
     WALSequencer,
+    verify_commit_bindings,
 )
 
 __all__ = [
@@ -27,4 +28,5 @@ __all__ = [
     "create_transaction_descriptor",
     "infer_footprint",
     "validate_occ",
+    "verify_commit_bindings",
 ]

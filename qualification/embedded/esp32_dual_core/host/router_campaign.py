@@ -499,6 +499,13 @@ class RouterCampaignRunner:
 
         self.occ_conflicts = 0
         self.occ_retries_successful = 0
+        self.authority_negative_control: dict[str, Any] = {}
+        self.evidence_context = combine_contexts(
+            self.authority.evidence_context(),
+            self.engine.evidence_context(),
+            self.policy.evidence_context(),
+            source="RouterCampaignRunner",
+        )
 
         self.stochastic_env = (
             StochasticEnvironmentGenerator(
@@ -509,6 +516,41 @@ class RouterCampaignRunner:
             if self.stochastic_mode
             else None
         )
+
+    def _run_authority_negative_control(self) -> dict[str, Any]:
+        """Force an offline-target proposal through the actual authority path."""
+        self.authority.reset(
+            online_mask=7,
+            max_cpu=16,
+            max_gpu=16,
+            max_npu=16,
+            tokens=1000,
+        )
+        offline = self.authority.set_online(DEVICE_GPU, False)
+        before = self.authority.get_snapshot()
+        before_hash = before.get("state_hash", "")
+        before_root = before.get("evidence_root", "")
+        forced = self.authority.propose(
+            pre_state_hash=before_hash,
+            job_id=0x7FFF0001,
+            target=DEVICE_GPU,
+            tokens=1,
+        )
+        after = self.authority.get_snapshot()
+        observed_pass = (
+            forced.get("committed") is False
+            and forced.get("reason") == "DEVICE_OFFLINE"
+            and after.get("state_hash") == before_hash
+            and after.get("evidence_root") == before_root
+        )
+        return {
+            "observed_pass": observed_pass,
+            "forced_reason": forced.get("reason"),
+            "committed": bool(forced.get("committed", False)),
+            "state_unchanged": after.get("state_hash") == before_hash,
+            "evidence_unchanged": after.get("evidence_root") == before_root,
+            "offline_mask": offline.get("online_mask"),
+        }
 
     def _execute_and_receipt(self, job: JobDescriptor, target: int, res_id: int) -> tuple[Any, dict[str, Any]]:
         w_receipt = self.engine.execute(job_id=job.job_id, target_device=target, batch_size=job.batch_size)
@@ -713,7 +755,11 @@ class RouterCampaignRunner:
         print(f" Total Jobs: {self.total_jobs} | Concurrency: {self.concurrency}")
         print(f"=======================================================\n")
 
-        # 1. Reset authority state
+        # 0. Required negative control: policy avoidance is not evidence that the
+        # authority can reject an illegal offline-device proposal.
+        self.authority_negative_control = self._run_authority_negative_control()
+
+        # 1. Reset authority state after the negative control.
         snap = self.authority.reset(online_mask=7, max_cpu=16, max_gpu=16, max_npu=16, tokens=1000)
         self.prev_evidence_root = snap.get("evidence_root", "0" * 64)
         current_state_hash = snap.get("state_hash", "")
@@ -829,6 +875,7 @@ class RouterCampaignRunner:
 
             feats = self.policy.featurize(job, snap, system_load)
             target, meta = self.policy.select_target(feats, snap, epsilon=eps)
+            meta["authority_online_mask"] = int(snap.get("online_mask", 7))
 
             # Submit proposal to ESP32 Scheduling Authority with OCC retry on stale state hash
             prop_res = self.authority.propose_with_occ_retry(

@@ -1,0 +1,17 @@
+{
+  "authority_rejects_corruption": true,
+  "backend": "module:npu_adapter_template:propose_with_your_npu",
+  "backend_accepts": 100,
+  "backend_rejects": 0,
+  "backend_trials": 100,
+  "baseline_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "baseline_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "external_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "external_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "no_mutation_on_rejection": true,
+  "passed": true,
+  "reference_parity": true,
+  "schema_version": "uow-esp32-external-proposer-v0.1",
+  "stale_snapshot_rejected": true,
+  "wrong_authoritative_commits": 0
+}

@@ -22,6 +22,7 @@ import os
 from pathlib import Path
 import shlex
 import subprocess
+import sys
 from typing import Any, Callable, Protocol
 
 from interrogator import Interrogator, SerialTransport
@@ -226,6 +227,9 @@ class ModuleBackend:
         if ":" not in target:
             raise ValueError("module backend target must be module:function")
         module_name, func_name = target.split(":", 1)
+        for p in (str(Path.cwd()), str(Path(__file__).resolve().parent)):
+            if p not in sys.path:
+                sys.path.insert(0, p)
         module = importlib.import_module(module_name)
         func = getattr(module, func_name)
         if not callable(func):

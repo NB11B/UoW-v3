@@ -181,3 +181,94 @@ python host/interrogator.py verify-transcript artifacts/full-qualification.jsonl
 - **Median Command Latency**: 6.32 ms
 - **Root Hash**: `57ba02b3818e7688b934fb416f744c2b296a2d56c1dc271356fac1283a407424`
 
+---
+
+## 6. Laptop/NPU External Proposer & Cross-Machine Authority Qualification
+
+Physical hardware verification separating proposal computation (laptop / NPU) from authority, certification, and evidence (ESP32-S3).
+
+```text
+Laptop / NPU (Proposer)                     ESP32-S3 (Authority)
+---------------------------------           ----------------------------------
+SNAPSHOT request                  ----->    Returns authoritative state + hash
+Local computation / model inference
+Candidate transition proposal     ----->    Independent recomputation
+(EXT_PROPOSE envelope)                      Deterministic certification (commit/reject)
+Decision observation              <-----    Evidence ledger append
+```
+
+### Gate X1 — Cross-Machine Capability Parity
+
+Executing full workload where the laptop proposes all transitions over serial via `EXT_PROPOSE`:
+
+```powershell
+python host\external_proposer.py `
+  --port COM10 `
+  capability `
+  --backend reference `
+  --report artifacts\external-reference-capability.json
+```
+
+```json
+{
+  "backend": "reference",
+  "baseline_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "baseline_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "commits": 102,
+  "evidence_parity": true,
+  "external_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "external_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "halted": true,
+  "passed": true,
+  "rejections": 0,
+  "schema_version": "uow-esp32-external-capability-v0.1",
+  "state_parity": true
+}
+```
+
+* **External Commits**: 102 / 102
+* **Rejections**: 0
+* **State Hash Parity**: Bit-for-bit identical to internal baseline (`18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599`)
+* **Evidence Root Parity**: Bit-for-bit identical to internal baseline (`3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc`)
+
+Subprocess command backend (`npu-template-capability.json`) and Python module backend (`npu-module-capability.json`) also achieved 100% parity across all 102 transitions.
+
+### Gate X2 — External Proposer Authority Containment
+
+100-trial adversarial qualification injecting corrupt state, bad pre-hashes, diverged routes, corrupted proposal hashes, and deliberately stale snapshots:
+
+```powershell
+python host\external_proposer.py `
+  --port COM10 `
+  qualify `
+  --backend reference `
+  --backend-trials 100 `
+  --report artifacts\external-authority-safety.json
+```
+
+```json
+{
+  "authority_rejects_corruption": true,
+  "backend": "reference",
+  "backend_accepts": 100,
+  "backend_rejects": 0,
+  "backend_trials": 100,
+  "baseline_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "baseline_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "external_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "external_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "no_mutation_on_rejection": true,
+  "passed": true,
+  "reference_parity": true,
+  "schema_version": "uow-esp32-external-proposer-v0.1",
+  "stale_snapshot_rejected": true,
+  "wrong_authoritative_commits": 0
+}
+```
+
+* **Wrong Authoritative Commits**: 0
+* **Corruption Rejection**: 100% rejected
+* **Stale Snapshot Rejection**: 100% rejected
+* **Zero Mutation on Rejection**: Verified
+
+

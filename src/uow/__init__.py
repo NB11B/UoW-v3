@@ -1,4 +1,4 @@
-"""Canonical UoW public API."""
+﻿"""Canonical UoW public API."""
 
 from .contracts import (
     Boundary,
@@ -33,37 +33,73 @@ from .engine import (
 )
 from .ontology import ALL_MATRIX_CELLS, MatrixCell, WorkCategory
 from .state import WorldState
+from .transactions import (
+    CommitSequencer,
+    DeterministicSequencer,
+    HazardType,
+    TransactionConflictError,
+    TransactionDescriptor,
+    WALSequencer,
+    apply_transaction,
+    create_transaction_descriptor,
+    infer_footprint,
+    validate_occ,
+)
+from .orchestration import (
+    OrchestrationState,
+    SCHEDULER_CELL,
+    TASK_CELL,
+    create_initial_orchestration_state,
+    evaluate_scheduler_step,
+    make_domain_task,
+)
 
 __all__ = [
     "ALL_MATRIX_CELLS",
     "Boundary",
     "CertificateResult",
+    "CommitSequencer",
     "Contract",
+    "DeterministicSequencer",
     "EvidenceLedger",
     "EvidenceRecord",
     "EvidenceSpec",
     "Guard",
     "GuardOp",
+    "HazardType",
     "Header",
     "Lifecycle",
     "LifecyclePhase",
     "MatrixCell",
     "Mutation",
     "MutationOp",
+    "OrchestrationState",
     "Proposal",
     "Realization",
     "Route",
+    "SCHEDULER_CELL",
     "Successor",
     "SuccessorKind",
+    "TASK_CELL",
     "Timing",
+    "TransactionConflictError",
+    "TransactionDescriptor",
     "UoW",
+    "WALSequencer",
     "WorkCategory",
     "WorldState",
+    "apply_transaction",
     "commit",
     "certify",
+    "create_initial_orchestration_state",
+    "create_transaction_descriptor",
+    "evaluate_scheduler_step",
     "execute_one",
+    "infer_footprint",
+    "make_domain_task",
     "make_uow",
     "propose",
     "run",
     "validate_graph",
+    "validate_occ",
 ]

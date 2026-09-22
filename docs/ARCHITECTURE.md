@@ -1,4 +1,4 @@
-# Architecture
+﻿# Architecture
 
 ## Invariant decomposition
 
@@ -48,8 +48,8 @@ research runtime's integer-only counter schema. This removes a proof-campaign
 assumption while keeping canonical serialization and cryptographic hash binding.
 
 The core state intentionally does not contain dedicated queue, active-set,
-transaction, resource, model, or external-effect fields. Derived layers may
-compose those structures over the primitive state model.
+transaction, resource, model, or external-effect fields. Derived layers compose
+those structures over the primitive state model.
 
 ## Successors
 
@@ -65,17 +65,32 @@ the exact UoW, pre-state, route, post-state, successor, and halt decision.
 This boundary is the stable seam for heuristic, optimization, learned, NPU, or
 other probabilistic proposal systems.
 
-## Derived layers
+## Derived layers: Transactions & Orchestration (Pass 2)
 
-The following are intentionally outside the kernel and will be migrated as
-separate packages:
+Pass 2 adds two foundational derived layers:
 
-- reflective orchestration and dependency scheduling
-- optimistic concurrency control and durable sequencing
-- resource requirements and leases
-- learned/probabilistic proposer integrations
-- goal-driven graph synthesis
-- certified external effects, asynchronous receipts, and saga compensation
+### 1. `uow.transactions` (OCC & Commit Sequencing)
+- **Mathematical OCC Hazard Detection**:
+  - `validate_occ(current_state, tx)` detects data hazards (`READ_WRITE_HAZARD`, `WRITE_WRITE_HAZARD`, and `HIDDEN_COUPLING_HAZARD`) purely without thread locks.
+  - Read and write sets are recorded via `TransactionDescriptor`.
+  - Zero partial mutation guarantee: transaction aborts leave authoritative state and evidence completely clean.
+- **Commit Sequencer & Persistence**:
+  - `CommitSequencer` protocol cleanly decouples concurrency execution from authoritative state commits.
+  - `DeterministicSequencer`: in-memory sequential commit validation and state progression.
+  - `WALSequencer`: append-only Write-Ahead Log persisting state transitions to disk for deterministic crash-recovery and audit replay.
 
-Correctness dependencies point inward toward the kernel. The kernel must never
-import those layers.
+### 2. `uow.orchestration` (Self-Hosted DAG Control)
+- **Typed Orchestration State**:
+  - `OrchestrationState` wraps `WorldState`, managing pending queue $Q_t$, active set $A_t$, DAG dependencies $D_t$, and completed set $C_t$ as typed views over immutable state attributes.
+- **Native Scheduler UoW**:
+  - Pure native scheduling step under `(RULES, PROCESSES)`.
+  - Dynamically dispatches ready tasks, detects clean terminal completion, and detects cyclic/missing prerequisite deadlocks.
+
+Dependency rule remains strictly invariant:
+```
+ontology -> state / contracts -> certification / evidence (kernel)
+    ^                 ^
+    |                 |
+uow.transactions   uow.orchestration
+```
+The kernel never imports `transactions` or `orchestration`.

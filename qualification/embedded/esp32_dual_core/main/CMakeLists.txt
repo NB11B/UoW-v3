@@ -1,7 +1,7 @@
 idf_component_register(
     SRCS "../src/main.cpp" "../src/uow_embedded.cpp"
     INCLUDE_DIRS "../include"
-    REQUIRES driver esp_driver_usb_serial_jtag
+    REQUIRES driver esp_driver_usb_serial_jtag nvs_flash
 )
 
 if(NOT DEFINED UOW_PROPOSER_CORE)

@@ -1,0 +1,17 @@
+{
+  "campaign_passed": true,
+  "checks": {
+    "campaign": true,
+    "fault_matrix": true,
+    "resilience": true,
+    "stress": true,
+    "transcript_integrity": true
+  },
+  "fault_matrix_passed": true,
+  "passed": true,
+  "resilience_passed": true,
+  "schema_version": "uow-esp32-full-qualification-v0.4",
+  "stress_passed": true,
+  "transcript_audit_passed": true,
+  "transcript_root": "57ba02b3818e7688b934fb416f744c2b296a2d56c1dc271356fac1283a407424"
+}

@@ -38,7 +38,13 @@ class SerialTransport:
         self.reconnect(timeout=10.0)
 
     def _open(self):
-        self._ser = self._serial.Serial(self.port, baudrate=self.baud, timeout=0.1)
+        self._ser = self._serial.Serial()
+        self._ser.port = self.port
+        self._ser.baudrate = self.baud
+        self._ser.timeout = 0.1
+        self._ser.dtr = False
+        self._ser.rts = False
+        self._ser.open()
         time.sleep(self.settle)
         self._ser.reset_input_buffer()
 
@@ -471,15 +477,18 @@ class Interrogator:
         while time.monotonic() < deadline:
             obj = self._read_json(max(0.01, deadline - time.monotonic()))
             obj_request = obj.get("request_id")
-            if request_id is None and obj_request is not None:
-                request_id = int(obj_request)
-            if request_id is not None and obj_request is not None and int(obj_request) != request_id:
-                continue
-            collected.append(obj)
             if obj.get("event") == terminal_event:
-                return CommandResult(command, obj, tuple(collected))
+                if request_id is None or (obj_request is not None and int(obj_request) == request_id):
+                    collected.append(obj)
+                    return CommandResult(command, obj, tuple(collected))
             if obj.get("event") == "error":
-                raise DeviceProtocolError(obj.get("reason", "device error"))
+                if request_id is None or (obj_request is not None and int(obj_request) == request_id):
+                    raise DeviceProtocolError(obj.get("reason", "device error"))
+            if terminal_event in {"run_complete", "burst_complete"} and obj.get("event") == "decision":
+                if request_id is None and obj_request is not None:
+                    request_id = int(obj_request)
+                if request_id is not None and obj_request is not None and int(obj_request) == request_id:
+                    collected.append(obj)
         raise TimeoutError(f"timed out waiting for {terminal_event!r} after {command!r}")
 
     def status(self) -> dict[str, Any]:

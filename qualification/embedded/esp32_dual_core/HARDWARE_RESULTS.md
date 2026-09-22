@@ -86,3 +86,98 @@ python host/interrogator.py \
   - State forgery injection and assertion of zero state mutation
   - State reset and replay with independently randomized clock pair $\beta$
   - Invariance assertion of terminal state and cryptographic evidence root
+
+---
+
+## 4. Resilience Qualification Results
+
+Executing the failure-in-time resilience suite on physical hardware:
+
+```powershell
+python host/interrogator.py \
+  --port COM10 \
+  --transcript artifacts/resilience.jsonl \
+  resilience \
+  --report artifacts/resilience.json
+```
+
+```json
+{
+  "authority_core": 1,
+  "baseline_evidence_root": "3c53a2626100991819d920a35d0cc07e7772e76100fa44cd7d23f67d9fb136dc",
+  "baseline_state_hash": "18295a4c8427f7a05eb2709aa59f212d5d18ecdd8c55c5f2857d9d4001cd2599",
+  "checks": {
+    "bounded_proposer_stall_commits": true,
+    "host_disconnect_reconciles": true,
+    "late_proposal_does_not_poison_next_step": true,
+    "midrun_reboot_observed": true,
+    "nvs_checkpoint_recovered": true,
+    "proposer_timeout_preserves_authority": true,
+    "queue_pressure_saturates": true,
+    "queue_pressure_single_authoritative_commit": true,
+    "reboot_recovery_reaches_baseline_state": true
+  },
+  "passed": true,
+  "proposer_core": 0,
+  "schema_version": "uow-esp32-resilience-v0.4"
+}
+```
+
+### Verified Failure-in-Time Boundaries:
+1. **Serial Loss & Reconnect**: Device execution continued authoritatively during host serial disconnection with non-blocking transmission fallbacks; on reconnect the identical terminal state hash and evidence root were verified.
+2. **Proposer Stall**: Proposer delay below authority timeout committed cleanly.
+3. **Proposer Timeout & Late Recovery**: Proposer stall beyond authority timeout produced zero authority mutation; subsequent request succeeded with request ID correlation discarding stale proposals.
+4. **Queue Pressure**: FreeRTOS bounded work queue saturated under concurrent proposal pressure with exactly one authoritative commit and strict OCC rejection of stale snapshots.
+5. **Mid-Execution Reboot & NVS Recovery**: Scheduled mid-run reboot checkpointed authoritative state and evidence root into NVS; on boot, the checkpoint was restored and execution completed to the identical canonical baseline state.
+
+---
+
+## 5. Full Physical Qualification Campaign
+
+Comprehensive execution of all hardware falsification and resilience gates:
+
+```powershell
+python host/interrogator.py \
+  --port COM10 \
+  --transcript artifacts/full-qualification.jsonl \
+  qualify-all \
+  --stress-trials 100 \
+  --seed 20260922 \
+  --report artifacts/full-qualification.json
+```
+
+```json
+{
+  "campaign_passed": true,
+  "checks": {
+    "campaign": true,
+    "fault_matrix": true,
+    "resilience": true,
+    "stress": true,
+    "transcript_integrity": true
+  },
+  "fault_matrix_passed": true,
+  "passed": true,
+  "resilience_passed": true,
+  "schema_version": "uow-esp32-full-qualification-v0.4",
+  "stress_passed": true,
+  "transcript_audit_passed": true,
+  "transcript_root": "57ba02b3818e7688b934fb416f744c2b296a2d56c1dc271356fac1283a407424"
+}
+```
+
+### Offline Transcript Audit:
+
+```powershell
+python host/interrogator.py verify-transcript artifacts/full-qualification.jsonl
+```
+
+- **Event Count**: 18,828 events
+- **Sent Commands**: 1,291
+- **Received Events**: 17,532
+- **Fatal Events**: 0
+- **Valid SHA-256 Hash Chain**: True
+- **Monotonic Host Clock**: True
+- **Median Command Latency**: 6.32 ms
+- **Root Hash**: `57ba02b3818e7688b934fb416f744c2b296a2d56c1dc271356fac1283a407424`
+

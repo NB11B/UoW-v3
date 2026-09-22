@@ -14,6 +14,8 @@
 #include "driver/usb_serial_jtag.h"
 #include "esp_system.h"
 #include "esp_log.h"
+#include "soc/soc.h"
+#include "soc/rtc_cntl_reg.h"
 #endif
 
 #include <algorithm>
@@ -217,8 +219,8 @@ void emit_line(const std::string& line) {
 #ifdef ARDUINO
     Serial.println(line.c_str());
 #else
-    usb_serial_jtag_write_bytes(line.data(), line.size(), portMAX_DELAY);
-    usb_serial_jtag_write_bytes("\n", 1, portMAX_DELAY);
+    usb_serial_jtag_write_bytes(line.data(), line.size(), pdMS_TO_TICKS(5));
+    usb_serial_jtag_write_bytes("\n", 1, pdMS_TO_TICKS(5));
 #endif
     if (gSerialMutex) xSemaphoreGive(gSerialMutex);
 }
@@ -574,6 +576,7 @@ void setup() {
     d_cfg.rx_buffer_size = 4096;
     d_cfg.tx_buffer_size = 4096;
     usb_serial_jtag_driver_install(&d_cfg);
+    SET_PERI_REG_MASK(RTC_CNTL_USB_CONF_REG, RTC_CNTL_USB_RESET_DISABLE);
     vTaskDelay(pdMS_TO_TICKS(750));
 #endif
 

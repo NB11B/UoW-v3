@@ -9,6 +9,14 @@ FOUNDATION
 [PASS] extensible memory beyond 1024 bits
 [PASS] forged core proposal rejected
 
+TIMING INDEPENDENCE
+[PASS] independent clock drift preserves certified domain state — 1,000 drift realizations
+[PASS] transition ordering is invariant to local clock drift
+[PASS] causal dependency order dominates local clock readings
+[PASS] shared mutable clock mutant is rejected
+[PASS] nested parent/child clocks remain isolated
+[PASS] canonical orchestration requires no host wall clock
+
 AUTHORITY
 [PASS] proposer has zero authority
 [PASS] stale proposal rejected without state mutation
@@ -38,7 +46,7 @@ REPLAY
 [PASS] final recovered evidence root identical
 [PASS] recovery performs zero external re-execution
 
-RESULT: 25/25 qualification assertions passed
+RESULT: 31/31 qualification assertions passed
 
 CANONICAL CLAIM:
 The extracted UoW repository behaved as specified by this acceptance campaign.

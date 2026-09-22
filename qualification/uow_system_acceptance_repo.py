@@ -89,7 +89,13 @@ class Acceptance:
             raise AssertionError(f"{section}: {name}: {detail}")
 
     def report(self) -> str:
-        out = ["UoW CANONICAL REPOSITORY ACCEPTANCE", "=" * 35, ""]
+        out = [
+            "UoW CANONICAL REPOSITORY ACCEPTANCE",
+            "=" * 35,
+            "EVIDENCE LEVEL: PORTABLE",
+            "No physical accelerator, live external service, or distributed clock is claimed by this campaign.",
+            "",
+        ]
         current = None
         for section, name, status, detail in self.rows:
             if section != current:
@@ -105,12 +111,15 @@ class Acceptance:
             f"RESULT: {passed}/{len(self.rows)} qualification assertions passed",
             "",
             "CANONICAL CLAIM:",
-            "The extracted UoW repository behaved as specified by this acceptance campaign.",
+            "The extracted UoW repository behaved as specified by this portable acceptance campaign.",
+            "Physical hardware/service claims require separate substrate-qualified evidence.",
         ]
         return "\n".join(out)
 
 
 def build_acceptance_dag() -> Tuple[Mapping[str, ResourceBoundTask], WorldState]:
+    # These are logical resource-capacity tokens used to exercise scheduling
+    # semantics. They are not observations of physical CPU/GPU/NPU hardware.
     caps = {
         "cpu_cores": 8,
         "ram_units": 16,
@@ -436,7 +445,7 @@ def runtime_gate(
         runner2 = EffectRunner(resumed2, client)
         result = runner2.execute_effect(eff)
         a.check(
-            "external world",
+            "external-effect protocol (mock service)",
             "post-success crash reconciles without duplicate side effect",
             result.status == EffectStatus.COMMITTED_RESULT
             and client.invocation_count == calls_before
@@ -474,14 +483,14 @@ def runtime_gate(
 
         comp_calls = [c for c in client.call_log[before_log:] if c["is_compensation"]]
         a.check(
-            "external world",
+            "external-effect protocol (mock service)",
             "saga compensation executes exact reverse order",
             len(comp_calls) == 2
             and "F2" in comp_calls[0]["effect_id"]
             and "F1" in comp_calls[1]["effect_id"],
         )
         a.check(
-            "external world",
+            "external-effect protocol (mock service)",
             "saga progress is authoritative state",
             "acceptance_saga" in get_sagas_map(resumed2.current_state),
         )

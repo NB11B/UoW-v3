@@ -361,6 +361,8 @@ class JobRecord:
     post_state_hash: str
     evidence_root: str
     canary_active: bool
+    actual_backend: str = ""
+    execution_error: str | None = None
 
 
 class DistributionTracker:
@@ -396,7 +398,11 @@ class DistributionTracker:
         if not records:
             return {}
 
-        latencies = [float(r.latency_us) for r in records if r.proposed_committed]
+        latencies = [
+            float(r.latency_us)
+            for r in records
+            if r.proposed_committed and r.receipt_committed and not r.execution_error
+        ]
         regrets = [float(r.regret_us) for r in records]
 
         # First half vs Second half variance convergence
@@ -412,8 +418,18 @@ class DistributionTracker:
         # Per-device breakdown
         device_stats = {}
         for dev_id, dev_name in [(DEVICE_CPU, "CPU"), (DEVICE_GPU, "GPU"), (DEVICE_NPU, "NPU")]:
-            dev_lats = [float(r.latency_us) for r in records if r.proposed_committed and r.target_device == dev_id]
-            dev_regs = [float(r.regret_us) for r in records if r.proposed_committed and r.target_device == dev_id]
+            dev_lats = [
+                float(r.latency_us)
+                for r in records
+                if r.proposed_committed and r.receipt_committed
+                and not r.execution_error and r.target_device == dev_id
+            ]
+            dev_regs = [
+                float(r.regret_us)
+                for r in records
+                if r.proposed_committed and r.receipt_committed
+                and not r.execution_error and r.target_device == dev_id
+            ]
             device_stats[dev_name] = {
                 "count": len(dev_lats),
                 "latency": cls.compute_percentiles(dev_lats),
@@ -424,7 +440,12 @@ class DistributionTracker:
         regimes = sorted(list(set(r.phase for r in records)))
         regime_stats = {}
         for reg in regimes:
-            reg_lats = [float(r.latency_us) for r in records if r.proposed_committed and r.phase == reg]
+            reg_lats = [
+                float(r.latency_us)
+                for r in records
+                if r.proposed_committed and r.receipt_committed
+                and not r.execution_error and r.phase == reg
+            ]
             reg_regs = [float(r.regret_us) for r in records if r.phase == reg]
             regime_stats[reg] = {
                 "count": len(reg_regs),

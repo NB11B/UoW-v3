@@ -503,6 +503,8 @@ class RouterCampaignRunner:
 
         self.occ_conflicts = 0
         self.occ_retries_successful = 0
+        self.evidence_links_verified = 0
+        self.evidence_verification_failures = 0
         self.authority_negative_control: dict[str, Any] = {}
         self.evidence_context = combine_contexts(
             self.authority.evidence_context(),
@@ -556,6 +558,56 @@ class RouterCampaignRunner:
             "offline_mask": offline.get("online_mask"),
         }
 
+    def _verify_reservation_evidence(
+        self,
+        job: JobDescriptor,
+        target: int,
+        prop_res: dict[str, Any],
+    ) -> None:
+        if not prop_res.get("committed", False):
+            return
+        prev_root = prop_res.get("prev_evidence_root")
+        post_hash = prop_res.get("post_state_hash")
+        actual_root = prop_res.get("evidence_root")
+        res_id = int(prop_res.get("reservation_id", 0))
+        if not prev_root or not post_hash or not actual_root or res_id <= 0:
+            self.evidence_verification_failures += 1
+            return
+        body = (
+            f"{prev_root}:RESERVE:{res_id}:{job.job_id}:"
+            f"{target}:{job.tokens}:{post_hash}"
+        )
+        expected = hashlib.sha256(body.encode("utf-8")).hexdigest()
+        if expected == actual_root:
+            self.evidence_links_verified += 1
+        else:
+            self.evidence_verification_failures += 1
+
+    def _verify_receipt_evidence(
+        self,
+        reservation_id: int,
+        w_receipt: Any,
+        rec_res: dict[str, Any],
+    ) -> None:
+        if not rec_res.get("committed", False):
+            return
+        prev_root = rec_res.get("prev_evidence_root")
+        post_hash = rec_res.get("post_state_hash")
+        actual_root = rec_res.get("evidence_root")
+        if not prev_root or not post_hash or not actual_root:
+            self.evidence_verification_failures += 1
+            return
+        status = 0 if w_receipt.error is None else 1
+        body = (
+            f"{prev_root}:RECEIPT:{reservation_id}:{status}:"
+            f"{w_receipt.latency_us}:{w_receipt.output_digest}:{post_hash}"
+        )
+        expected = hashlib.sha256(body.encode("utf-8")).hexdigest()
+        if expected == actual_root:
+            self.evidence_links_verified += 1
+        else:
+            self.evidence_verification_failures += 1
+
     def _execute_and_receipt(self, job: JobDescriptor, target: int, res_id: int) -> tuple[Any, dict[str, Any]]:
         w_receipt = self.engine.execute(job_id=job.job_id, target_device=target, batch_size=job.batch_size)
         rec_res = self.authority.receipt(
@@ -580,6 +632,11 @@ class RouterCampaignRunner:
     ) -> None:
         measured_latency_us = w_receipt.latency_us
         receipt_committed = rec_res.get("committed", False)
+        self._verify_receipt_evidence(
+            prop_res.get("reservation_id", 0),
+            w_receipt,
+            rec_res,
+        )
         post_state_hash = rec_res.get("post_state_hash", prop_res.get("post_state_hash", ""))
         ev_root = rec_res.get("evidence_root", prop_res.get("evidence_root", self.prev_evidence_root))
         res_id = prop_res.get("reservation_id", 0)
@@ -907,6 +964,7 @@ class RouterCampaignRunner:
                 print(f"CRITICAL FAULT: Authority committed proposal for offline device {target}!", file=sys.stderr)
 
             if prop_committed:
+                self._verify_reservation_evidence(job, target, prop_res)
                 if self.concurrency > 1 and executor is not None:
                     fut = executor.submit(
                         self._execute_and_receipt,

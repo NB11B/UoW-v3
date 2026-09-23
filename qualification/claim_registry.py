@@ -102,6 +102,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="heterogeneous hardware qualification",
     ),
+    "U15.ADAPTIVE_QUORUM_ORCHESTRATION.PORTABLE": ClaimSpec(
+        "U15.ADAPTIVE_QUORUM_ORCHESTRATION.PORTABLE",
+        "The adaptive proposer drives task execution under a distributed 2-of-3 quorum authority across independent replicas, tolerating single-node failure, isolating minority partitions, and incorporating quorum certificate feedback into policy adaptation.",
+        EvidenceLevel.PORTABLE,
+        scope="adaptive quorum orchestration qualification",
+    ),
+    "U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL": ClaimSpec(
+        "U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL",
+        "The physical Intel AI Boost NPU adaptive proposer drives live task execution under a heterogeneous physical 2-of-3 quorum across ESP32-S3, Arduino UNO Q STM32, and Laptop x86-64 CPU, verifying partition resilience, hot-swap under quorum, and zero wrong authoritative commits.",
+        EvidenceLevel.PHYSICAL,
+        ("authority_a_esp32", "authority_b_unoq_stm32", "authority_c_laptop_x86", "npu"),
+        requires_negative_control=True,
+        scope="heterogeneous hardware qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

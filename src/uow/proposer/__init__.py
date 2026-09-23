@@ -12,6 +12,7 @@ from .observation import (
     create_adaptation_observation,
     validate_observation_integrity,
 )
+from .quorum_sequencer import QuorumCommitError, QuorumCommitSequencer
 from .stochastic import RandomProposer
 from .types import ModelProposal, ProposalCertificate, TelemetryRecord
 
@@ -26,6 +27,8 @@ __all__ = [
     "PortableAdaptiveProposer",
     "ProposalCertificate",
     "ProposerOrchestrationEngine",
+    "QuorumCommitError",
+    "QuorumCommitSequencer",
     "RandomProposer",
     "ReferenceSchedulingProposer",
     "TFWRProposer",

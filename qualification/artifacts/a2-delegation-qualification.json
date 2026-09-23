@@ -1,0 +1,87 @@
+{
+  "schema_version": "uow-a2-delegation-v1.0",
+  "timestamp": "2026-09-23T18:05:17.631741+00:00",
+  "parent_contract": {
+    "contract_id": "parent_certified_transform_v1",
+    "contract_hash": "1caf69296026c011216f5ee2a84f55ed8d7e1ed1412bb0cb75d3f48f590cc42c"
+  },
+  "delegation_epochs": [
+    {
+      "epoch": 0,
+      "event": "PARENT_DELEGATION",
+      "status": "SUCCESS",
+      "assembled_keys": [
+        "certified_result_R",
+        "out_parsed_a",
+        "out_work_b",
+        "out_work_c"
+      ]
+    },
+    {
+      "epoch": 1,
+      "event": "RECURSIVE_DELEGATION",
+      "status": "SUCCESS",
+      "tree_depth": 2
+    },
+    {
+      "epoch": 2,
+      "event": "DELEGATE_FAILOVER",
+      "status": "SUCCESS",
+      "failover_target": "node_d"
+    },
+    {
+      "epoch": 3,
+      "event": "STALE_RESULT_REJECTION",
+      "status": "SUCCESS",
+      "rejection_reason": "STALE_CHILD_RESULT_REJECTED: result generation 1 < active generation 2"
+    },
+    {
+      "epoch": 4,
+      "event": "AUTHORITY_INFLATION_BLOCKED",
+      "status": "SUCCESS",
+      "violations": [
+        "SEMANTIC_CONSERVATION_DEFICIT: child specifications omit required parent outputs ['out_parsed_a', 'out_work_b', 'out_work_c']",
+        "AUTHORITY_INFLATION_REJECTED: delegate requested permissions ['commit', 'delegate', 'verify'] exceeding parent scope",
+        "DELEGATE_UNQUALIFIED_FOR_AUTHORITY: delegate 'node_d' lacks trusted cryptographic authority"
+      ]
+    },
+    {
+      "epoch": 5,
+      "event": "RECURSIVE_RECOVERY",
+      "status": "SUCCESS",
+      "generation": 2
+    }
+  ],
+  "negative_controls": {
+    "authority_inflation_rejected": true,
+    "expired_certificate_rejected": true,
+    "stale_result_rejected": true,
+    "non_idempotent_abort": true
+  },
+  "invariants": {
+    "wrong_authoritative_commits": 0,
+    "unauthorized_bindings": 0,
+    "semantic_divergence": 0
+  },
+  "claims": {
+    "A2.DELEGATION_ATTENUATION.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.RECURSIVE_ORCHESTRATION.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "passed": true
+}

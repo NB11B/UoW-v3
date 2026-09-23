@@ -55,6 +55,15 @@ from .fabric import (
     DistributedActorFabric,
     NetworkAgent,
 )
+from .delegation import (
+    AuthorityPermission,
+    AuthorityScope,
+    ChildUoWSpec,
+    DelegationCertificate,
+    DelegationResult,
+    DistributedDelegationNode,
+    validate_delegation,
+)
 
 __all__ = [
     "ActorBinding",
@@ -67,10 +76,16 @@ __all__ = [
     "AgentMessageKind",
     "AuthorityClass",
     "AuthorityObligation",
+    "AuthorityPermission",
+    "AuthorityScope",
     "CausalConstraint",
+    "ChildUoWSpec",
     "CompositionCertifier",
     "CompositionRuntimeState",
+    "DelegationCertificate",
+    "DelegationResult",
     "DistributedActorFabric",
+    "DistributedDelegationNode",
     "EvidenceObligation",
     "ExecutionRecord",
     "FailureSemantics",
@@ -91,4 +106,5 @@ __all__ = [
     "check_conformance",
     "project_semantics",
     "validate_binding",
+    "validate_delegation",
 ]

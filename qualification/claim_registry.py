@@ -157,6 +157,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.DELEGATION_ATTENUATION.PORTABLE": ClaimSpec(
+        "A2.DELEGATION_ATTENUATION.PORTABLE",
+        "Distributed nodes issue cryptographic DelegationCertificates with strict authority attenuation A(U_child) subset-of A(U_parent), preventing authority inflation, unauthorized delegation, and expired delegation under churning network state.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.RECURSIVE_ORCHESTRATION.PORTABLE": ClaimSpec(
+        "A2.RECURSIVE_ORCHESTRATION.PORTABLE",
+        "Hierarchical multi-level UoW decomposition preserves parent semantic projection Phi(bigoplus U_i) = Phi(U) across delegate drop, safe retry, stale generation rejection, and recursive recovery with zero wrong commits.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

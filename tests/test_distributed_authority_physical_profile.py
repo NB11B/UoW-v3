@@ -5,7 +5,7 @@ from qualification.distributed_authority.physical_profile import (
 )
 
 
-def test_current_profile_recognizes_uno_q_as_one_physical_failure_domain():
+def test_current_profile_recognizes_uno_q_as_one_authority_compute_domain():
     nodes = current_local_profile()
     assert len(nodes) == 2
     uno = next(node for node in nodes if node.board_model == "Arduino UNO Q")
@@ -39,17 +39,17 @@ def test_multiple_processors_on_same_board_do_not_inflate_quorum_count():
     assert assessment.two_of_three_quorum_ready is False
 
 
-def test_third_independent_board_enables_physical_two_of_three_profile():
+def test_third_distinct_authority_domain_enables_physical_two_of_three_profile():
     nodes = list(current_local_profile())
     nodes.append(
         PhysicalAuthorityNode(
             node_id="C",
-            board_model="future-independent-board",
+            board_model="future-distinct-board",
             transport="independent",
             endpoint="future",
             authority_domain="deterministic authority",
             service_domains=(),
-            failure_domain="third-independent-board",
+            failure_domain="third-distinct-authority-domain",
         )
     )
     assessment = assess_topology(nodes)
@@ -57,7 +57,7 @@ def test_third_independent_board_enables_physical_two_of_three_profile():
     assert assessment.two_of_three_quorum_ready is True
 
 
-def test_tri_heterogeneous_profile_has_three_independent_failure_domains():
+def test_tri_heterogeneous_profile_has_three_distinct_authority_compute_domains():
     from qualification.distributed_authority.physical_profile import tri_heterogeneous_profile
     nodes = tri_heterogeneous_profile()
     assert len(nodes) == 3

@@ -1,8 +1,9 @@
 """Physical D1-P topology definitions.
 
 This module does not communicate with hardware. It encodes the evidence rule
-that physical authority count is based on independent failure domains, not the
-number of processors/cores present on a board.
+that physical authority count is based on distinct authority/compute domains,
+not the number of processors/cores present on a board. Power-domain independence
+is a separate property and is only required for power-loss resilience claims.
 
 The Arduino UNO Q is therefore one physical node even though it contains:
 - Qualcomm Dragonwing QRB2210 MPU running Debian Linux
@@ -50,15 +51,15 @@ def assess_topology(nodes: Iterable[PhysicalAuthorityNode]) -> PhysicalTopologyA
 
     reasons: list[str] = []
     if pair_ready:
-        reasons.append("at least two physically independent authority failure domains are present")
+        reasons.append("at least two distinct physical authority/compute domains are present")
     else:
-        reasons.append("fewer than two physically independent authority failure domains are present")
+        reasons.append("fewer than two distinct physical authority/compute domains are present")
 
     if quorum_ready:
         reasons.append("2-of-3 physical quorum can be qualified")
     else:
         reasons.append(
-            "2-of-3 physical quorum is not yet qualified; three independent physical failure domains are required"
+            "2-of-3 physical quorum is not yet qualified; three distinct physical authority/compute domains are required"
         )
 
     return PhysicalTopologyAssessment(
@@ -101,10 +102,14 @@ def current_local_profile() -> tuple[PhysicalAuthorityNode, ...]:
 def tri_heterogeneous_profile() -> tuple[PhysicalAuthorityNode, ...]:
     """Tri-architecture heterogeneous physical cluster (D1-P3).
 
-    Three physically distinct failure domains:
+    Three distinct physical authority/compute domains:
       - Node A: ESP32-S3 (Xtensa LX7)
       - Node B: Arduino UNO Q (ARM Cortex-M33 + QRB2210 Linux service plane)
       - Node C: Laptop CPU Host (x86-64 isolated authority service)
+
+    Deployment note: the laptop currently supplies USB power to Nodes A and B.
+    The three authority domains are distinct, but the topology has a shared
+    upstream laptop power dependency.
     """
     return (
         PhysicalAuthorityNode(

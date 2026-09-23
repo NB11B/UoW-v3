@@ -1,0 +1,272 @@
+{
+  "schema_version": "uow-continuous-drift-qualification-v1.0",
+  "timestamp": "2026-09-23T16:51:29.490129+00:00",
+  "hardware": {
+    "npu_inference": "Intel(R) AI Boost",
+    "gpu_training": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "host_os": "Windows (OpenVINO Level-Zero VCL)"
+  },
+  "epochs": [
+    {
+      "epoch_id": 0,
+      "epoch_name": "E0_balanced",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 0,
+      "model_hash": "70007c63863e377bf1d6c75373cfeec1e6e646eb5252aab71f0e6d7e8ee4cb8e",
+      "parent_hash": null,
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 2075.78,
+      "epoch_duration_ms": 52.0,
+      "ledger_records": 25,
+      "ledger_root_hash": "d01e7ff22ac9884ff69350005ed5a3c8bc7172c81df171c87459b33dfeac4619"
+    },
+    {
+      "epoch_id": 1,
+      "epoch_name": "E1_gpu_scarcity",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 1,
+      "model_hash": "210e204cd5f1488ade9ff1237fdab0edd2d0bde46c6a0f5bbaeb8f2e1c3880ff",
+      "parent_hash": "70007c63863e377bf1d6c75373cfeec1e6e646eb5252aab71f0e6d7e8ee4cb8e",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 2102.27,
+      "epoch_duration_ms": 60.37,
+      "ledger_records": 50,
+      "ledger_root_hash": "a97930740e937ece52afb4eced88881305cadbdc3533c39d92fdb57763bdb718"
+    },
+    {
+      "epoch_id": 2,
+      "epoch_name": "E2_cpu_scarcity",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 2,
+      "model_hash": "3a6c2607952447290294ee637a6e68e8aaac89cde414720957a3f275f6e12568",
+      "parent_hash": "210e204cd5f1488ade9ff1237fdab0edd2d0bde46c6a0f5bbaeb8f2e1c3880ff",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 2445.07,
+      "epoch_duration_ms": 72.15,
+      "ledger_records": 75,
+      "ledger_root_hash": "a62a0851ee631ff9b7c042c0a6ea04b9c505e90ebc2f11b48db6417836556036"
+    },
+    {
+      "epoch_id": 3,
+      "epoch_name": "E3_npu_contention",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 3,
+      "model_hash": "e34ddc960af823239aa2adb1dc5b548412a7fce26d9ceee63d87e7eee5ff951c",
+      "parent_hash": "3a6c2607952447290294ee637a6e68e8aaac89cde414720957a3f275f6e12568",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 2422.7,
+      "epoch_duration_ms": 81.34,
+      "ledger_records": 100,
+      "ledger_root_hash": "e2d6ebef5bd106fe79fdfdedf167812401e73df0b093b2f893717438f6c3477c"
+    },
+    {
+      "epoch_id": 4,
+      "epoch_name": "E4_high_occ_conflict",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 4,
+      "model_hash": "9573f1cba60b606f47b56d9c52297236655105a84560e6ec890fc6fb15eba731",
+      "parent_hash": "e34ddc960af823239aa2adb1dc5b548412a7fce26d9ceee63d87e7eee5ff951c",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 2204.49,
+      "epoch_duration_ms": 85.58,
+      "ledger_records": 125,
+      "ledger_root_hash": "bc942c9cb9e933216c3e6970e4b4fa831d3300f1d5e970c910d8b6c8dcce1612"
+    },
+    {
+      "epoch_id": 5,
+      "epoch_name": "E5_high_concurrency",
+      "tasks_count": 12,
+      "completed_count": 12,
+      "model_generation": 5,
+      "model_hash": "383466e671418efe1055a7228bdcb6496d7cf61f993344fccde170830683d0a0",
+      "parent_hash": "9573f1cba60b606f47b56d9c52297236655105a84560e6ec890fc6fb15eba731",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 12,
+      "mean_npu_latency_us": 2655.41,
+      "epoch_duration_ms": 170.09,
+      "ledger_records": 162,
+      "ledger_root_hash": "592837d9e3e20832026450e3a2aca7d5c9b7dd1f3e723da7ba810ccddeacc0a7"
+    },
+    {
+      "epoch_id": 6,
+      "epoch_name": "E6_npu_unavailable",
+      "tasks_count": 6,
+      "completed_count": 6,
+      "model_generation": 5,
+      "model_hash": "383466e671418efe1055a7228bdcb6496d7cf61f993344fccde170830683d0a0",
+      "parent_hash": "9573f1cba60b606f47b56d9c52297236655105a84560e6ec890fc6fb15eba731",
+      "npu_unavailable": true,
+      "fallback_count": 7,
+      "neural_proposal_count": 0,
+      "mean_npu_latency_us": 0.0,
+      "epoch_duration_ms": 73.4,
+      "ledger_records": 181,
+      "ledger_root_hash": "694670649e4982350da9201f66fc4d7d47c5aaca3a517dd6c45860adf587aed1"
+    },
+    {
+      "epoch_id": 7,
+      "epoch_name": "E7_npu_restored",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 5,
+      "model_hash": "383466e671418efe1055a7228bdcb6496d7cf61f993344fccde170830683d0a0",
+      "parent_hash": "9573f1cba60b606f47b56d9c52297236655105a84560e6ec890fc6fb15eba731",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 2861.05,
+      "epoch_duration_ms": 130.16,
+      "ledger_records": 206,
+      "ledger_root_hash": "7c154be281e7a602b3767ce14445ba6a52edad19811ba019e74d875aed3db3d5"
+    },
+    {
+      "epoch_id": 8,
+      "epoch_name": "E8_workload_reversal",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 6,
+      "model_hash": "cf5b8bdf99355d7342fcca60d3408d9ed9ba9fdf6276b54191f30dcb2c3be0fa",
+      "parent_hash": "383466e671418efe1055a7228bdcb6496d7cf61f993344fccde170830683d0a0",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 3551.92,
+      "epoch_duration_ms": 146.8,
+      "ledger_records": 231,
+      "ledger_root_hash": "d688232641632fd74af13fe2803e767e811611ba004c13b6c3f68a2c3a7d12c6"
+    },
+    {
+      "epoch_id": 9,
+      "epoch_name": "E9_return_to_e0",
+      "tasks_count": 8,
+      "completed_count": 8,
+      "model_generation": 7,
+      "model_hash": "315cdf6242c6818f4bdfbdb101765fca5dad4f77d81354b0371b13dff501d762",
+      "parent_hash": "cf5b8bdf99355d7342fcca60d3408d9ed9ba9fdf6276b54191f30dcb2c3be0fa",
+      "npu_unavailable": false,
+      "fallback_count": 1,
+      "neural_proposal_count": 8,
+      "mean_npu_latency_us": 3075.47,
+      "epoch_duration_ms": 149.25,
+      "ledger_records": 256,
+      "ledger_root_hash": "573e64c40f8c453809e152b68034f9c2cc11874bbfb3ca48bdf66e11ac7419f9"
+    }
+  ],
+  "total_tasks_completed": 82,
+  "policy_memory_graph": [
+    {
+      "generation": 0,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": null,
+      "identity_hash": "70007c63863e377bf1d6c75373cfeec1e6e646eb5252aab71f0e6d7e8ee4cb8e",
+      "compile_latency_ms": 114.2841000109911
+    },
+    {
+      "generation": 1,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "70007c63863e377bf1d6c75373cfeec1e6e646eb5252aab71f0e6d7e8ee4cb8e",
+      "identity_hash": "210e204cd5f1488ade9ff1237fdab0edd2d0bde46c6a0f5bbaeb8f2e1c3880ff",
+      "compile_latency_ms": 91.73059999011457
+    },
+    {
+      "generation": 2,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "210e204cd5f1488ade9ff1237fdab0edd2d0bde46c6a0f5bbaeb8f2e1c3880ff",
+      "identity_hash": "3a6c2607952447290294ee637a6e68e8aaac89cde414720957a3f275f6e12568",
+      "compile_latency_ms": 90.43330000713468
+    },
+    {
+      "generation": 3,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "3a6c2607952447290294ee637a6e68e8aaac89cde414720957a3f275f6e12568",
+      "identity_hash": "e34ddc960af823239aa2adb1dc5b548412a7fce26d9ceee63d87e7eee5ff951c",
+      "compile_latency_ms": 90.57489997940138
+    },
+    {
+      "generation": 4,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "e34ddc960af823239aa2adb1dc5b548412a7fce26d9ceee63d87e7eee5ff951c",
+      "identity_hash": "9573f1cba60b606f47b56d9c52297236655105a84560e6ec890fc6fb15eba731",
+      "compile_latency_ms": 88.3589000441134
+    },
+    {
+      "generation": 5,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "9573f1cba60b606f47b56d9c52297236655105a84560e6ec890fc6fb15eba731",
+      "identity_hash": "383466e671418efe1055a7228bdcb6496d7cf61f993344fccde170830683d0a0",
+      "compile_latency_ms": 92.51760004553944
+    },
+    {
+      "generation": 6,
+      "state": "RETIRED",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "383466e671418efe1055a7228bdcb6496d7cf61f993344fccde170830683d0a0",
+      "identity_hash": "cf5b8bdf99355d7342fcca60d3408d9ed9ba9fdf6276b54191f30dcb2c3be0fa",
+      "compile_latency_ms": 99.43969995947555
+    },
+    {
+      "generation": 7,
+      "state": "ACTIVE",
+      "artifact_hash": "7faf03a3265cfae7fb6360aff0de051500aad39f88e0741346b039ad274118dc",
+      "parent_model_hash": "cf5b8bdf99355d7342fcca60d3408d9ed9ba9fdf6276b54191f30dcb2c3be0fa",
+      "identity_hash": "315cdf6242c6818f4bdfbdb101765fca5dad4f77d81354b0371b13dff501d762",
+      "compile_latency_ms": 101.7985999933444
+    }
+  ],
+  "branching_evaluation": {
+    "drifted_generation": 7,
+    "rolled_back_generation": 0,
+    "branched_generation": 1,
+    "branched_parent_hash": "70007c63863e377bf1d6c75373cfeec1e6e646eb5252aab71f0e6d7e8ee4cb8e"
+  },
+  "containment_matrix": {
+    "injected_health_check_rejected": true,
+    "injected_compilation_crash_rejected": true,
+    "corrupt_schedule_rejected": true,
+    "wrong_authoritative_commits": 0
+  },
+  "claims": {
+    "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": []
+    },
+    "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "physical",
+      "required_evidence_level": "physical",
+      "required_components": [
+        "authority",
+        "npu"
+      ]
+    }
+  },
+  "passed": true
+}

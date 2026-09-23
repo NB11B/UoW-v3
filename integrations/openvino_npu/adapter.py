@@ -292,3 +292,23 @@ class IntelNPUAdaptiveProposer:
         """Atomically stages and promotes the next generation."""
         self.stage_update(graph=graph)
         return self.promote_staged()
+
+    def branch_update(
+        self,
+        base_generation: int,
+        graph: Optional[Mapping[str, Any]] = None,
+    ) -> StagedModel:
+        """Trains candidate weights and stages a new branch child directly from base_generation."""
+        if graph and self.observations:
+            X, y = extract_training_samples(self.observations, self.encoder, graph)
+            if len(X) > 0:
+                train_surrogate_model(self.net, X, y, epochs=50)
+
+        return self.lifecycle.branch_generation(
+            net=self.net,
+            base_generation=base_generation,
+        )
+
+    def get_policy_graph(self) -> List[Dict[str, Any]]:
+        """Returns the policy memory DAG from the lifecycle manager."""
+        return self.lifecycle.get_policy_graph()

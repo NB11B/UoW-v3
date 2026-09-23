@@ -88,6 +88,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="heterogeneous hardware qualification",
     ),
+    "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PORTABLE": ClaimSpec(
+        "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PORTABLE",
+        "The adaptive proposer undergoes continuous adaptation across oscillating workload drift regimes without runtime reset while authoritative legality remains invariant.",
+        EvidenceLevel.PORTABLE,
+        scope="continuous adaptive endurance qualification",
+    ),
+    "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL": ClaimSpec(
+        "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL",
+        "Physical Intel AI Boost NPU undergoes repeated live multi-generation adaptation across continuous workload regimes, negative control injections, and regime reversals with zero wrong authoritative commits.",
+        EvidenceLevel.PHYSICAL,
+        ("authority", "npu"),
+        requires_negative_control=True,
+        scope="heterogeneous hardware qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

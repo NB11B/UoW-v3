@@ -209,6 +209,49 @@ class NPUModelLifecycleManager:
             self._persist_manifest()
             return target_stage.identity
 
+    def get_stage(self, generation: int) -> Optional[StagedModel]:
+        with self._lock:
+            return self._stages_by_gen.get(generation)
+
+    def get_all_generations(self) -> List[int]:
+        with self._lock:
+            return sorted(self._stages_by_gen.keys())
+
+    def branch_generation(
+        self,
+        net: UoWSchedulingNet,
+        base_generation: int,
+        branch_generation: Optional[int] = None,
+    ) -> StagedModel:
+        """Stages a new candidate generation branched directly from an ancestor generation."""
+        with self._lock:
+            if base_generation not in self._stages_by_gen:
+                raise ValueError(f"Base generation {base_generation} not found for branching")
+            base_stage = self._stages_by_gen[base_generation]
+            new_gen = branch_generation if branch_generation is not None else (max(self._stages_by_gen.keys()) + 1)
+
+        return self.stage_generation(
+            net=net,
+            generation=new_gen,
+            parent_identity=base_stage.identity,
+        )
+
+    def get_policy_graph(self) -> List[Dict[str, Any]]:
+        """Returns the full policy memory DAG showing all generations and lineage parentage."""
+        with self._lock:
+            nodes: List[Dict[str, Any]] = []
+            for gen in sorted(self._stages_by_gen.keys()):
+                s = self._stages_by_gen[gen]
+                nodes.append({
+                    "generation": s.generation,
+                    "state": s.state.value,
+                    "artifact_hash": s.identity.model_artifact_hash,
+                    "parent_model_hash": s.identity.parent_model_hash,
+                    "identity_hash": s.identity.identity_hash,
+                    "compile_latency_ms": s.compile_latency_ms,
+                })
+            return nodes
+
     def _persist_manifest(self) -> None:
         """Durable atomic write of the lineage manifest to disk."""
         manifest_file = self.model_dir / self.MANIFEST_FILENAME

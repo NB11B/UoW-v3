@@ -1,0 +1,45 @@
+schema_id: uow.semantic.proposal
+schema_version: "0.1"
+status: draft
+semantic_kind: Proposal
+
+fields:
+  proposal_id: {required: true}
+  proposal_kind: {required: true}
+  proposer_id: {required: true}
+  subject_contract_id: {required: true}
+  precondition_context: {required: true}
+  candidate_payload: {required: true}
+  causal_coordinate: {required: true}
+  predicted_metrics: {required: false}
+  proposal_identity: {required: true}
+  metadata:
+    required: false
+    authority_bearing: false_by_default
+
+laws:
+  - proposal_has_zero_authority
+  - proposal_identity_must_bind_every_field_used_by_conformance
+  - non_authority_metadata_must_not_change_authorization_result
+  - stale_precondition_context_must_not_be_silently_rebound
+
+current_python_mappings:
+  core:
+    type: src/uow/engine.py::Proposal
+    notes:
+      - uow_id identifies subject contract
+      - pre_state_hash binds precondition context
+      - proposed_state and route/successor fields form candidate payload
+  model:
+    type: src/uow/proposer/types.py::ModelProposal
+  graph:
+    type: src/uow/composition/substitution.py::GraphReplacementProposal
+  runtime_mutation:
+    type: src/uow/composition/mutation.py::RuntimeMutationProposal
+
+current_cpp_mapping:
+  type: qualification/embedded/esp32_dual_core/include/uow_embedded.hpp::Proposal
+
+conformance:
+  local: L0-L2
+  authority_cross_device_candidate: L3-L5

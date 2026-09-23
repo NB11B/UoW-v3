@@ -1,0 +1,51 @@
+schema_id: uow.semantic.attestation
+schema_version: "0.1"
+status: draft
+semantic_kind: Attestation
+
+common_fields:
+  attestation_id: {required: true}
+  attestation_kind: {required: true}
+  issuer_id: {required: true}
+  subject_id: {required: true}
+  policy_or_contract_id: {required: true}
+  causal_context: {required: true}
+  claim_or_decision: {required: true}
+  evidence_profile: {required: true}
+  proof_reference: {required: false}
+
+variants:
+  ConformanceCertificate:
+    grants_authority: false
+  AuthorityVote:
+    grants_authority: partial
+    laws:
+      - voter_must_be_qualified
+      - exact_candidate_binding
+      - exact_context_binding
+  QuorumAuthorization:
+    grants_authority: true_if_threshold_profile_satisfied
+    laws:
+      - distinct_qualified_voters
+      - threshold_satisfied
+      - all_votes_bind_same_candidate_and_context
+  DelegationGrant:
+    grants_authority: bounded
+    laws:
+      - child_scope_subset_parent_scope
+      - expiry_or_causal_scope_enforced
+  ExternalReceipt:
+    grants_authority: false
+    laws:
+      - binds_effect_identity
+      - binds_idempotency_identity
+      - binds_source_when_required
+      - binds_response_identity
+
+current_python_mappings:
+  core_certificate: src/uow/engine.py::CertificateResult
+  proposer_certificate: src/uow/proposer/types.py::ProposalCertificate
+  delegation_grant: src/uow/composition/delegation.py::DelegationCertificate
+  authority_vote: src/uow/composition/mutation.py::AuthorityMutationVote
+  quorum_authorization: src/uow/composition/mutation.py::RuntimeMutationQC
+  external_receipt: src/uow/effects/descriptor.py::EffectReceipt

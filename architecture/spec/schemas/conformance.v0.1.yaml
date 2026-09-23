@@ -1,0 +1,41 @@
+schema_id: uow.semantic.conformance
+schema_version: "0.1"
+status: draft
+semantic_kind: ConformanceResult
+
+fields:
+  conformance_id: {required: true}
+  subject_id: {required: true}
+  contract_id: {required: true}
+  context_id: {required: true}
+  decision:
+    required: true
+    values: [ACCEPT, REJECT]
+  violations:
+    required: false
+    type: ordered_or_canonical_set
+  evidence:
+    required: true
+  conformance_identity:
+    required: true
+
+laws:
+  - conformance_binds_exact_candidate
+  - conformance_binds_exact_causal_context
+  - conformance_is_not_necessarily_authorization
+  - rejection_must_not_mutate_authoritative_state
+
+current_python_mappings:
+  core: src/uow/engine.py::CertificateResult
+  proposer: src/uow/proposer/types.py::ProposalCertificate
+  materialization: src/uow/orchestration/materialization.py::certify_materialization
+  graph: src/uow/composition/substitution.py::GraphReplacementCertificate
+  semantic_projection: src/uow/composition/projection.py::SemanticProjection
+  occ: src/uow/transactions/occ.py::validate_occ
+  actor_binding: src/uow/composition/binding.py::validate_binding
+
+current_cpp_mapping:
+  type: qualification/embedded/esp32_dual_core/include/uow_embedded.hpp::Certificate
+
+note:
+  - functions returning booleans/tuples are semantic mappings, not yet one shared envelope

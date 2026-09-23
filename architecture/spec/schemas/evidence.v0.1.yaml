@@ -1,0 +1,41 @@
+schema_id: uow.semantic.evidence
+schema_version: "0.1"
+status: draft
+semantic_kind: EvidenceEntry
+
+fields:
+  entry_id: {required: true}
+  event_kind: {required: true}
+  subject_id: {required: true}
+  causal_references: {required: true}
+  pre_context_identity: {required: false}
+  post_context_identity_or_outcome: {required: true}
+  proposal_reference: {required: false}
+  conformance_reference: {required: false}
+  authorization_reference: {required: false}
+  issuer_or_source: {required: false}
+  evidence_profile: {required: true}
+  entry_identity: {required: true}
+
+laws:
+  - authoritative_transition_produces_evidence
+  - evidence_must_preserve_required_causal_links
+  - integrity_profile_must_make_forbidden_tampering_detectable
+  - evidence_level_cannot_be_silently_upgraded
+
+current_python_mappings:
+  core: src/uow/engine.py::EvidenceRecord
+  distributed_history: src/uow/composition/convergence.py::HistoryEntry
+  topology_lineage: src/uow/composition/endurance.py::LineageEdge
+  adaptive_feedback: src/uow/proposer/observation.py::AdaptationObservation
+  model_lineage: src/uow/proposer/identity.py::ModelIdentity
+
+current_cpp_mapping:
+  type: qualification/embedded/esp32_dual_core/include/uow_embedded.hpp::EvidenceRecord
+
+storage_realizations:
+  - EvidenceLedger
+  - WALSequencer
+  - DurableWAL
+  - AuthoritativeHistory
+  - TopologyLineage

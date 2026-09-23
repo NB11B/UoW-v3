@@ -1,0 +1,40 @@
+schema_id: uow.semantic.requirement_capability
+schema_version: "0.1"
+status: draft
+
+Requirement:
+  fields:
+    requirement_id: {required: true}
+    kind: {required: true}
+    typed_predicate: {required: true}
+    evidence_requirement: {required: false}
+    freshness_requirement: {required: false}
+    failure_requirement: {required: false}
+
+Capability:
+  fields:
+    capability_id: {required: true}
+    kind: {required: true}
+    offered_value: {required: true}
+    source_id: {required: true}
+    qualification: {required: false}
+    freshness: {required: false}
+    evidence: {required: false}
+
+matcher_kinds:
+  - SET_INCLUSION
+  - ORDERED_LATTICE
+  - QUANTITATIVE_MINIMUM
+  - QUANTITATIVE_MAXIMUM
+  - RELATIONAL_COMPATIBILITY
+  - QUALIFIED_CAPABILITY
+  - FRESH_CAPABILITY
+  - QUORUM_K_OF_N
+  - CONDITIONAL
+  - ONE_OF
+
+laws:
+  - matcher_is_typed
+  - evidence_and_freshness_participate_in_conformance_when_required
+  - self_advertised_authority_is_not_qualified_authority
+  - relational_constraints_cannot_be_flattened_to_scalar_matching

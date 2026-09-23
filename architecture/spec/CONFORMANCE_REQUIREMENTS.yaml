@@ -1,0 +1,37 @@
+schema_version: "0.1"
+status: R2_DRAFT
+
+boundaries:
+  local_core_transition:
+    objects: [AuthoritativeState, TransitionContract, Proposal, ConformanceCertificate, EvidenceEntry]
+    minimum: L0
+    required_for_rejection_testing: L1
+    evidence_tests: L2
+
+  local_scheduling_policy:
+    objects: [RequirementSet, CapabilitySet, Proposal]
+    minimum: L0
+    required_for_negative_controls: L1
+
+  external_proposer_adapter:
+    objects: [Proposal, ConformanceResult]
+    minimum: L0
+    required_for_negative_controls: L1
+    wire_schema: implementation_specific_until_R5
+
+  python_embedded_core_parity:
+    objects: [AuthoritativeState, Proposal, ConformanceCertificate, EvidenceEntry]
+    minimum: L0
+    target_rejection: L1
+    target_evidence: L2
+    canonical_bytes: not_yet_required
+
+  heterogeneous_authority_quorum:
+    objects: [AuthorityVote, QuorumAuthorization, causal_context]
+    minimum: L3
+    canonical_bytes: candidate_L4
+    canonical_hash: candidate_L5
+
+  historical_physical_evidence:
+    rule: preserve_original_profile
+    migration_does_not_upgrade_evidence: true

@@ -1,4 +1,4 @@
-schema_version: "0.6"
+schema_version: "0.7"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-only
@@ -6,8 +6,8 @@ mode: additive-research-only
 phases:
   R0_frozen_control: COMPLETE
   R1_architecture_evidence_mapping: COMPLETE
-  R2_language_neutral_specification: IN_PROGRESS
-  R3_shadow_minimal_implementation: NOT_STARTED
+  R2_language_neutral_specification: COMPLETE
+  R3_shadow_minimal_implementation: READY
   R4_experiment_reconstruction: NOT_STARTED
   R5_cross_language_conformance: NOT_STARTED
   R6_reduction_eligibility: NOT_STARTED
@@ -19,22 +19,28 @@ current_invariants:
   files_deleted: false
   experiments_deleted: false
 
-r2_drafts:
-  semantic_object_model: CREATED
-  typed_requirement_capability_model: CREATED
-  identity_and_causal_versioning: CREATED
-  attestation_taxonomy: CREATED
-  lineage_model: CREATED
-  conformance_profiles: CREATED
-  machine_readable_semantic_model: CREATED
+r2_outputs:
+  semantic_object_model: COMPLETE_DRAFT_V0_1
+  versioned_schema_candidates: COMPLETE_DRAFT_V0_1
+  typed_requirement_capability_model: COMPLETE_DRAFT_V0_1
+  identity_and_causal_versioning: COMPLETE_DRAFT_V0_1
+  attestation_taxonomy: COMPLETE_DRAFT_V0_1
+  lineage_model: COMPLETE_DRAFT_V0_1
+  conformance_profiles: COMPLETE_DRAFT_V0_1
+  python_mapping: COMPLETE_INITIAL
+  cpp_embedded_mapping: COMPLETE_INITIAL
+  canonicalization_profile_model: COMPLETE_INITIAL
 
-r2_open_questions:
+r2_open_questions_carried_to_r3_r4:
   - whether IntentContract can collapse into TransitionContract
   - whether graph substitution, rebinding, delegation, and runtime mutation are fully closed under UoW
   - whether multi-party attestation formation is a distinct meta-layer primitive
   - which cross-language boundaries require L3-L5 conformance
   - whether one canonical identity profile is appropriate globally or only per object/boundary
 
-source_change_gate:
-  allowed_in_r2: false
-  first_runtime_change_phase: R3_shadow_minimal_implementation
+r3_rules:
+  shadow_only: true
+  src_uow_changes_allowed_initially: false
+  public_api_changes_allowed: false
+  deletions_allowed: false
+  adapter_first: true

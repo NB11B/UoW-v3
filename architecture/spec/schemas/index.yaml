@@ -1,0 +1,29 @@
+schema_set: uow-semantic-draft
+schema_set_version: "0.1"
+status: R2_RESEARCH_DRAFT
+
+schemas:
+  - id: uow.semantic.state
+    path: state.v0.1.yaml
+  - id: uow.semantic.contract
+    path: contract.v0.1.yaml
+  - id: uow.semantic.proposal
+    path: proposal.v0.1.yaml
+  - id: uow.semantic.conformance
+    path: conformance.v0.1.yaml
+  - id: uow.semantic.attestation
+    path: attestation.v0.1.yaml
+  - id: uow.semantic.evidence
+    path: evidence.v0.1.yaml
+  - id: uow.semantic.realization_binding
+    path: realization_binding.v0.1.yaml
+  - id: uow.semantic.external_effect
+    path: external_effect.v0.1.yaml
+  - id: uow.semantic.requirement_capability
+    path: requirement_capability.v0.1.yaml
+
+rules:
+  - these are semantic schema candidates, not runtime serialization formats
+  - schema version is distinct from causal sequence/generation/epoch
+  - canonical byte format is intentionally unspecified unless a conformance profile requires it
+  - R3 shadow code must adapt existing behavior to these schemas before any production extraction

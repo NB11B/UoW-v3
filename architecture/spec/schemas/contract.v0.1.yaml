@@ -1,0 +1,48 @@
+schema_id: uow.semantic.contract
+schema_version: "0.1"
+status: draft
+semantic_kind: SemanticContract
+
+variants:
+  TransitionContract:
+    purpose: deterministic candidate state-transition semantics
+    fields:
+      contract_id: {required: true}
+      semantic_classification: {required: true}
+      transition_relation: {required: true}
+      realization_descriptor: {required: false}
+      boundary_descriptor: {required: false}
+      evidence_requirements: {required: false}
+      timing_requirements: {required: false}
+    current_python_mapping:
+      type: src/uow/contracts.py::UoW
+      components:
+        contract_id: H.identity
+        semantic_classification: [H.source_category, H.target_category]
+        transition_relation: Gamma
+        realization_descriptor: R
+        boundary_descriptor: B
+        evidence_requirements: E
+        timing_requirements: T
+
+  IntentContract:
+    purpose: realization-invariant obligations over permissible implementations
+    fields:
+      contract_id: {required: true}
+      output_requirements: {required: true}
+      causal_requirements: {required: false}
+      authority_requirements: {required: false}
+      evidence_requirements: {required: false}
+      temporal_requirements: {required: false}
+      resource_safety_requirements: {required: false}
+      failure_requirements: {required: false}
+    current_python_mapping:
+      type: src/uow/composition/contract.py::ParentContract
+
+open_questions:
+  - whether IntentContract can always be lowered to TransitionContract without privileged meta-semantics
+  - whether both require one shared canonical byte schema
+
+laws:
+  - meaning_is_distinct_from_realization
+  - valid_realization_must_satisfy_declared_requirements

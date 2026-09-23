@@ -1,0 +1,57 @@
+mapping_id: uow.mapping.cpp_embedded
+mapping_version: "0.1"
+source_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+source_header: qualification/embedded/esp32_dual_core/include/uow_embedded.hpp
+
+mappings:
+  AuthoritativeState:
+    type: uow_embedded::State
+    schema: uow.semantic.state
+    specialization: two_counter_machine_state
+
+  TransitionContract:
+    type: uow_embedded::Program + uow_embedded::Instruction
+    schema: uow.semantic.contract
+    specialization: compiled_counter_program
+
+  Proposal:
+    type: uow_embedded::Proposal
+    schema: uow.semantic.proposal
+
+  Conformance:
+    type: uow_embedded::Certificate
+    schema: uow.semantic.conformance
+
+  Evidence:
+    type: uow_embedded::EvidenceRecord
+    schema: uow.semantic.evidence
+
+  EvidenceStore:
+    type: uow_embedded::EvidenceLedger
+    semantic_role: lineage_store
+
+  AuthorizedTransitionResult:
+    type: uow_embedded::StepResult
+    semantic_role: transition_result
+
+  LocalTiming:
+    type: uow_embedded::LocalClock
+    semantic_role: observational_local_clock
+    authority_bearing: false
+
+unmapped_semantic_families:
+  - generic IntentContract
+  - generic RequirementSet/CapabilitySet
+  - ActorBinding
+  - ExternalEffect
+  - DelegationGrant
+  - AuthorityVote
+  - QuorumAuthorization
+  - distributed AuthoritativeHistory
+  - adaptive model lineage
+  - A2 endurance controls
+
+conformance_target:
+  current: [L0, L1_candidate]
+  next: [L2_evidence_semantic]
+  not_yet_claimed: [L3, L4, L5]

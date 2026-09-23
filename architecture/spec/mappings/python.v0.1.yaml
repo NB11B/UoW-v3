@@ -1,0 +1,73 @@
+mapping_id: uow.mapping.python
+mapping_version: "0.1"
+source_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+
+mappings:
+  AuthoritativeState:
+    type: src/uow/state.py::WorldState
+    schema: uow.semantic.state
+  TransitionContract:
+    type: src/uow/contracts.py::UoW
+    schema: uow.semantic.contract
+  Proposal.core:
+    type: src/uow/engine.py::Proposal
+    schema: uow.semantic.proposal
+  Proposal.model:
+    type: src/uow/proposer/types.py::ModelProposal
+    schema: uow.semantic.proposal
+  Proposal.graph:
+    type: src/uow/composition/substitution.py::GraphReplacementProposal
+    schema: uow.semantic.proposal
+  Proposal.runtime_mutation:
+    type: src/uow/composition/mutation.py::RuntimeMutationProposal
+    schema: uow.semantic.proposal
+  Conformance.core:
+    type: src/uow/engine.py::CertificateResult
+    schema: uow.semantic.conformance
+  Conformance.proposer:
+    type: src/uow/proposer/types.py::ProposalCertificate
+    schema: uow.semantic.conformance
+  Conformance.graph:
+    type: src/uow/composition/substitution.py::GraphReplacementCertificate
+    schema: uow.semantic.conformance
+  Attestation.authority_vote:
+    type: src/uow/composition/mutation.py::AuthorityMutationVote
+    schema: uow.semantic.attestation
+  Attestation.quorum:
+    type: src/uow/composition/mutation.py::RuntimeMutationQC
+    schema: uow.semantic.attestation
+  Attestation.delegation:
+    type: src/uow/composition/delegation.py::DelegationCertificate
+    schema: uow.semantic.attestation
+  Attestation.external_receipt:
+    type: src/uow/effects/descriptor.py::EffectReceipt
+    schema: uow.semantic.attestation
+  Evidence.core:
+    type: src/uow/engine.py::EvidenceRecord
+    schema: uow.semantic.evidence
+  Evidence.history:
+    type: src/uow/composition/convergence.py::HistoryEntry
+    schema: uow.semantic.evidence
+  Realization.graph:
+    type: src/uow/composition/graph.py::RealizationGraph
+    schema: uow.semantic.realization_binding
+  Binding.actor:
+    type: src/uow/composition/binding.py::ActorBinding
+    schema: uow.semantic.realization_binding
+  ExternalEffect:
+    type: src/uow/effects/descriptor.py::EffectDescriptor
+    schema: uow.semantic.external_effect
+  Requirement.resource:
+    type: src/uow/resources/requirement.py::ResourceRequirement
+    schema: uow.semantic.requirement_capability
+  Capability.resource:
+    type: src/uow/resources/state.py::ResourceState
+    schema: uow.semantic.requirement_capability
+  Capability.actor:
+    type: src/uow/composition/actor.py::ActorDescriptor
+    schema: uow.semantic.requirement_capability
+
+mapping_rule:
+  - one semantic schema may have several implementation-specific variants
+  - mapping does not imply byte-level interchangeability
+  - unmapped fields remain implementation extensions until promoted or rejected

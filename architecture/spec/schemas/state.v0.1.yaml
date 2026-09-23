@@ -1,0 +1,47 @@
+schema_id: uow.semantic.state
+schema_version: "0.1"
+status: draft
+semantic_kind: AuthoritativeState
+
+fields:
+  state_id:
+    required: true
+    meaning: deterministic semantic identity of authoritative state
+  schema_id:
+    required: true
+  schema_version:
+    required: true
+  semantic_payload:
+    required: true
+    type: structured
+  causal_coordinate:
+    required: true
+    type: typed_reference
+  status:
+    required: true
+
+laws:
+  - proposal_or_observation_is_not_authoritative_state
+  - state_identity_binds_authority_relevant_semantics
+  - causal_coordinate_is_distinct_from_schema_version
+  - typed_facets_may_project_state_without_becoming_independent_authority
+
+current_python_mapping:
+  type: src/uow/state.py::WorldState
+  fields:
+    semantic_payload: attributes
+    causal_coordinate: sequence
+    status: status
+    state_id: state_hash
+    cursor: cursor
+
+current_cpp_mapping:
+  type: qualification/embedded/esp32_dual_core/include/uow_embedded.hpp::State
+  fields:
+    semantic_payload: [r0, r1, pc, halted]
+    causal_coordinate: sequence
+    state_id: hash_state(State)
+
+conformance:
+  minimum_cross_language: L0
+  distributed_authority_candidate: L3-L5

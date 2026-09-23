@@ -1,0 +1,36 @@
+schema_id: uow.semantic.realization_binding
+schema_version: "0.1"
+status: draft
+
+Realization:
+  fields:
+    realization_id: {required: true}
+    contract_id: {required: true}
+    logical_structure: {required: false}
+    offered_capabilities: {required: true}
+    failure_behavior: {required: true}
+    evidence_profile: {required: true}
+    realization_identity: {required: true}
+  laws:
+    - realization_does_not_redefine_contract_meaning
+    - valid_realization_satisfies_contract_requirements
+
+Binding:
+  fields:
+    binding_id: {required: true}
+    realization_id: {required: true}
+    role_to_actor: {required: true}
+    causal_context: {required: true}
+    binding_identity: {required: true}
+  laws:
+    - every_bound_actor_must_satisfy_required_capabilities
+    - authority_roles_require_qualified_authority
+    - expired_or_unavailable_actor_cannot_satisfy_live_binding
+    - binding_change_must_not_silently_change_contract
+
+current_python_mappings:
+  realization_descriptor: src/uow/contracts.py::Realization
+  graph_realization: src/uow/composition/graph.py::RealizationGraph
+  graph_node: src/uow/composition/graph.py::RealizationNode
+  binding: src/uow/composition/binding.py::ActorBinding
+  actor: src/uow/composition/actor.py::ActorDescriptor

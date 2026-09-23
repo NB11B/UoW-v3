@@ -1,0 +1,39 @@
+schema_id: uow.semantic.external_effect
+schema_version: "0.1"
+status: draft
+semantic_kind: ExternalEffect
+
+fields:
+  effect_id: {required: true}
+  governing_work_id: {required: true}
+  intent: {required: true}
+  request: {required: true}
+  idempotency_id: {required: true}
+  precondition_context: {required: true}
+  status: {required: true}
+  observation: {required: false}
+  receipt_reference: {required: false}
+  compensation_spec: {required: false}
+
+lifecycle:
+  - INTENDED
+  - COMMITTED_INTENT
+  - PENDING_EXTERNAL
+  - OBSERVED
+  - COMMITTED_RESULT
+  - COMPENSATING
+  - COMPENSATED
+  - COMPENSATION_FAILED
+
+laws:
+  - external_invocation_is_not_internal_commit
+  - intent_must_be_committed_before_non_idempotent_external_invocation
+  - retry_identity_must_be_stable
+  - observed_result_requires_receipt_conformance_before_authoritative_result_commit
+  - compensation_failure_is_preserved_not_erased
+
+current_python_mapping:
+  effect: src/uow/effects/descriptor.py::EffectDescriptor
+  receipt: src/uow/effects/descriptor.py::EffectReceipt
+  runner: src/uow/effects/runner.py::EffectRunner
+  saga: src/uow/effects/saga.py::SagaCoordinator

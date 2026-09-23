@@ -118,7 +118,7 @@ CLAIMS: Mapping[str, ClaimSpec] = {
     ),
     "DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL": ClaimSpec(
         "DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL",
-        "A 2-of-3 quorum across three heterogeneous physical failure domains (ESP32-S3 Xtensa, Arduino UNO Q STM32, and Laptop x86-64 CPU) is necessary and sufficient for authoritative progress, preventing conflicting commits and surviving any single node outage.",
+        "A 2-of-3 quorum across three heterogeneous physical authority substrates (ESP32-S3 Xtensa, Arduino UNO Q STM32, and Laptop x86-64 CPU) authorizes progress for every tested 2-node/3-node voter combination, rejects insufficient quorum, and prevents conflicting commits from the same pre-state.",
         EvidenceLevel.PHYSICAL,
         ("authority_a_esp32", "authority_b_unoq_stm32", "authority_c_laptop_x86"),
         requires_negative_control=True,

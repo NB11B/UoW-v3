@@ -70,6 +70,16 @@ from .convergence import (
     HistoryEntryKind,
     MultiOrchestratorCluster,
 )
+from .wire import (
+    AdversarialChannel,
+    WireEnvelope,
+    sign_envelope,
+    verify_envelope,
+)
+from .host_node import (
+    DurableWAL,
+    PhysicalHostNode,
+)
 
 __all__ = [
     "ActorBinding",
@@ -78,6 +88,7 @@ __all__ = [
     "ActorRegistry",
     "AdaptiveCompositionRuntime",
     "AdaptiveGraphProposer",
+    "AdversarialChannel",
     "AgentMessage",
     "AgentMessageKind",
     "AuthoritativeHistory",
@@ -93,6 +104,7 @@ __all__ = [
     "DelegationResult",
     "DistributedActorFabric",
     "DistributedDelegationNode",
+    "DurableWAL",
     "EvidenceObligation",
     "ExecutionRecord",
     "FailureSemantics",
@@ -105,6 +117,7 @@ __all__ = [
     "NetworkAgent",
     "NodeExecutionResult",
     "ParentContract",
+    "PhysicalHostNode",
     "RealizationGraph",
     "RealizationNode",
     "ResourceConstraint",
@@ -112,9 +125,12 @@ __all__ = [
     "SubstitutionDecision",
     "SubstitutionStrategy",
     "TemporalConstraint",
+    "WireEnvelope",
     "are_equivalent",
     "check_conformance",
     "project_semantics",
+    "sign_envelope",
     "validate_binding",
     "validate_delegation",
+    "verify_envelope",
 ]

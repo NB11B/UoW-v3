@@ -185,6 +185,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.PHYSICAL_NETWORK_FAULT.PORTABLE": ClaimSpec(
+        "A2.PHYSICAL_NETWORK_FAULT.PORTABLE",
+        "Physical multi-process nodes communicating over socket channels survive adversarial packet loss, duplication, reordering, asymmetric partitions, and clock skew with strictly zero double commits.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.CRASH_RECOVERY_CONVERGENCE.PORTABLE": ClaimSpec(
+        "A2.CRASH_RECOVERY_CONVERGENCE.PORTABLE",
+        "Independent OS processes recover from crash-during-commit and crash-during-delegation via durable disk journals, catching up stale rejoined nodes with zero semantic divergence.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

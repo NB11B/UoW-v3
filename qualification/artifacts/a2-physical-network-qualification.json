@@ -1,0 +1,83 @@
+{
+  "schema_version": "uow-a2-physical-network-v1.0",
+  "timestamp": "2026-09-23T18:20:04.385365+00:00",
+  "scenarios_evaluated": [
+    {
+      "scenario": 1,
+      "event": "PACKET_LOSS_SURVIVAL",
+      "status": "SUCCESS"
+    },
+    {
+      "scenario": 2,
+      "event": "MESSAGE_DEDUPLICATION",
+      "status": "SUCCESS",
+      "commits": 1
+    },
+    {
+      "scenario": 3,
+      "event": "REORDERING_REJECTION",
+      "status": "SUCCESS",
+      "error": "SEQUENCE_GAP: expected 1, received 3"
+    },
+    {
+      "scenario": 4,
+      "event": "ASYMMETRIC_PARTITION",
+      "status": "SUCCESS"
+    },
+    {
+      "scenario": 5,
+      "event": "CLOCK_SKEW_TOLERATED",
+      "status": "SUCCESS"
+    },
+    {
+      "scenario": 6,
+      "event": "CRASH_WAL_REPLAY",
+      "status": "SUCCESS",
+      "replayed": 2
+    },
+    {
+      "scenario": 7,
+      "event": "CRASH_DELEGATION_IDEMPOTENCY",
+      "status": "SUCCESS"
+    },
+    {
+      "scenario": 8,
+      "event": "STALE_NODE_REJOIN_CATCHUP",
+      "status": "SUCCESS",
+      "caught_up": 3
+    }
+  ],
+  "negative_controls": {
+    "forged_signature_rejected": true,
+    "sequence_gap_rejected": true,
+    "stale_generation_rejected": true,
+    "duplicate_commit_suppressed": true
+  },
+  "invariants": {
+    "double_commits": 0,
+    "authority_inflation": 0,
+    "semantic_divergence": 0
+  },
+  "claims": {
+    "A2.PHYSICAL_NETWORK_FAULT.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.CRASH_RECOVERY_CONVERGENCE.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "canonical_digest": "38127d2fbede3947b8c324cbfa09754c1b99111bb6982284926ac158629be506",
+  "passed": true
+}

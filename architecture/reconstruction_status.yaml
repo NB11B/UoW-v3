@@ -1,13 +1,13 @@
-schema_version: "0.7"
+schema_version: "0.8"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
-mode: additive-research-only
+mode: additive-research-shadow
 
 phases:
   R0_frozen_control: COMPLETE
   R1_architecture_evidence_mapping: COMPLETE
   R2_language_neutral_specification: COMPLETE
-  R3_shadow_minimal_implementation: READY
+  R3_shadow_minimal_implementation: IN_PROGRESS
   R4_experiment_reconstruction: NOT_STARTED
   R5_cross_language_conformance: NOT_STARTED
   R6_reduction_eligibility: NOT_STARTED
@@ -18,25 +18,35 @@ current_invariants:
   public_api_modified: false
   files_deleted: false
   experiments_deleted: false
+  src_uow_imports_shadow: false
 
-r2_outputs:
-  semantic_object_model: COMPLETE_DRAFT_V0_1
-  versioned_schema_candidates: COMPLETE_DRAFT_V0_1
-  typed_requirement_capability_model: COMPLETE_DRAFT_V0_1
-  identity_and_causal_versioning: COMPLETE_DRAFT_V0_1
-  attestation_taxonomy: COMPLETE_DRAFT_V0_1
-  lineage_model: COMPLETE_DRAFT_V0_1
-  conformance_profiles: COMPLETE_DRAFT_V0_1
-  python_mapping: COMPLETE_INITIAL
-  cpp_embedded_mapping: COMPLETE_INITIAL
-  canonicalization_profile_model: COMPLETE_INITIAL
-
-r2_open_questions_carried_to_r3_r4:
-  - whether IntentContract can collapse into TransitionContract
-  - whether graph substitution, rebinding, delegation, and runtime mutation are fully closed under UoW
-  - whether multi-party attestation formation is a distinct meta-layer primitive
-  - which cross-language boundaries require L3-L5 conformance
-  - whether one canonical identity profile is appropriate globally or only per object/boundary
+r3:
+  R3_0_semantic_types:
+    status: IMPLEMENTED_INITIAL
+    location: architecture/shadow/python/uow_shadow/types.py
+  R3_0_shadow_identity:
+    status: IMPLEMENTED_INITIAL
+    profile: SHADOW-JSON-v0.1
+    authority_bearing: false
+  R3_0_requirement_capability_matcher:
+    status: IMPLEMENTED_INITIAL
+  R3_1_canonical_validator_adapters:
+    status: IMPLEMENTED_INITIAL
+    validators:
+      - core certify
+      - OCC validate_occ
+      - resource capacity
+      - resource requirement binding
+      - actor binding
+      - semantic projection
+      - delegation
+      - external receipt binding
+      - mutation vote verification
+      - mutation QC verification
+  shadow_tests:
+    status: CREATED_NOT_EXECUTED
+    syntax_checked: true
+    runtime_executed: false
 
 r3_rules:
   shadow_only: true
@@ -44,3 +54,4 @@ r3_rules:
   public_api_changes_allowed: false
   deletions_allowed: false
   adapter_first: true
+  shadow_identity_is_authoritative: false

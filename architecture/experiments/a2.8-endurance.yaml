@@ -1,0 +1,67 @@
+experiment:
+  id: A2.8
+  name: autonomous-continuous-topology-evolution-endurance
+  lineage:
+    current_paths:
+      - src/uow/composition/endurance.py
+      - tests/test_composition_endurance.py
+      - qualification/a2_endurance_campaign.py
+      - qualification/artifacts/a2-endurance-qualification.json
+    claim_ids:
+      - A2.CONTINUOUS_TOPOLOGY_EVOLUTION.PORTABLE
+      - A2.ADAPTATION_QUALITY_AND_STABILITY.PORTABLE
+
+requires:
+  axioms: [A0, A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S1, S2, S3, S6]
+  capabilities:
+    - continuous non-stationary perturbation
+    - adaptive topology selection
+    - adaptive actor binding
+    - quorum-certified runtime mutation
+    - objective-function comparison
+    - anti-thrashing hysteresis
+    - poisoned-observation containment
+    - topology lineage
+    - multi-generation crash/reboot recovery
+    - partition reconciliation
+
+realizations:
+  baselines:
+    B0: fixed-static-runtime
+    B1: rule-based-runtime
+  subject:
+    A2: learned-adaptive-runtime
+
+negative_controls:
+  - id: delayed-observation
+  - id: reordered-observation
+  - id: duplicate-observation
+  - id: falsified-telemetry
+  - id: near-threshold-thrashing
+  - id: runtime-substrate-failure
+  - id: crash-across-generation
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P1, P2, P3]
+  measured_trace_steps: 40
+  measured_objectives:
+    B0_cumulative_cost: 8299.78
+    B1_cumulative_cost: 5934.51
+    A2_cumulative_cost: 5907.99
+
+assertions:
+  - semantic projection remains invariant across continuous topology evolution
+  - zero wrong commits
+  - zero uncertified mutations
+  - zero double commits
+  - zero authority inflation
+  - zero lost tasks
+  - poisoned learning may degrade policy but not authoritative integrity
+  - B0 and B1 must remain available as scientific controls
+  - A2.8 is an integration reconstruction target, not a substitute for isolated earlier experiments
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

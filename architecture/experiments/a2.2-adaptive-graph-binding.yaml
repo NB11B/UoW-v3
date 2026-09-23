@@ -1,0 +1,44 @@
+experiment:
+  id: A2.2
+  name: adaptive-graph-proposer-and-actor-binding
+  lineage:
+    current_paths:
+      - src/uow/composition/actor.py
+      - src/uow/composition/binding.py
+      - src/uow/composition/policy.py
+      - tests/test_composition_adaptive_proposer.py
+      - qualification/a2_adaptive_proposer_campaign.py
+    claim_ids:
+      - A2.ACTOR_BINDING.PORTABLE
+      - A2.ADAPTIVE_PROPOSER.PORTABLE
+
+requires:
+  axioms: [A0, A2, A3, A4, A5, A7]
+  structural_laws: [S1]
+  capabilities:
+    - three-tier intent -> graph -> actor binding
+    - actor capability descriptors
+    - authority classes
+    - runtime state vector
+    - feasible actor binding search
+    - learned/adaptive graph scoring
+    - certified feedback adaptation
+
+negative_controls:
+  - id: unbound-node
+  - id: capability-deficit
+  - id: authority-deficit
+  - id: offline-actor
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P1, P2]
+
+assertions:
+  - logical topology is not tied to one physical actor
+  - adaptive proposer has zero mutation authority
+  - wrong substitution count remains zero under tested drift
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

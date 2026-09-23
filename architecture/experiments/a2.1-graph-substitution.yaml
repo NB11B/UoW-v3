@@ -1,0 +1,40 @@
+experiment:
+  id: A2.1
+  name: certified-graph-substitution
+  lineage:
+    current_paths:
+      - src/uow/composition/substitution.py
+      - src/uow/composition/runtime.py
+      - tests/test_composition_substitution.py
+      - qualification/a2_graph_substitution_campaign.py
+    claim_ids: [A2.GRAPH_SUBSTITUTION.PORTABLE]
+
+requires:
+  axioms: [A0, A2, A3, A4, A5, A6, A7]
+  capabilities:
+    - graph replacement proposal with zero direct authority
+    - pre-activation semantic certification
+    - stale graph protection
+    - atomic accepted substitution
+    - deterministic fallback to baseline
+    - execution parity across valid realizations
+
+negative_controls:
+  - id: stale-current-graph-hash
+  - id: foreign-parent-contract
+  - id: cyclic-candidate
+  - id: authority-bypass
+  - id: injected-execution-failure
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P1, P2]
+
+assertions:
+  - invalid candidate graph never becomes active
+  - accepted replacement preserves parent projection
+  - runtime failure can restore baseline without redefining intent
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

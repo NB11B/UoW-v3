@@ -1,0 +1,45 @@
+experiment:
+  id: A2.3
+  name: distributed-actor-fabric-and-churn
+  lineage:
+    current_paths:
+      - src/uow/composition/fabric.py
+      - src/uow/composition/binding.py
+      - src/uow/composition/runtime.py
+      - tests/test_composition_fabric.py
+      - qualification/a2_actor_fabric_campaign.py
+    claim_ids:
+      - A2.ACTOR_FABRIC.PORTABLE
+      - A2.CHURN_RESILIENCE.PORTABLE
+
+requires:
+  axioms: [A0, A2, A3, A4, A5, A7]
+  structural_laws: [S1, S2]
+  capabilities:
+    - actor announcement/discovery
+    - time-bounded actor leases
+    - separation of discovery from authority qualification
+    - actor rebinding without topology change
+    - graph substitution after rebinding is insufficient
+    - fail-closed authority loss
+    - recovery after actor reconnection
+
+negative_controls:
+  - id: expired-lease
+  - id: untrusted-authority-claim
+  - id: worker-drop
+  - id: latency-spike
+  - id: authority-drop
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P1, P2]
+
+assertions:
+  - discovery never confers authority
+  - actor churn can alter binding without semantic drift
+  - loss of required authority causes fail-closed behavior
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

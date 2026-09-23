@@ -1,0 +1,42 @@
+experiment:
+  id: A2.4
+  name: recursive-delegation-and-authority-attenuation
+  lineage:
+    current_paths:
+      - src/uow/composition/delegation.py
+      - tests/test_composition_delegation.py
+      - qualification/a2_delegation_campaign.py
+    claim_ids:
+      - A2.DELEGATION_ATTENUATION.PORTABLE
+      - A2.RECURSIVE_ORCHESTRATION.PORTABLE
+
+requires:
+  axioms: [A0, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S3, S4]
+  capabilities:
+    - parent-to-child work decomposition
+    - recursive multi-level delegation
+    - cryptographic delegation certificate
+    - authority attenuation
+    - stale-child-result rejection
+    - idempotent retry after delegate failure
+    - recursive result assembly
+
+negative_controls:
+  - id: authority-inflation
+  - id: stale-child-generation
+  - id: expired-delegation
+  - id: delegate-disappearance
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P0, P1, P2]
+
+assertions:
+  - delegated authority is a subset of parent authority
+  - recursive decomposition preserves parent semantics
+  - retry cannot create duplicate authoritative commit
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

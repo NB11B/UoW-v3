@@ -1,0 +1,43 @@
+experiment:
+  id: A2.5
+  name: multi-orchestrator-concurrency-and-partition-convergence
+  lineage:
+    current_paths:
+      - src/uow/composition/convergence.py
+      - tests/test_composition_convergence.py
+      - qualification/a2_convergence_campaign.py
+    claim_ids:
+      - A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE
+      - A2.PARTITION_CONVERGENCE.PORTABLE
+
+requires:
+  axioms: [A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S2, S3]
+  capabilities:
+    - multiple autonomous orchestrators
+    - concurrent commutative delegation merge
+    - deterministic conflict resolution
+    - minority partition fail-closed
+    - idempotent duplicate de-duplication
+    - canonical authoritative history
+    - partition healing and convergence
+
+negative_controls:
+  - id: conflicting-non-idempotent-assignment
+  - id: minority-partition-commit
+  - id: duplicate-idempotent-execution
+  - id: conflicting-graph-substitution
+  - id: stale-history-branch
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P1, P2]
+
+assertions:
+  - temporary local history divergence must converge to one authoritative history after healing
+  - double commit count remains zero
+  - minority without required authority cannot commit
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

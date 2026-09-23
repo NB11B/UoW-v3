@@ -1,0 +1,52 @@
+experiment:
+  id: A2.6
+  name: multiprocess-adversarial-network-and-crash-recovery
+  lineage:
+    current_paths:
+      - src/uow/composition/wire.py
+      - src/uow/composition/host_node.py
+      - tests/test_composition_physical_network.py
+      - qualification/a2_physical_network_campaign.py
+    claim_ids:
+      - A2.PHYSICAL_NETWORK_FAULT.PORTABLE
+      - A2.CRASH_RECOVERY_CONVERGENCE.PORTABLE
+
+requires:
+  axioms: [A1, A2, A4, A5, A6, A7]
+  structural_laws: [S2, S3, S6]
+  capabilities:
+    - independent OS process execution
+    - authenticated wire envelope
+    - packet loss
+    - duplication
+    - reordering
+    - asymmetric partition
+    - clock skew tolerance
+    - durable disk journal
+    - crash-during-commit recovery
+    - crash-during-delegation recovery
+    - stale-node catch-up
+
+negative_controls:
+  - id: packet-drop
+  - id: duplicate-message
+  - id: message-reordering
+  - id: asymmetric-link-failure
+  - id: clock-skew
+  - id: crash-mid-commit
+  - id: crash-mid-delegation
+  - id: stale-node-rejoin
+
+evidence:
+  minimum_level: PORTABLE
+  note: claim name includes PHYSICAL_NETWORK_FAULT but registry evidence level is PORTABLE
+  preservation_class: [P1, P2, P3]
+
+assertions:
+  - transport disorder does not create double commit
+  - persisted history recovers without semantic divergence
+  - stale rejoining node catches up before authoritative participation
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

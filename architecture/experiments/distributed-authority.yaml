@@ -1,0 +1,59 @@
+experiment:
+  id: DIST-AUTH
+  name: distributed-and-heterogeneous-authority
+  lineage:
+    current_paths:
+      - qualification/distributed_authority/
+      - tests/test_distributed_authority.py
+      - tests/test_distributed_authority_physical_profile.py
+      - tests/test_authority_service_c.py
+    claim_ids:
+      - DIST.AUTHORITY.AGREEMENT.PORTABLE
+      - DIST.AUTHORITY.QUORUM_SAFETY.PORTABLE
+      - DIST.NETWORK.SELF_HEAL.PORTABLE
+      - DIST.AUTHORITY.DIVERGENCE_CONTAINMENT.PORTABLE
+      - DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL
+      - DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL
+
+requires:
+  axioms: [A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S2]
+  capabilities:
+    - independent authority replica agreement
+    - 2-of-3 quorum safety
+    - conflicting-transition exclusion from one pre-state
+    - minority fail-closed
+    - verified stale-replica catch-up
+    - divergence quarantine
+    - network self-healing
+    - heterogeneous physical authority agreement
+    - heterogeneous physical quorum
+
+realizations:
+  portable_authority: simulated/host authority replicas
+  physical_authority:
+    - ESP32-S3 Xtensa
+    - Arduino UNO Q STM32
+    - Laptop x86-64 CPU
+
+negative_controls:
+  - id: insufficient-quorum
+  - id: conflicting-same-prestate-transition
+  - id: stale-replica
+  - id: divergent-non-prefix-replica
+  - id: physical-node-loss
+
+evidence:
+  minimum_level: PORTABLE
+  physical_extensions: true
+  no_silent_substitution: true
+  preservation_class: [P1, P2, P3]
+
+assertions:
+  - authority agreement is independent of adaptive proposer quality
+  - minority partitions cannot make authoritative progress
+  - divergent replicas are quarantined rather than silently overwritten
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python, cpp]

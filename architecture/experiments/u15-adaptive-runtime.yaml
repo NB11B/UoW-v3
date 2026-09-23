@@ -1,0 +1,83 @@
+experiment:
+  id: U15
+  name: continuous-adaptive-proposer-and-heterogeneous-quorum
+  lineage:
+    current_paths:
+      - src/uow/proposer/adaptive.py
+      - src/uow/proposer/identity.py
+      - src/uow/proposer/observation.py
+      - integrations/openvino_npu/
+      - tests/test_adaptive_contract.py
+      - tests/test_portable_adaptation.py
+      - tests/test_npu_adaptive_proposer.py
+      - tests/test_npu_hot_swap.py
+      - tests/test_continuous_drift.py
+      - tests/test_adaptive_quorum.py
+    claim_ids:
+      - U15.ADAPTIVE_CONTRACT
+      - U15.FEEDBACK_INTEGRITY
+      - U15.PORTABLE_ADAPTATION
+      - U15.ADAPTATION_CONTAINMENT
+      - U15.NPU_ADAPTIVE_PROPOSER.PORTABLE
+      - U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL
+      - U15.NPU_HOT_SWAP.PORTABLE
+      - U15.NPU_HOT_SWAP.PHYSICAL
+      - U15.CONTINUOUS_ADAPTATION_ENDURANCE.PORTABLE
+      - U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL
+      - U15.ADAPTIVE_QUORUM_ORCHESTRATION.PORTABLE
+      - U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL
+
+requires:
+  axioms: [A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S1, S2]
+  capabilities:
+    - adaptive proposer contract with zero commit authority
+    - cryptographic model identity and generation lineage
+    - certified feedback observations
+    - online closed-loop update
+    - degradation containment
+    - physical Intel NPU inference
+    - staged model generation
+    - health-check before promotion
+    - atomic hot swap
+    - rollback and restart recovery
+    - continuous drift endurance
+    - policy adaptation under quorum authority
+
+realizations:
+  proposer:
+    - PortableAdaptiveProposer
+    - IntelNPUAdaptiveProposer
+  model_lifecycle:
+    - STAGING
+    - ACTIVE
+    - rollback
+  authority:
+    - deterministic judge
+    - distributed quorum
+    - heterogeneous physical quorum
+
+negative_controls:
+  - id: forged-or-stale-feedback
+  - id: catastrophic-model-degradation
+  - id: corrupted-labels
+  - id: proposer-crash
+  - id: compilation-failure
+  - id: model-health-check-failure
+  - id: authority-node-loss
+  - id: minority-partition
+
+evidence:
+  minimum_level: PORTABLE
+  physical_claims_require_named_hardware: true
+  preservation_class: [P0, P1, P2, P3]
+
+assertions:
+  - adaptive model parameters cannot change deterministic authority semantics
+  - bad learning may reduce efficiency but cannot cause invalid authoritative commit
+  - model promotion is atomic and recoverable
+  - physical evidence is not replaceable by CPU fallback or simulation
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

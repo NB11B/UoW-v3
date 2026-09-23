@@ -1,0 +1,48 @@
+experiment:
+  id: A2.0
+  name: realization-semantics-and-projection
+  lineage:
+    current_paths:
+      - src/uow/composition/contract.py
+      - src/uow/composition/graph.py
+      - src/uow/composition/projection.py
+      - tests/test_composition_semantics.py
+      - qualification/a2_realization_semantics_campaign.py
+    claim_ids: [A2.SEMANTIC_PROJECTION.PORTABLE]
+
+requires:
+  axioms: [A0, A2, A4]
+  structural_laws: [S1]
+  capabilities:
+    - parent semantic contract
+    - realization graph
+    - semantic projection
+    - topology-independent equivalence
+    - explicit invariants for outputs, causality, authority, evidence, time, resources, and failure
+
+realizations:
+  qualified_graphs:
+    - sequential
+    - parallel
+    - accelerator
+    - distributed-quorum
+
+negative_controls:
+  - id: authority-bypass
+  - id: missing-provenance
+  - id: causal-inversion
+  - id: failure-semantics-mismatch
+  - id: deadline-breach
+  - id: resource-budget-breach
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P0, P2]
+
+assertions:
+  - structurally distinct graphs may be equivalent under the same parent contract
+  - output equality alone is insufficient for semantic equivalence
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

@@ -1,0 +1,46 @@
+experiment:
+  id: A2.7
+  name: quorum-certified-runtime-mutation
+  lineage:
+    current_paths:
+      - src/uow/composition/mutation.py
+      - src/uow/composition/host_node.py
+      - tests/test_composition_quorum_mutation.py
+      - qualification/a2_quorum_mutation_campaign.py
+    claim_ids:
+      - A2.QUORUM_CERTIFIED_MUTATION.PORTABLE
+      - A2.HETEROGENEOUS_MUTATION_CONSENSUS.PORTABLE
+
+requires:
+  axioms: [A0, A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S1, S2]
+  capabilities:
+    - zero-authority topology mutation proposal
+    - independent signed authority vote
+    - threshold runtime mutation QC
+    - QC binding to parent contract
+    - QC binding to candidate graph and actor binding
+    - generation binding
+    - history-head binding
+    - atomic durable graph/binding mutation
+    - crash/restart recovery after mutation
+
+negative_controls:
+  - id: proposer-self-sign
+  - id: insufficient-quorum
+  - id: stale-history-head
+  - id: tampered-candidate-payload
+  - id: semantic-projection-violation
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P0, P1, P2]
+
+assertions:
+  - runtime topology mutates only under valid quorum authorization
+  - candidate mutation cannot authorize itself
+  - stale or tampered mutation context is rejected
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

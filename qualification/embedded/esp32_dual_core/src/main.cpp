@@ -20,6 +20,8 @@
 
 #include <algorithm>
 #include <cstring>
+#include <map>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -75,6 +77,16 @@ enum class ControlType : uint8_t {
     SCHED_SET_ONLINE,
     SCHED_PROPOSE,
     SCHED_RECEIPT,
+    AUTH_RESET,
+    AUTH_SNAPSHOT,
+    AUTH_EVALUATE,
+    AUTH_APPLY_QC,
+    AUTH_CLOCK,
+    AUTH_QUARANTINE,
+    AUTH_REBUILD,
+    AUTH_QC_BEGIN,
+    AUTH_QC_VOTE,
+    AUTH_QC_APPLY,
 };
 
 struct SchedReservationSlot {
@@ -100,7 +112,69 @@ struct ControlMsg {
     uint16_t sched_max_inflight[3]{4, 8, 4};
     uint32_t sched_tokens{1000};
     uint8_t sched_device_id{0};
+
+    char qc_uow_id[32]{};
+    std::array<uint8_t, 32> qc_prop_hash{};
+    std::array<uint8_t, 32> qc_pre_st_hash{};
+    std::array<uint8_t, 32> qc_prop_st_hash{};
+    std::array<uint8_t, 32> qc_comm_st_hash{};
+    std::array<uint8_t, 32> qc_cert_hash{};
+    std::array<uint8_t, 32> qc_pre_ev_root{};
+    uint64_t qc_ev_step{0};
+    std::array<uint8_t, 32> qc_exp_ev_root{};
+    uint8_t qc_threshold{0};
+    uint8_t qc_voter_count{0};
+    char qc_voters[4][32]{};
+    std::array<uint8_t, 32> qc_vote_hashes[4]{};
+    std::array<uint8_t, 32> qc_claimed_hash{};
+    uint64_t rebuild_r0{0};
+    uint64_t rebuild_r1{0};
+    uint32_t rebuild_pc{0};
+    uint64_t rebuild_seq{0};
+    uint64_t rebuild_steps{0};
+    std::array<uint8_t, 32> rebuild_root{};
+
+    char qc_voter_name[32]{};
+    std::array<uint8_t, 32> qc_voter_hash{};
 };
+
+const std::string NODE_ID_ESP32 = "authority_a_esp32";
+const std::string RULESET_VERSION = "uow-authority-v1";
+enum class NodeMode : uint8_t { ACTIVE = 0, STALE = 1, QUARANTINED = 2 };
+NodeMode gReplicaMode = NodeMode::ACTIVE;
+std::map<std::string, std::string> gVoteLocks;
+std::set<std::string> gAppliedQCs;
+
+struct EvaluatedProposal {
+    Proposal p{};
+    Certificate cert{};
+    std::string prop_digest{};
+    std::string cert_hash{};
+    std::string pre_st_hash{};
+    std::string prop_st_hash{};
+    std::string pre_ev_root{};
+    uint64_t ev_step{0};
+    bool active{false};
+} gLastEvaluated;
+
+struct PendingQC {
+    std::string uow_id{};
+    uint64_t threshold{0};
+    std::string expected_ev_root{};
+    std::string claimed_qc_hash{};
+    std::vector<std::string> voters{};
+    std::vector<std::string> vote_hashes{};
+    bool active{false};
+} gPendingQC;
+
+const char* node_mode_string(NodeMode m) {
+    switch (m) {
+        case NodeMode::ACTIVE: return "ACTIVE";
+        case NodeMode::STALE: return "STALE";
+        case NodeMode::QUARANTINED: return "QUARANTINED";
+        default: return "UNKNOWN";
+    }
+}
 
 Program gProgram = Program::transfer_r0_to_r1();
 State gAuthorityState{10, 0, 0, 0, false};
@@ -314,6 +388,92 @@ void emit_sched_snapshot(uint32_t request_id) {
     s += ",\"resource_tokens\":" + std::to_string(gSchedState.resource_tokens);
     s += ",\"state_hash\":\"" + state_hash + "\"";
     s += ",\"evidence_root\":\"" + root + "\"}";
+    emit_line(s);
+}
+
+std::string compute_vote_hash(
+    bool accepted,
+    const std::string& cert_hash,
+    uint64_t evidence_step,
+    const std::string& node_id,
+    const std::string& pre_evidence_root,
+    const std::string& pre_state_hash,
+    const std::string& proposal_hash,
+    const std::string& proposed_state_hash,
+    const std::string& rejection_reason,
+    const std::string& ruleset_version
+) {
+    std::string s = "{\"accepted\":" + std::string(accepted ? "true" : "false") +
+                    ",\"certificate_hash\":\"" + cert_hash + "\"" +
+                    ",\"evidence_step\":" + std::to_string(evidence_step) +
+                    ",\"node_id\":\"" + node_id + "\"" +
+                    ",\"pre_evidence_root\":\"" + pre_evidence_root + "\"" +
+                    ",\"pre_state_hash\":\"" + pre_state_hash + "\"" +
+                    ",\"proposal_hash\":\"" + proposal_hash + "\"" +
+                    ",\"proposed_state_hash\":\"" + proposed_state_hash + "\"";
+    if (rejection_reason.empty()) {
+        s += ",\"rejection_reason\":null";
+    } else {
+        s += ",\"rejection_reason\":\"" + rejection_reason + "\"";
+    }
+    s += ",\"ruleset_version\":\"" + ruleset_version + "\"}";
+    return hex_digest(sha256(s));
+}
+
+std::string compute_qc_hash(
+    const std::string& cert_hash,
+    const std::string& committed_state_hash,
+    uint64_t evidence_step,
+    const std::string& expected_evidence_root,
+    const std::string& pre_evidence_root,
+    const std::string& pre_state_hash,
+    const std::string& proposal_hash,
+    const std::string& proposed_state_hash,
+    const std::string& ruleset_version,
+    uint64_t threshold,
+    const std::string& uow_id,
+    const std::vector<std::string>& vote_hashes,
+    const std::vector<std::string>& voters
+) {
+    std::string s = "{\"certificate_hash\":\"" + cert_hash + "\"" +
+                    ",\"committed_state_hash\":\"" + committed_state_hash + "\"" +
+                    ",\"evidence_step\":" + std::to_string(evidence_step) +
+                    ",\"expected_evidence_root\":\"" + expected_evidence_root + "\"" +
+                    ",\"pre_evidence_root\":\"" + pre_evidence_root + "\"" +
+                    ",\"pre_state_hash\":\"" + pre_state_hash + "\"" +
+                    ",\"proposal_hash\":\"" + proposal_hash + "\"" +
+                    ",\"proposed_state_hash\":\"" + proposed_state_hash + "\"" +
+                    ",\"ruleset_version\":\"" + ruleset_version + "\"" +
+                    ",\"threshold\":" + std::to_string(threshold) +
+                    ",\"uow_id\":\"" + uow_id + "\"" +
+                    ",\"vote_hashes\":[";
+    for (size_t i = 0; i < vote_hashes.size(); ++i) {
+        if (i > 0) s += ",";
+        s += "\"" + vote_hashes[i] + "\"";
+    }
+    s += "],\"voters\":[";
+    for (size_t i = 0; i < voters.size(); ++i) {
+        if (i > 0) s += ",";
+        s += "\"" + voters[i] + "\"";
+    }
+    s += "]}";
+    return hex_digest(sha256(s));
+}
+
+void emit_auth_snapshot(const std::string& event = "auth_snapshot") {
+    std::string s = "{\"event\":\"" + event + "\"" +
+                    ",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                    ",\"mode\":\"" + std::string(node_mode_string(gReplicaMode)) + "\"" +
+                    ",\"r0\":" + std::to_string(gAuthorityState.r0) +
+                    ",\"r1\":" + std::to_string(gAuthorityState.r1) +
+                    ",\"pc\":" + std::to_string(gAuthorityState.pc) +
+                    ",\"sequence\":" + std::to_string(gAuthorityState.sequence) +
+                    ",\"halted\":" + (gAuthorityState.halted ? "true" : "false") +
+                    ",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\"" +
+                    ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"" +
+                    ",\"evidence_steps\":" + std::to_string(gLedger.size()) +
+                    ",\"ruleset_version\":\"" + RULESET_VERSION + "\"" +
+                    ",\"local_clock\":" + std::to_string(gAuthorityClock.read()) + "}";
     emit_line(s);
 }
 
@@ -692,6 +852,276 @@ void authority_task(void*) {
                 }
                 break;
             }
+            case ControlType::AUTH_RESET:
+                gAuthorityState = State{c.a, c.b, 0, 0, false};
+                gLedger = EvidenceLedger(false);
+                gVoteLocks.clear();
+                gAppliedQCs.clear();
+                gReplicaMode = NodeMode::ACTIVE;
+                emit_auth_snapshot("auth_reset");
+                break;
+
+            case ControlType::AUTH_SNAPSHOT:
+                emit_auth_snapshot("auth_snapshot");
+                break;
+
+            case ControlType::AUTH_CLOCK:
+                gAuthorityClock.stride = c.a;
+                gAuthorityClock.frozen = c.flag;
+                emit_line("{\"event\":\"auth_clock\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                          ",\"stride\":" + std::to_string(gAuthorityClock.stride) +
+                          ",\"frozen\":" + (gAuthorityClock.frozen ? "true" : "false") +
+                          ",\"local_clock\":" + std::to_string(gAuthorityClock.read()) + "}");
+                break;
+
+            case ControlType::AUTH_QUARANTINE:
+                gReplicaMode = NodeMode::QUARANTINED;
+                emit_line("{\"event\":\"auth_quarantine\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"mode\":\"QUARANTINED\"}");
+                break;
+
+            case ControlType::AUTH_REBUILD: {
+                gAuthorityState = State{c.rebuild_r0, c.rebuild_r1, c.rebuild_pc, c.rebuild_seq, false};
+                gLedger = EvidenceLedger(false);
+                gLedger.restore_checkpoint(c.rebuild_root, static_cast<size_t>(c.rebuild_steps));
+                gVoteLocks.clear();
+                gReplicaMode = NodeMode::ACTIVE;
+                emit_auth_snapshot("auth_rebuild");
+                break;
+            }
+
+            case ControlType::AUTH_EVALUATE: {
+                const auto& p = c.external_proposal;
+                const std::string cur_state_hash = hex_digest(hash_state(gAuthorityState));
+                const std::string prop_digest = hex_digest(p.proposal_hash);
+                const std::string pre_ev_root = hex_digest(gLedger.root());
+                const uint64_t ev_step = gLedger.size();
+
+                bool accepted = false;
+                std::string reason = "";
+                std::string cert_hash = "";
+
+                if (gReplicaMode == NodeMode::QUARANTINED) {
+                    reason = "NODE_QUARANTINED";
+                } else if (hex_digest(p.pre_state_hash) != cur_state_hash) {
+                    reason = "PRE_STATE_MISMATCH";
+                } else {
+                    auto it = gVoteLocks.find(cur_state_hash);
+                    if (it != gVoteLocks.end() && it->second != prop_digest) {
+                        reason = "CONFLICTING_VOTE_LOCK";
+                    } else {
+                        Certificate cert = certify(gProgram, gAuthorityState, p);
+                        if (!cert.valid) {
+                            reason = reject_reason_string(cert.reason);
+                        } else {
+                            accepted = true;
+                            cert_hash = hex_digest(cert.certificate_hash);
+                            gVoteLocks[cur_state_hash] = prop_digest;
+                            gLastEvaluated.p = p;
+                            gLastEvaluated.cert = cert;
+                            gLastEvaluated.prop_digest = prop_digest;
+                            gLastEvaluated.cert_hash = cert_hash;
+                            gLastEvaluated.pre_st_hash = cur_state_hash;
+                            gLastEvaluated.prop_st_hash = hex_digest(hash_state(p.proposed));
+                            gLastEvaluated.pre_ev_root = pre_ev_root;
+                            gLastEvaluated.ev_step = ev_step;
+                            gLastEvaluated.active = true;
+                        }
+                    }
+                }
+
+                gAuthorityClock.advance();
+                const std::string vote_hash = compute_vote_hash(
+                    accepted, cert_hash, ev_step, NODE_ID_ESP32, pre_ev_root,
+                    cur_state_hash, prop_digest, hex_digest(hash_state(p.proposed)),
+                    reason, RULESET_VERSION
+                );
+
+                std::string s = "{\"event\":\"auth_vote\""
+                                ",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                                ",\"accepted\":" + (accepted ? "true" : "false");
+                if (reason.empty()) s += ",\"reason\":null";
+                else s += ",\"reason\":\"" + reason + "\"";
+                s += ",\"proposal_hash\":\"" + prop_digest + "\"" +
+                     ",\"pre_state_hash\":\"" + cur_state_hash + "\"" +
+                     ",\"proposed_state_hash\":\"" + hex_digest(hash_state(p.proposed)) + "\"" +
+                     ",\"certificate_hash\":\"" + cert_hash + "\"" +
+                     ",\"pre_evidence_root\":\"" + pre_ev_root + "\"" +
+                     ",\"evidence_step\":" + std::to_string(ev_step) +
+                     ",\"ruleset_version\":\"" + RULESET_VERSION + "\"" +
+                     ",\"vote_hash\":\"" + vote_hash + "\"" +
+                     ",\"local_clock\":" + std::to_string(gAuthorityClock.read()) + "}";
+                emit_line(s);
+                break;
+            }
+
+            case ControlType::AUTH_APPLY_QC: {
+                const std::string uow_id(c.qc_uow_id);
+                const std::string prop_hash = hex_digest(c.qc_prop_hash);
+                const std::string pre_st_hash = hex_digest(c.qc_pre_st_hash);
+                const std::string prop_st_hash = hex_digest(c.qc_prop_st_hash);
+                const std::string comm_st_hash = hex_digest(c.qc_comm_st_hash);
+                const std::string cert_hash = hex_digest(c.qc_cert_hash);
+                const std::string pre_ev_root = hex_digest(c.qc_pre_ev_root);
+                const uint64_t ev_step = c.qc_ev_step;
+                const std::string exp_ev_root = hex_digest(c.qc_exp_ev_root);
+                const uint64_t threshold = c.qc_threshold;
+                std::vector<std::string> voters;
+                std::vector<std::string> vote_hashes;
+                for (uint8_t i = 0; i < c.qc_voter_count; ++i) {
+                    voters.push_back(std::string(c.qc_voters[i]));
+                    vote_hashes.push_back(hex_digest(c.qc_vote_hashes[i]));
+                }
+                const std::string claimed_qc_hash = hex_digest(c.qc_claimed_hash);
+
+                if (gReplicaMode == NodeMode::QUARANTINED) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":false,\"reason\":\"NODE_QUARANTINED\"" +
+                              ",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\"" +
+                              ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
+                    break;
+                }
+
+                if (gAppliedQCs.count(claimed_qc_hash) > 0) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":true,\"reason\":\"ALREADY_APPLIED\"" +
+                              ",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\"" +
+                              ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
+                    break;
+                }
+
+                std::string expected_hash = compute_qc_hash(
+                    cert_hash, comm_st_hash, ev_step, exp_ev_root, pre_ev_root,
+                    pre_st_hash, prop_hash, prop_st_hash, RULESET_VERSION,
+                    threshold, uow_id, vote_hashes, voters
+                );
+                if (expected_hash != claimed_qc_hash) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":false,\"reason\":\"QC_HASH_MISMATCH\"" +
+                              ",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\"" +
+                              ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
+                    break;
+                }
+
+                std::string cur_st_hash = hex_digest(hash_state(gAuthorityState));
+                std::string cur_ev_root = hex_digest(gLedger.root());
+                if (cur_st_hash == comm_st_hash && cur_ev_root == exp_ev_root) {
+                    gAppliedQCs.insert(claimed_qc_hash);
+                    gReplicaMode = NodeMode::ACTIVE;
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":true,\"reason\":\"STATE_ALREADY_AT_QUORUM_TIP\"" +
+                              ",\"state_hash\":\"" + cur_st_hash + "\"" +
+                              ",\"evidence_root\":\"" + cur_ev_root + "\"}");
+                    break;
+                }
+
+                if (cur_st_hash != pre_st_hash) {
+                    gReplicaMode = NodeMode::STALE;
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":false,\"reason\":\"PRE_STATE_MISMATCH\"" +
+                              ",\"state_hash\":\"" + cur_st_hash + "\"" +
+                              ",\"evidence_root\":\"" + cur_ev_root + "\"}");
+                    break;
+                }
+
+                if (cur_ev_root != pre_ev_root || gLedger.size() != ev_step) {
+                    gReplicaMode = NodeMode::QUARANTINED;
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":false,\"reason\":\"PRE_EVIDENCE_ROOT_MISMATCH\"" +
+                              ",\"state_hash\":\"" + cur_st_hash + "\"" +
+                              ",\"evidence_root\":\"" + cur_ev_root + "\"}");
+                    break;
+                }
+
+                Proposal p{};
+                p.pre_state_hash = c.qc_pre_st_hash;
+                p.proposal_hash = c.qc_prop_hash;
+                StepResult res = commit(gProgram, gAuthorityState, p, gLedger);
+                if (!res.committed) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                              ",\"applied\":false,\"idempotent\":false,\"reason\":\"COMMIT_REJECTED\"" +
+                              ",\"state_hash\":\"" + cur_st_hash + "\"" +
+                              ",\"evidence_root\":\"" + cur_ev_root + "\"}");
+                    break;
+                }
+
+                gAuthorityState = res.state;
+                gAppliedQCs.insert(claimed_qc_hash);
+                gReplicaMode = NodeMode::ACTIVE;
+                emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\"" +
+                          ",\"applied\":true,\"idempotent\":false,\"reason\":\"APPLIED\"" +
+                          ",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\"" +
+                          ",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"" +
+                          ",\"sequence\":" + std::to_string(gAuthorityState.sequence) + "}");
+                break;
+            }
+
+            case ControlType::AUTH_QC_BEGIN:
+                gPendingQC.uow_id = std::string(c.qc_uow_id);
+                gPendingQC.threshold = c.qc_threshold;
+                gPendingQC.expected_ev_root = hex_digest(c.qc_exp_ev_root);
+                gPendingQC.claimed_qc_hash = hex_digest(c.qc_claimed_hash);
+                gPendingQC.voters.clear();
+                gPendingQC.vote_hashes.clear();
+                gPendingQC.active = true;
+                emit_line("{\"event\":\"auth_qc_begin\",\"status\":\"ok\"}");
+                break;
+
+            case ControlType::AUTH_QC_VOTE:
+                if (gPendingQC.active) {
+                    gPendingQC.voters.push_back(std::string(c.qc_voter_name));
+                    gPendingQC.vote_hashes.push_back(hex_digest(c.qc_voter_hash));
+                    emit_line("{\"event\":\"auth_qc_vote\",\"status\":\"ok\",\"count\":" + std::to_string(gPendingQC.voters.size()) + "}");
+                } else {
+                    emit_line("{\"event\":\"error\",\"reason\":\"no active pending QC\"}");
+                }
+                break;
+
+            case ControlType::AUTH_QC_APPLY: {
+                const std::string prop_digest = hex_digest(c.qc_prop_hash);
+                if (gReplicaMode == NodeMode::QUARANTINED) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":false,\"reason\":\"NODE_QUARANTINED\",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
+                    break;
+                }
+                if (!gPendingQC.active || !gLastEvaluated.active || gLastEvaluated.prop_digest != prop_digest) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":false,\"reason\":\"NO_MATCHING_EVALUATED_PROPOSAL\"}");
+                    break;
+                }
+                if (gAppliedQCs.count(gPendingQC.claimed_qc_hash) > 0) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":true,\"reason\":\"ALREADY_APPLIED\",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\"}");
+                    break;
+                }
+                if (gPendingQC.voters.size() < gPendingQC.threshold) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":false,\"reason\":\"INSUFFICIENT_QUORUM\"}");
+                    break;
+                }
+                std::set<std::string> unique_voters(gPendingQC.voters.begin(), gPendingQC.voters.end());
+                if (unique_voters.size() != gPendingQC.voters.size()) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":false,\"reason\":\"DUPLICATE_VOTER\"}");
+                    break;
+                }
+                std::string expected_hash = compute_qc_hash(
+                    gLastEvaluated.cert_hash, gLastEvaluated.prop_st_hash, gLastEvaluated.ev_step,
+                    gPendingQC.expected_ev_root, gLastEvaluated.pre_ev_root, gLastEvaluated.pre_st_hash,
+                    gLastEvaluated.prop_digest, gLastEvaluated.prop_st_hash, RULESET_VERSION,
+                    gPendingQC.threshold, gPendingQC.uow_id, gPendingQC.vote_hashes, gPendingQC.voters
+                );
+                if (expected_hash != gPendingQC.claimed_qc_hash) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":false,\"reason\":\"QC_HASH_MISMATCH\"}");
+                    break;
+                }
+                StepResult res = commit(gProgram, gAuthorityState, gLastEvaluated.p, gLedger);
+                if (!res.committed) {
+                    emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":false,\"idempotent\":false,\"reason\":\"COMMIT_REJECTED\"}");
+                    break;
+                }
+                gAuthorityState = res.state;
+                gAppliedQCs.insert(gPendingQC.claimed_qc_hash);
+                gReplicaMode = NodeMode::ACTIVE;
+                gPendingQC.active = false;
+                gLastEvaluated.active = false;
+                emit_line("{\"event\":\"auth_apply\",\"node_id\":\"" + NODE_ID_ESP32 + "\",\"applied\":true,\"idempotent\":false,\"reason\":\"APPLIED\",\"state_hash\":\"" + hex_digest(hash_state(gAuthorityState)) + "\",\"evidence_root\":\"" + hex_digest(gLedger.root()) + "\",\"sequence\":" + std::to_string(gAuthorityState.sequence) + "}");
+                break;
+            }
         }
     }
 }
@@ -707,6 +1137,18 @@ bool parse_u64(const std::string& s, uint64_t& out) {
     return end && *end == '\0';
 }
 
+std::vector<std::string> split_csv(const std::string& s) {
+    std::vector<std::string> elems;
+    size_t start = 0;
+    while (start < s.size()) {
+        size_t pos = s.find(',', start);
+        if (pos == std::string::npos) pos = s.size();
+        if (pos > start) elems.push_back(s.substr(start, pos - start));
+        start = pos + 1;
+    }
+    return elems;
+}
+
 void handle_command(std::string line) {
     while (!line.empty() && (line.front() == ' ' || line.front() == '\t' || line.front() == '\r' || line.front() == '\n')) line.erase(0, 1);
     while (!line.empty() && (line.back() == ' ' || line.back() == '\t' || line.back() == '\r' || line.back() == '\n')) line.pop_back();
@@ -714,7 +1156,7 @@ void handle_command(std::string line) {
 
     std::vector<std::string> parts;
     size_t start = 0;
-    while (parts.size() < 16 && start < line.size()) {
+    while (parts.size() < 32 && start < line.size()) {
         while (start < line.size() && line[start] == ' ') ++start;
         if (start >= line.size()) break;
         size_t space = line.find(' ', start);
@@ -861,6 +1303,108 @@ void handle_command(std::string line) {
         r.status = static_cast<uint8_t>(status);
         r.latency_us = static_cast<uint32_t>(latency_us);
         c.sched_receipt = r;
+    } else if (parts[0] == "AUTH_RESET") {
+        c.type = ControlType::AUTH_RESET;
+        c.a = 10; c.b = 0;
+        if (parts.size() >= 3) {
+            parse_u64(parts[1], c.a);
+            parse_u64(parts[2], c.b);
+        }
+    } else if (parts[0] == "AUTH_SNAPSHOT") {
+        c.type = ControlType::AUTH_SNAPSHOT;
+    } else if (parts[0] == "AUTH_CLOCK" && parts.size() >= 2) {
+        c.type = ControlType::AUTH_CLOCK;
+        c.a = 1; c.flag = false;
+        parse_u64(parts[1], c.a);
+        if (parts.size() >= 3) c.flag = (parts[2] == "1");
+    } else if (parts[0] == "AUTH_QUARANTINE") {
+        c.type = ControlType::AUTH_QUARANTINE;
+    } else if (parts[0] == "AUTH_REBUILD" && parts.size() >= 6) {
+        c.type = ControlType::AUTH_REBUILD;
+        if (parts.size() >= 7) {
+            uint64_t pc = 0;
+            if (!parse_u64(parts[1], c.rebuild_r0)
+                || !parse_u64(parts[2], c.rebuild_r1)
+                || !parse_u64(parts[3], pc)
+                || !parse_u64(parts[4], c.rebuild_seq)
+                || !parse_hex_digest(parts[5], c.rebuild_root)
+                || !parse_u64(parts[6], c.rebuild_steps)) {
+                emit_line("{\"event\":\"error\",\"reason\":\"bad AUTH_REBUILD arguments\"}"); return;
+            }
+            c.rebuild_pc = static_cast<uint32_t>(pc);
+        } else {
+            if (!parse_u64(parts[1], c.rebuild_r0)
+                || !parse_u64(parts[2], c.rebuild_r1)
+                || !parse_u64(parts[3], c.rebuild_seq)
+                || !parse_hex_digest(parts[4], c.rebuild_root)
+                || !parse_u64(parts[5], c.rebuild_steps)) {
+                emit_line("{\"event\":\"error\",\"reason\":\"bad AUTH_REBUILD arguments\"}"); return;
+            }
+            c.rebuild_pc = 0;
+        }
+    } else if (parts[0] == "AUTH_EVALUATE" && parts.size() >= 9) {
+        c.type = ControlType::AUTH_EVALUATE;
+        Proposal p{};
+        uint64_t r0 = 0, r1 = 0, pc = 0, seq = 0, halted = 0, selected_pc = 0;
+        if (!parse_hex_digest(parts[1], p.pre_state_hash)
+            || !parse_u64(parts[2], r0)
+            || !parse_u64(parts[3], r1)
+            || !parse_u64(parts[4], pc)
+            || !parse_u64(parts[5], seq)
+            || !parse_u64(parts[6], halted)
+            || !parse_u64(parts[7], selected_pc)
+            || !parse_hex_digest(parts[8], p.proposal_hash)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad AUTH_EVALUATE envelope\"}"); return;
+        }
+        p.proposed = State{r0, r1, static_cast<uint32_t>(pc), seq, halted != 0};
+        p.selected_pc = static_cast<uint32_t>(selected_pc);
+        p.halted = (halted != 0);
+        c.external_proposal = p;
+    } else if (parts[0] == "AUTH_APPLY_QC" && parts.size() >= 14) {
+        c.type = ControlType::AUTH_APPLY_QC;
+        strncpy(c.qc_uow_id, parts[1].c_str(), sizeof(c.qc_uow_id) - 1);
+        uint64_t ev_step = 0, threshold = 0;
+        if (!parse_hex_digest(parts[2], c.qc_prop_hash)
+            || !parse_hex_digest(parts[3], c.qc_pre_st_hash)
+            || !parse_hex_digest(parts[4], c.qc_prop_st_hash)
+            || !parse_hex_digest(parts[5], c.qc_comm_st_hash)
+            || !parse_hex_digest(parts[6], c.qc_cert_hash)
+            || !parse_hex_digest(parts[7], c.qc_pre_ev_root)
+            || !parse_u64(parts[8], ev_step)
+            || !parse_hex_digest(parts[9], c.qc_exp_ev_root)
+            || !parse_u64(parts[10], threshold)
+            || !parse_hex_digest(parts[13], c.qc_claimed_hash)) {
+            emit_line("{\"event\":\"error\",\"reason\":\"bad AUTH_APPLY_QC envelope\"}"); return;
+        }
+        c.qc_ev_step = ev_step;
+        c.qc_threshold = static_cast<uint8_t>(threshold);
+
+        std::vector<std::string> voters = split_csv(parts[11]);
+        std::vector<std::string> vote_hashes = split_csv(parts[12]);
+        if (voters.size() != vote_hashes.size() || voters.size() > 4) {
+            emit_line("{\"event\":\"error\",\"reason\":\"voter count mismatch or exceeds max\"}"); return;
+        }
+        c.qc_voter_count = static_cast<uint8_t>(voters.size());
+        for (uint8_t i = 0; i < c.qc_voter_count; ++i) {
+            strncpy(c.qc_voters[i], voters[i].c_str(), sizeof(c.qc_voters[i]) - 1);
+            if (!parse_hex_digest(vote_hashes[i], c.qc_vote_hashes[i])) {
+                emit_line("{\"event\":\"error\",\"reason\":\"bad vote hash in AUTH_APPLY_QC\"}"); return;
+            }
+        }
+    } else if (parts[0] == "AUTH_QC_BEGIN" && parts.size() >= 5) {
+        c.type = ControlType::AUTH_QC_BEGIN;
+        strncpy(c.qc_uow_id, parts[1].c_str(), sizeof(c.qc_uow_id) - 1);
+        parse_u64(parts[2], c.a);
+        c.qc_threshold = static_cast<uint8_t>(c.a);
+        parse_hex_digest(parts[3], c.qc_exp_ev_root);
+        parse_hex_digest(parts[4], c.qc_claimed_hash);
+    } else if (parts[0] == "AUTH_QC_VOTE" && parts.size() >= 3) {
+        c.type = ControlType::AUTH_QC_VOTE;
+        strncpy(c.qc_voter_name, parts[1].c_str(), sizeof(c.qc_voter_name) - 1);
+        parse_hex_digest(parts[2], c.qc_voter_hash);
+    } else if (parts[0] == "AUTH_QC_APPLY" && parts.size() >= 2) {
+        c.type = ControlType::AUTH_QC_APPLY;
+        parse_hex_digest(parts[1], c.qc_prop_hash);
     } else {
         emit_line("{\"event\":\"error\",\"reason\":\"unknown command; send HELP\"}");
         return;

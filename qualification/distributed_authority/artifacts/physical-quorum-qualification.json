@@ -1,0 +1,805 @@
+{
+  "claim_result": {
+    "observed_pass": true,
+    "qualified": true,
+    "passed": true,
+    "evidence_level": "physical",
+    "required_evidence_level": "physical",
+    "required_components": [
+      "authority_a_esp32",
+      "authority_b_unoq_stm32",
+      "authority_c_laptop_x86"
+    ],
+    "claim_id": "DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL",
+    "statement": "A 2-of-3 quorum across three heterogeneous physical failure domains (ESP32-S3 Xtensa, Arduino UNO Q STM32, and Laptop x86-64 CPU) is necessary and sufficient for authoritative progress, preventing conflicting commits and surviving any single node outage.",
+    "gates": {
+      "GATE_1_HARDWARE_FAILURE_DOMAINS": {
+        "passed": true,
+        "details": {
+          "node_a": "authority_a_esp32",
+          "node_b": "authority_b_unoq_stm32",
+          "node_c": "authority_c_laptop_x86",
+          "node_b_mpu_transport": {
+            "adb_present": true,
+            "linux_mpu_detected": true,
+            "kernel_release": "7.0.0-g122c2c22d838",
+            "qualcomm_soc": "524",
+            "shared_failure_domain": true
+          },
+          "independent_failure_domains": 3,
+          "two_of_three_quorum_ready": true,
+          "isa_diversity": [
+            "Xtensa LX7",
+            "ARM Cortex-M33",
+            "x86-64"
+          ]
+        }
+      },
+      "GATE_2_THREE_WAY_DETERMINISTIC_AGREEMENT": {
+        "passed": true,
+        "details": {
+          "initial_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+          "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+          "node_a_cert_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+          "node_b_cert_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+          "node_c_cert_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+          "all_cert_hashes_identical": true,
+          "vote_hash_uniqueness": true
+        }
+      },
+      "GATE_3_ALL_QUORUM_PERMUTATIONS": {
+        "passed": true,
+        "details": {
+          "{A, B}": {
+            "passed": true,
+            "voters": [
+              "authority_a_esp32",
+              "authority_b_unoq_stm32"
+            ],
+            "applies": {
+              "A": {
+                "event": "auth_apply",
+                "node_id": "authority_a_esp32",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              },
+              "B": {
+                "event": "auth_apply",
+                "node_id": "authority_b_unoq_stm32",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              }
+            },
+            "post_snapshots": {
+              "A": {
+                "event": "auth_snapshot",
+                "node_id": "authority_a_esp32",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 1034
+              },
+              "B": {
+                "event": "auth_snapshot",
+                "node_id": "authority_b_unoq_stm32",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 42505
+              }
+            }
+          },
+          "{B, C}": {
+            "passed": true,
+            "voters": [
+              "authority_b_unoq_stm32",
+              "authority_c_laptop_x86"
+            ],
+            "applies": {
+              "B": {
+                "event": "auth_apply",
+                "node_id": "authority_b_unoq_stm32",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              },
+              "C": {
+                "event": "auth_apply",
+                "node_id": "authority_c_laptop_x86",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              }
+            },
+            "post_snapshots": {
+              "B": {
+                "event": "auth_snapshot",
+                "node_id": "authority_b_unoq_stm32",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 44005
+              },
+              "C": {
+                "event": "auth_snapshot",
+                "node_id": "authority_c_laptop_x86",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 3010
+              }
+            }
+          },
+          "{A, C}": {
+            "passed": true,
+            "voters": [
+              "authority_a_esp32",
+              "authority_c_laptop_x86"
+            ],
+            "applies": {
+              "A": {
+                "event": "auth_apply",
+                "node_id": "authority_a_esp32",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              },
+              "C": {
+                "event": "auth_apply",
+                "node_id": "authority_c_laptop_x86",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              }
+            },
+            "post_snapshots": {
+              "A": {
+                "event": "auth_snapshot",
+                "node_id": "authority_a_esp32",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 1051
+              },
+              "C": {
+                "event": "auth_snapshot",
+                "node_id": "authority_c_laptop_x86",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 3011
+              }
+            }
+          },
+          "{A, B, C}": {
+            "passed": true,
+            "voters": [
+              "authority_a_esp32",
+              "authority_b_unoq_stm32",
+              "authority_c_laptop_x86"
+            ],
+            "applies": {
+              "A": {
+                "event": "auth_apply",
+                "node_id": "authority_a_esp32",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              },
+              "B": {
+                "event": "auth_apply",
+                "node_id": "authority_b_unoq_stm32",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              },
+              "C": {
+                "event": "auth_apply",
+                "node_id": "authority_c_laptop_x86",
+                "applied": true,
+                "idempotent": false,
+                "reason": "APPLIED",
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "sequence": 1
+              }
+            },
+            "post_snapshots": {
+              "A": {
+                "event": "auth_snapshot",
+                "node_id": "authority_a_esp32",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 1068
+              },
+              "B": {
+                "event": "auth_snapshot",
+                "node_id": "authority_b_unoq_stm32",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 45505
+              },
+              "C": {
+                "event": "auth_snapshot",
+                "node_id": "authority_c_laptop_x86",
+                "mode": "ACTIVE",
+                "r0": 9,
+                "r1": 0,
+                "pc": 1,
+                "sequence": 1,
+                "halted": false,
+                "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+                "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+                "evidence_steps": 1,
+                "ruleset_version": "uow-authority-v1",
+                "local_clock": 3012
+              }
+            }
+          }
+        }
+      },
+      "GATE_4_NO_QUORUM_NO_COMMIT": {
+        "passed": true,
+        "details": {
+          "node_a_rejection": {
+            "event": "auth_apply",
+            "node_id": "authority_a_esp32",
+            "applied": false,
+            "idempotent": false,
+            "reason": "INSUFFICIENT_QUORUM"
+          },
+          "node_a_sequence_unmutated": true,
+          "node_c_rejection": {
+            "event": "auth_apply",
+            "node_id": "authority_c_laptop_x86",
+            "applied": false,
+            "idempotent": false,
+            "reason": "INSUFFICIENT_QUORUM"
+          },
+          "node_c_sequence_unmutated": true
+        }
+      },
+      "GATE_5_CONFLICTING_QUORUM_PREVENTION": {
+        "passed": true,
+        "details": {
+          "proposer_1_votes": [
+            "authority_a_esp32",
+            "authority_b_unoq_stm32"
+          ],
+          "proposer_2_vote_lock_rejection": {
+            "event": "auth_vote",
+            "node_id": "authority_a_esp32",
+            "accepted": false,
+            "reason": "CONFLICTING_VOTE_LOCK",
+            "proposal_hash": "0c6aeae86e597c9a66bd91df8da09344f1ff00eb9de7ca4d48003e6d009ed6a8",
+            "pre_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+            "proposed_state_hash": "57146a8b27c94bbf95b8f942d82c0c3f0e88bcd07158070f4e4fc53f3376015d",
+            "certificate_hash": "",
+            "pre_evidence_root": "0000000000000000000000000000000000000000000000000000000000000000",
+            "evidence_step": 0,
+            "ruleset_version": "uow-authority-v1",
+            "vote_hash": "f170d79d8d3d1daf994d4da371926b0e996a842e9e04ed343284b6b37ee0a49a",
+            "local_clock": 1119
+          },
+          "split_brain_prevented": true
+        }
+      },
+      "GATE_6_CROSS_ARCHITECTURE_STALE_CATCHUP": {
+        "passed": true,
+        "details": {
+          "node_b_rebuild": {
+            "event": "auth_rebuild",
+            "node_id": "authority_b_unoq_stm32",
+            "mode": "ACTIVE",
+            "r0": 9,
+            "r1": 0,
+            "pc": 1,
+            "sequence": 1,
+            "halted": false,
+            "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+            "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+            "evidence_steps": 1,
+            "ruleset_version": "uow-authority-v1",
+            "local_clock": 47005
+          },
+          "node_b_reconciled_sequence": 1,
+          "state_hash_parity": true,
+          "evidence_root_parity": true
+        }
+      },
+      "GATE_7_DIVERGENCE_QUARANTINE_RESILIENCE": {
+        "passed": true,
+        "details": {
+          "node_c_quarantined": true,
+          "evaluation_blocked_under_quarantine": true,
+          "cluster_majority_progress_maintained": true,
+          "authorized_rebuild_restoration": true
+        }
+      }
+    }
+  },
+  "gates": {
+    "GATE_1_HARDWARE_FAILURE_DOMAINS": {
+      "passed": true,
+      "details": {
+        "node_a": "authority_a_esp32",
+        "node_b": "authority_b_unoq_stm32",
+        "node_c": "authority_c_laptop_x86",
+        "node_b_mpu_transport": {
+          "adb_present": true,
+          "linux_mpu_detected": true,
+          "kernel_release": "7.0.0-g122c2c22d838",
+          "qualcomm_soc": "524",
+          "shared_failure_domain": true
+        },
+        "independent_failure_domains": 3,
+        "two_of_three_quorum_ready": true,
+        "isa_diversity": [
+          "Xtensa LX7",
+          "ARM Cortex-M33",
+          "x86-64"
+        ]
+      }
+    },
+    "GATE_2_THREE_WAY_DETERMINISTIC_AGREEMENT": {
+      "passed": true,
+      "details": {
+        "initial_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+        "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+        "node_a_cert_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+        "node_b_cert_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+        "node_c_cert_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+        "all_cert_hashes_identical": true,
+        "vote_hash_uniqueness": true
+      }
+    },
+    "GATE_3_ALL_QUORUM_PERMUTATIONS": {
+      "passed": true,
+      "details": {
+        "{A, B}": {
+          "passed": true,
+          "voters": [
+            "authority_a_esp32",
+            "authority_b_unoq_stm32"
+          ],
+          "applies": {
+            "A": {
+              "event": "auth_apply",
+              "node_id": "authority_a_esp32",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            },
+            "B": {
+              "event": "auth_apply",
+              "node_id": "authority_b_unoq_stm32",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            }
+          },
+          "post_snapshots": {
+            "A": {
+              "event": "auth_snapshot",
+              "node_id": "authority_a_esp32",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 1034
+            },
+            "B": {
+              "event": "auth_snapshot",
+              "node_id": "authority_b_unoq_stm32",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 42505
+            }
+          }
+        },
+        "{B, C}": {
+          "passed": true,
+          "voters": [
+            "authority_b_unoq_stm32",
+            "authority_c_laptop_x86"
+          ],
+          "applies": {
+            "B": {
+              "event": "auth_apply",
+              "node_id": "authority_b_unoq_stm32",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            },
+            "C": {
+              "event": "auth_apply",
+              "node_id": "authority_c_laptop_x86",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            }
+          },
+          "post_snapshots": {
+            "B": {
+              "event": "auth_snapshot",
+              "node_id": "authority_b_unoq_stm32",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 44005
+            },
+            "C": {
+              "event": "auth_snapshot",
+              "node_id": "authority_c_laptop_x86",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 3010
+            }
+          }
+        },
+        "{A, C}": {
+          "passed": true,
+          "voters": [
+            "authority_a_esp32",
+            "authority_c_laptop_x86"
+          ],
+          "applies": {
+            "A": {
+              "event": "auth_apply",
+              "node_id": "authority_a_esp32",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            },
+            "C": {
+              "event": "auth_apply",
+              "node_id": "authority_c_laptop_x86",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            }
+          },
+          "post_snapshots": {
+            "A": {
+              "event": "auth_snapshot",
+              "node_id": "authority_a_esp32",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 1051
+            },
+            "C": {
+              "event": "auth_snapshot",
+              "node_id": "authority_c_laptop_x86",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 3011
+            }
+          }
+        },
+        "{A, B, C}": {
+          "passed": true,
+          "voters": [
+            "authority_a_esp32",
+            "authority_b_unoq_stm32",
+            "authority_c_laptop_x86"
+          ],
+          "applies": {
+            "A": {
+              "event": "auth_apply",
+              "node_id": "authority_a_esp32",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            },
+            "B": {
+              "event": "auth_apply",
+              "node_id": "authority_b_unoq_stm32",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            },
+            "C": {
+              "event": "auth_apply",
+              "node_id": "authority_c_laptop_x86",
+              "applied": true,
+              "idempotent": false,
+              "reason": "APPLIED",
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "sequence": 1
+            }
+          },
+          "post_snapshots": {
+            "A": {
+              "event": "auth_snapshot",
+              "node_id": "authority_a_esp32",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 1068
+            },
+            "B": {
+              "event": "auth_snapshot",
+              "node_id": "authority_b_unoq_stm32",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 45505
+            },
+            "C": {
+              "event": "auth_snapshot",
+              "node_id": "authority_c_laptop_x86",
+              "mode": "ACTIVE",
+              "r0": 9,
+              "r1": 0,
+              "pc": 1,
+              "sequence": 1,
+              "halted": false,
+              "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+              "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+              "evidence_steps": 1,
+              "ruleset_version": "uow-authority-v1",
+              "local_clock": 3012
+            }
+          }
+        }
+      }
+    },
+    "GATE_4_NO_QUORUM_NO_COMMIT": {
+      "passed": true,
+      "details": {
+        "node_a_rejection": {
+          "event": "auth_apply",
+          "node_id": "authority_a_esp32",
+          "applied": false,
+          "idempotent": false,
+          "reason": "INSUFFICIENT_QUORUM"
+        },
+        "node_a_sequence_unmutated": true,
+        "node_c_rejection": {
+          "event": "auth_apply",
+          "node_id": "authority_c_laptop_x86",
+          "applied": false,
+          "idempotent": false,
+          "reason": "INSUFFICIENT_QUORUM"
+        },
+        "node_c_sequence_unmutated": true
+      }
+    },
+    "GATE_5_CONFLICTING_QUORUM_PREVENTION": {
+      "passed": true,
+      "details": {
+        "proposer_1_votes": [
+          "authority_a_esp32",
+          "authority_b_unoq_stm32"
+        ],
+        "proposer_2_vote_lock_rejection": {
+          "event": "auth_vote",
+          "node_id": "authority_a_esp32",
+          "accepted": false,
+          "reason": "CONFLICTING_VOTE_LOCK",
+          "proposal_hash": "0c6aeae86e597c9a66bd91df8da09344f1ff00eb9de7ca4d48003e6d009ed6a8",
+          "pre_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+          "proposed_state_hash": "57146a8b27c94bbf95b8f942d82c0c3f0e88bcd07158070f4e4fc53f3376015d",
+          "certificate_hash": "",
+          "pre_evidence_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence_step": 0,
+          "ruleset_version": "uow-authority-v1",
+          "vote_hash": "f170d79d8d3d1daf994d4da371926b0e996a842e9e04ed343284b6b37ee0a49a",
+          "local_clock": 1119
+        },
+        "split_brain_prevented": true
+      }
+    },
+    "GATE_6_CROSS_ARCHITECTURE_STALE_CATCHUP": {
+      "passed": true,
+      "details": {
+        "node_b_rebuild": {
+          "event": "auth_rebuild",
+          "node_id": "authority_b_unoq_stm32",
+          "mode": "ACTIVE",
+          "r0": 9,
+          "r1": 0,
+          "pc": 1,
+          "sequence": 1,
+          "halted": false,
+          "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+          "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+          "evidence_steps": 1,
+          "ruleset_version": "uow-authority-v1",
+          "local_clock": 47005
+        },
+        "node_b_reconciled_sequence": 1,
+        "state_hash_parity": true,
+        "evidence_root_parity": true
+      }
+    },
+    "GATE_7_DIVERGENCE_QUARANTINE_RESILIENCE": {
+      "passed": true,
+      "details": {
+        "node_c_quarantined": true,
+        "evaluation_blocked_under_quarantine": true,
+        "cluster_majority_progress_maintained": true,
+        "authorized_rebuild_restoration": true
+      }
+    }
+  },
+  "evidence_context": {
+    "level": "physical",
+    "source": "tri_heterogeneous_physical_cluster",
+    "actual_components": {
+      "authority_a_esp32": "ESP32-S3 (Xtensa Dual-Core) on COM10",
+      "authority_b_unoq_stm32": "Arduino UNO Q STM32U585 (ARM Cortex-M33) on COM5",
+      "authority_c_laptop_x86": "Laptop Host CPU (x86-64 standalone process on 127.0.0.1:9527)"
+    },
+    "substitutions": {}
+  },
+  "timestamp": "2026-09-23T06:24:54Z"
+}

@@ -1,0 +1,315 @@
+{
+  "claim_result": {
+    "observed_pass": true,
+    "qualified": true,
+    "passed": true,
+    "evidence_level": "physical",
+    "required_evidence_level": "physical",
+    "required_components": [
+      "authority_a_esp32",
+      "authority_b_unoq_stm32"
+    ],
+    "claim_id": "DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL",
+    "statement": "Heterogeneous physical authorities (ESP32-S3 and Arduino UNO Q STM32) deterministically agree on state transitions, piecewise QC application, and divergence quarantine across independent failure domains.",
+    "gates": {
+      "GATE_1_HARDWARE_FAILURE_DOMAIN": {
+        "passed": true,
+        "details": {
+          "node_a": "authority_a_esp32",
+          "node_b": "authority_b_unoq_stm32",
+          "node_b_mpu_transport": {
+            "adb_present": true,
+            "linux_mpu_detected": true,
+            "kernel_release": "7.0.0-g122c2c22d838",
+            "qualcomm_soc": "524",
+            "shared_failure_domain": true
+          },
+          "failure_domain_invariant": "processors != independent authority nodes",
+          "failure_domain_enforced": true,
+          "physical_authority_nodes": 2,
+          "authority_a_arch": "Xtensa LX7 Dual-Core (ESP32-S3)",
+          "authority_b_arch": "ARM Cortex-M33 (STM32U585) + Qualcomm Dragonwing QRB2210 (MPU)"
+        }
+      },
+      "GATE_2_DETERMINISTIC_AGREEMENT": {
+        "passed": true,
+        "details": {
+          "initial_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+          "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+          "node_a_vote": {
+            "event": "auth_vote",
+            "node_id": "authority_a_esp32",
+            "accepted": true,
+            "reason": null,
+            "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+            "pre_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+            "proposed_state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+            "certificate_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+            "pre_evidence_root": "0000000000000000000000000000000000000000000000000000000000000000",
+            "evidence_step": 0,
+            "ruleset_version": "uow-authority-v1",
+            "vote_hash": "350ed46aa93de432c617b4538ca3302e8f8b45f3dd2d95f7cd570df7ec1065a7",
+            "local_clock": 1017
+          },
+          "node_b_vote": {
+            "event": "auth_vote",
+            "node_id": "authority_b_unoq_stm32",
+            "accepted": true,
+            "reason": null,
+            "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+            "pre_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+            "proposed_state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+            "certificate_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+            "pre_evidence_root": "0000000000000000000000000000000000000000000000000000000000000000",
+            "evidence_step": 0,
+            "ruleset_version": "uow-authority-v1",
+            "vote_hash": "cb360db0c6dcc41da5e75f9ccc4e261e363341d11bd776b363ed521fe979cab7",
+            "local_clock": 20005
+          },
+          "certificate_hash_match": true,
+          "proposed_state_hash_match": true
+        }
+      },
+      "GATE_3_NEGATIVE_CONTROLS": {
+        "passed": true,
+        "details": {
+          "stale_pre_state_rejected": true,
+          "illegal_state_rejected": true,
+          "conflicting_vote_lock_enforced": true,
+          "non_equivocation_proven": true
+        }
+      },
+      "GATE_4_CLOCK_INDEPENDENCE": {
+        "passed": true,
+        "details": {
+          "node_a_clock": 1585,
+          "node_b_clock": 27505,
+          "clocks_differ": true,
+          "certificate_hash_invariance": true
+        }
+      },
+      "GATE_5_PIECEWISE_QC_APPLICATION": {
+        "passed": true,
+        "details": {
+          "qc_hash": "d9fe14d6c556044f8d003809afa21fe8d124a179a21e919cf2a5cb4b5eeafbfc",
+          "node_a_apply": {
+            "event": "auth_apply",
+            "node_id": "authority_a_esp32",
+            "applied": true,
+            "idempotent": false,
+            "reason": "APPLIED",
+            "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+            "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+            "sequence": 1
+          },
+          "node_b_apply": {
+            "event": "auth_apply",
+            "node_id": "authority_b_unoq_stm32",
+            "applied": true,
+            "idempotent": false,
+            "reason": "APPLIED",
+            "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+            "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+            "sequence": 1
+          },
+          "sequence_advanced": true,
+          "state_hash_parity": true,
+          "evidence_root_parity": true,
+          "idempotency_verified": true
+        }
+      },
+      "GATE_6_STALE_REPLICA_CATCHUP": {
+        "passed": true,
+        "details": {
+          "node_b_rebuild_response": {
+            "event": "auth_rebuild",
+            "node_id": "authority_b_unoq_stm32",
+            "mode": "ACTIVE",
+            "r0": 9,
+            "r1": 0,
+            "pc": 1,
+            "sequence": 1,
+            "halted": false,
+            "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+            "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+            "evidence_steps": 1,
+            "ruleset_version": "uow-authority-v1",
+            "local_clock": 29005
+          },
+          "node_a_sequence": 1,
+          "node_b_post_sequence": 1,
+          "state_hashes_reconciled": true
+        }
+      },
+      "GATE_7_DIVERGENCE_QUARANTINE": {
+        "passed": true,
+        "details": {
+          "quarantine_command_ack": {
+            "event": "auth_quarantine",
+            "node_id": "authority_b_unoq_stm32",
+            "mode": "QUARANTINED"
+          },
+          "node_in_quarantine": true,
+          "evaluation_blocked_under_quarantine": true,
+          "rejection_reason": "NODE_QUARANTINED",
+          "authorized_rebuild_restored_active": true
+        }
+      }
+    }
+  },
+  "gates": {
+    "GATE_1_HARDWARE_FAILURE_DOMAIN": {
+      "passed": true,
+      "details": {
+        "node_a": "authority_a_esp32",
+        "node_b": "authority_b_unoq_stm32",
+        "node_b_mpu_transport": {
+          "adb_present": true,
+          "linux_mpu_detected": true,
+          "kernel_release": "7.0.0-g122c2c22d838",
+          "qualcomm_soc": "524",
+          "shared_failure_domain": true
+        },
+        "failure_domain_invariant": "processors != independent authority nodes",
+        "failure_domain_enforced": true,
+        "physical_authority_nodes": 2,
+        "authority_a_arch": "Xtensa LX7 Dual-Core (ESP32-S3)",
+        "authority_b_arch": "ARM Cortex-M33 (STM32U585) + Qualcomm Dragonwing QRB2210 (MPU)"
+      }
+    },
+    "GATE_2_DETERMINISTIC_AGREEMENT": {
+      "passed": true,
+      "details": {
+        "initial_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+        "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+        "node_a_vote": {
+          "event": "auth_vote",
+          "node_id": "authority_a_esp32",
+          "accepted": true,
+          "reason": null,
+          "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+          "pre_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+          "proposed_state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+          "certificate_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+          "pre_evidence_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence_step": 0,
+          "ruleset_version": "uow-authority-v1",
+          "vote_hash": "350ed46aa93de432c617b4538ca3302e8f8b45f3dd2d95f7cd570df7ec1065a7",
+          "local_clock": 1017
+        },
+        "node_b_vote": {
+          "event": "auth_vote",
+          "node_id": "authority_b_unoq_stm32",
+          "accepted": true,
+          "reason": null,
+          "proposal_hash": "22e45df57ab8474cab2db657819f885aac65321b162012743e2f04252a352875",
+          "pre_state_hash": "00de5e736c29232a61a1482e3b18dedec6965b9207e490e09980ce5505adaba6",
+          "proposed_state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+          "certificate_hash": "6dea189d57e486b6786cd035a426c47d599a132e70d03d70a517566cb57a646c",
+          "pre_evidence_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "evidence_step": 0,
+          "ruleset_version": "uow-authority-v1",
+          "vote_hash": "cb360db0c6dcc41da5e75f9ccc4e261e363341d11bd776b363ed521fe979cab7",
+          "local_clock": 20005
+        },
+        "certificate_hash_match": true,
+        "proposed_state_hash_match": true
+      }
+    },
+    "GATE_3_NEGATIVE_CONTROLS": {
+      "passed": true,
+      "details": {
+        "stale_pre_state_rejected": true,
+        "illegal_state_rejected": true,
+        "conflicting_vote_lock_enforced": true,
+        "non_equivocation_proven": true
+      }
+    },
+    "GATE_4_CLOCK_INDEPENDENCE": {
+      "passed": true,
+      "details": {
+        "node_a_clock": 1585,
+        "node_b_clock": 27505,
+        "clocks_differ": true,
+        "certificate_hash_invariance": true
+      }
+    },
+    "GATE_5_PIECEWISE_QC_APPLICATION": {
+      "passed": true,
+      "details": {
+        "qc_hash": "d9fe14d6c556044f8d003809afa21fe8d124a179a21e919cf2a5cb4b5eeafbfc",
+        "node_a_apply": {
+          "event": "auth_apply",
+          "node_id": "authority_a_esp32",
+          "applied": true,
+          "idempotent": false,
+          "reason": "APPLIED",
+          "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+          "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+          "sequence": 1
+        },
+        "node_b_apply": {
+          "event": "auth_apply",
+          "node_id": "authority_b_unoq_stm32",
+          "applied": true,
+          "idempotent": false,
+          "reason": "APPLIED",
+          "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+          "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+          "sequence": 1
+        },
+        "sequence_advanced": true,
+        "state_hash_parity": true,
+        "evidence_root_parity": true,
+        "idempotency_verified": true
+      }
+    },
+    "GATE_6_STALE_REPLICA_CATCHUP": {
+      "passed": true,
+      "details": {
+        "node_b_rebuild_response": {
+          "event": "auth_rebuild",
+          "node_id": "authority_b_unoq_stm32",
+          "mode": "ACTIVE",
+          "r0": 9,
+          "r1": 0,
+          "pc": 1,
+          "sequence": 1,
+          "halted": false,
+          "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
+          "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
+          "evidence_steps": 1,
+          "ruleset_version": "uow-authority-v1",
+          "local_clock": 29005
+        },
+        "node_a_sequence": 1,
+        "node_b_post_sequence": 1,
+        "state_hashes_reconciled": true
+      }
+    },
+    "GATE_7_DIVERGENCE_QUARANTINE": {
+      "passed": true,
+      "details": {
+        "quarantine_command_ack": {
+          "event": "auth_quarantine",
+          "node_id": "authority_b_unoq_stm32",
+          "mode": "QUARANTINED"
+        },
+        "node_in_quarantine": true,
+        "evaluation_blocked_under_quarantine": true,
+        "rejection_reason": "NODE_QUARANTINED",
+        "authorized_rebuild_restored_active": true
+      }
+    }
+  },
+  "evidence_context": {
+    "level": "physical",
+    "source": "physical_serial_endpoints",
+    "actual_components": {
+      "authority_a_esp32": "ESP32-S3 (Xtensa Dual-Core) on COM10",
+      "authority_b_unoq_stm32": "Arduino UNO Q STM32U585 (ARM Cortex-M33) on COM5"
+    },
+    "substitutions": {}
+  },
+  "timestamp": "2026-09-23T06:09:22Z"
+}

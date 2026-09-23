@@ -23,3 +23,6 @@ jobs:
         run: python -m pytest -q
       - name: Acceptance smoke
         run: python qualification/uow_system_acceptance.py --step-programs 2 --steps-per-program 2 --terminating-runs 2 --timing-seeds 10 --output /tmp/uow_acceptance_smoke.txt
+      - name: Distributed authority campaign (D1)
+        run: python -m qualification.distributed_authority.campaign
+

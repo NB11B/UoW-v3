@@ -1,0 +1,87 @@
+{
+  "schema_version": "uow-npu-hot-swap-qualification-v1.0",
+  "timestamp": "2026-09-23T16:08:57.232086+00:00",
+  "hardware": {
+    "npu_inference": "Intel(R) AI Boost",
+    "gpu_training": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "host_os": "Windows (OpenVINO + Level-Zero VCL)"
+  },
+  "generations": [
+    {
+      "generation": 0,
+      "artifact_hash": "14ce54ac43f70618c6e2f3257234957b2cdee44e7e48e82fd061721f9a6831f7",
+      "identity_hash": "aceae0d97f86132a99ba43fc1f7d7b026a752aa4a670003a8d481ec9457d2644",
+      "parent_model_hash": null
+    },
+    {
+      "generation": 1,
+      "artifact_hash": "14ce54ac43f70618c6e2f3257234957b2cdee44e7e48e82fd061721f9a6831f7",
+      "identity_hash": "ce5fc1060dd9792ed4c4b5677461973037220b46d4b43166ec8da868a1d9803b",
+      "parent_model_hash": "aceae0d97f86132a99ba43fc1f7d7b026a752aa4a670003a8d481ec9457d2644"
+    },
+    {
+      "generation": 2,
+      "artifact_hash": "68be98d9b4ac4865320f1c6dab839f26e20fb21e4be9ec1526a66695ca49d71e",
+      "identity_hash": "a8bebf75ce105fba8db13c77658d0a1e5c8eb1aa757eb7bbf4e0e5bbab2d49f6",
+      "parent_model_hash": "ce5fc1060dd9792ed4c4b5677461973037220b46d4b43166ec8da868a1d9803b"
+    },
+    {
+      "generation": 3,
+      "artifact_hash": "552b6df2a1078f954f58157efcb8e690a5c4e044207e23063010bf1c16b40f3a",
+      "identity_hash": "66f4a72b96f4f0b8b8db264c940ec1be3d7ee3c254faaff3fa28d240f5f275dd",
+      "parent_model_hash": "a8bebf75ce105fba8db13c77658d0a1e5c8eb1aa757eb7bbf4e0e5bbab2d49f6"
+    }
+  ],
+  "hot_swap_events": [
+    {
+      "from_generation": 0,
+      "to_generation": 1,
+      "stage_latency_ms": 118.23,
+      "swap_latency_us": 2434.4,
+      "target_device": "NPU"
+    },
+    {
+      "from_generation": 1,
+      "to_generation": 2,
+      "stage_latency_ms": 1037.83,
+      "swap_latency_us": 986.9,
+      "target_device": "NPU"
+    },
+    {
+      "from_generation": 2,
+      "to_generation": 3,
+      "stage_latency_ms": 186.54,
+      "swap_latency_us": 822.5,
+      "target_device": "NPU"
+    }
+  ],
+  "containment_matrix": {
+    "staged_health_check_rejection": true,
+    "active_inference_isolation": true,
+    "atomic_rollback_verified": true,
+    "cold_restart_recovery_verified": true,
+    "wrong_authoritative_commits": 0
+  },
+  "claims": {
+    "U15.NPU_HOT_SWAP.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": []
+    },
+    "U15.NPU_HOT_SWAP.PHYSICAL": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "physical",
+      "required_evidence_level": "physical",
+      "required_components": [
+        "authority",
+        "npu"
+      ]
+    }
+  },
+  "passed": true
+}

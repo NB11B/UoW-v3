@@ -1,4 +1,4 @@
-schema_version: "0.3"
+schema_version: "0.4"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-only
@@ -25,13 +25,14 @@ r1_artifacts:
   experiment_manifests: COMPLETE_INITIAL
   claim_traceability: COMPLETE_CURRENT_REGISTRY
   module_semantic_map: COMPLETE_MODULE_LEVEL
+  symbol_level_machine_map: COMPLETE_INITIAL
+  p4_candidate_register: COMPLETE_INITIAL
   closure_falsification_matrix: COMPLETE_INITIAL
   requirement_capability_matrix: COMPLETE_INITIAL
   archive_file_disposition: COMPLETE_INITIAL
   closure_shadow_vectors: COMPLETE_DESIGN
   requirement_capability_shadow_vectors: COMPLETE_DESIGN
   cross_language_inventory: COMPLETE_INITIAL
-  symbol_level_machine_map: NOT_STARTED
 
 known_preservation_gaps:
   - U14-B goal-driven graph synthesis has no located canonical main implementation
@@ -50,8 +51,8 @@ retained_archive_realizations:
   - archive/orchestrator/qualification/logistics/logistics_proposer.py
 
 next_mapping_targets:
-  - refine module map to symbol-level machine-readable entries
-  - inventory actual import/call consumers for candidate P4 items
+  - validate symbol map against package export surfaces and integrations
+  - validate experiment-manifest coverage against archived tests one-by-one
+  - prepare R1 exit checklist
   - define language-neutral schema candidates without modifying runtime
-  - validate manifest coverage against all registered claims and archived tests
-  - prepare R1 exit checklist before beginning R2
+  - begin only after R1 exit: R2 specification drafts

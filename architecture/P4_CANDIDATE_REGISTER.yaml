@@ -1,0 +1,61 @@
+schema_version: "0.1"
+purpose: prevent premature deletion of apparently redundant code
+
+candidates:
+  - path: src/uow/proposer/learned.py
+    classification: P4_CANDIDATE_BLOCKED
+    observation: >
+      The file is a backwards-compatible alias surface rather than an independent
+      learned implementation.
+    current_consumers:
+      - src/uow/proposer/__init__.py
+      - src/uow/__init__.py
+      - tests/test_proposer.py
+    exported_symbols:
+      - TFWRProposer
+      - HeuristicSchedulingProposer
+      - ReferenceSchedulingProposer
+    blocking_reasons:
+      - public/package compatibility behavior exists
+      - tests reference aliases
+      - archive/current import compatibility has not been reconstructed
+    reduction_requirement:
+      - prove no supported external API depends on aliases, or preserve aliases in new organization
+
+  - pattern: repeated canonical_json helpers
+    classification: CONSOLIDATION_CANDIDATE_NOT_DELETION
+    observation: >
+      Canonicalization logic is repeated across state/composition/proposer/effect modules.
+      This may indicate a common semantic primitive, but authority-bearing payload schemas differ.
+    blocking_reasons:
+      - byte/hash identity may be evidence-bearing
+      - changing canonicalization can invalidate historical artifacts and physical claims
+      - cross-language canonical-byte requirements are not yet defined
+    reduction_requirement:
+      - preserve old hash semantics or explicitly version canonical schemas
+      - rerun any claim whose wire/hash semantics materially change
+
+  - pattern: repeated compute_hash/calculate_hash methods
+    classification: CONSOLIDATION_CANDIDATE_NOT_DELETION
+    observation: >
+      Identity construction is structurally repeated but binds different semantic payloads.
+    blocking_reasons:
+      - semantic identity fields differ by object type
+      - generic hash base class could conceal omission of authority-bearing fields
+    reduction_requirement:
+      - language-neutral typed identity schema with negative controls for omitted/tampered fields
+
+  - pattern: to_dict/from_dict repetition
+    classification: SCHEMA_GENERATION_CANDIDATE
+    observation: >
+      Repeated serialization boilerplate may be generated from language-neutral schemas.
+    blocking_reasons:
+      - backward compatibility
+      - evidence artifacts and wire formats
+    reduction_requirement:
+      - round-trip conformance and historical artifact readability
+
+rules:
+  - candidate status does not authorize code deletion
+  - consumer scan must include repository, archive, integrations, and declared public API
+  - evidence-bearing identity changes require new qualification

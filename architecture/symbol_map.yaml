@@ -1,0 +1,258 @@
+schema_version: "0.1"
+baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+scope: public-and-architecturally-significant symbols under src/uow
+
+modules:
+  src/uow/ontology.py:
+    concept: semantic_ontology
+    symbols: [WorkCategory, MatrixCell, ALL_MATRIX_CELLS]
+    experiments: [U1-U10, U11, U13, U14-B, Q1]
+
+  src/uow/state.py:
+    concept: authoritative_state_and_canonical_identity
+    symbols: [WorldState, canonical_json]
+    methods: [calculate_hash, get, require, with_attribute, without_attribute, with_cursor, with_status, advance_sequence, to_dict]
+    experiments: [U1-U10, U11, U12, U13, U14, Q1, TIMING, U15]
+
+  src/uow/contracts.py:
+    concept: native_work_transition_algebra
+    symbols: [LifecyclePhase, Header, Lifecycle, Realization, Boundary, EvidenceSpec, Timing, GuardOp, Guard, MutationOp, Mutation, SuccessorKind, Successor, Route, Contract, UoW, make_uow]
+    experiments: [U1-U10, U11, U12, U13, U14, Q1]
+
+  src/uow/engine.py:
+    concept: core_authority_loop
+    symbols: [Proposal, CertificateResult, EvidenceRecord, EvidenceLedger, validate_graph, propose, certify, commit, execute_one, run]
+    experiments: [U1-U10, U11, U12, U13, U14, Q1, U15]
+
+  src/uow/transactions/descriptor.py:
+    concept: transaction_footprint
+    symbols: [TransactionDescriptor, infer_footprint, create_transaction_descriptor]
+    experiments: [U12, U13, U14, Q1]
+
+  src/uow/transactions/occ.py:
+    concept: concurrency_conformance
+    symbols: [HazardType, TransactionConflictError, validate_occ, apply_transaction]
+    experiments: [U12, U13, U14, Q1]
+
+  src/uow/transactions/sequencer.py:
+    concept: authoritative_commit_realizations
+    symbols: [verify_commit_bindings, CommitSequencer, DeterministicSequencer, WALSequencer]
+    methods: [commit, recover]
+    experiments: [U12, U13, U14, Q1, U15]
+
+  src/uow/orchestration/state.py:
+    concept: orchestration_state_projection
+    symbols: [OrchestrationState, create_initial_orchestration_state]
+    methods: [get_ready_tasks, ready_frontier, is_queue_empty, is_deadlocked, dispatch_tasks, complete_task, enqueue_tasks]
+    experiments: [U11, U12, U13, U14]
+
+  src/uow/orchestration/materialization.py:
+    concept: uow_closure_materialization
+    symbols: [MaterializedUoW, UoWMaterializer, canonical_uow_payload, uow_fingerprint, bind_materialization, certify_materialization]
+    experiments: [U11, U13, U14]
+
+  src/uow/orchestration/scheduler.py:
+    concept: self_hosted_scheduler_realization
+    symbols: [SchedulerMaterializer, CompletionMaterializer, make_domain_task, evaluate_scheduler_step]
+    experiments: [U11, U12, U13, U14]
+
+  src/uow/orchestration/runtime.py:
+    concept: orchestration_execution_composition
+    symbols: [execute_materialized, execute_domain_task, run_orchestration]
+    experiments: [U11, U12, U13]
+
+  src/uow/resources/requirement.py:
+    concept: resource_requirement
+    symbols: [ResourceRequirement, ResourceBoundTask, verify_requirement_binding, make_resource_domain_task]
+    experiments: [U13, U14, U15]
+
+  src/uow/resources/state.py:
+    concept: resource_capability_state
+    symbols: [ResourceLease, ResourceState, get_authoritative_resource_state, set_authoritative_resource_state]
+    methods: [available, can_accommodate, acquire_lease, release_lease, record_starvation, get_starving_tasks]
+    experiments: [U13, U14, U15]
+
+  src/uow/resources/policies.py:
+    concept: scheduling_proposal_realizations
+    symbols: [BaseSchedulingPolicy, FIFOSchedulingPolicy, GreedyCapacitySchedulingPolicy, PriorityDeadlineSchedulingPolicy, CostEnergySchedulingPolicy, filter_feasible_candidates]
+    experiments: [U13, U14, A2.8]
+
+  src/uow/resources/runtime.py:
+    concept: resource_aware_closure
+    symbols: [ResourceAwareSchedulerMaterializer, ResourceAwareCompletionMaterializer, run_resource_orchestration]
+    experiments: [U13, U14]
+
+  src/uow/effects/descriptor.py:
+    concept: external_effect_contract
+    symbols: [EffectStatus, LEGAL_EFFECT_TRANSITIONS, CompensationSpec, EffectReceipt, EffectDescriptor, compute_idempotency_key, create_effect_descriptor]
+    experiments: [Q1]
+
+  src/uow/effects/certification.py:
+    concept: external_effect_conformance
+    symbols: [ReceiptAuthenticator, PrefixReceiptAuthenticator, HMACReceiptAuthenticator, verify_effect_intent_binding, verify_effect_receipt_binding]
+    experiments: [Q1]
+
+  src/uow/effects/runner.py:
+    concept: external_effect_realization
+    symbols: [ExternalClientProtocol, MockExternalClient, EffectRunner, get_effects_map]
+    methods: [commit_intent, suspend_pending_external, commit_receipt, execute_effect]
+    experiments: [Q1]
+
+  src/uow/effects/saga.py:
+    concept: compensation_failure_semantics
+    symbols: [SagaStatus, SagaRecord, SagaCompensationError, SagaStep, SagaCoordinator, get_sagas_map]
+    methods: [execute_saga, compensate]
+    experiments: [Q1]
+
+  src/uow/proposer/base.py:
+    concept: zero_authority_proposal_protocol
+    symbols: [BaseProposer, AdaptiveProposer]
+    methods: [propose, model_identity, observe_feedback, update]
+    experiments: [U14, U15]
+
+  src/uow/proposer/types.py:
+    concept: proposal_and_certificate_envelopes
+    symbols: [ModelProposal, ProposalCertificate, TelemetryRecord]
+    experiments: [U14, U15]
+
+  src/uow/proposer/judge.py:
+    concept: proposal_conformance
+    symbols: [certify_proposal]
+    experiments: [U14, U15]
+
+  src/uow/proposer/heuristic.py:
+    concept: heuristic_proposal_realization
+    symbols: [HeuristicSchedulingProposer, ReferenceSchedulingProposer]
+    experiments: [U14, U15]
+
+  src/uow/proposer/stochastic.py:
+    concept: stochastic_falsification_realization
+    symbols: [RandomProposer]
+    experiments: [U14]
+
+  src/uow/proposer/adaptive.py:
+    concept: portable_adaptive_realization
+    symbols: [PortableAdaptiveProposer]
+    methods: [score_candidate, propose, observe_feedback, update, model_identity]
+    experiments: [U15]
+
+  src/uow/proposer/identity.py:
+    concept: model_lineage
+    symbols: [ModelIdentity]
+    methods: [calculate_hash, child_identity, to_dict, from_dict]
+    experiments: [U15]
+
+  src/uow/proposer/observation.py:
+    concept: certified_adaptation_feedback
+    symbols: [AdaptationObservation, create_adaptation_observation, validate_observation_integrity]
+    experiments: [U15]
+
+  src/uow/proposer/fallback.py:
+    concept: deterministic_liveness_fallback
+    symbols: [DeterministicFallbackScheduler]
+    experiments: [U14, U15]
+
+  src/uow/proposer/engine.py:
+    concept: proposer_authority_composition
+    symbols: [ProposerOrchestrationEngine, run_proposer_orchestration]
+    methods: [certify_proposal, run_dag]
+    experiments: [U14, U15]
+
+  src/uow/proposer/quorum_sequencer.py:
+    concept: distributed_quorum_commit_realization
+    symbols: [QuorumCommitError, QuorumCommitSequencer]
+    methods: [is_converged, commit]
+    experiments: [U15, DIST-AUTH]
+    architecture_note: imports qualification.distributed_authority.authority
+
+  src/uow/proposer/learned.py:
+    concept: compatibility_alias_surface
+    symbols: [TFWRProposer, HeuristicSchedulingProposer, ReferenceSchedulingProposer]
+    experiments: [U14]
+    note: no independent implementation; retained pending compatibility/import reconstruction
+
+  src/uow/composition/contract.py:
+    concept: parent_semantic_requirement_contract
+    symbols: [FailureSemantics, CausalConstraint, AuthorityObligation, EvidenceObligation, TemporalConstraint, ResourceConstraint, ParentContract]
+    experiments: [A2.0, A2.1, A2.2, A2.3, A2.4, A2.5, A2.6, A2.7, A2.8]
+
+  src/uow/composition/graph.py:
+    concept: realization_topology
+    symbols: [RealizationNode, RealizationGraph]
+    methods: [compute_hash, validate_acyclic, topological_sort, is_reachable, get_nodes_by_role, roles_causally_ordered, critical_path_duration_ms, total_cost_units, peak_resource_demands]
+    experiments: [A2.0, A2.1, A2.2, A2.3, A2.4, A2.5, A2.6, A2.7, A2.8]
+
+  src/uow/composition/projection.py:
+    concept: semantic_projection_conformance
+    symbols: [SemanticProjection, project_semantics, check_conformance, are_equivalent]
+    experiments: [A2.0, A2.1, A2.7, A2.8]
+
+  src/uow/composition/actor.py:
+    concept: actor_capability_ontology
+    symbols: [AuthorityClass, ActorDescriptor, ActorRegistry]
+    methods: [find_capable_actors, update_status]
+    experiments: [A2.2, A2.3, A2.4, A2.7, A2.8]
+
+  src/uow/composition/binding.py:
+    concept: realization_actor_binding
+    symbols: [ActorBinding, validate_binding]
+    experiments: [A2.2, A2.3, A2.7, A2.8]
+
+  src/uow/composition/substitution.py:
+    concept: certified_realization_replacement
+    symbols: [SubstitutionStrategy, SubstitutionDecision, GraphReplacementProposal, GraphReplacementCertificate, CompositionCertifier]
+    experiments: [A2.1, A2.2, A2.3, A2.8]
+
+  src/uow/composition/policy.py:
+    concept: adaptive_realization_proposal
+    symbols: [CompositionRuntimeState, GraphAdaptationObservation, AdaptiveGraphProposer]
+    methods: [find_feasible_binding, evaluate_score, propose_realization, adapt]
+    experiments: [A2.2, A2.3, A2.8]
+
+  src/uow/composition/fabric.py:
+    concept: distributed_actor_discovery_and_leases
+    symbols: [AgentMessageKind, AgentMessage, ActorLease, NetworkAgent, DistributedActorFabric]
+    methods: [register_trusted_authority, register_agent, handle_heartbeat, handle_message, reap_expired_leases, get_valid_lease, qualify_actor]
+    experiments: [A2.3, A2.4, A2.5]
+
+  src/uow/composition/delegation.py:
+    concept: recursive_delegation_and_authority_attenuation
+    symbols: [AuthorityPermission, AuthorityScope, DelegationCertificate, DelegationResult, ChildUoWSpec, DistributedDelegationNode, validate_delegation]
+    methods: [issue_certificate, dispatch_delegation, receive_child_result, handle_delegate_failure, assemble_results]
+    experiments: [A2.4, A2.5, A2.6]
+
+  src/uow/composition/convergence.py:
+    concept: distributed_authoritative_history
+    symbols: [HistoryEntryKind, HistoryEntry, AuthoritativeHistory, MultiOrchestratorCluster]
+    methods: [append, verify_integrity, state_digest, partition_network, heal_partition, has_authority_quorum, propose_operation, reconcile_to_canonical]
+    experiments: [A2.5, A2.6, A2.7, A2.8]
+
+  src/uow/composition/wire.py:
+    concept: authenticated_transport_realization
+    symbols: [WireEnvelope, AdversarialChannel, sign_envelope, verify_envelope]
+    methods: [set_asymmetric_drop, transmit, flush_reorder_buffer]
+    experiments: [A2.6, A2.7]
+
+  src/uow/composition/host_node.py:
+    concept: independent_host_durability_realization
+    symbols: [DurableWAL, PhysicalHostNode]
+    methods: [append, replay, startup, crash, restart, receive_wire_envelope, commit_entry_durably, catch_up_from, apply_mutation_qc]
+    experiments: [A2.6, A2.7, A2.8]
+
+  src/uow/composition/mutation.py:
+    concept: quorum_governed_runtime_meta_mutation
+    symbols: [RuntimeMutationProposal, AuthorityMutationVote, RuntimeMutationQC, QuorumMutationCoordinator, sign_mutation_vote, verify_mutation_vote, assemble_mutation_qc, verify_mutation_qc]
+    methods: [propose_mutation, collect_votes, apply_mutation]
+    experiments: [A2.7, A2.8]
+
+  src/uow/composition/runtime.py:
+    concept: adaptive_composition_runtime
+    symbols: [NodeExecutionResult, ExecutionRecord, AdaptiveCompositionRuntime]
+    methods: [get_runtime_state, rebind_active_graph, propose_and_certify, fallback_to_baseline, execute]
+    experiments: [A2.1, A2.2, A2.3]
+
+  src/uow/composition/endurance.py:
+    concept: adaptive_endurance_and_scientific_controls
+    symbols: [EnvironmentalState, ContinuousPerturbationTrace, RuntimeObjectiveFunction, AntiThrashingHysteresis, LineageEdge, TopologyLineage, ObservationPoisoningEngine, FixedBaselineRuntime, RuleBasedRuntime, EnduranceAdaptiveRuntime]
+    methods: [evaluate, should_propose, record_mutation, poison_observations, execute_step]
+    experiments: [A2.8]

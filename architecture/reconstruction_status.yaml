@@ -1,4 +1,4 @@
-schema_version: "1.5"
+schema_version: "1.6"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-shadow
@@ -42,10 +42,16 @@ r3:
         shadow_runs: [15, 16]
         closure_kind: VALIDATED_APPLICATION
         graph_context_bound: true
-        caveat: canonical runtime has validation+application but no distinct authority artifact
       A2_4_DELEGATION_REGISTRATION_FAILOVER:
-        status: IMPLEMENTED_AWAITING_EXECUTION
+        status: SUPPORTED
+        shadow_runs: [17, 18]
         closure_kind: VALIDATED_CERTIFICATE_APPLICATION
+        idempotent_failover_evidence_chained: true
+        non_idempotent_failover_non_lowerable: true
+      A2_5_CANONICAL_HISTORY_RECONCILIATION:
+        status: IMPLEMENTED_AWAITING_EXECUTION
+        closure_kind: VERIFIED_HISTORY_APPLICATION
+        caveat: canonical-history selection/consensus remains outside application closure
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

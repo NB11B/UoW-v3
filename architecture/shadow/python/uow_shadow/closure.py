@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Tuple
 
+from uow.composition.convergence import AuthoritativeHistory, HistoryEntry
 from uow.composition.delegation import DelegationCertificate
 from uow.composition.mutation import RuntimeMutationQC
 from uow.composition.substitution import GraphReplacementCertificate
@@ -32,6 +33,10 @@ META_DELEGATION_CERT_PREFIX = "__delegation_cert__::"
 META_DELEGATION_ACTOR_PREFIX = "__delegation_actor__::"
 META_DELEGATION_GENERATION_PREFIX = "__delegation_generation__::"
 META_DELEGATION_SCOPE_PREFIX = "__delegation_scope__::"
+META_CANONICAL_HISTORY_DIGEST = "__canonical_history_digest__"
+META_CANONICAL_HISTORY_TIP_HASH = "__canonical_history_tip_hash__"
+META_CANONICAL_HISTORY_TIP_SEQUENCE = "__canonical_history_tip_sequence__"
+META_CANONICAL_HISTORY_ENTRIES = "__canonical_history_entries__"
 
 
 def make_runtime_meta_state(
@@ -334,6 +339,86 @@ def execute_validated_delegation_registration(
     return _execute_meta_uow(
         state,
         make_validated_delegation_registration_uow(certificate, conformance),
+        prev_evidence_hash=prev_evidence_hash,
+        step_number=step_number,
+    )
+
+
+
+def serialize_authoritative_history(history: AuthoritativeHistory) -> Tuple[dict, ...]:
+    """Serialize the complete authoritative history into WorldState-compatible data."""
+    return tuple(
+        {
+            "entry_id": e.entry_id,
+            "sequence_number": e.sequence_number,
+            "prev_hash": e.prev_hash,
+            "kind": e.kind.value,
+            "author_node_id": e.author_node_id,
+            "generation": e.generation,
+            "payload": dict(e.payload),
+            "quorum_signatures": tuple(e.quorum_signatures),
+            "timestamp_iso": e.timestamp_iso,
+            "entry_hash": e.entry_hash,
+        }
+        for e in history.entries
+    )
+
+
+def make_verified_history_reconciliation_uow(
+    canonical_history: AuthoritativeHistory,
+) -> UoW:
+    """Lower adoption of an already integrity-verified canonical history into a UoW.
+
+    This tests closure of history *application*. Choosing which history is
+    canonical, obtaining authority for that choice, and distributed consensus
+    over the choice remain outside the closure claim.
+    """
+    if not canonical_history.verify_integrity():
+        raise ValueError("Invalid canonical history cannot be lowered for reconciliation.")
+
+    digest = canonical_history.state_digest()
+    identity = f"shadow::adopt-canonical-history::{digest[:16]}"
+    return make_uow(
+        identity,
+        [
+            Route(
+                guard=Guard(GuardOp.EQ, META_AUTHORIZATION_HASH, digest),
+                mutations=(
+                    Mutation(MutationOp.SET, META_CANONICAL_HISTORY_DIGEST, digest),
+                    Mutation(
+                        MutationOp.SET,
+                        META_CANONICAL_HISTORY_TIP_HASH,
+                        canonical_history.tip_hash(),
+                    ),
+                    Mutation(
+                        MutationOp.SET,
+                        META_CANONICAL_HISTORY_TIP_SEQUENCE,
+                        canonical_history.tip_sequence(),
+                    ),
+                    Mutation(
+                        MutationOp.SET,
+                        META_CANONICAL_HISTORY_ENTRIES,
+                        serialize_authoritative_history(canonical_history),
+                    ),
+                ),
+                successor=Successor.halt(),
+            )
+        ],
+        layer="shadow-meta",
+        parent_context="A2.5-history-reconciliation-closure",
+    )
+
+
+def execute_verified_history_reconciliation(
+    state: WorldState,
+    canonical_history: AuthoritativeHistory,
+    *,
+    prev_evidence_hash: str = "0" * 64,
+    step_number: int = 1,
+) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
+    return _execute_meta_uow(
+        state,
+        make_verified_history_reconciliation_uow(canonical_history),
         prev_evidence_hash=prev_evidence_hash,
         step_number=step_number,
     )

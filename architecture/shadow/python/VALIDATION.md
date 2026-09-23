@@ -48,6 +48,20 @@ Interpretation:
 - behavioral and causal application closure is supported.
 - full authority-equivalence remains OPEN because canonical tier-1 rebinding does not emit a separate authority artifact.
 
+### Commit 03f0ef9
+Shadow workflow runs 17 and 18: PASS.
+
+Closure result:
+- A2.4 validated delegation registration can be lowered to an ordinary native UoW transition.
+- child identity, delegate actor, generation, authority scope, and certificate lineage are preserved.
+- authority inflation remains non-lowerable.
+- idempotent delegate failover can replace the registered delegation through a second evidence-linked UoW.
+- non-idempotent failover produces no replacement certificate and therefore no lowerable mutation.
+
+Scope limitation:
+- certificate issuance remains outside the application-closure claim.
+- attenuation/expiry/fabric validation remain canonical preconditions.
+
 ## Canonical CI observation
 
 Normal repository CI continues to fail before test execution because existing NPU tests import optional numpy/openvino dependencies not installed by the canonical CI workflow.
@@ -56,11 +70,10 @@ This is not attributed to shadow code.
 
 ## R3.2 next closure target
 
-A2.4 delegation registration and failover:
-- lower only the state mutation after canonical DelegationCertificate validation;
-- preserve child identity, delegate actor, generation, authority scope, and certificate lineage;
-- authority inflation must remain non-lowerable;
-- idempotent failover may replace the registered certificate;
-- non-idempotent failover must not create replacement authority.
+A2.5 canonical-history reconciliation:
+- validate complete canonical history integrity first;
+- lower full history payload adoption, digest, tip hash, and sequence into an ordinary UoW;
+- invalid history must be rejected before UoW construction;
+- mismatched application context must fail closed.
 
-Certificate issuance and attenuation validation remain outside the application-closure claim.
+Choosing which history is canonical and distributed consensus over that choice remain outside the application-closure claim.

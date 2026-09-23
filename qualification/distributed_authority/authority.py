@@ -270,8 +270,7 @@ class AuthorityNode:
         if self.mode is NodeMode.QUARANTINED:
             return reject("NODE_QUARANTINED")
         if proposal.pre_state_hash != self.state.state_hash:
-            self.mode = NodeMode.STALE
-            return reject("STALE_REPLICA")
+            return reject("PRE_STATE_MISMATCH")
 
         existing = self._vote_locks.get(self.state.state_hash)
         if existing is not None and existing != digest:

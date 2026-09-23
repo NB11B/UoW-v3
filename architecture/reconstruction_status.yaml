@@ -1,4 +1,4 @@
-schema_version: "0.1"
+schema_version: "0.2"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-only
@@ -19,16 +19,28 @@ current_invariants:
   files_deleted: false
   experiments_deleted: false
 
+r1_artifacts:
+  candidate_axioms: COMPLETE_INITIAL
+  capability_ledger: COMPLETE_INITIAL
+  experiment_manifests: COMPLETE_INITIAL
+  claim_traceability: COMPLETE_CURRENT_REGISTRY
+  module_semantic_map: COMPLETE_MODULE_LEVEL
+  closure_falsification_matrix: COMPLETE_INITIAL
+  requirement_capability_matrix: COMPLETE_INITIAL
+  archive_file_disposition: NOT_STARTED
+  symbol_level_machine_map: NOT_STARTED
+
 known_preservation_gaps:
   - U14-B goal-driven graph synthesis has no located canonical main implementation
   - U12 original general concurrent execution realization remains archive-only
   - Q1 logistics reference workload and human-signoff qualification are primarily archive lineage
   - Python and embedded C++ do not yet have one universal canonical-byte specification
   - composition and canonical UoW contract models remain parallel ontologies
+  - current claim registry does not individually encode U1-U13, U14-B, or Q1 historical distinctions
 
 next_mapping_targets:
-  - map every current claim_id to experiment manifests
-  - map every src/uow module to semantic concept and experiment consumers
-  - map archived U1-U14B/Q1 files to retained/reconstructed/archive disposition
-  - identify first closure falsification vectors
-  - identify first requirement-capability unification falsification vectors
+  - map archived U1-U14B/Q1 files to RECONSTRUCTED / RETAINED_REALIZATION / ARCHIVED_EVIDENCE disposition
+  - refine module map to symbol-level machine-readable entries
+  - define matched shadow vectors for first closure tests
+  - define matched shadow vectors for requirement-capability unification
+  - inventory cross-language semantic and byte-conformance vectors

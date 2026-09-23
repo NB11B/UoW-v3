@@ -1,0 +1,58 @@
+schema_version: "0.1"
+source: qualification/claim_registry.py
+baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+
+claims:
+  "U14.PROPOSER_ISOLATION": {experiment: U14, evidence: PORTABLE}
+  "U15.ADAPTIVE_CONTRACT": {experiment: U15, evidence: PORTABLE}
+  "U15.FEEDBACK_INTEGRITY": {experiment: U15, evidence: PORTABLE, negative_control: true}
+  "U15.PORTABLE_ADAPTATION": {experiment: U15, evidence: PORTABLE, negative_control: true}
+  "U15.ADAPTATION_CONTAINMENT": {experiment: U15, evidence: PORTABLE, negative_control: true}
+  "U15.NPU_ADAPTIVE_PROPOSER.PORTABLE": {experiment: U15, evidence: PORTABLE}
+  "U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL": {experiment: U15, evidence: PHYSICAL, negative_control: true}
+  "U15.NPU_HOT_SWAP.PORTABLE": {experiment: U15, evidence: PORTABLE}
+  "U15.NPU_HOT_SWAP.PHYSICAL": {experiment: U15, evidence: PHYSICAL, negative_control: true}
+  "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PORTABLE": {experiment: U15, evidence: PORTABLE}
+  "U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL": {experiment: U15, evidence: PHYSICAL, negative_control: true}
+  "U15.ADAPTIVE_QUORUM_ORCHESTRATION.PORTABLE": {experiment: U15, evidence: PORTABLE}
+  "U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL": {experiment: U15, evidence: PHYSICAL, negative_control: true}
+
+  "A2.SEMANTIC_PROJECTION.PORTABLE": {experiment: A2.0, evidence: PORTABLE}
+  "A2.GRAPH_SUBSTITUTION.PORTABLE": {experiment: A2.1, evidence: PORTABLE, negative_control: true}
+  "A2.ACTOR_BINDING.PORTABLE": {experiment: A2.2, evidence: PORTABLE, negative_control: true}
+  "A2.ADAPTIVE_PROPOSER.PORTABLE": {experiment: A2.2, evidence: PORTABLE, negative_control: true}
+  "A2.ACTOR_FABRIC.PORTABLE": {experiment: A2.3, evidence: PORTABLE, negative_control: true}
+  "A2.CHURN_RESILIENCE.PORTABLE": {experiment: A2.3, evidence: PORTABLE, negative_control: true}
+  "A2.DELEGATION_ATTENUATION.PORTABLE": {experiment: A2.4, evidence: PORTABLE, negative_control: true}
+  "A2.RECURSIVE_ORCHESTRATION.PORTABLE": {experiment: A2.4, evidence: PORTABLE, negative_control: true}
+  "A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE": {experiment: A2.5, evidence: PORTABLE, negative_control: true}
+  "A2.PARTITION_CONVERGENCE.PORTABLE": {experiment: A2.5, evidence: PORTABLE, negative_control: true}
+  "A2.PHYSICAL_NETWORK_FAULT.PORTABLE": {experiment: A2.6, evidence: PORTABLE, negative_control: true}
+  "A2.CRASH_RECOVERY_CONVERGENCE.PORTABLE": {experiment: A2.6, evidence: PORTABLE, negative_control: true}
+  "A2.QUORUM_CERTIFIED_MUTATION.PORTABLE": {experiment: A2.7, evidence: PORTABLE, negative_control: true}
+  "A2.HETEROGENEOUS_MUTATION_CONSENSUS.PORTABLE": {experiment: A2.7, evidence: PORTABLE, negative_control: true}
+  "A2.CONTINUOUS_TOPOLOGY_EVOLUTION.PORTABLE": {experiment: A2.8, evidence: PORTABLE, negative_control: true}
+  "A2.ADAPTATION_QUALITY_AND_STABILITY.PORTABLE": {experiment: A2.8, evidence: PORTABLE, negative_control: true}
+
+  "TIMING.LOCAL_INDEPENDENCE": {experiment: TIMING, evidence: PORTABLE}
+
+  "ESP32.AUTHORITY": {experiment: DIST-AUTH, evidence: PHYSICAL, negative_control: true}
+  "HETERO.EXECUTION": {experiment: U15, evidence: PHYSICAL}
+  "HETERO.ADAPTATION": {experiment: U15, evidence: PHYSICAL}
+  "HETERO.PERFORMANCE": {experiment: U15, evidence: PHYSICAL}
+  "EVIDENCE.CHAIN": {experiment: DIST-AUTH, evidence: PHYSICAL}
+
+  "DIST.AUTHORITY.AGREEMENT.PORTABLE": {experiment: DIST-AUTH, evidence: PORTABLE}
+  "DIST.AUTHORITY.QUORUM_SAFETY.PORTABLE": {experiment: DIST-AUTH, evidence: PORTABLE, negative_control: true}
+  "DIST.NETWORK.SELF_HEAL.PORTABLE": {experiment: DIST-AUTH, evidence: PORTABLE, negative_control: true}
+  "DIST.AUTHORITY.DIVERGENCE_CONTAINMENT.PORTABLE": {experiment: DIST-AUTH, evidence: PORTABLE, negative_control: true}
+  "DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL": {experiment: DIST-AUTH, evidence: PHYSICAL, negative_control: true}
+  "DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL": {experiment: DIST-AUTH, evidence: PHYSICAL, negative_control: true}
+
+historical_claim_gap:
+  description: >
+    U1-U13, U14-B, and Q1 contain experimentally important distinctions that are not
+    represented as first-class entries in the current claim registry. Their experiment
+    manifests therefore remain mandatory preservation records rather than being inferred
+    from the modern claim registry alone.
+  experiments: [U1-U10, U11, U12, U13, U14-B, Q1]

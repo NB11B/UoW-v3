@@ -180,3 +180,138 @@ def test_rejected_graph_substitution_cannot_be_lowered_as_authorized_uow():
 
     with pytest.raises(ValueError, match="Rejected GraphReplacementCertificate"):
         make_certified_graph_substitution_uow(cert)
+
+
+from uow.composition.actor import ActorDescriptor, ActorRegistry, AuthorityClass
+from uow_shadow.adapters import actor_binding_adapter
+from uow_shadow.closure import (
+    META_LAST_BINDING_CONFORMANCE,
+    execute_validated_rebinding,
+    make_validated_rebinding_uow,
+)
+
+
+def _rebind_graph() -> RealizationGraph:
+    return RealizationGraph(
+        "g-rebind",
+        {
+            "worker": RealizationNode(
+                node_id="worker",
+                role="worker",
+                required_capabilities=("cpu_compute",),
+            )
+        },
+        (),
+    )
+
+
+def test_validated_actor_rebinding_application_closes_behaviorally():
+    graph = _rebind_graph()
+    registry = ActorRegistry(
+        [
+            ActorDescriptor(
+                actor_id="actor-a",
+                capabilities=("cpu_compute",),
+                substrate="cpu_x86",
+                authority_class=AuthorityClass.PROPOSER_ONLY,
+            ),
+            ActorDescriptor(
+                actor_id="actor-b",
+                capabilities=("cpu_compute",),
+                substrate="cpu_x86",
+                authority_class=AuthorityClass.PROPOSER_ONLY,
+            ),
+        ]
+    )
+    b0 = ActorBinding("b0-rebind", graph.graph_id, {"worker": "actor-a"})
+    b1 = ActorBinding("b1-rebind", graph.graph_id, {"worker": "actor-b"})
+    runtime = AdaptiveCompositionRuntime(
+        ParentContract(
+            contract_id="u-rebind",
+            description="rebind closure",
+            required_outputs=(),
+        ),
+        graph,
+        registry=registry,
+        baseline_binding=b0,
+    )
+
+    canonical_ok, canonical_violations = runtime.rebind_active_graph(b1)
+    assert canonical_ok, canonical_violations
+    assert runtime.active_binding.compute_hash() == b1.compute_hash()
+
+    conformance = actor_binding_adapter(graph, b1, registry)
+    assert conformance.accepted
+    assert conformance.context_id == graph.compute_hash()
+
+    uow = make_validated_rebinding_uow(
+        active_graph_hash=graph.compute_hash(),
+        candidate_binding_hash=b1.compute_hash(),
+        conformance=conformance,
+    )
+    shadow_state = make_runtime_meta_state(
+        active_graph_hash=graph.compute_hash(),
+        active_binding_hash=b0.compute_hash(),
+        authorization_hash="implicit-runtime-authority",
+        cursor=uow.H.identity,
+    )
+    committed, evidence, native_cert = execute_validated_rebinding(
+        shadow_state,
+        active_graph_hash=graph.compute_hash(),
+        candidate_binding_hash=b1.compute_hash(),
+        conformance=conformance,
+    )
+
+    assert native_cert.is_valid
+    assert committed.get(META_ACTIVE_GRAPH_HASH) == graph.compute_hash()
+    assert committed.get(META_ACTIVE_BINDING_HASH) == runtime.active_binding.compute_hash()
+    assert committed.get(META_LAST_BINDING_CONFORMANCE) == conformance.conformance_id
+    assert evidence.certificate_hash == native_cert.certificate_hash
+
+
+def test_rebinding_conformance_cannot_be_reused_for_different_graph_context():
+    graph = _rebind_graph()
+    registry = ActorRegistry(
+        [
+            ActorDescriptor(
+                actor_id="actor-b",
+                capabilities=("cpu_compute",),
+                substrate="cpu_x86",
+                authority_class=AuthorityClass.PROPOSER_ONLY,
+            )
+        ]
+    )
+    binding = ActorBinding("b-rebind", graph.graph_id, {"worker": "actor-b"})
+    conformance = actor_binding_adapter(graph, binding, registry)
+    assert conformance.accepted
+
+    with pytest.raises(ValueError, match="not bound to the active graph hash"):
+        make_validated_rebinding_uow(
+            active_graph_hash="different-graph-hash",
+            candidate_binding_hash=binding.compute_hash(),
+            conformance=conformance,
+        )
+
+
+def test_invalid_actor_rebinding_is_not_lowerable():
+    graph = _rebind_graph()
+    registry = ActorRegistry(
+        [
+            ActorDescriptor(
+                actor_id="actor-bad",
+                capabilities=("storage",),
+                substrate="cpu_x86",
+                authority_class=AuthorityClass.PROPOSER_ONLY,
+            )
+        ]
+    )
+    bad_binding = ActorBinding("b-bad", graph.graph_id, {"worker": "actor-bad"})
+    conformance = actor_binding_adapter(graph, bad_binding, registry)
+    assert not conformance.accepted
+
+    with pytest.raises(ValueError, match="Rejected binding conformance"):
+        make_validated_rebinding_uow(
+            active_graph_hash=graph.compute_hash(),
+            candidate_binding_hash=bad_binding.compute_hash(),
+            conformance=conformance,
+        )

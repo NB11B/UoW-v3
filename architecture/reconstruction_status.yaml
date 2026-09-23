@@ -1,4 +1,4 @@
-schema_version: "1.2"
+schema_version: "1.3"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-shadow
@@ -40,6 +40,7 @@ r3:
       A2_2_A2_3_ACTOR_REBINDING_APPLICATION:
         status: IMPLEMENTED_AWAITING_EXECUTION
         closure_kind: VALIDATED_APPLICATION
+        graph_context_bound: true
         caveat: current runtime exposes validation+application without a distinct authority artifact
 
 canonical_ci_observation:

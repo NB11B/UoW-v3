@@ -45,11 +45,18 @@ Normal repository CI continues to fail before test execution because existing NP
 
 This is not attributed to shadow code.
 
-## R3.2 next closure target
+## R3.2 actor rebinding experiment
 
-A2.2/A2.3 actor rebinding application:
-- current runtime validates binding and applies it in one method;
-- no separate authority certificate is emitted for tier-1 rebinding;
-- shadow lowering will record the accepted binding conformance identity as the application guard only for parity;
-- rejected conformance or wrong guard must fail closed;
-- the result will explicitly distinguish "validated application closure" from "authorization closure".
+Canonical A2.3 Tier-1 rebinding validates against the live active graph and then immediately mutates active_binding. It does not emit a separate authorization artifact.
+
+The tightened shadow experiment therefore:
+- requires accepted canonical validate_binding conformance;
+- binds that conformance to the exact active graph hash;
+- lowers only the binding-state mutation to an ordinary native UoW;
+- records conformance identity in resulting meta-state/evidence;
+- rejects reuse of accepted conformance under a different active graph;
+- rejects invalid binding conformance before UoW construction.
+
+Expected interpretation if PASS:
+- behavioral and causal application closure is supported;
+- full authority-equivalence remains OPEN because current A2.3 authority is implicit in runtime ownership rather than represented by a standalone artifact.

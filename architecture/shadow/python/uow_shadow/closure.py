@@ -176,29 +176,40 @@ def execute_certified_graph_substitution(
 
 def make_validated_rebinding_uow(
     *,
+    active_graph_hash: str,
     candidate_binding_hash: str,
     conformance: ConformanceResult,
 ) -> UoW:
     """Lower tier-1 actor rebinding application into an ordinary UoW.
 
-    Current A2 rebinding combines validation and application and does not emit
-    a separate authority artifact. Therefore this experiment tests closure of
-    validated application only. It intentionally records the accepted
-    ConformanceResult identity as the guard and does not generalize
-    conformance == authorization.
+    Canonical A2 rebinding validates against the live active graph and applies
+    the binding immediately. The shadow lowering therefore binds the native UoW
+    guard to the exact graph hash that the accepted ConformanceResult evaluated.
+
+    The conformance identity is recorded in the resulting state/evidence, but
+    this still does NOT create a standalone authority artifact where the
+    canonical runtime has none. The result is behavioral/causal closure, not
+    full authority-equivalence.
     """
     if not conformance.accepted:
         raise ValueError("Rejected binding conformance cannot permit shadow rebinding.")
+    if conformance.context_id != active_graph_hash:
+        raise ValueError(
+            "Binding conformance is not bound to the active graph hash supplied for rebinding."
+        )
 
-    identity = f"shadow::apply-rebinding::{candidate_binding_hash[:16]}"
+    identity = (
+        f"shadow::apply-rebinding::{candidate_binding_hash[:12]}::"
+        f"{conformance.conformance_id[:12]}"
+    )
     return make_uow(
         identity,
         [
             Route(
                 guard=Guard(
                     GuardOp.EQ,
-                    META_AUTHORIZATION_HASH,
-                    conformance.conformance_id,
+                    META_ACTIVE_GRAPH_HASH,
+                    active_graph_hash,
                 ),
                 mutations=(
                     Mutation(MutationOp.SET, META_ACTIVE_BINDING_HASH, candidate_binding_hash),
@@ -212,13 +223,14 @@ def make_validated_rebinding_uow(
             )
         ],
         layer="shadow-meta",
-        parent_context="A2.2-A2.3-rebinding-closure",
+        parent_context=f"A2.2-A2.3-rebinding-closure::{conformance.conformance_id}",
     )
 
 
 def execute_validated_rebinding(
     state: WorldState,
     *,
+    active_graph_hash: str,
     candidate_binding_hash: str,
     conformance: ConformanceResult,
     prev_evidence_hash: str = "0" * 64,
@@ -227,6 +239,7 @@ def execute_validated_rebinding(
     return _execute_meta_uow(
         state,
         make_validated_rebinding_uow(
+            active_graph_hash=active_graph_hash,
             candidate_binding_hash=candidate_binding_hash,
             conformance=conformance,
         ),

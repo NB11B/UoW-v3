@@ -12,8 +12,10 @@ from datetime import datetime, timezone
 from enum import Enum
 import hashlib
 import json
-from typing import Tuple
+from typing import Optional, Tuple
 
+from uow.composition.actor import ActorRegistry
+from uow.composition.binding import ActorBinding, validate_binding
 from uow.composition.contract import ParentContract
 from uow.composition.graph import RealizationGraph
 from uow.composition.projection import (
@@ -48,6 +50,7 @@ class GraphReplacementProposal:
     predicted_speedup: float = 1.0
     rationale: str = ""
     proposal_id: str = ""
+    actor_binding: Optional[ActorBinding] = None
 
     def compute_hash(self) -> str:
         payload = {
@@ -58,6 +61,7 @@ class GraphReplacementProposal:
             "strategy": self.strategy.value,
             "predicted_speedup": f"{self.predicted_speedup:.4f}",
             "rationale": self.rationale,
+            "actor_binding_hash": self.actor_binding.compute_hash() if self.actor_binding else "",
         }
         raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
         return hashlib.sha256(raw).hexdigest()
@@ -76,6 +80,7 @@ class GraphReplacementCertificate:
     decision: SubstitutionDecision
     violations: Tuple[str, ...] = ()
     epoch: int = 1
+    actor_binding_hash: str = ""
     certifier_id: str = "authoritative_composition_certifier"
     timestamp_iso: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
@@ -90,6 +95,7 @@ class GraphReplacementCertificate:
             "decision": self.decision.value,
             "violations": sorted(self.violations),
             "epoch": self.epoch,
+            "actor_binding_hash": self.actor_binding_hash,
             "certifier_id": self.certifier_id,
         }
         raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -112,6 +118,7 @@ class CompositionCertifier:
         original_graph: RealizationGraph,
         contract: ParentContract,
         current_epoch: int = 1,
+        actor_registry: Optional[ActorRegistry] = None,
     ) -> GraphReplacementCertificate:
         """Evaluates a graph replacement proposal and issues an authoritative certificate."""
         violations = []
@@ -148,6 +155,17 @@ class CompositionCertifier:
             elif cand_proj.conforms and cand_proj.projection_hash != orig_proj.projection_hash:
                 violations.append("SEMANTIC_EQUIVALENCE_FAILED: projection hash mismatch")
 
+        # 6. Evaluate actor binding if provided
+        if proposal.actor_binding is not None:
+            if actor_registry is not None:
+                valid_binding, bind_violations = validate_binding(
+                    cand_graph, proposal.actor_binding, actor_registry
+                )
+                if not valid_binding:
+                    violations.extend(bind_violations)
+            else:
+                violations.append("NO_ACTOR_REGISTRY_FOR_BINDING_VALIDATION")
+
         # Decision
         if violations:
             decision = SubstitutionDecision.REJECTED
@@ -157,6 +175,7 @@ class CompositionCertifier:
             assert cand_proj is not None
             proj_hash = cand_proj.projection_hash
 
+        binding_hash = proposal.actor_binding.compute_hash() if proposal.actor_binding else ""
         cert_id = f"cert_{proposal.proposal_id or 'anon'}_e{current_epoch}"
         return GraphReplacementCertificate(
             certificate_id=cert_id,
@@ -168,5 +187,6 @@ class CompositionCertifier:
             decision=decision,
             violations=tuple(violations),
             epoch=current_epoch,
+            actor_binding_hash=binding_hash,
             certifier_id=self.certifier_id,
         )

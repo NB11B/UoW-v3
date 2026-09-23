@@ -32,9 +32,25 @@ class RealizationNode:
     npu_slots: int = 0
     cost_units: float = 1.0
     failure_mode: str = "ROLLBACK"  # "ROLLBACK", "COMPENSATE", "QUARANTINE_ON_DIVERGENCE", "PARTIAL_COMMIT"
+    required_capabilities: Tuple[str, ...] = ()
+    required_authority_class: str = "PROPOSER_ONLY"  # "PROPOSER_ONLY", "VERIFIER", "AUTHORITY_SUBSTRATE"
     node_hash: str = ""
 
     def __post_init__(self) -> None:
+        if not self.required_capabilities:
+            caps = [f"role:{self.role}"]
+            if self.actor_class == "npu":
+                caps.append("npu_inference")
+            elif self.actor_class in ("physical_esp32", "physical_unoq", "remote"):
+                caps.append(f"substrate:{self.actor_class}")
+            object.__setattr__(self, "required_capabilities", tuple(sorted(caps)))
+
+        if self.required_authority_class == "PROPOSER_ONLY":
+            if self.authority_tier in ("authority_quorum", "deterministic_judge"):
+                object.__setattr__(self, "required_authority_class", "AUTHORITY_SUBSTRATE")
+            elif self.authority_tier == "verifier":
+                object.__setattr__(self, "required_authority_class", "VERIFIER")
+
         if not self.node_hash:
             payload = {
                 "node_id": self.node_id,
@@ -52,6 +68,8 @@ class RealizationNode:
                 "npu_slots": self.npu_slots,
                 "cost_units": self.cost_units,
                 "failure_mode": self.failure_mode,
+                "required_capabilities": sorted(self.required_capabilities),
+                "required_authority_class": self.required_authority_class,
             }
             digest = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
             object.__setattr__(self, "node_hash", digest)

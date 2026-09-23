@@ -129,6 +129,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.ACTOR_BINDING.PORTABLE": ClaimSpec(
+        "A2.ACTOR_BINDING.PORTABLE",
+        "Dynamic actor binding decouples logical realization graphs from physical actor execution, certifying capability matching and authority constraints prior to task dispatch.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.ADAPTIVE_PROPOSER.PORTABLE": ClaimSpec(
+        "A2.ADAPTIVE_PROPOSER.PORTABLE",
+        "The adaptive composition proposer adapts its graph selection policy based on runtime state S_t and certified execution feedback, converging to optimal topology under environmental drift with strictly zero wrong substitutions.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

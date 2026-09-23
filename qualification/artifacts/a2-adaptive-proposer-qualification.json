@@ -1,0 +1,61 @@
+{
+  "schema_version": "uow-a2-adaptive-proposer-v1.0",
+  "timestamp": "2026-09-23T17:45:17.667616+00:00",
+  "parent_contract": {
+    "contract_id": "parent_certified_transform_v1",
+    "contract_hash": "643898dcd0eb231b3643f87d0aacbf951abdefb84ca309dcd227d8d59ab1e0c3"
+  },
+  "proposer_lineage": {
+    "model_id": "AdaptiveGraphProposer",
+    "final_generation": 2,
+    "artifact_hash": "ea4055f6ca29ddbcce01ef0380c3da3e60a9a3a6c163a0e836289499b939594b"
+  },
+  "drift_epochs": [
+    {
+      "epoch": 1,
+      "selected_graph": "G2_accelerator",
+      "status": "SUCCESS"
+    },
+    {
+      "epoch": 2,
+      "selected_graph": "G1_parallel",
+      "status": "SUCCESS"
+    },
+    {
+      "epoch": 3,
+      "selected_graph": "G2_accelerator",
+      "status": "SUCCESS"
+    }
+  ],
+  "negative_controls": {
+    "unbound_node_rejected": true,
+    "capability_deficit_rejected": true,
+    "authority_deficit_rejected": true,
+    "offline_actor_rejected": true
+  },
+  "invariants": {
+    "wrong_substitutions": 0,
+    "wrong_authoritative_commits": 0
+  },
+  "claims": {
+    "A2.ACTOR_BINDING.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.ADAPTIVE_PROPOSER.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "passed": true
+}

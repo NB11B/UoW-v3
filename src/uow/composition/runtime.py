@@ -12,8 +12,11 @@ import json
 import time
 from typing import Any, Mapping, Tuple
 
+from uow.composition.actor import ActorRegistry
+from uow.composition.binding import ActorBinding
 from uow.composition.contract import ParentContract
 from uow.composition.graph import RealizationGraph, RealizationNode
+from uow.composition.policy import CompositionRuntimeState
 from uow.composition.substitution import (
     CompositionCertifier,
     GraphReplacementCertificate,
@@ -32,6 +35,7 @@ class NodeExecutionResult:
     status: str  # "COMPLETED", "FAILED", "SKIPPED"
     duration_ms: float
     output_keys: Tuple[str, ...]
+    actor_id: str = "local"
     error_message: str = ""
 
 
@@ -70,10 +74,15 @@ class AdaptiveCompositionRuntime:
         contract: ParentContract,
         baseline_graph: RealizationGraph,
         certifier: CompositionCertifier | None = None,
+        registry: ActorRegistry | None = None,
+        baseline_binding: ActorBinding | None = None,
     ) -> None:
         self.contract = contract
         self.baseline_graph = baseline_graph
         self.certifier = certifier or CompositionCertifier()
+        self.registry = registry
+        self.baseline_binding = baseline_binding
+        self.active_binding = baseline_binding
         self.active_graph = baseline_graph
         self.certificates_journal: list[GraphReplacementCertificate] = []
         self.execution_history: list[ExecutionRecord] = []
@@ -82,6 +91,26 @@ class AdaptiveCompositionRuntime:
     @property
     def current_graph_hash(self) -> str:
         return self.active_graph.compute_hash()
+
+    def get_runtime_state(self, queue_depth: int = 0, network_latency_ms: float = 0.0) -> CompositionRuntimeState:
+        """Constructs runtime state vector S_t from current actor registry and active graph."""
+        if self.registry:
+            avail = {a.actor_id: a.availability for a in self.registry.all_actors()}
+            loads = {a.actor_id: a.load for a in self.registry.all_actors()}
+            lats = {a.actor_id: a.latency_ms for a in self.registry.all_actors()}
+            fails = {a.actor_id: a.recent_failures for a in self.registry.all_actors()}
+        else:
+            avail, loads, lats, fails = {}, {}, {}, {}
+
+        return CompositionRuntimeState(
+            actor_availability=avail,
+            actor_loads=loads,
+            actor_latencies=lats,
+            actor_failure_counts=fails,
+            active_graph_id=self.active_graph.graph_id,
+            queue_depth=queue_depth,
+            network_latency_ms=network_latency_ms,
+        )
 
     def propose_and_certify(
         self,
@@ -94,17 +123,20 @@ class AdaptiveCompositionRuntime:
             original_graph=self.active_graph,
             contract=self.contract,
             current_epoch=next_epoch,
+            actor_registry=self.registry,
         )
         self.certificates_journal.append(cert)
 
         if cert.is_accepted:
-            # Atomic substitution of the active execution graph
+            # Atomic substitution of the active execution graph and binding
             self.active_graph = proposal.candidate_graph
+            if proposal.actor_binding:
+                self.active_binding = proposal.actor_binding
 
         return cert
 
     def fallback_to_baseline(self, reason: str = "runtime_requested_fallback") -> GraphReplacementCertificate:
-        """Atomically restores the active execution graph to the baseline graph."""
+        """Atomically restores the active execution graph and binding to the baseline."""
         next_epoch = len(self.certificates_journal) + 1
         fallback_proposal = GraphReplacementProposal(
             parent_contract_id=self.contract.contract_id,
@@ -114,15 +146,18 @@ class AdaptiveCompositionRuntime:
             predicted_speedup=1.0,
             rationale=f"Automated fallback to baseline: {reason}",
             proposal_id=f"fallback_e{next_epoch}",
+            actor_binding=self.baseline_binding,
         )
         cert = self.certifier.certify_proposal(
             proposal=fallback_proposal,
             original_graph=self.active_graph,
             contract=self.contract,
             current_epoch=next_epoch,
+            actor_registry=self.registry,
         )
         self.certificates_journal.append(cert)
         self.active_graph = self.baseline_graph
+        self.active_binding = self.baseline_binding
         return cert
 
     def execute(
@@ -143,6 +178,8 @@ class AdaptiveCompositionRuntime:
 
         for nid in topo_order:
             node = self.active_graph.nodes[nid]
+            act_id = self.active_binding.node_to_actor.get(nid, "local") if self.active_binding else "local"
+
             if failed:
                 node_results.append(
                     NodeExecutionResult(
@@ -151,6 +188,7 @@ class AdaptiveCompositionRuntime:
                         status="SKIPPED",
                         duration_ms=0.0,
                         output_keys=node.outputs,
+                        actor_id=act_id,
                     )
                 )
                 continue
@@ -165,6 +203,7 @@ class AdaptiveCompositionRuntime:
                         status="FAILED",
                         duration_ms=node.duration_ms,
                         output_keys=(),
+                        actor_id=act_id,
                         error_message=error_msg,
                     )
                 )
@@ -191,6 +230,7 @@ class AdaptiveCompositionRuntime:
                     status="COMPLETED",
                     duration_ms=node.duration_ms,
                     output_keys=node.outputs,
+                    actor_id=act_id,
                 )
             )
 

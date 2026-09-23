@@ -22,6 +22,20 @@ from .projection import (
     project_semantics,
 )
 
+from .actor import (
+    ActorDescriptor,
+    ActorRegistry,
+    AuthorityClass,
+)
+from .binding import (
+    ActorBinding,
+    validate_binding,
+)
+from .policy import (
+    AdaptiveGraphProposer,
+    CompositionRuntimeState,
+    GraphAdaptationObservation,
+)
 from .substitution import (
     CompositionCertifier,
     GraphReplacementCertificate,
@@ -36,13 +50,20 @@ from .runtime import (
 )
 
 __all__ = [
+    "ActorBinding",
+    "ActorDescriptor",
+    "ActorRegistry",
     "AdaptiveCompositionRuntime",
+    "AdaptiveGraphProposer",
+    "AuthorityClass",
     "AuthorityObligation",
     "CausalConstraint",
     "CompositionCertifier",
+    "CompositionRuntimeState",
     "EvidenceObligation",
     "ExecutionRecord",
     "FailureSemantics",
+    "GraphAdaptationObservation",
     "GraphReplacementCertificate",
     "GraphReplacementProposal",
     "NodeExecutionResult",
@@ -57,4 +78,5 @@ __all__ = [
     "are_equivalent",
     "check_conformance",
     "project_semantics",
+    "validate_binding",
 ]

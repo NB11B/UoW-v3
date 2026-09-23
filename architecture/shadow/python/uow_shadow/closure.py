@@ -1,9 +1,9 @@
 """R3 shadow closure experiments.
 
 This module tests whether selected meta-runtime state transitions can be lowered
-into ordinary canonical UoWs after an independent authorization artifact already
-exists. It deliberately does NOT claim closure of authorization/attestation
-formation itself.
+into ordinary canonical UoWs after an independent authorization or validation
+artifact already exists. It deliberately does NOT claim closure of
+authorization/attestation formation itself.
 """
 from __future__ import annotations
 
@@ -15,6 +15,8 @@ from uow.contracts import Guard, GuardOp, Mutation, MutationOp, Route, Successor
 from uow.engine import CertificateResult, EvidenceRecord, commit, certify, propose
 from uow.state import WorldState
 
+from .types import ConformanceResult
+
 
 META_ACTIVE_GRAPH_HASH = "__runtime_active_graph_hash__"
 META_ACTIVE_BINDING_HASH = "__runtime_active_binding_hash__"
@@ -24,6 +26,7 @@ META_HISTORY_PARENT = "__runtime_history_parent__"
 META_AUTHORIZATION_HASH = "__runtime_authorization_hash__"
 META_LAST_QC_HASH = "__runtime_last_mutation_qc_hash__"
 META_LAST_SUBSTITUTION_CERT_HASH = "__runtime_last_substitution_certificate_hash__"
+META_LAST_BINDING_CONFORMANCE = "__runtime_last_binding_conformance__"
 
 
 def make_runtime_meta_state(
@@ -48,6 +51,26 @@ def make_runtime_meta_state(
         cursor=cursor,
         status="RUNNING",
     )
+
+
+def _execute_meta_uow(
+    state: WorldState,
+    uow: UoW,
+    *,
+    prev_evidence_hash: str,
+    step_number: int,
+) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
+    proposal = propose(uow, state)
+    certificate = certify(uow, state, proposal)
+    committed, evidence = commit(
+        uow,
+        state,
+        proposal,
+        certificate,
+        prev_evidence_hash=prev_evidence_hash,
+        step_number=step_number,
+    )
+    return committed, evidence, certificate
 
 
 def make_qc_authorized_runtime_mutation_uow(qc: RuntimeMutationQC) -> UoW:
@@ -89,18 +112,12 @@ def execute_qc_authorized_runtime_mutation(
     prev_evidence_hash: str = "0" * 64,
     step_number: int = 1,
 ) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
-    uow = make_qc_authorized_runtime_mutation_uow(qc)
-    proposal = propose(uow, state)
-    certificate = certify(uow, state, proposal)
-    committed, evidence = commit(
-        uow,
+    return _execute_meta_uow(
         state,
-        proposal,
-        certificate,
+        make_qc_authorized_runtime_mutation_uow(qc),
         prev_evidence_hash=prev_evidence_hash,
         step_number=step_number,
     )
-    return committed, evidence, certificate
 
 
 def make_certified_graph_substitution_uow(cert: GraphReplacementCertificate) -> UoW:
@@ -149,15 +166,70 @@ def execute_certified_graph_substitution(
     prev_evidence_hash: str = "0" * 64,
     step_number: int = 1,
 ) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
-    uow = make_certified_graph_substitution_uow(cert)
-    proposal = propose(uow, state)
-    certificate = certify(uow, state, proposal)
-    committed, evidence = commit(
-        uow,
+    return _execute_meta_uow(
         state,
-        proposal,
-        certificate,
+        make_certified_graph_substitution_uow(cert),
         prev_evidence_hash=prev_evidence_hash,
         step_number=step_number,
     )
-    return committed, evidence, certificate
+
+
+def make_validated_rebinding_uow(
+    *,
+    candidate_binding_hash: str,
+    conformance: ConformanceResult,
+) -> UoW:
+    """Lower tier-1 actor rebinding application into an ordinary UoW.
+
+    Current A2 rebinding combines validation and application and does not emit
+    a separate authority artifact. Therefore this experiment tests closure of
+    validated application only. It intentionally records the accepted
+    ConformanceResult identity as the guard and does not generalize
+    conformance == authorization.
+    """
+    if not conformance.accepted:
+        raise ValueError("Rejected binding conformance cannot permit shadow rebinding.")
+
+    identity = f"shadow::apply-rebinding::{candidate_binding_hash[:16]}"
+    return make_uow(
+        identity,
+        [
+            Route(
+                guard=Guard(
+                    GuardOp.EQ,
+                    META_AUTHORIZATION_HASH,
+                    conformance.conformance_id,
+                ),
+                mutations=(
+                    Mutation(MutationOp.SET, META_ACTIVE_BINDING_HASH, candidate_binding_hash),
+                    Mutation(
+                        MutationOp.SET,
+                        META_LAST_BINDING_CONFORMANCE,
+                        conformance.conformance_id,
+                    ),
+                ),
+                successor=Successor.halt(),
+            )
+        ],
+        layer="shadow-meta",
+        parent_context="A2.2-A2.3-rebinding-closure",
+    )
+
+
+def execute_validated_rebinding(
+    state: WorldState,
+    *,
+    candidate_binding_hash: str,
+    conformance: ConformanceResult,
+    prev_evidence_hash: str = "0" * 64,
+    step_number: int = 1,
+) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
+    return _execute_meta_uow(
+        state,
+        make_validated_rebinding_uow(
+            candidate_binding_hash=candidate_binding_hash,
+            conformance=conformance,
+        ),
+        prev_evidence_hash=prev_evidence_hash,
+        step_number=step_number,
+    )

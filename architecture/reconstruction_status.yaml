@@ -1,4 +1,4 @@
-schema_version: "1.1"
+schema_version: "1.2"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-shadow
@@ -32,22 +32,15 @@ r3:
       A2_7_QC_AUTHORIZED_MUTATION_APPLICATION:
         status: SUPPORTED
         shadow_run: 6
-        scope:
-          included:
-            - graph hash application
-            - binding hash application
-            - generation advance
-            - native UoW certification
-            - native UoW evidence
-            - unauthorized fail-closed
-          excluded:
-            - quorum formation
-            - QC verification
-            - distributed history construction
-            - WAL persistence
+        closure_kind: AUTHORIZED_APPLICATION
       A2_1_GRAPH_SUBSTITUTION_APPLICATION:
+        status: SUPPORTED
+        shadow_run: 8
+        closure_kind: CERTIFIED_APPLICATION
+      A2_2_A2_3_ACTOR_REBINDING_APPLICATION:
         status: IMPLEMENTED_AWAITING_EXECUTION
-        current_semantics: accepted GraphReplacementCertificate authorizes substitution application
+        closure_kind: VALIDATED_APPLICATION
+        caveat: current runtime exposes validation+application without a distinct authority artifact
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

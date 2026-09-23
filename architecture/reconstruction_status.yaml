@@ -1,4 +1,4 @@
-schema_version: "1.4"
+schema_version: "1.5"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-shadow
@@ -38,12 +38,14 @@ r3:
         shadow_run: 8
         closure_kind: CERTIFIED_APPLICATION
       A2_2_A2_3_ACTOR_REBINDING_APPLICATION:
-        status: RERUN_PENDING_AFTER_HARNESS_FIX
-        previous_shadow_run: 12
-        previous_result: TEST_HARNESS_API_MISMATCH
+        status: SUPPORTED_WITH_AUTHORITY_CAVEAT
+        shadow_runs: [15, 16]
         closure_kind: VALIDATED_APPLICATION
         graph_context_bound: true
-        caveat: current runtime exposes validation+application without a distinct authority artifact
+        caveat: canonical runtime has validation+application but no distinct authority artifact
+      A2_4_DELEGATION_REGISTRATION_FAILOVER:
+        status: IMPLEMENTED_AWAITING_EXECUTION
+        closure_kind: VALIDATED_CERTIFICATE_APPLICATION
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

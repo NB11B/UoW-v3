@@ -35,17 +35,18 @@ Closure result:
 - active graph hash, substitution epoch, and certificate lineage are preserved.
 - rejected/stale graph substitution certificate cannot be lowered as an authorized mutation.
 
-### Commit 3d49084
-Shadow workflow run 12: FAIL — TEST HARNESS/API MISMATCH.
+### Commit 1e77c9e
+Shadow workflow runs 15 and 16: PASS.
 
-The rebinding helper was tightened to require active_graph_hash binding, but an independently added test file still called the older helper signature. Result:
-- 17 tests passed;
-- 3 rebinding tests failed with missing required argument;
-- no canonical/shadow semantic assertion was reached in those failures.
+Closure result:
+- A2.2/A2.3 validated actor rebinding application can be lowered to an ordinary native UoW transition.
+- accepted binding conformance is bound to the exact live graph hash.
+- invalid binding conformance cannot construct the lowering.
+- reuse against a different graph context fails closed.
 
 Interpretation:
-- not an architectural falsification;
-- test harness corrected before rerun.
+- behavioral and causal application closure is supported.
+- full authority-equivalence remains OPEN because canonical tier-1 rebinding does not emit a separate authority artifact.
 
 ## Canonical CI observation
 
@@ -53,17 +54,13 @@ Normal repository CI continues to fail before test execution because existing NP
 
 This is not attributed to shadow code.
 
-## R3.2 actor rebinding experiment
+## R3.2 next closure target
 
-Canonical A2.3 Tier-1 rebinding validates against the live active graph and then immediately mutates active_binding. It does not emit a separate authorization artifact.
+A2.4 delegation registration and failover:
+- lower only the state mutation after canonical DelegationCertificate validation;
+- preserve child identity, delegate actor, generation, authority scope, and certificate lineage;
+- authority inflation must remain non-lowerable;
+- idempotent failover may replace the registered certificate;
+- non-idempotent failover must not create replacement authority.
 
-The corrected shadow experiment:
-- requires accepted canonical validate_binding conformance;
-- binds accepted conformance to the exact active graph hash;
-- lowers only binding-state mutation to an ordinary native UoW;
-- rejects reuse under a different live graph;
-- rejects invalid binding conformance before UoW construction.
-
-Expected interpretation if PASS:
-- behavioral and causal application closure is supported;
-- full authority-equivalence remains OPEN because current A2.3 authority is implicit in runtime ownership.
+Certificate issuance and attenuation validation remain outside the application-closure claim.

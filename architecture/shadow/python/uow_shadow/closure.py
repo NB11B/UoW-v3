@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Tuple
 
+from uow.composition.delegation import DelegationCertificate
 from uow.composition.mutation import RuntimeMutationQC
 from uow.composition.substitution import GraphReplacementCertificate
 from uow.contracts import Guard, GuardOp, Mutation, MutationOp, Route, Successor, UoW, make_uow
@@ -27,6 +28,10 @@ META_AUTHORIZATION_HASH = "__runtime_authorization_hash__"
 META_LAST_QC_HASH = "__runtime_last_mutation_qc_hash__"
 META_LAST_SUBSTITUTION_CERT_HASH = "__runtime_last_substitution_certificate_hash__"
 META_LAST_BINDING_CONFORMANCE = "__runtime_last_binding_conformance__"
+META_DELEGATION_CERT_PREFIX = "__delegation_cert__::"
+META_DELEGATION_ACTOR_PREFIX = "__delegation_actor__::"
+META_DELEGATION_GENERATION_PREFIX = "__delegation_generation__::"
+META_DELEGATION_SCOPE_PREFIX = "__delegation_scope__::"
 
 
 def make_runtime_meta_state(
@@ -243,6 +248,92 @@ def execute_validated_rebinding(
             candidate_binding_hash=candidate_binding_hash,
             conformance=conformance,
         ),
+        prev_evidence_hash=prev_evidence_hash,
+        step_number=step_number,
+    )
+
+
+
+def _delegation_key(prefix: str, child_uow_id: str) -> str:
+    return f"{prefix}{child_uow_id}"
+
+
+def make_validated_delegation_registration_uow(
+    certificate: DelegationCertificate,
+    conformance: ConformanceResult,
+) -> UoW:
+    """Lower registration/replacement of an accepted delegation into a native UoW.
+
+    This models the state mutation performed after the canonical delegation
+    validator accepts a DelegationCertificate. Certificate issuance and
+    attenuation validation remain outside the closure claim.
+
+    The current canonical path does not create a second authorization artifact;
+    the accepted certificate hash is therefore the exact application guard.
+    """
+    if not conformance.accepted:
+        raise ValueError("Rejected delegation conformance cannot permit registration.")
+    if conformance.conformance_id != certificate.compute_hash():
+        raise ValueError("Delegation conformance does not bind the supplied certificate.")
+    if conformance.subject_id != certificate.child_uow_id:
+        raise ValueError("Delegation conformance subject does not match child UoW.")
+    if conformance.contract_id != certificate.parent_contract_id:
+        raise ValueError("Delegation conformance parent contract does not match certificate.")
+    if conformance.context_id != f"generation:{certificate.generation}":
+        raise ValueError("Delegation conformance generation does not match certificate.")
+
+    child = certificate.child_uow_id
+    identity = f"shadow::register-delegation::{child}::{certificate.compute_hash()[:12]}"
+    return make_uow(
+        identity,
+        [
+            Route(
+                guard=Guard(
+                    GuardOp.EQ,
+                    META_AUTHORIZATION_HASH,
+                    certificate.compute_hash(),
+                ),
+                mutations=(
+                    Mutation(
+                        MutationOp.SET,
+                        _delegation_key(META_DELEGATION_CERT_PREFIX, child),
+                        certificate.compute_hash(),
+                    ),
+                    Mutation(
+                        MutationOp.SET,
+                        _delegation_key(META_DELEGATION_ACTOR_PREFIX, child),
+                        certificate.delegate_actor_id,
+                    ),
+                    Mutation(
+                        MutationOp.SET,
+                        _delegation_key(META_DELEGATION_GENERATION_PREFIX, child),
+                        certificate.generation,
+                    ),
+                    Mutation(
+                        MutationOp.SET,
+                        _delegation_key(META_DELEGATION_SCOPE_PREFIX, child),
+                        certificate.authority_scope.to_strings(),
+                    ),
+                ),
+                successor=Successor.halt(),
+            )
+        ],
+        layer="shadow-meta",
+        parent_context=f"A2.4-delegation-closure::{certificate.parent_contract_id}",
+    )
+
+
+def execute_validated_delegation_registration(
+    state: WorldState,
+    certificate: DelegationCertificate,
+    conformance: ConformanceResult,
+    *,
+    prev_evidence_hash: str = "0" * 64,
+    step_number: int = 1,
+) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
+    return _execute_meta_uow(
+        state,
+        make_validated_delegation_registration_uow(certificate, conformance),
         prev_evidence_hash=prev_evidence_hash,
         step_number=step_number,
     )

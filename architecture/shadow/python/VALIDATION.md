@@ -35,9 +35,17 @@ Closure result:
 - active graph hash, substitution epoch, and certificate lineage are preserved.
 - rejected/stale graph substitution certificate cannot be lowered as an authorized mutation.
 
-Scope limitation:
-- GraphReplacementCertificate formation remains outside the application-closure claim.
-- this preserves current A2.1 semantics and does not assert that all certification is authority in every subsystem.
+### Commit 3d49084
+Shadow workflow run 12: FAIL — TEST HARNESS/API MISMATCH.
+
+The rebinding helper was tightened to require active_graph_hash binding, but an independently added test file still called the older helper signature. Result:
+- 17 tests passed;
+- 3 rebinding tests failed with missing required argument;
+- no canonical/shadow semantic assertion was reached in those failures.
+
+Interpretation:
+- not an architectural falsification;
+- test harness corrected before rerun.
 
 ## Canonical CI observation
 
@@ -49,14 +57,13 @@ This is not attributed to shadow code.
 
 Canonical A2.3 Tier-1 rebinding validates against the live active graph and then immediately mutates active_binding. It does not emit a separate authorization artifact.
 
-The tightened shadow experiment therefore:
+The corrected shadow experiment:
 - requires accepted canonical validate_binding conformance;
-- binds that conformance to the exact active graph hash;
-- lowers only the binding-state mutation to an ordinary native UoW;
-- records conformance identity in resulting meta-state/evidence;
-- rejects reuse of accepted conformance under a different active graph;
+- binds accepted conformance to the exact active graph hash;
+- lowers only binding-state mutation to an ordinary native UoW;
+- rejects reuse under a different live graph;
 - rejects invalid binding conformance before UoW construction.
 
 Expected interpretation if PASS:
 - behavioral and causal application closure is supported;
-- full authority-equivalence remains OPEN because current A2.3 authority is implicit in runtime ownership rather than represented by a standalone artifact.
+- full authority-equivalence remains OPEN because current A2.3 authority is implicit in runtime ownership.

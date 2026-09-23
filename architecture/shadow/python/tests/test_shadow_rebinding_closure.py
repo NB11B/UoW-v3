@@ -68,6 +68,7 @@ def test_validated_actor_rebinding_application_closes_over_native_uow():
     assert conformance.accepted
 
     uow = make_validated_rebinding_uow(
+        active_graph_hash=graph.compute_hash(),
         candidate_binding_hash=b1.compute_hash(),
         conformance=conformance,
     )
@@ -81,6 +82,7 @@ def test_validated_actor_rebinding_application_closes_over_native_uow():
     )
     committed, evidence, certificate = execute_validated_rebinding(
         shadow_state,
+        active_graph_hash=graph.compute_hash(),
         candidate_binding_hash=b1.compute_hash(),
         conformance=conformance,
     )
@@ -108,7 +110,7 @@ def test_rejected_binding_conformance_cannot_be_lowered_as_rebinding():
         )
 
 
-def test_validated_rebinding_fails_closed_if_context_guard_does_not_match():
+def test_validated_rebinding_fails_closed_if_active_graph_context_does_not_match():
     graph = _graph()
     registry = ActorRegistry([_actor("actor-A"), _actor("actor-B")])
     b0 = ActorBinding("b0", graph.graph_id, {"worker": "actor-A"})
@@ -117,15 +119,16 @@ def test_validated_rebinding_fails_closed_if_context_guard_does_not_match():
     assert conformance.accepted
 
     uow = make_validated_rebinding_uow(
+        active_graph_hash=graph.compute_hash(),
         candidate_binding_hash=b1.compute_hash(),
         conformance=conformance,
     )
     shadow_state = make_runtime_meta_state(
-        active_graph_hash=graph.compute_hash(),
+        active_graph_hash="different-live-graph-hash",
         active_binding_hash=b0.compute_hash(),
         generation=0,
         history_head="rebind-history",
-        authorization_hash="wrong-conformance-id",
+        authorization_hash=conformance.conformance_id,
         cursor=uow.H.identity,
     )
 

@@ -1,4 +1,5 @@
 """Public API for Pass 5: Proposer Seam & Deterministic Judge."""
+from .adaptive import PortableAdaptiveProposer
 from .base import AdaptiveProposer, BaseProposer
 from .engine import ProposerOrchestrationEngine, run_proposer_orchestration
 from .fallback import DeterministicFallbackScheduler
@@ -22,6 +23,7 @@ __all__ = [
     "HeuristicSchedulingProposer",
     "ModelIdentity",
     "ModelProposal",
+    "PortableAdaptiveProposer",
     "ProposalCertificate",
     "ProposerOrchestrationEngine",
     "RandomProposer",

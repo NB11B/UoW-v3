@@ -46,6 +46,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="canonical runtime",
     ),
+    "U15.PORTABLE_ADAPTATION": ClaimSpec(
+        "U15.PORTABLE_ADAPTATION",
+        "The closed-loop adaptive proposer converges under workload drift, reducing rejection rate R_reject(t+n) < R_reject(t) with strictly zero wrong authoritative commits.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="canonical runtime",
+    ),
+    "U15.ADAPTATION_CONTAINMENT": ClaimSpec(
+        "U15.ADAPTATION_CONTAINMENT",
+        "Catastrophic model degradation, corrupted labels, and proposer crashes reduce efficiency without compromising deterministic authority invariants or producing invalid state.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="canonical runtime",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

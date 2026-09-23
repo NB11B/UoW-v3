@@ -1,0 +1,34 @@
+schema_version: "0.1"
+branch: research/uow-closure-architecture
+control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+mode: additive-research-only
+
+phases:
+  R0_frozen_control: COMPLETE
+  R1_architecture_evidence_mapping: IN_PROGRESS
+  R2_language_neutral_specification: NOT_STARTED
+  R3_shadow_minimal_implementation: NOT_STARTED
+  R4_experiment_reconstruction: NOT_STARTED
+  R5_cross_language_conformance: NOT_STARTED
+  R6_reduction_eligibility: NOT_STARTED
+  R7_repository_reorganization: NOT_STARTED
+
+current_invariants:
+  source_runtime_modified: false
+  public_api_modified: false
+  files_deleted: false
+  experiments_deleted: false
+
+known_preservation_gaps:
+  - U14-B goal-driven graph synthesis has no located canonical main implementation
+  - U12 original general concurrent execution realization remains archive-only
+  - Q1 logistics reference workload and human-signoff qualification are primarily archive lineage
+  - Python and embedded C++ do not yet have one universal canonical-byte specification
+  - composition and canonical UoW contract models remain parallel ontologies
+
+next_mapping_targets:
+  - map every current claim_id to experiment manifests
+  - map every src/uow module to semantic concept and experiment consumers
+  - map archived U1-U14B/Q1 files to retained/reconstructed/archive disposition
+  - identify first closure falsification vectors
+  - identify first requirement-capability unification falsification vectors

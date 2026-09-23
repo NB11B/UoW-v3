@@ -1,19 +1,38 @@
-# R3.0 Validation Note
+# R3 Validation Record
 
-The initial shadow Python package was syntax-checked before commit.
+## Commit 195e330
 
-The tests under architecture/shadow/python/tests have been created but have not yet been executed against the repository runtime in this branch.
+Shadow test workflow:
+- workflow: UoW Closure Shadow
+- run: 2
+- result: PASS
 
-No qualification claim should be inferred from their existence.
+Initial shadow tests executed successfully against the canonical package.
 
-Initial intended parity checks:
-- core deterministic certification accept/reject;
-- resource capacity decision;
+Covered:
+- core certification accept/reject;
+- resource capacity parity;
 - OCC stale-read rejection;
 - external receipt binding;
-- typed set-inclusion matching;
-- authority lattice matching;
-- distinct-voter quorum semantics;
-- freshness semantics.
+- typed requirement/capability matcher basics.
 
-The next action is to execute these tests in a repository environment and treat any mismatch as a research finding.
+## Canonical CI observation
+
+The ordinary CI run on the same research PR did not reach canonical test execution because collection failed on missing optional dependencies:
+- numpy
+- openvino
+
+The standard workflow installs only the editable UoW package and pytest.
+
+This failure is not attributed to shadow code; it occurs during import of existing NPU test modules.
+
+No change to canonical CI dependency policy is made in R3.
+
+## Next validation expansion
+
+R3.1 adds parity tests for:
+- actor capability binding;
+- semantic projection with authority-bypass negative control;
+- delegation authority attenuation.
+
+Qualification status remains research-only. Shadow parity does not upgrade evidence level.

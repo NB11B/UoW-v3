@@ -1,4 +1,4 @@
-schema_version: "0.8"
+schema_version: "0.9"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-shadow
@@ -21,32 +21,30 @@ current_invariants:
   src_uow_imports_shadow: false
 
 r3:
-  R3_0_semantic_types:
-    status: IMPLEMENTED_INITIAL
-    location: architecture/shadow/python/uow_shadow/types.py
+  R3_0_semantic_types: IMPLEMENTED_INITIAL
   R3_0_shadow_identity:
     status: IMPLEMENTED_INITIAL
     profile: SHADOW-JSON-v0.1
     authority_bearing: false
-  R3_0_requirement_capability_matcher:
-    status: IMPLEMENTED_INITIAL
-  R3_1_canonical_validator_adapters:
-    status: IMPLEMENTED_INITIAL
-    validators:
-      - core certify
-      - OCC validate_occ
-      - resource capacity
-      - resource requirement binding
-      - actor binding
-      - semantic projection
-      - delegation
-      - external receipt binding
-      - mutation vote verification
-      - mutation QC verification
-  shadow_tests:
-    status: CREATED_NOT_EXECUTED
-    syntax_checked: true
-    runtime_executed: false
+  R3_0_requirement_capability_matcher: IMPLEMENTED_INITIAL
+  R3_1_canonical_validator_adapters: IN_PROGRESS
+  shadow_workflow:
+    configured: true
+    latest_completed_run: 2
+    latest_result: PASS
+  canonical_ci_observation:
+    latest_result: FAIL_BEFORE_TEST_EXECUTION
+    reason: missing optional numpy/openvino during existing NPU test collection
+    attributed_to_shadow: false
+
+r3_1_parity_coverage:
+  - core certification
+  - OCC
+  - resource capacity
+  - external receipt binding
+  - actor binding
+  - semantic projection
+  - delegation attenuation
 
 r3_rules:
   shadow_only: true
@@ -54,4 +52,3 @@ r3_rules:
   public_api_changes_allowed: false
   deletions_allowed: false
   adapter_first: true
-  shadow_identity_is_authoritative: false

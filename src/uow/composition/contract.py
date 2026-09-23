@@ -144,3 +144,7 @@ class ParentContract:
             }
             digest = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
             object.__setattr__(self, "contract_hash", digest)
+
+    def compute_hash(self) -> str:
+        return self.contract_hash
+

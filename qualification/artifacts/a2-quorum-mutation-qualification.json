@@ -1,0 +1,66 @@
+{
+  "schema_version": "uow-a2-quorum-mutation-v1.0",
+  "timestamp": "2026-09-23T18:53:47.007534+00:00",
+  "phases_evaluated": [
+    {
+      "phase": "phase_1_baseline",
+      "head": "11ee9f70e7a326cdc5192a62a013b8a06860e2e3e559f3c83a66a41a6fcfb075"
+    },
+    {
+      "phase": "phase_2_proposal",
+      "proposer_authority": 0
+    },
+    {
+      "phase": "phase_3_quorum_voting",
+      "voters": [
+        "auth_esp32_s3",
+        "auth_stm32_unoq",
+        "auth_laptop_cpu"
+      ]
+    },
+    {
+      "phase": "phase_4_mutation_applied",
+      "head": "03d88e2443249ca5ea6ea629edf4932eac6cb0adcdfa04e0605d82d86467c6fe",
+      "generation": 1
+    },
+    {
+      "phase": "phase_5_crash_recovery",
+      "replayed_entries": 2
+    }
+  ],
+  "negative_controls": {
+    "proposer_self_sign_rejected": true,
+    "insufficient_quorum_rejected": true,
+    "stale_history_head_rejected": true,
+    "tampered_payload_rejected": true,
+    "semantic_projection_violation_rejected": true
+  },
+  "invariants": {
+    "uncertified_mutations": 0,
+    "stale_mutations": 0,
+    "double_commits": 0,
+    "state_divergence": 0
+  },
+  "claims": {
+    "A2.QUORUM_CERTIFIED_MUTATION.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.HETEROGENEOUS_MUTATION_CONSENSUS.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "canonical_digest": "ca43f19dd4eb2ecc1442b2206aed95df624128bb82e15510fca58711f40c0847",
+  "passed": true
+}

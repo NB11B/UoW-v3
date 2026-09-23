@@ -15,7 +15,13 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import time
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
+
+if TYPE_CHECKING:
+    from uow.composition.binding import ActorBinding
+    from uow.composition.contract import ParentContract
+    from uow.composition.graph import RealizationGraph
+    from uow.composition.mutation import RuntimeMutationQC
 
 from uow.composition.convergence import AuthoritativeHistory, HistoryEntry, HistoryEntryKind
 from uow.composition.fabric import canonical_json
@@ -93,12 +99,16 @@ class PhysicalHostNode:
         secret_key: str,
         clock_skew_sec: float = 0.0,
         generation: int = 1,
+        active_graph: Optional[RealizationGraph] = None,
+        active_binding: Optional[ActorBinding] = None,
     ) -> None:
         self.node_id = node_id
         self.working_dir = Path(working_dir)
         self.secret_key = secret_key
         self.clock_skew_sec = clock_skew_sec
         self.generation = generation
+        self.active_graph = active_graph
+        self.active_binding = active_binding
 
         self.wal = DurableWAL(self.working_dir)
         self.history = AuthoritativeHistory()
@@ -209,3 +219,55 @@ class PhysicalHostNode:
             appended_count += 1
 
         return True, appended_count, "CAUGHT_UP"
+
+    def apply_mutation_qc(
+        self,
+        qc: Any,
+        candidate_graph: Any,
+        candidate_binding: Any,
+        parent_contract: Any,
+        authority_keys: Mapping[str, str],
+        threshold: int = 2,
+    ) -> Tuple[bool, str]:
+        """Atomically applies a Quorum Certificate verified graph and binding mutation."""
+        if not self.is_alive:
+            return False, "NODE_OFFLINE"
+
+        from uow.composition.mutation import verify_mutation_qc
+
+        valid, reason = verify_mutation_qc(
+            qc=qc,
+            parent_contract=parent_contract,
+            current_history_head=self.history.tip_hash(),
+            current_generation=self.generation,
+            authority_keys=authority_keys,
+            threshold=threshold,
+        )
+        if not valid:
+            return False, f"MUTATION_REJECTED: {reason}"
+
+        if candidate_graph.compute_hash() != qc.candidate_graph_hash:
+            return False, "MUTATION_REJECTED: CANDIDATE_GRAPH_HASH_MISMATCH"
+        if candidate_binding.compute_hash() != qc.candidate_binding_hash:
+            return False, "MUTATION_REJECTED: CANDIDATE_BINDING_HASH_MISMATCH"
+
+        self.active_graph = candidate_graph
+        self.active_binding = candidate_binding
+        next_gen = self.generation + 1
+
+        payload = {
+            "candidate_graph_hash": qc.candidate_graph_hash,
+            "candidate_binding_hash": qc.candidate_binding_hash,
+            "signers": list(qc.signers),
+        }
+        ok, entry, msg = self.commit_entry_durably(
+            kind=HistoryEntryKind.GRAPH_SUBSTITUTION,
+            payload=payload,
+            author_id=qc.qc_id,
+            quorum_sigs=qc.signers,
+        )
+        if not ok:
+            return False, msg
+
+        self.generation = next_gen
+        return True, "MUTATION_COMMITTED"

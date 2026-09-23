@@ -199,6 +199,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.QUORUM_CERTIFIED_MUTATION.PORTABLE": ClaimSpec(
+        "A2.QUORUM_CERTIFIED_MUTATION.PORTABLE",
+        "Runtime execution topology (realization graph G and actor binding B) mutates if and only if certified by a cryptographic Quorum Certificate (QC) signed by a threshold of independent authority nodes, binding parent contract U, candidate G, candidate B, generation epoch, and history head, with zero uncertified substitutions.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.HETEROGENEOUS_MUTATION_CONSENSUS.PORTABLE": ClaimSpec(
+        "A2.HETEROGENEOUS_MUTATION_CONSENSUS.PORTABLE",
+        "Distributed runtime nodes across an adversarial physical network substrate maintain strictly zero state divergence, zero stale generation mutations, and zero dropped in-flight tasks during live quorum-certified graph and binding transitions.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

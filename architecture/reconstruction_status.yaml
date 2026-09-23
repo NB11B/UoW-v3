@@ -1,12 +1,12 @@
-schema_version: "0.4"
+schema_version: "0.5"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-only
 
 phases:
   R0_frozen_control: COMPLETE
-  R1_architecture_evidence_mapping: IN_PROGRESS
-  R2_language_neutral_specification: NOT_STARTED
+  R1_architecture_evidence_mapping: COMPLETE
+  R2_language_neutral_specification: READY
   R3_shadow_minimal_implementation: NOT_STARTED
   R4_experiment_reconstruction: NOT_STARTED
   R5_cross_language_conformance: NOT_STARTED
@@ -19,20 +19,13 @@ current_invariants:
   files_deleted: false
   experiments_deleted: false
 
-r1_artifacts:
-  candidate_axioms: COMPLETE_INITIAL
-  capability_ledger: COMPLETE_INITIAL
-  experiment_manifests: COMPLETE_INITIAL
+r1_validation:
+  current_tests_mapped: "27/27"
+  archived_tests_mapped: "39/39"
+  unmapped_tests: 0
   claim_traceability: COMPLETE_CURRENT_REGISTRY
-  module_semantic_map: COMPLETE_MODULE_LEVEL
-  symbol_level_machine_map: COMPLETE_INITIAL
-  p4_candidate_register: COMPLETE_INITIAL
-  closure_falsification_matrix: COMPLETE_INITIAL
-  requirement_capability_matrix: COMPLETE_INITIAL
-  archive_file_disposition: COMPLETE_INITIAL
-  closure_shadow_vectors: COMPLETE_DESIGN
-  requirement_capability_shadow_vectors: COMPLETE_DESIGN
-  cross_language_inventory: COMPLETE_INITIAL
+  archive_disposition: COMPLETE_INITIAL
+  public_surface_review: COMPLETE_INITIAL
 
 known_preservation_gaps:
   - U14-B goal-driven graph synthesis has no located canonical main implementation
@@ -42,17 +35,17 @@ known_preservation_gaps:
   - Python and embedded C++ do not yet have one universal canonical-byte specification
   - composition and canonical UoW contract models remain parallel ontologies
   - current claim registry does not individually encode U1-U13, U14-B, or Q1 historical distinctions
+  - QuorumCommitSequencer imports a qualification implementation
+  - top-level uow public API flattens multiple architectural layers
 
-retained_archive_realizations:
-  - archive/orchestrator/orchestrator/graph_synthesis.py
-  - archive/orchestrator/orchestrator/concurrent_engine.py
-  - archive/orchestrator/orchestrator/semantic_matrix_prior.py
-  - archive/orchestrator/qualification/logistics/logistics_workload.py
-  - archive/orchestrator/qualification/logistics/logistics_proposer.py
-
-next_mapping_targets:
-  - validate symbol map against package export surfaces and integrations
-  - validate experiment-manifest coverage against archived tests one-by-one
-  - prepare R1 exit checklist
-  - define language-neutral schema candidates without modifying runtime
-  - begin only after R1 exit: R2 specification drafts
+r2_entry_rule:
+  additive_specification_only: true
+  source_runtime_changes_allowed: false
+  deletions_allowed: false
+  first_targets:
+    - semantic object model
+    - typed requirement/capability model
+    - canonical identity/versioning model
+    - attestation taxonomy
+    - lineage model
+    - semantic vs wire conformance profiles

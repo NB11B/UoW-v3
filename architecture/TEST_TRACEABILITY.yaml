@@ -1,0 +1,184 @@
+schema_version: "0.1"
+control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+archive_baseline: e9a143568180e612809dabd1352b023079c5001c
+
+current_tests:
+  - path: tests/test_adaptive_contract.py
+    experiment: U15
+  - path: tests/test_adaptive_quorum.py
+    experiment: U15
+  - path: tests/test_authority_service_c.py
+    experiment: DIST-AUTH
+  - path: tests/test_composition_adaptive_proposer.py
+    experiment: A2.2
+  - path: tests/test_composition_convergence.py
+    experiment: A2.5
+  - path: tests/test_composition_delegation.py
+    experiment: A2.4
+  - path: tests/test_composition_endurance.py
+    experiment: A2.8
+  - path: tests/test_composition_fabric.py
+    experiment: A2.3
+  - path: tests/test_composition_physical_network.py
+    experiment: A2.6
+  - path: tests/test_composition_quorum_mutation.py
+    experiment: A2.7
+  - path: tests/test_composition_semantics.py
+    experiment: A2.0
+  - path: tests/test_composition_substitution.py
+    experiment: A2.1
+  - path: tests/test_continuous_drift.py
+    experiment: U15
+  - path: tests/test_core_primitives.py
+    experiment: U1-U10
+  - path: tests/test_distributed_authority.py
+    experiment: DIST-AUTH
+  - path: tests/test_distributed_authority_physical_profile.py
+    experiment: DIST-AUTH
+  - path: tests/test_effects.py
+    experiment: Q1
+  - path: tests/test_npu_adaptive_proposer.py
+    experiment: U15
+  - path: tests/test_npu_hot_swap.py
+    experiment: U15
+  - path: tests/test_orchestration.py
+    experiment: U11
+  - path: tests/test_portable_adaptation.py
+    experiment: U15
+  - path: tests/test_proposer.py
+    experiment: U14
+  - path: tests/test_qualification_claims.py
+    experiment: QUALIFICATION-POLICY
+  - path: tests/test_resources.py
+    experiment: U13
+  - path: tests/test_timing_independence.py
+    experiment: TIMING
+  - path: tests/test_transactions.py
+    experiment: U12
+  - path: tests/test_universal_computation.py
+    experiment: U1-U10
+
+archive_tests:
+  - path: archive/orchestrator/tests/test_architectural_falsification.py
+    experiment: CROSS-CAMPAIGN-FALSIFICATION
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_bounded_control.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_corruption.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_crash_resume.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_differential.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_minsky_compile.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_minsky_execution.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_native_replay.py
+    experiment: U1-U10
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_q1_external_effects.py
+    experiment: Q1
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_q1_logistics_qualification.py
+    experiment: Q1
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u11_crash_resume.py
+    experiment: U11
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u11_nested_orchestration.py
+    experiment: U11
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u11_queue_as_state.py
+    experiment: U11
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u11_reference_elimination.py
+    experiment: U11
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u11_scheduler_as_uow.py
+    experiment: U11
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_atomicity.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_crash_resume.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_disjoint_concurrency.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_hazard_detection.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_hidden_coupling.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_multi_active_state.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_replay.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_semantic_matrix_priors.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u12_serializability.py
+    experiment: U12
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_atomic_leases.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_crash_resume.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_deadline_priority.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_legality_dominance.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_overallocation.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_pluggable_policy.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_replay.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_resource_state.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u13_starvation.py
+    experiment: U13
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u14_graph_synthesis.py
+    experiment: U14-B
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u14_npu_swappability.py
+    experiment: U14
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u14_objective_performance.py
+    experiment: U14
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u14_proposer_boundary.py
+    experiment: U14
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u14_rejection_invariants.py
+    experiment: U14
+    disposition: ARCHIVED_EVIDENCE
+  - path: archive/orchestrator/tests/test_u14_replay_and_telemetry.py
+    experiment: U14
+    disposition: ARCHIVED_EVIDENCE
+
+validation:
+  current_test_count: 27
+  archive_test_count: 39
+  unmapped_current: []
+  unmapped_archive: []

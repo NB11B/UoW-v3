@@ -280,7 +280,7 @@ class SelfHealingController:
             )
 
         # Import here to avoid a runtime circular dependency.
-        from .authority import AuthorityNode
+        from .authority import AuthorityNode, NodeMode
 
         old = self.cluster.nodes[node_id]
         before_state = old.state.state_hash
@@ -325,7 +325,7 @@ class SelfHealingController:
             and replacement.ledger.root_hash() == expected_root
             and len(replacement.ledger.records) == expected_steps
         )
-        replacement.mode = replacement.mode.ACTIVE if success else replacement.mode.QUARANTINED
+        replacement.mode = NodeMode.ACTIVE if success else NodeMode.QUARANTINED
         result = HealingResult(
             node_id,
             HealingAction.REBUILT if success else HealingAction.QUARANTINED_REPLAY_FAILURE,

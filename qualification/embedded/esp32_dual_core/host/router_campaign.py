@@ -9,15 +9,16 @@ Orchestrates the complete 6-phase heterogeneous adaptive routing campaign:
   Phase 5: Device Outage [GPU Offline] (Jobs 800-999)
   Phase 6: Nominal Restoration [Retention / Fast Reacquisition] (Jobs 1000-1199)
 
-Evaluates 8 Capability Gates:
-  G0: wrong_authoritative_commits == 0 (strictly 0 across all jobs)
-  G1: Non-zero rejection during phase shifts (authority enforcement)
-  G2: Adaptation convergence (rejection falls <= 5% within 40 jobs)
-  G3: Heterogeneous execution (CPU, GPU, NPU all execute >= 100 jobs)
-  G4: Latency regret reduction (adaptive router beats static baselines)
+Evaluates 13 Capability Gates (G0-G12), including:
+  G0: zero wrong authoritative commits
+  G1: forced offline-target rejection through the actual authority boundary
+  G2: adaptation convergence
+  G3: attested CPU/CUDA/NPU heterogeneous execution
+  G4: latency regret against measured actual-hardware shadow oracle
   G5: independently verified SHA-256 evidence-chain continuity
-  G6: Transactional canary safety (no degraded model promoted)
-  G7: Retention / Fast reacquisition in Phase 6 within 25 jobs
+  G6-G10: canary safety, retention, rollback, stochastic recovery, operational memory
+  G11: OCC concurrency resolution
+  G12: empirical tail-distribution stability
 """
 from __future__ import annotations
 
@@ -39,6 +40,7 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from qualification.claim_registry import get_claim
 from qualification.evidence import (
     ClaimRequirement,
     EvidenceContext,
@@ -1223,18 +1225,15 @@ class RouterCampaignRunner:
                 and p95_reg <= 15000.0
             )
 
-        physical_authority = ClaimRequirement(
-            EvidenceLevel.PHYSICAL,
-            ("authority",),
-        )
-        physical_heterogeneous = ClaimRequirement(
-            EvidenceLevel.PHYSICAL,
-            ("authority", "cpu", "gpu", "npu"),
-        )
-        physical_adaptation = ClaimRequirement(
-            EvidenceLevel.PHYSICAL,
-            ("authority", "cpu", "gpu", "npu", "gpu_training", "npu_policy"),
-        )
+        def requirement(claim_id: str) -> ClaimRequirement:
+            spec = get_claim(claim_id)
+            return ClaimRequirement(spec.required_level, spec.required_components)
+
+        physical_authority = requirement("ESP32.AUTHORITY")
+        physical_heterogeneous = requirement("HETERO.EXECUTION")
+        physical_adaptation = requirement("HETERO.ADAPTATION")
+        physical_performance = requirement("HETERO.PERFORMANCE")
+        physical_evidence_chain = requirement("EVIDENCE.CHAIN")
 
         gates = {
             "G0_zero_wrong_commits": evaluate_claim(
@@ -1257,12 +1256,12 @@ class RouterCampaignRunner:
                 npu_jobs=npu_count,
             ),
             "G4_latency_regret_reduction": evaluate_claim(
-                g4_pass, self.evidence_context, physical_heterogeneous,
+                g4_pass, self.evidence_context, physical_performance,
                 avg_regret_us=avg_regret,
                 oracle="measured_actual_hardware",
             ),
             "G5_evidence_chain_continuity": evaluate_claim(
-                g5_pass, self.evidence_context, physical_authority,
+                g5_pass, self.evidence_context, physical_evidence_chain,
                 links_verified=self.evidence_links_verified,
                 expected_links=expected_evidence_links,
                 verification_failures=self.evidence_verification_failures,
@@ -1292,7 +1291,7 @@ class RouterCampaignRunner:
                 occ_retries_successful=self.occ_retries_successful,
             ),
             "G12_distribution_stability": evaluate_claim(
-                g12_pass, self.evidence_context, physical_heterogeneous,
+                g12_pass, self.evidence_context, physical_performance,
                 p50_regret_us=p50_reg,
                 p95_regret_us=p95_reg,
                 p99_regret_us=p99_reg,

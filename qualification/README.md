@@ -90,3 +90,18 @@ All qualification code is governed by [EVIDENCE_POLICY.md](EVIDENCE_POLICY.md).
 A mock, simulation, portable fallback, proxy metric, or substituted device may validate logic, but it cannot satisfy a claim about a different physical substrate. Substrate-sensitive gates must distinguish `observed_pass`, `qualified`, and `passed`.
 
 The shared implementation is `qualification/evidence.py`.
+
+
+## Architectural source
+
+The executable evidence-substrate contract in this repository is the implementation counterpart of the broader architectural rule maintained in:
+
+`NB11B/Hybrid-systems-architecture-`
+
+Companion review:
+
+`Hybrid-systems-architecture- PR #1 — Architecture: evidence-substrate fidelity and qualification registry`
+
+The knowledgebase defines the domain-neutral concepts: claim, evidence substrate, substitution, qualification, negative control, and measurement provenance.
+
+This repository is responsible for making those concepts executable through `qualification/evidence.py`, `qualification/claim_registry.py`, qualification lint, CI, and concrete evidence artifacts.

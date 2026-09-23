@@ -1,0 +1,85 @@
+schema_version: "0.1"
+baseline:
+  repository: NB11B/UoW
+  commit: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+archive:
+  repository: NB11B/weights-on-the-fly
+  commit: e9a143568180e612809dabd1352b023079c5001c
+
+experiments:
+  - id: U1-U10
+    name: universal-uow-kernel
+    status: MAPPED
+    preservation: [P0, P2, P3]
+  - id: U11
+    name: self-hosted-orchestration
+    status: MAPPED
+    preservation: [P0, P1, P3]
+  - id: U12
+    name: transactional-concurrency
+    status: MAPPED
+    preservation: [P0, P1, P2, P3]
+  - id: U13
+    name: resource-aware-scheduling
+    status: MAPPED
+    preservation: [P0, P1, P2]
+  - id: U14
+    name: probabilistic-proposer
+    status: MAPPED
+    preservation: [P0, P1, P2]
+  - id: U14-B
+    name: goal-driven-graph-synthesis
+    status: PRESERVATION_GAP
+    preservation: [P1, P2, P3]
+  - id: Q1
+    name: certified-external-effects
+    status: MAPPED_WITH_ARCHIVE_DOMAIN_EVIDENCE
+    preservation: [P0, P1, P2, P3]
+  - id: TIMING
+    name: local-clock-independence
+    status: MAPPED
+    preservation: [P0, P2, P3]
+  - id: U15
+    name: continuous-adaptive-proposer
+    status: MAPPED
+    preservation: [P0, P1, P2, P3]
+  - id: DIST-AUTH
+    name: distributed-authority
+    status: MAPPED
+    preservation: [P1, P2, P3]
+  - id: A2.0
+    name: semantic-projection
+    status: MAPPED
+    preservation: [P0, P2]
+  - id: A2.1
+    name: graph-substitution
+    status: MAPPED
+    preservation: [P1, P2]
+  - id: A2.2
+    name: adaptive-graph-and-binding
+    status: MAPPED
+    preservation: [P1, P2]
+  - id: A2.3
+    name: distributed-actor-fabric
+    status: MAPPED
+    preservation: [P1, P2]
+  - id: A2.4
+    name: recursive-delegation
+    status: MAPPED
+    preservation: [P0, P1, P2]
+  - id: A2.5
+    name: partition-convergence
+    status: MAPPED
+    preservation: [P1, P2]
+  - id: A2.6
+    name: physical-multiprocess-adversarial-network
+    status: MAPPED
+    preservation: [P1, P2, P3]
+  - id: A2.7
+    name: quorum-certified-runtime-mutation
+    status: MAPPED
+    preservation: [P0, P1, P2]
+  - id: A2.8
+    name: continuous-topology-evolution-endurance
+    status: MAPPED
+    preservation: [P1, P2, P3]

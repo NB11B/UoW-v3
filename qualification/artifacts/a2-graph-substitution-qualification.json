@@ -1,0 +1,54 @@
+{
+  "schema_version": "uow-a2-graph-substitution-v1.0",
+  "timestamp": "2026-09-23T17:22:44.860856+00:00",
+  "parent_contract": {
+    "contract_id": "parent_certified_transform_v1",
+    "contract_hash": "643898dcd0eb231b3643f87d0aacbf951abdefb84ca309dcd227d8d59ab1e0c3"
+  },
+  "baseline_graph": {
+    "graph_id": "G0_sequential",
+    "graph_hash": "9f42c01b2b762162d87bcb37ea88f038c71cf698a43e2da19e48dc69c5138664"
+  },
+  "certified_substitutions": [
+    {
+      "strategy": "parallel_decomposition",
+      "target_graph_id": "G1_parallel",
+      "target_graph_hash": "57133f76f399603325eb875d907ed82ee943695948639920666389014e052d34",
+      "certificate_hash": "f2a8daa5c9db7ebe3069ad74fd2b6ce53029cbdaac727f743a2c529eb65d603d",
+      "execution_status": "SUCCESS"
+    },
+    {
+      "strategy": "accelerator_offload",
+      "target_graph_id": "G2_accelerator",
+      "target_graph_hash": "691e452c86458e8a537420c77a7dccca3236eaf49d8e1e6952724a13f0dd179a",
+      "certificate_hash": "c0265b9d4d6023c39b615755ab2b35211df4852d2a8c1d3abe3506c904a5bd35",
+      "execution_status": "SUCCESS"
+    },
+    {
+      "strategy": "distributed_quorum",
+      "target_graph_id": "G3_distributed",
+      "target_graph_hash": "4cad74b423aa3b99488512b47ed4cd70046616bbb856037ccf1ae77815ca0ead",
+      "certificate_hash": "6e554e451bd14945b7e4ab9af50590ec39e8c4bb2d1ac03a976dbcdc5931a6d9",
+      "execution_status": "SUCCESS"
+    }
+  ],
+  "negative_controls": {
+    "stale_graph_hash_rejected": true,
+    "foreign_contract_rejected": true,
+    "cyclic_candidate_rejected": true,
+    "authority_bypass_rejected": true,
+    "injected_failure_fallback_to_baseline": true
+  },
+  "claims": {
+    "A2.GRAPH_SUBSTITUTION.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "passed": true
+}

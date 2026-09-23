@@ -22,16 +22,37 @@ from .projection import (
     project_semantics,
 )
 
+from .substitution import (
+    CompositionCertifier,
+    GraphReplacementCertificate,
+    GraphReplacementProposal,
+    SubstitutionDecision,
+    SubstitutionStrategy,
+)
+from .runtime import (
+    AdaptiveCompositionRuntime,
+    ExecutionRecord,
+    NodeExecutionResult,
+)
+
 __all__ = [
+    "AdaptiveCompositionRuntime",
     "AuthorityObligation",
     "CausalConstraint",
+    "CompositionCertifier",
     "EvidenceObligation",
+    "ExecutionRecord",
     "FailureSemantics",
+    "GraphReplacementCertificate",
+    "GraphReplacementProposal",
+    "NodeExecutionResult",
     "ParentContract",
     "RealizationGraph",
     "RealizationNode",
     "ResourceConstraint",
     "SemanticProjection",
+    "SubstitutionDecision",
+    "SubstitutionStrategy",
     "TemporalConstraint",
     "are_equivalent",
     "check_conformance",

@@ -64,6 +64,7 @@ class RealizationGraph:
     nodes: Mapping[str, RealizationNode]
     edges: Tuple[Tuple[str, str], ...]  # Directed edges (u, v) representing u -> v
     graph_hash: str = ""
+    allow_cycle: bool = False
 
     def __post_init__(self) -> None:
         # 1. Edge validation
@@ -73,8 +74,8 @@ class RealizationGraph:
             if dst not in self.nodes:
                 raise ValueError(f"Edge references non-existent destination node: {dst!r}")
 
-        # 2. Cycle detection (must be a valid DAG)
-        if self._has_cycle():
+        # 2. Cycle detection (must be a valid DAG unless explicitly testing cycle rejection)
+        if self._has_cycle() and not self.allow_cycle:
             raise ValueError(f"RealizationGraph {self.graph_id!r} contains a cycle; must be a valid DAG.")
 
         # 3. Canonical graph digest
@@ -86,6 +87,38 @@ class RealizationGraph:
             }
             digest = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
             object.__setattr__(self, "graph_hash", digest)
+
+    def compute_hash(self) -> str:
+        """Returns the canonical SHA-256 digest of this graph topology."""
+        return self.graph_hash
+
+    def validate_acyclic(self) -> bool:
+        """Verifies whether this graph is strictly acyclic (DAG)."""
+        return not self._has_cycle()
+
+    def topological_sort(self) -> Tuple[str, ...]:
+        """Returns node IDs in deterministic topological order."""
+        adj: Dict[str, List[str]] = {nid: [] for nid in self.nodes}
+        in_degree: Dict[str, int] = {nid: 0 for nid in self.nodes}
+        for u, v in self.edges:
+            adj[u].append(v)
+            in_degree[v] += 1
+
+        queue = sorted([nid for nid, deg in in_degree.items() if deg == 0])
+        order: List[str] = []
+
+        while queue:
+            curr = queue.pop(0)
+            order.append(curr)
+            for nxt in adj[curr]:
+                in_degree[nxt] -= 1
+                if in_degree[nxt] == 0:
+                    queue.append(nxt)
+            queue.sort()
+
+        if len(order) != len(self.nodes):
+            raise ValueError(f"Graph {self.graph_id!r} contains a cycle.")
+        return tuple(order)
 
     def _has_cycle(self) -> bool:
         visited: Set[str] = set()

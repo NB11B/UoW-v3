@@ -122,6 +122,13 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         EvidenceLevel.PORTABLE,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.GRAPH_SUBSTITUTION.PORTABLE": ClaimSpec(
+        "A2.GRAPH_SUBSTITUTION.PORTABLE",
+        "The adaptive composition runtime certifies candidate realization graph replacements against parent contract semantics prior to activation, guaranteeing semantic invariance Phi(G', U) = Phi(G, U) and falling back safely upon invalid proposals.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

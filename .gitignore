@@ -8,5 +8,7 @@ build/
 scratch/
 storage_authority_c/
 qualification/distributed_authority/storage_authority_c/
+/artifacts/
+*.onnx
 
 

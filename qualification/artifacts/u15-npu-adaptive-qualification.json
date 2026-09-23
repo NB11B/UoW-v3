@@ -1,0 +1,53 @@
+{
+  "schema_version": "uow-npu-adaptive-qualification-v1.0",
+  "timestamp": "2026-09-23T16:03:07.707375+00:00",
+  "hardware": {
+    "npu_inference": "Intel(R) AI Boost",
+    "gpu_training": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "host_os": "Windows (OpenVINO + Level-Zero VCL)"
+  },
+  "lineage": {
+    "generation_0_hash": "6f26e8e64c15c366a299c3d5043b8726fe24398c33fed0d159a1e33a082ebdd8",
+    "generation_1_hash": "c9e5a737a0bcb555e52fc58f74eff9e10e39fe2dc029814ff9726172a0c6980b",
+    "parent_link_verified": true
+  },
+  "metrics": {
+    "dag_trials": 20,
+    "tasks_committed": 3204,
+    "proposals_scored": 1890,
+    "wrong_authoritative_commits": 0,
+    "npu_latency_us": {
+      "p50": 1715.8,
+      "p95": 2413.2,
+      "p99": 6935.2
+    }
+  },
+  "containment_matrix": {
+    "illegal_schedule_rejected": true,
+    "accelerator_crash_fallback": true,
+    "zero_state_mutation_on_rejection": true,
+    "wal_ledger_integrity_verified": true
+  },
+  "claims": {
+    "U15.NPU_ADAPTIVE_PROPOSER.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": []
+    },
+    "U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "physical",
+      "required_evidence_level": "physical",
+      "required_components": [
+        "authority",
+        "npu"
+      ]
+    }
+  },
+  "passed": true
+}

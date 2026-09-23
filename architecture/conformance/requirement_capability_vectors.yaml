@@ -1,0 +1,102 @@
+schema_version: "0.1"
+purpose: matched vectors for requirement-capability unification
+status: DESIGN_ONLY
+
+vectors:
+  - id: RC-RESOURCE-FIT
+    domain: resource
+    requirement: {cpu_cores: 2, ram_units: 4}
+    capability: {cpu_cores_available: 4, ram_units_available: 8}
+    expected: SATISFIED
+  - id: RC-RESOURCE-ONE-DIMENSION-FAIL
+    domain: resource
+    requirement: {cpu_cores: 2, ram_units: 4}
+    capability: {cpu_cores_available: 8, ram_units_available: 3}
+    expected: REJECT
+
+  - id: RC-ACTOR-CAPABILITY-FIT
+    domain: actor_capability
+    requirement: [role:worker, cpu_compute]
+    capability: [role:worker, cpu_compute, local_storage]
+    expected: SATISFIED
+  - id: RC-ACTOR-CAPABILITY-MISSING
+    domain: actor_capability
+    requirement: [role:worker, cpu_compute]
+    capability: [role:worker]
+    expected: REJECT
+
+  - id: RC-AUTHORITY-TRUST
+    domain: authority
+    requirement: AUTHORITY_SUBSTRATE
+    advertised_capability: AUTHORITY_SUBSTRATE
+    trusted_root: false
+    expected: REJECT
+    purpose: prove capability matching cannot erase qualification/trust
+
+  - id: RC-LEASE-FRESHNESS
+    domain: liveness
+    requirement: actor available now
+    actor_descriptor_available: true
+    lease_valid: false
+    expected: REJECT
+    purpose: prove timeless capability matching is insufficient
+
+  - id: RC-DEPENDENCY-NOT-READY
+    domain: dependency
+    required_predecessors: [u1, u2]
+    completed: [u1]
+    expected: REJECT
+
+  - id: RC-OCC-HIDDEN-COUPLING
+    domain: concurrency
+    direct_write_conflict: false
+    coupled_state_changed: true
+    expected: REJECT
+    purpose: prove common matcher must support relational predicates
+
+  - id: RC-TEMPORAL-BREACH
+    domain: temporal
+    required_max_ms: 100
+    offered_critical_path_ms: 101
+    expected: REJECT
+
+  - id: RC-EVIDENCE-DEFICIT
+    domain: evidence
+    required_level: PHYSICAL
+    offered_level: PORTABLE
+    semantic_output_correct: true
+    expected: REJECT
+    purpose: preserve evidence-substrate fidelity
+
+  - id: RC-FAILURE-SEMANTICS
+    domain: failure
+    required: ROLLBACK
+    offered: PARTIAL_COMMIT
+    semantic_output_correct_on_success: true
+    expected: REJECT
+
+  - id: RC-CAUSAL-INVERSION
+    domain: causality
+    required: authority_precedes_commit
+    offered_graph: commit_precedes_authority
+    final_output_equal: true
+    expected: REJECT
+
+  - id: RC-QUORUM-DUPLICATE-VOTER
+    domain: quorum
+    threshold: 2
+    votes: [authority_A, authority_A]
+    expected: REJECT
+    purpose: capability cardinality must preserve distinctness semantics
+
+  - id: RC-DELEGATION-INFLATION
+    domain: delegation
+    parent_scope: [READ, COMPUTE]
+    child_requested: [READ, COMPUTE, COMMIT]
+    expected: REJECT
+
+  - id: RC-RECEIPT-WRONG-EFFECT
+    domain: external_effect
+    receipt_signature_valid: true
+    receipt_effect_binding_matches: false
+    expected: REJECT

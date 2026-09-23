@@ -1,0 +1,117 @@
+schema_version: "0.1"
+archive:
+  repository: NB11B/weights-on-the-fly
+  commit: e9a143568180e612809dabd1352b023079c5001c
+  root: archive/orchestrator
+
+disposition_values:
+  RECONSTRUCTED: current main contains the demonstrated semantic capability in a maintained form
+  RETAINED_REALIZATION: unique realization remains architecturally useful and must be preserved/rebuilt
+  ARCHIVED_EVIDENCE: historical implementation/test/report remains evidence even when capability is reconstructed
+  PRESERVATION_GAP: capability has no located current canonical reconstruction
+
+runtime_sources:
+  "orchestrator/types.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/state.py, src/uow/ontology.py, src/uow/engine.py]
+    archive_role: original combined state/evidence/ontology types
+  "orchestrator/contract.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/contracts.py]
+  "orchestrator/engine.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/engine.py]
+  "orchestrator/transaction.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/transactions/descriptor.py, src/uow/transactions/occ.py, src/uow/transactions/sequencer.py]
+  "orchestrator/scheduler_uow.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/orchestration/]
+  "orchestrator/scheduler_policies.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/resources/policies.py]
+  "orchestrator/resources.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/resources/requirement.py, src/uow/resources/state.py, src/uow/resources/runtime.py]
+  "orchestrator/proposer.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/proposer/base.py, src/uow/proposer/stochastic.py, src/uow/proposer/heuristic.py, src/uow/proposer/fallback.py]
+  "orchestrator/proposer_types.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/proposer/types.py]
+  "orchestrator/learned_engine.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/proposer/engine.py, src/uow/proposer/judge.py]
+  "orchestrator/external_effect.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/effects/descriptor.py, src/uow/effects/certification.py, src/uow/effects/runner.py]
+    note: current realization stores authoritative effect state through canonical WorldState rather than preserving the original journal object unchanged
+  "orchestrator/saga.py":
+    disposition: RECONSTRUCTED
+    current: [src/uow/effects/saga.py]
+  "orchestrator/bounded_backend.py":
+    disposition: ARCHIVED_EVIDENCE
+    current: [foundations/universal_computation/bounded_control.py, tests/test_universal_computation.py]
+    preservation: P2
+    reason: negative control defining the bounded-memory falsification boundary
+  "orchestrator/persistence.py":
+    disposition: ARCHIVED_EVIDENCE
+    current: [src/uow/transactions/sequencer.py, src/uow/composition/host_node.py]
+    note: current durability is WAL-oriented; original JSON checkpoint realization remains useful historical crash/resume evidence
+  "orchestrator/concurrent_engine.py":
+    disposition: RETAINED_REALIZATION
+    current_semantics: [src/uow/transactions/]
+    preservation: [P1, P2, P3]
+    reason: actual ThreadPoolExecutor concurrent execution with timing entropy is not represented by an equivalent general canonical runtime realization
+  "orchestrator/semantic_matrix_prior.py":
+    disposition: RETAINED_REALIZATION
+    preservation: [P1, P2]
+    reason: ontology-informed concurrency prior is not present in current canonical main and may be a useful optional optimization realization
+  "orchestrator/graph_synthesis.py":
+    disposition: PRESERVATION_GAP
+    preservation: [P1, P2, P3]
+    reason: GoalDecompositionProposer and DeterministicGraphCertifier have no located current canonical equivalent
+
+domain_qualification:
+  "qualification/logistics/logistics_workload.py":
+    disposition: RETAINED_REALIZATION
+    preservation: [P2, P3]
+    reason: independent logistics reference oracle, human-signoff step, and domain recovery DAG
+  "qualification/logistics/logistics_proposer.py":
+    disposition: RETAINED_REALIZATION
+    preservation: [P1, P2, P3]
+    reason: domain-specific repair proposer used to demonstrate proposal seam in real-work qualification
+  "qualification/logistics/mock_external_systems.py":
+    disposition: ARCHIVED_EVIDENCE
+    preservation: [P2, P3]
+    reason: external-system/idempotency/compensation test substrate
+
+experiment_directories:
+  "experiments/native_uow_universal_kernel/": ARCHIVED_EVIDENCE
+  "experiments/self_hosted_orchestration/": ARCHIVED_EVIDENCE
+  "experiments/transactional_concurrency/": ARCHIVED_EVIDENCE
+  "experiments/resource_aware_scheduling/": ARCHIVED_EVIDENCE
+  "experiments/probabilistic_proposer/": ARCHIVED_EVIDENCE
+  "experiments/qualification_campaign/": ARCHIVED_EVIDENCE
+
+tests:
+  policy: >
+    All archived U1-U14B/Q1 tests remain ARCHIVED_EVIDENCE until their individual
+    negative controls and assertions are represented by reconstructed manifests and
+    matched conformance vectors. A current test with similar name does not silently
+    replace a historical falsification test.
+
+docs:
+  "docs/NATIVE_UOW_UNIVERSAL_KERNEL.md": ARCHIVED_EVIDENCE
+  "docs/U11_SELF_HOSTED_ORCHESTRATION.md": ARCHIVED_EVIDENCE
+  "docs/U12_TRANSACTIONAL_CONCURRENCY.md": ARCHIVED_EVIDENCE
+  "docs/U13_RESOURCE_AWARE_SCHEDULING.md": ARCHIVED_EVIDENCE
+  "docs/U14_PROBABILISTIC_PROPOSER.md": ARCHIVED_EVIDENCE
+  "docs/Q1_REAL_WORLD_QUALIFICATION.md": ARCHIVED_EVIDENCE
+
+high_priority_reconstruction:
+  - archive/orchestrator/orchestrator/graph_synthesis.py
+  - archive/orchestrator/orchestrator/concurrent_engine.py
+  - archive/orchestrator/orchestrator/semantic_matrix_prior.py
+  - archive/orchestrator/qualification/logistics/logistics_workload.py
+  - archive/orchestrator/qualification/logistics/logistics_proposer.py

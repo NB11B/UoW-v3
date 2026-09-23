@@ -1,4 +1,4 @@
-schema_version: "0.2"
+schema_version: "0.3"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-only
@@ -27,20 +27,31 @@ r1_artifacts:
   module_semantic_map: COMPLETE_MODULE_LEVEL
   closure_falsification_matrix: COMPLETE_INITIAL
   requirement_capability_matrix: COMPLETE_INITIAL
-  archive_file_disposition: NOT_STARTED
+  archive_file_disposition: COMPLETE_INITIAL
+  closure_shadow_vectors: COMPLETE_DESIGN
+  requirement_capability_shadow_vectors: COMPLETE_DESIGN
+  cross_language_inventory: COMPLETE_INITIAL
   symbol_level_machine_map: NOT_STARTED
 
 known_preservation_gaps:
   - U14-B goal-driven graph synthesis has no located canonical main implementation
   - U12 original general concurrent execution realization remains archive-only
+  - U12 ontology-informed semantic concurrency prior remains archive-only
   - Q1 logistics reference workload and human-signoff qualification are primarily archive lineage
   - Python and embedded C++ do not yet have one universal canonical-byte specification
   - composition and canonical UoW contract models remain parallel ontologies
   - current claim registry does not individually encode U1-U13, U14-B, or Q1 historical distinctions
 
+retained_archive_realizations:
+  - archive/orchestrator/orchestrator/graph_synthesis.py
+  - archive/orchestrator/orchestrator/concurrent_engine.py
+  - archive/orchestrator/orchestrator/semantic_matrix_prior.py
+  - archive/orchestrator/qualification/logistics/logistics_workload.py
+  - archive/orchestrator/qualification/logistics/logistics_proposer.py
+
 next_mapping_targets:
-  - map archived U1-U14B/Q1 files to RECONSTRUCTED / RETAINED_REALIZATION / ARCHIVED_EVIDENCE disposition
   - refine module map to symbol-level machine-readable entries
-  - define matched shadow vectors for first closure tests
-  - define matched shadow vectors for requirement-capability unification
-  - inventory cross-language semantic and byte-conformance vectors
+  - inventory actual import/call consumers for candidate P4 items
+  - define language-neutral schema candidates without modifying runtime
+  - validate manifest coverage against all registered claims and archived tests
+  - prepare R1 exit checklist before beginning R2

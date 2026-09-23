@@ -1,0 +1,93 @@
+schema_version: "0.1"
+purpose: matched vectors for shadow UoW closure experiments
+status: DESIGN_ONLY
+source_runtime_modified: false
+
+vectors:
+  - id: CL-REBIND-VALID
+    operation: actor_rebinding
+    positive:
+      input: valid active graph and alternate qualified actor binding
+      current_result: binding changes; graph unchanged
+      shadow_expectation: equivalent runtime meta-state transition
+    compare:
+      - active graph hash unchanged
+      - binding semantic identity equivalent
+      - no authority deficit
+      - evidence emitted
+  - id: CL-REBIND-AUTHORITY-DEFICIT
+    operation: actor_rebinding
+    negative:
+      inject: PROPOSER_ONLY actor into verifier/authority role
+      expected: reject with no active-binding mutation
+
+  - id: CL-GRAPH-VALID
+    operation: graph_substitution
+    positive:
+      input: semantically equivalent candidate graph
+      expected: accepted shadow UoW and current GraphReplacementCertificate agree
+    compare:
+      - parent contract
+      - original/candidate graph identities
+      - semantic projection
+      - causal generation
+      - authoritative mutation
+      - evidence
+  - id: CL-GRAPH-STALE
+    operation: graph_substitution
+    negative:
+      inject: stale current graph hash
+      expected: reject with no topology mutation
+  - id: CL-GRAPH-SEMANTIC-DRIFT
+    operation: graph_substitution
+    negative:
+      inject: missing required output or authority bypass
+      expected: reject
+
+  - id: CL-DELEGATE-VALID
+    operation: delegation
+    positive:
+      input: child authority strict subset of parent
+      expected: current certificate and shadow transition agree
+  - id: CL-DELEGATE-INFLATE
+    operation: delegation
+    negative:
+      inject: child requests permission absent from parent
+      expected: reject with no child authority grant
+  - id: CL-DELEGATE-STALE
+    operation: delegation
+    negative:
+      inject: obsolete generation child result
+      expected: reject
+
+  - id: CL-MUTATION-QC-VALID
+    operation: runtime_mutation
+    positive:
+      input: valid 2-of-3 QC for current contract/graph/binding/generation/history head
+      expected: current path and shadow UoW apply same meta-state mutation
+  - id: CL-MUTATION-QC-INSUFFICIENT
+    operation: runtime_mutation
+    negative:
+      inject: one valid vote where threshold is two
+      expected: reject
+  - id: CL-MUTATION-QC-STALE
+    operation: runtime_mutation
+    negative:
+      inject: stale history head
+      expected: reject
+  - id: CL-MUTATION-QC-TAMPER
+    operation: runtime_mutation
+    negative:
+      inject: candidate graph differs from QC-bound graph
+      expected: reject
+
+  - id: CL-EFFECT-EXTERNAL-BOUNDARY
+    operation: external_invocation
+    expected_result: NON_CLOSURE_BOUNDARY
+    reason: internal UoW transition cannot itself guarantee reversal or replay of an already-realized external action
+    required_pattern:
+      - commit intent internally
+      - invoke external realization
+      - observe receipt
+      - certify receipt
+      - commit result internally

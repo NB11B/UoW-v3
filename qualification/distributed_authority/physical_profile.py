@@ -34,6 +34,8 @@ class PhysicalAuthorityNode:
 @dataclass(frozen=True)
 class PhysicalTopologyAssessment:
     physical_nodes: int
+    # Legacy field name retained for artifact/test compatibility. In D1-P3 this
+    # counts distinct authority/compute domains, not independent upstream power.
     independent_failure_domains: int
     authority_domains: int
     pair_qualification_ready: bool

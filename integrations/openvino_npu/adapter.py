@@ -21,6 +21,7 @@ from uow.state import WorldState
 from uow.transactions.descriptor import infer_footprint
 
 from .features import CandidateFeatureEncoder, FEATURE_DIM
+from .lifecycle import ModelLifecycleState, NPUModelLifecycleManager, StagedModel
 from .model import UoWSchedulingNet, export_and_hash_onnx
 from .training import extract_training_samples, train_surrogate_model
 
@@ -71,23 +72,24 @@ class IntelNPUAdaptiveProposer:
 
         # Internal PyTorch network (used for training updates)
         self.net = initial_net or UoWSchedulingNet()
-        self._generation = generation
-        self._parent_model_hash = parent_model_hash
 
-        # Export initial ONNX artifact and compile
-        onnx_file = self.model_dir / f"model_gen_{self._generation}.onnx"
-        self._onnx_path, self._artifact_hash = export_and_hash_onnx(self.net, onnx_file)
-        self._compiled_model = self._compile(self._onnx_path, self.device)
-
-        # Initialize cryptographic ModelIdentity (theta_0)
-        self._identity = ModelIdentity(
+        # Initialize lifecycle manager
+        self.lifecycle = NPUModelLifecycleManager(
+            model_dir=self.model_dir,
+            core=self.core,
+            device=self.device,
             model_id=model_id,
             model_version=model_version,
-            model_artifact_hash=self._artifact_hash,
-            parent_model_hash=self._parent_model_hash,
-            training_generation=self._generation,
-            metadata={"device": self.device, "device_full_name": self.device_full_name},
+            fail_closed=fail_closed,
         )
+
+        # Stage and promote initial model generation
+        self.lifecycle.stage_generation(
+            net=self.net,
+            generation=generation,
+            parent_identity=None,
+        )
+        self.lifecycle.promote_staged()
 
         # Feedback and audit buffers
         self.observations: List[AdaptationObservation] = []
@@ -97,9 +99,28 @@ class IntelNPUAdaptiveProposer:
         self.inject_crash_on_propose: bool = False
         self.inject_corrupt_schedule: bool = False
 
-    def _compile(self, onnx_path: Path, device: str) -> Any:
-        ov_model = self.core.read_model(str(onnx_path))
-        return self.core.compile_model(ov_model, device)
+    @property
+    def _identity(self) -> ModelIdentity:
+        stage = self.lifecycle.active_stage
+        if stage is None:
+            raise RuntimeError("No active model stage in lifecycle manager")
+        return stage.identity
+
+    @property
+    def _compiled_model(self) -> Any:
+        stage = self.lifecycle.active_stage
+        if stage is None:
+            raise RuntimeError("No active model stage in lifecycle manager")
+        return stage.compiled_model
+
+    @property
+    def _generation(self) -> int:
+        stage = self.lifecycle.active_stage
+        return stage.generation if stage else 0
+
+    @property
+    def _artifact_hash(self) -> str:
+        return self._identity.model_artifact_hash
 
     def model_id(self) -> str:
         return self._identity.model_id
@@ -120,18 +141,25 @@ class IntelNPUAdaptiveProposer:
         if self.inject_crash_on_propose:
             raise RuntimeError("Injected NPU accelerator crash during propose()")
 
+        # Pin active stage reference to guarantee atomic inference throughout propose()
+        stage = self.lifecycle.active_stage
+        if stage is None:
+            raise RuntimeError("No active model stage in lifecycle manager")
+        identity = stage.identity
+        compiled = stage.compiled_model
+
         if not ready_candidates:
             return ModelProposal(
-                model_id=self.model_id(),
-                model_version=self.model_version(),
+                model_id=identity.model_id,
+                model_version=identity.model_version,
                 input_state_hash=state.state_hash,
                 input_sequence=state.sequence,
                 input_epoch=state.sequence,
                 candidate_schedule=(),
                 predicted_metrics={"npu_latency_us": 0.0, "candidates_scored": 0.0, "batch_size": 0.0},
-                model_artifact_hash=self._identity.model_artifact_hash,
-                training_generation=self._identity.training_generation,
-                parent_model_hash=self._identity.parent_model_hash,
+                model_artifact_hash=identity.model_artifact_hash,
+                training_generation=identity.training_generation,
+                parent_model_hash=identity.parent_model_hash,
                 metadata={"device": self.device, "device_name": self.device_full_name},
             )
 
@@ -142,11 +170,11 @@ class IntelNPUAdaptiveProposer:
         ]
         # 2. Hardware NPU Inference (evaluated candidate-by-candidate to match static NPU shape (1, 14))
         t0 = time.perf_counter()
-        output_tensor = self._compiled_model.output(0)
+        output_tensor = compiled.output(0)
         scores: List[float] = []
         for feat in features_list:
             inp = feat[np.newaxis, :].astype(np.float32)
-            s = float(self._compiled_model([inp])[output_tensor][0, 0])
+            s = float(compiled([inp])[output_tensor][0, 0])
             scores.append(s)
         latency_us = (time.perf_counter() - t0) * 1e6
 
@@ -160,15 +188,15 @@ class IntelNPUAdaptiveProposer:
         if self.inject_corrupt_schedule:
             # Propose illegal tasks to test containment
             return ModelProposal(
-                model_id=self.model_id(),
-                model_version=self.model_version(),
+                model_id=identity.model_id,
+                model_version=identity.model_version,
                 input_state_hash=state.state_hash,
                 input_sequence=state.sequence,
                 input_epoch=state.sequence,
                 candidate_schedule=("illegal_unregistered_task_999",),
-                model_artifact_hash=self._identity.model_artifact_hash,
-                training_generation=self._identity.training_generation,
-                parent_model_hash=self._identity.parent_model_hash,
+                model_artifact_hash=identity.model_artifact_hash,
+                training_generation=identity.training_generation,
+                parent_model_hash=identity.parent_model_hash,
                 metadata={"device": self.device},
             )
 
@@ -201,8 +229,8 @@ class IntelNPUAdaptiveProposer:
             batch = [ready_candidates[0]]
 
         return ModelProposal(
-            model_id=self.model_id(),
-            model_version=self.model_version(),
+            model_id=identity.model_id,
+            model_version=identity.model_version,
             input_state_hash=state.state_hash,
             input_sequence=state.sequence,
             input_epoch=state.sequence,
@@ -215,11 +243,11 @@ class IntelNPUAdaptiveProposer:
             metadata={
                 "device": self.device,
                 "device_name": self.device_full_name,
-                "model_artifact_hash": self._identity.model_artifact_hash,
+                "model_artifact_hash": identity.model_artifact_hash,
             },
-            model_artifact_hash=self._identity.model_artifact_hash,
-            training_generation=self._identity.training_generation,
-            parent_model_hash=self._identity.parent_model_hash,
+            model_artifact_hash=identity.model_artifact_hash,
+            training_generation=identity.training_generation,
+            parent_model_hash=identity.parent_model_hash,
         )
 
     def observe_feedback(self, observation: AdaptationObservation) -> None:
@@ -229,24 +257,38 @@ class IntelNPUAdaptiveProposer:
         self.seen_observation_hashes.add(observation.observation_hash)
         self.observations.append(observation)
 
-    def update(self, graph: Optional[Mapping[str, Any]] = None) -> ModelIdentity:
-        """Retrains neural surrogate, re-exports ONNX, and compiles for target hardware."""
+    def stage_update(
+        self,
+        graph: Optional[Mapping[str, Any]] = None,
+        inject_compilation_failure: bool = False,
+        inject_health_check_failure: bool = False,
+    ) -> StagedModel:
+        """Trains candidate weights on certified feedback and compiles into STAGING without altering active model."""
         if graph and self.observations:
             X, y = extract_training_samples(self.observations, self.encoder, graph)
             if len(X) > 0:
                 train_surrogate_model(self.net, X, y, epochs=50)
 
-        self.observations.clear()
-        self._generation += 1
-
-        # Export new ONNX artifact and recompile
-        new_onnx = self.model_dir / f"model_gen_{self._generation}.onnx"
-        self._onnx_path, self._artifact_hash = export_and_hash_onnx(self.net, new_onnx)
-        self._compiled_model = self._compile(self._onnx_path, self.device)
-
-        # Transition model identity with parent linkage
-        self._identity = self._identity.child_identity(
-            new_artifact_hash=self._artifact_hash,
-            metadata={"device": self.device, "device_full_name": self.device_full_name},
+        next_gen = self._generation + 1
+        return self.lifecycle.stage_generation(
+            net=self.net,
+            generation=next_gen,
+            parent_identity=self.model_identity(),
+            inject_compilation_failure=inject_compilation_failure,
+            inject_health_check_failure=inject_health_check_failure,
         )
-        return self._identity
+
+    def promote_staged(self) -> ModelIdentity:
+        """Atomically promotes the currently staged generation to ACTIVE."""
+        self.observations.clear()
+        return self.lifecycle.promote_staged()
+
+    def rollback(self, generation: int) -> ModelIdentity:
+        """Rolls back the active model to a previously compiled generation."""
+        self.observations.clear()
+        return self.lifecycle.rollback_to_generation(generation)
+
+    def update(self, graph: Optional[Mapping[str, Any]] = None) -> ModelIdentity:
+        """Atomically stages and promotes the next generation."""
+        self.stage_update(graph=graph)
+        return self.promote_staged()

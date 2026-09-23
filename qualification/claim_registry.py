@@ -74,6 +74,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="heterogeneous hardware qualification",
     ),
+    "U15.NPU_HOT_SWAP.PORTABLE": ClaimSpec(
+        "U15.NPU_HOT_SWAP.PORTABLE",
+        "Live atomic model replacement updates active proposer without interrupting transaction flow, and corrupted staging models are rejected without rollback.",
+        EvidenceLevel.PORTABLE,
+        scope="canonical proposer lifecycle",
+    ),
+    "U15.NPU_HOT_SWAP.PHYSICAL": ClaimSpec(
+        "U15.NPU_HOT_SWAP.PHYSICAL",
+        "Physical Intel AI Boost NPU executes live atomic model generation hot swap with verified continuous DAG progress and zero wrong authoritative commits.",
+        EvidenceLevel.PHYSICAL,
+        ("authority", "npu"),
+        requires_negative_control=True,
+        scope="heterogeneous hardware qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

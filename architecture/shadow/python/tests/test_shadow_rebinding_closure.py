@@ -105,6 +105,7 @@ def test_rejected_binding_conformance_cannot_be_lowered_as_rebinding():
 
     with pytest.raises(ValueError, match="Rejected binding conformance"):
         make_validated_rebinding_uow(
+            active_graph_hash=graph.compute_hash(),
             candidate_binding_hash=bad_binding.compute_hash(),
             conformance=conformance,
         )
@@ -135,6 +136,7 @@ def test_validated_rebinding_fails_closed_if_active_graph_context_does_not_match
     with pytest.raises(RuntimeError, match="No applicable route"):
         execute_validated_rebinding(
             shadow_state,
+            active_graph_hash=graph.compute_hash(),
             candidate_binding_hash=b1.compute_hash(),
             conformance=conformance,
         )

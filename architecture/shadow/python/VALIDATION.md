@@ -5,40 +5,40 @@
 ### Commit 195e330
 Shadow workflow run 2: PASS.
 
-Covered:
-- core certification accept/reject;
-- resource capacity parity;
-- OCC stale-read rejection;
-- external receipt binding;
-- typed requirement/capability matcher basics.
-
 ### Commit 0825554
 Shadow workflow run 4: PASS.
 
-Added:
-- actor capability binding parity;
-- semantic projection parity;
+Added parity coverage:
+- actor capability binding;
+- semantic projection;
 - authority-bypass rejection;
 - delegation authority attenuation.
 
-## Canonical CI observation
+### Commit dd4a718
+Shadow workflow run 6: PASS.
 
-The normal repository CI still fails before test execution because existing NPU test modules import optional dependencies not installed by the standard workflow:
-- numpy
-- openvino
-
-The branch has not changed canonical CI dependency policy.
-
-## R3.2 closure experiment
-
-Next experiment:
-- lower A2.7 QC-authorized graph/binding application into an ordinary UoW transition;
-- compare active graph hash, active binding hash, generation, and canonical evidence;
-- force wrong authorization hash and require fail-closed/no-mutation behavior.
+Closure result:
+- A2.7 QC-authorized graph/binding mutation application can be lowered to an ordinary native UoW transition.
+- Wrong authorization hash fails closed with no meta-state mutation.
 
 Scope limitation:
-- quorum vote formation is not claimed closed;
-- quorum certificate verification is not claimed closed;
-- distributed AuthoritativeHistory construction is not claimed closed.
+- QC formation remains outside the closure claim.
+- QC signature verification remains outside the closure claim.
+- distributed AuthoritativeHistory construction remains outside the closure claim.
+- WAL persistence remains outside the closure claim.
 
-The experiment only tests closure of the already-authorized meta-state mutation.
+## Canonical CI observation
+
+Normal repository CI continues to fail before test execution because existing NPU tests import optional numpy/openvino dependencies not installed by the canonical CI workflow.
+
+This is not attributed to shadow code.
+
+## R3.2 next closure target
+
+A2.1 graph substitution application:
+- use accepted GraphReplacementCertificate as current runtime authorization artifact;
+- lower active graph hash substitution into an ordinary UoW;
+- preserve substitution epoch and certificate lineage;
+- rejected/stale certificate must not be lowerable as authorized mutation.
+
+This test preserves current A2.1 semantics. It does not add a new authority layer.

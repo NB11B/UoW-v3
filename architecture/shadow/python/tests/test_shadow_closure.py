@@ -7,6 +7,8 @@ from uow.composition.contract import ParentContract
 from uow.composition.convergence import AuthoritativeHistory
 from uow.composition.graph import RealizationGraph, RealizationNode
 from uow.composition.mutation import QuorumMutationCoordinator, assemble_mutation_qc
+from uow.composition.runtime import AdaptiveCompositionRuntime
+from uow.composition.substitution import GraphReplacementProposal, SubstitutionStrategy
 
 from uow_shadow.closure import (
     META_ACTIVE_BINDING_HASH,
@@ -14,7 +16,11 @@ from uow_shadow.closure import (
     META_AUTHORIZATION_HASH,
     META_GENERATION,
     META_LAST_QC_HASH,
+    META_LAST_SUBSTITUTION_CERT_HASH,
+    META_SUBSTITUTION_EPOCH,
+    execute_certified_graph_substitution,
     execute_qc_authorized_runtime_mutation,
+    make_certified_graph_substitution_uow,
     make_qc_authorized_runtime_mutation_uow,
     make_runtime_meta_state,
 )
@@ -123,3 +129,54 @@ def test_runtime_mutation_lowering_fails_closed_on_wrong_authorization_hash():
     assert shadow_state.get(META_ACTIVE_BINDING_HASH) == b0.compute_hash()
     assert shadow_state.get(META_GENERATION) == 0
     assert shadow_state.get(META_AUTHORIZATION_HASH) == "wrong-qc-hash"
+
+
+def _certified_substitution(stale: bool = False):
+    contract = ParentContract(
+        contract_id="u-sub",
+        description="graph substitution closure",
+        required_outputs=("result",),
+    )
+    g0 = _graph("g0-sub", False)
+    g1 = _graph("g1-sub", True)
+    runtime = AdaptiveCompositionRuntime(contract, g0)
+
+    proposal = GraphReplacementProposal(
+        parent_contract_id=contract.contract_id,
+        current_graph_hash="stale-hash" if stale else g0.compute_hash(),
+        candidate_graph=g1,
+        strategy=SubstitutionStrategy.PARALLEL_DECOMPOSITION,
+        proposal_id="sub-1",
+    )
+    cert = runtime.propose_and_certify(proposal)
+    return runtime, g0, g1, cert
+
+
+def test_accepted_graph_substitution_application_closes_over_native_uow():
+    runtime, g0, g1, cert = _certified_substitution(stale=False)
+    assert cert.is_accepted
+    assert runtime.active_graph.compute_hash() == g1.compute_hash()
+
+    uow = make_certified_graph_substitution_uow(cert)
+    shadow_state = make_runtime_meta_state(
+        active_graph_hash=g0.compute_hash(),
+        authorization_hash=cert.compute_hash(),
+        cursor=uow.H.identity,
+    )
+    committed, evidence, native_cert = execute_certified_graph_substitution(shadow_state, cert)
+
+    assert native_cert.is_valid
+    assert committed.get(META_ACTIVE_GRAPH_HASH) == runtime.active_graph.compute_hash()
+    assert committed.get(META_SUBSTITUTION_EPOCH) == cert.epoch
+    assert committed.get(META_LAST_SUBSTITUTION_CERT_HASH) == cert.compute_hash()
+    assert evidence.certificate_hash == native_cert.certificate_hash
+
+
+def test_rejected_graph_substitution_cannot_be_lowered_as_authorized_uow():
+    runtime, g0, _, cert = _certified_substitution(stale=True)
+
+    assert not cert.is_accepted
+    assert runtime.active_graph.compute_hash() == g0.compute_hash()
+
+    with pytest.raises(ValueError, match="Rejected GraphReplacementCertificate"):
+        make_certified_graph_substitution_uow(cert)

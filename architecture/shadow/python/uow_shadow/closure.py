@@ -2,13 +2,15 @@
 
 This module tests whether selected meta-runtime state transitions can be lowered
 into ordinary canonical UoWs after an independent authorization artifact already
-exists. It deliberately does NOT claim closure of quorum formation itself.
+exists. It deliberately does NOT claim closure of authorization/attestation
+formation itself.
 """
 from __future__ import annotations
 
 from typing import Tuple
 
 from uow.composition.mutation import RuntimeMutationQC
+from uow.composition.substitution import GraphReplacementCertificate
 from uow.contracts import Guard, GuardOp, Mutation, MutationOp, Route, Successor, UoW, make_uow
 from uow.engine import CertificateResult, EvidenceRecord, commit, certify, propose
 from uow.state import WorldState
@@ -17,17 +19,20 @@ from uow.state import WorldState
 META_ACTIVE_GRAPH_HASH = "__runtime_active_graph_hash__"
 META_ACTIVE_BINDING_HASH = "__runtime_active_binding_hash__"
 META_GENERATION = "__runtime_generation__"
+META_SUBSTITUTION_EPOCH = "__runtime_substitution_epoch__"
 META_HISTORY_PARENT = "__runtime_history_parent__"
 META_AUTHORIZATION_HASH = "__runtime_authorization_hash__"
 META_LAST_QC_HASH = "__runtime_last_mutation_qc_hash__"
+META_LAST_SUBSTITUTION_CERT_HASH = "__runtime_last_substitution_certificate_hash__"
 
 
 def make_runtime_meta_state(
     *,
     active_graph_hash: str,
-    active_binding_hash: str,
-    generation: int,
-    history_head: str,
+    active_binding_hash: str = "",
+    generation: int = 0,
+    substitution_epoch: int = 0,
+    history_head: str = "",
     authorization_hash: str,
     cursor: str,
 ) -> WorldState:
@@ -36,6 +41,7 @@ def make_runtime_meta_state(
             META_ACTIVE_GRAPH_HASH: active_graph_hash,
             META_ACTIVE_BINDING_HASH: active_binding_hash,
             META_GENERATION: generation,
+            META_SUBSTITUTION_EPOCH: substitution_epoch,
             META_HISTORY_PARENT: history_head,
             META_AUTHORIZATION_HASH: authorization_hash,
         },
@@ -84,6 +90,66 @@ def execute_qc_authorized_runtime_mutation(
     step_number: int = 1,
 ) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
     uow = make_qc_authorized_runtime_mutation_uow(qc)
+    proposal = propose(uow, state)
+    certificate = certify(uow, state, proposal)
+    committed, evidence = commit(
+        uow,
+        state,
+        proposal,
+        certificate,
+        prev_evidence_hash=prev_evidence_hash,
+        step_number=step_number,
+    )
+    return committed, evidence, certificate
+
+
+def make_certified_graph_substitution_uow(cert: GraphReplacementCertificate) -> UoW:
+    """Lower application of an accepted A2.1 graph-replacement certificate.
+
+    The current A2.1 runtime treats an accepted GraphReplacementCertificate as
+    sufficient authority for atomic active-graph substitution. This shadow
+    lowering models only that application step, not certificate formation.
+    """
+    if not cert.is_accepted:
+        raise ValueError("Rejected GraphReplacementCertificate cannot authorize substitution.")
+
+    identity = f"shadow::apply-graph-substitution::{cert.certificate_id}"
+    mutations = [
+        Mutation(MutationOp.SET, META_ACTIVE_GRAPH_HASH, cert.candidate_graph_hash),
+        Mutation(MutationOp.SET, META_SUBSTITUTION_EPOCH, cert.epoch),
+        Mutation(MutationOp.SET, META_LAST_SUBSTITUTION_CERT_HASH, cert.compute_hash()),
+    ]
+    if cert.actor_binding_hash:
+        mutations.append(
+            Mutation(MutationOp.SET, META_ACTIVE_BINDING_HASH, cert.actor_binding_hash)
+        )
+
+    return make_uow(
+        identity,
+        [
+            Route(
+                guard=Guard(
+                    GuardOp.EQ,
+                    META_AUTHORIZATION_HASH,
+                    cert.compute_hash(),
+                ),
+                mutations=tuple(mutations),
+                successor=Successor.halt(),
+            )
+        ],
+        layer="shadow-meta",
+        parent_context="A2.1-graph-substitution-closure",
+    )
+
+
+def execute_certified_graph_substitution(
+    state: WorldState,
+    cert: GraphReplacementCertificate,
+    *,
+    prev_evidence_hash: str = "0" * 64,
+    step_number: int = 1,
+) -> Tuple[WorldState, EvidenceRecord, CertificateResult]:
+    uow = make_certified_graph_substitution_uow(cert)
     proposal = propose(uow, state)
     certificate = certify(uow, state, proposal)
     committed, evidence = commit(

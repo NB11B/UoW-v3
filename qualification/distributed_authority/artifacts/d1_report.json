@@ -1,0 +1,235 @@
+{
+  "schema_version": "uow-distributed-authority-d1-v0.1",
+  "evidence_level": "portable",
+  "claim_scope": "in-process independent replicas with simulated network faults",
+  "physical_distributed_authority_qualified": false,
+  "gates": {
+    "D0_independent_authority_agreement": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "certificate_hash": "1a49fe397ee673376816f9303bdb2ac71eda612c5013701e800d8a7b65091c0a",
+      "local_clocks": {
+        "A": 2,
+        "B": 1009983,
+        "C": 94
+      },
+      "independent_state_objects": true,
+      "independent_ledgers": true
+    },
+    "D1_quorum_commit_convergence": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "voters": [
+        "A",
+        "B",
+        "C"
+      ],
+      "journal_root": "8adb721842a91344b6a5844427fc3e7f884244161f68c9b4ef13b72b9c6e4e61"
+    },
+    "D2_no_quorum_no_commit": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "reachable_nodes": [
+        "A"
+      ],
+      "negative_control": "only one authority reachable"
+    },
+    "D3_network_alternate_route": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c",
+        "network_fabric",
+        "self_healing_controller"
+      ],
+      "route": [
+        "P",
+        "B",
+        "A"
+      ],
+      "negative_control": "direct ingress-to-A link failed"
+    },
+    "D4_majority_progress_one_isolated": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "reachable_nodes": [
+        "A",
+        "B"
+      ]
+    },
+    "D5_stale_replica_self_heals": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c",
+        "network_fabric",
+        "self_healing_controller"
+      ],
+      "entries_replayed": 1,
+      "route": [
+        "P",
+        "A",
+        "C"
+      ]
+    },
+    "D6_divergence_quarantined_no_overwrite": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c",
+        "self_healing_controller"
+      ],
+      "negative_control": "validly hashed but non-journal state injected",
+      "divergent_state_hash": "aeb6a4294302f5637bf29113c5e87d1b6bb27385f2d77c5a2a13455058acc8ad"
+    },
+    "D7_explicit_verified_rebuild": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c",
+        "self_healing_controller"
+      ],
+      "unauthorized_rebuild_blocked": true,
+      "entries_replayed": 1
+    },
+    "D8_duplicate_quorum_idempotent": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "apply_reason": "ALREADY_APPLIED"
+    },
+    "D9_stale_proposal_rejected": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "rejection_reasons": [
+        "PRE_STATE_MISMATCH",
+        "PRE_STATE_MISMATCH",
+        "PRE_STATE_MISMATCH"
+      ],
+      "negative_control": "replay prior proposal after authoritative state advanced"
+    },
+    "D10_conflicting_quorums_blocked": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "first_quorum_voters": [
+        "A",
+        "B"
+      ],
+      "second_accepts": 1,
+      "negative_control": "competing valid UoW transitions from same pre-state"
+    },
+    "D11_clock_independent_authority_vote": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c"
+      ],
+      "local_clocks": [
+        2,
+        1000099999939,
+        1000099999939
+      ]
+    },
+    "D12_ruleset_mismatch_contained": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [
+        "authority_a",
+        "authority_b",
+        "authority_c",
+        "self_healing_controller"
+      ],
+      "quorum_voters": [
+        "A",
+        "B"
+      ],
+      "c_apply_reason": "RULESET_VERSION_MISMATCH",
+      "healing_action": "QUARANTINED_REPLAY_FAILURE",
+      "negative_control": "authority C runs incompatible ruleset version"
+    }
+  },
+  "all_gates_passed": true
+}

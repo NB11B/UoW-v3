@@ -1,4 +1,4 @@
-schema_version: "0.9"
+schema_version: "1.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-shadow
@@ -22,33 +22,36 @@ current_invariants:
 
 r3:
   R3_0_semantic_types: IMPLEMENTED_INITIAL
-  R3_0_shadow_identity:
-    status: IMPLEMENTED_INITIAL
-    profile: SHADOW-JSON-v0.1
-    authority_bearing: false
   R3_0_requirement_capability_matcher: IMPLEMENTED_INITIAL
-  R3_1_canonical_validator_adapters: IN_PROGRESS
-  shadow_workflow:
-    configured: true
-    latest_completed_run: 2
-    latest_result: PASS
-  canonical_ci_observation:
-    latest_result: FAIL_BEFORE_TEST_EXECUTION
-    reason: missing optional numpy/openvino during existing NPU test collection
-    attributed_to_shadow: false
+  R3_1_canonical_validator_adapters:
+    status: PASS_INITIAL
+    latest_shadow_run: 4
+    coverage:
+      - core certification
+      - OCC
+      - resource capacity
+      - external receipt binding
+      - actor binding
+      - semantic projection
+      - delegation attenuation
+  R3_2_closure_shadow:
+    status: IMPLEMENTED_AWAITING_EXECUTION
+    first_target: A2.7_QC_AUTHORIZED_MUTATION_APPLICATION
+    claim_scope:
+      included:
+        - graph hash application
+        - binding hash application
+        - generation advance
+        - native UoW certification
+        - native UoW evidence
+        - unauthorized fail-closed
+      excluded:
+        - quorum formation
+        - QC verification
+        - distributed history construction
+        - WAL persistence
 
-r3_1_parity_coverage:
-  - core certification
-  - OCC
-  - resource capacity
-  - external receipt binding
-  - actor binding
-  - semantic projection
-  - delegation attenuation
-
-r3_rules:
-  shadow_only: true
-  src_uow_changes_allowed_initially: false
-  public_api_changes_allowed: false
-  deletions_allowed: false
-  adapter_first: true
+canonical_ci_observation:
+  result: FAIL_BEFORE_TEST_EXECUTION
+  attributed_to_shadow: false
+  reason: existing optional numpy/openvino dependencies absent from standard CI install

@@ -1,13 +1,9 @@
 # R3 Validation Record
 
-## Commit 195e330
+## Shadow parity status
 
-Shadow test workflow:
-- workflow: UoW Closure Shadow
-- run: 2
-- result: PASS
-
-Initial shadow tests executed successfully against the canonical package.
+### Commit 195e330
+Shadow workflow run 2: PASS.
 
 Covered:
 - core certification accept/reject;
@@ -16,23 +12,33 @@ Covered:
 - external receipt binding;
 - typed requirement/capability matcher basics.
 
+### Commit 0825554
+Shadow workflow run 4: PASS.
+
+Added:
+- actor capability binding parity;
+- semantic projection parity;
+- authority-bypass rejection;
+- delegation authority attenuation.
+
 ## Canonical CI observation
 
-The ordinary CI run on the same research PR did not reach canonical test execution because collection failed on missing optional dependencies:
+The normal repository CI still fails before test execution because existing NPU test modules import optional dependencies not installed by the standard workflow:
 - numpy
 - openvino
 
-The standard workflow installs only the editable UoW package and pytest.
+The branch has not changed canonical CI dependency policy.
 
-This failure is not attributed to shadow code; it occurs during import of existing NPU test modules.
+## R3.2 closure experiment
 
-No change to canonical CI dependency policy is made in R3.
+Next experiment:
+- lower A2.7 QC-authorized graph/binding application into an ordinary UoW transition;
+- compare active graph hash, active binding hash, generation, and canonical evidence;
+- force wrong authorization hash and require fail-closed/no-mutation behavior.
 
-## Next validation expansion
+Scope limitation:
+- quorum vote formation is not claimed closed;
+- quorum certificate verification is not claimed closed;
+- distributed AuthoritativeHistory construction is not claimed closed.
 
-R3.1 adds parity tests for:
-- actor capability binding;
-- semantic projection with authority-bypass negative control;
-- delegation authority attenuation.
-
-Qualification status remains research-only. Shadow parity does not upgrade evidence level.
+The experiment only tests closure of the already-authorized meta-state mutation.

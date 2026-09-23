@@ -1,0 +1,98 @@
+{
+  "schema_version": "uow-a2-actor-fabric-v1.0",
+  "timestamp": "2026-09-23T17:59:17.453125+00:00",
+  "parent_contract": {
+    "contract_id": "parent_certified_transform_v1",
+    "contract_hash": "643898dcd0eb231b3643f87d0aacbf951abdefb84ca309dcd227d8d59ab1e0c3"
+  },
+  "fabric_configuration": {
+    "trusted_authorities": [
+      "act_verifier"
+    ],
+    "lease_ttl_sec": 30.0,
+    "registered_agents_count": 8
+  },
+  "churn_epochs": [
+    {
+      "epoch": 0,
+      "event": "NOMINAL",
+      "action": "EXECUTE",
+      "graph": "G0_sequential",
+      "binding": "b0_sequential",
+      "status": "SUCCESS"
+    },
+    {
+      "epoch": 1,
+      "event": "WORKER_LOSS",
+      "action": "FAST_REBINDING",
+      "graph": "G0_sequential",
+      "binding": "b1_sequential_worker_d",
+      "status": "SUCCESS"
+    },
+    {
+      "epoch": 2,
+      "event": "WORKER_SATURATION",
+      "action": "GRAPH_SUBSTITUTION",
+      "graph": "G1_parallel",
+      "binding": "b_parallel_g1",
+      "status": "SUCCESS"
+    },
+    {
+      "epoch": 3,
+      "event": "LATENCY_SPIKE",
+      "action": "FAST_REBINDING",
+      "graph": "G1_parallel",
+      "binding": "b_parallel_g1_low_lat",
+      "status": "SUCCESS"
+    },
+    {
+      "epoch": 4,
+      "event": "AUTHORITY_LOSS",
+      "action": "FAIL_CLOSED",
+      "graph": "G1_parallel",
+      "binding": "b_parallel_g1_low_lat",
+      "status": "FAILED",
+      "error": "AUTHORITY_ACTOR_UNAVAILABLE_FAIL_CLOSED: node 'n_verify' authority actor 'act_verifier' has no valid lease"
+    },
+    {
+      "epoch": 5,
+      "event": "RECONNECTION",
+      "action": "RECOVERY_SUBSTITUTION",
+      "graph": "G2_accelerator",
+      "binding": "b_npu_g2",
+      "status": "SUCCESS"
+    }
+  ],
+  "negative_controls": {
+    "unauthorized_authority_rejected": true,
+    "expired_lease_rejected": true,
+    "missing_role_rejected": true,
+    "authority_loss_fail_closed": true
+  },
+  "invariants": {
+    "wrong_substitutions": 0,
+    "wrong_authoritative_commits": 0,
+    "unauthorized_bindings": 0
+  },
+  "claims": {
+    "A2.ACTOR_FABRIC.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.CHURN_RESILIENCE.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "passed": true
+}

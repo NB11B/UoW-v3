@@ -143,6 +143,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.ACTOR_FABRIC.PORTABLE": ClaimSpec(
+        "A2.ACTOR_FABRIC.PORTABLE",
+        "Distributed runtime agents dynamically announce, discover, qualify, and lease network actors under churning availability, maintaining valid leases and capability/authority matching with zero unauthorized bindings.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.CHURN_RESILIENCE.PORTABLE": ClaimSpec(
+        "A2.CHURN_RESILIENCE.PORTABLE",
+        "The composition runtime adapts across network churn (node drop, saturation, latency spike, authority partition, reconnection) by separating actor rebinding from graph replacement, failing closed on authority loss and preserving parent semantics Phi(G, U) = Phi(U) with strictly zero wrong commits.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

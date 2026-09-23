@@ -12,10 +12,13 @@ from datetime import datetime, timezone
 from enum import Enum
 import hashlib
 import json
-from typing import Optional, Tuple
+from typing import TYPE_CHECKING, Optional, Tuple
 
 from uow.composition.actor import ActorRegistry
 from uow.composition.binding import ActorBinding, validate_binding
+
+if TYPE_CHECKING:
+    from uow.composition.fabric import DistributedActorFabric
 from uow.composition.contract import ParentContract
 from uow.composition.graph import RealizationGraph
 from uow.composition.projection import (
@@ -119,6 +122,8 @@ class CompositionCertifier:
         contract: ParentContract,
         current_epoch: int = 1,
         actor_registry: Optional[ActorRegistry] = None,
+        fabric: Optional[DistributedActorFabric] = None,
+        current_ts: Optional[float] = None,
     ) -> GraphReplacementCertificate:
         """Evaluates a graph replacement proposal and issues an authoritative certificate."""
         violations = []
@@ -159,7 +164,7 @@ class CompositionCertifier:
         if proposal.actor_binding is not None:
             if actor_registry is not None:
                 valid_binding, bind_violations = validate_binding(
-                    cand_graph, proposal.actor_binding, actor_registry
+                    cand_graph, proposal.actor_binding, actor_registry, fabric=fabric, current_ts=current_ts
                 )
                 if not valid_binding:
                     violations.extend(bind_violations)

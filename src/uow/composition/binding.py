@@ -8,10 +8,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
-from typing import Mapping, Tuple
+import time
+from typing import TYPE_CHECKING, Mapping, Optional, Tuple
 
 from uow.composition.actor import ActorRegistry, AuthorityClass
 from uow.composition.graph import RealizationGraph
+
+if TYPE_CHECKING:
+    from uow.composition.fabric import DistributedActorFabric
 
 
 def canonical_json(data: object) -> str:
@@ -45,9 +49,12 @@ def validate_binding(
     graph: RealizationGraph,
     binding: ActorBinding,
     registry: ActorRegistry,
+    fabric: Optional[DistributedActorFabric] = None,
+    current_ts: Optional[float] = None,
 ) -> Tuple[bool, Tuple[str, ...]]:
-    """Validates that all nodes in a graph are bound to qualified, available actors."""
+    """Validates that all nodes in a graph are bound to qualified, available, leased actors."""
     violations = []
+    ts = current_ts if current_ts is not None else time.time()
 
     if binding.graph_id != graph.graph_id:
         violations.append(
@@ -68,6 +75,12 @@ def validate_binding(
         if not actor.availability:
             violations.append(f"ACTOR_UNAVAILABLE: actor {actor_id!r} bound to node {node_id!r} is offline")
 
+        # Lease validation under fabric
+        if fabric is not None:
+            lease = fabric.get_valid_lease(actor_id, ts)
+            if lease is None:
+                violations.append(f"INVALID_OR_EXPIRED_ACTOR_LEASE: actor {actor_id!r} has no active lease")
+
         # Capability check
         if node.required_capabilities:
             if not actor.has_capabilities(node.required_capabilities):
@@ -79,10 +92,17 @@ def validate_binding(
         # Authority hierarchy check
         try:
             req_auth = AuthorityClass(node.required_authority_class)
-            if not actor.authority_class.satisfies(req_auth):
-                violations.append(
-                    f"ACTOR_AUTHORITY_INSUFFICIENT: actor {actor_id!r} has class {actor.authority_class.value}, but node {node_id!r} requires {req_auth.value}"
-                )
+            if fabric is not None:
+                # Fabric-enforced qualification: Discover(A) != Qualify(A, U)
+                if not fabric.qualify_actor(actor_id, req_auth):
+                    violations.append(
+                        f"ACTOR_UNQUALIFIED_FOR_AUTHORITY: actor {actor_id!r} is not qualified for {req_auth.value} under fabric"
+                    )
+            else:
+                if not actor.authority_class.satisfies(req_auth):
+                    violations.append(
+                        f"ACTOR_AUTHORITY_INSUFFICIENT: actor {actor_id!r} has class {actor.authority_class.value}, but node {node_id!r} requires {req_auth.value}"
+                    )
         except ValueError:
             violations.append(f"INVALID_NODE_AUTHORITY_CLASS: {node.required_authority_class!r}")
 

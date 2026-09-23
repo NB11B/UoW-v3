@@ -13,7 +13,7 @@ import time
 from typing import Any, Mapping, Tuple
 
 from uow.composition.actor import ActorRegistry
-from uow.composition.binding import ActorBinding
+from uow.composition.binding import ActorBinding, validate_binding
 from uow.composition.contract import ParentContract
 from uow.composition.graph import RealizationGraph, RealizationNode
 from uow.composition.policy import CompositionRuntimeState
@@ -76,6 +76,7 @@ class AdaptiveCompositionRuntime:
         certifier: CompositionCertifier | None = None,
         registry: ActorRegistry | None = None,
         baseline_binding: ActorBinding | None = None,
+        fabric: Any | None = None,
     ) -> None:
         self.contract = contract
         self.baseline_graph = baseline_graph
@@ -84,6 +85,7 @@ class AdaptiveCompositionRuntime:
         self.baseline_binding = baseline_binding
         self.active_binding = baseline_binding
         self.active_graph = baseline_graph
+        self.fabric = fabric
         self.certificates_journal: list[GraphReplacementCertificate] = []
         self.execution_history: list[ExecutionRecord] = []
         self._execution_counter = 0
@@ -112,9 +114,28 @@ class AdaptiveCompositionRuntime:
             network_latency_ms=network_latency_ms,
         )
 
+    def rebind_active_graph(
+        self,
+        new_binding: ActorBinding,
+        current_ts: Optional[float] = None,
+    ) -> Tuple[bool, Tuple[str, ...]]:
+        """Tier 1: Fast Actor Rebinding without graph topology change (B0 -> B1 where G0 == G1)."""
+        valid, violations = validate_binding(
+            graph=self.active_graph,
+            binding=new_binding,
+            registry=self.registry or ActorRegistry(),
+            fabric=self.fabric,
+            current_ts=current_ts,
+        )
+        if valid:
+            self.active_binding = new_binding
+            return True, ()
+        return False, tuple(violations)
+
     def propose_and_certify(
         self,
         proposal: GraphReplacementProposal,
+        current_ts: Optional[float] = None,
     ) -> GraphReplacementCertificate:
         """Evaluates a graph replacement proposal and, if certified, atomically switches active graph."""
         next_epoch = len(self.certificates_journal) + 1
@@ -124,6 +145,8 @@ class AdaptiveCompositionRuntime:
             contract=self.contract,
             current_epoch=next_epoch,
             actor_registry=self.registry,
+            fabric=self.fabric,
+            current_ts=current_ts,
         )
         self.certificates_journal.append(cert)
 
@@ -154,6 +177,7 @@ class AdaptiveCompositionRuntime:
             contract=self.contract,
             current_epoch=next_epoch,
             actor_registry=self.registry,
+            fabric=self.fabric,
         )
         self.certificates_journal.append(cert)
         self.active_graph = self.baseline_graph
@@ -164,11 +188,32 @@ class AdaptiveCompositionRuntime:
         self,
         inputs: Mapping[str, Any],
         fail_node_id: str | None = None,
+        current_ts: Optional[float] = None,
     ) -> ExecutionRecord:
         """Executes the active realization graph topologically and verifies output postconditions."""
         self._execution_counter += 1
         rec_id = f"exec_{self._execution_counter}"
         t_start = time.perf_counter()
+        ts = current_ts if current_ts is not None else time.time()
+
+        # Pre-execution check: Fail-closed if authority actor is missing or unleased
+        if self.fabric is not None and self.active_binding is not None:
+            for nid, act_id in self.active_binding.node_to_actor.items():
+                node = self.active_graph.nodes.get(nid)
+                lease = self.fabric.get_valid_lease(act_id, ts)
+                if lease is None and node and node.required_authority_class in ("VERIFIER", "AUTHORITY_SUBSTRATE"):
+                    record = ExecutionRecord(
+                        record_id=rec_id,
+                        parent_contract_hash=self.contract.contract_hash,
+                        graph_hash=self.active_graph.compute_hash(),
+                        status="FAILED",
+                        node_results=(),
+                        final_outputs={},
+                        total_duration_ms=0.0,
+                        error_message=f"AUTHORITY_ACTOR_UNAVAILABLE_FAIL_CLOSED: node {nid!r} authority actor {act_id!r} has no valid lease",
+                    )
+                    self.execution_history.append(record)
+                    return record
 
         topo_order = self.active_graph.topological_sort()
         node_results: list[NodeExecutionResult] = []

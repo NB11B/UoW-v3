@@ -60,6 +60,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="canonical runtime",
     ),
+    "U15.NPU_ADAPTIVE_PROPOSER.PORTABLE": ClaimSpec(
+        "U15.NPU_ADAPTIVE_PROPOSER.PORTABLE",
+        "The OpenVINO neural proposer adapter satisfies the canonical adaptive proposer contract with zero commit authority on portable backends.",
+        EvidenceLevel.PORTABLE,
+        scope="canonical proposer integration",
+    ),
+    "U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL": ClaimSpec(
+        "U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL",
+        "Physical Intel AI Boost NPU inference executes the canonical adaptive UoW scheduling proposer while deterministic authority remains fixed and wrong commits remain zero.",
+        EvidenceLevel.PHYSICAL,
+        ("authority", "npu"),
+        requires_negative_control=True,
+        scope="heterogeneous hardware qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

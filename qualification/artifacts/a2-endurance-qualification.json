@@ -1,0 +1,108 @@
+{
+  "schema_version": "uow-a2-endurance-v1.0",
+  "timestamp": "2026-09-23T19:19:05.037472+00:00",
+  "campaign": "Gate A2.8 \u2014 Autonomous Continuous Topology Evolution Endurance (Campaign A2 Capstone)",
+  "trace_steps": 40,
+  "baselines_comparison": {
+    "B0_fixed": {
+      "total_mutations": 0,
+      "cumulative_cost": 8299.78
+    },
+    "B1_rule_based": {
+      "total_mutations": 1,
+      "cumulative_cost": 5934.51
+    },
+    "A2_adaptive": {
+      "total_mutations": 1,
+      "cumulative_cost": 5907.99
+    }
+  },
+  "performance_delta": {
+    "cost_reduction_vs_fixed_pct": 28.82,
+    "mutation_reduction_vs_rule_based": 0
+  },
+  "invariants_verified": {
+    "wrong_commit_count": 0,
+    "uncertified_mutation_count": 0,
+    "double_commit_count": 0,
+    "authority_inflation_count": 0,
+    "accepted_stale_mutation_count": 0,
+    "lost_task_count": 0
+  },
+  "observation_poisoning_resilience": {
+    "injected_corrupt_observations": 6,
+    "uncertified_mutations": 0,
+    "wrong_commits": 0,
+    "passed": true
+  },
+  "crash_recovery_verified": {
+    "crash_events": [
+      {
+        "step": 7,
+        "generation": 1,
+        "entries_replayed": 8,
+        "state_digest": "f313622f4c1ea01cdcd3f3b103851c005915b17b721f9289e5c01513efd28065",
+        "verified": true
+      },
+      {
+        "step": 18,
+        "generation": 1,
+        "entries_replayed": 19,
+        "state_digest": "966c9dda213b54a43f7e0b0f0d799676a80583c67fa43801f9ef1f62f01af0e9",
+        "verified": true
+      }
+    ],
+    "passed": true
+  },
+  "lineage_summary": {
+    "total_transitions": 1,
+    "transitions": [
+      {
+        "edge_index": 0,
+        "step": 22,
+        "from_graph_id": "G_npu",
+        "to_graph_id": "G_parallel",
+        "from_binding_id": "bind_npu",
+        "to_binding_id": "bind_parallel",
+        "generation_before": 1,
+        "generation_after": 2,
+        "history_head": "8a1432a282a9d08f0115955d2939683dda9e52749458acc353e4d508e19644bc",
+        "proposal_id": "mut_prop_step22_G_parallel",
+        "rationale": "IMPROVEMENT_EXCEEDS_THRESHOLD: delta=6.59",
+        "telemetry_hash": "56f0450e855198137f4d007058b34b9f1300c36a4a98470519e4f8cf308b7285",
+        "candidate_graph_hash": "13a55637dc61fd5f17682e2774d310bbb9ac71b07ba38573e86e23f34b7fb2b9",
+        "candidate_binding_hash": "666edf972bab1a636709bf38504116d4292dc8fbf4400edad53841d978b78b6c",
+        "conformance_verified": true,
+        "signers": [
+          "auth_cpu",
+          "auth_esp32",
+          "auth_stm32"
+        ],
+        "qc_hash": "93f0feceff9f96c9145b87558e43dc9d952de544a6106c3e46dfa353a30ef5c2",
+        "observed_delta_j": "6.59",
+        "timestamp_iso": "2026-09-23T19:19:04.979836+00:00"
+      }
+    ]
+  },
+  "claims": {
+    "A2.CONTINUOUS_TOPOLOGY_EVOLUTION.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.ADAPTATION_QUALITY_AND_STABILITY.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "passed": true
+}

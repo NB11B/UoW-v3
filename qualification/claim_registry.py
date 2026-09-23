@@ -213,6 +213,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.CONTINUOUS_TOPOLOGY_EVOLUTION.PORTABLE": ClaimSpec(
+        "A2.CONTINUOUS_TOPOLOGY_EVOLUTION.PORTABLE",
+        "The adaptive composition runtime continuously reorganizes realization graphs and actor bindings under overlapping environmental perturbations (load, latency, node drop, partition) over multi-epoch endurance execution with strictly zero wrong commits, zero uncertified mutations, zero double commits, zero lost tasks, and full partition reconciliation to H*.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.ADAPTATION_QUALITY_AND_STABILITY.PORTABLE": ClaimSpec(
+        "A2.ADAPTATION_QUALITY_AND_STABILITY.PORTABLE",
+        "Under continuous environmental drift, the learned adaptive runtime achieves superior objective cost J_adaptive < J_static across identical perturbation traces, suppresses mutation thrashing via anti-thrashing hysteresis (R_mutation <= threshold), and maintains absolute semantic and authority integrity even under observation delay, reordering, and corruption.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

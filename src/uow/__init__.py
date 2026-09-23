@@ -121,9 +121,12 @@ from .effects import (
     verify_effect_receipt_binding,
 )
 from .proposer import (
+    AdaptationObservation,
+    AdaptiveProposer,
     BaseProposer,
     DeterministicFallbackScheduler,
     HeuristicSchedulingProposer,
+    ModelIdentity,
     ModelProposal,
     ProposalCertificate,
     ProposerOrchestrationEngine,
@@ -132,11 +135,15 @@ from .proposer import (
     TFWRProposer,
     TelemetryRecord,
     certify_proposal,
+    create_adaptation_observation,
     run_proposer_orchestration,
+    validate_observation_integrity,
 )
 
 __all__ = [
     "ALL_MATRIX_CELLS",
+    "AdaptationObservation",
+    "AdaptiveProposer",
     "BaseProposer",
     "BaseSchedulingPolicy",
     "Boundary",
@@ -173,6 +180,7 @@ __all__ = [
     "MaterializedUoW",
     "MatrixCell",
     "MockExternalClient",
+    "ModelIdentity",
     "ModelProposal",
     "Mutation",
     "MutationOp",
@@ -230,6 +238,7 @@ __all__ = [
     "certify_proposal",
     "commit",
     "compute_idempotency_key",
+    "create_adaptation_observation",
     "create_effect_descriptor",
     "create_initial_orchestration_state",
     "create_transaction_descriptor",
@@ -253,6 +262,7 @@ __all__ = [
     "set_authoritative_resource_state",
     "uow_fingerprint",
     "validate_graph",
+    "validate_observation_integrity",
     "validate_occ",
     "verify_commit_bindings",
     "verify_effect_intent_binding",

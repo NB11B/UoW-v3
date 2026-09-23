@@ -33,6 +33,19 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         EvidenceLevel.PORTABLE,
         scope="canonical runtime",
     ),
+    "U15.ADAPTIVE_CONTRACT": ClaimSpec(
+        "U15.ADAPTIVE_CONTRACT",
+        "Swapping or updating adaptive model parameters cannot change deterministic certification semantics or authority invariants.",
+        EvidenceLevel.PORTABLE,
+        scope="canonical runtime",
+    ),
+    "U15.FEEDBACK_INTEGRITY": ClaimSpec(
+        "U15.FEEDBACK_INTEGRITY",
+        "Learning observations are strictly derived from deterministic authority outcomes, prevent forged acceptances, detect stale feedback, and reconstruct exact training lineage.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="canonical runtime",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

@@ -27,6 +27,10 @@ class ModelProposal:
     # Invariant: anything affecting authority or certification must be hash-bound;
     # metadata does not affect certification and is excluded from proposal_hash.
     metadata: Mapping[str, Any] = field(default_factory=dict)
+    # Continual adaptation model lineage (Gate U15.1)
+    model_artifact_hash: str = ""
+    training_generation: int = 0
+    parent_model_hash: Optional[str] = None
     proposal_hash: str = field(default="")
 
     def __post_init__(self) -> None:
@@ -38,6 +42,9 @@ class ModelProposal:
             input_epoch=self.input_epoch,
             candidate_schedule=self.candidate_schedule,
             predicted_metrics=dict(self.predicted_metrics),
+            model_artifact_hash=self.model_artifact_hash,
+            training_generation=self.training_generation,
+            parent_model_hash=self.parent_model_hash,
         )
         if not self.proposal_hash:
             object.__setattr__(self, "proposal_hash", expected)
@@ -53,6 +60,9 @@ class ModelProposal:
         input_epoch: int,
         candidate_schedule: Tuple[str, ...],
         predicted_metrics: Mapping[str, float],
+        model_artifact_hash: str = "",
+        training_generation: int = 0,
+        parent_model_hash: Optional[str] = None,
     ) -> str:
         payload = {
             "model_id": model_id,
@@ -63,6 +73,10 @@ class ModelProposal:
             "candidate_schedule": list(candidate_schedule),
             "predicted_metrics": dict(sorted(predicted_metrics.items())),
         }
+        if model_artifact_hash or training_generation != 0 or parent_model_hash is not None:
+            payload["model_artifact_hash"] = model_artifact_hash
+            payload["training_generation"] = training_generation
+            payload["parent_model_hash"] = parent_model_hash
         return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,6 +88,9 @@ class ModelProposal:
             "input_epoch": self.input_epoch,
             "candidate_schedule": list(self.candidate_schedule),
             "predicted_metrics": dict(self.predicted_metrics),
+            "model_artifact_hash": self.model_artifact_hash,
+            "training_generation": self.training_generation,
+            "parent_model_hash": self.parent_model_hash,
             "metadata": dict(self.metadata),
             "proposal_hash": self.proposal_hash,
         }
@@ -88,6 +105,11 @@ class ModelProposal:
             input_epoch=int(data.get("input_epoch", 0)),
             candidate_schedule=tuple(str(x) for x in data.get("candidate_schedule", ())),
             predicted_metrics={str(k): float(v) for k, v in data.get("predicted_metrics", {}).items()},
+            model_artifact_hash=str(data.get("model_artifact_hash", "")),
+            training_generation=int(data.get("training_generation", 0)),
+            parent_model_hash=(
+                str(data["parent_model_hash"]) if data.get("parent_model_hash") else None
+            ),
             metadata=dict(data.get("metadata", {})),
             proposal_hash=str(data.get("proposal_hash", "")),
         )

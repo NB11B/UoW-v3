@@ -1,7 +1,7 @@
 """Autonomous execution engine connecting external proposers to deterministic authority (Gate U14)."""
 from __future__ import annotations
 
-from typing import Any, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..contracts import UoW
 from ..engine import CertificateResult, Proposal, certify, propose
@@ -26,6 +26,7 @@ from ..transactions import (
 from .base import BaseProposer
 from .fallback import DeterministicFallbackScheduler
 from .judge import certify_proposal
+from .observation import AdaptationObservation, create_adaptation_observation
 from .types import ModelProposal, ProposalCertificate, TelemetryRecord
 
 
@@ -71,6 +72,7 @@ class ProposerOrchestrationEngine:
         self.proposer = proposer
         self.fallback_scheduler = fallback_scheduler or DeterministicFallbackScheduler()
         self.telemetry: List[TelemetryRecord] = []
+        self.observations: List[AdaptationObservation] = []
 
     def certify_proposal(
         self,
@@ -142,6 +144,31 @@ class ProposerOrchestrationEngine:
 
                 tx = create_transaction_descriptor(materialized.uow, before)
                 seq.commit(materialized.uow, proposal, tx, core_cert)
+
+                after = seq.current_state
+                # Emit AdaptationObservation to telemetry and adaptive proposer (Gate U15.2)
+                res_state = after.get("__resources__", {})
+                res_util: Dict[str, float] = {}
+                if isinstance(res_state, dict):
+                    res_util = {
+                        str(k): float(v)
+                        for k, v in res_state.get("allocated", {}).items()
+                        if isinstance(v, (int, float))
+                    }
+                obs = create_adaptation_observation(
+                    pre_state=before,
+                    proposal=model_prop,
+                    certificate=cert,
+                    post_state=after,
+                    committed=True,
+                    resource_utilization=res_util,
+                )
+                self.observations.append(obs)
+                if hasattr(self.proposer, "observe_feedback"):
+                    try:
+                        self.proposer.observe_feedback(obs)
+                    except Exception:
+                        pass
                 continue
 
             # 2. Task Completion Evaluation

@@ -1,0 +1,47 @@
+experiment:
+  id: U11
+  name: self-hosted-orchestration
+  lineage:
+    current_paths:
+      - src/uow/orchestration/state.py
+      - src/uow/orchestration/materialization.py
+      - src/uow/orchestration/scheduler.py
+      - src/uow/orchestration/runtime.py
+      - tests/test_orchestration.py
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+
+requires:
+  axioms: [A0, A1, A2, A3, A4, A5, A6]
+  capabilities:
+    - queue as authoritative state
+    - scheduler as ordinary UoW
+    - completion as ordinary UoW
+    - nested orchestration
+    - deadlock detection
+    - crash/resume from committed state and evidence
+    - equivalence to external procedural scheduler
+
+realizations:
+  orchestration_state: typed projection over WorldState
+  scheduler: SchedulerMaterializer
+  completion: CompletionMaterializer
+  closure_mechanism: UoWMaterializer
+
+negative_controls:
+  - id: cyclic-dependency-deadlock
+    expected: deterministic halt/deadlock state
+  - id: independent-reference-scheduler
+    expected: same authoritative result as self-hosted scheduler
+
+evidence:
+  minimum_level: PORTABLE
+  preserve_archive_campaign: true
+
+assertions:
+  - scheduler decisions have no privileged mutation path
+  - orchestration control state participates in authoritative state identity
+  - self-hosted and reference orchestration produce equivalent result
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

@@ -1,0 +1,58 @@
+experiment:
+  id: Q1
+  name: certified-external-effects-and-logistics
+  lineage:
+    current_paths:
+      - src/uow/effects/
+      - tests/test_effects.py
+    archive_repository: NB11B/weights-on-the-fly
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+    archive_domain: pharmaceutical cold-chain logistics recovery
+
+requires:
+  axioms: [A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S3, S5]
+  capabilities:
+    - committed external intent
+    - external invocation separated from internal commit
+    - idempotency
+    - receipt certification
+    - crash reconciliation
+    - partial observability via concrete receipts
+    - long-running/pending external operation
+    - reverse-order saga compensation
+    - compensation failure preservation
+    - human signoff as certified work
+    - domain result checked against independent reference
+
+realizations:
+  current_general:
+    - EffectRunner
+    - ExternalClientProtocol
+    - SagaCoordinator
+  archive_domain:
+    - carrier APIs
+    - warehouse API
+    - logistics repair proposer
+    - reference recovery oracle
+    - human approval workflow
+
+negative_controls:
+  - id: crash-after-external-success-before-internal-commit
+  - id: duplicate-retry
+  - id: downstream-failure-requiring-compensation
+  - id: compensation-failure
+
+evidence:
+  minimum_level: PORTABLE
+  preserve_archive_domain_campaign: true
+
+assertions:
+  - internal rollback cannot be treated as undo of external reality
+  - duplicate retry must not duplicate external side effect
+  - external observation enters authority only through certified receipt
+  - generic effects implementation does not erase the value of domain qualification
+
+reconstruction:
+  status: MAPPED_WITH_ARCHIVE_DOMAIN_EVIDENCE
+  implementation_targets: [python]

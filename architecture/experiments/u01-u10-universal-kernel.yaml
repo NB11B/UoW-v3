@@ -1,0 +1,58 @@
+experiment:
+  id: U1-U10
+  name: universal-uow-kernel
+  lineage:
+    current_repository: NB11B/UoW
+    current_paths:
+      - src/uow/contracts.py
+      - src/uow/state.py
+      - src/uow/engine.py
+      - foundations/universal_computation/
+      - tests/test_universal_computation.py
+    archive_repository: NB11B/weights-on-the-fly
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+
+requires:
+  axioms: [A0, A1, A2, A3, A4, A5, A6]
+  capabilities:
+    - native guarded state transition
+    - branching
+    - iteration
+    - independent state dimensions
+    - extensible memory semantics
+    - deterministic certification
+    - replay
+    - semantic-cell/computational orthogonality
+    - native execution without hidden interpreter
+
+realizations:
+  state: WorldState
+  transition: Guard + Mutation + Successor
+  authority: PROPOSE-CERTIFY-COMMIT
+  evidence: EvidenceLedger
+  reference_oracle: independent Minsky two-counter interpreter
+
+negative_controls:
+  - id: bounded-memory
+    purpose: demonstrate finite-state periodicity under fixed-width state
+  - id: tampered-proposal
+    purpose: reject forged state, route, pre-state, or successor
+  - id: hidden-interpreter
+    purpose: prove native execution does not call reference oracle
+
+evidence:
+  minimum_level: PORTABLE
+  archive_results:
+    randomized_single_steps: 20000
+    terminating_program_comparisons: 500
+  preserve_archive_campaign: true
+
+assertions:
+  - identical computational result across semantic matrix cells
+  - deterministic replay produces identical evidence roots
+  - bounded state cycles while extensible state preserves unbounded-model behavior
+  - tampered candidates do not commit
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python, cpp]

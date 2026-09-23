@@ -1,0 +1,50 @@
+experiment:
+  id: U13
+  name: resource-aware-certified-scheduling
+  lineage:
+    current_paths:
+      - src/uow/resources/requirement.py
+      - src/uow/resources/state.py
+      - src/uow/resources/policies.py
+      - src/uow/resources/runtime.py
+      - tests/test_resources.py
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+
+requires:
+  axioms: [A0, A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S1]
+  capabilities:
+    - typed resource requirements
+    - resource capability state
+    - leased capacities
+    - consumable budgets
+    - over-allocation rejection
+    - atomic lease acquisition/release
+    - legality dominance
+    - deadline and priority scheduling
+    - starvation aging
+    - pluggable scheduling policies
+
+realizations:
+  scheduling:
+    - FIFO
+    - GreedyCapacity
+    - PriorityDeadline
+    - CostEnergy
+
+negative_controls:
+  - id: resource-overallocation
+  - id: forged-requirement-binding
+
+evidence:
+  minimum_level: PORTABLE
+  preserve_policy_diversity: true
+
+assertions:
+  - selected work cannot exceed authoritative resource capabilities
+  - policy choice cannot override resource legality
+  - changing policy must not change correctness semantics
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

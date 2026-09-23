@@ -1,0 +1,32 @@
+experiment:
+  id: TIMING
+  name: local-clock-independence
+  lineage:
+    current_paths:
+      - docs/TIMING_INDEPENDENCE.md
+      - qualification/timing_independence.py
+      - tests/test_timing_independence.py
+
+requires:
+  axioms: [A1, A5, A7]
+  structural_laws: [S6]
+  capabilities:
+    - independent local clocks
+    - causal ordering without one mutable global execution clock
+    - nested timing-domain isolation
+    - execution with common host wall-clock APIs disabled
+
+negative_controls:
+  - id: deliberately-shared-mutable-clock
+    expected: detect violation
+
+evidence:
+  minimum_level: PORTABLE
+
+assertions:
+  - local timing values do not themselves grant authority
+  - causal correctness survives permitted independent clock drift
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

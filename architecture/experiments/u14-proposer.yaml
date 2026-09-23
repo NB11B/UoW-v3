@@ -1,0 +1,56 @@
+experiment:
+  id: U14
+  name: probabilistic-proposer-boundary
+  lineage:
+    current_paths:
+      - src/uow/proposer/
+      - integrations/tfwr/
+      - integrations/openvino_npu/
+      - tests/test_proposer.py
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+
+requires:
+  axioms: [A1, A2, A3, A4, A5, A6, A7]
+  structural_laws: [S1, S2]
+  capabilities:
+    - proposer interface isolation
+    - stochastic proposal
+    - learned/heuristic proposal
+    - hardware/NPU proposal
+    - stale proposal rejection
+    - dependency rejection
+    - OCC batch rejection
+    - resource-invalid rejection
+    - deterministic fallback
+    - replayable proposal/certificate telemetry
+    - proposal-quality comparison under invariant correctness
+
+realizations:
+  proposer:
+    - RandomProposer
+    - HeuristicSchedulingProposer
+    - PortableAdaptiveProposer
+    - TFWRRuntimeAdapter
+    - IntelNPUAdaptiveProposer
+
+negative_controls:
+  - id: random-proposer
+    role: comparative/falsification realization
+  - id: crashing-proposer
+  - id: illegal-task-proposal
+  - id: stale-state-proposal
+  - id: conflicting-batch
+  - id: resource-invalid-batch
+
+evidence:
+  minimum_level: PORTABLE
+  physical_extensions: [U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL]
+  preserve_low_quality_proposers: true
+
+assertions:
+  - proposer quality may alter efficiency but not authoritative correctness
+  - proposer crash or invalid output cannot directly mutate authoritative state
+
+reconstruction:
+  status: MAPPED
+  implementation_targets: [python]

@@ -1,0 +1,55 @@
+experiment:
+  id: U12
+  name: transactional-concurrency
+  lineage:
+    current_paths:
+      - src/uow/transactions/descriptor.py
+      - src/uow/transactions/occ.py
+      - src/uow/transactions/sequencer.py
+      - tests/test_transactions.py
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+    archive_note: original general host-thread concurrent execution engine is not canonical main code
+
+requires:
+  axioms: [A1, A2, A3, A4, A5, A6, A7]
+  capabilities:
+    - multi-active work
+    - read/write footprint inference
+    - read-write hazard rejection
+    - write-write hazard rejection
+    - hidden-coupling hazard rejection
+    - atomic abort with zero dirty mutation
+    - strict serializability
+    - timing-invariant commit history
+    - crash/resume of concurrent state
+    - replay determinism
+
+realizations:
+  concurrency_control: optimistic concurrency control
+  commit:
+    - DeterministicSequencer
+    - WALSequencer
+  archived_realization:
+    - general host-thread concurrent engine
+    - semantic concurrency priors
+
+negative_controls:
+  - id: stale-read
+  - id: write-write-conflict
+  - id: hidden-state-coupling
+  - id: randomized-thread-timing
+  - id: crash-with-inflight-work
+
+evidence:
+  minimum_level: PORTABLE
+  preserve_archive_campaign: true
+  preservation_class: [P0, P1, P2, P3]
+
+assertions:
+  - concurrent committed history is equivalent to a legal sequential history
+  - rejected transactions cause no partial authoritative mutation
+  - OCC semantics alone must not be mistaken for preservation of every archived concurrent execution realization
+
+reconstruction:
+  status: MAPPED_WITH_ARCHIVE_REALIZATION
+  implementation_targets: [python]

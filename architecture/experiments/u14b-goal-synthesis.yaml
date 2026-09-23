@@ -1,0 +1,45 @@
+experiment:
+  id: U14-B
+  name: goal-driven-uow-graph-synthesis
+  lineage:
+    archive_repository: NB11B/weights-on-the-fly
+    archive_commit: e9a143568180e612809dabd1352b023079c5001c
+    archive_paths:
+      - archive/orchestrator/orchestrator/graph_synthesis.py
+      - archive/orchestrator/docs/U14_PROBABILISTIC_PROPOSER.md
+    current_implementation_found: false
+
+requires:
+  axioms: [A0, A2, A3, A4]
+  capabilities:
+    - high-level goal to candidate task graph
+    - probabilistic decomposition
+    - ontology typing of generated work
+    - deterministic graph certification before authority
+    - DAG acyclicity validation
+    - generated graph execution
+
+realizations:
+  archived:
+    proposer: GoalDecompositionProposer
+    certifier: DeterministicGraphCertifier
+
+negative_controls:
+  - id: cyclic-generated-graph
+    expected: reject before authoritative state entry
+  - id: invalid-ontology-category
+    expected: reject before execution
+
+evidence:
+  minimum_level: PORTABLE
+  preservation_class: [P1, P2, P3]
+  preservation_gap: true
+
+assertions:
+  - goal decomposition does not acquire execution authority
+  - invalid candidate graphs are rejected before authoritative execution
+
+reconstruction:
+  status: PRESERVATION_GAP
+  implementation_targets: []
+  blocker: no canonical main implementation currently located

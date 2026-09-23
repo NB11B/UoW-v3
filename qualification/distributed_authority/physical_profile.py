@@ -98,6 +98,52 @@ def current_local_profile() -> tuple[PhysicalAuthorityNode, ...]:
     )
 
 
+def tri_heterogeneous_profile() -> tuple[PhysicalAuthorityNode, ...]:
+    """Tri-architecture heterogeneous physical cluster (D1-P3).
+
+    Three physically distinct failure domains:
+      - Node A: ESP32-S3 (Xtensa LX7)
+      - Node B: Arduino UNO Q (ARM Cortex-M33 + QRB2210 Linux service plane)
+      - Node C: Laptop CPU Host (x86-64 isolated authority service)
+    """
+    return (
+        PhysicalAuthorityNode(
+            node_id="A",
+            board_model="ESP32-S3",
+            transport="USB Serial/JTAG",
+            endpoint="COM10",
+            authority_domain="ESP32-S3 Xtensa LX7 deterministic authority task",
+            service_domains=(),
+            failure_domain="esp32-s3-com10",
+        ),
+        PhysicalAuthorityNode(
+            node_id="B",
+            board_model="Arduino UNO Q",
+            transport="USB Serial gadget / CDC-ACM",
+            endpoint="COM5",
+            authority_domain="STM32U585 Cortex-M33 / Zephyr deterministic authority",
+            service_domains=(
+                "Qualcomm Dragonwing QRB2210 Debian transport plane",
+                "Arduino Bridge/RPC service plane",
+                "self-healing/recovery supervisor",
+            ),
+            failure_domain="arduino-uno-q-com5",
+        ),
+        PhysicalAuthorityNode(
+            node_id="C",
+            board_model="Laptop CPU Host",
+            transport="Loopback TCP Socket",
+            endpoint="127.0.0.1:9527",
+            authority_domain="Laptop x86-64 isolated authority service",
+            service_domains=(
+                "Standalone OS process",
+                "Isolated persistent storage",
+            ),
+            failure_domain="laptop-cpu-host",
+        ),
+    )
+
+
 if __name__ == "__main__":
-    assessment = assess_topology(current_local_profile())
+    assessment = assess_topology(tri_heterogeneous_profile())
     print(assessment)

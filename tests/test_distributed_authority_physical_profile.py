@@ -55,3 +55,15 @@ def test_third_independent_board_enables_physical_two_of_three_profile():
     assessment = assess_topology(nodes)
     assert assessment.independent_failure_domains == 3
     assert assessment.two_of_three_quorum_ready is True
+
+
+def test_tri_heterogeneous_profile_has_three_independent_failure_domains():
+    from qualification.distributed_authority.physical_profile import tri_heterogeneous_profile
+    nodes = tri_heterogeneous_profile()
+    assert len(nodes) == 3
+    assessment = assess_topology(nodes)
+    assert assessment.independent_failure_domains == 3
+    assert assessment.pair_qualification_ready is True
+    assert assessment.two_of_three_quorum_ready is True
+    assert "2-of-3 physical quorum can be qualified" in assessment.reasons
+

@@ -1,0 +1,85 @@
+{
+  "schema_version": "uow-a2-convergence-v1.0",
+  "timestamp": "2026-09-23T18:12:21.655837+00:00",
+  "cluster_nodes": [
+    "node_a",
+    "node_b",
+    "node_c",
+    "node_d"
+  ],
+  "authority_keys": [
+    "act_verifier"
+  ],
+  "test_cases": [
+    {
+      "case": 1,
+      "event": "CONCURRENT_VALID_DELEGATION",
+      "status": "SUCCESS",
+      "tip_seq": 1
+    },
+    {
+      "case": 2,
+      "event": "CONCURRENT_CONFLICTING_DELEGATION",
+      "status": "SUCCESS",
+      "winner": "node_a"
+    },
+    {
+      "case": 3,
+      "event": "MINORITY_PARTITION_FAIL_CLOSED",
+      "status": "SUCCESS",
+      "error": "MINORITY_PARTITION_FAIL_CLOSED: cannot commit without authority quorum"
+    },
+    {
+      "case": 4,
+      "event": "IDEMPOTENT_DEDUPLICATION",
+      "status": "SUCCESS",
+      "action": "DUPLICATE_EXECUTION_DEDUPLICATED"
+    },
+    {
+      "case": 5,
+      "event": "GRAPH_SUBSTITUTION_CONSENSUS",
+      "status": "SUCCESS",
+      "graph": "G2_accelerator"
+    },
+    {
+      "case": 6,
+      "event": "PARTITION_HEAL_CONVERGENCE",
+      "status": "SUCCESS",
+      "unified_digest": "20b17763bbe73a7fd6907e225de3548d99b75b490fb4cc327edcd79b71b4e4dc"
+    }
+  ],
+  "negative_controls": {
+    "sequence_gap_rejected": true,
+    "hash_discontinuity_rejected": true,
+    "minority_fail_closed": true,
+    "duplicate_commit_suppressed": false
+  },
+  "invariants": {
+    "double_commits": 0,
+    "authority_inflation": 0,
+    "semantic_divergence": 0,
+    "accepted_stale_generation": 0
+  },
+  "claims": {
+    "A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    },
+    "A2.PARTITION_CONVERGENCE.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": [],
+      "negative_control_pass": true
+    }
+  },
+  "converged_state_digest": "20b17763bbe73a7fd6907e225de3548d99b75b490fb4cc327edcd79b71b4e4dc",
+  "passed": true
+}

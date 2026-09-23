@@ -64,6 +64,12 @@ from .delegation import (
     DistributedDelegationNode,
     validate_delegation,
 )
+from .convergence import (
+    AuthoritativeHistory,
+    HistoryEntry,
+    HistoryEntryKind,
+    MultiOrchestratorCluster,
+)
 
 __all__ = [
     "ActorBinding",
@@ -74,6 +80,7 @@ __all__ = [
     "AdaptiveGraphProposer",
     "AgentMessage",
     "AgentMessageKind",
+    "AuthoritativeHistory",
     "AuthorityClass",
     "AuthorityObligation",
     "AuthorityPermission",
@@ -92,6 +99,9 @@ __all__ = [
     "GraphAdaptationObservation",
     "GraphReplacementCertificate",
     "GraphReplacementProposal",
+    "HistoryEntry",
+    "HistoryEntryKind",
+    "MultiOrchestratorCluster",
     "NetworkAgent",
     "NodeExecutionResult",
     "ParentContract",

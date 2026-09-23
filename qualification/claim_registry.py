@@ -171,6 +171,20 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE": ClaimSpec(
+        "A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE",
+        "Multiple autonomous orchestrators concurrently propose realization graph mutations and sub-UoW delegations, deterministically resolving conflicts and merging commutative operations with strictly zero double commits.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
+    "A2.PARTITION_CONVERGENCE.PORTABLE": ClaimSpec(
+        "A2.PARTITION_CONVERGENCE.PORTABLE",
+        "Under network partition into disjoint orchestrator clusters, minority partitions fail closed on authoritative commits while majority partitions proceed under quorum; upon partition healing, all nodes reconcile to a single authoritative history H* with zero semantic divergence.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

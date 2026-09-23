@@ -1,4 +1,4 @@
-schema_version: "0.5"
+schema_version: "0.6"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-only
@@ -6,7 +6,7 @@ mode: additive-research-only
 phases:
   R0_frozen_control: COMPLETE
   R1_architecture_evidence_mapping: COMPLETE
-  R2_language_neutral_specification: READY
+  R2_language_neutral_specification: IN_PROGRESS
   R3_shadow_minimal_implementation: NOT_STARTED
   R4_experiment_reconstruction: NOT_STARTED
   R5_cross_language_conformance: NOT_STARTED
@@ -19,33 +19,22 @@ current_invariants:
   files_deleted: false
   experiments_deleted: false
 
-r1_validation:
-  current_tests_mapped: "27/27"
-  archived_tests_mapped: "39/39"
-  unmapped_tests: 0
-  claim_traceability: COMPLETE_CURRENT_REGISTRY
-  archive_disposition: COMPLETE_INITIAL
-  public_surface_review: COMPLETE_INITIAL
+r2_drafts:
+  semantic_object_model: CREATED
+  typed_requirement_capability_model: CREATED
+  identity_and_causal_versioning: CREATED
+  attestation_taxonomy: CREATED
+  lineage_model: CREATED
+  conformance_profiles: CREATED
+  machine_readable_semantic_model: CREATED
 
-known_preservation_gaps:
-  - U14-B goal-driven graph synthesis has no located canonical main implementation
-  - U12 original general concurrent execution realization remains archive-only
-  - U12 ontology-informed semantic concurrency prior remains archive-only
-  - Q1 logistics reference workload and human-signoff qualification are primarily archive lineage
-  - Python and embedded C++ do not yet have one universal canonical-byte specification
-  - composition and canonical UoW contract models remain parallel ontologies
-  - current claim registry does not individually encode U1-U13, U14-B, or Q1 historical distinctions
-  - QuorumCommitSequencer imports a qualification implementation
-  - top-level uow public API flattens multiple architectural layers
+r2_open_questions:
+  - whether IntentContract can collapse into TransitionContract
+  - whether graph substitution, rebinding, delegation, and runtime mutation are fully closed under UoW
+  - whether multi-party attestation formation is a distinct meta-layer primitive
+  - which cross-language boundaries require L3-L5 conformance
+  - whether one canonical identity profile is appropriate globally or only per object/boundary
 
-r2_entry_rule:
-  additive_specification_only: true
-  source_runtime_changes_allowed: false
-  deletions_allowed: false
-  first_targets:
-    - semantic object model
-    - typed requirement/capability model
-    - canonical identity/versioning model
-    - attestation taxonomy
-    - lineage model
-    - semantic vs wire conformance profiles
+source_change_gate:
+  allowed_in_r2: false
+  first_runtime_change_phase: R3_shadow_minimal_implementation

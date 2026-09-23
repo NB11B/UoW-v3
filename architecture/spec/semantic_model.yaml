@@ -1,0 +1,116 @@
+schema_version: "0.1-draft"
+status: R2_RESEARCH_DRAFT
+
+object_families:
+  SemanticContract:
+    variants: [TransitionContract, IntentContract]
+    common:
+      - contract_id
+      - contract_schema
+      - semantic_kind
+      - requirements
+      - failure_requirements
+      - evidence_requirements
+      - temporal_requirements
+
+  AuthoritativeState:
+    fields:
+      - state_identity
+      - schema
+      - semantic_payload
+      - causal_coordinate
+      - status
+
+  RequirementSet:
+    semantics: typed predicates over offered capabilities and context
+
+  CapabilitySet:
+    semantics: qualified offered properties with source, evidence, and freshness
+
+  Realization:
+    fields:
+      - realization_id
+      - contract_id
+      - offered_capabilities
+      - failure_behavior
+      - evidence_profile
+
+  Binding:
+    fields:
+      - binding_id
+      - realization_id
+      - role_to_actor
+      - causal_context
+
+  Proposal:
+    authority: ZERO
+    fields:
+      - proposal_id
+      - proposer_id
+      - contract_id
+      - precondition_context
+      - candidate_payload
+      - causal_coordinate
+
+  ConformanceResult:
+    fields:
+      - subject_id
+      - contract_id
+      - context_id
+      - decision
+      - violations
+      - evidence
+
+  Attestation:
+    variants:
+      - ConformanceCertificate
+      - AuthorityVote
+      - QuorumAuthorization
+      - DelegationGrant
+      - ExternalReceipt
+
+  AuthorizedTransition:
+    inputs: [authoritative_state, proposal, conformance, authorization]
+    outputs: [next_authoritative_state, evidence]
+    laws:
+      - causal_binding
+      - atomic_authority_boundary
+      - failure_semantics
+      - lineage
+
+  ExternalEffect:
+    law: external_action_is_not_internal_commit
+    lifecycle:
+      - intent_commit
+      - external_invocation
+      - observation
+      - receipt_conformance
+      - result_commit
+
+  EvidenceEntry:
+    fields:
+      - entry_id
+      - event_kind
+      - subject_id
+      - causal_references
+      - pre_context_identity
+      - post_context_identity_or_outcome
+      - conformance_reference
+      - authorization_reference
+      - evidence_profile
+
+relations:
+  - Realization satisfies SemanticContract
+  - Binding binds Realization roles to qualified actors/substrates
+  - Proposal carries zero authority
+  - Conformance evaluates exact candidate in exact context
+  - Authorization is distinct from proposal and conformance
+  - AuthorizedTransition mutates authoritative state/meta-state
+  - AuthorizedTransition produces EvidenceEntry
+  - ExternalEffect remains outside internal rollback semantics
+
+open_questions:
+  - whether IntentContract collapses into TransitionContract
+  - whether graph substitution/rebinding/delegation/runtime mutation are fully closed under UoW
+  - whether multi-party attestation formation is a meta-layer primitive
+  - which object families require L3-L5 cross-language conformance

@@ -77,6 +77,37 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         measurement_source="independent_recomputation",
         scope="embedded qualification",
     ),
+    "DIST.AUTHORITY.AGREEMENT.PORTABLE": ClaimSpec(
+        "DIST.AUTHORITY.AGREEMENT.PORTABLE",
+        "Independent authority replicas deterministically agree on certification for the same state, proposal, and ruleset.",
+        EvidenceLevel.PORTABLE,
+        ("authority_a", "authority_b", "authority_c"),
+        scope="distributed authority portable qualification",
+    ),
+    "DIST.AUTHORITY.QUORUM_SAFETY.PORTABLE": ClaimSpec(
+        "DIST.AUTHORITY.QUORUM_SAFETY.PORTABLE",
+        "A 2-of-3 quorum is required for authoritative progress and conflicting transitions cannot both obtain quorum from one pre-state.",
+        EvidenceLevel.PORTABLE,
+        ("authority_a", "authority_b", "authority_c"),
+        requires_negative_control=True,
+        scope="distributed authority portable qualification",
+    ),
+    "DIST.NETWORK.SELF_HEAL.PORTABLE": ClaimSpec(
+        "DIST.NETWORK.SELF_HEAL.PORTABLE",
+        "The portable network-fault model reroutes around failed links and catches up stale replicas only from verified quorum-certified history.",
+        EvidenceLevel.PORTABLE,
+        ("authority_a", "authority_b", "authority_c", "network_fabric", "self_healing_controller"),
+        requires_negative_control=True,
+        scope="distributed authority portable qualification",
+    ),
+    "DIST.AUTHORITY.DIVERGENCE_CONTAINMENT.PORTABLE": ClaimSpec(
+        "DIST.AUTHORITY.DIVERGENCE_CONTAINMENT.PORTABLE",
+        "A replica whose state/evidence is not a verified journal prefix is quarantined and is never silently overwritten.",
+        EvidenceLevel.PORTABLE,
+        ("authority_a", "authority_b", "authority_c", "self_healing_controller"),
+        requires_negative_control=True,
+        scope="distributed authority portable qualification",
+    ),
 }
 
 

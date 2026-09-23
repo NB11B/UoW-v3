@@ -108,6 +108,14 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="distributed authority portable qualification",
     ),
+    "DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL": ClaimSpec(
+        "DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL",
+        "Heterogeneous physical authorities (ESP32-S3 and Arduino UNO Q STM32) deterministically agree on state transitions, piecewise QC application, and divergence quarantine across independent failure domains.",
+        EvidenceLevel.PHYSICAL,
+        ("authority_a_esp32", "authority_b_unoq_stm32"),
+        requires_negative_control=True,
+        scope="heterogeneous physical pair qualification",
+    ),
 }
 
 

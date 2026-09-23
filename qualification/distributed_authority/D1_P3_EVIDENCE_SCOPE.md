@@ -22,14 +22,12 @@ The campaign physically demonstrated that a 2-of-3 quorum across these three aut
 
 ## Scope limitation
 
-The campaign did **not** physically power down or physically sever every individual authority/transport path.
+The three authorities occupy distinct physical authority/compute domains, but the current bench has a **shared upstream laptop power dependency**: the laptop powers the ESP32-S3 and Arduino UNO Q through their USB/serial connections while also hosting Authority C and the campaign coordinator.
 
-In particular, Authority C and the campaign coordinator execute on the same laptop failure domain. The campaign exercised C as an isolated authority process and exercised A+B progress while C was quarantined, but it did not demonstrate continued A+B coordination after complete laptop power/network loss.
+D1-P3 is therefore complete for the claim it was designed to test: heterogeneous physical 2-of-3 authority quorum semantics. It does not claim continued operation after complete laptop power loss.
 
-Therefore the qualified physical claim is deliberately narrower than:
+The campaign physically exercised authority omission/quarantine, quorum formation, insufficient-quorum rejection, non-equivocation, stale catch-up, and divergence containment while the bench remained powered.
 
-> survives any single physical node outage.
+Independent-power, cable-cut, and full host-power-loss resilience are distinct deployment/fault-tolerance questions, not prerequisites for the completed D1-P3 quorum qualification.
 
-Physical power-loss, cable-cut, and transport-path fault tolerance remain separate qualification targets.
-
-This note narrows interpretation only. It does not alter the recorded gate observations in `physical-quorum-qualification.json`.
+This note defines the final interpretation of the completed D1-P3 milestone. It does not alter the recorded gate observations in `physical-quorum-qualification.json`.

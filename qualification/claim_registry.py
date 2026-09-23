@@ -116,6 +116,12 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="heterogeneous hardware qualification",
     ),
+    "A2.SEMANTIC_PROJECTION.PORTABLE": ClaimSpec(
+        "A2.SEMANTIC_PROJECTION.PORTABLE",
+        "Semantic projection Phi(G, U) deterministically establishes whether candidate realization graphs satisfy parent contract U (G |= U) and evaluates semantic equivalence G_a equiv_U G_b independent of graph topology.",
+        EvidenceLevel.PORTABLE,
+        scope="adaptive composition runtime qualification",
+    ),
     "TIMING.LOCAL_INDEPENDENCE": ClaimSpec(
         "TIMING.LOCAL_INDEPENDENCE",
         "Canonical correctness does not require shared mutable execution clocks.",

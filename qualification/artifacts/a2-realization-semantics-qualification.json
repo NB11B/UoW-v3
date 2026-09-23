@@ -1,0 +1,63 @@
+{
+  "schema_version": "uow-a2-semantic-projection-v1.0",
+  "timestamp": "2026-09-23T17:16:44.353566+00:00",
+  "parent_contract": {
+    "contract_id": "parent_certified_transform_v1",
+    "contract_hash": "643898dcd0eb231b3643f87d0aacbf951abdefb84ca309dcd227d8d59ab1e0c3",
+    "invariant_classes": [
+      "O",
+      "D",
+      "A",
+      "E",
+      "T",
+      "R",
+      "F"
+    ]
+  },
+  "alternate_realizations": [
+    {
+      "graph_id": "G0_sequential",
+      "graph_hash": "9f42c01b2b762162d87bcb37ea88f038c71cf698a43e2da19e48dc69c5138664",
+      "projection_hash": "c8391ccc5688cd00b32486da0bbca35f43011306574d46541175e4f6212f342e",
+      "critical_path_ms": 140.0
+    },
+    {
+      "graph_id": "G1_parallel",
+      "graph_hash": "57133f76f399603325eb875d907ed82ee943695948639920666389014e052d34",
+      "projection_hash": "c8391ccc5688cd00b32486da0bbca35f43011306574d46541175e4f6212f342e",
+      "critical_path_ms": 130.0
+    },
+    {
+      "graph_id": "G2_accelerator",
+      "graph_hash": "691e452c86458e8a537420c77a7dccca3236eaf49d8e1e6952724a13f0dd179a",
+      "projection_hash": "c8391ccc5688cd00b32486da0bbca35f43011306574d46541175e4f6212f342e",
+      "critical_path_ms": 75.0
+    },
+    {
+      "graph_id": "G3_distributed",
+      "graph_hash": "4cad74b423aa3b99488512b47ed4cd70046616bbb856037ccf1ae77815ca0ead",
+      "projection_hash": "c8391ccc5688cd00b32486da0bbca35f43011306574d46541175e4f6212f342e",
+      "critical_path_ms": 190.0
+    }
+  ],
+  "topological_equivalence_verified": true,
+  "negative_controls": {
+    "authority_bypass_rejected": true,
+    "missing_provenance_rejected": true,
+    "causal_inversion_rejected": true,
+    "failure_semantics_mismatch_rejected": true,
+    "temporal_deadline_breach_rejected": true,
+    "resource_budget_excess_rejected": true
+  },
+  "claims": {
+    "A2.SEMANTIC_PROJECTION.PORTABLE": {
+      "observed_pass": true,
+      "qualified": true,
+      "passed": true,
+      "evidence_level": "portable",
+      "required_evidence_level": "portable",
+      "required_components": []
+    }
+  },
+  "passed": true
+}

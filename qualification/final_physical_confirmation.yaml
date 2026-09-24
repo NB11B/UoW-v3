@@ -9,7 +9,10 @@ candidate:
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: POST_FREEZE_QUALIFICATION_TOOLING
+  status: QUALIFIED_FOR_OPERATOR_USE
+  harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
+  shadow_run: 151
+  shadow_tests_passed: 274
   candidate_identity_separate_from_harness_identity: true
   one_command: python qualification/final_physical_campaign.py --execute
 

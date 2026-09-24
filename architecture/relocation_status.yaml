@@ -351,3 +351,14 @@ post_freeze_admin_transition:
   repair_shadow_test_count: 271
   repair_conclusion: PASS
   semantic_candidate_changed: false
+
+post_freeze_operator_harness:
+  path: qualification/final_physical_campaign.py
+  status: PASS
+  harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
+  shadow_run: 151
+  shadow_test_count: 274
+  candidate_ref: archive/uow-reduction-software-candidate
+  candidate_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  semantic_candidate_changed: false
+  purpose: orchestrate F0-F8 and bind candidate identity separately from qualification-tool identity

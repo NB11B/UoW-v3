@@ -37,5 +37,5 @@ def test_final_campaign_preserves_a3_and_post_a3_p1_p5_without_inventing_p6():
     assert "qualification/a3-adaptive-compute-efficiency" in text
     assert "architecture/policy-aware-uow-orchestrator" in text
     assert "aa886329298f87e8b006501d47dd89eb8f0d4a3b" in text
-    assert "final_candidate_exact_shadow_tests: 277" in text
+    assert "final_candidate_exact_shadow_tests: 279" in text
     assert "p6_required: false" in text

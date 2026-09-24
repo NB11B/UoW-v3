@@ -12,7 +12,7 @@ software/repository closeout -> frozen candidate PASS -> F0 attestation -> one c
 
 ## V3 packaging repair
 
-The v2 runtime/API candidate remains qualified, but its archived tree contains candidate-local physical metadata that still names an earlier target. V3 changes no runtime/API behavior. The frozen v3 tree uses `UNBOUND_PRESEAL` markers and a planned v3 ref. After exact-seal CI passes, the v3 SHA is bound only in post-freeze operator metadata and the harness is separately requalified.
+The v2 runtime/API candidate remains qualified, but its archived tree contains candidate-local physical metadata that still names an earlier target. V3 changes no runtime/API behavior. The frozen v3 tree uses `UNBOUND_PRESEAL` markers and a planned v3 ref. After exact-seal CI passes, the v3 SHA is bound only in post-freeze operator metadata and the harness is separately requalified. The v3 shadow suite contains **279** tests; the P1-P5 policy suite remains **44** tests.
 
 ## Hardware set
 
@@ -88,7 +88,7 @@ Frozen reference:
 - historical complete repository verification at closeout: **324 passed, 0 failed**
 - mandatory architectural invariants: **13**
 
-The final campaign reruns the exact frozen reduced candidate's **277-test** closure-shadow suite and separately reruns the **44-test P1-P5 suite** from the frozen post-A3 reference.
+The final campaign reruns the exact frozen reduced candidate's **279-test** closure-shadow suite and separately reruns the **44-test P1-P5 suite** from the frozen post-A3 reference.
 
 Confirm all 13 invariants: U-to-W projection, deterministic snapshot resolution, graph realization, qualified policy registry, discovery without authority, prospective promotion, deterministic policy reuse, safe drift invalidation, transactional registry versioning, distributed policy authority, durable recovery, zero duplicate external effects, and five-tier provenance.
 

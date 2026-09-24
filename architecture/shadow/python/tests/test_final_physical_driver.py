@@ -31,7 +31,7 @@ def test_final_physical_driver_preserves_reference_oracles_and_thirteen_invarian
     assert 'P1_P5_COMMIT = "aa886329298f87e8b006501d47dd89eb8f0d4a3b"' in source
     assert "P1_P5_POLICY_SUITE_TESTS = 44" in source
     assert "P1_P5_FULL_REPOSITORY_TESTS = 324" in source
-    assert "CANDIDATE_SHADOW_TESTS = 277" in source
+    assert "CANDIDATE_SHADOW_TESTS = 279" in source
     start = source.index("P1_P5_INVARIANTS = (")
     end = source.index(")", start)
     assert source[start:end].count('    "') == 13

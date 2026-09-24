@@ -18,8 +18,8 @@ def test_v3_preseal_release_metadata_has_no_current_v1_or_v2_binding():
 def test_v3_preseal_counts_and_oracles_are_consistent():
     confirmation = (REPO / "qualification" / "final_physical_confirmation.yaml").read_text(encoding="utf-8")
     freeze = (REPO / "architecture" / "software_candidate_freeze.yaml").read_text(encoding="utf-8")
-    assert "final_candidate_exact_shadow_tests: 277" in confirmation
+    assert "final_candidate_exact_shadow_tests: 279" in confirmation
     assert "policy_suite_tests: 44" in confirmation
-    assert "expected_shadow_tests: 277" in freeze
+    assert "expected_shadow_tests: 279" in freeze
     assert "expected_policy_tests: 44" in freeze
     assert "aa886329298f87e8b006501d47dd89eb8f0d4a3b" in confirmation

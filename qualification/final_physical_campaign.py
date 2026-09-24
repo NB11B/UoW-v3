@@ -36,7 +36,7 @@ P1_P5_COMMIT = "aa886329298f87e8b006501d47dd89eb8f0d4a3b"
 P1_P5_TAG = "policy-orchestrator-p5-qualified"
 P1_P5_POLICY_SUITE_TESTS = 44
 P1_P5_FULL_REPOSITORY_TESTS = 324
-CANDIDATE_SHADOW_TESTS = 277
+CANDIDATE_SHADOW_TESTS = 279
 
 P1_P5_INVARIANTS = (
     "canonical_uow_requirement_projection",

@@ -92,6 +92,12 @@ staged_moves:
       source: src/uow/effects/saga.py
       target: src/uow/implementations/effects/saga.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [115]
+    seventh_move:
+      source: src/uow/composition/runtime.py
+      target: src/uow/implementations/composition/runtime.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
     production_deletions: false
 

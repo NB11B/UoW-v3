@@ -209,7 +209,8 @@ staged_moves:
       target: src/uow/realizations/scheduling/stochastic.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [133]
       rationale: relocate zero-authority stochastic/adversarial proposal generation while preserving it as a scientific falsification control
       preserves:
         - zero_authority_proposal_boundary

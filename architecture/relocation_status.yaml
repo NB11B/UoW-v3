@@ -238,7 +238,8 @@ staged_moves:
       target: src/uow/realizations/adaptation/portable.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [137]
       rationale: relocate portable online adaptation mechanics while retaining model identity, certified feedback evidence, proposal envelopes, and deterministic judge semantics
       preserves:
         - zero_authority_adaptation

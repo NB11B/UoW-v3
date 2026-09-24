@@ -28,6 +28,7 @@ from typing import Any, Iterable, Sequence
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CANDIDATE_REF = "archive/uow-reduction-software-candidate"
 CANDIDATE_COMMIT = "f842d62c7d18355886e2c9fdc25e9cc5db17987b"
+CANDIDATE_RELEASE_STATUS = "SUPERSEDED_PRE_POLICY"
 A3_REF = "qualification/a3-adaptive-compute-efficiency"
 A3_COMMIT = "05c8094ac5c8572f7da6d00e781ce673754c5c59"
 P1_P5_REF = "architecture/policy-aware-uow-orchestrator"
@@ -719,6 +720,12 @@ def main() -> int:
     print(json.dumps(plan, indent=2))
     if not args.execute:
         return 0
+
+    if CANDIDATE_RELEASE_STATUS != "FINAL":
+        raise RuntimeError(
+            "Physical execution is blocked: the pinned candidate is the superseded pre-policy "
+            "candidate. Freeze and repin archive/uow-reduction-software-candidate-v2 first."
+        )
 
     if args.esp_port != "COM10" or args.uno_port != "COM5":
         raise RuntimeError(

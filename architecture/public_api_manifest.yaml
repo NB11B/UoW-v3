@@ -1,5 +1,5 @@
 schema_version: "1.0"
-status: POST_A3_POLICY_NAMESPACE_MERGED_AWAITING_QUALIFICATION
+status: POLICY_INTEGRATED_CANDIDATE_EXACT_SEAL_ON_PASS
 package: uow
 package_version: 0.1.0.dev0
 source:
@@ -217,6 +217,13 @@ namespaced_surfaces:
     source_branch: architecture/policy-aware-uow-orchestrator
     source_tag: policy-orchestrator-p5-qualified
     source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
-    status: MERGED_AWAITING_COMBINED_QUALIFICATION
+    status: INTEGRATION_PASS_RUN_156_EXACT_SEAL_PENDING
     flatten_into_top_level: false
     collision_guard: uow.RealizationGraph != uow.policy.RealizationGraph
+
+qualification:
+  integration_shadow_run: 156
+  integration_shadow_tests_passed: 277
+  integration_policy_tests_passed: 44
+  exact_seal_required: true
+  planned_candidate_ref: archive/uow-reduction-software-candidate-v2

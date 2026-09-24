@@ -364,14 +364,18 @@ post_freeze_operator_harness:
   purpose: orchestrate F0-F8 and bind candidate identity separately from qualification-tool identity
 
 post_a3_policy_api_integration:
-  status: MERGED_AWAITING_COMBINED_QUALIFICATION
+  status: INTEGRATION_PASS_RUN_156_EXACT_SEAL_PENDING
   source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
   target_namespace: uow.policy
   flatten_policy_symbols_into_uow: false
   expected_policy_suite_tests: 44
+  integration_shadow_run: 156
+  integration_shadow_tests_passed: 277
+  integration_policy_tests_passed: 44
   failed_shadow_runs: [155]
   failure_evidence: historical R7 top-level API blob gate correctly detected the intentional namespace export
   historical_baseline_preserved: true
   previous_candidate_ref: archive/uow-reduction-software-candidate
   previous_candidate_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
   next_candidate_ref_planned: archive/uow-reduction-software-candidate-v2
+  physical_harness_v1_blocked: true

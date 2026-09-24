@@ -11,6 +11,8 @@ def test_final_physical_driver_is_syntax_valid_and_candidate_pinned():
     source = DRIVER.read_text(encoding="utf-8")
     compile(source, str(DRIVER), "exec")
     assert f'CANDIDATE_COMMIT = "{CANDIDATE}"' in source
+    assert 'CANDIDATE_RELEASE_STATUS = "SUPERSEDED_PRE_POLICY"' in source
+    assert "Physical execution is blocked" in source
     assert 'CANDIDATE_REF = "archive/uow-reduction-software-candidate"' in source
     assert '"candidate_commit": CANDIDATE_COMMIT' in source
     assert '"harness_commit": harness_commit()' in source

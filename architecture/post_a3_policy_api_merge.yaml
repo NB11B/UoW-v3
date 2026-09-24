@@ -1,5 +1,5 @@
 schema_version: "1.0"
-status: MERGED_AWAITING_COMBINED_QUALIFICATION
+status: INTEGRATION_PASS_RUN_156_EXACT_SEAL_PENDING
 source_branch: architecture/policy-aware-uow-orchestrator
 source_tag: policy-orchestrator-p5-qualified
 source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
@@ -17,4 +17,14 @@ previous_candidate:
   commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
   disposition: IMMUTABLE_PRE_POLICY_EVIDENCE
 next_candidate:
+  planned_ref: archive/uow-reduction-software-candidate-v2
+
+integration_qualification:
+  commit: 8b6893f3b4db4da161a27f89fd905feb7a794a87
+  run: 156
+  shadow_tests_passed: 277
+  policy_tests_passed: 44
+  conclusion: PASS
+exact_seal:
+  status: PENDING
   planned_ref: archive/uow-reduction-software-candidate-v2

@@ -16,3 +16,11 @@ rules:
   - all listed files must remain byte-identical during additive R7 stages
   - implementations/python/uow_architecture_facade is research-only and not installed as uow
   - any intentional public API migration requires a new compatibility phase and explicit versioning decision
+
+approved_post_a3_migration:
+  source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+  target_namespace: uow.policy
+  historical_baseline_preserved: true
+  top_level_delta: namespace_export_only
+  approved_src_uow_init_blob: 766ce31ecd63e30376fa8771f84c4a104ed31247
+  note: all other historical API baseline files remain byte-identical

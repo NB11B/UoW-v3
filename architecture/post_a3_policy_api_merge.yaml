@@ -1,0 +1,20 @@
+schema_version: "1.0"
+status: MERGED_AWAITING_COMBINED_QUALIFICATION
+source_branch: architecture/policy-aware-uow-orchestrator
+source_tag: policy-orchestrator-p5-qualified
+source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+completed_local_date: 2026-09-23
+target_namespace: uow.policy
+top_level_delta: namespace_export_only
+historical_baseline_preserved: true
+flatten_policy_symbols_into_uow: false
+collision_guard: "uow.RealizationGraph != uow.policy.RealizationGraph"
+policy_suite_expected: 44
+full_repository_reference_tests: 324
+mandatory_invariants: 13
+previous_candidate:
+  ref: archive/uow-reduction-software-candidate
+  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  disposition: IMMUTABLE_PRE_POLICY_EVIDENCE
+next_candidate:
+  planned_ref: archive/uow-reduction-software-candidate-v2

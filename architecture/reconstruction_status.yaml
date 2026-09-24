@@ -1,17 +1,17 @@
-schema_version: "6.7"
+schema_version: "7.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
-mode: repository-additive-layout
+mode: frozen-additive-reference
 
 phases:
   R0_frozen_control: COMPLETE
   R1_architecture_evidence_mapping: COMPLETE
-  R2_language_neutral_specification: COMPLETE
+  R2_language_neutral_specification: COMPLETE_INITIAL
   R3_shadow_minimal_implementation: COMPLETE_INITIAL
   R4_experiment_reconstruction: COMPLETE_PORTABLE_INITIAL
   R5_cross_language_conformance: COMPLETE_INITIAL
   R6_reduction_eligibility: COMPLETE_INITIAL
-  R7_repository_reorganization: IN_PROGRESS_ADDITIVE
+  R7_repository_reorganization: COMPLETE_ADDITIVE_INITIAL
 
 current_invariants:
   source_runtime_modified: false
@@ -19,31 +19,49 @@ current_invariants:
   files_deleted: false
   experiments_deleted: false
   src_uow_imports_shadow: false
+  production_cutover_performed: false
 
-r6:
-  latest_shadow_runs: [75, 76]
-  latest_test_count: 157
+latest_qualification:
+  closure_shadow_runs: [95, 96]
+  status: PASS
+
+reference_oracles:
+  qualified:
+    - A2_PORTABLE_CAPSTONE
+    - A3_ADAPTIVE_COMPUTE_EFFICIENCY
+    - POLICY_ORCHESTRATOR_P1_P5
+  conceptual_unqualified:
+    - A4_ONTOLOGY_ADAPTATION
+
+reduction:
   deletion_candidates: 0
-  validated_K3: [common_authority_application_spine, authority_provider_protocol, typed_conformance_registry]
+  validated_K3:
+    - common_authority_application_spine
+    - qualification_independent_authority_provider
+    - typed_conformance_registry
 
 r7:
-  R7_0_current_target_manifest: COMPLETE_INITIAL
+  R7_0_current_target_manifest: PASS_INITIAL
   R7_1_parallel_skeleton: PASS_INITIAL
   R7_2_semantic_facade: PASS_INITIAL
   R7_3_oracle_gate_mapping: PASS_INITIAL
   R7_4_experiment_manifest_surface: PASS_INITIAL
   R7_5_api_and_physical_boundary: PASS_INITIAL
-  R7_6_cutover_eligibility: IMPLEMENTED_AWAITING_SUITE
-  target_surfaces:
-    - specification
-    - implementations
-    - realizations
-    - experiments
-    - conformance
-  legacy_canonical_paths_unchanged: true
-  production_moves_allowed: false
-  production_deletions_allowed: false
-  next:
-    - verify full shadow suite with additive root layout
-    - build semantic facade in parallel target surface
-    - run dual-layout reconstruction parity
+  R7_6_cutover_eligibility: PASS_INITIAL
+
+cutover:
+  parallel_target_layout_qualified: true
+  staged_cutover_planning_eligible: true
+  production_cutover_authorized: false
+  production_moves_allowed_on_this_branch: false
+  production_deletions_allowed_on_this_branch: false
+  next_branch_required_for_relocation: true
+
+handoff:
+  status: FROZEN_REDUCTION_REFERENCE
+  next_program:
+    - staged production relocation
+    - canonical ontology stabilization
+    - protocol stabilization
+    - expanded multi-language implementations
+    - future A4 ontology-adaptation qualification

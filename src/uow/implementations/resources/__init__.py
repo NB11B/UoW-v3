@@ -1,6 +1,6 @@
-"""Compatibility shim for the historical resource runtime path."""
+"""Resource-aware Python implementation."""
 
-from ..implementations.resources.runtime import (
+from .runtime import (
     ResourceAwareCompletionMaterializer,
     ResourceAwareSchedulerMaterializer,
     run_resource_orchestration,

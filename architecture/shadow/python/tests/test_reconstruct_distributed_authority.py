@@ -189,11 +189,19 @@ def test_r4_distributed_authority_ruleset_mismatch_excluded_from_quorum_applicat
 
 
 def test_r4_distributed_authority_reconstruction_does_not_depend_on_qualification_package():
+    import ast
     import inspect
     import uow_shadow.distributed_authority_reconstruction as shadow_authority
 
-    source = inspect.getsource(shadow_authority)
-    assert "qualification.distributed_authority" not in source
+    tree = ast.parse(inspect.getsource(shadow_authority))
+    imported = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imported.extend(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imported.append(node.module)
+
+    assert not any(name.startswith("qualification.distributed_authority") for name in imported)
     cluster = make_shadow_authority_cluster(_initial())
     uow = _inc()
     committed, qc, _, _ = cluster.submit(

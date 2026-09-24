@@ -19,13 +19,13 @@ constraints:
   final_candidate_must_be_frozen_before_physical_confirmation: true
 
 physical_confirmation:
-  status: READY_FOR_CONSOLIDATED_FINAL_CAMPAIGN
-  candidate_ref: archive/uow-reduction-software-candidate-v3
-  candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  status: PHYSICALLY_QUALIFIED
+  candidate_ref: archive/uow-reduction-software-candidate-v4
+  candidate_commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
   manifest: qualification/final_physical_confirmation.yaml
   historical_evidence_rewritten: false
-  final_head_physical_claims_promoted: false
+  final_head_physical_claims_promoted: true
 
 staged_moves:
   S1_authority_provider_dependency_inversion:
@@ -326,11 +326,11 @@ blocker_resolution:
     finding: no uow.implementations.engine module is architecturally required
 
 software_candidate:
-  status: FROZEN_V3_EXACT_SEAL_PASS
+  status: FROZEN_V4_PHYSICAL_QUALIFICATION_PASS
   manifest: architecture/software_candidate_freeze.yaml
-  planned_freeze_ref: archive/uow-reduction-software-candidate-v3
-  freeze_ref: archive/uow-reduction-software-candidate-v3
-  freeze_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  planned_freeze_ref: archive/uow-reduction-software-candidate-v4
+  freeze_ref: archive/uow-reduction-software-candidate-v4
+  freeze_commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
   integration_validation_run: 156
   integration_validation_shadow_test_count: 277
   integration_validation_policy_test_count: 44
@@ -423,3 +423,21 @@ post_freeze_operator_harness_v3:
   shadow_test_count: 279
   policy_test_count: 44
   ready_for_physical_campaign: true
+
+v4_physical_closeout:
+  status: PASS
+  candidate_ref: archive/uow-reduction-software-candidate-v4
+  candidate_commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
+  binding_commit: 98a6687198fb78f233ac13091bff5cca3526585d
+  evidence_commit: ad49e5b243e7b19aa840405776947f9740895da4
+  final_campaign_artifact: qualification/artifacts/final-physical/20260924T203451Z/final-physical-campaign-summary.json
+  live_flash_enabled: true
+  passed: true
+  physical_claims_promotable: true
+  f2_gates_passed: 13
+  evidence_links_verified: 2400
+  evidence_link_failures: 0
+  candidate_shadow_tests_passed: 279
+  policy_tests_passed: 44
+  mandatory_invariants_passed: 13
+  release_state: CLOSED

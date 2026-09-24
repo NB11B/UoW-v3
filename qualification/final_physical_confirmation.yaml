@@ -1,43 +1,45 @@
-schema_version: "0.1"
-status: READY_FOR_EXECUTION
+schema_version: "0.2"
+status: PHYSICALLY_QUALIFIED
 
-previous_candidate:
-  ref: archive/uow-reduction-software-candidate-v2
-  commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-  disposition: SUPERSEDED_FOR_PACKAGING_METADATA_CONSISTENCY_ONLY
-
-candidate_v3:
-  ref: archive/uow-reduction-software-candidate-v3
-  commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
-  exact_seal_run: 167
-  exact_seal_shadow_tests_passed: 279
-  exact_seal_policy_tests_passed: 44
-  exact_seal_status: PASS
-  runtime_api_changed_from_v2: false
-  physical_execution_blocked_until_postfreeze_binding: false
+candidate_v4:
+  ref: archive/uow-reduction-software-candidate-v4
+  commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
+  binding_commit: 98a6687198fb78f233ac13091bff5cca3526585d
+  evidence_commit: ad49e5b243e7b19aa840405776947f9740895da4
+  runtime_api_changed_from_v3: false
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: QUALIFIED_FOR_OPERATOR_USE
+  status: QUALIFIED_AND_EXECUTED
   candidate_identity_separate_from_harness_identity: true
-  candidate_ref: archive/uow-reduction-software-candidate-v3
-  candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  candidate_ref: archive/uow-reduction-software-candidate-v4
+  candidate_commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
   execution_blocked: false
-  binding_commit: 8c589320c05b56ebc3a466e1659c8c46b617451e
-  qualification_head: c318bf57c9c6a6d7553a73ffd1d0205a31c64d6d
-  shadow_run: 169
-  shadow_tests_passed: 279
+
+final_campaign:
+  artifact: qualification/artifacts/final-physical/20260924T203451Z/final-physical-campaign-summary.json
+  canonical_summary: qualification/artifacts/final-physical-campaign-summary.json
+  live_flash_enabled: true
+  passed: true
+  physical_claims_promotable: true
+  f0_attested_inputs: 18
+  f1_passed: true
+  f2_passed: true
+  f2_gates_passed: 13
+  f2_evidence_links_verified: 2400
+  f2_evidence_link_failures: 0
+  f3_passed: true
+  f4_passed: true
+  f5_passed: true
+  f6_passed: true
+  f7_passed: true
+  f8_passed: true
+  candidate_shadow_tests_passed: 279
   policy_tests_passed: 44
-  historical_v2_binding:
-    candidate_ref: archive/uow-reduction-software-candidate-v2
-    candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-    qualification_run: 161
-    shadow_tests_passed: 277
-    policy_tests_passed: 44
+  mandatory_invariants_passed: 13
 
 execution_policy:
   mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN
-  run_during_r7_additive_work: false
   final_candidate_must_be_frozen_first: true
   portable_results_may_upgrade_physical_claims: false
 
@@ -49,51 +51,8 @@ expected_hardware:
   authority_b: arduino_uno_q_stm32u585
   authority_c: laptop_x86_64
 
-campaigns:
-  F0_CANDIDATE_ATTESTATION:
-    required: true
-  F1_EMBEDDED_AUTHORITY:
-    claim_ids:
-      - ESP32.AUTHORITY
-      - EVIDENCE.CHAIN
-      - DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL
-      - DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL
-  F2_HETEROGENEOUS_EXECUTION:
-    claim_ids:
-      - HETERO.EXECUTION
-      - HETERO.ADAPTATION
-      - HETERO.PERFORMANCE
-  F3_NPU_ADAPTIVE_PROPOSER:
-    claim_ids:
-      - U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL
-  F4_NPU_HOT_SWAP:
-    claim_ids:
-      - U15.NPU_HOT_SWAP.PHYSICAL
-  F5_CONTINUOUS_ADAPTATION:
-    claim_ids:
-      - U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL
-  F6_ADAPTIVE_PHYSICAL_QUORUM:
-    claim_ids:
-      - U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL
-  F7_A3_CONTINUUM_CONFIRMATION:
-    reference_branch: qualification/a3-adaptive-compute-efficiency
-    reference_tag: a3-qualification-complete
-    conditional_full_requalification: true
-  F8_POST_A3_POLICY_P1_P5_CONFIRMATION:
-    role: DISTINCT_POST_A3_QUALIFIED_LAYER
-    reference_branch: architecture/policy-aware-uow-orchestrator
-    reference_tag: policy-orchestrator-p5-qualified
-    reference_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
-    completed_local_date: 2026-09-23
-    policy_suite_tests: 44
-    historical_full_repository_tests: 324
-    mandatory_invariants: 13
-    a3_evidence_inherited_not_double_counted: true
-    p1_p5_specific_evidence_required: true
-    final_candidate_exact_shadow_tests: 279
-    p6_required: false
-
 final_gate:
-  software_closeout_may_precede_physical_campaign: true
-  production_physical_claim_promotion_requires_campaign: true
+  software_closeout_complete: true
+  production_physical_claim_promotion_complete: true
   historical_evidence_remains_bound_to_original_heads: true
+  release_state: CLOSED

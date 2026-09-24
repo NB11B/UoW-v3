@@ -1,124 +1,53 @@
 # Final Physical Confirmation Campaign
 
-Status: ready terminal qualification gate for the self-consistent v3 candidate.
+Status: **COMPLETE — v4 physically qualified**.
 
-Runtime/API reduction is complete and unchanged from v2. The self-consistent v3 candidate is frozen at `archive/uow-reduction-software-candidate-v3@3e28e4bba1023810aada953e25d3e3c46a58f113`; exact-seal run **167** passed **279/279** shadow tests and **44/44** post-A3 P1-P5 policy tests.
+The final candidate is:
 
-Historical physical evidence remains valid for its original qualified heads. Portable or shadow success never upgrades the final candidate to PHYSICAL.
+`archive/uow-reduction-software-candidate-v4@9d95c11f4b09c34769e1f3a1e6d7b915291d43c8`
 
-Final sequence:
+The consolidated F0-F8 campaign completed with live flashing enabled and satisfied both terminal closure conditions:
 
-software/repository closeout -> frozen candidate PASS -> F0 attestation -> one consolidated physical campaign -> final qualification
+- `passed: true`
+- `physical_claims_promotable: true`
 
-## V3 packaging repair
+## Final campaign result
 
-The v2 runtime/API candidate remains qualified, but its archived tree contains candidate-local physical metadata that still names an earlier target. V3 changes no runtime/API behavior. The frozen v3 tree uses `UNBOUND_PRESEAL` markers and a planned v3 ref. The v3 SHA is now bound in post-freeze operator metadata. The harness is repinned to v3 and receives its own combined shadow/policy qualification before hardware execution.
+- F0 — source attestation, build, hash, and live flash: PASS
+- F1 — ESP32/UNO Q/x86 physical authority and quorum: PASS
+- F2 — 1,200-job heterogeneous CPU/GPU/NPU router: PASS
+- F2 — G0-G12: 13/13 PASS
+- F2 — evidence continuity: 2,400/2,400 links verified
+- F3 — physical NPU adaptive proposer: PASS
+- F4 — physical NPU hot swap: PASS
+- F5 — continuous physical adaptation: PASS
+- F6 — adaptive proposer under heterogeneous physical quorum: PASS
+- F7 — frozen A3 reference oracle: PASS
+- F8 — candidate shadow: 279/279 PASS
+- F8 — post-A3 P1-P5 policy suite: 44/44 PASS
+- P1-P5 mandatory invariants: 13/13 PASS
 
 ## Hardware set
 
-- D1: CUDA GPU
-- D2: Intel AI Boost NPU
-- D3: host x86-64 CPU
-- D4: ESP32-S3 authority/embedded compute
-- D5: Arduino UNO Q STM32U585 authority/embedded compute
-- Authority quorum where required: ESP32-S3 + STM32U585 + Laptop x86-64, 2-of-3
+- CUDA GPU
+- Intel AI Boost NPU
+- host x86-64 CPU
+- ESP32-S3 authority/embedded compute
+- Arduino UNO Q STM32U585 authority/embedded compute
+- laptop x86-64 authority participant
 
-## F0 Candidate attestation
+## Chain of custody
 
-Record candidate commit, package/version, firmware source SHA and binary hashes, actual device identities, CPU/GPU/NPU backend identities, transports, authority profile version, wire/protocol version, and claim-registry digest.
+V4 pins the physical build and qualification inputs, including `platformio.ini`, the ESP32 interrogator, heterogeneous router campaign, physical pair/quorum clients, and NPU quorum harness. F0 rebuilt and flashed the pinned firmware and recorded binary hashes before F1-F8 executed.
 
-Fallback/substitution must never retain the requested physical label.
+Final evidence:
 
-## F1 Embedded authority
+`qualification/artifacts/final-physical/20260924T203451Z/final-physical-campaign-summary.json`
 
-Reconfirm ESP32 authority rejection, evidence-chain recomputation, ESP32/STM32 pair agreement, stale catch-up, divergence quarantine, 2-of-3 ESP32/STM32/x86 quorum, insufficient quorum rejection, conflicting-transition rejection, duplicate authorization idempotency, and physical L4/L5 authority-hash parity.
+Canonical repository summary:
 
-Claims: ESP32.AUTHORITY; EVIDENCE.CHAIN; DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL; DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL.
+`qualification/artifacts/final-physical-campaign-summary.json`
 
-## F2 Heterogeneous execution
+## Release conclusion
 
-Reconfirm actual CPU, CUDA GPU, and OpenVINO NPU execution; no silent substitution; measured performance from the named substrate; authority fixed outside adaptive proposal.
-
-Claims: HETERO.EXECUTION; HETERO.ADAPTATION; HETERO.PERFORMANCE.
-
-## F3 Physical adaptive proposer
-
-Reconfirm physical NPU inference, zero proposer authority, rejection of illegal proposals, certified feedback, and no CPU fallback labeled NPU.
-
-Claim: U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL.
-
-## F4 Physical hot swap
-
-Reconfirm staging generation, NPU health check, atomic promotion, continuous work progress, corrupt staging rejection, rollback/restart recovery, and zero wrong commits.
-
-Claim: U15.NPU_HOT_SWAP.PHYSICAL.
-
-## F5 Continuous physical adaptation
-
-Reconfirm repeated live generations under workload drift, reversal, observation corruption, continued NPU execution, no reset, and zero wrong commits.
-
-Claim: U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL.
-
-## F6 Adaptive proposer under heterogeneous physical quorum
-
-Reconfirm NPU proposer -> 2-of-3 heterogeneous authority -> authoritative transition -> certified feedback -> adaptation.
-
-Exercise all required voter combinations, authority loss, minority partition, hot swap under quorum, quorum-certified feedback, and zero wrong commits.
-
-Claim: U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL.
-
-## F7 A3 physical continuum confirmation
-
-At minimum rerun affected physical A3 gates for GPU/NPU/CPU characterization, repeated crossover, ESP32/STM32 characterization, minimum-adequate placement, deterministic/dynamic substitution, power-envelope behavior, heterogeneous graph execution including transfer cost, and semantic-equivalence/correctness gates.
-
-If final code materially changes the power model, transfer model, device-selection policy, measurement source, physical executor, or A3 policy lifecycle, rerun the relevant full A3 characterization/endurance campaign.
-
-The historical 12,000-UoW A3.8 soak remains evidence for its original qualified head. A new 12,000-UoW soak is required only if the final release claims that same endurance scope for a changed mechanism.
-
-## F8 Post-A3 Policy Orchestrator P1-P5 final-candidate confirmation
-
-This is the final qualified layer built after A3 on September 23, 2026. It must be treated as a distinct post-A3 oracle rather than being absorbed into A3 itself.
-
-Frozen reference:
-
-- branch: `architecture/policy-aware-uow-orchestrator`
-- tag: `policy-orchestrator-p5-qualified`
-- commit: `aa886329298f87e8b006501d47dd89eb8f0d4a3b`
-- policy-specific suite: **44 passed, 0 failed**
-- historical complete repository verification at closeout: **324 passed, 0 failed**
-- mandatory architectural invariants: **13**
-
-The final campaign reruns the exact frozen reduced candidate's **279-test** closure-shadow suite and separately reruns the **44-test P1-P5 suite** from the frozen post-A3 reference.
-
-Confirm all 13 invariants: U-to-W projection, deterministic snapshot resolution, graph realization, qualified policy registry, discovery without authority, prospective promotion, deterministic policy reuse, safe drift invalidation, transactional registry versioning, distributed policy authority, durable recovery, zero duplicate external effects, and five-tier provenance.
-
-P1-P5 is downstream of A3. Shared A3 evidence may satisfy inherited dependencies, but it is not counted twice as independent evidence. P1-P5-specific lifecycle, distributed-authority, recovery, external-effect, and provenance evidence remains independently required.
-
-No P6 is required.
-
-## Result semantics
-
-Each physical claim records observed_pass, qualified, passed = observed_pass AND qualified, actual components, substitutions/fallbacks, candidate commit, firmware hashes, and artifact paths.
-
-## Final acceptance
-
-The final candidate can be promoted as physically qualified only when every physical claim required for the intended release scope passes. A failure blocks only the affected physical claim/release scope until corrected and rerun.
-Run **169** qualified the post-freeze v3 harness with **279/279** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
-
-## Operator entry point
-
-The post-freeze operator harness is `qualification/final_physical_campaign.py`. It records the frozen candidate commit separately from the harness commit and fails closed on missing named physical substrates. The harness is repinned to the v2 candidate in post-freeze commit `173e8c376fdd51df605a839679af1a52af2d057f`. Qualification head `9e6272edccd75b7b72d435bea21729f4bf592f59` passed run **161** with **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests. The subsequent documentation-only closeout at `95d99895ecd484b4d92f7f1b9940cebd9390c9ee` passed run **162** with the same **277/277 + 44/44** result.
-
-Preview the complete campaign without touching hardware:
-
-```powershell
-python qualification/final_physical_campaign.py
-```
-
-Execute F0 through F8 as one consolidated run:
-
-```powershell
-python qualification/final_physical_campaign.py --execute
-```
-
-The default hardware endpoints are the qualified topology: ESP32-S3 on COM10, Arduino UNO Q STM32U585 on COM5, laptop x86 authority on localhost:9527, CUDA GPU, and Intel AI Boost NPU. CPU fallback is not permitted for NPU-specific physical claims.
+The UoW reduction, post-A3 policy integration, physical interface repair, chain-of-custody closure, and final hardware qualification are complete. Future work should branch from the v4 closeout rather than modify the sealed evidence chain.

@@ -4,11 +4,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
 DRIVER = REPO / "qualification" / "final_physical_campaign.py"
-FINAL_REF = "archive/uow-reduction-software-candidate-v3"
-FINAL_COMMIT = "3e28e4bba1023810aada953e25d3e3c46a58f113"
+FINAL_REF = "archive/uow-reduction-software-candidate-v4"
+FINAL_COMMIT = "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8"
 
 
-def test_postfreeze_harness_is_pinned_to_v3():
+def test_postfreeze_harness_is_pinned_to_v4():
     source = DRIVER.read_text(encoding="utf-8")
     compile(source, str(DRIVER), "exec")
     assert f'CANDIDATE_REF = "{FINAL_REF}"' in source

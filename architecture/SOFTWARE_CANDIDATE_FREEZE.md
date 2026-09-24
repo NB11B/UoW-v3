@@ -1,29 +1,44 @@
 # UoW Software Candidate Freeze
 
-Status: **self-consistent policy-integrated v3 software candidate frozen and exact-seal qualified**.
+Status: **v4 physically qualified and release-closeout complete**.
 
-Final software candidate:
+Final software/qualification candidate:
 
-`archive/uow-reduction-software-candidate-v3@3e28e4bba1023810aada953e25d3e3c46a58f113`
+`archive/uow-reduction-software-candidate-v4@9d95c11f4b09c34769e1f3a1e6d7b915291d43c8`
 
-Exact-seal run **167** passed **279/279** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
+V4 incorporates the physically tested qualification/build surface, including USB CDC configuration, serial framing/reliability fixes, transaction-specific response matching, write flushing, retry handling, and the final F0 input manifest. Runtime/API semantics remain unchanged from the policy-integrated v3 candidate.
 
-V3 changes no runtime/API behavior from v2. It exists to make the frozen repository package self-consistent: candidate-local physical qualification files contain neutral `UNBOUND_PRESEAL` markers rather than stale identifiers from earlier candidates.
+## Final qualification
 
-## Runtime/API identity
+The complete F0-F8 campaign ran with live flashing enabled and produced:
 
-The canonical package remains `uow` with the qualified post-A3 policy layer under `uow.policy`. The composition and policy `RealizationGraph` types remain intentionally namespaced and distinct.
+- `passed: true`
+- `physical_claims_promotable: true`
+- F0 source attestation: 18/18 pinned inputs
+- F1 physical authority/quorum: PASS
+- F2 heterogeneous execution: 13/13 gates PASS
+- F2 evidence continuity: 2,400/2,400 cryptographic links verified
+- F3-F6 NPU adaptive/hot-swap/drift/quorum: PASS
+- F7 A3 frozen oracle: PASS
+- F8 candidate shadow: 279/279 PASS
+- F8 post-A3 P1-P5 policy suite: 44/44 PASS
+- mandatory P1-P5 invariants: 13/13 PASS
 
-## Historical candidates
+Final campaign evidence is preserved under:
 
-- v1: `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` — immutable pre-policy evidence.
-- v2: `archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9` — policy-integrated candidate superseded only for packaging-metadata consistency.
-- v3: `archive/uow-reduction-software-candidate-v3@3e28e4bba1023810aada953e25d3e3c46a58f113` — final software candidate.
+`qualification/artifacts/final-physical/20260924T203451Z/`
 
-## Physical qualification binding
+and summarized at:
 
-The frozen v3 tree intentionally does not self-encode its own SHA. Post-freeze operator metadata binds the immutable v3 commit and the hardware harness is qualified separately. That binding does not alter the frozen software candidate.
+`qualification/artifacts/final-physical-campaign-summary.json`
 
-## Next gate
+## Candidate lineage
 
-The post-freeze v3 harness passed run **169** with **279/279 + 44/44**. The remaining work is local reproduction followed by the consolidated F0-F8 physical campaign.
+- v1: `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` — pre-policy historical evidence.
+- v2: `archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9` — policy-integrated candidate.
+- v3: `archive/uow-reduction-software-candidate-v3@3e28e4bba1023810aada953e25d3e3c46a58f113` — self-consistent packaging candidate.
+- v4: `archive/uow-reduction-software-candidate-v4@9d95c11f4b09c34769e1f3a1e6d7b915291d43c8` — final physically qualified candidate.
+
+## Release state
+
+No further architectural work or qualification repair is required by the completed campaign. Subsequent changes should begin from v4 as a new development cycle rather than mutating the closed evidence chain.

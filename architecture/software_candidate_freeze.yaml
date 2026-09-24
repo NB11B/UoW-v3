@@ -1,10 +1,10 @@
 schema_version: "1.0"
-status: FROZEN_V3_EXACT_SEAL_PASS
+status: FROZEN_V4_PHYSICAL_QUALIFICATION_PASS
 candidate_branch: architecture/uow-staged-relocation
 candidate_parent_code_head: 8b6893f3b4db4da161a27f89fd905feb7a794a87
-freeze_ref_planned: archive/uow-reduction-software-candidate-v3
-freeze_ref: archive/uow-reduction-software-candidate-v3
-freeze_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+freeze_ref_planned: archive/uow-reduction-software-candidate-v4
+freeze_ref: archive/uow-reduction-software-candidate-v4
+freeze_commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
 freeze_commit_definition: archived exact commit accepted after combined CI; candidate-local self-hash intentionally omitted
 package:
   name: uow
@@ -105,3 +105,18 @@ v3_packaging_candidate:
   shadow_tests_passed: 279
   policy_tests_passed: 44
   exact_seal_status: PASS
+
+v4_physical_qualification:
+  status: PASS
+  ref: archive/uow-reduction-software-candidate-v4
+  commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
+  binding_commit: 98a6687198fb78f233ac13091bff5cca3526585d
+  evidence_commit: ad49e5b243e7b19aa840405776947f9740895da4
+  final_campaign_artifact: qualification/artifacts/final-physical/20260924T203451Z/final-physical-campaign-summary.json
+  live_flash_enabled: true
+  passed: true
+  physical_claims_promotable: true
+  shadow_tests_passed: 279
+  policy_tests_passed: 44
+  mandatory_invariants_passed: 13
+  note: runtime/API semantics are unchanged from v3; v4 seals physical interface reliability and build/qualification inputs

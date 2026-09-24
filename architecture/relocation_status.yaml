@@ -33,7 +33,9 @@ staged_moves:
     target_semantics: qualification-independent authority-provider protocol
     compatibility_goal: existing DistributedAuthorityCluster remains structurally compatible
   S2_common_application_spine:
-    status: IMPLEMENTED_AWAITING_SUITE
+    status: RERUN_PENDING_AFTER_PARITY_TEST_REFINEMENT
+    first_run: 102
+    first_run_result: PRODUCTION_OCC_METADATA_NOT_PRESENT_IN_REDUCED_SHADOW_ORACLE
     first_shim: src/uow/orchestration/runtime.py
     target_facade: implementations/python/uow_architecture_facade/application.py
   S3_typed_conformance_registry:

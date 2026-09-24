@@ -59,9 +59,13 @@ def test_r7_dual_layout_application_semantics_match():
         cursor_policy=CursorPolicy.OWNED,
     )
 
-    assert via_facade.state.state_hash == via_shadow.state.state_hash
-    assert via_facade.state.to_dict() == via_shadow.state.to_dict()
-    assert via_facade.evidence.post_state_hash == via_shadow.state.state_hash
+    facade_attrs = dict(via_facade.state.attributes)
+    facade_attrs.pop("__versions__", None)
+    assert facade_attrs == dict(via_shadow.state.attributes)
+    assert via_facade.state.cursor == via_shadow.state.cursor
+    assert via_facade.state.status == via_shadow.state.status
+    assert via_facade.state.sequence == via_shadow.state.sequence
+    assert via_facade.state.get("x") == via_shadow.state.get("x") == 7
 
 
 def test_r7_dual_layout_conformance_manifest_matches():

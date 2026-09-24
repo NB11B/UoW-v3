@@ -2,33 +2,34 @@
 
 Status: **policy-integrated v2 software candidate frozen and exact-seal qualified**.
 
-This cutover ends the staged software/repository relocation campaign. The preseal package at `88b2802197c93d8a1a6e7bd52becad9c98e264c9` passed shadow run **147** with **271/271** tests. The exact seal commit `f842d62c7d18355886e2c9fdc25e9cc5db17987b` independently passed shadow run **148** with **271/271** tests and is preserved at `archive/uow-reduction-software-candidate`.
+The final software candidate is:
+
+`archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9`
+
+Exact-seal run **158** passed **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
+
+The earlier `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` remains immutable as **pre-policy historical evidence only**. It is not the final release or physical-qualification target.
 
 ## Architectural closeout
 
-The recovered architecture now keeps semantic authority, conformance, transition, effect, evidence, transaction, resource, orchestration, graph, binding, history, delegation, and mutation rules in canonical semantic packages. Stateful or substrate-specific machinery has been moved behind implementation/realization boundaries with historical compatibility imports preserved.
+The recovered architecture keeps semantic authority, conformance, transition, effect, evidence, transaction, resource, orchestration, graph, binding, history, delegation, mutation, and policy rules in canonical semantic packages. Stateful or substrate-specific machinery remains behind implementation/realization boundaries with historical compatibility imports preserved.
 
-The reduction campaign found no remaining K3 code-reduction seam after the common application spine and authority-provider inversion. Later work was K1 relocation or semantic/realization splitting. In particular, graph substitution certification remains semantic; delegation authority rules remain semantic; mutation proposal/vote/QC/history rules remain semantic.
+The post-A3 Policy-Aware UoW Orchestrator P1-P5 implementation is now part of the canonical package under `uow.policy`. Its frozen reference remains `policy-orchestrator-p5-qualified@aa886329298f87e8b006501d47dd89eb8f0d4a3b`.
 
-Two failed shadow attempts are intentionally retained as evidence. Run 139 exposed an eager-import cycle and led to a non-semantic package-initialization repair. Run 144 showed that the canonical history dependency in runtime-mutation semantics is architectural and must not be removed as an apparently unused import.
+The policy namespace is intentionally not flattened into the top-level facade because `uow.RealizationGraph` and `uow.policy.RealizationGraph` represent different qualified semantics.
 
 ## Freeze surfaces
 
-The top-level `uow` package remains a 199-symbol compatibility facade for this candidate. Its existence does not imply that every symbol is axiomatic. Exact symbols are pinned in `architecture/public_api_manifest.yaml`.
+The top-level `uow` package is a **200-symbol compatibility facade** for v2, including the `policy` namespace export. Exact symbols are pinned in `architecture/public_api_manifest.yaml`.
 
 Wire, authority, mutation-QC, graph-substitution, quorum-commit, and cross-language conformance profiles are pinned by Git blob identity in `architecture/canonical_profiles_manifest.yaml`.
 
-Physical confirmation inputs are pinned in `qualification/final_physical_candidate_inputs.yaml`. Final flash/executable binaries are not stored as release binaries in this tree, so F0 must build/export them from the frozen source inputs and record cryptographic binary hashes before any physical claim is promoted.
+Physical source inputs are pinned in `qualification/final_physical_candidate_inputs.yaml`. Final flash/executable binaries are not stored as release binaries, so F0 must build/export them from the frozen source inputs and record cryptographic binary hashes before any physical claim is promoted.
+
+## Preserved failure evidence
+
+The reduction and finalization campaign intentionally retains failure evidence that exposed architectural or release-gate assumptions, including runs 139, 144, 149, 155, 159, and 160. Each was repaired without silently erasing the failed condition.
 
 ## Next gate
 
-The exact freeze commit is preserved under `archive/uow-reduction-software-candidate`. No semantic changes follow this freeze. The next engineering operation is the single consolidated physical confirmation campaign described in `qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md`, beginning with F0 candidate and binary attestation.
-
-
-## Policy-integrated v2 candidate
-
-The post-A3 P1-P5 implementation is now merged into the canonical package under `uow.policy`. Integration validation at `8b6893f3b4db4da161a27f89fd905feb7a794a87` passed **277/277** reduced shadow tests and **44/44** P1-P5 policy tests in run **156**.
-
-The original `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` remains immutable as the pre-policy candidate. It is not the final physical target.
-
-The policy-integrated candidate is frozen at `archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9`. Exact-seal run **158** passed **277/277** reduced shadow tests and **44/44** P1-P5 policy tests.
+No further semantic software changes are planned. The next operation is local reproduction followed by the single consolidated physical confirmation campaign in `qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md`, beginning with F0 candidate/binary attestation against the **v2** candidate.

@@ -55,19 +55,16 @@ known_failed_attempts_preserved:
     repair: 20095983bc3a07220f7fcd89fce461114b0d2e36
     evidence: canonical history dependency is architectural mutation semantics
 
-preseal_shadow:
-  commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
-  run: 147
-  tests_passed: 271
+previous_pre_policy_candidate:
+  ref: archive/uow-reduction-software-candidate
+  preseal_commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
+  preseal_run: 147
+  preseal_tests_passed: 271
+  exact_seal_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  exact_seal_run: 148
+  exact_seal_tests_passed: 271
   conclusion: PASS
-previous_pre_policy_exact_seal:
-  status: PASS
-  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
-  run: 148
-  tests_passed: 271
-  conclusion: PASS
-  archive_ref: archive/uow-reduction-software-candidate
-  rule: physical qualification must execute against this frozen candidate; later documentation commits do not redefine the candidate
+  disposition: IMMUTABLE_PRE_POLICY_HISTORICAL_EVIDENCE_ONLY
 
 policy_integrated_candidate:
   source_policy_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
@@ -82,7 +79,7 @@ policy_integrated_candidate:
   exact_seal_run: 158
   exact_seal_shadow_tests_passed: 277
   exact_seal_policy_tests_passed: 44
-  rule: the commit containing this manifest becomes the v2 candidate only if both shadow and P1-P5 policy suites pass
+  rule: the v2 candidate is valid only because the exact sealed commit passed both shadow and P1-P5 policy suites
 
 policy_integrated_exact_seal:
   status: PASS

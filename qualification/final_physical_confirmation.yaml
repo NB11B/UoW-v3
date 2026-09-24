@@ -19,25 +19,24 @@ candidate_v2:
   exact_seal_status: PASS
   physical_execution_blocked_until_refreeze: false
 
-candidate:
-  ref: archive/uow-reduction-software-candidate
-  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
-  exact_seal_shadow_run: 148
-  exact_seal_tests_passed: 271
-
 operator_harness:
   path: qualification/final_physical_campaign.py
   status: QUALIFIED_FOR_OPERATOR_USE
+  candidate_identity_separate_from_harness_identity: true
+  candidate_ref: archive/uow-reduction-software-candidate-v2
+  candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
   harness_repin_commit: 173e8c376fdd51df605a839679af1a52af2d057f
   qualification_head: 9e6272edccd75b7b72d435bea21729f4bf592f59
   shadow_run: 161
   shadow_tests_passed: 277
   policy_tests_passed: 44
-  harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
-  shadow_run: 151
-  shadow_tests_passed: 274
-  candidate_identity_separate_from_harness_identity: true
   one_command: python qualification/final_physical_campaign.py --execute
+  historical_v1_harness:
+    harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
+    shadow_run: 151
+    shadow_tests_passed: 274
+    candidate_ref: archive/uow-reduction-software-candidate
+    disposition: SUPERSEDED_PRE_POLICY
 
 execution_policy:
   mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN
@@ -94,7 +93,7 @@ campaigns:
     mandatory_invariants: 13
     a3_evidence_inherited_not_double_counted: true
     p1_p5_specific_evidence_required: true
-    final_candidate_exact_shadow_tests: 271
+    final_candidate_exact_shadow_tests: 277
     p6_required: false
 
 final_gate:

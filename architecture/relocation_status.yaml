@@ -331,11 +331,9 @@ software_candidate:
   planned_freeze_ref: archive/uow-reduction-software-candidate-v2
   freeze_ref: archive/uow-reduction-software-candidate-v2
   freeze_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-  last_qualified_shadow_run: 145
-  last_qualified_test_count: 271
-  preseal_shadow_run: 147
-  preseal_shadow_commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
-  preseal_shadow_test_count: 271
+  integration_validation_run: 156
+  integration_validation_shadow_test_count: 277
+  integration_validation_policy_test_count: 44
   exact_seal_shadow_run: 158
   exact_seal_shadow_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
   exact_seal_shadow_test_count: 277
@@ -353,7 +351,7 @@ post_freeze_admin_transition:
   repair_conclusion: PASS
   semantic_candidate_changed: false
 
-post_freeze_operator_harness:
+post_freeze_operator_harness_v1:
   path: qualification/final_physical_campaign.py
   status: PASS
   harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2

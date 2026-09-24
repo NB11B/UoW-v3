@@ -1,4 +1,4 @@
-schema_version: "2.7"
+schema_version: "2.8"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -34,15 +34,39 @@ r4:
       preservation_gap_closed: true
       restored_from_archive: true
     Q1:
-      status: RERUN_PENDING_AFTER_CONTROL_PLANE_FIX
-      previous_shadow_run: 36
-      previous_result: CURSOR_OWNERSHIP_ASSUMPTION_MISMATCH
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [37, 38]
+      preserved:
+        - committed intent before external invocation
+        - explicit external non-closure boundary
+        - receipt certification before result commit
+        - crash-window reconciliation without duplicate invocation
+        - cursor/status preservation
+        - reverse-order compensation
+        - compensation-failure retention
       architectural_finding:
-        - cursor-owned program transitions and detached control-plane transitions are distinct execution contexts
-        - detached transitions preserve enclosing cursor/status but remain fully proposed, conformed, authorized, transitioned, and evidenced
-      fix:
-        - execute_explicit_uow_reconstructed added for detached certified transitions
-        - ordinary execute_one_reconstructed cursor semantics remain unchanged
+        - cursor-owned program execution and detached certified control-plane transitions are distinct execution contexts
+    U15_PORTABLE:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      target_gates: [U15.1, U15.2, U15.3, U15.4]
+      preserved_targets:
+        - proposer zero authority
+        - model identity lineage
+        - certified adaptation observations
+        - closed-loop rejection reduction
+        - workload drift adaptation
+        - catastrophic model poisoning containment
+        - corrupt/duplicate/stale feedback rejection
+        - update crash rollback
+      authority_path:
+        - U14 judge semantics
+        - shadow minimal authority transition
+        - certified post-transition feedback to learner
+      physical_subgates_deferred:
+        - U15.5 NPU proposer physical
+        - U15.6 hot swap physical
+        - U15.7 endurance physical
+        - U15.8 heterogeneous adaptive quorum physical
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

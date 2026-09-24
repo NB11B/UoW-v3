@@ -1,44 +1,45 @@
 # R4 Validation Record
 
-## Reconstructed families already passing
+## Reconstructed and passing
 
-- U1-U10: shadow runs 23/24 PASS.
-- U11: shadow runs 25/26 PASS.
-- U12: shadow runs 27/28 PASS.
-- U13: shadow runs 29/30 PASS.
-- U14: shadow runs 31/32 PASS.
-- U14-B: shadow runs 33/34 PASS; archive-only preservation gap closed on the research branch.
+- U1-U10 — runs 23/24 PASS.
+- U11 — runs 25/26 PASS.
+- U12 — runs 27/28 PASS.
+- U13 — runs 29/30 PASS.
+- U14 — runs 31/32 PASS.
+- U14-B — runs 33/34 PASS; archive-only preservation gap closed.
+- Q1 — runs 37/38 PASS after separating cursor-owned execution from detached certified control-plane transitions.
 
-## Q1 first run
+## Q1 architectural result
 
-Shadow run 36: 72 passed, 5 failed.
+Effect/saga bookkeeping transitions do not own the enclosing workflow cursor. They still pass the full authority grammar:
 
-All five failures had the same cause:
-- the generic reconstruction helper assumed an executing UoW must own WorldState.cursor;
-- Q1 effect-intent/result and saga-progress transitions intentionally preserve an enclosing cursor and execute as certified bookkeeping/control-plane transitions.
+Proposal -> Conformance -> Authorization -> AuthorizedTransition -> Evidence
 
-No Q1 receipt, idempotency, compensation, or authority assertion failed. The tests failed before those semantics were reached.
+but execute through an explicit supplied-UoW path whose contract preserves the enclosing cursor.
 
-## Q1 correction
+This is a semantic distinction, not an exception to certification.
 
-A separate execution context is now explicit:
+## U15 portable reconstruction in execution
 
-1. cursor-owned program execution:
-   execute_one_reconstructed(graph, state)
-   requires state.cursor to select the UoW.
+The U15.1-U15.4 reconstruction builds on the already reconstructed U14 proposer seam.
 
-2. detached certified control-plane transition:
-   execute_explicit_uow_reconstructed(uow, state)
-   does not claim cursor ownership and requires the UoW's own transition semantics to preserve/change cursor explicitly.
+Flow:
 
-Both paths still use:
-Proposal -> Conformance -> Local Authorization -> AuthorizedTransition -> Evidence.
+adaptive proposer (zero authority)
+-> deterministic U14 Judge
+-> certified scheduler materialization
+-> minimal shadow authority transition
+-> authoritative post-state
+-> cryptographically bound AdaptationObservation
+-> learner feedback buffer
+-> model update / new ModelIdentity generation
 
-The Q1 reconstruction now uses the detached path for:
-- effect intent state;
-- receipt/result state;
-- pending-external state;
-- saga progress;
-- compensation status.
+Negative controls retained:
+- catastrophic weight poisoning may trigger fallback but cannot corrupt authoritative state;
+- corrupted feedback is dropped;
+- duplicate feedback is dropped;
+- stale feedback is dropped;
+- update crash rolls back model weights and identity.
 
-This preserves, rather than relaxes, cursor semantics.
+Physical NPU/hot-swap/quorum claims remain separate future reconstruction targets and are not inferred from portable reconstruction.

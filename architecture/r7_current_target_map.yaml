@@ -1,0 +1,299 @@
+schema_version: "0.1"
+status: R7_0_CURRENT_TARGET_MAP
+production_moves: false
+
+actions:
+  KEEP_AND_FACADE: existing implementation remains; future semantic facade wraps/exposes it
+  MOVE_LATER: candidate for structural relocation only after dual-layout parity
+  RETAIN_REALIZATION: preserve as distinct implementation
+  RETAIN_EVIDENCE: preserve as qualification/archive evidence
+  COMPATIBILITY_SHIM: preserve old import path/API after future relocation
+  SPEC_SOURCE: semantic content informs language-neutral specification
+
+mappings:
+  - current: src/uow/ontology.py
+    target: specification/ontology + implementations/python/kernel
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/state.py
+    target: specification/state + implementations/python/kernel
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/contracts.py
+    target: specification/contracts/transition + implementations/python/kernel
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/engine.py
+    target: specification/transition + implementations/python/kernel
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/transactions/descriptor.py
+    target: specification/conformance/transaction + implementations/python/transactions
+    class: K1
+    action: MOVE_LATER
+
+  - current: src/uow/transactions/occ.py
+    target: realizations/concurrency/occ + implementations/python/transactions
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/transactions/sequencer.py
+    target: realizations/commit/{deterministic,wal}
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/orchestration/state.py
+    target: implementations/python/orchestration
+    class: K1
+    action: MOVE_LATER
+
+  - current: src/uow/orchestration/materialization.py
+    target: specification/transition/materialization + implementations/python/orchestration
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/orchestration/scheduler.py
+    target: realizations/scheduling/self_hosted
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/orchestration/runtime.py
+    target: implementations/python/orchestration
+    class: K3
+    action: MOVE_LATER
+    reduction: common application spine
+
+  - current: src/uow/resources/requirement.py
+    target: specification/requirements/resources + implementations/python/resources
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/resources/state.py
+    target: specification/requirements/capabilities + implementations/python/resources
+    class: K1
+    action: MOVE_LATER
+
+  - current: src/uow/resources/policies.py
+    target: realizations/scheduling/{fifo,greedy,priority,cost_energy}
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/resources/runtime.py
+    target: implementations/python/resources
+    class: K3
+    action: MOVE_LATER
+    reduction: common application spine + typed conformance interface
+
+  - current: src/uow/effects/descriptor.py
+    target: specification/effects + implementations/python/effects
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/effects/certification.py
+    target: specification/conformance/external_receipt + implementations/python/effects
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/effects/runner.py
+    target: implementations/python/effects
+    class: K3
+    action: MOVE_LATER
+    reduction: detached application spine; external invocation remains separate
+
+  - current: src/uow/effects/saga.py
+    target: realizations/effects/saga + implementations/python/effects
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/proposer/base.py
+    target: specification/transition/proposal + implementations/python/adaptation
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/proposer/types.py
+    target: specification/transition/proposal + specification/conformance
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/proposer/judge.py
+    target: specification/conformance/proposer + implementations/python/adaptation
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/proposer/stochastic.py
+    target: realizations/scheduling/stochastic
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/proposer/heuristic.py
+    target: realizations/scheduling/heuristic
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/proposer/adaptive.py
+    target: realizations/adaptation/portable
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/proposer/fallback.py
+    target: realizations/scheduling/fallback
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/proposer/identity.py
+    target: specification/identity/model_lineage + implementations/python/adaptation
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/proposer/observation.py
+    target: specification/evidence/adaptation + implementations/python/adaptation
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/proposer/engine.py
+    target: implementations/python/adaptation
+    class: K3
+    action: MOVE_LATER
+    reduction: common application spine
+
+  - current: src/uow/proposer/quorum_sequencer.py
+    target: realizations/commit/quorum
+    class: K3
+    action: MOVE_LATER
+    reduction: authority-provider protocol
+    dependency_fix: remove runtime dependency on qualification package
+
+  - current: src/uow/proposer/learned.py
+    target: compatibility/python/proposer
+    class: K1
+    action: COMPATIBILITY_SHIM
+
+  - current: src/uow/composition/contract.py
+    target: specification/contracts/intent
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/composition/graph.py
+    target: specification/contracts/realization + implementations/python/composition
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/composition/projection.py
+    target: specification/conformance/semantic_projection
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/composition/actor.py
+    target: specification/requirements/capabilities + implementations/python/composition
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/composition/binding.py
+    target: specification/contracts/binding + specification/conformance/actor_binding
+    class: K0
+    action: KEEP_AND_FACADE
+
+  - current: src/uow/composition/substitution.py
+    target: realizations/adaptation/graph_substitution
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/policy.py
+    target: realizations/adaptation/graph_policy
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/fabric.py
+    target: realizations/networking/actor_fabric
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/delegation.py
+    target: specification/authority/delegation + realizations/authority/delegation
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/convergence.py
+    target: realizations/authority/distributed_history + specification/evidence
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/wire.py
+    target: realizations/networking/wire
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/host_node.py
+    target: realizations/persistence/host_wal + implementations/python/composition
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/mutation.py
+    target: specification/authority/quorum_mutation + realizations/adaptation/runtime_mutation
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: src/uow/composition/runtime.py
+    target: implementations/python/composition
+    class: K3
+    action: MOVE_LATER
+    reduction: common application spine + typed conformance interface
+
+  - current: src/uow/composition/endurance.py
+    target: experiments/adaptive_composition/a2_8 + realizations/adaptation/endurance_controls
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: qualification/distributed_authority/
+    target: qualification/{portable,physical}/distributed_authority
+    class: P3
+    action: RETAIN_EVIDENCE
+    constraint: runtime must depend on authority protocol, not qualification package
+
+  - current: qualification/embedded/
+    target: implementations/embedded + qualification/physical
+    class: P3
+    action: RETAIN_EVIDENCE
+
+  - current: integrations/openvino_npu/
+    target: realizations/acceleration/openvino_npu
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: integrations/tfwr/
+    target: realizations/adaptation/tfwr
+    class: K1
+    action: RETAIN_REALIZATION
+
+  - current: foundations/universal_computation/
+    target: experiments/universality + retained reference/falsification tools
+    class: P2_P3
+    action: RETAIN_EVIDENCE
+
+  - current: archive/orchestrator/orchestrator/concurrent_engine.py
+    source_repository: NB11B/weights-on-the-fly
+    target: archive/immutable-research-lineage + realizations/concurrency/threaded_reference
+    class: K1_P3
+    action: RETAIN_EVIDENCE
+
+  - current: archive/orchestrator/orchestrator/semantic_matrix_prior.py
+    source_repository: NB11B/weights-on-the-fly
+    target: realizations/concurrency/semantic_prior + archive
+    class: K1_P3
+    action: RETAIN_EVIDENCE
+
+  - current: archive/orchestrator/orchestrator/graph_synthesis.py
+    source_repository: NB11B/weights-on-the-fly
+    target: realizations/adaptation/goal_synthesis + experiments/goal_synthesis
+    class: K1_P3
+    action: RETAIN_EVIDENCE
+
+rules:
+  - no MOVE_LATER action occurs before dual-layout reconstruction parity
+  - every old public import path receives a compatibility disposition
+  - physical evidence paths retain immutable qualification linkage
+  - experiment controls remain discoverable from experiment manifests

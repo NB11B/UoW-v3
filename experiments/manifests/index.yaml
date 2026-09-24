@@ -1,0 +1,39 @@
+schema_version: "0.1"
+mode: additive_index
+canonical_manifest_root: architecture/experiments
+
+portable_reconstruction_manifests:
+  U1_U10: architecture/experiments/u01-u10-universal-kernel.yaml
+  U11: architecture/experiments/u11-self-hosting.yaml
+  U12: architecture/experiments/u12-transactional-concurrency.yaml
+  U13: architecture/experiments/u13-resource-aware-scheduling.yaml
+  U14: architecture/experiments/u14-proposer.yaml
+  U14_B: architecture/experiments/u14b-goal-synthesis.yaml
+  Q1: architecture/experiments/q1-external-effects.yaml
+  TIMING: architecture/experiments/timing-local-independence.yaml
+  U15: architecture/experiments/u15-adaptive-runtime.yaml
+  DIST_AUTH: architecture/experiments/distributed-authority.yaml
+  A2_0: architecture/experiments/a2.0-semantic-projection.yaml
+  A2_1: architecture/experiments/a2.1-graph-substitution.yaml
+  A2_2: architecture/experiments/a2.2-adaptive-graph-binding.yaml
+  A2_3: architecture/experiments/a2.3-actor-fabric.yaml
+  A2_4: architecture/experiments/a2.4-recursive-delegation.yaml
+  A2_5: architecture/experiments/a2.5-partition-convergence.yaml
+  A2_6: architecture/experiments/a2.6-physical-network.yaml
+  A2_7: architecture/experiments/a2.7-quorum-mutation.yaml
+  A2_8: architecture/experiments/a2.8-endurance.yaml
+
+reference_oracles:
+  manifest: experiments/reference-oracles/oracles.yaml
+  gate_map: experiments/reference-oracles/gate_map.yaml
+  includes:
+    - A3_ADAPTIVE_COMPUTE_EFFICIENCY
+    - POLICY_ORCHESTRATOR_P1_P5
+    - A4_ONTOLOGY_ADAPTATION
+
+rules:
+  - this index does not duplicate evidence
+  - canonical manifests remain under architecture/experiments during R7
+  - external frozen branches remain external acceptance oracles
+  - A4 remains conceptual and unqualified
+  - cutover requires every indexed qualified manifest/oracle to remain reconstructable

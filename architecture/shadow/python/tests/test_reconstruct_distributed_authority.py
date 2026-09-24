@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from qualification.distributed_authority.authority import form_quorum_certificate
-from qualification.distributed_authority.network import NetworkFabric
 from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
 from uow.engine import propose
 
 from uow_shadow.distributed_authority_reconstruction import (
     ShadowAuthorityReplica,
     ShadowDistributedAuthorityCluster,
+    ShadowNetworkFabric,
     ShadowNodeMode,
+    form_quorum_certificate,
     make_shadow_authority_cluster,
 )
 
@@ -170,7 +170,7 @@ def test_r4_distributed_authority_ruleset_mismatch_excluded_from_quorum_applicat
         ShadowAuthorityReplica("B", initial, clock_start=2),
         ShadowAuthorityReplica("C", initial, ruleset_version="uow-authority-v2", clock_start=3),
     ]
-    fabric = NetworkFabric(("P", "A", "B", "C"))
+    fabric = ShadowNetworkFabric(("P", "A", "B", "C"))
     fabric.connect("P", "A")
     fabric.connect("P", "B")
     fabric.connect("A", "B")
@@ -188,14 +188,10 @@ def test_r4_distributed_authority_ruleset_mismatch_excluded_from_quorum_applicat
     assert cluster.nodes["C"].state.get("counter") == 0
 
 
-def test_r4_distributed_authority_does_not_call_canonical_node_apply(monkeypatch):
-    from qualification.distributed_authority import authority as canonical
+def test_r4_distributed_authority_reconstruction_does_not_depend_on_qualification_package():
+    import sys
 
-    def forbidden(*args, **kwargs):
-        raise AssertionError("canonical AuthorityNode.apply_quorum_certificate must not be used")
-
-    monkeypatch.setattr(canonical.AuthorityNode, "apply_quorum_certificate", forbidden)
-
+    assert "qualification.distributed_authority.authority" not in sys.modules
     cluster = make_shadow_authority_cluster(_initial())
     uow = _inc()
     committed, qc, _, _ = cluster.submit(

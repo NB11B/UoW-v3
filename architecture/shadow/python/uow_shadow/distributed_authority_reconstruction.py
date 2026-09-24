@@ -1,33 +1,232 @@
 """R4 portable distributed-authority reconstruction.
 
-Independent replicas form AuthorityVote and QuorumCertificate objects using the
-qualified attestation semantics, but authoritative application does not call
-AuthorityNode.apply_quorum_certificate or uow.engine.commit.
+This module intentionally does NOT import qualification.distributed_authority.
+R1 found that src/uow/proposer/quorum_sequencer.py imports that qualification
+package, creating a derived-runtime -> qualification dependency inversion and a
+circular import when qualification is treated as a reusable runtime primitive.
 
-Each replica applies a verified QC through the R3 minimal authority kernel and
-maintains an independent canonical EvidenceLedger for subsequent quorum rounds.
+The shadow layer therefore reconstructs the portable semantics directly from
+the language-neutral attestation model:
+
+independent replica evaluation -> AuthorityVote -> threshold QuorumCertificate
+-> QC verification -> minimal shadow authorization -> AuthorizedTransition
+-> independent evidence lineage.
+
+No canonical AuthorityNode.apply_quorum_certificate and no uow.engine.commit
+are used.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+import hashlib
+from collections import deque
 from typing import Dict, Iterable, Mapping, Optional, Tuple
 
-from qualification.distributed_authority.authority import (
-    AuthorityVote,
-    QuorumCertificate,
-    form_quorum_certificate,
-    proposal_digest,
-)
-from qualification.distributed_authority.network import NetworkFabric
 from uow.contracts import UoW
 from uow.engine import EvidenceLedger, EvidenceRecord, Proposal, certify
-from uow.state import WorldState
+from uow.state import WorldState, canonical_json
 
 from .adapters import adapt_world_state
 from .identity import shadow_identity
 from .kernel import LocalAuthorization, apply_authorized_transition
 from .types import CausalCoordinate, ConformanceDecision, ConformanceResult, ProposalEnvelope
+
+
+def proposal_digest(proposal: Proposal) -> str:
+    payload = {
+        "uow_id": proposal.uow_id,
+        "pre_state_hash": proposal.pre_state_hash,
+        "selected_route_index": proposal.selected_route_index,
+        "proposed_state_hash": proposal.proposed_state.state_hash,
+        "selected_successor": proposal.selected_successor,
+        "halted": proposal.halted,
+    }
+    return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+@dataclass(frozen=True)
+class AuthorityVote:
+    node_id: str
+    accepted: bool
+    proposal_hash: str
+    pre_state_hash: str
+    proposed_state_hash: str
+    certificate_hash: str
+    pre_evidence_root: str
+    evidence_step: int
+    ruleset_version: str
+    rejection_reason: Optional[str] = None
+    local_clock: int = 0
+    vote_hash: str = ""
+
+    def __post_init__(self) -> None:
+        payload = {
+            "node_id": self.node_id,
+            "accepted": self.accepted,
+            "proposal_hash": self.proposal_hash,
+            "pre_state_hash": self.pre_state_hash,
+            "proposed_state_hash": self.proposed_state_hash,
+            "certificate_hash": self.certificate_hash,
+            "pre_evidence_root": self.pre_evidence_root,
+            "evidence_step": self.evidence_step,
+            "ruleset_version": self.ruleset_version,
+            "rejection_reason": self.rejection_reason,
+        }
+        expected = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+        if self.vote_hash and self.vote_hash != expected:
+            raise ValueError("Authority vote hash mismatch.")
+        object.__setattr__(self, "vote_hash", expected)
+
+
+@dataclass(frozen=True)
+class QuorumCertificate:
+    proposal_hash: str
+    uow_id: str
+    pre_state_hash: str
+    proposed_state_hash: str
+    committed_state_hash: str
+    certificate_hash: str
+    pre_evidence_root: str
+    evidence_step: int
+    expected_evidence_root: str
+    ruleset_version: str
+    threshold: int
+    voters: Tuple[str, ...]
+    vote_hashes: Tuple[str, ...]
+    qc_hash: str = ""
+
+    def __post_init__(self) -> None:
+        payload = {
+            "proposal_hash": self.proposal_hash,
+            "uow_id": self.uow_id,
+            "pre_state_hash": self.pre_state_hash,
+            "proposed_state_hash": self.proposed_state_hash,
+            "committed_state_hash": self.committed_state_hash,
+            "certificate_hash": self.certificate_hash,
+            "pre_evidence_root": self.pre_evidence_root,
+            "evidence_step": self.evidence_step,
+            "expected_evidence_root": self.expected_evidence_root,
+            "ruleset_version": self.ruleset_version,
+            "threshold": self.threshold,
+            "voters": self.voters,
+            "vote_hashes": self.vote_hashes,
+        }
+        expected = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+        if self.qc_hash and self.qc_hash != expected:
+            raise ValueError("Quorum certificate hash mismatch.")
+        object.__setattr__(self, "qc_hash", expected)
+
+
+def _vote_group_key(vote: AuthorityVote) -> tuple:
+    return (
+        vote.proposal_hash,
+        vote.pre_state_hash,
+        vote.proposed_state_hash,
+        vote.certificate_hash,
+        vote.pre_evidence_root,
+        vote.evidence_step,
+        vote.ruleset_version,
+    )
+
+
+def form_quorum_certificate(
+    uow: UoW,
+    proposal: Proposal,
+    votes: Iterable[AuthorityVote],
+    threshold: int,
+) -> Optional[QuorumCertificate]:
+    accepted = [v for v in votes if v.accepted]
+    groups: Dict[tuple, list[AuthorityVote]] = {}
+    for vote in accepted:
+        groups.setdefault(_vote_group_key(vote), []).append(vote)
+    if not groups:
+        return None
+
+    matching = max(
+        groups.values(),
+        key=lambda group: (len(group), tuple(sorted(v.node_id for v in group))),
+    )
+    unique = {v.node_id: v for v in matching}
+    if len(unique) < threshold:
+        return None
+
+    selected = [unique[node_id] for node_id in sorted(unique)]
+    first = selected[0]
+    if first.proposal_hash != proposal_digest(proposal):
+        return None
+
+    committed = proposal.proposed_state.advance_sequence()
+    expected_evidence = EvidenceRecord(
+        step_number=first.evidence_step + 1,
+        uow_id=uow.H.identity,
+        source_category=uow.H.source_category.value,
+        target_category=uow.H.target_category.value,
+        pre_state_hash=first.pre_state_hash,
+        selected_route_index=proposal.selected_route_index,
+        proposed_state_hash=proposal.proposed_state.state_hash,
+        certificate_hash=first.certificate_hash,
+        post_state_hash=committed.state_hash,
+        next_uow_pointer=proposal.selected_successor,
+        prev_evidence_hash=first.pre_evidence_root,
+    )
+    return QuorumCertificate(
+        proposal_hash=first.proposal_hash,
+        uow_id=uow.H.identity,
+        pre_state_hash=first.pre_state_hash,
+        proposed_state_hash=first.proposed_state_hash,
+        committed_state_hash=committed.state_hash,
+        certificate_hash=first.certificate_hash,
+        pre_evidence_root=first.pre_evidence_root,
+        evidence_step=first.evidence_step,
+        expected_evidence_root=expected_evidence.record_hash,
+        ruleset_version=first.ruleset_version,
+        threshold=threshold,
+        voters=tuple(v.node_id for v in selected),
+        vote_hashes=tuple(v.vote_hash for v in selected),
+    )
+
+
+class ShadowNetworkFabric:
+    def __init__(self, nodes: Iterable[str]) -> None:
+        self.nodes = tuple(nodes)
+        self.links: Dict[tuple[str, str], bool] = {}
+
+    def connect(self, a: str, b: str) -> None:
+        self.links[tuple(sorted((a, b)))] = True
+
+    def set_link(self, a: str, b: str, active: bool) -> None:
+        self.links[tuple(sorted((a, b)))] = active
+
+    def isolate_node(self, node: str) -> None:
+        for edge in list(self.links):
+            if node in edge:
+                self.links[edge] = False
+
+    def restore_link(self, a: str, b: str) -> None:
+        self.set_link(a, b, True)
+
+    def route(self, source: str, target: str) -> Optional[Tuple[str, ...]]:
+        if source == target:
+            return (source,)
+        adjacency: Dict[str, list[str]] = {n: [] for n in self.nodes}
+        for (a, b), active in self.links.items():
+            if active:
+                adjacency.setdefault(a, []).append(b)
+                adjacency.setdefault(b, []).append(a)
+        q = deque([(source, (source,))])
+        seen = {source}
+        while q:
+            node, path = q.popleft()
+            for nxt in sorted(adjacency.get(node, ())):
+                if nxt in seen:
+                    continue
+                new_path = path + (nxt,)
+                if nxt == target:
+                    return new_path
+                seen.add(nxt)
+                q.append((nxt, new_path))
+        return None
 
 
 class ShadowNodeMode(str, Enum):
@@ -64,12 +263,13 @@ class ShadowAuthorityReplica:
         clock_start: int = 0,
         clock_stride: int = 1,
     ) -> None:
+        data = initial_state.to_dict()
         self.node_id = node_id
         self.initial_state = WorldState(
-            attributes=initial_state.to_dict()["attributes"],
-            cursor=initial_state.cursor,
-            status=initial_state.status,
-            sequence=initial_state.sequence,
+            attributes=data["attributes"],
+            cursor=data["cursor"],
+            status=data["status"],
+            sequence=data["sequence"],
         )
         self.state = self.initial_state
         self.ledger = EvidenceLedger()
@@ -309,7 +509,7 @@ class ShadowDistributedAuthorityCluster:
     def __init__(
         self,
         nodes: Iterable[ShadowAuthorityReplica],
-        network: NetworkFabric,
+        network: ShadowNetworkFabric,
         *,
         threshold: int = 2,
         ingress: str = "P",
@@ -343,7 +543,6 @@ class ShadowDistributedAuthorityCluster:
 
     def catch_up(self, node_id: str) -> tuple[bool, str]:
         node = self.nodes[node_id]
-        # Determine whether node matches a valid journal prefix.
         if (
             node.state.state_hash == node.initial_state.state_hash
             and node.ledger.root_hash() == "0" * 64
@@ -379,7 +578,7 @@ def make_shadow_authority_cluster(initial: WorldState) -> ShadowDistributedAutho
         ShadowAuthorityReplica("B", initial, clock_start=10_000, clock_stride=999_983),
         ShadowAuthorityReplica("C", initial, clock_start=77, clock_stride=17),
     ]
-    fabric = NetworkFabric(("P", "A", "B", "C"))
+    fabric = ShadowNetworkFabric(("P", "A", "B", "C"))
     fabric.connect("P", "A")
     fabric.connect("P", "B")
     fabric.connect("A", "B")

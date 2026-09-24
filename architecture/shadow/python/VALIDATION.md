@@ -1,35 +1,32 @@
 # R4 Validation Record
 
-## Reconstructed and passing
+## Passing reconstructed families
 
-- U1-U10 — runs 23/24.
-- U11 — runs 25/26.
-- U12 — runs 27/28.
-- U13 — runs 29/30.
-- U14 — runs 31/32.
-- U14-B — runs 33/34.
-- Q1 — runs 37/38.
-- U15.1-U15.4 portable — runs 39/41/42.
+U1-U10, U11, U12, U13, U14, U14-B, Q1, and U15.1-U15.4 portable are passing on the shadow reconstruction workflow.
 
-## Distributed authority portable reconstruction now under test
+## Distributed-authority first attempt
 
-The reconstruction keeps attestation formation explicit:
+Runs 43/44 failed during test collection, before any authority assertion.
 
-independent replica evaluation
--> AuthorityVote
--> threshold QuorumCertificate
--> QC verification
--> minimal shadow quorum authorization
--> shadow AuthorizedTransition
--> independent evidence chain
+Cause:
+qualification.distributed_authority.authority imports uow.contracts.
+Importing uow initializes uow.proposer.quorum_sequencer, which imports
+qualification.distributed_authority.authority again.
 
-The canonical AuthorityNode.apply_quorum_certificate path is excluded.
+This is the runtime -> qualification dependency inversion already identified in R1.
 
-Preserved negative controls:
-- only one reachable authority cannot commit;
-- conflicting proposals from one pre-state cannot both obtain quorum;
-- divergent replica is quarantined rather than overwritten;
-- duplicate QC delivery is idempotent;
-- ruleset mismatch cannot silently participate.
+## Layering correction
 
-Self-healing is reconstructed as verified replay of QC journal entries only from a recognized prefix. A non-prefix state is quarantined.
+The shadow portable distributed-authority reconstruction now defines its own:
+- AuthorityVote semantic object;
+- QuorumCertificate semantic object;
+- vote grouping / threshold QC formation;
+- deterministic faultable network fabric;
+- independent authority replicas.
+
+These are reconstructed from the R2 semantic/attestation model and current qualified behavior, not imported from qualification packaging.
+
+State application remains:
+QC verification -> distributed quorum authorization profile -> minimal shadow AuthorizedTransition -> independent evidence lineage.
+
+This correction is architecturally preferable to working around the import cycle because it tests the intended language-neutral boundary directly.

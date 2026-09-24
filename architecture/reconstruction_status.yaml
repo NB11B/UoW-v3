@@ -1,4 +1,4 @@
-schema_version: "3.0"
+schema_version: "3.1"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -21,7 +21,6 @@ current_invariants:
   src_uow_imports_shadow: false
 
 r4:
-  canonical_commit_allowed_in_shadow_reconstruction: false
   results:
     U1_U10: {status: RECONSTRUCTED_INITIAL, shadow_runs: [23, 24]}
     U11: {status: RECONSTRUCTED_INITIAL, shadow_runs: [25, 26]}
@@ -32,34 +31,18 @@ r4:
     Q1: {status: RECONSTRUCTED_INITIAL, shadow_runs: [37, 38]}
     U15_PORTABLE: {status: RECONSTRUCTED_INITIAL, shadow_runs: [39, 41, 42]}
     DIST_AUTH_PORTABLE:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      preserved_targets:
-        - independent replica state and ledgers
-        - clock-skew-invariant certification
-        - 2-of-3 quorum convergence
-        - one-node fail-closed
-        - stale-replica verified catch-up
-        - divergent-replica quarantine
-        - duplicate QC idempotency
-        - conflicting vote lock
-        - ruleset mismatch exclusion
-      attestation_boundary:
-        vote_and_qc_formation: retained_as_protocol
-        qc_authorized_application: minimal_shadow_authority
-      canonical_authority_node_apply_excluded: true
+      status: RERUN_PENDING_AFTER_LAYERING_FIX
+      previous_shadow_runs: [43, 44]
+      previous_result: IMPORT_CYCLE_BEFORE_TEST_COLLECTION
+      architectural_finding:
+        - qualification.distributed_authority cannot serve as a reusable semantic runtime dependency while src/uow/proposer/quorum_sequencer imports it
+        - authority vote/QC semantics must be represented independently of qualification packaging
+      fix:
+        - shadow AuthorityVote and QuorumCertificate semantic types reconstructed independently
+        - shadow network fabric reconstructed independently
+        - no qualification.distributed_authority import in portable reconstruction
+        - QC-authorized application still uses minimal shadow authority kernel
 
 next_r4_targets:
-  - A2.0 semantic projection
-  - A2.1 graph substitution
-  - A2.2 adaptive graph/binding
-  - A2.3 actor fabric
-  - A2.4 delegation
-  - A2.5 partition convergence
-  - A2.6 adversarial network/crash
-  - A2.7 quorum mutation
-  - A2.8 endurance capstone
-
-canonical_ci_observation:
-  result: FAIL_BEFORE_TEST_EXECUTION
-  attributed_to_shadow: false
-  reason: existing optional numpy/openvino dependencies absent from standard CI install
+  - finish portable distributed-authority rerun
+  - A2.0-A2.8 reconstruction

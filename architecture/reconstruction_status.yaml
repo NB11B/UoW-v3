@@ -1,4 +1,4 @@
-schema_version: "2.9"
+schema_version: "3.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -28,38 +28,36 @@ r4:
     U12: {status: RECONSTRUCTED_INITIAL, shadow_runs: [27, 28]}
     U13: {status: RECONSTRUCTED_INITIAL, shadow_runs: [29, 30]}
     U14: {status: RECONSTRUCTED_INITIAL, shadow_runs: [31, 32]}
-    U14_B:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [33, 34]
-      preservation_gap_closed: true
-      restored_from_archive: true
-    Q1:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [37, 38]
-      control_plane_execution_context: DETACHED_CERTIFIED_UOW
-    U15_PORTABLE:
-      status: RECONSTRUCTED_INITIAL
-      shadow_run: 39
-      target_gates: [U15.1, U15.2, U15.3, U15.4]
-      preserved:
-        - proposer zero authority
-        - model identity lineage
-        - certified adaptation observations
-        - closed-loop rejection reduction
-        - workload drift adaptation
-        - catastrophic model poisoning containment
-        - corrupt duplicate stale feedback containment
-        - update crash rollback
-      physical_subgates_deferred:
-        - U15.5 NPU proposer physical
-        - U15.6 hot swap physical
-        - U15.7 endurance physical
-        - U15.8 heterogeneous adaptive quorum physical
+    U14_B: {status: RECONSTRUCTED_INITIAL, shadow_runs: [33, 34], preservation_gap_closed: true}
+    Q1: {status: RECONSTRUCTED_INITIAL, shadow_runs: [37, 38]}
+    U15_PORTABLE: {status: RECONSTRUCTED_INITIAL, shadow_runs: [39, 41, 42]}
+    DIST_AUTH_PORTABLE:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      preserved_targets:
+        - independent replica state and ledgers
+        - clock-skew-invariant certification
+        - 2-of-3 quorum convergence
+        - one-node fail-closed
+        - stale-replica verified catch-up
+        - divergent-replica quarantine
+        - duplicate QC idempotency
+        - conflicting vote lock
+        - ruleset mismatch exclusion
+      attestation_boundary:
+        vote_and_qc_formation: retained_as_protocol
+        qc_authorized_application: minimal_shadow_authority
+      canonical_authority_node_apply_excluded: true
 
 next_r4_targets:
-  - distributed authority portable reconstruction
-  - A2.0-A2.8 reconstruction
-  - U15 physical evidence/harness preservation mapping against reconstructed semantics
+  - A2.0 semantic projection
+  - A2.1 graph substitution
+  - A2.2 adaptive graph/binding
+  - A2.3 actor fabric
+  - A2.4 delegation
+  - A2.5 partition convergence
+  - A2.6 adversarial network/crash
+  - A2.7 quorum mutation
+  - A2.8 endurance capstone
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

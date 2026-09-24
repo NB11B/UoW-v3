@@ -2,37 +2,34 @@
 
 ## Reconstructed and passing
 
-- U1-U10 — runs 23/24 PASS.
-- U11 — runs 25/26 PASS.
-- U12 — runs 27/28 PASS.
-- U13 — runs 29/30 PASS.
-- U14 — runs 31/32 PASS.
-- U14-B — runs 33/34 PASS; archive-only preservation gap closed.
-- Q1 — runs 37/38 PASS; detached certified control-plane transition distinction preserved.
-- U15.1-U15.4 portable — run 39 PASS.
+- U1-U10 — runs 23/24.
+- U11 — runs 25/26.
+- U12 — runs 27/28.
+- U13 — runs 29/30.
+- U14 — runs 31/32.
+- U14-B — runs 33/34.
+- Q1 — runs 37/38.
+- U15.1-U15.4 portable — runs 39/41/42.
 
-## U15 portable result
+## Distributed authority portable reconstruction now under test
 
-The reconstructed loop preserves:
+The reconstruction keeps attestation formation explicit:
 
-adaptive proposer (zero authority)
--> deterministic Judge
--> certified materialization
--> minimal shadow authority transition
--> authoritative post-state
--> cryptographically bound AdaptationObservation
--> learner feedback
--> model generation update
+independent replica evaluation
+-> AuthorityVote
+-> threshold QuorumCertificate
+-> QC verification
+-> minimal shadow quorum authorization
+-> shadow AuthorizedTransition
+-> independent evidence chain
 
-The run preserves both positive and negative claims:
-- policy adaptation reduces rejection rate under the tested drift scenario;
-- workload drift still completes under deterministic authority;
-- catastrophic model poisoning degrades proposal quality/fallback behavior rather than authoritative correctness;
-- corrupt, duplicate, and stale feedback remain contained;
-- update crashes roll back model state.
+The canonical AuthorityNode.apply_quorum_certificate path is excluded.
 
-Physical U15.5-U15.8 evidence is not inferred from this portable reconstruction and remains a separate preservation/requalification obligation.
+Preserved negative controls:
+- only one reachable authority cannot commit;
+- conflicting proposals from one pre-state cannot both obtain quorum;
+- divergent replica is quarantined rather than overwritten;
+- duplicate QC delivery is idempotent;
+- ruleset mismatch cannot silently participate.
 
-## Next
-
-Proceed to distributed-authority portable reconstruction and then A2.0-A2.8 reconstruction, using the same preservation rule: application semantics may be reconstructed while attestation formation, physical substrate evidence, and external effects remain explicit boundaries where appropriate.
+Self-healing is reconstructed as verified replay of QC journal entries only from a recognized prefix. A non-prefix state is quarantined.

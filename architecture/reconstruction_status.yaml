@@ -1,4 +1,4 @@
-schema_version: "2.8"
+schema_version: "2.9"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -36,37 +36,30 @@ r4:
     Q1:
       status: RECONSTRUCTED_INITIAL
       shadow_runs: [37, 38]
-      preserved:
-        - committed intent before external invocation
-        - explicit external non-closure boundary
-        - receipt certification before result commit
-        - crash-window reconciliation without duplicate invocation
-        - cursor/status preservation
-        - reverse-order compensation
-        - compensation-failure retention
-      architectural_finding:
-        - cursor-owned program execution and detached certified control-plane transitions are distinct execution contexts
+      control_plane_execution_context: DETACHED_CERTIFIED_UOW
     U15_PORTABLE:
-      status: IMPLEMENTED_AWAITING_EXECUTION
+      status: RECONSTRUCTED_INITIAL
+      shadow_run: 39
       target_gates: [U15.1, U15.2, U15.3, U15.4]
-      preserved_targets:
+      preserved:
         - proposer zero authority
         - model identity lineage
         - certified adaptation observations
         - closed-loop rejection reduction
         - workload drift adaptation
         - catastrophic model poisoning containment
-        - corrupt/duplicate/stale feedback rejection
+        - corrupt duplicate stale feedback containment
         - update crash rollback
-      authority_path:
-        - U14 judge semantics
-        - shadow minimal authority transition
-        - certified post-transition feedback to learner
       physical_subgates_deferred:
         - U15.5 NPU proposer physical
         - U15.6 hot swap physical
         - U15.7 endurance physical
         - U15.8 heterogeneous adaptive quorum physical
+
+next_r4_targets:
+  - distributed authority portable reconstruction
+  - A2.0-A2.8 reconstruction
+  - U15 physical evidence/harness preservation mapping against reconstructed semantics
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

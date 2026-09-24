@@ -1,8 +1,8 @@
 # Final Physical Confirmation Campaign
 
-Status: deferred pending v3 packaging exact seal and post-freeze candidate binding.
+Status: ready terminal qualification gate for the self-consistent v3 candidate.
 
-Runtime/API reduction is complete and unchanged from v2. A packaging-only v3 cut is being sealed so the frozen repository tree contains neutral pre-seal physical metadata rather than stale earlier-candidate identifiers.
+Runtime/API reduction is complete and unchanged from v2. The self-consistent v3 candidate is frozen at `archive/uow-reduction-software-candidate-v3@3e28e4bba1023810aada953e25d3e3c46a58f113`; exact-seal run **167** passed **279/279** shadow tests and **44/44** post-A3 P1-P5 policy tests.
 
 Historical physical evidence remains valid for its original qualified heads. Portable or shadow success never upgrades the final candidate to PHYSICAL.
 
@@ -12,7 +12,7 @@ software/repository closeout -> frozen candidate PASS -> F0 attestation -> one c
 
 ## V3 packaging repair
 
-The v2 runtime/API candidate remains qualified, but its archived tree contains candidate-local physical metadata that still names an earlier target. V3 changes no runtime/API behavior. The frozen v3 tree uses `UNBOUND_PRESEAL` markers and a planned v3 ref. After exact-seal CI passes, the v3 SHA is bound only in post-freeze operator metadata and the harness is separately requalified. The v3 shadow suite contains **279** tests; the P1-P5 policy suite remains **44** tests.
+The v2 runtime/API candidate remains qualified, but its archived tree contains candidate-local physical metadata that still names an earlier target. V3 changes no runtime/API behavior. The frozen v3 tree uses `UNBOUND_PRESEAL` markers and a planned v3 ref. The v3 SHA is now bound in post-freeze operator metadata. The harness is repinned to v3 and receives its own combined shadow/policy qualification before hardware execution.
 
 ## Hardware set
 

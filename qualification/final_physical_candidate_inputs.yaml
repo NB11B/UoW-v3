@@ -1,13 +1,13 @@
 schema_version: "1.0"
-status: V3_PRESEAL_PHYSICAL_INPUT_TEMPLATE
+status: V3_READY_FOR_F0_BINARY_ATTESTATION
 candidate_branch: architecture/uow-staged-relocation
 candidate_ref_planned: archive/uow-reduction-software-candidate-v3
 candidate_binding_mode: POST_FREEZE_OPERATOR_METADATA
-candidate_ref: UNBOUND_PRESEAL
-candidate_commit: UNBOUND_PRESEAL
-exact_seal_shadow_run: PENDING
-exact_seal_tests_passed: PENDING
-exact_seal_policy_tests_passed: PENDING
+candidate_ref: archive/uow-reduction-software-candidate-v3
+candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+exact_seal_shadow_run: 167
+exact_seal_tests_passed: 279
+exact_seal_policy_tests_passed: 44
 historical_physical_evidence_promoted_to_candidate: false
 binary_policy:
   repository_contains_final_flash_binaries: false

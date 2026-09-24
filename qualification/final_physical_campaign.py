@@ -26,9 +26,9 @@ import time
 from typing import Any, Iterable, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CANDIDATE_REF = "UNBOUND_PRESEAL"
-CANDIDATE_COMMIT = "UNBOUND_PRESEAL"
-CANDIDATE_RELEASE_STATUS = "UNBOUND_PRESEAL"
+CANDIDATE_REF = "archive/uow-reduction-software-candidate-v3"
+CANDIDATE_COMMIT = "3e28e4bba1023810aada953e25d3e3c46a58f113"
+CANDIDATE_RELEASE_STATUS = "FINAL"
 A3_REF = "qualification/a3-adaptive-compute-efficiency"
 A3_COMMIT = "05c8094ac5c8572f7da6d00e781ce673754c5c59"
 P1_P5_REF = "architecture/policy-aware-uow-orchestrator"

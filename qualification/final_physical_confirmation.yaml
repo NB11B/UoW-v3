@@ -1,5 +1,5 @@
 schema_version: "0.1"
-status: DEFERRED_PENDING_V3_EXACT_SEAL
+status: READY_FOR_EXECUTION
 
 previous_candidate:
   ref: archive/uow-reduction-software-candidate-v2
@@ -7,21 +7,22 @@ previous_candidate:
   disposition: SUPERSEDED_FOR_PACKAGING_METADATA_CONSISTENCY_ONLY
 
 candidate_v3:
-  planned_ref: archive/uow-reduction-software-candidate-v3
-  candidate_commit: UNBOUND_PRESEAL
-  exact_seal_status: PENDING
+  ref: archive/uow-reduction-software-candidate-v3
+  commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  exact_seal_run: 167
+  exact_seal_shadow_tests_passed: 279
+  exact_seal_policy_tests_passed: 44
+  exact_seal_status: PASS
   runtime_api_changed_from_v2: false
-  expected_shadow_tests: 279
-  expected_policy_tests: 44
-  physical_execution_blocked_until_postfreeze_binding: true
+  physical_execution_blocked_until_postfreeze_binding: false
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: UNBOUND_PRESEAL
+  status: REPINNED_TO_V3_AWAITING_HARNESS_SHADOW
   candidate_identity_separate_from_harness_identity: true
-  candidate_ref: UNBOUND_PRESEAL
-  candidate_commit: UNBOUND_PRESEAL
-  execution_blocked: true
+  candidate_ref: archive/uow-reduction-software-candidate-v3
+  candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  execution_blocked: false
   historical_v2_binding:
     candidate_ref: archive/uow-reduction-software-candidate-v2
     candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9

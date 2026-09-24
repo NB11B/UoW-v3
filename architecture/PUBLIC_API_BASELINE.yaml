@@ -1,0 +1,18 @@
+schema_version: "0.1"
+baseline_ref: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+purpose: lock installed Python public-surface files during additive R7 migration
+
+git_blob_sha1:
+  pyproject.toml: f0eef6966867068e290386b8a5a5a8985ac50c05
+  src/uow/__init__.py: 487acc3a35686aac47428003a362d82310312318
+  src/uow/composition/__init__.py: f8f07f1b06a65b0856e44ba74771533fac619417
+  src/uow/effects/__init__.py: f8a1571102a467de38d9b310383a89b73729df6c
+  src/uow/orchestration/__init__.py: 6c4651e48d02481366d0bb75dd00e7a234c276c5
+  src/uow/proposer/__init__.py: e745efb91a178f8d0973fb7353154718d3ed464f
+  src/uow/resources/__init__.py: afc626356c2d18aa4ec93a29c72af01dcba0d168
+  src/uow/transactions/__init__.py: 0ad39d033e0e69183c5ac79eb81c542e8c33cd57
+
+rules:
+  - all listed files must remain byte-identical during additive R7 stages
+  - implementations/python/uow_architecture_facade is research-only and not installed as uow
+  - any intentional public API migration requires a new compatibility phase and explicit versioning decision

@@ -1,0 +1,101 @@
+schema_version: "0.1"
+purpose: R7 physical evidence preservation and requalification boundary
+
+policy:
+  historical_rule:
+    - sealed physical artifacts remain valid for the code/head on which recorded
+    - additive repository organization does not create new physical evidence
+    - portable/shadow parity never upgrades to PHYSICAL
+  current_R7_effect:
+    physical_runtime_paths_modified: false
+    qualification_semantics_modified: false
+    wire_protocols_modified_in_production: false
+    fresh_physical_run_required_now: false
+
+fresh_physical_requalification_triggers:
+  - production firmware behavior changes
+  - physical authority vote/QC canonicalization changes
+  - physical wire/protocol framing changes
+  - authority threshold or signer qualification semantics change
+  - evidence-chain/hash verification semantics change
+  - physical negative-control injection path changes
+  - NPU/GPU/CPU backend selection or fallback semantics change
+  - model hot-swap lifecycle semantics change
+  - physical timing/energy/latency measurement source changes
+  - A3 calibrated device/power/transfer model changes materially
+  - persistence/recovery behavior used by a physical claim changes
+  - required hardware topology/components change
+
+physical_claim_families:
+  U15_NPU:
+    claim_ids:
+      - U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL
+      - U15.NPU_HOT_SWAP.PHYSICAL
+      - U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL
+      - U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL
+    required_components:
+      - Intel AI Boost NPU
+      - deterministic authority
+      - heterogeneous authority nodes where required
+    cutover_rule: rerun affected physical campaigns before new production head claims these as newly qualified
+
+  EMBEDDED_AUTHORITY:
+    claim_ids:
+      - ESP32.AUTHORITY
+      - EVIDENCE.CHAIN
+      - DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL
+      - DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL
+    required_components:
+      - ESP32-S3
+      - Arduino UNO Q STM32 where applicable
+      - laptop x86-64 authority where applicable
+    cutover_rule: exact authority protocol/hash changes require fresh pair/quorum qualification
+
+  HETEROGENEOUS_EXECUTION:
+    claim_ids:
+      - HETERO.EXECUTION
+      - HETERO.ADAPTATION
+      - HETERO.PERFORMANCE
+    required_components:
+      - CPU
+      - CUDA GPU
+      - OpenVINO NPU
+      - physical authority
+    cutover_rule: backend/fallback/measurement changes require fresh physical qualification
+
+  A3_EFFICIENCY:
+    reference:
+      branch: qualification/a3-adaptive-compute-efficiency
+      tag: a3-qualification-complete
+      anchor: 05c8094ac5c8572f7da6d00e781ce673754c5c59
+    evidence:
+      - physical device characterization
+      - repeated crossover
+      - embedded characterization
+      - minimum adequate placement
+      - physical energy/latency calibration
+      - 12000-UoW qualified-model soak
+    cutover_rule:
+      - historical A3 artifacts remain immutable reference evidence
+      - implementation reorganization alone does not rewrite those artifacts
+      - material device/profile/measurement changes require fresh A3 physical characterization
+
+  POLICY_P1_P5:
+    reference:
+      branch: architecture/policy-aware-uow-orchestrator
+      tag: policy-orchestrator-p5-qualified
+      commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+    evidence_relationship:
+      - downstream of A3
+      - inherited A3 physical evidence is not double-counted
+      - P1-P5 policy lifecycle/authority/recovery qualification remains its own reference
+    cutover_rule:
+      - target layout must rerun P1-P5 acceptance against the new facade before cutover
+      - physical A3 foundations remain historical evidence unless a physical trigger above changes
+
+cutover_decision:
+  current: NO_PHYSICAL_RERUN_REQUIRED_FOR_ADDITIVE_R7_WORK
+  before_production_cutover:
+    - verify changed-path impact against trigger list
+    - rerun all affected physical families
+    - preserve unaffected historical artifacts as original-head evidence

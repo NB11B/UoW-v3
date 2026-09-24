@@ -1,4 +1,4 @@
-schema_version: "6.5"
+schema_version: "6.6"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: repository-additive-layout
@@ -31,7 +31,8 @@ r7:
   R7_1_parallel_skeleton: PASS_INITIAL
   R7_2_semantic_facade: PASS_INITIAL
   R7_3_oracle_gate_mapping: PASS_INITIAL
-  R7_4_experiment_manifest_surface: IMPLEMENTED_AWAITING_SUITE
+  R7_4_experiment_manifest_surface: PASS_INITIAL
+  R7_5_api_and_physical_boundary: IMPLEMENTED_AWAITING_SUITE
   target_surfaces:
     - specification
     - implementations

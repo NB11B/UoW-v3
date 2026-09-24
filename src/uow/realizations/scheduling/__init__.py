@@ -1,6 +1,6 @@
-"""Compatibility shim for the relocated self-hosted scheduling realization."""
+"""Scheduling realization packages."""
 
-from ..realizations.scheduling.self_hosted import (
+from .self_hosted import (
     COMPLETION_PREFIX,
     ORCH_TERMINATION_KEY,
     SCHEDULER_CELL,

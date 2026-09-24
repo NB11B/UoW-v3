@@ -1,0 +1,117 @@
+schema_version: "1.0"
+branch: architecture/uow-staged-relocation
+basis_head: 4c34a5e4209b25134e3ae3cd4d1a77523c4ff237
+status: ACTIVE_RELOCATION_INVENTORY
+
+classification_rules:
+  semantic_core: language-level representation of qualified semantics; keep near canonical semantic package
+  realization: one qualified way to satisfy semantic contracts; may relocate behind compatibility shim
+  implementation: language/runtime-specific execution machinery; may relocate behind compatibility shim
+  compatibility_shim: historical import surface only; duplicate implementation logic forbidden
+  mixed_or_unresolved: semantic and realization responsibilities are still interleaved; do not move wholesale
+
+k3_reduction_status:
+  remaining_candidates: 0
+  completed:
+    - common_authority_application_spine
+    - authority_protocol_decoupling
+  interface_consolidation_completed:
+    - typed_conformance_registry
+  finding: >-
+    The remaining structural work is predominantly K1 retained-realization relocation.
+    It must not be relabeled as a new K3 reduction merely because code is moving.
+
+semantic_core:
+  - src/uow/ontology.py
+  - src/uow/state.py
+  - src/uow/contracts.py
+  - src/uow/engine.py
+  - src/uow/application.py
+  - src/uow/authority/protocol.py
+  - src/uow/conformance/
+
+semantic_specializations_keep_near_canonical_package:
+  - src/uow/transactions/descriptor.py
+  - src/uow/transactions/occ.py
+  - src/uow/transactions/protocol.py
+  - src/uow/orchestration/materialization.py
+  - src/uow/orchestration/state.py
+  - src/uow/resources/requirement.py
+  - src/uow/resources/state.py
+  - src/uow/effects/descriptor.py
+  - src/uow/effects/certification.py
+  - src/uow/proposer/base.py
+  - src/uow/proposer/types.py
+  - src/uow/proposer/judge.py
+  - src/uow/proposer/identity.py
+  - src/uow/proposer/observation.py
+  - src/uow/composition/contract.py
+  - src/uow/composition/graph.py
+  - src/uow/composition/projection.py
+  - src/uow/composition/actor.py
+  - src/uow/composition/binding.py
+  - src/uow/composition/history.py
+
+compatibility_shims_already_established:
+  - src/uow/transactions/sequencer.py
+  - src/uow/orchestration/runtime.py
+  - src/uow/resources/runtime.py
+  - src/uow/proposer/engine.py
+  - src/uow/proposer/quorum_sequencer.py
+  - src/uow/effects/runner.py
+  - src/uow/effects/saga.py
+  - src/uow/composition/runtime.py
+  - src/uow/composition/wire.py
+  - src/uow/composition/host_node.py
+  - src/uow/composition/endurance.py
+  - src/uow/composition/fabric.py
+  - src/uow/composition/convergence.py
+
+remaining_clean_realization_candidates:
+  - source: src/uow/orchestration/scheduler.py
+    target: src/uow/realizations/scheduling/self_hosted.py
+    class: K1
+    disposition: NEXT_SELECTED
+    rationale: self-hosted scheduler/completion materializers are realizations over retained orchestration semantics
+  - source: src/uow/resources/policies.py
+    target: src/uow/realizations/scheduling/
+    class: K1
+    disposition: REVIEW_AFTER_CURRENT_MOVE
+  - source: src/uow/proposer/heuristic.py
+    target: src/uow/realizations/scheduling/heuristic.py
+    class: K1
+    disposition: REVIEW_LATER
+  - source: src/uow/proposer/stochastic.py
+    target: src/uow/realizations/scheduling/stochastic.py
+    class: K1
+    disposition: REVIEW_LATER
+  - source: src/uow/proposer/adaptive.py
+    target: src/uow/realizations/adaptation/portable.py
+    class: K1
+    disposition: REVIEW_LATER
+  - source: src/uow/proposer/fallback.py
+    target: src/uow/realizations/scheduling/fallback.py
+    class: K1
+    disposition: REVIEW_LATER
+  - source: src/uow/composition/substitution.py
+    target: src/uow/realizations/adaptation/graph_substitution.py
+    class: K1
+    disposition: REVIEW_LATER
+  - source: src/uow/composition/policy.py
+    target: src/uow/realizations/adaptation/graph_policy.py
+    class: K1
+    disposition: REVIEW_LATER
+
+mixed_or_unresolved_do_not_move_wholesale:
+  - path: src/uow/composition/delegation.py
+    reason: authority-scope semantics and distributed realization are interleaved
+  - path: src/uow/composition/mutation.py
+    reason: proposal/vote/QC semantics and mutation coordinator realization are interleaved
+  - path: src/uow/orchestration/state.py
+    reason: Python representation is language-specific but carries qualified orchestration-state semantics
+  - path: src/uow/resources/state.py
+    reason: Python representation is language-specific but carries qualified capability/lease semantics
+
+forward_compatibility:
+  a4_status: CONCEPTUAL_UNQUALIFIED
+  constraint: do not freeze Python enums, dataclasses, class names, or module paths as the universal ontology

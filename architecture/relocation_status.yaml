@@ -181,7 +181,8 @@ staged_moves:
       target: src/uow/realizations/scheduling/resource_policies.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [129]
       rationale: relocate pluggable resource scheduling proposal policies while retaining independent resource legality checks
       preserves:
         - legality_dominance

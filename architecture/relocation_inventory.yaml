@@ -76,11 +76,11 @@ remaining_clean_realization_candidates:
   - source: src/uow/resources/policies.py
     target: src/uow/realizations/scheduling/
     class: K1
-    disposition: CURRENT_MOVE
+    disposition: RELOCATED_PASS_RUN_129
   - source: src/uow/proposer/heuristic.py
     target: src/uow/realizations/scheduling/heuristic.py
     class: K1
-    disposition: REVIEW_LATER
+    disposition: NEXT_SELECTED
   - source: src/uow/proposer/stochastic.py
     target: src/uow/realizations/scheduling/stochastic.py
     class: K1

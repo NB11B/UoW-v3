@@ -94,13 +94,15 @@ remaining_clean_realization_candidates:
     class: K1
     disposition: RELOCATED_PASS_RUN_135
   - source: src/uow/composition/substitution.py
-    target: src/uow/realizations/adaptation/graph_substitution.py
-    class: K1
-    disposition: REVIEW_FOR_SEMANTIC_SPLIT
+    target: src/uow/composition/substitution.py
+    class: K0_K1_BOUNDARY
+    disposition: KEEP_SEMANTIC_CERTIFICATION
+    rationale: proposal/certificate envelopes and CompositionCertifier are authoritative conformance semantics, not an execution realization
   - source: src/uow/composition/policy.py
-    target: src/uow/realizations/adaptation/graph_policy.py
+    semantic_target: src/uow/composition/adaptation.py
+    realization_target: src/uow/realizations/adaptation/graph_policy.py
     class: K1
-    disposition: REVIEW_FOR_SEMANTIC_SPLIT
+    disposition: CURRENT_SEMANTIC_SPLIT
 
 mixed_or_unresolved_do_not_move_wholesale:
   - path: src/uow/composition/delegation.py

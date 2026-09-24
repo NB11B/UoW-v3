@@ -248,6 +248,22 @@ staged_moves:
         - stale_duplicate_corrupt_feedback_rejection
         - atomic_update_rollback
         - workload_drift_adaptation
+    twentieth_move:
+      semantic_split:
+        source: src/uow/composition/policy.py
+        semantic_target: src/uow/composition/adaptation.py
+        implementation_target: src/uow/realizations/adaptation/graph_policy.py
+      class: K1
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: retain adaptive runtime-state and certified-observation semantics while relocating only zero-authority graph proposal policy mechanics
+      preserves:
+        - composition_runtime_state_identity
+        - graph_adaptation_observation_identity
+        - zero_authority_graph_proposal
+        - actor_binding_validation
+        - certified_feedback_adaptation
+        - graph_substitution_certifier_semantic_boundary
     production_deletions: false
 
 final_gate:

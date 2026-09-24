@@ -220,6 +220,18 @@ staged_moves:
         - resource_overallocation_injection
         - stale_epoch_injection
         - proposer_crash_injection
+    eighteenth_move:
+      source: src/uow/proposer/fallback.py
+      target: src/uow/realizations/scheduling/fallback.py
+      class: K1
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: relocate deterministic liveness fallback as a scheduling realization without moving proposal certification or authority
+      preserves:
+        - proposer_failure_liveness
+        - deterministic_fallback
+        - independent_resource_legality
+        - zero_commit_authority
     production_deletions: false
 
 final_gate:

@@ -61,7 +61,9 @@ staged_moves:
       source: src/uow/orchestration/runtime.py
       target: src/uow/implementations/orchestration/runtime.py
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: RERUN_PENDING_AFTER_SHIM_AWARE_TEST
+      first_run: 108
+      first_run_result: TEST_INSPECTED_COMPATIBILITY_SHIM_NOT_IMPLEMENTATION
     production_deletions: false
 
 final_gate:

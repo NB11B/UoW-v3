@@ -114,7 +114,7 @@ def _without_occ_versions(state):
 
 
 def test_s2_orchestration_runtime_uses_common_application_spine():
-    import uow.orchestration.runtime as runtime
+    import uow.implementations.orchestration.runtime as runtime
 
     source = inspect.getsource(runtime)
     assert "DEFAULT_APPLICATION_SPINE.execute" in source

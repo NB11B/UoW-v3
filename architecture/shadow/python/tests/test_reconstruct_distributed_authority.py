@@ -189,9 +189,11 @@ def test_r4_distributed_authority_ruleset_mismatch_excluded_from_quorum_applicat
 
 
 def test_r4_distributed_authority_reconstruction_does_not_depend_on_qualification_package():
-    import sys
+    import inspect
+    import uow_shadow.distributed_authority_reconstruction as shadow_authority
 
-    assert "qualification.distributed_authority.authority" not in sys.modules
+    source = inspect.getsource(shadow_authority)
+    assert "qualification.distributed_authority" not in source
     cluster = make_shadow_authority_cluster(_initial())
     uow = _inc()
     committed, qc, _, _ = cluster.submit(

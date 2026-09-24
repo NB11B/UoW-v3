@@ -1,0 +1,82 @@
+schema_version: "0.1"
+
+policy_p1_p5:
+  source: POLICY_ORCHESTRATOR_P1_P5_FINAL_SYNTHESIS.md
+  branch: architecture/policy-aware-uow-orchestrator
+  tag: policy-orchestrator-p5-qualified
+  gates:
+    canonical_uow_requirement_projection:
+      target: [specification/contracts, specification/requirements, specification/policy]
+      required_reconstruction: U_to_W_projection
+    deterministic_world_state_snapshot:
+      target: [specification/state, specification/policy]
+      required_reconstruction: deterministic_decision_context
+    execution_realization_graph:
+      target: [specification/contracts, realizations]
+      required_reconstruction: graph_not_device
+    qualified_versioned_policy_registry:
+      target: [specification/policy, realizations/adaptation]
+      required_reconstruction: versioned_qualified_registry
+    discovery_without_authority:
+      target: [specification/policy, specification/authority, realizations/adaptation]
+      required_reconstruction: candidate_only_discovery
+    prospective_qualification:
+      target: [specification/policy, specification/conformance, qualification]
+      required_reconstruction: qualify_before_promote
+    deterministic_policy_reuse:
+      target: [specification/policy, implementations/python]
+      required_reconstruction: stable_lookup
+    live_drift_invalidation_safe_replacement:
+      target: [specification/policy, realizations/adaptation]
+      required_reconstruction: atomic_invalidate_without_inflight_corruption
+    transactional_registry_versioning:
+      target: [specification/policy, specification/evidence]
+      required_reconstruction: lifecycle_recorded_transition
+    distributed_policy_authority:
+      target: [specification/authority, specification/policy, realizations/authority]
+      required_reconstruction: quorum_policy_transition
+    durable_persistence_atomic_recovery:
+      target: [specification/evidence, realizations/persistence]
+      required_reconstruction: digest_identical_recovery
+    zero_duplicate_external_effects:
+      target: [specification/effects, realizations/effects, realizations/persistence]
+      required_reconstruction: idempotent_recovery_classification
+    five_tier_cryptographic_provenance:
+      target: [specification/evidence, specification/policy, specification/authority]
+      required_reconstruction: end_to_end_provenance_chain
+
+a3:
+  source: A3_FINAL_SYNTHESIS.md
+  branch: qualification/a3-adaptive-compute-efficiency
+  tag: a3-qualification-complete
+  gates:
+    realization_is_graph_not_device:
+      target: [specification/contracts, realizations]
+    composition_efficiency_is_measurable:
+      target: [experiments, realizations/acceleration]
+    discovery_without_authority:
+      target: [specification/policy, specification/authority]
+    prospective_policy_qualification:
+      target: [specification/policy, specification/conformance, qualification]
+    deterministic_policy_reuse:
+      target: [specification/policy]
+    power_capacity_constraints:
+      target: [specification/requirements, realizations]
+    semantic_equivalence_under_placement:
+      target: [specification/conformance, conformance]
+    policy_lifecycle_metrics:
+      target: [specification/policy, experiments]
+    physical_measurement_evidence:
+      target: [qualification/physical, experiments]
+    endurance_policy_residency:
+      target: [experiments, specification/policy]
+
+a4:
+  status: CONCEPTUAL_UNQUALIFIED
+  target: [specification/ontology]
+  future_gates:
+    - versioned_ontology_identity
+    - ontology_transition_authority
+    - migration_lineage
+    - explicit_compatibility_and_rejection
+    - prior_semantics_reconstructable

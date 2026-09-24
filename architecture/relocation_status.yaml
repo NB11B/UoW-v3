@@ -255,7 +255,11 @@ staged_moves:
         implementation_target: src/uow/realizations/adaptation/graph_policy.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [140]
+      failed_shadow_runs: [139]
+      repair_commit: 44d7813fe87f3715ed72cbb73ae8a75f0f78cf08
+      failure_evidence: eager realization package import created a circular import during collection; repaired without semantic/API change
       rationale: retain adaptive runtime-state and certified-observation semantics while relocating only zero-authority graph proposal policy mechanics
       preserves:
         - composition_runtime_state_identity

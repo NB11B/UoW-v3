@@ -1,0 +1,88 @@
+schema_version: "0.1"
+phase: R6
+deletion_candidates: 0
+
+classes:
+  K0: RETAIN_AXIOMATIC
+  K1: RETAIN_REALIZATION
+  K2: CONSOLIDATE_INTERFACE_ONLY
+  K3: SHADOW_REFACTOR_ELIGIBLE
+  K4: DELETE_ELIGIBLE
+
+candidates:
+  - id: common_authority_application_spine
+    class: K3
+    basis:
+      - U11-U15 portable reconstruction
+      - Q1 detached-control-plane reconstruction
+      - A2 application closure
+    production_changes_allowed: false
+
+  - id: authority_protocol_decoupling
+    class: K3
+    priority: HIGH
+    basis:
+      - runtime_to_qualification_dependency_inversion
+      - reconstruction_import_cycle
+      - self_contained_shadow_authority_protocol
+    production_changes_allowed: false
+
+  - id: typed_requirement_capability_interface
+    class: K2
+    basis:
+      - resource
+      - actor
+      - authority
+      - dependency
+      - OCC
+      - timing
+      - evidence
+      - failure
+    specialized_predicates_retained: true
+
+  - id: canonical_identity_interface
+    class: K2
+    global_byte_profile: false
+    boundary_profiles:
+      - python_canonical_json
+      - embedded_core_kv
+      - heterogeneous_authority_v1
+
+  - id: serialization_generation
+    class: K2
+    historical_artifact_compatibility_required: true
+
+  - id: commit_realizations
+    class: K1
+    retain:
+      - DeterministicSequencer
+      - WALSequencer
+      - QuorumCommitSequencer
+
+  - id: lineage_realizations
+    class: K1
+    common_interface_candidate: true
+    retain:
+      - EvidenceLedger
+      - WAL
+      - AuthoritativeHistory
+      - TopologyLineage
+
+  - id: scientific_controls
+    class: K1
+    retain:
+      - RandomProposer
+      - FIFO
+      - B0_fixed
+      - B1_rule_based
+      - adversarial_fault_injectors
+      - bounded_memory_control
+
+  - id: public_compatibility_aliases
+    class: K1
+    deletion_blocked: true
+
+  - id: physical_and_cross_language_implementations
+    class: K1
+    evidence_role: P3
+    portable_substitution_forbidden: true

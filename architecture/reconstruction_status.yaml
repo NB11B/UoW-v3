@@ -1,7 +1,7 @@
-schema_version: "4.0"
+schema_version: "5.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
-mode: cross-language-conformance
+mode: reduction-eligibility-shadow
 
 phases:
   R0_frozen_control: COMPLETE
@@ -9,8 +9,8 @@ phases:
   R2_language_neutral_specification: COMPLETE
   R3_shadow_minimal_implementation: COMPLETE_INITIAL
   R4_experiment_reconstruction: COMPLETE_PORTABLE_INITIAL
-  R5_cross_language_conformance: IN_PROGRESS
-  R6_reduction_eligibility: NOT_STARTED
+  R5_cross_language_conformance: COMPLETE_INITIAL
+  R6_reduction_eligibility: IN_PROGRESS
   R7_repository_reorganization: NOT_STARTED
 
 current_invariants:
@@ -20,27 +20,37 @@ current_invariants:
   experiments_deleted: false
   src_uow_imports_shadow: false
 
-r4_summary:
-  latest_shadow_runs: [57, 58]
-  latest_test_count: 115
-  A2_8_exact_costs:
-    B0_fixed: 8299.78
-    B1_rule_based: 5934.51
-    A2_reconstructed: 5907.99
-  physical_replay:
-    status: RETAINED_LOCAL_HARDWARE_OBLIGATION
-    not_replaced_by_portable: true
-
 r5:
-  first_target: PYTHON_CPP_CORE
-  conformance_levels:
-    L0_behavior: IMPLEMENTED_AWAITING_EXECUTION
-    L1_rejection: IMPLEMENTED_AWAITING_EXECUTION
-    L2_evidence_semantics: IMPLEMENTED_AWAITING_EXECUTION
-    L3_wire_schema: NOT_STARTED
-    L4_canonical_bytes: NOT_CLAIMED
-    L5_canonical_hash: NOT_CLAIMED
-  byte_profile_note:
-    python: canonical JSON
-    cpp_embedded: deterministic key-value strings
-    implication: semantic parity does not imply hash parity
+  latest_shadow_runs: [67, 68]
+  latest_test_count: 145
+  L0_behavior: PASS
+  L1_rejection: PASS
+  L2_evidence_semantics: PASS
+  L3_wire_schema:
+    status: PASS
+    profile: UOW-CORE-WIRE/1
+    objects: [State, Proposal, Certificate, Evidence]
+  L4_canonical_bytes:
+    status: PASS_BOUNDARY_SPECIFIC
+    profile: HETEROGENEOUS_AUTHORITY_V1
+  L5_canonical_hash:
+    status: PASS_BOUNDARY_SPECIFIC
+    profile: HETEROGENEOUS_AUTHORITY_V1
+  global_L4_L5_claim: false
+  physical_replay:
+    retained_obligation: true
+
+r6:
+  deletion_candidates: 0
+  K3_candidates:
+    - common_authority_application_spine
+    - authority_protocol_decoupling
+  K2_candidates:
+    - typed_requirement_capability_interface
+    - canonical_identity_interface
+    - serialization_generation
+  production_changes_allowed: false
+  next:
+    - prototype common authority application spine
+    - prototype authority provider protocol independent of qualification package
+    - rerun reconstructed experiment suite against prototypes

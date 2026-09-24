@@ -110,7 +110,9 @@ def apply_authorized_transition(
             "value": next_sequence,
         },
     }
-    after_id = shadow_identity("authoritative-state", state_identity_payload)
+    after_id = str(proposal.candidate_payload.get("committed_state_id", "")) or shadow_identity(
+        "authoritative-state", state_identity_payload
+    )
     after = AuthoritativeStateRef(
         state_id=after_id,
         schema_id=before.schema_id,

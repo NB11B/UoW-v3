@@ -1,86 +1,50 @@
-# R3 Validation Record
+# R3/R4 Validation Record
 
-## Shadow parity status
+## R3 shadow parity and closure
 
-### Commit 195e330
-Shadow workflow run 2: PASS.
+- Commit 195e330 — shadow run 2 PASS.
+- Commit 0825554 — shadow run 4 PASS.
+- Commit dd4a718 — shadow run 6 PASS: A2.7 authorized mutation application closure.
+- Commit d3dfe58 — shadow run 8 PASS: A2.1 graph substitution application closure.
+- Commit 1e77c9e — shadow runs 15/16 PASS: actor rebinding behavioral/causal closure.
+- Commit 03f0ef9 — shadow runs 17/18 PASS: delegation registration and idempotent failover closure.
+- Commit 6b52087 — shadow runs 19/20 PASS: complete verified canonical-history application closure.
+- Commit 6083f28 — shadow runs 21/22 PASS: minimal authority kernel parity.
 
-### Commit 0825554
-Shadow workflow run 4: PASS.
+## R3 interpretation
 
-Added parity coverage:
-- actor capability binding;
-- semantic projection;
-- authority-bypass rejection;
-- delegation authority attenuation.
+Supported:
+- application of accepted/certified/authorized meta-state transitions can often be expressed as ordinary UoW state transitions;
+- rejected or context-mismatched applications fail closed;
+- evidence/lineage can be preserved in the lowered path.
 
-### Commit dd4a718
-Shadow workflow run 6: PASS.
+Not claimed closed:
+- external physical invocation;
+- quorum/attestation formation;
+- canonical-history selection/consensus;
+- physical/WAL persistence mechanisms.
 
-Closure result:
-- A2.7 QC-authorized graph/binding mutation application can be lowered to an ordinary native UoW transition.
-- Wrong authorization hash fails closed with no meta-state mutation.
+## R4 start — U1-U10
 
-Scope limitation:
-- QC formation remains outside the closure claim.
-- QC signature verification remains outside the closure claim.
-- distributed AuthoritativeHistory construction remains outside the closure claim.
-- WAL persistence remains outside the closure claim.
+The first reconstruction runner deliberately excludes canonical uow.engine.commit.
 
-### Commit d3dfe58
-Shadow workflow run 8: PASS.
+Flow:
 
-Closure result:
-- A2.1 accepted GraphReplacementCertificate application can be lowered to an ordinary native UoW transition.
-- active graph hash, substitution epoch, and certificate lineage are preserved.
-- rejected/stale graph substitution certificate cannot be lowered as an authorized mutation.
+native UoW contract
+-> pure native proposal
+-> canonical deterministic conformance oracle
+-> explicit shadow local authorization
+-> minimal shadow AuthorizedTransition
+-> shadow EvidenceEntry
 
-### Commit 1e77c9e
-Shadow workflow runs 15 and 16: PASS.
+The next workflow reconstructs:
+- primitive instruction behavior;
+- multi-step Minsky execution;
+- differential equivalence to independent reference interpreter;
+- bounded-state periodicity negative control;
+- extensible large-integer state;
+- semantic-matrix orthogonality;
+- replay determinism;
+- non-halting external step budget.
 
-Closure result:
-- A2.2/A2.3 validated actor rebinding application can be lowered to an ordinary native UoW transition.
-- accepted binding conformance is bound to the exact live graph hash.
-- invalid binding conformance cannot construct the lowering.
-- reuse against a different graph context fails closed.
-
-Interpretation:
-- behavioral and causal application closure is supported.
-- full authority-equivalence remains OPEN because canonical tier-1 rebinding does not emit a separate authority artifact.
-
-### Commit 03f0ef9
-Shadow workflow runs 17 and 18: PASS.
-
-Closure result:
-- A2.4 validated delegation registration can be lowered to an ordinary native UoW transition.
-- child identity, delegate actor, generation, authority scope, and certificate lineage are preserved.
-- authority inflation remains non-lowerable.
-- idempotent delegate failover can replace the registered delegation through a second evidence-linked UoW.
-- non-idempotent failover produces no replacement certificate and therefore no lowerable mutation.
-
-### Commit 6b52087
-Shadow workflow run 19: PASS.
-
-Closure result:
-- A2.5 integrity-verified canonical-history adoption can be lowered to an ordinary native UoW transition.
-- full serialized history payload, digest, tip hash, and tip sequence are preserved.
-- invalid history is rejected before lowering.
-- wrong application context fails closed.
-
-Scope limitation:
-- selecting which history is canonical remains outside the closure claim.
-- distributed consensus/authority over that choice remains outside the closure claim.
-
-## Canonical CI observation
-
-Normal repository CI continues to fail before test execution because existing NPU tests import optional numpy/openvino dependencies not installed by the canonical CI workflow.
-
-This is not attributed to shadow code.
-
-## R3.4 minimal authority kernel
-
-Next test:
-- explicitly separate Proposal, Conformance, Local Authorization, Authorized Transition, and Evidence;
-- compare shadow post-state semantics against canonical core commit;
-- reject stale context, rejected conformance, and mismatched authorization;
-- treat the canonical local deterministic certifier as a profile in which accepted conformance is sufficient local authorization, without generalizing that rule to distributed/A2 authority.
+This is an initial reconstruction, not yet removal justification for the canonical engine.

@@ -1,14 +1,14 @@
-schema_version: "1.7"
+schema_version: "2.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
-mode: additive-research-shadow
+mode: additive-research-reconstruction
 
 phases:
   R0_frozen_control: COMPLETE
   R1_architecture_evidence_mapping: COMPLETE
   R2_language_neutral_specification: COMPLETE
-  R3_shadow_minimal_implementation: IN_PROGRESS
-  R4_experiment_reconstruction: NOT_STARTED
+  R3_shadow_minimal_implementation: COMPLETE_INITIAL
+  R4_experiment_reconstruction: IN_PROGRESS
   R5_cross_language_conformance: NOT_STARTED
   R6_reduction_eligibility: NOT_STARTED
   R7_repository_reorganization: NOT_STARTED
@@ -20,47 +20,44 @@ current_invariants:
   experiments_deleted: false
   src_uow_imports_shadow: false
 
-r3:
-  R3_0_semantic_types: IMPLEMENTED_INITIAL
-  R3_0_requirement_capability_matcher: IMPLEMENTED_INITIAL
-  R3_1_canonical_validator_adapters:
-    status: PASS_INITIAL
-    latest_shadow_run: 4
-  R3_2_closure_shadow:
-    status: IN_PROGRESS
-    results:
-      A2_7_QC_AUTHORIZED_MUTATION_APPLICATION:
-        status: SUPPORTED
-        shadow_run: 6
-        closure_kind: AUTHORIZED_APPLICATION
-      A2_1_GRAPH_SUBSTITUTION_APPLICATION:
-        status: SUPPORTED
-        shadow_run: 8
-        closure_kind: CERTIFIED_APPLICATION
-      A2_2_A2_3_ACTOR_REBINDING_APPLICATION:
-        status: SUPPORTED_WITH_AUTHORITY_CAVEAT
-        shadow_runs: [15, 16]
-        closure_kind: VALIDATED_APPLICATION
-      A2_4_DELEGATION_REGISTRATION_FAILOVER:
-        status: SUPPORTED
-        shadow_runs: [17, 18]
-        closure_kind: VALIDATED_CERTIFICATE_APPLICATION
-      A2_5_CANONICAL_HISTORY_RECONCILIATION:
-        status: SUPPORTED_WITH_SELECTION_CAVEAT
-        shadow_run: 19
-        closure_kind: VERIFIED_HISTORY_APPLICATION
-        caveat: canonical-history selection/consensus remains outside application closure
-  R3_4_minimal_authority_kernel:
-    status: IMPLEMENTED_AWAITING_EXECUTION
-    local_authority_profile: LOCAL_DETERMINISTIC_CERTIFIER
-    separates:
-      - proposal
-      - conformance
-      - authorization
-      - transition
-      - evidence
+r3_summary:
+  validator_adapter_parity: PASS_INITIAL
+  minimal_authority_kernel:
+    status: PASS
+    shadow_runs: [21, 22]
+  application_closure:
+    A2_7_runtime_mutation: SUPPORTED
+    A2_1_graph_substitution: SUPPORTED
+    A2_2_A2_3_rebinding: SUPPORTED_WITH_AUTHORITY_CAVEAT
+    A2_4_delegation_failover: SUPPORTED
+    A2_5_history_adoption: SUPPORTED_WITH_SELECTION_CAVEAT
+  nonclosure_boundaries:
+    - external physical invocation
+  open_meta_primitives:
+    - quorum/attestation formation
+    - canonical history selection/consensus
 
-canonical_ci_observation:
-  result: FAIL_BEFORE_TEST_EXECUTION
-  attributed_to_shadow: false
-  reason: existing optional numpy/openvino dependencies absent from standard CI install
+r4:
+  reconstruction_rule: preserve experiment capability and falsification boundary under minimal invariants
+  canonical_commit_allowed_in_shadow_reconstruction: false
+  first_target:
+    experiment: U1-U10
+    status: IMPLEMENTED_AWAITING_EXECUTION
+    retained_oracles:
+      - native UoW contract and pure proposal semantics
+      - deterministic canonical certifier
+      - independent Minsky reference interpreter
+    shadow_authority:
+      - explicit local authorization
+      - minimal authorized transition
+      - shadow evidence lineage
+    reconstructed_checks:
+      - primitive HALT/INC/DECJZ
+      - multi-step transfer
+      - independent differential oracle
+      - bounded-memory negative control
+      - extensible arithmetic beyond 1024 bits
+      - semantic matrix orthogonality
+      - replay determinism
+      - external step budget
+      - canonical commit exclusion

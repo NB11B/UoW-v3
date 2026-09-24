@@ -268,6 +268,22 @@ staged_moves:
         - actor_binding_validation
         - certified_feedback_adaptation
         - graph_substitution_certifier_semantic_boundary
+    twenty_first_move:
+      semantic_split:
+        source: src/uow/composition/delegation.py
+        semantic_retained: src/uow/composition/delegation.py
+        implementation_target: src/uow/realizations/authority/delegation.py
+      class: K1
+      compatibility_reexport: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: retain authority attenuation, delegation certificates, result/spec envelopes, and validation semantics while relocating only the distributed delegation-node realization
+      preserves:
+        - authority_attenuation
+        - certificate_ttl_validation
+        - delegate_qualification_checks
+        - stale_generation_rejection
+        - idempotent_failover
+        - semantic_output_conservation
     production_deletions: false
 
 final_gate:

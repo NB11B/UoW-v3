@@ -106,7 +106,10 @@ remaining_clean_realization_candidates:
 
 mixed_or_unresolved_do_not_move_wholesale:
   - path: src/uow/composition/delegation.py
-    reason: authority-scope semantics and distributed realization are interleaved
+    reason: authority-scope semantics and distributed realization were interleaved
+    disposition: CURRENT_SEMANTIC_SPLIT
+    semantic_retained: authority scope, certificates, result/spec envelopes, validation
+    realization_target: src/uow/realizations/authority/delegation.py
   - path: src/uow/composition/mutation.py
     reason: proposal/vote/QC semantics and mutation coordinator realization are interleaved
   - path: src/uow/orchestration/state.py

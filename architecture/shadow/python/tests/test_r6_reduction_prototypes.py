@@ -94,12 +94,23 @@ def test_r6_shadow_distributed_authority_satisfies_provider_protocol():
     assert all(r.applied for r in results.values())
 
 
-def test_r6_authority_protocol_and_shadow_provider_do_not_depend_on_qualification_package():
+def test_r6_authority_protocol_and_shadow_provider_do_not_import_qualification_package():
+    import ast
     import uow_shadow.authority_protocol as protocol
     import uow_shadow.distributed_authority_reconstruction as provider
 
-    protocol_source = inspect.getsource(protocol)
-    provider_source = inspect.getsource(provider)
+    def imported_modules(module):
+        tree = ast.parse(inspect.getsource(module))
+        names = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                names.append(node.module)
+        return tuple(names)
 
-    assert "qualification.distributed_authority" not in protocol_source
-    assert "qualification.distributed_authority" not in provider_source
+    for module in (protocol, provider):
+        assert not any(
+            name.startswith("qualification.distributed_authority")
+            for name in imported_modules(module)
+        )

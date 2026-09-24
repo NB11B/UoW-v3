@@ -1,4 +1,4 @@
-schema_version: "3.1"
+schema_version: "3.3"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -31,18 +31,40 @@ r4:
     Q1: {status: RECONSTRUCTED_INITIAL, shadow_runs: [37, 38]}
     U15_PORTABLE: {status: RECONSTRUCTED_INITIAL, shadow_runs: [39, 41, 42]}
     DIST_AUTH_PORTABLE:
-      status: RERUN_PENDING_AFTER_LAYERING_FIX
-      previous_shadow_runs: [43, 44]
-      previous_result: IMPORT_CYCLE_BEFORE_TEST_COLLECTION
-      architectural_finding:
-        - qualification.distributed_authority cannot serve as a reusable semantic runtime dependency while src/uow/proposer/quorum_sequencer imports it
-        - authority vote/QC semantics must be represented independently of qualification packaging
-      fix:
-        - shadow AuthorityVote and QuorumCertificate semantic types reconstructed independently
-        - shadow network fabric reconstructed independently
-        - no qualification.distributed_authority import in portable reconstruction
-        - QC-authorized application still uses minimal shadow authority kernel
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [53, 54]
+      qualification_dependency_removed_from_shadow: true
+    A2_0_TO_A2_5:
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [53, 54]
+      preserved:
+        - semantic projection
+        - certified graph substitution
+        - adaptive realization/binding proposal
+        - discovery versus qualification
+        - recursive delegation attenuation
+        - verified canonical-history application
+    A2_6:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      strategy: RETAIN_REALIZATION
+      retained:
+        - authenticated wire envelope
+        - packet loss/duplication/reordering/asymmetric partition
+        - durable WAL
+        - crash/restart replay
+        - idempotency across restart
+        - local clock skew independence
+      evidence_level: PORTABLE
+    A2_7:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      attestation_formation: retained
+      authoritative_application: MINIMAL_SHADOW_AUTHORITY
+      canonical_mutation_apply_excluded: true
+      negative_controls:
+        - insufficient quorum
+        - stale history
+        - candidate payload tamper
+        - semantic projection violation
 
-next_r4_targets:
-  - finish portable distributed-authority rerun
-  - A2.0-A2.8 reconstruction
+next_r4_target:
+  - A2.8 endurance capstone reconstruction

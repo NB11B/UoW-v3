@@ -1,32 +1,36 @@
 # R4 Validation Record
 
-## Passing reconstructed families
+## Passing through A2.5
 
-U1-U10, U11, U12, U13, U14, U14-B, Q1, and U15.1-U15.4 portable are passing on the shadow reconstruction workflow.
+Shadow runs 53/54 pass the entire reconstructed stack through portable distributed authority and A2.0-A2.5.
 
-## Distributed-authority first attempt
+A notable layering result is now demonstrated: the reconstructed portable authority protocol does not import qualification.distributed_authority. Vote/QC semantics are represented directly in the research architecture.
 
-Runs 43/44 failed during test collection, before any authority assertion.
+## A2.6
 
-Cause:
-qualification.distributed_authority.authority imports uow.contracts.
-Importing uow initializes uow.proposer.quorum_sequencer, which imports
-qualification.distributed_authority.authority again.
+A2.6 is treated as retained realization capability, not something to collapse into the semantic kernel.
 
-This is the runtime -> qualification dependency inversion already identified in R1.
+The reconstruction tests preserve:
+- signed wire verification and tamper rejection;
+- packet duplication plus idempotent N_commit=1;
+- reorder exposure and asymmetric partitions;
+- WAL fsync-backed history;
+- crash/restart replay;
+- delegation/task idempotency across restart;
+- local wall-clock skew with generation semantics unchanged.
 
-## Layering correction
+The claim remains PORTABLE; these tests do not upgrade it to physical evidence.
 
-The shadow portable distributed-authority reconstruction now defines its own:
-- AuthorityVote semantic object;
-- QuorumCertificate semantic object;
-- vote grouping / threshold QC formation;
-- deterministic faultable network fabric;
-- independent authority replicas.
+## A2.7
 
-These are reconstructed from the R2 semantic/attestation model and current qualified behavior, not imported from qualification packaging.
+RuntimeMutationProposal / authority vote / RuntimeMutationQC formation remain the attestation protocol.
 
-State application remains:
-QC verification -> distributed quorum authorization profile -> minimal shadow AuthorizedTransition -> independent evidence lineage.
+The authoritative topology application path is reconstructed as:
 
-This correction is architecturally preferable to working around the import cycle because it tests the intended language-neutral boundary directly.
+verified RuntimeMutationQC
+-> exact graph/binding/context hash verification
+-> distributed-quorum authorization profile
+-> minimal shadow AuthorizedTransition
+-> evidence
+
+The canonical QuorumMutationCoordinator.apply_mutation and PhysicalHostNode.apply_mutation_qc paths are excluded from the reconstructed application test.

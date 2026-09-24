@@ -91,3 +91,11 @@ final_gate:
   software_candidate_freeze_required: true
   consolidated_physical_campaign_required: true
   affected_physical_claims_only_promoted_after_pass: true
+
+blocker_resolution:
+  import_depth_blocker:
+    status: FIXED_AWAITING_SUITE
+    file: src/uow/implementations/effects/runner.py
+    bad_import: from ..engine
+    corrected_import: from ...engine
+    finding: no uow.implementations.engine module is architecturally required

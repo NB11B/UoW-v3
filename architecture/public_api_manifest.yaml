@@ -1,11 +1,11 @@
 schema_version: "1.0"
-status: FROZEN_COMPATIBILITY_FACADE
+status: POST_A3_POLICY_NAMESPACE_MERGED_AWAITING_QUALIFICATION
 package: uow
 package_version: 0.1.0.dev0
 source:
   path: src/uow/__init__.py
-  git_blob_sha: 487acc3a35686aac47428003a362d82310312318
-public_symbol_count: 199
+  git_blob_sha: 766ce31ecd63e30376fa8771f84c4a104ed31247
+public_symbol_count: 200
 compatibility_policy:
   historical_import_identity_required: true
   top_level_export_does_not_imply_axiomatic_status: true
@@ -187,6 +187,7 @@ symbols:
   - "make_domain_task"
   - "make_resource_domain_task"
   - "make_uow"
+  - "policy"
   - "project_semantics"
   - "propose"
   - "run"
@@ -210,3 +211,12 @@ symbols:
   - "verify_mutation_vote"
   - "verify_requirement_binding"
   - "WireEnvelope"
+
+namespaced_surfaces:
+  uow.policy:
+    source_branch: architecture/policy-aware-uow-orchestrator
+    source_tag: policy-orchestrator-p5-qualified
+    source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+    status: MERGED_AWAITING_COMBINED_QUALIFICATION
+    flatten_into_top_level: false
+    collision_guard: uow.RealizationGraph != uow.policy.RealizationGraph

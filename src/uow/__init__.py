@@ -32,6 +32,7 @@ from .engine import (
     validate_graph,
 )
 from .ontology import ALL_MATRIX_CELLS, MatrixCell, WorkCategory
+from . import policy as policy
 from .orchestration import (
     COMPLETION_PREFIX,
     ORCH_ACTIVE_KEY,
@@ -391,6 +392,7 @@ __all__ = [
     "make_domain_task",
     "make_resource_domain_task",
     "make_uow",
+    "policy",
     "project_semantics",
     "propose",
     "run",

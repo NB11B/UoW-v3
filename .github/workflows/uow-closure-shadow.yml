@@ -30,3 +30,13 @@ jobs:
         run: python -m pip install -e . pytest
       - name: Shadow semantic tests
         run: python -m pytest -q architecture/shadow/python/tests
+
+      - name: Post-A3 P1-P5 policy API suite
+        run: >
+          python -m pytest -q
+          tests/test_policy_orchestrator.py
+          tests/test_p1_end_to_end_orchestration.py
+          tests/test_p2_live_policy_promotion.py
+          tests/test_p3_live_drift_and_requalification.py
+          tests/test_p4_distributed_policy_authority.py
+          tests/test_p5_durable_recovery.py

@@ -108,6 +108,12 @@ staged_moves:
         - src/uow/realizations/commit/wal.py
         - src/uow/realizations/commit/quorum.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [117]
+    ninth_move:
+      source: src/uow/composition/wire.py
+      target: src/uow/realizations/network/wire.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
     production_deletions: false
 

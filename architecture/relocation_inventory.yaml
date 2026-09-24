@@ -1,7 +1,7 @@
 schema_version: "1.0"
 branch: architecture/uow-staged-relocation
 basis_head: 97f015aba652feb7169cf73767e6078161940f05
-status: SOFTWARE_CANDIDATE_READY_FOR_FINAL_SHADOW
+status: SOFTWARE_CANDIDATE_FROZEN_PENDING_EXACT_SEAL_SHADOW
 
 classification_rules:
   semantic_core: language-level representation of qualified semantics; keep near canonical semantic package
@@ -134,3 +134,9 @@ final_inventory:
   public_api_manifest: architecture/public_api_manifest.yaml
   canonical_profiles_manifest: architecture/canonical_profiles_manifest.yaml
   physical_candidate_inputs: qualification/final_physical_candidate_inputs.yaml
+
+software_freeze:
+  preseal_commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
+  preseal_shadow_run: 147
+  preseal_tests_passed: 271
+  exact_seal_shadow_required: true

@@ -1,8 +1,8 @@
 # UoW Software Candidate Freeze
 
-Status: **pending final closure-shadow qualification**.
+Status: **software candidate frozen; exact seal commit pending its final closure-shadow qualification**.
 
-This cutover ends the staged software/repository relocation campaign. The candidate is frozen only if the exact commit containing this document passes the complete `.github/workflows/uow-closure-shadow.yml` suite with zero failures and no test-count regression below 271.
+This cutover ends the staged software/repository relocation campaign. The freeze package at `88b2802197c93d8a1a6e7bd52becad9c98e264c9` passed shadow run **147** with **271/271** tests. This documentation-only seal commit is the exact software candidate and is accepted only if it independently passes the complete `.github/workflows/uow-closure-shadow.yml` suite with zero failures and no test-count regression below 271.
 
 ## Architectural closeout
 

@@ -1,5 +1,5 @@
 schema_version: "1.0"
-status: PENDING_FINAL_SHADOW
+status: FROZEN_PENDING_EXACT_SEAL_SHADOW
 candidate_branch: architecture/uow-staged-relocation
 candidate_parent_code_head: 97f015aba652feb7169cf73767e6078161940f05
 freeze_ref_planned: archive/uow-reduction-software-candidate
@@ -45,3 +45,12 @@ known_failed_attempts_preserved:
   - run: 144
     repair: 20095983bc3a07220f7fcd89fce461114b0d2e36
     evidence: canonical history dependency is architectural mutation semantics
+
+preseal_shadow:
+  commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
+  run: 147
+  tests_passed: 271
+  conclusion: PASS
+exact_seal:
+  status: PENDING_SHADOW
+  rule: the exact commit containing this record is the software freeze candidate and must pass the complete closure shadow before the archive ref is created

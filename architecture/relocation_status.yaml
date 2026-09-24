@@ -120,7 +120,8 @@ staged_moves:
       source: src/uow/composition/host_node.py
       target: src/uow/implementations/distributed/host_node.py
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [119]
       preserves:
         - durable_wal_fsync
         - crash_restart_replay
@@ -128,6 +129,12 @@ staged_moves:
         - stale_history_catchup
         - authenticated_wire_verification
         - qc_authorized_mutation_application
+    eleventh_move:
+      source: src/uow/composition/endurance.py
+      target: src/uow/implementations/composition/endurance.py
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      preserved_experiment: A2.8
     production_deletions: false
 
 final_gate:

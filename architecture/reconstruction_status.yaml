@@ -1,15 +1,15 @@
-schema_version: "3.4"
+schema_version: "4.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
-mode: additive-research-reconstruction
+mode: cross-language-conformance
 
 phases:
   R0_frozen_control: COMPLETE
   R1_architecture_evidence_mapping: COMPLETE
   R2_language_neutral_specification: COMPLETE
   R3_shadow_minimal_implementation: COMPLETE_INITIAL
-  R4_experiment_reconstruction: IN_PROGRESS
-  R5_cross_language_conformance: NOT_STARTED
+  R4_experiment_reconstruction: COMPLETE_PORTABLE_INITIAL
+  R5_cross_language_conformance: IN_PROGRESS
   R6_reduction_eligibility: NOT_STARTED
   R7_repository_reorganization: NOT_STARTED
 
@@ -20,52 +20,27 @@ current_invariants:
   experiments_deleted: false
   src_uow_imports_shadow: false
 
-r4:
-  results:
-    U1_U10: {status: RECONSTRUCTED_INITIAL, shadow_runs: [23, 24]}
-    U11: {status: RECONSTRUCTED_INITIAL, shadow_runs: [25, 26]}
-    U12: {status: RECONSTRUCTED_INITIAL, shadow_runs: [27, 28]}
-    U13: {status: RECONSTRUCTED_INITIAL, shadow_runs: [29, 30]}
-    U14: {status: RECONSTRUCTED_INITIAL, shadow_runs: [31, 32]}
-    U14_B: {status: RECONSTRUCTED_INITIAL, shadow_runs: [33, 34], preservation_gap_closed: true}
-    Q1: {status: RECONSTRUCTED_INITIAL, shadow_runs: [37, 38]}
-    U15_PORTABLE: {status: RECONSTRUCTED_INITIAL, shadow_runs: [39, 41, 42]}
-    DIST_AUTH_PORTABLE: {status: RECONSTRUCTED_INITIAL, shadow_runs: [53, 54]}
-    A2_0_TO_A2_5: {status: RECONSTRUCTED_INITIAL, shadow_runs: [53, 54]}
-    A2_6:
-      status: RECONSTRUCTED_RETAINED_REALIZATION
-      shadow_runs: [55, 56]
-      evidence_level: PORTABLE
-      retained:
-        - authenticated wire
-        - adversarial transport
-        - durable WAL
-        - crash/restart replay
-        - idempotency
-        - clock skew
-    A2_7:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [55, 56]
-      qc_formation_retained: true
-      mutation_application: MINIMAL_SHADOW_AUTHORITY
-      canonical_mutation_apply_excluded: true
-    A2_8:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      canonical_endurance_runtime_excluded: true
-      expected_baseline:
-        trace_steps: 40
-        B0_cost: 8299.78
-        B1_cost: 5934.51
-        A2_cost: 5907.99
-      preserved_targets:
-        - semantic projection invariant
-        - continuous topology adaptation
-        - quorum-certified mutation
-        - objective improvement versus fixed baseline
-        - B0 and B1 scientific controls
-        - anti-thrashing hysteresis
-        - topology lineage
-        - poisoned-feedback containment
-        - duplicate task protection
-        - WAL recovery
-        - zero wrong/uncertified/lost task invariants
+r4_summary:
+  latest_shadow_runs: [57, 58]
+  latest_test_count: 115
+  A2_8_exact_costs:
+    B0_fixed: 8299.78
+    B1_rule_based: 5934.51
+    A2_reconstructed: 5907.99
+  physical_replay:
+    status: RETAINED_LOCAL_HARDWARE_OBLIGATION
+    not_replaced_by_portable: true
+
+r5:
+  first_target: PYTHON_CPP_CORE
+  conformance_levels:
+    L0_behavior: IMPLEMENTED_AWAITING_EXECUTION
+    L1_rejection: IMPLEMENTED_AWAITING_EXECUTION
+    L2_evidence_semantics: IMPLEMENTED_AWAITING_EXECUTION
+    L3_wire_schema: NOT_STARTED
+    L4_canonical_bytes: NOT_CLAIMED
+    L5_canonical_hash: NOT_CLAIMED
+  byte_profile_note:
+    python: canonical JSON
+    cpp_embedded: deterministic key-value strings
+    implication: semantic parity does not imply hash parity

@@ -211,3 +211,62 @@ def run_orchestration_reconstructed(
         evidence.append(entry)
 
     raise RuntimeError(f"Orchestration reconstruction step budget {max_steps} exceeded.")
+
+
+
+def run_resource_orchestration_reconstructed(
+    task_registry,
+    initial_state: WorldState,
+    policy,
+    *,
+    max_steps: int = 10_000,
+) -> ReconstructionResult:
+    """Reconstruct U13 resource-aware orchestration through shadow authority.
+
+    Resource scheduler/completion materializers remain the canonical semantic
+    oracle for lease/budget state transitions. Their accepted ordinary UoWs are
+    applied by the minimal shadow authority kernel; no canonical sequencer is used.
+    """
+    from uow.orchestration.materialization import certify_materialization
+    from uow.orchestration.scheduler import COMPLETION_PREFIX, SCHEDULER_ID
+    from uow.resources.requirement import verify_requirement_binding
+    from uow.resources.runtime import (
+        ResourceAwareCompletionMaterializer,
+        ResourceAwareSchedulerMaterializer,
+    )
+
+    state = initial_state
+    evidence = []
+    scheduler = ResourceAwareSchedulerMaterializer(task_registry, policy)
+
+    for step in range(max_steps):
+        if state.cursor is None or state.status != "RUNNING":
+            return ReconstructionResult(state, tuple(evidence), step)
+
+        cursor = state.cursor
+        if cursor == SCHEDULER_ID:
+            materialized = scheduler.materialize(state)
+            if not certify_materialization(scheduler, state, materialized):
+                raise ValueError("Resource scheduler materialization failed certification.")
+            active_uow = materialized.uow
+
+        elif cursor.startswith(COMPLETION_PREFIX):
+            task_id = cursor[len(COMPLETION_PREFIX):]
+            completion = ResourceAwareCompletionMaterializer(task_id)
+            materialized = completion.materialize(state)
+            if not certify_materialization(completion, state, materialized):
+                raise ValueError("Resource completion materialization failed certification.")
+            active_uow = materialized.uow
+
+        else:
+            if cursor not in task_registry:
+                raise KeyError(f"Resource orchestration cursor references unknown task {cursor!r}.")
+            bound = task_registry[cursor]
+            if not verify_requirement_binding(bound):
+                raise ValueError(f"Requirement binding violation for domain task {cursor!r}.")
+            active_uow = bound.uow
+
+        state, entry = execute_one_reconstructed({active_uow.H.identity: active_uow}, state)
+        evidence.append(entry)
+
+    raise RuntimeError(f"Resource orchestration reconstruction step budget {max_steps} exceeded.")

@@ -1,4 +1,4 @@
-schema_version: "2.2"
+schema_version: "2.3"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -29,32 +29,32 @@ r4:
     U11:
       status: RECONSTRUCTED_INITIAL
       shadow_runs: [25, 26]
-      preserved:
-        - self-hosted scheduler materialization
-        - completion materialization
-        - materialization certification
-        - domain work
-        - deadlock terminal transition
-        - deterministic replay
-      canonical_orchestration_runtime_excluded: true
     U12:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      reconstruction_model:
-        proposal_preparation: actual ThreadPoolExecutor workers
-        authority_application: minimal shadow authority kernel
-        concurrency_conformance: canonical OCC oracle
-        transaction_state_projection: canonical pure apply_transaction
-      preserved_targets:
-        - multi-active parallel proposal preparation
-        - disjoint commutativity
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [27, 28]
+      preserved:
+        - actual ThreadPoolExecutor proposal preparation
+        - disjoint concurrent commits under OCC
         - read-write hazard rejection
         - write-write hazard rejection
         - hidden-coupling hazard rejection
         - atomic abort/no dirty mutation
-        - timing entropy invariance
-        - replay determinism
+        - host timing entropy invariance
+        - deterministic replay
       architectural_finding:
-        - OCC provides typed causal compatibility that may remain valid even when whole-state hash changes
+        - transaction causal validity may be version/footprint-relative rather than whole-state-hash equality
+    U13:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      preserved_targets:
+        - resource requirement cryptographic binding
+        - leased capacities
+        - consumable budgets
+        - atomic dispatch/resource-state materialization
+        - lease release on completion
+        - over-allocation fail-closed
+        - policy diversity
+        - replay determinism
+      canonical_resource_runtime_excluded: true
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

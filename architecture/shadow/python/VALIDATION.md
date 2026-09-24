@@ -1,39 +1,32 @@
 # R4 Validation Record
 
 ## U1-U10
-Commit 7485dbb — shadow runs 23 and 24 PASS.
+Shadow runs 23 and 24: PASS.
 
 ## U11
-Commit 63ef25a — shadow runs 25 and 26 PASS.
+Shadow runs 25 and 26: PASS.
+
+## U12
+Commit 799e294 — shadow runs 27 and 28: PASS.
 
 Preserved:
-- scheduler and completion materialization as ordinary UoWs;
-- independent materialization certification;
-- domain execution;
-- deadlock as a certified terminal transition;
-- deterministic replay.
+- actual parallel worker preparation;
+- OCC disjoint compatibility;
+- read/write, write/write, and hidden-coupling hazards;
+- atomic reject/no dirty second mutation;
+- timing entropy invariance;
+- deterministic evidence replay.
 
-The reconstruction path does not call canonical run_orchestration.
+Architectural result:
+- a transaction can remain causally valid after the whole state hash changes when OCC proves its typed read/write/coupling snapshot is still compatible;
+- the reduced architecture therefore needs typed causal contexts, not only one global state-hash freshness predicate.
 
-## U12 in execution
+## U13 next
 
-The U12 reconstruction deliberately restores an actual threaded proposal realization rather than treating current OCC semantics alone as sufficient preservation.
-
-Flow:
-
-base authoritative snapshot
--> parallel worker proposal + transaction descriptor
--> deterministic core conformance
--> current-state OCC conformance
--> typed transaction-application proposal
--> explicit local authorization
--> minimal shadow AuthorizedTransition
--> shadow evidence
-
-Important causal result under test:
-
-whole-state precondition freshness is not the only valid freshness relation.
-
-A transaction proposed at S_base can remain valid at S_current after disjoint commits when its recorded read/write/coupled versions still conform under OCC.
-
-This is exactly why R2 retained typed causal coordinates rather than one universal state hash freshness rule.
+Resource-aware orchestration reconstruction:
+- retain current resource requirement and materialization semantics as oracles;
+- exclude run_resource_orchestration and DeterministicSequencer;
+- apply scheduler/domain/completion UoWs through minimal shadow authority;
+- preserve leased vs consumable distinction;
+- preserve over-allocation and forged-requirement controls;
+- preserve alternate scheduling policies as distinct valid realizations.

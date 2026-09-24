@@ -31,6 +31,12 @@ def test_final_physical_driver_preserves_reference_oracles_and_thirteen_invarian
     source = DRIVER.read_text(encoding="utf-8")
     assert 'A3_COMMIT = "05c8094ac5c8572f7da6d00e781ce673754c5c59"' in source
     assert 'P1_P5_COMMIT = "aa886329298f87e8b006501d47dd89eb8f0d4a3b"' in source
+    assert "P1_P5_POLICY_SUITE_TESTS = 44" in source
+    assert "P1_P5_FULL_REPOSITORY_TESTS = 324" in source
+    assert "CANDIDATE_SHADOW_TESTS = 271" in source
+    assert "f8_candidate_exact_seal_shadow" in source
+    assert "f8_post_a3_p1_p5_frozen_oracle" in source
+    assert "require_pytest_pass_count(oracle, P1_P5_POLICY_SUITE_TESTS)" in source
     start = source.index("P1_P5_INVARIANTS = (")
     end = source.index(")", start)
     block = source[start:end]

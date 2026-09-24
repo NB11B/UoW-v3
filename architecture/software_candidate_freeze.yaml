@@ -21,9 +21,14 @@ qualification_oracles:
     commit: 05c8094ac5c8572f7da6d00e781ce673754c5c59
     tag: a3-qualification-complete
   policy_orchestrator_p1_p5:
+    role: DISTINCT_POST_A3_QUALIFIED_LAYER
+    completed_local_date: 2026-09-23
     commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
     tag: policy-orchestrator-p5-qualified
+    policy_suite_tests_passed: 44
+    full_repository_tests_passed_at_closeout: 324
     mandatory_invariants: 13
+    a3_evidence_inherited_not_double_counted: true
   a4_ontology_adaptation:
     status: CONCEPTUAL_UNQUALIFIED
     constraint: Python enums, class names, dataclasses, and module paths are not frozen as universal ontology

@@ -46,13 +46,17 @@ A3 adds acceptance requirements that are not implied merely by A2 correctness:
 
 A3 physical/device artifacts remain retained evidence. Portable reconstruction must not replace them.
 
-## Oracle O3 — Policy-Aware UoW Orchestrator P1–P5
+## Oracle O3 — Post-A3 Policy-Aware UoW Orchestrator P1–P5
+
+This is the final qualified architecture layer built after A3 on September 23, 2026. It is a downstream extension of A3, not merely another name for A3.
 
 - Branch: `architecture/policy-aware-uow-orchestrator`
 - Tag: `policy-orchestrator-p5-qualified`
 - Frozen commit: `aa886329298f87e8b006501d47dd89eb8f0d4a3b`
 - Synthesis: `POLICY_ORCHESTRATOR_P1_P5_FINAL_SYNTHESIS.md`
 - Status: qualified, feature-complete, frozen reference architecture.
+- P1-P5 policy suite at closeout: 44 passed, 0 failed.
+- Complete repository verification at closeout: 324 passed, 0 failed.
 - No P6 is required for this series.
 
 P1–P5 is downstream of A3 and contains the A3 experimental tree. Evidence inherited from A3 must not be double-counted as a separate independent physical campaign.

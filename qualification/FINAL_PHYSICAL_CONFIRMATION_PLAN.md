@@ -71,11 +71,24 @@ If final code materially changes the power model, transfer model, device-selecti
 
 The historical 12,000-UoW A3.8 soak remains evidence for its original qualified head. A new 12,000-UoW soak is required only if the final release claims that same endurance scope for a changed mechanism.
 
-## F8 Policy P1-P5 final-candidate confirmation
+## F8 Post-A3 Policy Orchestrator P1-P5 final-candidate confirmation
 
-Run the frozen P1-P5 acceptance suite against the final facade/cutover candidate while physical providers are available.
+This is the final qualified layer built after A3 on September 23, 2026. It must be treated as a distinct post-A3 oracle rather than being absorbed into A3 itself.
+
+Frozen reference:
+
+- branch: `architecture/policy-aware-uow-orchestrator`
+- tag: `policy-orchestrator-p5-qualified`
+- commit: `aa886329298f87e8b006501d47dd89eb8f0d4a3b`
+- policy-specific suite: **44 passed, 0 failed**
+- historical complete repository verification at closeout: **324 passed, 0 failed**
+- mandatory architectural invariants: **13**
+
+The final campaign reruns the exact frozen reduced candidate's **271-test** closure-shadow suite and separately reruns the **44-test P1-P5 suite** from the frozen post-A3 reference.
 
 Confirm all 13 invariants: U-to-W projection, deterministic snapshot resolution, graph realization, qualified policy registry, discovery without authority, prospective promotion, deterministic policy reuse, safe drift invalidation, transactional registry versioning, distributed policy authority, durable recovery, zero duplicate external effects, and five-tier provenance.
+
+P1-P5 is downstream of A3. Shared A3 evidence may satisfy inherited dependencies, but it is not counted twice as independent evidence. P1-P5-specific lifecycle, distributed-authority, recovery, external-effect, and provenance evidence remains independently required.
 
 No P6 is required.
 

@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -31,6 +32,10 @@ A3_REF = "qualification/a3-adaptive-compute-efficiency"
 A3_COMMIT = "05c8094ac5c8572f7da6d00e781ce673754c5c59"
 P1_P5_REF = "architecture/policy-aware-uow-orchestrator"
 P1_P5_COMMIT = "aa886329298f87e8b006501d47dd89eb8f0d4a3b"
+P1_P5_TAG = "policy-orchestrator-p5-qualified"
+P1_P5_POLICY_SUITE_TESTS = 44
+P1_P5_FULL_REPOSITORY_TESTS = 324
+CANDIDATE_SHADOW_TESTS = 271
 
 P1_P5_INVARIANTS = (
     "canonical_uow_requirement_projection",
@@ -221,6 +226,19 @@ def require_commands_pass(commands: Iterable[CommandResult]) -> None:
     if failed:
         names = ", ".join(c.name for c in failed)
         raise RuntimeError(f"Qualification command failure: {names}")
+
+
+def require_pytest_pass_count(command: CommandResult, expected: int) -> int:
+    text = Path(command.log_path).read_text(encoding="utf-8", errors="replace")
+    matches = re.findall(r"(\d+) passed(?:, \d+ deselected)? in ", text)
+    if not matches:
+        raise RuntimeError(f"Could not recover pytest pass count from {command.log_path}")
+    observed = int(matches[-1])
+    if observed != expected:
+        raise RuntimeError(
+            f"{command.name} passed {observed} tests; expected exact frozen-suite count {expected}"
+        )
+    return observed
 
 
 def f0_attestation(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
@@ -591,14 +609,15 @@ def f7(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
 
 
 def f8(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
-    candidate = run_logged(
-        "f8_candidate_shadow",
-        [sys.executable, "-m", "pytest", "-q", "architecture/shadow/python/tests"],
-        cwd=REPO_ROOT,
-        artifacts_dir=phase_dir,
+    # Re-run the exact frozen reduced candidate rather than the later operator-harness branch.
+    candidate = run_frozen_oracle(
+        name="f8_candidate_exact_seal_shadow",
+        commit=CANDIDATE_COMMIT,
+        pytest_paths=["architecture/shadow/python/tests"],
+        phase_dir=phase_dir,
     )
     oracle = run_frozen_oracle(
-        name="f8_p1_p5_frozen_oracle",
+        name="f8_post_a3_p1_p5_frozen_oracle",
         commit=P1_P5_COMMIT,
         pytest_paths=[
             "tests/test_policy_orchestrator.py",
@@ -611,6 +630,8 @@ def f8(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
         phase_dir=phase_dir,
     )
     require_commands_pass([candidate, oracle])
+    candidate_count = require_pytest_pass_count(candidate, CANDIDATE_SHADOW_TESTS)
+    policy_count = require_pytest_pass_count(oracle, P1_P5_POLICY_SUITE_TESTS)
 
     gate_map = REPO_ROOT / "experiments" / "reference-oracles" / "gate_map.yaml"
     gate_text = gate_map.read_text(encoding="utf-8")
@@ -618,12 +639,20 @@ def f8(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
     if missing:
         raise RuntimeError("P1-P5 invariant gate map missing: " + ", ".join(missing))
     details = {
+        "layer": "POST_A3_POLICY_ORCHESTRATOR_P1_P5",
+        "candidate_exact_seal_commit": CANDIDATE_COMMIT,
+        "candidate_shadow_tests_passed": candidate_count,
         "reference_ref": P1_P5_REF,
+        "reference_tag": P1_P5_TAG,
         "reference_commit": P1_P5_COMMIT,
+        "policy_suite_tests_passed": policy_count,
+        "historical_full_repository_tests_passed": P1_P5_FULL_REPOSITORY_TESTS,
         "mandatory_invariants": list(P1_P5_INVARIANTS),
         "mandatory_invariant_count": len(P1_P5_INVARIANTS),
         "gate_map_sha256": sha256_file(gate_map),
         "physical_phase_dependencies": ["F1", "F2", "F3", "F4", "F5", "F6"],
+        "a3_evidence_inherited_not_double_counted": True,
+        "p1_p5_specific_evidence_required": True,
         "p6_required": False,
     }
     return PhaseResult("F8", True, details, [candidate, oracle])

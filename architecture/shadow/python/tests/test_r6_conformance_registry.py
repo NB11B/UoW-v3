@@ -150,6 +150,7 @@ def test_r6_registry_actor_binding_preserves_qualification_semantics():
     )
     weak_registry = ActorRegistry((weak_actor,))
     bad_binding = ActorBinding("b-bad", "g", {"worker": "weak", "verify": "weak"})
+    direct_rejected = actor_binding_adapter(graph, bad_binding, weak_registry)
     rejected = DEFAULT_CONFORMANCE_REGISTRY.evaluate(
         "actor_binding",
         graph,
@@ -157,7 +158,9 @@ def test_r6_registry_actor_binding_preserves_qualification_semantics():
         weak_registry,
     )
     assert not rejected.accepted
-    assert any("AUTHORITY_DEFICIT" in v for v in rejected.violations)
+    assert rejected.decision == direct_rejected.decision
+    assert rejected.violations == direct_rejected.violations
+    assert any("ACTOR_AUTHORITY_INSUFFICIENT" in v for v in rejected.violations)
 
 
 def test_r6_registry_semantic_projection_preserves_output_and_authority_rules():

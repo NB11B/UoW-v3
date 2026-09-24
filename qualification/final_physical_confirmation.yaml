@@ -51,6 +51,45 @@ expected_hardware:
   authority_b: arduino_uno_q_stm32u585
   authority_c: laptop_x86_64
 
+campaigns:
+  F0_CANDIDATE_ATTESTATION:
+    required: true
+  F1_EMBEDDED_AUTHORITY:
+    claim_ids:
+      - ESP32.AUTHORITY
+      - EVIDENCE.CHAIN
+      - DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL
+      - DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL
+  F2_HETEROGENEOUS_EXECUTION:
+    claim_ids:
+      - HETERO.EXECUTION
+      - HETERO.ADAPTATION
+      - HETERO.PERFORMANCE
+  F3_NPU_ADAPTIVE_PROPOSER:
+    claim_ids:
+      - U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL
+  F4_NPU_HOT_SWAP:
+    claim_ids:
+      - U15.NPU_HOT_SWAP.PHYSICAL
+  F5_CONTINUOUS_ADAPTATION:
+    claim_ids:
+      - U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL
+  F6_ADAPTIVE_PHYSICAL_QUORUM:
+    claim_ids:
+      - U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL
+  F7_A3_CONTINUUM_CONFIRMATION:
+    reference_branch: qualification/a3-adaptive-compute-efficiency
+    reference_tag: a3-qualification-complete
+    reference_commit: 05c8094ac5c8572f7da6d00e781ce673754c5c59
+  F8_POST_A3_POLICY_P1_P5_CONFIRMATION:
+    reference_branch: architecture/policy-aware-uow-orchestrator
+    reference_tag: policy-orchestrator-p5-qualified
+    reference_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+    policy_suite_tests: 44
+    mandatory_invariants: 13
+    final_candidate_exact_shadow_tests: 279
+    p6_required: false
+
 final_gate:
   software_closeout_complete: true
   production_physical_claim_promotion_complete: true

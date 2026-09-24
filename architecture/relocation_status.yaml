@@ -292,7 +292,11 @@ staged_moves:
         implementation_target: src/uow/realizations/authority/runtime_mutation.py
       class: K1
       compatibility_reexport: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [145]
+      failed_shadow_runs: [144]
+      repair_commit: 20095983bc3a07220f7fcd89fce461114b0d2e36
+      failure_evidence: canonical composition.history dependency was initially removed as unused; qualified convergence gate proved it is an architectural mutation-semantic dependency and it was restored
       rationale: retain mutation proposal, vote, quorum-certificate, signing, verification, and threshold semantics while relocating only the stateful quorum mutation coordinator
       preserves:
         - proposal_zero_authority

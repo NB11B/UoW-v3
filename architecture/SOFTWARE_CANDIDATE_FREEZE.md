@@ -1,6 +1,6 @@
 # UoW Software Candidate Freeze
 
-Status: **policy-integrated v2 candidate pending exact combined qualification**.
+Status: **policy-integrated v2 software candidate frozen and exact-seal qualified**.
 
 This cutover ends the staged software/repository relocation campaign. The preseal package at `88b2802197c93d8a1a6e7bd52becad9c98e264c9` passed shadow run **147** with **271/271** tests. The exact seal commit `f842d62c7d18355886e2c9fdc25e9cc5db17987b` independently passed shadow run **148** with **271/271** tests and is preserved at `archive/uow-reduction-software-candidate`.
 
@@ -31,4 +31,4 @@ The post-A3 P1-P5 implementation is now merged into the canonical package under 
 
 The original `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` remains immutable as the pre-policy candidate. It is not the final physical target.
 
-The new candidate will be frozen under `archive/uow-reduction-software-candidate-v2` only when the exact commit containing the v2 freeze manifest independently passes both required suites.
+The policy-integrated candidate is frozen at `archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9`. Exact-seal run **158** passed **277/277** reduced shadow tests and **44/44** P1-P5 policy tests.

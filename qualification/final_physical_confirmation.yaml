@@ -1,5 +1,5 @@
 schema_version: "0.1"
-status: DEFERRED_PENDING_POLICY_INTEGRATED_EXACT_SEAL
+status: READY_FOR_EXECUTION
 
 previous_candidate:
   ref: archive/uow-reduction-software-candidate
@@ -7,13 +7,17 @@ previous_candidate:
   disposition: IMMUTABLE_PRE_POLICY_EVIDENCE
 
 candidate_v2:
-  planned_ref: archive/uow-reduction-software-candidate-v2
+  ref: archive/uow-reduction-software-candidate-v2
+  commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
   source_policy_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
   integration_validation_run: 156
   integration_shadow_tests_passed: 277
   integration_policy_tests_passed: 44
-  exact_seal_status: PENDING
-  physical_execution_blocked_until_refreeze: true
+  exact_seal_run: 158
+  exact_seal_shadow_tests_passed: 277
+  exact_seal_policy_tests_passed: 44
+  exact_seal_status: PASS
+  physical_execution_blocked_until_refreeze: false
 
 candidate:
   ref: archive/uow-reduction-software-candidate
@@ -23,7 +27,7 @@ candidate:
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: QUALIFIED_FOR_OPERATOR_USE
+  status: REPINNED_TO_V2_AWAITING_HARNESS_SHADOW
   harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
   shadow_run: 151
   shadow_tests_passed: 274

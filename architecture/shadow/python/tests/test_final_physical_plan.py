@@ -1,15 +1,19 @@
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
+FINAL_REF = "archive/uow-reduction-software-candidate-v2"
+FINAL_COMMIT = "728988f93a1ec0f634f450dc4d187fbd5e0e95c9"
 
 
-def test_final_physical_campaign_is_deferred_until_policy_integrated_v2_freeze():
+def test_final_physical_campaign_is_ready_only_for_policy_integrated_v2():
     text = (REPO / "qualification" / "final_physical_confirmation.yaml").read_text(encoding="utf-8")
-    assert "status: DEFERRED_PENDING_POLICY_INTEGRATED_EXACT_SEAL" in text
-    assert "planned_ref: archive/uow-reduction-software-candidate-v2" in text
-    assert "physical_execution_blocked_until_refreeze: true" in text
-    assert "integration_shadow_tests_passed: 277" in text
-    assert "integration_policy_tests_passed: 44" in text
+    assert "status: READY_FOR_EXECUTION" in text
+    assert f"ref: {FINAL_REF}" in text
+    assert f"commit: {FINAL_COMMIT}" in text
+    assert "exact_seal_run: 158" in text
+    assert "exact_seal_shadow_tests_passed: 277" in text
+    assert "exact_seal_policy_tests_passed: 44" in text
+    assert "physical_execution_blocked_until_refreeze: false" in text
     assert "mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN" in text
     assert "final_candidate_must_be_frozen_first: true" in text
 

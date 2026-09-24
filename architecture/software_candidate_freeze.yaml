@@ -1,10 +1,10 @@
 schema_version: "1.0"
-status: POLICY_INTEGRATED_CANDIDATE_EXACT_SEAL_ON_PASS
+status: FROZEN_POLICY_INTEGRATED_EXACT_SEAL_PASS
 candidate_branch: architecture/uow-staged-relocation
 candidate_parent_code_head: 8b6893f3b4db4da161a27f89fd905feb7a794a87
 freeze_ref_planned: archive/uow-reduction-software-candidate-v2
-freeze_ref: PENDING_POLICY_INTEGRATED_EXACT_SEAL
-freeze_commit: PENDING_POLICY_INTEGRATED_EXACT_SEAL
+freeze_ref: archive/uow-reduction-software-candidate-v2
+freeze_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
 freeze_commit_definition: the commit containing this manifest, after its full closure-shadow run passes
 package:
   name: uow
@@ -77,5 +77,18 @@ policy_integrated_candidate:
   integration_shadow_tests_passed: 277
   integration_policy_tests_passed: 44
   planned_ref: archive/uow-reduction-software-candidate-v2
-  exact_seal_status: PENDING
+  exact_seal_status: PASS
+  exact_seal_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  exact_seal_run: 158
+  exact_seal_shadow_tests_passed: 277
+  exact_seal_policy_tests_passed: 44
   rule: the commit containing this manifest becomes the v2 candidate only if both shadow and P1-P5 policy suites pass
+
+policy_integrated_exact_seal:
+  status: PASS
+  ref: archive/uow-reduction-software-candidate-v2
+  commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  run: 158
+  shadow_tests_passed: 277
+  policy_tests_passed: 44
+  conclusion: PASS

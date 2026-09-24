@@ -26,9 +26,9 @@ import time
 from typing import Any, Iterable, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CANDIDATE_REF = "archive/uow-reduction-software-candidate"
-CANDIDATE_COMMIT = "f842d62c7d18355886e2c9fdc25e9cc5db17987b"
-CANDIDATE_RELEASE_STATUS = "SUPERSEDED_PRE_POLICY"
+CANDIDATE_REF = "archive/uow-reduction-software-candidate-v2"
+CANDIDATE_COMMIT = "728988f93a1ec0f634f450dc4d187fbd5e0e95c9"
+CANDIDATE_RELEASE_STATUS = "FINAL"
 A3_REF = "qualification/a3-adaptive-compute-efficiency"
 A3_COMMIT = "05c8094ac5c8572f7da6d00e781ce673754c5c59"
 P1_P5_REF = "architecture/policy-aware-uow-orchestrator"
@@ -36,7 +36,7 @@ P1_P5_COMMIT = "aa886329298f87e8b006501d47dd89eb8f0d4a3b"
 P1_P5_TAG = "policy-orchestrator-p5-qualified"
 P1_P5_POLICY_SUITE_TESTS = 44
 P1_P5_FULL_REPOSITORY_TESTS = 324
-CANDIDATE_SHADOW_TESTS = 271
+CANDIDATE_SHADOW_TESTS = 277
 
 P1_P5_INVARIANTS = (
     "canonical_uow_requirement_projection",

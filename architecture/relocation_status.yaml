@@ -385,3 +385,18 @@ post_a3_policy_api_integration:
   next_candidate_ref_planned: archive/uow-reduction-software-candidate-v2
   physical_harness_v1_blocked: false
   physical_harness_repin_commit: 173e8c376fdd51df605a839679af1a52af2d057f
+
+post_freeze_operator_harness_v2:
+  path: qualification/final_physical_campaign.py
+  status: PASS
+  harness_repin_commit: 173e8c376fdd51df605a839679af1a52af2d057f
+  qualification_head: 9e6272edccd75b7b72d435bea21729f4bf592f59
+  shadow_run: 161
+  shadow_test_count: 277
+  policy_test_count: 44
+  candidate_ref: archive/uow-reduction-software-candidate-v2
+  candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  failed_shadow_runs: [159, 160]
+  failure_evidence: stale test retained the superseded v1 candidate-ref assertion after the harness was correctly repinned to v2
+  semantic_candidate_changed: false
+  ready_for_physical_campaign: true

@@ -27,7 +27,12 @@ candidate:
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: REPINNED_TO_V2_AWAITING_HARNESS_SHADOW
+  status: QUALIFIED_FOR_OPERATOR_USE
+  harness_repin_commit: 173e8c376fdd51df605a839679af1a52af2d057f
+  qualification_head: 9e6272edccd75b7b72d435bea21729f4bf592f59
+  shadow_run: 161
+  shadow_tests_passed: 277
+  policy_tests_passed: 44
   harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
   shadow_run: 151
   shadow_tests_passed: 274

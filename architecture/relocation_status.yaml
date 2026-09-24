@@ -81,8 +81,10 @@ staged_moves:
       source: src/uow/effects/runner.py
       target: src/uow/implementations/effects/runner.py
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: RERUN_PENDING_AFTER_GENERATION_FIX
       external_invocation_remains_outside_spine: true
+      first_run: 112
+      first_run_result: GENERATED_IMPORT_NEWLINE_SYNTAX_ERROR
     production_deletions: false
 
 final_gate:

@@ -6,7 +6,8 @@ import hashlib
 import time
 from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol, Tuple
 
-from ...application import DEFAULT_APPLICATION_SPINE, CursorPolicy\nfrom ...contracts import Guard, GuardOp, Mutation, MutationOp, Route, Successor, make_uow
+from ...application import DEFAULT_APPLICATION_SPINE, CursorPolicy
+from ...contracts import Guard, GuardOp, Mutation, MutationOp, Route, Successor, make_uow
 from ..engine import CertificateResult, Proposal, certify, propose
 from ...ontology import MatrixCell, WorkCategory
 from ...state import WorldState, canonical_json

@@ -168,7 +168,8 @@ staged_moves:
       target: src/uow/realizations/scheduling/self_hosted.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [127]
       rationale: separate self-hosted scheduling realization from orchestration semantics
       preserves:
         - scheduler_materialization_certification

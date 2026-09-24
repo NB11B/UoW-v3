@@ -1,0 +1,78 @@
+schema_version: "0.1"
+purpose: frozen acceptance references for reduction and repository reorganization
+
+oracles:
+  A2_PORTABLE_CAPSTONE:
+    evidence_status: QUALIFIED_PORTABLE
+    repository: NB11B/UoW
+    ref: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+    reconstruction_status: COMPLETE_PORTABLE_INITIAL
+    covers:
+      - U1-U15_portable
+      - Q1
+      - distributed_authority_portable
+      - A2.0-A2.8
+
+  A3_ADAPTIVE_COMPUTE_EFFICIENCY:
+    evidence_status: QUALIFIED_MIXED_PORTABLE_PHYSICAL
+    repository: NB11B/UoW
+    branch: qualification/a3-adaptive-compute-efficiency
+    tag: a3-qualification-complete
+    qualified_long_soak_anchor: 05c8094ac5c8572f7da6d00e781ce673754c5c59
+    synthesis: A3_FINAL_SYNTHESIS.md
+    relationship:
+      extends: A2_PORTABLE_CAPSTONE
+      inherited_by: POLICY_ORCHESTRATOR_P1_P5
+    acceptance:
+      - realization_is_graph_not_device
+      - heterogeneous_composition_efficiency
+      - discovery_has_zero_authority
+      - prospective_policy_qualification
+      - deterministic_policy_reuse
+      - policy_lifecycle_residency
+      - power_and_capacity_constraints
+      - semantic_equivalence_under_placement
+      - hard_correctness_zero_gates
+      - physical_measurement_evidence_preserved
+      - long_duration_endurance_preserved
+
+  POLICY_ORCHESTRATOR_P1_P5:
+    evidence_status: QUALIFIED_FROZEN_REFERENCE
+    repository: NB11B/UoW
+    branch: architecture/policy-aware-uow-orchestrator
+    tag: policy-orchestrator-p5-qualified
+    commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+    synthesis: POLICY_ORCHESTRATOR_P1_P5_FINAL_SYNTHESIS.md
+    relationship:
+      downstream_of: A3_ADAPTIVE_COMPUTE_EFFICIENCY
+      evidence_double_counting_forbidden: true
+      further_feature_milestone_required: false
+    invariants:
+      - canonical_uow_requirement_projection
+      - deterministic_world_state_snapshot
+      - execution_realization_graph
+      - qualified_versioned_policy_registry
+      - discovery_without_authority
+      - prospective_qualification
+      - deterministic_policy_reuse
+      - live_drift_invalidation_safe_replacement
+      - transactional_registry_versioning
+      - distributed_policy_authority
+      - durable_persistence_atomic_recovery
+      - zero_duplicate_external_effects
+      - five_tier_cryptographic_provenance
+
+  A4_ONTOLOGY_ADAPTATION:
+    evidence_status: CONCEPTUAL_UNQUALIFIED
+    repository: NB11B/UoW
+    branch: null
+    tag: null
+    relationship:
+      conceptual_successor_to: A3_ADAPTIVE_COMPUTE_EFFICIENCY
+    reduction_constraint:
+      - do_not_hardcode_python_ontology_as_universal_protocol
+      - ontology_versions_must_have_deterministic_semantics
+      - ontology_change_requires_authority_and_lineage
+      - compatibility_and_migration_must_be_explicit
+      - prior_experiment_semantics_must_remain_reconstructable
+    qualification_status: NOT_STARTED

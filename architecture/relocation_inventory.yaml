@@ -88,11 +88,11 @@ remaining_clean_realization_candidates:
   - source: src/uow/proposer/adaptive.py
     target: src/uow/realizations/adaptation/portable.py
     class: K1
-    disposition: REVIEW_LATER
+    disposition: NEXT_SELECTED
   - source: src/uow/proposer/fallback.py
     target: src/uow/realizations/scheduling/fallback.py
     class: K1
-    disposition: CURRENT_MOVE
+    disposition: RELOCATED_PASS_RUN_135
   - source: src/uow/composition/substitution.py
     target: src/uow/realizations/adaptation/graph_substitution.py
     class: K1

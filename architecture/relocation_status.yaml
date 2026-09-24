@@ -225,7 +225,8 @@ staged_moves:
       target: src/uow/realizations/scheduling/fallback.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [135]
       rationale: relocate deterministic liveness fallback as a scheduling realization without moving proposal certification or authority
       preserves:
         - proposer_failure_liveness

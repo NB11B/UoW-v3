@@ -1,4 +1,4 @@
-schema_version: "6.2"
+schema_version: "6.3"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: repository-additive-layout
@@ -28,7 +28,8 @@ r6:
 
 r7:
   R7_0_current_target_manifest: COMPLETE_INITIAL
-  R7_1_parallel_skeleton: IMPLEMENTED_AWAITING_SUITE
+  R7_1_parallel_skeleton: PASS_INITIAL
+  R7_2_semantic_facade: IMPLEMENTED_AWAITING_SUITE
   target_surfaces:
     - specification
     - implementations

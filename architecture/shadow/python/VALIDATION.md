@@ -1,36 +1,46 @@
 # R4 Validation Record
 
-## Passing through A2.5
+## Through A2.7
 
-Shadow runs 53/54 pass the entire reconstructed stack through portable distributed authority and A2.0-A2.5.
+Shadow runs 55/56 pass A2.6 and A2.7 in addition to the prior reconstructed stack.
 
-A notable layering result is now demonstrated: the reconstructed portable authority protocol does not import qualification.distributed_authority. Vote/QC semantics are represented directly in the research architecture.
+A2.6 is preserved as retained realization capability:
+- wire authentication/tamper rejection;
+- duplication/idempotency;
+- reordering/asymmetric partition;
+- WAL crash/restart;
+- idempotency across restart;
+- clock-skew independence.
 
-## A2.6
+A2.7 preserves vote/QC formation while replacing mutation application with the minimal shadow authority transition.
 
-A2.6 is treated as retained realization capability, not something to collapse into the semantic kernel.
+## A2.8 capstone now under test
 
-The reconstruction tests preserve:
-- signed wire verification and tamper rejection;
-- packet duplication plus idempotent N_commit=1;
-- reorder exposure and asymmetric partitions;
-- WAL fsync-backed history;
-- crash/restart replay;
-- delegation/task idempotency across restart;
-- local wall-clock skew with generation semantics unchanged.
+The reconstructed runtime does not instantiate canonical EnduranceAdaptiveRuntime and does not call PhysicalHostNode.apply_mutation_qc.
 
-The claim remains PORTABLE; these tests do not upgrade it to physical evidence.
+It preserves the original experiment's:
+- ParentContract / SemanticProjection criteria;
+- RuntimeObjectiveFunction;
+- ContinuousPerturbationTrace;
+- AntiThrashingHysteresis;
+- RuntimeMutationProposal and signed vote/QC formation;
+- Fixed B0 and rule-based B1 controls;
+- TopologyLineage;
+- optional DurableWAL persistence.
 
-## A2.7
+The authority-changing step is reconstructed:
 
-RuntimeMutationProposal / authority vote / RuntimeMutationQC formation remain the attestation protocol.
+proposal
+-> independent mutation votes
+-> RuntimeMutationQC
+-> exact QC/context/candidate verification
+-> minimal distributed-quorum authorization
+-> shadow AuthorizedTransition
+-> topology lineage + authoritative history.
 
-The authoritative topology application path is reconstructed as:
+The 40-step seed-42 test requires exact two-decimal parity with the original reported costs:
+B0 8299.78
+B1 5934.51
+A2 5907.99
 
-verified RuntimeMutationQC
--> exact graph/binding/context hash verification
--> distributed-quorum authorization profile
--> minimal shadow AuthorizedTransition
--> evidence
-
-The canonical QuorumMutationCoordinator.apply_mutation and PhysicalHostNode.apply_mutation_qc paths are excluded from the reconstructed application test.
+The test also retains poisoning, hysteresis, duplicate protection, lineage, semantic projection, and WAL replay controls.

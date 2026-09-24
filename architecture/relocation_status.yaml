@@ -154,7 +154,8 @@ staged_moves:
         semantic_target: src/uow/composition/history.py
         implementation_target: src/uow/implementations/distributed/convergence.py
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [125]
       rationale: separate authoritative history semantics from cluster/network implementation
       preserves:
         - discovery_without_authority

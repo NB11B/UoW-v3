@@ -1,4 +1,4 @@
-schema_version: "2.4"
+schema_version: "2.5"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -23,41 +23,34 @@ current_invariants:
 r4:
   canonical_commit_allowed_in_shadow_reconstruction: false
   results:
-    U1_U10:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [23, 24]
-    U11:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [25, 26]
-    U12:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [27, 28]
-    U13:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [29, 30]
-      preserved:
-        - resource requirement cryptographic binding
-        - leased capacities
-        - consumable budgets
-        - resource-aware scheduler materialization
-        - completion lease release
-        - over-allocation fail-closed
-        - policy diversity
-        - replay determinism
+    U1_U10: {status: RECONSTRUCTED_INITIAL, shadow_runs: [23, 24]}
+    U11: {status: RECONSTRUCTED_INITIAL, shadow_runs: [25, 26]}
+    U12: {status: RECONSTRUCTED_INITIAL, shadow_runs: [27, 28]}
+    U13: {status: RECONSTRUCTED_INITIAL, shadow_runs: [29, 30]}
     U14:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      preserved_targets:
-        - proposal has zero authority
-        - stochastic proposer execution
-        - illegal dependency rejection
-        - intra-batch OCC conflict rejection
-        - resource capacity rejection
-        - stale proposal rejection
-        - deterministic fallback on proposer crash
-        - replayable proposal/certificate telemetry
-        - heuristic-vs-stochastic proposal quality
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [31, 32]
+      preserved:
+        - proposer zero authority
+        - deterministic proposal judge
+        - illegal/stale/conflicting/resource-invalid rejection
+        - deterministic fallback
+        - replayable telemetry
+        - heuristic vs stochastic realization diversity
         - portable external proposer seam
-      canonical_proposer_runtime_excluded: true
+      physical_npu_evidence_deferred_to: U15
+    U14_B:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      source_lineage: NB11B/weights-on-the-fly@e9a143568180e612809dabd1352b023079c5001c
+      restoration_mode: shadow_research_port
+      preserved_targets:
+        - high-level goal to candidate task graph
+        - deterministic ontology/category certification
+        - dependency completeness
+        - DAG acyclicity
+        - certified graph execution
+        - cycle/category/dangling dependency negative controls
+      preservation_gap_closed_if_pass: true
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

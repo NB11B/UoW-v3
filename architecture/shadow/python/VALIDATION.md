@@ -10,31 +10,37 @@ Shadow runs 25 and 26: PASS.
 Shadow runs 27 and 28: PASS.
 
 ## U13
-Commit d44209b — shadow runs 29 and 30: PASS.
+Shadow runs 29 and 30: PASS.
+
+## U14
+Commit 3d208af — shadow runs 31 and 32: PASS.
 
 Preserved:
-- requirement binding;
-- leased-resource lifecycle;
-- consumable budget debit;
-- atomic resource-aware scheduler materialization;
-- over-allocation failure;
-- forged requirement failure;
-- legal policy diversity;
-- deterministic replay.
+- pure non-authoritative proposer seam;
+- deterministic legality judge;
+- dependency/OCC/resource/freshness rejection;
+- deterministic fallback after proposer failure;
+- deterministic telemetry replay;
+- stochastic, heuristic, and portable edge proposer realizations.
 
-## U14 next
+Physical NPU evidence is intentionally not inferred from the portable seam.
 
-Proposer reconstruction deliberately excludes ProposerOrchestrationEngine and run_proposer_orchestration.
+## U14-B next
 
-Flow:
+The archive-only graph-synthesis capability has been ported into the shadow research layer from the frozen pre-consolidation source.
 
-non-authoritative proposer
--> deterministic canonical proposal judge
--> deterministic fallback if required
--> certified resource scheduler materialization
--> minimal shadow authority transition
--> telemetry
+The port adapts the old generated task graph to current:
+- ResourceBoundTask;
+- current WorkCategory/MatrixCell;
+- current orchestration state;
+- current resource state;
+- minimal shadow authority execution.
 
-The proposer is never passed an authority object or mutation interface.
+Acceptance requires:
+- valid reconcile goal certifies and executes;
+- cycle rejected;
+- invalid ontology category rejected;
+- dangling dependency rejected;
+- replay deterministic.
 
-Portable proposer-swappability is reconstructed separately from physical NPU evidence; physical U15/HETERO claims remain later reconstruction obligations.
+If green, the critical U14-B preservation gap is no longer archive-only.

@@ -285,6 +285,24 @@ staged_moves:
         - stale_generation_rejection
         - idempotent_failover
         - semantic_output_conservation
+    twenty_second_move:
+      semantic_split:
+        source: src/uow/composition/mutation.py
+        semantic_retained: src/uow/composition/mutation.py
+        implementation_target: src/uow/realizations/authority/runtime_mutation.py
+      class: K1
+      compatibility_reexport: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: retain mutation proposal, vote, quorum-certificate, signing, verification, and threshold semantics while relocating only the stateful quorum mutation coordinator
+      preserves:
+        - proposal_zero_authority
+        - quorum_threshold_validation
+        - cryptographic_vote_integrity
+        - stale_history_head_rejection
+        - stale_generation_rejection
+        - semantic_projection_rejection
+        - candidate_hash_binding
+        - atomic_history_append
     production_deletions: false
 
 final_gate:

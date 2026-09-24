@@ -111,7 +111,10 @@ mixed_or_unresolved_do_not_move_wholesale:
     semantic_retained: authority scope, certificates, result/spec envelopes, validation
     realization_target: src/uow/realizations/authority/delegation.py
   - path: src/uow/composition/mutation.py
-    reason: proposal/vote/QC semantics and mutation coordinator realization are interleaved
+    reason: proposal/vote/QC semantics and mutation coordinator realization were interleaved
+    disposition: CURRENT_SEMANTIC_SPLIT
+    semantic_retained: proposal, vote, QC, signing, verification, threshold and freshness rules
+    realization_target: src/uow/realizations/authority/runtime_mutation.py
   - path: src/uow/orchestration/state.py
     reason: Python representation is language-specific but carries qualified orchestration-state semantics
   - path: src/uow/resources/state.py

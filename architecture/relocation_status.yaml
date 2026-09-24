@@ -233,6 +233,20 @@ staged_moves:
         - deterministic_fallback
         - independent_resource_legality
         - zero_commit_authority
+    nineteenth_move:
+      source: src/uow/proposer/adaptive.py
+      target: src/uow/realizations/adaptation/portable.py
+      class: K1
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: relocate portable online adaptation mechanics while retaining model identity, certified feedback evidence, proposal envelopes, and deterministic judge semantics
+      preserves:
+        - zero_authority_adaptation
+        - certified_feedback_only
+        - model_identity_lineage
+        - stale_duplicate_corrupt_feedback_rejection
+        - atomic_update_rollback
+        - workload_drift_adaptation
     production_deletions: false
 
 final_gate:

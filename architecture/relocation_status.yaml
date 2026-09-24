@@ -81,10 +81,18 @@ staged_moves:
       source: src/uow/effects/runner.py
       target: src/uow/implementations/effects/runner.py
       compatibility_shim: true
-      status: RERUN_PENDING_AFTER_GENERATION_FIX
+      status: PASS_INITIAL
+      shadow_runs: [114]
       external_invocation_remains_outside_spine: true
       first_run: 112
       first_run_result: GENERATED_IMPORT_NEWLINE_SYNTAX_ERROR
+      second_run: 113
+      second_run_result: IMPORT_DEPTH_BLOCKER
+    sixth_move:
+      source: src/uow/effects/saga.py
+      target: src/uow/implementations/effects/saga.py
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
     production_deletions: false
 
 final_gate:
@@ -94,7 +102,8 @@ final_gate:
 
 blocker_resolution:
   import_depth_blocker:
-    status: FIXED_AWAITING_SUITE
+    status: PASS_INITIAL
+    shadow_runs: [114]
     file: src/uow/implementations/effects/runner.py
     bad_import: from ..engine
     corrected_import: from ...engine

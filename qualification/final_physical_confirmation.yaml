@@ -1,42 +1,31 @@
 schema_version: "0.1"
-status: READY_FOR_EXECUTION
+status: DEFERRED_PENDING_V3_EXACT_SEAL
 
 previous_candidate:
-  ref: archive/uow-reduction-software-candidate
-  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
-  disposition: IMMUTABLE_PRE_POLICY_EVIDENCE
-
-candidate_v2:
   ref: archive/uow-reduction-software-candidate-v2
   commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-  source_policy_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
-  integration_validation_run: 156
-  integration_shadow_tests_passed: 277
-  integration_policy_tests_passed: 44
-  exact_seal_run: 158
-  exact_seal_shadow_tests_passed: 277
-  exact_seal_policy_tests_passed: 44
-  exact_seal_status: PASS
-  physical_execution_blocked_until_refreeze: false
+  disposition: SUPERSEDED_FOR_PACKAGING_METADATA_CONSISTENCY_ONLY
+
+candidate_v3:
+  planned_ref: archive/uow-reduction-software-candidate-v3
+  candidate_commit: UNBOUND_PRESEAL
+  exact_seal_status: PENDING
+  runtime_api_changed_from_v2: false
+  physical_execution_blocked_until_postfreeze_binding: true
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: QUALIFIED_FOR_OPERATOR_USE
+  status: UNBOUND_PRESEAL
   candidate_identity_separate_from_harness_identity: true
-  candidate_ref: archive/uow-reduction-software-candidate-v2
-  candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-  harness_repin_commit: 173e8c376fdd51df605a839679af1a52af2d057f
-  qualification_head: 9e6272edccd75b7b72d435bea21729f4bf592f59
-  shadow_run: 161
-  shadow_tests_passed: 277
-  policy_tests_passed: 44
-  one_command: python qualification/final_physical_campaign.py --execute
-  historical_v1_harness:
-    harness_commit: 81612415d2211942831c608a1a8036fc1ffcf5d2
-    shadow_run: 151
-    shadow_tests_passed: 274
-    candidate_ref: archive/uow-reduction-software-candidate
-    disposition: SUPERSEDED_PRE_POLICY
+  candidate_ref: UNBOUND_PRESEAL
+  candidate_commit: UNBOUND_PRESEAL
+  execution_blocked: true
+  historical_v2_binding:
+    candidate_ref: archive/uow-reduction-software-candidate-v2
+    candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+    qualification_run: 161
+    shadow_tests_passed: 277
+    policy_tests_passed: 44
 
 execution_policy:
   mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN

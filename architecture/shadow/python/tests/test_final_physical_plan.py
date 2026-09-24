@@ -1,21 +1,18 @@
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
-FINAL_REF = "archive/uow-reduction-software-candidate-v2"
-FINAL_COMMIT = "728988f93a1ec0f634f450dc4d187fbd5e0e95c9"
+PLANNED_REF = "archive/uow-reduction-software-candidate-v3"
 
 
-def test_final_physical_campaign_is_ready_only_for_policy_integrated_v2():
+def test_final_physical_campaign_is_blocked_inside_v3_preseal_tree():
     text = (REPO / "qualification" / "final_physical_confirmation.yaml").read_text(encoding="utf-8")
-    assert "status: READY_FOR_EXECUTION" in text
-    assert f"ref: {FINAL_REF}" in text
-    assert f"commit: {FINAL_COMMIT}" in text
-    assert "exact_seal_run: 158" in text
-    assert "exact_seal_shadow_tests_passed: 277" in text
-    assert "exact_seal_policy_tests_passed: 44" in text
-    assert "physical_execution_blocked_until_refreeze: false" in text
+    assert "status: DEFERRED_PENDING_V3_EXACT_SEAL" in text
+    assert f"planned_ref: {PLANNED_REF}" in text
+    assert "candidate_commit: UNBOUND_PRESEAL" in text
+    assert "physical_execution_blocked_until_postfreeze_binding: true" in text
+    assert "status: UNBOUND_PRESEAL" in text
+    assert "execution_blocked: true" in text
     assert "mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN" in text
-    assert "final_candidate_must_be_frozen_first: true" in text
 
 
 def test_final_campaign_covers_every_current_physical_claim():
@@ -40,4 +37,5 @@ def test_final_campaign_preserves_a3_and_post_a3_p1_p5_without_inventing_p6():
     assert "qualification/a3-adaptive-compute-efficiency" in text
     assert "architecture/policy-aware-uow-orchestrator" in text
     assert "aa886329298f87e8b006501d47dd89eb8f0d4a3b" in text
+    assert "final_candidate_exact_shadow_tests: 277" in text
     assert "p6_required: false" in text

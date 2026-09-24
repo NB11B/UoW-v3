@@ -26,9 +26,9 @@ import time
 from typing import Any, Iterable, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CANDIDATE_REF = "archive/uow-reduction-software-candidate-v2"
-CANDIDATE_COMMIT = "728988f93a1ec0f634f450dc4d187fbd5e0e95c9"
-CANDIDATE_RELEASE_STATUS = "FINAL"
+CANDIDATE_REF = "UNBOUND_PRESEAL"
+CANDIDATE_COMMIT = "UNBOUND_PRESEAL"
+CANDIDATE_RELEASE_STATUS = "UNBOUND_PRESEAL"
 A3_REF = "qualification/a3-adaptive-compute-efficiency"
 A3_COMMIT = "05c8094ac5c8572f7da6d00e781ce673754c5c59"
 P1_P5_REF = "architecture/policy-aware-uow-orchestrator"
@@ -723,8 +723,8 @@ def main() -> int:
 
     if CANDIDATE_RELEASE_STATUS != "FINAL":
         raise RuntimeError(
-            "Physical execution is blocked: the pinned candidate is the superseded pre-policy "
-            "candidate. Freeze and repin archive/uow-reduction-software-candidate-v2 first."
+            "Physical execution is blocked: this frozen tree intentionally contains an unbound "
+            "pre-seal harness. Bind the exact archived candidate in post-freeze operator metadata first."
         )
 
     if args.esp_port != "COM10" or args.uno_port != "COM5":

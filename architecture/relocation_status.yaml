@@ -275,7 +275,8 @@ staged_moves:
         implementation_target: src/uow/realizations/authority/delegation.py
       class: K1
       compatibility_reexport: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [142]
       rationale: retain authority attenuation, delegation certificates, result/spec envelopes, and validation semantics while relocating only the distributed delegation-node realization
       preserves:
         - authority_attenuation

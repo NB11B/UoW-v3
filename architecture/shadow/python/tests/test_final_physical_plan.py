@@ -1,18 +1,19 @@
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
-PLANNED_REF = "archive/uow-reduction-software-candidate-v3"
+FINAL_REF = "archive/uow-reduction-software-candidate-v3"
+FINAL_COMMIT = "3e28e4bba1023810aada953e25d3e3c46a58f113"
 
 
-def test_final_physical_campaign_is_blocked_inside_v3_preseal_tree():
+def test_v3_is_bound_but_physical_execution_waits_for_harness_shadow():
     text = (REPO / "qualification" / "final_physical_confirmation.yaml").read_text(encoding="utf-8")
-    assert "status: DEFERRED_PENDING_V3_EXACT_SEAL" in text
-    assert f"planned_ref: {PLANNED_REF}" in text
-    assert "candidate_commit: UNBOUND_PRESEAL" in text
-    assert "physical_execution_blocked_until_postfreeze_binding: true" in text
-    assert "status: UNBOUND_PRESEAL" in text
-    assert "execution_blocked: true" in text
-    assert "mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN" in text
+    assert "status: DEFERRED_PENDING_V3_HARNESS_SHADOW" in text
+    assert f"ref: {FINAL_REF}" in text
+    assert f"commit: {FINAL_COMMIT}" in text
+    assert "exact_seal_run: 167" in text
+    assert "exact_seal_shadow_tests_passed: 279" in text
+    assert "exact_seal_policy_tests_passed: 44" in text
+    assert "status: REPINNED_TO_V3_AWAITING_HARNESS_SHADOW" in text
 
 
 def test_final_campaign_covers_every_current_physical_claim():

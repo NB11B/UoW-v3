@@ -4,7 +4,7 @@ parent_reference:
   branch: research/uow-closure-architecture
   commit: 29021acf15d4a964abb01d92f60cf47f74bcb87d
   status: FROZEN_REDUCTION_REFERENCE
-mode: v3-packaging-candidate-preseal
+mode: software-candidate-frozen
 
 completed_reference_phases:
   R0_R7_additive_reference: COMPLETE
@@ -19,9 +19,9 @@ constraints:
   final_candidate_must_be_frozen_before_physical_confirmation: true
 
 physical_confirmation:
-  status: DEFERRED_PENDING_V3_PACKAGING_EXACT_SEAL
-  candidate_ref: UNBOUND_PRESEAL
-  candidate_commit: UNBOUND_PRESEAL
+  status: DEFERRED_PENDING_V3_HARNESS_SHADOW
+  candidate_ref: archive/uow-reduction-software-candidate-v3
+  candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
   manifest: qualification/final_physical_confirmation.yaml
   historical_evidence_rewritten: false
@@ -326,17 +326,17 @@ blocker_resolution:
     finding: no uow.implementations.engine module is architecturally required
 
 software_candidate:
-  status: FROZEN_POLICY_INTEGRATED_EXACT_SEAL_PASS
+  status: FROZEN_V3_EXACT_SEAL_PASS
   manifest: architecture/software_candidate_freeze.yaml
-  planned_freeze_ref: archive/uow-reduction-software-candidate-v2
-  freeze_ref: archive/uow-reduction-software-candidate-v2
-  freeze_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  planned_freeze_ref: archive/uow-reduction-software-candidate-v3
+  freeze_ref: archive/uow-reduction-software-candidate-v3
+  freeze_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
   integration_validation_run: 156
   integration_validation_shadow_test_count: 277
   integration_validation_policy_test_count: 44
-  exact_seal_shadow_run: 158
-  exact_seal_shadow_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-  exact_seal_shadow_test_count: 277
+  exact_seal_shadow_run: 167
+  exact_seal_shadow_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  exact_seal_shadow_test_count: 279
   exact_seal_policy_test_count: 44
   exact_seal_conclusion: PASS
   unresolved_relocation_candidates: 0
@@ -400,10 +400,14 @@ post_freeze_operator_harness_v2:
   ready_for_physical_campaign: true
 
 v3_packaging_repair:
-  status: EXACT_SEAL_PENDING
+  status: EXACT_SEAL_PASS
   runtime_api_changed_from_v2: false
   reason: archived v2 tree retained stale earlier-candidate physical-target metadata in candidate-local qualification files
   planned_ref: archive/uow-reduction-software-candidate-v3
   expected_shadow_tests: 279
   expected_policy_tests: 44
-  physical_campaign_blocked_until_postfreeze_binding: true
+  physical_campaign_blocked_until_postfreeze_binding: false
+  exact_seal_run: 167
+  exact_seal_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  exact_seal_shadow_tests: 279
+  exact_seal_policy_tests: 44

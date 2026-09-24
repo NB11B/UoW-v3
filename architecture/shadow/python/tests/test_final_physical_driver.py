@@ -4,15 +4,16 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
 DRIVER = REPO / "qualification" / "final_physical_campaign.py"
+FINAL_REF = "archive/uow-reduction-software-candidate-v3"
+FINAL_COMMIT = "3e28e4bba1023810aada953e25d3e3c46a58f113"
 
 
-def test_v3_candidate_tree_contains_unbound_preseal_harness():
+def test_postfreeze_harness_is_pinned_to_v3():
     source = DRIVER.read_text(encoding="utf-8")
     compile(source, str(DRIVER), "exec")
-    assert 'CANDIDATE_REF = "UNBOUND_PRESEAL"' in source
-    assert 'CANDIDATE_COMMIT = "UNBOUND_PRESEAL"' in source
-    assert 'CANDIDATE_RELEASE_STATUS = "UNBOUND_PRESEAL"' in source
-    assert "Physical execution is blocked" in source
+    assert f'CANDIDATE_REF = "{FINAL_REF}"' in source
+    assert f'CANDIDATE_COMMIT = "{FINAL_COMMIT}"' in source
+    assert 'CANDIDATE_RELEASE_STATUS = "FINAL"' in source
 
 
 def test_final_physical_driver_covers_f0_f8_and_fail_closed_substrates():

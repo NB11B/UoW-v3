@@ -1,5 +1,5 @@
 schema_version: "0.1"
-status: READY_FOR_EXECUTION
+status: DEFERRED_PENDING_V3_HARNESS_SHADOW
 
 previous_candidate:
   ref: archive/uow-reduction-software-candidate-v2

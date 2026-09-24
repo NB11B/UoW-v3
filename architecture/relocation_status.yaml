@@ -133,7 +133,9 @@ staged_moves:
       source: src/uow/composition/endurance.py
       target: src/uow/implementations/composition/endurance.py
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: RERUN_PENDING_AFTER_COMPAT_EXPORT_FIX
+      first_run: 120
+      first_run_result: HISTORICAL_MODULE_IMPLICIT_REEXPORT_MISSING
       preserved_experiment: A2.8
     production_deletions: false
 

@@ -4,7 +4,7 @@ parent_reference:
   branch: research/uow-closure-architecture
   commit: 29021acf15d4a964abb01d92f60cf47f74bcb87d
   status: FROZEN_REDUCTION_REFERENCE
-mode: software-candidate-frozen
+mode: v3-packaging-candidate-preseal
 
 completed_reference_phases:
   R0_R7_additive_reference: COMPLETE
@@ -19,9 +19,9 @@ constraints:
   final_candidate_must_be_frozen_before_physical_confirmation: true
 
 physical_confirmation:
-  status: READY_FOR_CONSOLIDATED_FINAL_CAMPAIGN
-  candidate_ref: archive/uow-reduction-software-candidate-v2
-  candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  status: DEFERRED_PENDING_V3_PACKAGING_EXACT_SEAL
+  candidate_ref: UNBOUND_PRESEAL
+  candidate_commit: UNBOUND_PRESEAL
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
   manifest: qualification/final_physical_confirmation.yaml
   historical_evidence_rewritten: false
@@ -398,3 +398,12 @@ post_freeze_operator_harness_v2:
   failure_evidence: stale test retained the superseded v1 candidate-ref assertion after the harness was correctly repinned to v2
   semantic_candidate_changed: false
   ready_for_physical_campaign: true
+
+v3_packaging_repair:
+  status: EXACT_SEAL_PENDING
+  runtime_api_changed_from_v2: false
+  reason: archived v2 tree retained stale earlier-candidate physical-target metadata in candidate-local qualification files
+  planned_ref: archive/uow-reduction-software-candidate-v3
+  expected_shadow_tests: 277
+  expected_policy_tests: 44
+  physical_campaign_blocked_until_postfreeze_binding: true

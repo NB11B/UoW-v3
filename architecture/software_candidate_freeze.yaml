@@ -1,11 +1,11 @@
 schema_version: "1.0"
-status: FROZEN_POLICY_INTEGRATED_EXACT_SEAL_PASS
+status: V3_PACKAGING_EXACT_SEAL_CANDIDATE
 candidate_branch: architecture/uow-staged-relocation
 candidate_parent_code_head: 8b6893f3b4db4da161a27f89fd905feb7a794a87
-freeze_ref_planned: archive/uow-reduction-software-candidate-v2
-freeze_ref: archive/uow-reduction-software-candidate-v2
-freeze_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
-freeze_commit_definition: the commit containing this manifest, after its full closure-shadow run passes
+freeze_ref_planned: archive/uow-reduction-software-candidate-v3
+freeze_ref: UNBOUND_PRESEAL
+freeze_commit: UNBOUND_PRESEAL
+freeze_commit_definition: exact commit accepted externally after combined CI; self-hash is intentionally not embedded
 package:
   name: uow
   version: 0.1.0.dev0
@@ -89,3 +89,17 @@ policy_integrated_exact_seal:
   shadow_tests_passed: 277
   policy_tests_passed: 44
   conclusion: PASS
+
+previous_policy_integrated_v2_candidate:
+  ref: archive/uow-reduction-software-candidate-v2
+  commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  exact_seal_run: 158
+  shadow_tests_passed: 277
+  policy_tests_passed: 44
+  disposition: SUPERSEDED_FOR_PACKAGING_METADATA_CONSISTENCY_ONLY
+v3_packaging_candidate:
+  runtime_api_changed_from_v2: false
+  planned_ref: archive/uow-reduction-software-candidate-v3
+  expected_shadow_tests: 277
+  expected_policy_tests: 44
+  exact_seal_status: PENDING

@@ -1,35 +1,28 @@
 # UoW Software Candidate Freeze
 
-Status: **policy-integrated v2 software candidate frozen and exact-seal qualified**.
+Status: **policy-integrated v3 packaging candidate awaiting exact-seal qualification**.
 
-The final software candidate is:
+The runtime/API content is unchanged from the policy-integrated v2 candidate. This v3 cut exists only to make the frozen repository package self-consistent for external review: candidate-local physical qualification files are neutral pre-seal templates rather than stale references to an earlier candidate.
 
-`archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9`
+Planned archive ref:
 
-Exact-seal run **158** passed **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
+`archive/uow-reduction-software-candidate-v3`
 
-The earlier `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` remains immutable as **pre-policy historical evidence only**. It is not the final release or physical-qualification target.
+The exact v3 commit is accepted only if it passes both **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
 
-## Architectural closeout
+## Runtime/API identity
 
-The recovered architecture keeps semantic authority, conformance, transition, effect, evidence, transaction, resource, orchestration, graph, binding, history, delegation, mutation, and policy rules in canonical semantic packages. Stateful or substrate-specific machinery remains behind implementation/realization boundaries with historical compatibility imports preserved.
+The canonical package remains `uow` with the qualified post-A3 policy layer under `uow.policy`. V3 changes no runtime, authority, conformance, policy, persistence, recovery, or public API behavior.
 
-The post-A3 Policy-Aware UoW Orchestrator P1-P5 implementation is now part of the canonical package under `uow.policy`. Its frozen reference remains `policy-orchestrator-p5-qualified@aa886329298f87e8b006501d47dd89eb8f0d4a3b`.
+## Historical candidates
 
-The policy namespace is intentionally not flattened into the top-level facade because `uow.RealizationGraph` and `uow.policy.RealizationGraph` represent different qualified semantics.
+- v1: `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b` — immutable pre-policy evidence.
+- v2: `archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9` — policy-integrated software candidate; superseded only for release-package metadata consistency.
 
-## Freeze surfaces
+## Candidate-local physical metadata
 
-The top-level `uow` package is a **200-symbol compatibility facade** for v2, including the `policy` namespace export. Exact symbols are pinned in `architecture/public_api_manifest.yaml`.
-
-Wire, authority, mutation-QC, graph-substitution, quorum-commit, and cross-language conformance profiles are pinned by Git blob identity in `architecture/canonical_profiles_manifest.yaml`.
-
-Physical source inputs are pinned in `qualification/final_physical_candidate_inputs.yaml`. Final flash/executable binaries are not stored as release binaries, so F0 must build/export them from the frozen source inputs and record cryptographic binary hashes before any physical claim is promoted.
-
-## Preserved failure evidence
-
-The reduction and finalization campaign intentionally retains failure evidence that exposed architectural or release-gate assumptions, including runs 139, 144, 149, 155, 159, and 160. Each was repaired without silently erasing the failed condition.
+The frozen v3 tree deliberately uses `UNBOUND_PRESEAL` markers for the final physical target. A commit cannot self-embed its own final SHA. After exact-seal CI passes, post-freeze operator metadata binds the immutable v3 SHA and the harness is qualified separately.
 
 ## Next gate
 
-No further semantic software changes are planned. The next operation is local reproduction followed by the single consolidated physical confirmation campaign in `qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md`, beginning with F0 candidate/binary attestation against the **v2** candidate.
+Exact combined software qualification, creation of the v3 archive ref, then post-freeze physical-harness binding and local F0-F8 qualification.

@@ -27,12 +27,15 @@ physical_confirmation:
 
 staged_moves:
   S1_authority_provider_dependency_inversion:
-    status: IMPLEMENTED_AWAITING_SUITE
+    status: PASS_INITIAL
+    shadow_runs: [101]
     current_path: src/uow/proposer/quorum_sequencer.py
     target_semantics: qualification-independent authority-provider protocol
     compatibility_goal: existing DistributedAuthorityCluster remains structurally compatible
   S2_common_application_spine:
-    status: NOT_STARTED
+    status: IMPLEMENTED_AWAITING_SUITE
+    first_shim: src/uow/orchestration/runtime.py
+    target_facade: implementations/python/uow_architecture_facade/application.py
   S3_typed_conformance_registry:
     status: NOT_STARTED
   S4_repository_path_relocation:

@@ -1,13 +1,16 @@
-"""R7 facade for the validated common authority-application seam."""
+"""R7/relocation facade for the production common application seam."""
 
-from uow_shadow.spine import (
+from uow.application import (
+    ApplicationResult,
     ApplicationSpine,
     CursorPolicy,
     DEFAULT_APPLICATION_SPINE,
-    SpineResult,
 )
 
+SpineResult = ApplicationResult
+
 __all__ = [
+    "ApplicationResult",
     "ApplicationSpine",
     "CursorPolicy",
     "DEFAULT_APPLICATION_SPINE",

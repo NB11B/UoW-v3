@@ -3,10 +3,10 @@ from __future__ import annotations
 
 from typing import Mapping, Optional, Tuple
 
+from ..application import DEFAULT_APPLICATION_SPINE, CursorPolicy
 from ..contracts import UoW
-from ..engine import certify, propose
 from ..state import WorldState
-from ..transactions import DeterministicSequencer, create_transaction_descriptor
+from ..transactions import DeterministicSequencer
 from .materialization import UoWMaterializer, certify_materialization
 from .scheduler import COMPLETION_PREFIX, CompletionMaterializer, SCHEDULER_ID, SchedulerMaterializer
 
@@ -21,32 +21,22 @@ def execute_materialized(
     if not certify_materialization(materializer, before, materialized):
         raise ValueError("Derived UoW materialization failed independent certification.")
 
-    proposal = propose(materialized.uow, before)
-    certificate = certify(materialized.uow, before, proposal)
-    if not certificate.is_valid:
-        raise ValueError(
-            f"Materialized UoW failed core certification: {certificate.rejection_reason}"
-        )
-    transaction = create_transaction_descriptor(materialized.uow, before)
-    committed, _evidence = sequencer.commit(
+    result = DEFAULT_APPLICATION_SPINE.execute(
         materialized.uow,
-        proposal,
-        transaction,
-        certificate,
+        sequencer,
+        cursor_policy=CursorPolicy.OWNED,
     )
-    return committed
+    return result.state
 
 
 def execute_domain_task(uow: UoW, sequencer: DeterministicSequencer) -> WorldState:
-    """Execute one ordinary domain UoW through core certification and OCC commit."""
-    before = sequencer.current_state
-    proposal = propose(uow, before)
-    certificate = certify(uow, before, proposal)
-    if not certificate.is_valid:
-        raise ValueError(f"Domain UoW failed certification: {certificate.rejection_reason}")
-    transaction = create_transaction_descriptor(uow, before)
-    committed, _evidence = sequencer.commit(uow, proposal, transaction, certificate)
-    return committed
+    """Execute one ordinary domain UoW through the common application spine."""
+    result = DEFAULT_APPLICATION_SPINE.execute(
+        uow,
+        sequencer,
+        cursor_policy=CursorPolicy.OWNED,
+    )
+    return result.state
 
 
 def run_orchestration(

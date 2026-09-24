@@ -1,4 +1,4 @@
-schema_version: "2.3"
+schema_version: "2.4"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -32,29 +32,32 @@ r4:
     U12:
       status: RECONSTRUCTED_INITIAL
       shadow_runs: [27, 28]
-      preserved:
-        - actual ThreadPoolExecutor proposal preparation
-        - disjoint concurrent commits under OCC
-        - read-write hazard rejection
-        - write-write hazard rejection
-        - hidden-coupling hazard rejection
-        - atomic abort/no dirty mutation
-        - host timing entropy invariance
-        - deterministic replay
-      architectural_finding:
-        - transaction causal validity may be version/footprint-relative rather than whole-state-hash equality
     U13:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      preserved_targets:
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [29, 30]
+      preserved:
         - resource requirement cryptographic binding
         - leased capacities
         - consumable budgets
-        - atomic dispatch/resource-state materialization
-        - lease release on completion
+        - resource-aware scheduler materialization
+        - completion lease release
         - over-allocation fail-closed
         - policy diversity
         - replay determinism
-      canonical_resource_runtime_excluded: true
+    U14:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      preserved_targets:
+        - proposal has zero authority
+        - stochastic proposer execution
+        - illegal dependency rejection
+        - intra-batch OCC conflict rejection
+        - resource capacity rejection
+        - stale proposal rejection
+        - deterministic fallback on proposer crash
+        - replayable proposal/certificate telemetry
+        - heuristic-vs-stochastic proposal quality
+        - portable external proposer seam
+      canonical_proposer_runtime_excluded: true
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

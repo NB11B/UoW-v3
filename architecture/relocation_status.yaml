@@ -114,7 +114,20 @@ staged_moves:
       source: src/uow/composition/wire.py
       target: src/uow/realizations/network/wire.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [118]
+    tenth_move:
+      source: src/uow/composition/host_node.py
+      target: src/uow/implementations/distributed/host_node.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
+      preserves:
+        - durable_wal_fsync
+        - crash_restart_replay
+        - idempotent_deduplication
+        - stale_history_catchup
+        - authenticated_wire_verification
+        - qc_authorized_mutation_application
     production_deletions: false
 
 final_gate:

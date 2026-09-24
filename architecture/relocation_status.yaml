@@ -27,7 +27,7 @@ physical_confirmation:
 
 staged_moves:
   S1_authority_provider_dependency_inversion:
-    status: NEXT
+    status: IMPLEMENTED_AWAITING_SUITE
     current_path: src/uow/proposer/quorum_sequencer.py
     target_semantics: qualification-independent authority-provider protocol
     compatibility_goal: existing DistributedAuthorityCluster remains structurally compatible

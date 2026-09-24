@@ -4,11 +4,18 @@ on:
   push:
     branches:
       - "research/uow-closure-architecture"
+      - "architecture/uow-staged-relocation"
   pull_request:
     branches:
       - main
     paths:
       - "architecture/**"
+      - "src/uow/**"
+      - "specification/**"
+      - "implementations/**"
+      - "realizations/**"
+      - "experiments/**"
+      - "qualification/**"
       - ".github/workflows/uow-closure-shadow.yml"
 
 jobs:

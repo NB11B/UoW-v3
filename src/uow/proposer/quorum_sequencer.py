@@ -6,22 +6,19 @@ authority nodes.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, List, Optional, Tuple
 
+from ..authority import (
+    AuthorityReplica,
+    QuorumAuthorityProvider,
+    QuorumRoundResult,
+    authority_mode_is_active,
+)
 from ..contracts import UoW
 from ..engine import CertificateResult, EvidenceLedger, EvidenceRecord, Proposal
 from ..state import WorldState
 from ..transactions.descriptor import TransactionDescriptor
 from ..transactions.sequencer import CommitSequencer
-
-# Import DistributedAuthorityCluster and related types from qualification harness
-from qualification.distributed_authority.authority import (
-    AuthorityNode,
-    DistributedAuthorityCluster,
-    NodeMode,
-    QuorumCertificate,
-    RoundResult,
-)
 
 
 class QuorumCommitError(RuntimeError):
@@ -29,29 +26,29 @@ class QuorumCommitError(RuntimeError):
 
 
 class QuorumCommitSequencer(CommitSequencer):
-    """Commit sequencer backed by an independent replicated authority cluster.
+    """Commit sequencer backed by a semantic quorum authority provider.
     
     Invariants:
     1. A proposal has ZERO authority to mutate state on any node.
     2. Commit requires at least threshold (e.g. 2-of-3) independent authority votes.
-    3. Replicas independently re-certify and apply Quorum Certificates (QCs).
+    3. Provider replicas independently re-certify and apply authority certificates.
     4. Minority partitions (< threshold) cannot commit.
     5. Conflicting proposals from the same pre-state are locked and rejected.
     """
 
     def __init__(
         self,
-        cluster: DistributedAuthorityCluster,
+        cluster: QuorumAuthorityProvider,
         *,
         primary_node_id: Optional[str] = None,
     ) -> None:
         self.cluster = cluster
         self._primary_node_id = primary_node_id or sorted(cluster.nodes.keys())[0]
-        self._qc_history: List[QuorumCertificate] = []
-        self._last_round_result: Optional[RoundResult] = None
+        self._qc_history: List[Any] = []
+        self._last_round_result: Optional[QuorumRoundResult] = None
 
     @property
-    def primary_node(self) -> AuthorityNode:
+    def primary_node(self) -> AuthorityReplica:
         reachable = self.cluster.reachable_nodes()
         if self._primary_node_id in reachable:
             return self.cluster.nodes[self._primary_node_id]
@@ -68,11 +65,11 @@ class QuorumCommitSequencer(CommitSequencer):
         return self.primary_node.ledger
 
     @property
-    def qc_history(self) -> Tuple[QuorumCertificate, ...]:
+    def qc_history(self) -> Tuple[Any, ...]:
         return tuple(self._qc_history)
 
     @property
-    def last_round_result(self) -> Optional[RoundResult]:
+    def last_round_result(self) -> Optional[QuorumRoundResult]:
         return self._last_round_result
 
     def is_converged(self) -> bool:
@@ -81,7 +78,7 @@ class QuorumCommitSequencer(CommitSequencer):
         active_nodes = [
             self.cluster.nodes[nid]
             for nid in reachable
-            if self.cluster.nodes[nid].mode == NodeMode.ACTIVE
+            if authority_mode_is_active(self.cluster.nodes[nid].mode)
         ]
         if not active_nodes:
             return False

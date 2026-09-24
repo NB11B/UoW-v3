@@ -36,6 +36,8 @@ staged_moves:
     status: RERUN_PENDING_AFTER_PARITY_TEST_REFINEMENT
     first_run: 102
     first_run_result: PRODUCTION_OCC_METADATA_NOT_PRESENT_IN_REDUCED_SHADOW_ORACLE
+    second_run: 103
+    second_run_result: TEST_HELPER_API_MISMATCH_ONLY
     first_shim: src/uow/orchestration/runtime.py
     target_facade: implementations/python/uow_architecture_facade/application.py
   S3_typed_conformance_registry:

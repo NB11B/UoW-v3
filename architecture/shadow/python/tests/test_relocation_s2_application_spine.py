@@ -137,9 +137,7 @@ def test_s2_orchestration_runtime_is_exactly_compatible_with_pre_move_algorithm(
 
     assert moved_state.to_dict() == reference_state.to_dict()
     assert moved_state.state_hash == reference_state.state_hash
-    assert tuple(r.to_dict() for r in moved_seq.ledger.records) == tuple(
-        r.to_dict() for r in reference_seq.ledger.records
-    )
+    assert moved_seq.ledger.records == reference_seq.ledger.records
 
 
 def test_s2_orchestration_preserves_reconstructed_u11_semantics():
@@ -155,7 +153,7 @@ def test_s2_orchestration_preserves_reconstructed_u11_semantics():
 
     assert _without_occ_versions(moved_state) == _without_occ_versions(reconstructed.final_state)
     assert moved_state.sequence == reconstructed.final_state.sequence == 13
-    assert moved_seq.ledger.verify_chain()
+    assert moved_seq.ledger.verify_integrity()
 
 
 def test_s2_target_layout_facade_points_to_production_spine():

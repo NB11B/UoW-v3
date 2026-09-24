@@ -1,0 +1,66 @@
+schema_version: "0.1"
+status: R7_6_CUTOVER_ELIGIBILITY_AUDIT
+
+control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
+research_branch: research/uow-closure-architecture
+
+preconditions:
+  R0_frozen_control: PASS
+  R1_architecture_evidence_mapping: PASS
+  R2_language_neutral_specification: PASS
+  R3_shadow_minimal_implementation: PASS_INITIAL
+  R4_portable_experiment_reconstruction: PASS_INITIAL
+  R5_cross_language_conformance: PASS_INITIAL
+  R6_reduction_eligibility: PASS_INITIAL
+  R7_parallel_layout: PASS_INITIAL
+  R7_semantic_facade: PASS_INITIAL
+  R7_reference_oracles: PASS_INITIAL
+  R7_manifest_index: PASS_INITIAL
+  R7_public_api_baseline: PASS_INITIAL
+  R7_physical_requalification_boundary: PASS_INITIAL
+
+qualified_reference_oracles:
+  - A2_PORTABLE_CAPSTONE
+  - A3_ADAPTIVE_COMPUTE_EFFICIENCY
+  - POLICY_ORCHESTRATOR_P1_P5
+
+conceptual_constraints:
+  - A4_ONTOLOGY_ADAPTATION
+
+reduction_result:
+  deletion_candidates: 0
+  validated_consolidations:
+    - common_authority_application_spine
+    - qualification_independent_authority_provider
+    - typed_conformance_registry
+  implementation_diversity_retained: true
+  experiment_controls_retained: true
+  physical_evidence_retained: true
+
+cutover_constraints:
+  public_api_must_remain_compatible: true
+  all_qualified_experiments_must_reconstruct: true
+  all_13_policy_invariants_must_remain_mapped: true
+  a3_physical_evidence_must_remain_scoped: true
+  physical_claims_must_be_requalified_when_triggered: true
+  a4_must_remain_unqualified_until_explicit_campaign: true
+  no_runtime_dependency_on_qualification_implementation: true
+  no_silent_evidence_upgrade: true
+
+decision:
+  parallel_target_layout_qualified: true
+  staged_cutover_planning_eligible: true
+  production_cutover_authorized: false
+  reason: >
+    The target architecture and additive layout satisfy the reconstructed portable
+    experiment suite, cross-language conformance, frozen A3/P1-P5 oracle mapping,
+    public API baseline, and physical evidence boundary. Actual production moves
+    remain a separate controlled action requiring per-move parity and requalification
+    impact review.
+
+next_stage_if_authorized:
+  - move one K3 implementation path at a time behind compatibility shims
+  - rerun full reconstruction and oracle gates after each move
+  - rerun affected physical qualification before claiming the moved head physical
+  - retain old path until parity is established
+  - never batch-delete legacy implementations during first cutover

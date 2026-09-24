@@ -1,17 +1,40 @@
-schema_version: "0.1"
-status: BLUEPRINT_ONLY
+schema_version: "0.2"
+status: ADDITIVE_LAYOUT_QUALIFIED
 production_moves: false
 production_deletions: false
 
 top_level:
   specification:
-    areas: [ontology, contracts, state, identity, requirements, conformance, authority, transition, effects, evidence, wire]
+    areas:
+      - ontology
+      - contracts
+      - state
+      - identity
+      - requirements
+      - conformance
+      - policy
+      - authority
+      - transition
+      - effects
+      - evidence
+      - wire
   implementations:
     languages: [python, cpp, embedded]
   realizations:
     families: [commit, scheduling, authority, persistence, networking, effects, concurrency, acceleration, adaptation]
   experiments:
-    families: [universality, self_hosting, concurrency, resources, proposer, goal_synthesis, external_effects, adaptation, distributed_authority, adaptive_composition]
+    families:
+      - universality
+      - self_hosting
+      - concurrency
+      - resources
+      - proposer
+      - goal_synthesis
+      - external_effects
+      - adaptation
+      - distributed_authority
+      - adaptive_composition
+      - reference_oracles
   qualification:
     classes: [portable, physical, negative_controls, evidence]
   conformance:
@@ -20,19 +43,36 @@ top_level:
 validated_seams:
   application:
     prototype: architecture/shadow/python/uow_shadow/spine.py
-    status: PASS_R6
+    facade: implementations/python/uow_architecture_facade/application.py
+    status: PASS_R7
   conformance:
     prototype: architecture/shadow/python/uow_shadow/conformance_registry.py
-    status: PASS_R6
+    facade: implementations/python/uow_architecture_facade/conformance.py
+    status: PASS_R7
   authority:
     prototype: architecture/shadow/python/uow_shadow/authority_protocol.py
-    status: PASS_R6
+    facade: implementations/python/uow_architecture_facade/authority.py
+    status: PASS_R7
+
+reference_oracles:
+  qualified:
+    - A2_PORTABLE_CAPSTONE
+    - A3_ADAPTIVE_COMPUTE_EFFICIENCY
+    - POLICY_ORCHESTRATOR_P1_P5
+  conceptual_unqualified:
+    - A4_ONTOLOGY_ADAPTATION
 
 migration:
-  R7_0_current_target_manifest: NEXT
-  R7_1_parallel_skeleton: NOT_STARTED
-  R7_2_semantic_facade: NOT_STARTED
-  R7_3_dual_layout_reconstruction: NOT_STARTED
-  R7_4_api_compatibility: NOT_STARTED
-  R7_5_physical_requalification_boundary: NOT_STARTED
-  R7_6_cutover: NOT_STARTED
+  R7_0_current_target_manifest: PASS_INITIAL
+  R7_1_parallel_skeleton: PASS_INITIAL
+  R7_2_semantic_facade: PASS_INITIAL
+  R7_3_oracle_gate_mapping: PASS_INITIAL
+  R7_4_experiment_manifest_surface: PASS_INITIAL
+  R7_5_api_and_physical_boundary: PASS_INITIAL
+  R7_6_cutover_eligibility: IMPLEMENTED_AWAITING_SUITE
+
+cutover:
+  staged_cutover_performed: false
+  production_import_redirected: false
+  production_file_moved: false
+  production_file_deleted: false

@@ -1,4 +1,4 @@
-schema_version: "2.5"
+schema_version: "2.6"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -27,30 +27,32 @@ r4:
     U11: {status: RECONSTRUCTED_INITIAL, shadow_runs: [25, 26]}
     U12: {status: RECONSTRUCTED_INITIAL, shadow_runs: [27, 28]}
     U13: {status: RECONSTRUCTED_INITIAL, shadow_runs: [29, 30]}
-    U14:
-      status: RECONSTRUCTED_INITIAL
-      shadow_runs: [31, 32]
-      preserved:
-        - proposer zero authority
-        - deterministic proposal judge
-        - illegal/stale/conflicting/resource-invalid rejection
-        - deterministic fallback
-        - replayable telemetry
-        - heuristic vs stochastic realization diversity
-        - portable external proposer seam
-      physical_npu_evidence_deferred_to: U15
+    U14: {status: RECONSTRUCTED_INITIAL, shadow_runs: [31, 32]}
     U14_B:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      source_lineage: NB11B/weights-on-the-fly@e9a143568180e612809dabd1352b023079c5001c
-      restoration_mode: shadow_research_port
-      preserved_targets:
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [33, 34]
+      preservation_gap_closed: true
+      restored_from_archive: true
+      preserved:
         - high-level goal to candidate task graph
-        - deterministic ontology/category certification
+        - ontology/category validation
         - dependency completeness
         - DAG acyclicity
         - certified graph execution
-        - cycle/category/dangling dependency negative controls
-      preservation_gap_closed_if_pass: true
+        - deterministic replay
+    Q1:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      preserved_targets:
+        - committed effect intent before external invocation
+        - external invocation remains non-closure boundary
+        - receipt certification before authoritative result commit
+        - deterministic idempotency/reconciliation
+        - crash-window no-duplicate recovery
+        - cursor/status preservation
+        - reverse-order saga compensation
+        - compensation failure retention
+      canonical_effect_runner_excluded: true
+      canonical_saga_coordinator_excluded: true
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

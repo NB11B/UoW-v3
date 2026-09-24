@@ -13,34 +13,38 @@ Shadow runs 27 and 28: PASS.
 Shadow runs 29 and 30: PASS.
 
 ## U14
-Commit 3d208af — shadow runs 31 and 32: PASS.
+Shadow runs 31 and 32: PASS.
 
-Preserved:
-- pure non-authoritative proposer seam;
-- deterministic legality judge;
-- dependency/OCC/resource/freshness rejection;
-- deterministic fallback after proposer failure;
-- deterministic telemetry replay;
-- stochastic, heuristic, and portable edge proposer realizations.
+## U14-B
+Commit e6b1080 — shadow runs 33 and 34: PASS.
 
-Physical NPU evidence is intentionally not inferred from the portable seam.
-
-## U14-B next
-
-The archive-only graph-synthesis capability has been ported into the shadow research layer from the frozen pre-consolidation source.
-
-The port adapts the old generated task graph to current:
-- ResourceBoundTask;
-- current WorkCategory/MatrixCell;
-- current orchestration state;
-- current resource state;
-- minimal shadow authority execution.
-
-Acceptance requires:
-- valid reconcile goal certifies and executes;
-- cycle rejected;
+The archive-only graph-synthesis capability is restored on the research branch:
+- valid reconcile goal produces a certified executable five-step graph;
+- cycle rejected before execution;
 - invalid ontology category rejected;
 - dangling dependency rejected;
 - replay deterministic.
 
-If green, the critical U14-B preservation gap is no longer archive-only.
+This closes the U14-B preservation gap without adding the implementation to src/uow.
+
+## Q1 next
+
+The Q1 reconstruction keeps the external-action boundary explicit.
+
+Internal transitions:
+- intent commit;
+- pending-external state;
+- result commit;
+- saga progress;
+- compensation state
+
+use the minimal shadow authority kernel.
+
+External operations:
+- invoke;
+- reconcile/query;
+- compensation invocation
+
+remain outside the internal transition algebra.
+
+Acceptance requires crash-window reconciliation without duplicate invocation, reverse compensation order, and preserved compensation-failure state.

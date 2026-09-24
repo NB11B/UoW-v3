@@ -176,6 +176,20 @@ staged_moves:
         - completion_materialization
         - deterministic_scheduler_reference_helper
         - domain_task_successor_wrapping
+    fifteenth_move:
+      source: src/uow/resources/policies.py
+      target: src/uow/realizations/scheduling/resource_policies.py
+      class: K1
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: relocate pluggable resource scheduling proposal policies while retaining independent resource legality checks
+      preserves:
+        - legality_dominance
+        - fifo_scientific_control
+        - greedy_capacity_policy
+        - priority_deadline_aging_policy
+        - cost_energy_policy
+        - policy_discrepancy_evidence
     production_deletions: false
 
 final_gate:

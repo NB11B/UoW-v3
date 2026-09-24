@@ -71,12 +71,12 @@ remaining_clean_realization_candidates:
   - source: src/uow/orchestration/scheduler.py
     target: src/uow/realizations/scheduling/self_hosted.py
     class: K1
-    disposition: NEXT_SELECTED
+    disposition: RELOCATED_PASS_RUN_127
     rationale: self-hosted scheduler/completion materializers are realizations over retained orchestration semantics
   - source: src/uow/resources/policies.py
     target: src/uow/realizations/scheduling/
     class: K1
-    disposition: REVIEW_AFTER_CURRENT_MOVE
+    disposition: CURRENT_MOVE
   - source: src/uow/proposer/heuristic.py
     target: src/uow/realizations/scheduling/heuristic.py
     class: K1

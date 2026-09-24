@@ -1,0 +1,44 @@
+schema_version: "8.0"
+branch: architecture/uow-staged-relocation
+parent_reference:
+  branch: research/uow-closure-architecture
+  commit: 29021acf15d4a964abb01d92f60cf47f74bcb87d
+  status: FROZEN_REDUCTION_REFERENCE
+mode: staged-production-relocation
+
+completed_reference_phases:
+  R0_R7_additive_reference: COMPLETE
+
+constraints:
+  batch_deletion_allowed: false
+  compatibility_shim_required_per_move: true
+  full_reconstruction_after_each_move: true
+  frozen_oracle_gates_after_each_move: true
+  physical_campaign_during_each_move: false
+  physical_confirmation_mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN
+  final_candidate_must_be_frozen_before_physical_confirmation: true
+
+physical_confirmation:
+  status: DEFERRED_UNTIL_FINAL_CANDIDATE
+  plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
+  manifest: qualification/final_physical_confirmation.yaml
+  historical_evidence_rewritten: false
+  final_head_physical_claims_promoted: false
+
+staged_moves:
+  S1_authority_provider_dependency_inversion:
+    status: NEXT
+    current_path: src/uow/proposer/quorum_sequencer.py
+    target_semantics: qualification-independent authority-provider protocol
+    compatibility_goal: existing DistributedAuthorityCluster remains structurally compatible
+  S2_common_application_spine:
+    status: NOT_STARTED
+  S3_typed_conformance_registry:
+    status: NOT_STARTED
+  S4_repository_path_relocation:
+    status: NOT_STARTED
+
+final_gate:
+  software_candidate_freeze_required: true
+  consolidated_physical_campaign_required: true
+  affected_physical_claims_only_promoted_after_pass: true

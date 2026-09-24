@@ -1,0 +1,56 @@
+schema_version: "0.1"
+status: DEFERRED_UNTIL_FINAL_CANDIDATE
+
+execution_policy:
+  mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN
+  run_during_r7_additive_work: false
+  final_candidate_must_be_frozen_first: true
+  portable_results_may_upgrade_physical_claims: false
+
+expected_hardware:
+  cpu: host_x86_64
+  gpu: cuda_gpu
+  npu: intel_ai_boost
+  authority_a: esp32_s3
+  authority_b: arduino_uno_q_stm32u585
+  authority_c: laptop_x86_64
+
+campaigns:
+  F0_CANDIDATE_ATTESTATION:
+    required: true
+  F1_EMBEDDED_AUTHORITY:
+    claim_ids:
+      - ESP32.AUTHORITY
+      - EVIDENCE.CHAIN
+      - DIST.AUTHORITY.PAIR_AGREEMENT.PHYSICAL
+      - DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL
+  F2_HETEROGENEOUS_EXECUTION:
+    claim_ids:
+      - HETERO.EXECUTION
+      - HETERO.ADAPTATION
+      - HETERO.PERFORMANCE
+  F3_NPU_ADAPTIVE_PROPOSER:
+    claim_ids:
+      - U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL
+  F4_NPU_HOT_SWAP:
+    claim_ids:
+      - U15.NPU_HOT_SWAP.PHYSICAL
+  F5_CONTINUOUS_ADAPTATION:
+    claim_ids:
+      - U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL
+  F6_ADAPTIVE_PHYSICAL_QUORUM:
+    claim_ids:
+      - U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL
+  F7_A3_CONTINUUM_CONFIRMATION:
+    reference_branch: qualification/a3-adaptive-compute-efficiency
+    reference_tag: a3-qualification-complete
+    conditional_full_requalification: true
+  F8_POLICY_P1_P5_CONFIRMATION:
+    reference_branch: architecture/policy-aware-uow-orchestrator
+    reference_tag: policy-orchestrator-p5-qualified
+    p6_required: false
+
+final_gate:
+  software_closeout_may_precede_physical_campaign: true
+  production_physical_claim_promotion_requires_campaign: true
+  historical_evidence_remains_bound_to_original_heads: true

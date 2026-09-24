@@ -204,6 +204,21 @@ staged_moves:
         - deterministic_reference_heuristic
         - resource_and_occ_aware_candidate_ranking
         - reference_scheduling_alias
+    seventeenth_move:
+      source: src/uow/proposer/stochastic.py
+      target: src/uow/realizations/scheduling/stochastic.py
+      class: K1
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: relocate zero-authority stochastic/adversarial proposal generation while preserving it as a scientific falsification control
+      preserves:
+        - zero_authority_proposal_boundary
+        - stochastic_scientific_control
+        - illegal_dependency_injection
+        - occ_conflict_injection
+        - resource_overallocation_injection
+        - stale_epoch_injection
+        - proposer_crash_injection
     production_deletions: false
 
 final_gate:

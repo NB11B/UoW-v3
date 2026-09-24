@@ -191,6 +191,18 @@ staged_moves:
         - priority_deadline_aging_policy
         - cost_energy_policy
         - policy_discrepancy_evidence
+    sixteenth_move:
+      source: src/uow/proposer/heuristic.py
+      target: src/uow/realizations/scheduling/heuristic.py
+      class: K1
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: relocate zero-authority reference heuristic proposal generation while retaining proposer protocol and deterministic judge semantics
+      preserves:
+        - zero_authority_proposal_boundary
+        - deterministic_reference_heuristic
+        - resource_and_occ_aware_candidate_ranking
+        - reference_scheduling_alias
     production_deletions: false
 
 final_gate:

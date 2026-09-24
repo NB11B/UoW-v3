@@ -80,7 +80,7 @@ remaining_clean_realization_candidates:
   - source: src/uow/proposer/heuristic.py
     target: src/uow/realizations/scheduling/heuristic.py
     class: K1
-    disposition: NEXT_SELECTED
+    disposition: CURRENT_MOVE
   - source: src/uow/proposer/stochastic.py
     target: src/uow/realizations/scheduling/stochastic.py
     class: K1

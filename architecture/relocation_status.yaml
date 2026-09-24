@@ -404,6 +404,6 @@ v3_packaging_repair:
   runtime_api_changed_from_v2: false
   reason: archived v2 tree retained stale earlier-candidate physical-target metadata in candidate-local qualification files
   planned_ref: archive/uow-reduction-software-candidate-v3
-  expected_shadow_tests: 277
+  expected_shadow_tests: 279
   expected_policy_tests: 44
   physical_campaign_blocked_until_postfreeze_binding: true

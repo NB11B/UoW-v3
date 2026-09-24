@@ -8,7 +8,7 @@ Planned archive ref:
 
 `archive/uow-reduction-software-candidate-v3`
 
-The exact v3 commit is accepted only if it passes both **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
+The exact v3 commit is accepted only if it passes both **279/279** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
 
 ## Runtime/API identity
 

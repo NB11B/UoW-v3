@@ -11,6 +11,8 @@ candidate_v3:
   candidate_commit: UNBOUND_PRESEAL
   exact_seal_status: PENDING
   runtime_api_changed_from_v2: false
+  expected_shadow_tests: 279
+  expected_policy_tests: 44
   physical_execution_blocked_until_postfreeze_binding: true
 
 operator_harness:
@@ -82,7 +84,7 @@ campaigns:
     mandatory_invariants: 13
     a3_evidence_inherited_not_double_counted: true
     p1_p5_specific_evidence_required: true
-    final_candidate_exact_shadow_tests: 277
+    final_candidate_exact_shadow_tests: 279
     p6_required: false
 
 final_gate:

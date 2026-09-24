@@ -100,6 +100,6 @@ previous_policy_integrated_v2_candidate:
 v3_packaging_candidate:
   runtime_api_changed_from_v2: false
   planned_ref: archive/uow-reduction-software-candidate-v3
-  expected_shadow_tests: 277
+  expected_shadow_tests: 279
   expected_policy_tests: 44
   exact_seal_status: PENDING

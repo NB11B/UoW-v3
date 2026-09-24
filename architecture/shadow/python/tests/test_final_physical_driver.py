@@ -13,7 +13,6 @@ def test_final_physical_driver_is_syntax_valid_and_candidate_pinned():
     assert f'CANDIDATE_COMMIT = "{CANDIDATE}"' in source
     assert 'CANDIDATE_RELEASE_STATUS = "FINAL"' in source
     assert 'CANDIDATE_REF = "archive/uow-reduction-software-candidate-v2"' in source
-    assert 'CANDIDATE_REF = "archive/uow-reduction-software-candidate"' in source
     assert '"candidate_commit": CANDIDATE_COMMIT' in source
     assert '"harness_commit": harness_commit()' in source
 

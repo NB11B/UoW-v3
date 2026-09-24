@@ -26,4 +26,4 @@ The frozen v3 tree intentionally does not self-encode its own SHA. Post-freeze o
 
 ## Next gate
 
-Complete the post-freeze harness shadow, then local 279+44 reproduction and the consolidated F0-F8 physical campaign.
+The post-freeze v3 harness passed run **169** with **279/279 + 44/44**. The remaining work is local reproduction followed by the consolidated F0-F8 physical campaign.

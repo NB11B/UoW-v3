@@ -103,6 +103,8 @@ Each physical claim records observed_pass, qualified, passed = observed_pass AND
 ## Final acceptance
 
 The final candidate can be promoted as physically qualified only when every physical claim required for the intended release scope passes. A failure blocks only the affected physical claim/release scope until corrected and rerun.
+Run **169** qualified the post-freeze v3 harness with **279/279** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
+
 ## Operator entry point
 
 The post-freeze operator harness is `qualification/final_physical_campaign.py`. It records the frozen candidate commit separately from the harness commit and fails closed on missing named physical substrates. The harness is repinned to the v2 candidate in post-freeze commit `173e8c376fdd51df605a839679af1a52af2d057f`. Qualification head `9e6272edccd75b7b72d435bea21729f4bf592f59` passed run **161** with **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests. The subsequent documentation-only closeout at `95d99895ecd484b4d92f7f1b9940cebd9390c9ee` passed run **162** with the same **277/277 + 44/44** result.

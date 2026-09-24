@@ -1,5 +1,5 @@
 schema_version: "0.1"
-status: DEFERRED_PENDING_V3_HARNESS_SHADOW
+status: READY_FOR_EXECUTION
 
 previous_candidate:
   ref: archive/uow-reduction-software-candidate-v2
@@ -18,11 +18,16 @@ candidate_v3:
 
 operator_harness:
   path: qualification/final_physical_campaign.py
-  status: REPINNED_TO_V3_AWAITING_HARNESS_SHADOW
+  status: QUALIFIED_FOR_OPERATOR_USE
   candidate_identity_separate_from_harness_identity: true
   candidate_ref: archive/uow-reduction-software-candidate-v3
   candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
   execution_blocked: false
+  binding_commit: 8c589320c05b56ebc3a466e1659c8c46b617451e
+  qualification_head: c318bf57c9c6a6d7553a73ffd1d0205a31c64d6d
+  shadow_run: 169
+  shadow_tests_passed: 279
+  policy_tests_passed: 44
   historical_v2_binding:
     candidate_ref: archive/uow-reduction-software-candidate-v2
     candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9

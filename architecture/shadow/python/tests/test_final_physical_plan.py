@@ -5,15 +5,18 @@ FINAL_REF = "archive/uow-reduction-software-candidate-v3"
 FINAL_COMMIT = "3e28e4bba1023810aada953e25d3e3c46a58f113"
 
 
-def test_v3_is_bound_but_physical_execution_waits_for_harness_shadow():
+def test_v3_physical_campaign_is_ready_only_after_harness_qualification():
     text = (REPO / "qualification" / "final_physical_confirmation.yaml").read_text(encoding="utf-8")
-    assert "status: DEFERRED_PENDING_V3_HARNESS_SHADOW" in text
+    assert "status: READY_FOR_EXECUTION" in text
     assert f"ref: {FINAL_REF}" in text
     assert f"commit: {FINAL_COMMIT}" in text
     assert "exact_seal_run: 167" in text
     assert "exact_seal_shadow_tests_passed: 279" in text
     assert "exact_seal_policy_tests_passed: 44" in text
-    assert "status: REPINNED_TO_V3_AWAITING_HARNESS_SHADOW" in text
+    assert "status: QUALIFIED_FOR_OPERATOR_USE" in text
+    assert "shadow_run: 169" in text
+    assert "shadow_tests_passed: 279" in text
+    assert "policy_tests_passed: 44" in text
 
 
 def test_final_campaign_covers_every_current_physical_claim():

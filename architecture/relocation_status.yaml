@@ -19,7 +19,7 @@ constraints:
   final_candidate_must_be_frozen_before_physical_confirmation: true
 
 physical_confirmation:
-  status: DEFERRED_PENDING_V3_HARNESS_SHADOW
+  status: READY_FOR_CONSOLIDATED_FINAL_CAMPAIGN
   candidate_ref: archive/uow-reduction-software-candidate-v3
   candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
@@ -411,3 +411,15 @@ v3_packaging_repair:
   exact_seal_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
   exact_seal_shadow_tests: 279
   exact_seal_policy_tests: 44
+
+post_freeze_operator_harness_v3:
+  path: qualification/final_physical_campaign.py
+  status: PASS
+  candidate_ref: archive/uow-reduction-software-candidate-v3
+  candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+  binding_commit: 8c589320c05b56ebc3a466e1659c8c46b617451e
+  qualification_head: c318bf57c9c6a6d7553a73ffd1d0205a31c64d6d
+  shadow_run: 169
+  shadow_test_count: 279
+  policy_test_count: 44
+  ready_for_physical_campaign: true

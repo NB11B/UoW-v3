@@ -98,6 +98,16 @@ staged_moves:
       source: src/uow/composition/runtime.py
       target: src/uow/implementations/composition/runtime.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [116]
+    eighth_move:
+      source: src/uow/transactions/sequencer.py
+      semantic_target: src/uow/transactions/protocol.py
+      realization_targets:
+        - src/uow/realizations/commit/deterministic.py
+        - src/uow/realizations/commit/wal.py
+        - src/uow/realizations/commit/quorum.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
     production_deletions: false
 

@@ -1,5 +1,15 @@
 """Production realization packages."""
 
-from .commit import QuorumCommitError, QuorumCommitSequencer
+from .commit import (
+    DeterministicSequencer,
+    QuorumCommitError,
+    QuorumCommitSequencer,
+    WALSequencer,
+)
 
-__all__ = ["QuorumCommitError", "QuorumCommitSequencer"]
+__all__ = [
+    "DeterministicSequencer",
+    "QuorumCommitError",
+    "QuorumCommitSequencer",
+    "WALSequencer",
+]

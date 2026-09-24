@@ -18,7 +18,7 @@ from ...contracts import UoW
 from ...engine import CertificateResult, EvidenceLedger, EvidenceRecord, Proposal
 from ...state import WorldState
 from ...transactions.descriptor import TransactionDescriptor
-from ...transactions.sequencer import CommitSequencer
+from ...transactions.protocol import CommitSequencer
 
 
 class QuorumCommitError(RuntimeError):

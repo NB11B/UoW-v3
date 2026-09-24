@@ -1,14 +1,14 @@
 # Final Physical Confirmation Campaign
 
-Status: planned terminal qualification gate.
+Status: ready terminal qualification gate.
 
-This campaign is intentionally deferred until R7 software/repository work is complete and the final cutover candidate is frozen.
+R7 software/repository work is complete. The final cutover candidate is frozen at `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b`, which passed closure-shadow run **148** with **271/271** tests.
 
 Historical physical evidence remains valid for its original qualified heads. Portable or shadow success never upgrades the final candidate to PHYSICAL.
 
 Final sequence:
 
-software/repository closeout -> freeze candidate -> one consolidated physical campaign -> final qualification
+software/repository closeout -> frozen candidate PASS -> F0 attestation -> one consolidated physical campaign -> final qualification
 
 ## Hardware set
 

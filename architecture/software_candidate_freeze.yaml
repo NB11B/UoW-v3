@@ -1,8 +1,10 @@
 schema_version: "1.0"
-status: FROZEN_PENDING_EXACT_SEAL_SHADOW
+status: FROZEN_EXACT_SEAL_PASS
 candidate_branch: architecture/uow-staged-relocation
 candidate_parent_code_head: 97f015aba652feb7169cf73767e6078161940f05
 freeze_ref_planned: archive/uow-reduction-software-candidate
+freeze_ref: archive/uow-reduction-software-candidate
+freeze_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
 freeze_commit_definition: the commit containing this manifest, after its full closure-shadow run passes
 package:
   name: uow
@@ -52,5 +54,10 @@ preseal_shadow:
   tests_passed: 271
   conclusion: PASS
 exact_seal:
-  status: PENDING_SHADOW
-  rule: the exact commit containing this record is the software freeze candidate and must pass the complete closure shadow before the archive ref is created
+  status: PASS
+  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  run: 148
+  tests_passed: 271
+  conclusion: PASS
+  archive_ref: archive/uow-reduction-software-candidate
+  rule: physical qualification must execute against this frozen candidate; later documentation commits do not redefine the candidate

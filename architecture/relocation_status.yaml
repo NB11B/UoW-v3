@@ -4,7 +4,7 @@ parent_reference:
   branch: research/uow-closure-architecture
   commit: 29021acf15d4a964abb01d92f60cf47f74bcb87d
   status: FROZEN_REDUCTION_REFERENCE
-mode: staged-production-relocation
+mode: software-candidate-frozen
 
 completed_reference_phases:
   R0_R7_additive_reference: COMPLETE
@@ -19,7 +19,9 @@ constraints:
   final_candidate_must_be_frozen_before_physical_confirmation: true
 
 physical_confirmation:
-  status: DEFERRED_UNTIL_FINAL_CANDIDATE
+  status: READY_FOR_CONSOLIDATED_FINAL_CAMPAIGN
+  candidate_ref: archive/uow-reduction-software-candidate
+  candidate_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
   manifest: qualification/final_physical_confirmation.yaml
   historical_evidence_rewritten: false
@@ -50,7 +52,7 @@ staged_moves:
     target_facade: implementations/python/uow_architecture_facade/conformance.py
     specialized_validators_replaced: false
   S4_repository_path_relocation:
-    status: IN_PROGRESS
+    status: COMPLETE
     first_move:
       source: src/uow/proposer/quorum_sequencer.py
       target: src/uow/realizations/commit/quorum.py
@@ -324,13 +326,19 @@ blocker_resolution:
     finding: no uow.implementations.engine module is architecturally required
 
 software_candidate:
-  status: FROZEN_PENDING_EXACT_SEAL_SHADOW
+  status: FROZEN_EXACT_SEAL_PASS
   manifest: architecture/software_candidate_freeze.yaml
   planned_freeze_ref: archive/uow-reduction-software-candidate
+  freeze_ref: archive/uow-reduction-software-candidate
+  freeze_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
   last_qualified_shadow_run: 145
   last_qualified_test_count: 271
   preseal_shadow_run: 147
   preseal_shadow_commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
   preseal_shadow_test_count: 271
+  exact_seal_shadow_run: 148
+  exact_seal_shadow_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  exact_seal_shadow_test_count: 271
+  exact_seal_conclusion: PASS
   unresolved_relocation_candidates: 0
   semantic_changes_after_freeze: false

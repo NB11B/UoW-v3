@@ -1,5 +1,11 @@
 schema_version: "0.1"
-status: DEFERRED_UNTIL_FINAL_CANDIDATE
+status: READY_FOR_EXECUTION
+
+candidate:
+  ref: archive/uow-reduction-software-candidate
+  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  exact_seal_shadow_run: 148
+  exact_seal_tests_passed: 271
 
 execution_policy:
   mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN

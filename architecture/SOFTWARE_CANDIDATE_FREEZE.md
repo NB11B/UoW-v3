@@ -1,8 +1,8 @@
 # UoW Software Candidate Freeze
 
-Status: **software candidate frozen; exact seal commit pending its final closure-shadow qualification**.
+Status: **software candidate frozen and exact-seal qualified**.
 
-This cutover ends the staged software/repository relocation campaign. The freeze package at `88b2802197c93d8a1a6e7bd52becad9c98e264c9` passed shadow run **147** with **271/271** tests. This documentation-only seal commit is the exact software candidate and is accepted only if it independently passes the complete `.github/workflows/uow-closure-shadow.yml` suite with zero failures and no test-count regression below 271.
+This cutover ends the staged software/repository relocation campaign. The preseal package at `88b2802197c93d8a1a6e7bd52becad9c98e264c9` passed shadow run **147** with **271/271** tests. The exact seal commit `f842d62c7d18355886e2c9fdc25e9cc5db17987b` independently passed shadow run **148** with **271/271** tests and is preserved at `archive/uow-reduction-software-candidate`.
 
 ## Architectural closeout
 
@@ -22,4 +22,4 @@ Physical confirmation inputs are pinned in `qualification/final_physical_candida
 
 ## Next gate
 
-After the exact freeze commit passes the full software shadow suite, preserve that commit under `archive/uow-reduction-software-candidate`. No semantic changes should follow. The next engineering operation is the single consolidated physical confirmation campaign described in `qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md`.
+The exact freeze commit is preserved under `archive/uow-reduction-software-candidate`. No semantic changes follow this freeze. The next engineering operation is the single consolidated physical confirmation campaign described in `qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md`, beginning with F0 candidate and binary attestation.

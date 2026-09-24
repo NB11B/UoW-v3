@@ -1,7 +1,7 @@
 schema_version: "1.0"
 branch: architecture/uow-staged-relocation
 basis_head: 97f015aba652feb7169cf73767e6078161940f05
-status: SOFTWARE_CANDIDATE_FROZEN_PENDING_EXACT_SEAL_SHADOW
+status: SOFTWARE_CANDIDATE_FROZEN_EXACT_SEAL_PASS
 
 classification_rules:
   semantic_core: language-level representation of qualified semantics; keep near canonical semantic package
@@ -140,3 +140,8 @@ software_freeze:
   preseal_shadow_run: 147
   preseal_tests_passed: 271
   exact_seal_shadow_required: true
+  exact_seal_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  exact_seal_shadow_run: 148
+  exact_seal_tests_passed: 271
+  exact_seal_conclusion: PASS
+  archive_ref: archive/uow-reduction-software-candidate

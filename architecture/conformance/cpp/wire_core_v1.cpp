@@ -1,3 +1,4 @@
+#include <cctype>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -43,7 +44,7 @@ static std::map<std::string, std::string> parse_wire(
 }
 
 static std::string q(const std::string& s) {
-    return std::string(""") + s + """;
+    return std::string("\"") + s + "\"";
 }
 
 static void require(
@@ -56,10 +57,102 @@ static void require(
     }
 }
 
-static void emit_json(const std::string& kind, const std::map<std::string,std::string>& f) {
+static bool is_uint(const std::string& s) {
+    if (s.empty()) return false;
+    for (char c : s) {
+        if (!std::isdigit(static_cast<unsigned char>(c))) return false;
+    }
+    return true;
+}
+
+static bool is_bool(const std::string& s) {
+    return s == "0" || s == "1";
+}
+
+static bool is_hex64(const std::string& s) {
+    if (s.size() != 64) return false;
+    for (char c : s) {
+        if (!std::isxdigit(static_cast<unsigned char>(c))) return false;
+    }
+    return true;
+}
+
+static void require_uint(
+    const std::map<std::string,std::string>& f,
+    const std::string& key
+) {
+    if (!is_uint(f.at(key))) throw std::runtime_error("INVALID_UINT");
+}
+
+static void require_bool(
+    const std::map<std::string,std::string>& f,
+    const std::string& key
+) {
+    if (!is_bool(f.at(key))) throw std::runtime_error("INVALID_BOOL");
+}
+
+static void require_hex64(
+    const std::map<std::string,std::string>& f,
+    const std::string& key
+) {
+    if (!is_hex64(f.at(key))) throw std::runtime_error("INVALID_HEX64");
+}
+
+static void validate_fields(
+    const std::string& kind,
+    const std::map<std::string,std::string>& f
+) {
+    if (kind == "STATE") {
+        require(f, {"r0","r1","pc","sequence","halted"});
+        for (const auto& k : {"r0","r1","pc","sequence"}) require_uint(f, k);
+        require_bool(f, "halted");
+        return;
+    }
+    if (kind == "PROPOSAL") {
+        require(f, {
+            "pre_state_hash","proposal_hash","r0","r1","pc","sequence",
+            "halted","selected_pc","proposal_halted","proposer_clock"
+        });
+        require_hex64(f, "pre_state_hash");
+        require_hex64(f, "proposal_hash");
+        for (const auto& k : {"r0","r1","pc","sequence","selected_pc","proposer_clock"}) {
+            require_uint(f, k);
+        }
+        require_bool(f, "halted");
+        require_bool(f, "proposal_halted");
+        return;
+    }
+    if (kind == "CERTIFICATE") {
+        require(f, {"valid","reason","certificate_hash"});
+        require_bool(f, "valid");
+        require_hex64(f, "certificate_hash");
+        if (f.at("reason").empty()) throw std::runtime_error("INVALID_TOKEN");
+        return;
+    }
+    if (kind == "EVIDENCE") {
+        require(f, {
+            "step","pre_state_hash","post_state_hash","proposal_hash",
+            "certificate_hash","prev_record_hash","record_hash"
+        });
+        require_uint(f, "step");
+        for (const auto& k : {
+            "pre_state_hash","post_state_hash","proposal_hash",
+            "certificate_hash","prev_record_hash","record_hash"
+        }) {
+            require_hex64(f, k);
+        }
+        return;
+    }
+    throw std::runtime_error("UNKNOWN_KIND");
+}
+
+static void emit_json(
+    const std::string& kind,
+    const std::map<std::string,std::string>& f
+) {
     std::cout << "{\"kind\":" << q(kind);
     for (const auto& kv : f) {
-        std::cout << ",\""<< kv.first <<"\":" << q(kv.second);
+        std::cout << ",\"" << kv.first << "\":" << q(kv.second);
     }
     std::cout << "}" << std::endl;
 }
@@ -98,21 +191,7 @@ int main(int argc, char** argv) {
 
         std::string kind;
         auto fields = parse_wire(argv[2], kind);
-        if (kind == "STATE") {
-            require(fields, {"r0","r1","pc","sequence","halted"});
-        } else if (kind == "PROPOSAL") {
-            require(fields, {
-                "pre_state_hash","proposal_hash","r0","r1","pc","sequence",
-                "halted","selected_pc","proposal_halted","proposer_clock"
-            });
-        } else if (kind == "CERTIFICATE") {
-            require(fields, {"valid","reason","certificate_hash"});
-        } else if (kind == "EVIDENCE") {
-            require(fields, {
-                "step","pre_state_hash","post_state_hash","proposal_hash",
-                "certificate_hash","prev_record_hash","record_hash"
-            });
-        }
+        validate_fields(kind, fields);
         emit_json(kind, fields);
         return 0;
     } catch (const std::exception& e) {

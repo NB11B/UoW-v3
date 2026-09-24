@@ -131,6 +131,9 @@ def test_r5_l3_field_order_is_not_semantic(cpp_wire_binary):
         "UOW1|STATE|r0=1|r1=2|pc=0|halted=0",
         "UOW1|UNKNOWN|x=1",
         "UOW1|STATE|r0=1|r0=2|r1=2|pc=0|sequence=0|halted=0",
+        "UOW1|STATE|r0=-1|r1=2|pc=0|sequence=0|halted=0",
+        "UOW1|STATE|r0=1|r1=2|pc=0|sequence=0|halted=true",
+        "UOW1|CERTIFICATE|valid=1|reason=OK|certificate_hash=not-a-hash",
     ],
 )
 def test_r5_l3_malformed_wire_fails_closed_in_both_languages(cpp_wire_binary, bad):

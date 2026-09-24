@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from ...composition.graph import RealizationGraph
     from ...composition.mutation import RuntimeMutationQC
 
-from ...composition.convergence import AuthoritativeHistory, HistoryEntry, HistoryEntryKind
+from ...composition.history import AuthoritativeHistory, HistoryEntry, HistoryEntryKind
 from ...composition.fabric import canonical_json
 from ...realizations.network.wire import WireEnvelope, verify_envelope
 

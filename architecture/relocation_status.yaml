@@ -142,11 +142,20 @@ staged_moves:
       source: src/uow/composition/fabric.py
       target: src/uow/implementations/distributed/fabric.py
       compatibility_shim: true
-      status: RERUN_PENDING_AFTER_IMPORT_ASSERTION_FIX
+      status: PASS_INITIAL
+      shadow_runs: [124]
       first_run: 122
       first_run_result: DISTRIBUTED_IMPLEMENTATION_PACKAGE_EAGER_IMPORT_CYCLE
       second_run: 123
       second_run_result: TEST_MATCHED_DOCSTRING_TEXT_NOT_IMPORT
+    thirteenth_move:
+      semantic_split:
+        source: src/uow/composition/convergence.py
+        semantic_target: src/uow/composition/history.py
+        implementation_target: src/uow/implementations/distributed/convergence.py
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+      rationale: separate authoritative history semantics from cluster/network implementation
       preserves:
         - discovery_without_authority
         - lease_liveness

@@ -33,7 +33,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from uow.composition.actor import ActorDescriptor, ActorRegistry, AuthorityClass
 from uow.composition.binding import ActorBinding, validate_binding
 from uow.composition.contract import ParentContract
-from uow.composition.convergence import AuthoritativeHistory, HistoryEntry, HistoryEntryKind
+from uow.composition.history import AuthoritativeHistory, HistoryEntry, HistoryEntryKind
 from uow.composition.fabric import canonical_json
 from uow.composition.graph import RealizationGraph
 from ...implementations.distributed.host_node import DurableWAL, PhysicalHostNode

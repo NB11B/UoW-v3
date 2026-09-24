@@ -18,6 +18,7 @@ __all__ = [
     "canonical_json",
     "DurableWAL",
     "PhysicalHostNode",
+    "MultiOrchestratorCluster",
 ]
 
 _FABRIC = {
@@ -29,6 +30,7 @@ _FABRIC = {
     "canonical_json",
 }
 _HOST = {"DurableWAL", "PhysicalHostNode"}
+_CONVERGENCE = {"MultiOrchestratorCluster"}
 
 
 def __getattr__(name: str) -> Any:
@@ -36,4 +38,6 @@ def __getattr__(name: str) -> Any:
         return getattr(import_module(".fabric", __name__), name)
     if name in _HOST:
         return getattr(import_module(".host_node", __name__), name)
+    if name in _CONVERGENCE:
+        return getattr(import_module(".convergence", __name__), name)
     raise AttributeError(name)

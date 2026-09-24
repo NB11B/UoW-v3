@@ -12,7 +12,7 @@ from uow.composition.graph import RealizationGraph, RealizationNode
 from uow.composition.mutation import QuorumMutationCoordinator, assemble_mutation_qc
 from uow.conformance import DEFAULT_CONFORMANCE_REGISTRY as PROD
 from uow.effects.descriptor import EffectReceipt, create_effect_descriptor
-from uow.resources.requirement import ResourceRequirement
+from uow.resources.requirement import ResourceRequirement, make_resource_domain_task
 from uow.resources.state import ResourceState
 from uow.state import WorldState, canonical_json
 from uow.transactions.descriptor import create_transaction_descriptor
@@ -79,9 +79,9 @@ def test_s3_resource_binding_and_occ_parity():
         "resource-task",
         [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.SET, "x", 1),), Successor.preserve())],
     )
-    from uow.resources.requirement import ResourceBoundTask
-    good_bound = ResourceBoundTask.bind(
-        bound_uow,
+    good_bound = make_resource_domain_task(
+        "resource-bound",
+        [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.SET, "x", 1),), Successor.preserve())],
         ResourceRequirement(cpu_cores=1, ram_units=1),
     )
     _eq(
@@ -187,6 +187,7 @@ def test_s3_mutation_vote_and_qc_parity():
         contract_id="mut-parent",
         description="mutation parity",
         required_outputs=("result",),
+        authority=AuthorityObligation(required_role="verifier"),
     )
     graph = RealizationGraph(
         "g0",

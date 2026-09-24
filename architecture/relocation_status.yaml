@@ -42,7 +42,9 @@ staged_moves:
     first_shim: src/uow/orchestration/runtime.py
     target_facade: implementations/python/uow_architecture_facade/application.py
   S3_typed_conformance_registry:
-    status: IMPLEMENTED_AWAITING_SUITE
+    status: RERUN_PENDING_AFTER_FIXTURE_CORRECTION
+    first_run: 105
+    first_run_result: TEST_FIXTURE_CONSTRUCTION_ONLY
     production_package: src/uow/conformance
     target_facade: implementations/python/uow_architecture_facade/conformance.py
     specialized_validators_replaced: false

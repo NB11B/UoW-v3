@@ -1,7 +1,7 @@
-schema_version: "5.1"
+schema_version: "6.0"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
-mode: reduction-eligibility-shadow
+mode: repository-blueprint
 
 phases:
   R0_frozen_control: COMPLETE
@@ -10,8 +10,8 @@ phases:
   R3_shadow_minimal_implementation: COMPLETE_INITIAL
   R4_experiment_reconstruction: COMPLETE_PORTABLE_INITIAL
   R5_cross_language_conformance: COMPLETE_INITIAL
-  R6_reduction_eligibility: IN_PROGRESS
-  R7_repository_reorganization: NOT_STARTED
+  R6_reduction_eligibility: COMPLETE_INITIAL
+  R7_repository_reorganization: IN_PROGRESS_BLUEPRINT
 
 current_invariants:
   source_runtime_modified: false
@@ -20,29 +20,36 @@ current_invariants:
   experiments_deleted: false
   src_uow_imports_shadow: false
 
-r5:
-  latest_shadow_runs: [67, 68]
-  latest_test_count: 145
-  L0_behavior: PASS
-  L1_rejection: PASS
-  L2_evidence_semantics: PASS
-  L3_wire_schema: PASS
-  L4_canonical_bytes: PASS_BOUNDARY_SPECIFIC
-  L5_canonical_hash: PASS_BOUNDARY_SPECIFIC
-  global_L4_L5_claim: false
-
 r6:
+  latest_shadow_runs: [75, 76]
+  latest_test_count: 157
   deletion_candidates: 0
-  prototypes:
+  validated_K3:
     common_authority_application_spine:
-      status: IMPLEMENTED_AWAITING_FULL_SUITE
-      execution_contexts: [OWNED, DETACHED]
-      production_changes: false
+      status: PASS
+      repeated_high_level_commit_paths: 5
     authority_provider_protocol:
-      status: IMPLEMENTED_AWAITING_FULL_SUITE
-      qualification_dependency: false
-      production_changes: false
+      status: PASS
+      qualification_dependency_removed_in_shadow: true
+    typed_conformance_registry:
+      status: PASS
+      registered_domains: 9
+      specialized_predicates_retained: true
+  measured_source_recurrence:
+    proposal_sites: 11
+    certification_modules: 7
+    transaction_descriptor_modules: 6
+    sequencer_commit_modules: 5
+    materialization_certification_modules: 4
+    actor_binding_validation_modules: 5
+    semantic_projection_modules: 4
+
+r7:
+  stage: R7_0_BLUEPRINT
+  production_moves_allowed: false
+  production_deletions_allowed: false
   next:
-    - run complete reconstruction/conformance suite against R6 prototypes
-    - quantify surviving specialized paths
-    - determine whether typed requirement/capability interface merits K3 promotion
+    - create current_to_target mapping
+    - create parallel additive package skeleton
+    - route shadow reconstruction through semantic facade
+    - require full reconstruction parity before production cutover

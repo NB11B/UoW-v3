@@ -14,7 +14,11 @@ def _git_blob_sha1(path: Path) -> str:
 
 def test_r7_public_api_surface_matches_frozen_main_baseline():
     text = (REPO / "architecture" / "PUBLIC_API_BASELINE.yaml").read_text(encoding="utf-8")
-    pairs = re.findall(r"^  ([^:]+(?:/__init__\.py|pyproject\.toml)): ([0-9a-f]{40})$", text, flags=re.MULTILINE)
+    pairs = re.findall(
+        r"^  (pyproject\.toml|src/uow(?:/[^:]+)?/__init__\.py): ([0-9a-f]{40})$",
+        text,
+        flags=re.MULTILINE,
+    )
 
     assert len(pairs) == 8
     for rel, expected in pairs:
@@ -23,7 +27,8 @@ def test_r7_public_api_surface_matches_frozen_main_baseline():
 
 def test_r7_facade_remains_outside_installed_uow_package():
     pyproject = (REPO / "pyproject.toml").read_text(encoding="utf-8")
-    assert 'package-dir = {"" = "src"}' in pyproject
+    assert "[tool.setuptools.packages.find]" in pyproject
+    assert 'where = ["src"]' in pyproject
     assert "implementations/python" not in pyproject
 
     import uow

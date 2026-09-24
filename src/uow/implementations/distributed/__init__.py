@@ -1,23 +1,39 @@
-"""Distributed implementation package."""
+"""Distributed implementation package with lazy compatibility exports.
 
-from .host_node import DurableWAL, PhysicalHostNode
+Submodules are loaded only when their symbols are requested. This avoids
+creating package-initialization cycles between fabric, convergence/delegation,
+and host durability implementations.
+"""
+from __future__ import annotations
 
-__all__ = ["DurableWAL", "PhysicalHostNode"]
+from importlib import import_module
+from typing import Any
 
-from .fabric import (
-    ActorLease,
-    AgentMessage,
-    AgentMessageKind,
-    DistributedActorFabric,
-    NetworkAgent,
-    canonical_json,
-)
-
-__all__ += [
+__all__ = [
     "ActorLease",
     "AgentMessage",
     "AgentMessageKind",
     "DistributedActorFabric",
     "NetworkAgent",
     "canonical_json",
+    "DurableWAL",
+    "PhysicalHostNode",
 ]
+
+_FABRIC = {
+    "ActorLease",
+    "AgentMessage",
+    "AgentMessageKind",
+    "DistributedActorFabric",
+    "NetworkAgent",
+    "canonical_json",
+}
+_HOST = {"DurableWAL", "PhysicalHostNode"}
+
+
+def __getattr__(name: str) -> Any:
+    if name in _FABRIC:
+        return getattr(import_module(".fabric", __name__), name)
+    if name in _HOST:
+        return getattr(import_module(".host_node", __name__), name)
+    raise AttributeError(name)

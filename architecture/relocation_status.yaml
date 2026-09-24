@@ -142,7 +142,9 @@ staged_moves:
       source: src/uow/composition/fabric.py
       target: src/uow/implementations/distributed/fabric.py
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: RERUN_PENDING_AFTER_LAZY_PACKAGE_FIX
+      first_run: 122
+      first_run_result: DISTRIBUTED_IMPLEMENTATION_PACKAGE_EAGER_IMPORT_CYCLE
       preserves:
         - discovery_without_authority
         - lease_liveness

@@ -1,14 +1,13 @@
-"""Target-layout facade for the production typed conformance registry."""
+"""Typed conformance registry and normalized result envelopes."""
 
-from uow.conformance import (
-    ConformanceDecision,
+from .registry import (
     ConformanceDomain,
     ConformanceRegistry,
-    ConformanceResult,
     DEFAULT_CONFORMANCE_REGISTRY,
     MatcherKind,
     build_default_registry,
 )
+from .types import ConformanceDecision, ConformanceResult
 
 __all__ = [
     "ConformanceDecision",

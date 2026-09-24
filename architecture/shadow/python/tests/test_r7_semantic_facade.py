@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 
 from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
+from uow.conformance import DEFAULT_CONFORMANCE_REGISTRY as PRODUCTION_REGISTRY
 from uow_shadow.conformance_registry import DEFAULT_CONFORMANCE_REGISTRY as SHADOW_REGISTRY
 from uow.application import DEFAULT_APPLICATION_SPINE as PRODUCTION_SPINE
 from uow.application import CursorPolicy as ProductionCursorPolicy
@@ -38,7 +39,7 @@ def _uow():
 
 def test_r7_parallel_facade_exposes_production_application_seam_and_validated_conformance():
     assert DEFAULT_APPLICATION_SPINE is PRODUCTION_SPINE
-    assert DEFAULT_CONFORMANCE_REGISTRY is SHADOW_REGISTRY
+    assert DEFAULT_CONFORMANCE_REGISTRY is PRODUCTION_REGISTRY
     assert CursorPolicy is ProductionCursorPolicy
 
 

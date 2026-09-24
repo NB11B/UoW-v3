@@ -6,16 +6,6 @@ import subprocess
 
 import pytest
 
-from qualification.distributed_authority.authority_service_c import (
-    compute_cert_hash,
-    compute_evidence_record_hash,
-    compute_proposal_hash,
-    compute_qc_hash,
-    compute_state_hash,
-    compute_vote_hash,
-)
-
-
 def _load_profile():
     repo = Path(__file__).resolve().parents[4]
     path = repo / "architecture" / "conformance" / "authority" / "profile_v1.py"
@@ -29,6 +19,17 @@ def _load_profile():
 @pytest.fixture(scope="session")
 def profile():
     return _load_profile()
+
+
+@pytest.fixture(scope="session")
+def authority_service_module():
+    repo = Path(__file__).resolve().parents[4]
+    path = repo / "qualification" / "distributed_authority" / "authority_service_c.py"
+    spec = importlib.util.spec_from_file_location("authority_service_c_direct", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
 
 
 @pytest.fixture(scope="session")
@@ -120,20 +121,20 @@ def test_r5_l4_l5_cpp_and_python_profile_match_exactly(
     assert cpp_hash == profile.sha256_hex(canonical)
 
 
-def test_r5_l5_profile_matches_existing_x86_authority_service(profile):
+def test_r5_l5_profile_matches_existing_x86_authority_service(profile, authority_service_module):
     a, b, c, d, e, f = ("a"*64, "b"*64, "c"*64, "d"*64, "e"*64, "f"*64)
     g, h = "1"*64, "2"*64
 
-    assert profile.sha256_hex(profile.canonical_state(10, 2, 3, 4, False)) == compute_state_hash(
+    assert profile.sha256_hex(profile.canonical_state(10, 2, 3, 4, False)) == authority_service_module.compute_state_hash(
         10, 2, 3, 4, False
     )
-    assert profile.sha256_hex(profile.canonical_proposal(a, b, 3, False)) == compute_proposal_hash(
+    assert profile.sha256_hex(profile.canonical_proposal(a, b, 3, False)) == authority_service_module.compute_proposal_hash(
         a, b, 3, False
     )
-    assert profile.sha256_hex(profile.canonical_certificate(c, True, 0)) == compute_cert_hash(
+    assert profile.sha256_hex(profile.canonical_certificate(c, True, 0)) == authority_service_module.compute_cert_hash(
         c, True, 0
     )
-    assert profile.sha256_hex(profile.canonical_evidence(5, a, b, c, d, e)) == compute_evidence_record_hash(
+    assert profile.sha256_hex(profile.canonical_evidence(5, a, b, c, d, e)) == authority_service_module.compute_evidence_record_hash(
         5, a, b, c, d, e
     )
     assert profile.sha256_hex(
@@ -149,7 +150,7 @@ def test_r5_l5_profile_matches_existing_x86_authority_service(profile):
             rejection_reason=None,
             ruleset_version="uow-authority-v1",
         )
-    ) == compute_vote_hash(
+    ) == authority_service_module.compute_vote_hash(
         True, d, 5, "authority_a_esp32", e, a, c, b, None, "uow-authority-v1"
     )
     assert profile.sha256_hex(
@@ -168,7 +169,7 @@ def test_r5_l5_profile_matches_existing_x86_authority_service(profile):
             vote_hashes=(g, h),
             voters=("authority_a_esp32", "authority_b_unoq_stm32"),
         )
-    ) == compute_qc_hash(
+    ) == authority_service_module.compute_qc_hash(
         d, b, 5, f, e, a, c, b, "uow-authority-v1", 2, "test_uow",
         [g, h], ["authority_a_esp32", "authority_b_unoq_stm32"]
     )

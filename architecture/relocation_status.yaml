@@ -55,6 +55,12 @@ staged_moves:
       source: src/uow/proposer/quorum_sequencer.py
       target: src/uow/realizations/commit/quorum.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [107]
+    second_move:
+      source: src/uow/orchestration/runtime.py
+      target: src/uow/implementations/orchestration/runtime.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
     production_deletions: false
 

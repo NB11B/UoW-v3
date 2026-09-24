@@ -19,5 +19,6 @@ def test_s4_historical_fabric_module_is_only_shim():
 def test_s4_relocated_fabric_has_no_qualification_dependency():
     import uow.implementations.distributed.fabric as implementation
     source = inspect.getsource(implementation)
-    assert "qualification." not in source
+    assert "from qualification" not in source
+    assert "import qualification" not in source
     assert "Discover(A) != Qualify(A, U)" in source

@@ -198,11 +198,19 @@ def run_logged(
     started_at = utc_now()
     print(f"\n[{name}] cwd={cwd}")
     print("  " + " ".join(str(x) for x in argv))
+    if env is None:
+        sub_env = os.environ.copy()
+    else:
+        sub_env = env.copy()
+    py_paths = [str(REPO_ROOT), str(REPO_ROOT / "src")]
+    if sub_env.get("PYTHONPATH"):
+        py_paths.append(sub_env["PYTHONPATH"])
+    sub_env["PYTHONPATH"] = os.pathsep.join(py_paths)
     with log_path.open("w", encoding="utf-8") as log:
         cp = subprocess.run(
             [str(x) for x in argv],
             cwd=cwd,
-            env=env,
+            env=sub_env,
             stdout=log,
             stderr=subprocess.STDOUT,
             text=True,
@@ -340,7 +348,7 @@ def f0_attestation(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
 
         adb = str(hardware["adb"])
         uno_dir = REPO_ROOT / "qualification" / "embedded" / "uno_q_authority"
-        remote = "/tmp/uno_q_authority_final"
+        remote = "/tmp/uno_q_authority"
         build = f"{remote}/build"
         commands.append(
             run_logged(
@@ -429,15 +437,20 @@ def command_phase(
     specs: Sequence[tuple[str, Sequence[str], Path]],
     phase_dir: Path,
 ) -> PhaseResult:
-    commands = [
-        run_logged(name, argv, cwd=cwd, artifacts_dir=phase_dir)
-        for name, argv, cwd in specs
-    ]
+    commands: list[CommandResult] = []
+    for idx, (name, argv, cwd) in enumerate(specs):
+        if idx > 0:
+            time.sleep(1.0)
+        res = run_logged(name, argv, cwd=cwd, artifacts_dir=phase_dir)
+        commands.append(res)
+        if res.returncode != 0:
+            break
     require_commands_pass(commands)
     return PhaseResult(phase, True, {}, commands)
 
 
 def f1(args: argparse.Namespace, phase_dir: Path) -> PhaseResult:
+    time.sleep(2.0)
     py = sys.executable
     host = REPO_ROOT / "qualification" / "embedded" / "esp32_dual_core" / "host"
     specs = [

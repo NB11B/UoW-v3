@@ -34,7 +34,7 @@ import random
 import sys
 import threading
 import time
-from typing import Any
+from typing import Any, Callable
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 if str(REPO_ROOT) not in sys.path:
@@ -70,15 +70,25 @@ from workload_engine import WorkloadEngine
 class PhysicalAuthorityClient:
     """Manages serial protocol communication with ESP32-S3 scheduling authority."""
 
-    def __init__(self, port: str, baud: int = 115200, timeout: float = 2.0):
+    def __init__(self, port: str, baud: int = 115200, timeout: float = 20.0):
         try:
             import serial  # type: ignore
         except ImportError as exc:
             raise RuntimeError("pyserial is required: pip install pyserial") from exc
-        self.ser = serial.Serial(port, baudrate=baud, timeout=0.1)
+        self.ser = serial.Serial()
+        self.ser.port = port
+        self.ser.baudrate = baud
+        self.ser.timeout = 0.05
+        self.ser.dtr = False
+        self.ser.rts = False
+        self.ser.open()
         self.timeout = timeout
         self._lock = threading.Lock()
-        time.sleep(1.0)
+        self._buf = bytearray()
+        self._pending_frames: list[dict[str, Any]] = []
+        self.last_evidence_root = "0" * 64
+        self.last_reservation_id = 0
+        time.sleep(1.5)
         with self._lock:
             self.ser.reset_input_buffer()
 
@@ -95,54 +105,180 @@ class PhysicalAuthorityClient:
             if self.ser and self.ser.is_open:
                 self.ser.close()
 
-    def send_command(self, cmd: str, expected_events: tuple[str, ...]) -> dict[str, Any]:
-        """Send command line and await JSON response matching one of expected_events."""
-        with self._lock:
-            self.ser.reset_input_buffer()
-            self.ser.write((cmd.strip() + "\n").encode("utf-8"))
-            self.ser.flush()
+    def _write_chunked(self, data: bytes) -> None:
+        chunk_size = 16
+        for i in range(0, len(data), chunk_size):
+            self.ser.write(data[i : i + chunk_size])
+            if i + chunk_size < len(data):
+                time.sleep(0.003)
+        self.ser.flush()
 
-            deadline = time.monotonic() + self.timeout
-            while time.monotonic() < deadline:
-                line = self.ser.readline()
-                if not line:
-                    continue
-                text = line.decode("utf-8", errors="replace").strip()
-                if not text or not text.startswith("{"):
-                    continue
+    def _extract_frames_from_buf(self) -> None:
+        """Extract all complete JSON objects from self._buf and append to self._pending_frames."""
+        while True:
+            start = self._buf.find(b"{")
+            if start == -1:
+                self._buf.clear()
+                break
+            if start > 0:
+                del self._buf[:start]
+                start = 0
+
+            end = self._buf.find(b"}", start)
+            found = False
+            while end != -1:
+                candidate = self._buf[start : end + 1]
                 try:
-                    data = json.loads(text)
-                    if data.get("event") in expected_events:
-                        return data
-                    if data.get("event") == "error":
-                        return data
+                    data = json.loads(candidate.decode("utf-8", errors="replace"))
+                    if isinstance(data, dict):
+                        self._pending_frames.append(data)
+                        consumed = end + 1
+                        while consumed < len(self._buf) and self._buf[consumed] in (10, 13, 32):
+                            consumed += 1
+                        del self._buf[:consumed]
+                        found = True
+                        break
                 except json.JSONDecodeError:
-                    continue
+                    pass
+                end = self._buf.find(b"}", end + 1)
+
+            if not found:
+                break
+
+    def _find_and_consume_frame(
+        self,
+        expected_events: tuple[str, ...],
+        predicate: Callable[[dict[str, Any]], bool] | None = None,
+    ) -> dict[str, Any] | None:
+        """Find and remove a matching frame from self._pending_frames."""
+        for idx, frame in enumerate(self._pending_frames):
+            ev = frame.get("event")
+            if ev in expected_events or ev == "error":
+                if predicate is None or ev == "error" or predicate(frame):
+                    return self._pending_frames.pop(idx)
+        return None
+
+    def send_command(
+        self,
+        cmd: str,
+        expected_events: tuple[str, ...],
+        predicate: Callable[[dict[str, Any]], bool] | None = None,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
+        """Send command line and await JSON response matching expected_events and predicate."""
+        with self._lock:
+            # Drain any pending serial bytes into buffer first
+            try:
+                avail = self.ser.in_waiting
+                if avail > 0:
+                    chunk = self.ser.read(avail)
+                    if chunk:
+                        self._buf.extend(chunk)
+                        self._extract_frames_from_buf()
+            except Exception:
+                pass
+
+            # Check if a matching frame was already received (only when keyed by predicate)
+            if predicate is not None:
+                match = self._find_and_consume_frame(expected_events, predicate)
+                if match is not None:
+                    if "evidence_root" in match and match.get("committed", False):
+                        self.last_evidence_root = match["evidence_root"]
+                    return match
+            else:
+                self._pending_frames = [
+                    f for f in self._pending_frames if f.get("event") not in expected_events
+                ]
+
+            time.sleep(0.002)
+            self._write_chunked((cmd.strip() + "\n").encode("utf-8"))
+
+            cmd_verb = cmd.split()[0].upper() if cmd.strip() else ""
+            retryable = cmd_verb in {"SCHED_SNAPSHOT", "SCHED_RESET", "SCHED_SET_ONLINE", "SCHED_RECEIPT"}
+            effective_timeout = timeout if timeout is not None else self.timeout
+            deadline = time.monotonic() + effective_timeout
+
+            while time.monotonic() < deadline:
+                try:
+                    avail = self.ser.in_waiting
+                    if avail > 0:
+                        chunk = self.ser.read(avail)
+                        if chunk:
+                            self._buf.extend(chunk)
+                            self._extract_frames_from_buf()
+                    else:
+                        time.sleep(0.002)
+                except Exception:
+                    time.sleep(0.005)
+
+                match = self._find_and_consume_frame(expected_events, predicate)
+                if match is not None:
+                    if "evidence_root" in match and match.get("committed", False):
+                        self.last_evidence_root = match["evidence_root"]
+                    return match
+
+                if retryable and time.monotonic() < deadline - 0.5 and (time.monotonic() - (deadline - effective_timeout)) > 0.15:
+                    time.sleep(0.02)
+                    self._write_chunked((cmd.strip() + "\n").encode("utf-8"))
 
             raise TimeoutError(f"Timeout waiting for {expected_events} after command: {cmd}")
 
     def get_snapshot(self) -> dict[str, Any]:
-        return self.send_command("SCHED_SNAPSHOT", ("sched_snapshot",))
+        snap = self.send_command("SCHED_SNAPSHOT", ("sched_snapshot",))
+        if "evidence_root" in snap:
+            self.last_evidence_root = snap["evidence_root"]
+        return snap
 
     def reset(self, online_mask: int = 7, max_cpu: int = 16, max_gpu: int = 16, max_npu: int = 16, tokens: int = 1000) -> dict[str, Any]:
+        with self._lock:
+            self._pending_frames.clear()
+            self._buf.clear()
+            self.ser.reset_input_buffer()
         cmd = f"SCHED_RESET {online_mask} {max_cpu} {max_gpu} {max_npu} {tokens}"
-        return self.send_command(cmd, ("sched_snapshot",))
+        snap = self.send_command(cmd, ("sched_snapshot",))
+        self.last_evidence_root = snap.get("evidence_root", "0" * 64)
+        self.last_reservation_id = int(snap.get("reservation_seq", 0))
+        return snap
 
     def set_online(self, device: int, online: bool) -> dict[str, Any]:
         cmd = f"SCHED_SET_ONLINE {device} {1 if online else 0}"
         return self.send_command(cmd, ("sched_snapshot",))
 
-    def propose(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1) -> dict[str, Any]:
+    def propose(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1, timeout: float | None = None) -> dict[str, Any]:
         prop_hash = hashlib.sha256(f"{pre_state_hash}:{job_id}:{target}:{tokens}".encode("utf-8")).hexdigest()
         cmd = f"SCHED_PROPOSE {pre_state_hash} {job_id} {target} {tokens} {prop_hash}"
-        return self.send_command(cmd, ("sched_decision",))
+        res = self.send_command(
+            cmd,
+            ("sched_decision",),
+            predicate=lambda f: int(f.get("job_id", -1)) == job_id,
+            timeout=timeout,
+        )
+        if res.get("committed", False):
+            self.last_reservation_id = int(res.get("reservation_id", self.last_reservation_id))
+            self.last_evidence_root = res.get("evidence_root", self.last_evidence_root)
+        return res
 
     def propose_with_occ_retry(self, pre_state_hash: str, job_id: int, target: int, tokens: int = 1, max_retries: int = 5) -> dict[str, Any]:
         curr_hash = pre_state_hash
         attempts = 0
         for _ in range(max_retries):
             attempts += 1
-            res = self.propose(pre_state_hash=curr_hash, job_id=job_id, target=target, tokens=tokens)
+            try:
+                res = self.propose(pre_state_hash=curr_hash, job_id=job_id, target=target, tokens=tokens, timeout=10.0)
+            except TimeoutError:
+                with self._lock:
+                    match = self._find_and_consume_frame(
+                        ("sched_decision",),
+                        lambda f: int(f.get("job_id", -1)) == job_id,
+                    )
+                if match is not None:
+                    res = match
+                else:
+                    snap = self.get_snapshot()
+                    curr_hash = snap.get("state_hash", curr_hash)
+                    time.sleep(0.005)
+                    continue
+
             if res.get("committed", False) or res.get("reason") != "STALE_STATE_HASH":
                 res["occ_attempts"] = attempts
                 return res
@@ -154,7 +290,43 @@ class PhysicalAuthorityClient:
 
     def receipt(self, reservation_id: int, status: int, latency_us: int, output_digest: str) -> dict[str, Any]:
         cmd = f"SCHED_RECEIPT {reservation_id} {status} {latency_us} {output_digest}"
-        return self.send_command(cmd, ("sched_receipt",))
+        for attempt in range(5):
+            try:
+                res = self.send_command(
+                    cmd,
+                    ("sched_receipt",),
+                    predicate=lambda f: int(f.get("reservation_id", -1)) == reservation_id and f.get("committed", False),
+                    timeout=5.0,
+                )
+                if res.get("committed", False):
+                    self.last_evidence_root = res.get("evidence_root", self.last_evidence_root)
+                return res
+            except TimeoutError:
+                with self._lock:
+                    match = self._find_and_consume_frame(
+                        ("sched_receipt",),
+                        lambda f: int(f.get("reservation_id", -1)) == reservation_id and f.get("committed", False),
+                    )
+                if match is not None:
+                    if match.get("committed", False):
+                        self.last_evidence_root = match.get("evidence_root", self.last_evidence_root)
+                    return match
+                if attempt < 4:
+                    time.sleep(0.02)
+                    continue
+                with self._lock:
+                    match = self._find_and_consume_frame(
+                        ("sched_receipt",),
+                        lambda f: int(f.get("reservation_id", -1)) == reservation_id,
+                    )
+                if match is not None:
+                    return match
+                return {
+                    "event": "sched_receipt",
+                    "committed": False,
+                    "reason": "TIMEOUT",
+                    "reservation_id": reservation_id,
+                }
 
 
 class MockAuthorityClient:
@@ -1403,6 +1575,9 @@ def main():
                 json.dump(multi_seed_report, f, indent=2)
             print(f"[Campaign] Multi-seed aggregate report saved to: {multi_report_path}")
 
+        all_passed = all(s["gates"]["all_gates_passed"] for s in all_seed_summaries.values())
+        if not all_passed:
+            sys.exit(1)
     finally:
         authority.close()
 

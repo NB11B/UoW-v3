@@ -11,7 +11,7 @@
       "authority_c_laptop_x86"
     ],
     "claim_id": "DIST.AUTHORITY.QUORUM_2_OF_3.PHYSICAL",
-    "statement": "A 2-of-3 quorum across three heterogeneous physical failure domains (ESP32-S3 Xtensa, Arduino UNO Q STM32, and Laptop x86-64 CPU) is necessary and sufficient for authoritative progress, preventing conflicting commits and surviving any single node outage.",
+    "statement": "A 2-of-3 quorum across three heterogeneous physical authority substrates (ESP32-S3 Xtensa, Arduino UNO Q STM32, and Laptop x86-64 CPU) authorizes progress for every tested 2-node/3-node voter combination, rejects insufficient quorum, and prevents conflicting commits from the same pre-state.",
     "gates": {
       "GATE_1_HARDWARE_FAILURE_DOMAINS": {
         "passed": true,
@@ -107,7 +107,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 42505
+                "local_clock": 174505
               }
             }
           },
@@ -153,7 +153,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 44005
+                "local_clock": 176005
               },
               "C": {
                 "event": "auth_snapshot",
@@ -168,7 +168,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 3010
+                "local_clock": 3078
               }
             }
           },
@@ -229,7 +229,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 3011
+                "local_clock": 3079
               }
             }
           },
@@ -301,7 +301,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 45505
+                "local_clock": 177505
               },
               "C": {
                 "event": "auth_snapshot",
@@ -316,7 +316,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 3012
+                "local_clock": 3080
               }
             }
           }
@@ -384,7 +384,7 @@
             "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
             "evidence_steps": 1,
             "ruleset_version": "uow-authority-v1",
-            "local_clock": 47005
+            "local_clock": 179005
           },
           "node_b_reconciled_sequence": 1,
           "state_hash_parity": true,
@@ -497,7 +497,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 42505
+              "local_clock": 174505
             }
           }
         },
@@ -543,7 +543,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 44005
+              "local_clock": 176005
             },
             "C": {
               "event": "auth_snapshot",
@@ -558,7 +558,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 3010
+              "local_clock": 3078
             }
           }
         },
@@ -619,7 +619,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 3011
+              "local_clock": 3079
             }
           }
         },
@@ -691,7 +691,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 45505
+              "local_clock": 177505
             },
             "C": {
               "event": "auth_snapshot",
@@ -706,7 +706,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 3012
+              "local_clock": 3080
             }
           }
         }
@@ -774,7 +774,7 @@
           "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
           "evidence_steps": 1,
           "ruleset_version": "uow-authority-v1",
-          "local_clock": 47005
+          "local_clock": 179005
         },
         "node_b_reconciled_sequence": 1,
         "state_hash_parity": true,
@@ -801,5 +801,5 @@
     },
     "substitutions": {}
   },
-  "timestamp": "2026-09-23T06:24:54Z"
+  "timestamp": "2026-09-24T20:21:41Z"
 }

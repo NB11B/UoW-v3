@@ -81,6 +81,7 @@ class SerialAuthorityClient:
         self.ser = serial.Serial(port, baud, timeout=timeout)
         time.sleep(0.3)
         self.ser.reset_input_buffer()
+        self.rx_buf = bytearray()
 
     def close(self):
         try:
@@ -88,12 +89,30 @@ class SerialAuthorityClient:
         except Exception:
             pass
 
+    def read_line(self, max_wait: float) -> str | None:
+        deadline = time.time() + max_wait
+        while time.time() < deadline:
+            if b"\n" in self.rx_buf:
+                line, self.rx_buf = self.rx_buf.split(b"\n", 1)
+                return line.decode("utf-8", errors="ignore").strip()
+            try:
+                avail = self.ser.in_waiting
+                chunk = self.ser.read(avail if avail > 0 else 1)
+                if chunk:
+                    self.rx_buf.extend(chunk)
+            except Exception:
+                time.sleep(0.002)
+        if b"\n" in self.rx_buf:
+            line, self.rx_buf = self.rx_buf.split(b"\n", 1)
+            return line.decode("utf-8", errors="ignore").strip()
+        return None
+
     def send_command(self, cmd: str, expected_event: Optional[str] = None, max_wait: float = 3.0) -> Dict[str, Any]:
         self.ser.write((cmd.strip() + "\n").encode("utf-8"))
         start = time.time()
         lines = []
         while time.time() - start < max_wait:
-            raw = self.ser.readline().decode("utf-8", errors="ignore").strip()
+            raw = self.read_line(max(0.01, start + max_wait - time.time()))
             if not raw:
                 continue
             try:

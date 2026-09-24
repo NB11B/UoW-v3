@@ -48,30 +48,41 @@ class SerialTransport:
         self._ser = self._serial.Serial()
         self._ser.port = self.port
         self._ser.baudrate = self.baud
-        self._ser.timeout = 0.1
+        self._ser.timeout = 0.05
         self._ser.dtr = False
         self._ser.rts = False
         self._ser.open()
         time.sleep(self.settle)
         self._ser.reset_input_buffer()
+        self._buf = bytearray()
 
     def write_line(self, text: str) -> None:
         if self._ser is None:
             raise RuntimeError("serial transport is closed")
+        time.sleep(0.010)
         self._ser.write((text.strip() + "\n").encode("utf-8"))
-        self._ser.flush()
 
     def read_line(self, timeout: float) -> str | None:
         if self._ser is None:
             return None
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
+            if b"\n" in self._buf:
+                line, self._buf = self._buf.split(b"\n", 1)
+                return line.decode("utf-8", errors="replace").strip()
             try:
-                raw = self._ser.readline()
-            except Exception:
-                return None
-            if raw:
-                return raw.decode("utf-8", errors="replace").strip()
+                avail = self._ser.in_waiting
+                chunk = self._ser.read(max(avail, 2048))
+                if chunk:
+                    self._buf.extend(chunk)
+            except Exception as exc:
+                print(f"[read_line/EXC] {type(exc).__name__}: {exc}")
+                time.sleep(0.002)
+        if b"\n" in self._buf:
+            line, self._buf = self._buf.split(b"\n", 1)
+            return line.decode("utf-8", errors="replace").strip()
+        if self._buf:
+            self._buf.clear()
         return None
 
     def evidence_context(self) -> EvidenceContext:
@@ -535,10 +546,10 @@ class Interrogator:
                 obj = json.loads(raw)
             except json.JSONDecodeError:
                 self.transcript.received({"raw": raw})
-                if self.echo:
-                    print(f"[device/raw] {raw}")
+                print(f"[device/raw-drop] {raw}")
                 continue
             self.transcript.received(obj)
+            print(f"[device/event] event={obj.get('event')} req={obj.get('request_id')}")
             if self.echo:
                 print(json.dumps(obj, sort_keys=True))
             if obj.get("event") == "fatal":
@@ -552,8 +563,20 @@ class Interrogator:
         collected: list[dict[str, Any]] = []
         deadline = time.monotonic() + timeout
         request_id: int | None = None
+        cmd_verb = command.split()[0].upper() if command.strip() else ""
+        retryable = (
+            cmd_verb in {"STATUS", "SNAPSHOT", "RESET", "CLOCKS", "FREEZE"}
+            or command.strip().startswith("STEP TAMPER_")
+        )
         while time.monotonic() < deadline:
-            obj = self._read_json(max(0.01, deadline - time.monotonic()))
+            read_budget = 0.35 if retryable else max(0.01, deadline - time.monotonic())
+            try:
+                obj = self._read_json(min(read_budget, max(0.01, deadline - time.monotonic())))
+            except TimeoutError:
+                if retryable and time.monotonic() < deadline:
+                    self.transport.write_line(command)
+                    continue
+                raise
             obj_request = obj.get("request_id")
             if obj.get("event") == terminal_event:
                 if request_id is None or (obj_request is not None and int(obj_request) == request_id):
@@ -1136,7 +1159,7 @@ def main() -> int:
 
     transport = SerialTransport(args.port, args.baud)
     try:
-        iq = Interrogator(transport)
+        iq = Interrogator(transport, echo=args.cmd not in {"stress", "qualify-all", "soak"})
         if args.cmd == "status":
             print(json.dumps(iq.status(), indent=2, sort_keys=True))
         elif args.cmd == "send":

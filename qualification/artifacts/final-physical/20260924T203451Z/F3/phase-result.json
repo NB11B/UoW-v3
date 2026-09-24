@@ -1,0 +1,20 @@
+{
+  "phase": "F3",
+  "passed": true,
+  "details": {},
+  "commands": [
+    {
+      "name": "f3_npu_adaptive",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "qualification/npu_adaptive_campaign.py"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:43:34.956898+00:00",
+      "duration_s": 4.745,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F3\\f3_npu_adaptive.log",
+      "passed": true
+    }
+  ]
+}

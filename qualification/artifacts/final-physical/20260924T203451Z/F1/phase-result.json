@@ -1,0 +1,59 @@
+{
+  "phase": "F1",
+  "passed": true,
+  "details": {},
+  "commands": [
+    {
+      "name": "f1_esp32_qualify_all",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "interrogator.py",
+        "--port",
+        "COM10",
+        "--baud",
+        "115200",
+        "--transcript",
+        "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\esp32-transcript.jsonl",
+        "qualify-all",
+        "--stress-trials",
+        "100",
+        "--seed",
+        "20260924",
+        "--report",
+        "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\esp32-qualification.json"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core\\host",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:36:41.949936+00:00",
+      "duration_s": 161.697,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\f1_esp32_qualify_all.log",
+      "passed": true
+    },
+    {
+      "name": "f1_physical_pair",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "qualification/distributed_authority/physical_pair_campaign.py"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:39:24.646823+00:00",
+      "duration_s": 3.879,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\f1_physical_pair.log",
+      "passed": true
+    },
+    {
+      "name": "f1_physical_quorum",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "qualification/distributed_authority/physical_quorum_campaign.py"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:39:29.526354+00:00",
+      "duration_s": 3.795,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\f1_physical_quorum.log",
+      "passed": true
+    }
+  ]
+}

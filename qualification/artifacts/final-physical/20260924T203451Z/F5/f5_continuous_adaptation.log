@@ -1,0 +1,81 @@
+C:\Users\nateb\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\cuda\__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+================================================================================
+GATE U15.7: CONTINUOUS DRIFT ENDURANCE & POLICY MEMORY QUALIFICATION
+================================================================================
+OpenVINO Available Devices: ['CPU', 'GPU.0', 'GPU.1', 'NPU']
+Target Accelerator: NPU (Intel(R) AI Boost)
+Training Accelerator: NVIDIA GeForce RTX 5070 Laptop GPU
+Fail-Closed Mode: True
+
+--- [PART 1] 10-Epoch Continuous Drift Sequence (Zero Reset) ---
+Initial Baseline Model: Gen 0 (hash: 98286ffd29d084a1...)
+
+[Epoch 0: E0_balanced] Balanced CPU/GPU/NPU demands and standard capacities
+  Completed: 8/8 tasks | Gen: 0 | Neural: 8, Fallback: 1 | NPU Lat: 2294.9탎 | Ledger Root: e86caa53c5f441fe...
+
+[Epoch 1: E1_gpu_scarcity] Severe GPU constraint with high GPU demand competition
+  -> Model hot-swapped to Gen 1 (staged & promoted in 159.1ms)
+  Completed: 8/8 tasks | Gen: 1 | Neural: 8, Fallback: 1 | NPU Lat: 2070.9탎 | Ledger Root: 2b1958e4850b41ef...
+
+[Epoch 2: E2_cpu_scarcity] Severe CPU constraint with heavy CPU workloads
+  -> Model hot-swapped to Gen 2 (staged & promoted in 153.1ms)
+  Completed: 8/8 tasks | Gen: 2 | Neural: 8, Fallback: 1 | NPU Lat: 2414.4탎 | Ledger Root: c8dba6630b4b84b8...
+
+[Epoch 3: E3_npu_contention] Single NPU slot with competing accelerator tasks
+  -> Model hot-swapped to Gen 3 (staged & promoted in 153.8ms)
+  Completed: 8/8 tasks | Gen: 3 | Neural: 8, Fallback: 1 | NPU Lat: 2404.6탎 | Ledger Root: 333693d5e02c380a...
+
+[Epoch 4: E4_high_occ_conflict] Multiple concurrent tasks writing to shared hazard keys
+  -> Model hot-swapped to Gen 4 (staged & promoted in 153.3ms)
+  Completed: 8/8 tasks | Gen: 4 | Neural: 8, Fallback: 1 | NPU Lat: 2486.7탎 | Ledger Root: 872ba5f1063c1edc...
+
+[Epoch 5: E5_high_concurrency] Wide frontier with expanded system capacities
+  -> Model hot-swapped to Gen 5 (staged & promoted in 164.3ms)
+  Completed: 12/12 tasks | Gen: 5 | Neural: 12, Fallback: 1 | NPU Lat: 3632.0탎 | Ledger Root: b41de56b3b9ae255...
+
+[Epoch 6: E6_npu_unavailable] NPU accelerator offline; fallback scheduler preserves progress
+  -> Simulating NPU accelerator outage (injecting propose crash)...
+  Completed: 6/6 tasks | Gen: 5 | Neural: 0, Fallback: 7 | NPU Lat: 0.0탎 | Ledger Root: 1e8eca40f2a53ed0...
+
+[Epoch 7: E7_npu_restored] NPU accelerator restored online; hardware inference resumed
+  -> Restoring NPU accelerator online...
+  Completed: 8/8 tasks | Gen: 5 | Neural: 8, Fallback: 1 | NPU Lat: 2773.8탎 | Ledger Root: e92186e4429851f6...
+
+[Epoch 8: E8_workload_reversal] Workload profile inverted: high priority light tasks, deprioritized heavy compute
+  -> Model hot-swapped to Gen 6 (staged & promoted in 154.6ms)
+  Completed: 8/8 tasks | Gen: 6 | Neural: 8, Fallback: 1 | NPU Lat: 2339.3탎 | Ledger Root: 95425b3e79f7bd14...
+
+[Epoch 9: E9_return_to_e0] Return to original balanced distribution (evaluates policy memory and forgetting)
+  -> Model hot-swapped to Gen 7 (staged & promoted in 155.8ms)
+  Completed: 8/8 tasks | Gen: 7 | Neural: 8, Fallback: 1 | NPU Lat: 3025.2탎 | Ledger Root: 5408329fe700af4e...
+
+Continuous drift sequence finished. Total tasks completed: 82
+Continuous Ledger: 256 records verified cryptographically unbroken.
+
+--- [PART 2] Policy Memory Graph & Ancestor Branching ---
+Policy Memory Graph Nodes: 8 generations tracked:
+  - Gen 0: hash=bc6e20fa8306..., parent=None (root), state=RETIRED
+  - Gen 1: hash=bc6e20fa8306..., parent=98286ffd29d0, state=RETIRED
+  - Gen 2: hash=bc6e20fa8306..., parent=a312efb928bd, state=RETIRED
+  - Gen 3: hash=bc6e20fa8306..., parent=25f03218d928, state=RETIRED
+  - Gen 4: hash=bc6e20fa8306..., parent=0b94f1f228b0, state=RETIRED
+  - Gen 5: hash=bc6e20fa8306..., parent=5b750fef0278, state=RETIRED
+  - Gen 6: hash=bc6e20fa8306..., parent=79ab0bd9bad6, state=RETIRED
+  - Gen 7: hash=bc6e20fa8306..., parent=47f4366bfe57, state=ACTIVE
+Branching from Gen 0 created Gen 1 with parent 98286ffd29d0...
+PASS: Policy memory graph branching verified under Judge with zero wrong commits.
+
+--- [PART 3] Negative Control Containment Matrix under Drift ---
+PASS [NC1]: Poisoned health check rejected: 'Injected health check failure: model output contains invalid non-finite values'
+PASS [NC2]: Compilation failure rejected: 'Injected accelerator compilation failure during staging'
+PASS [NC3]: Corrupt schedule rejected by Judge without authoritative commit.
+
+--- [PART 4] Formal Qualification Claim Registration ---
+Claim U15.CONTINUOUS_ADAPTATION_ENDURANCE.PORTABLE: qualified=True, passed=True
+Claim U15.CONTINUOUS_ADAPTATION_ENDURANCE.PHYSICAL: qualified=True, passed=True
+
+Saved qualification artifact to: C:\Users\nateb\OneDrive\Documents\UoW ESP32\qualification\artifacts\u15-continuous-drift-qualification.json
+================================================================================
+GATE U15.7 QUALIFICATION SUCCESS: CONTINUOUS DRIFT ENDURANCE VERIFIED ON PHYSICAL NPU
+================================================================================

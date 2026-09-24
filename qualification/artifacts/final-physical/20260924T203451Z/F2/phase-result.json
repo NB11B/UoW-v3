@@ -1,0 +1,36 @@
+{
+  "phase": "F2",
+  "passed": true,
+  "details": {},
+  "commands": [
+    {
+      "name": "f2_heterogeneous_router",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "router_campaign.py",
+        "--port",
+        "COM10",
+        "--baud",
+        "115200",
+        "--physical",
+        "--jobs",
+        "1200",
+        "--concurrency",
+        "4",
+        "--seed",
+        "20260924",
+        "--stochastic",
+        "--adversarial-at",
+        "600",
+        "--artifacts",
+        "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F2"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core\\host",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:39:33.322031+00:00",
+      "duration_s": 241.633,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F2\\f2_heterogeneous_router.log",
+      "passed": true
+    }
+  ]
+}

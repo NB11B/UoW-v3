@@ -1,0 +1,25 @@
+{
+  "candidate_ref": "archive/uow-reduction-software-candidate-v4",
+  "candidate_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+  "harness_commit": "98a6687198fb78f233ac13091bff5cca3526585d",
+  "phases": [
+    "F0",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8"
+  ],
+  "hardware": {
+    "esp32": "COM10",
+    "uno_q": "COM5",
+    "authority_c": "127.0.0.1:9527",
+    "cuda_gpu_required": true,
+    "openvino_npu_required": true
+  },
+  "fail_closed": true,
+  "cpu_fallback_allowed_for_npu_claims": false
+}

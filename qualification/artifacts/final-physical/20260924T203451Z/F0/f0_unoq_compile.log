@@ -1,0 +1,15 @@
+In file included from /home/arduino/.arduino15/packages/zephyr/tools/arm-zephyr-eabi/0.16.8/arm-zephyr-eabi/include/c++/12.2.0/vector:70,
+                 from /tmp/uno_q_authority/uow_embedded.hpp:7,
+                 from /tmp/uno_q_authority/uow_embedded.cpp:1:
+/home/arduino/.arduino15/packages/zephyr/tools/arm-zephyr-eabi/0.16.8/arm-zephyr-eabi/include/c++/12.2.0/bits/vector.tcc: In member function 'void std::vector<_Tp, _Alloc>::_M_realloc_insert(iterator, _Args&& ...) [with _Args = {const uow_embedded::EvidenceRecord&}; _Tp = uow_embedded::EvidenceRecord; _Alloc = std::allocator<uow_embedded::EvidenceRecord>]':
+/home/arduino/.arduino15/packages/zephyr/tools/arm-zephyr-eabi/0.16.8/arm-zephyr-eabi/include/c++/12.2.0/bits/vector.tcc:439:7: note: parameter passing for argument of type 'std::vector<uow_embedded::EvidenceRecord>::iterator' changed in GCC 7.1
+  439 |       vector<_Tp, _Alloc>::
+      |       ^~~~~~~~~~~~~~~~~~~
+In file included from /home/arduino/.arduino15/packages/zephyr/tools/arm-zephyr-eabi/0.16.8/arm-zephyr-eabi/include/c++/12.2.0/vector:64:
+In member function 'void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = uow_embedded::EvidenceRecord; _Alloc = std::allocator<uow_embedded::EvidenceRecord>]',
+    inlined from 'bool uow_embedded::EvidenceLedger::append(const uow_embedded::EvidenceRecord&)' at /tmp/uno_q_authority/uow_embedded.cpp:262:44:
+/home/arduino/.arduino15/packages/zephyr/tools/arm-zephyr-eabi/0.16.8/arm-zephyr-eabi/include/c++/12.2.0/bits/stl_vector.h:1287:28: note: parameter passing for argument of type '__gnu_cxx::__normal_iterator<uow_embedded::EvidenceRecord*, std::vector<uow_embedded::EvidenceRecord> >' changed in GCC 7.1
+ 1287 |           _M_realloc_insert(end(), __x);
+      |           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+Sketch uses 114892 bytes (14%) of program storage space. Maximum is 786432 bytes.
+Global variables use 44800 bytes (17%) of dynamic memory, leaving 217344 bytes for local variables. Maximum is 262144 bytes.

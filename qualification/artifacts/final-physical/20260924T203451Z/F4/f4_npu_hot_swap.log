@@ -1,0 +1,34 @@
+C:\Users\nateb\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\cuda\__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+================================================================================
+U15.6: PHYSICAL INTEL AI BOOST NPU LIVE HOT-SWAP QUALIFICATION
+================================================================================
+OpenVINO Available Devices: ['CPU', 'GPU.0', 'GPU.1', 'NPU']
+Physical NPU Device: NPU (Intel(R) AI Boost)
+PyTorch CUDA Device: NVIDIA GeForce RTX 5070 Laptop GPU
+
+--- [PART 1] Multi-Generation Live Hot Swap on Physical NPU ---
+Generation 0 Initialized on NPU: f9207aa54a4fccc3
+Live Hot-Swap: G0 -> G1 (Stage: 150.4ms, Atomic Swap: 1237.9us) -> Hash: f9207aa54a4fccc3
+Live Hot-Swap: G1 -> G2 (Stage: 1049.2ms, Atomic Swap: 827.2us) -> Hash: 452e5991358010a3
+Live Hot-Swap: G2 -> G3 (Stage: 204.1ms, Atomic Swap: 844.5us) -> Hash: 1fa6a09bfbe6aa5f
+PASS: 3 successive live hot swaps executed on physical NPU with 0 wrong commits.
+
+--- [PART 2] Staged Health Check Failure Containment on NPU ---
+Intercepted expected health check rejection: Injected health check failure: model output contains invalid non-finite values
+PASS: Staged poisoning contained. Active NPU inference completely undisturbed.
+
+--- [PART 3] Atomic Rollback on Physical NPU (G3 -> G1) ---
+PASS: Atomic rollback to Generation 1 verified on physical NPU in 890.7us.
+
+--- [PART 4] Cold Restart Recovery from Durable Manifest ---
+PASS: Cold restart recovered active Generation 2 on physical NPU.
+
+--- [PART 5] Formal Qualification Claim Registration ---
+Claim U15.NPU_HOT_SWAP.PORTABLE: qualified=True, passed=True
+Claim U15.NPU_HOT_SWAP.PHYSICAL: qualified=True, passed=True
+
+Saved qualification artifact to: qualification\artifacts\u15-npu-hot-swap-qualification.json
+================================================================================
+GATE U15.6 QUALIFICATION SUCCESS: LIVE HOT SWAP VERIFIED ON INTEL AI BOOST NPU
+================================================================================

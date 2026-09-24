@@ -1,0 +1,671 @@
+{
+  "schema_version": "uow-final-physical-campaign-v1.0",
+  "candidate_ref": "archive/uow-reduction-software-candidate-v4",
+  "candidate_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+  "harness_commit": "98a6687198fb78f233ac13091bff5cca3526585d",
+  "started_plan": {
+    "candidate_ref": "archive/uow-reduction-software-candidate-v4",
+    "candidate_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+    "harness_commit": "98a6687198fb78f233ac13091bff5cca3526585d",
+    "phases": [
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8"
+    ],
+    "hardware": {
+      "esp32": "COM10",
+      "uno_q": "COM5",
+      "authority_c": "127.0.0.1:9527",
+      "cuda_gpu_required": true,
+      "openvino_npu_required": true
+    },
+    "fail_closed": true,
+    "cpu_fallback_allowed_for_npu_claims": false
+  },
+  "completed_at": "2026-09-24T20:44:09.891702+00:00",
+  "phases": [
+    {
+      "phase": "F0",
+      "passed": true,
+      "details": {
+        "candidate_ref": "archive/uow-reduction-software-candidate-v4",
+        "candidate_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+        "harness_commit": "98a6687198fb78f233ac13091bff5cca3526585d",
+        "source_attestation": [
+          {
+            "path": "qualification/embedded/esp32_dual_core/src/main.cpp",
+            "expected_blob": "616e721a0fb58222cf1ec68f03daa6181ff7892c",
+            "candidate_blob": "616e721a0fb58222cf1ec68f03daa6181ff7892c",
+            "worktree_blob": "616e721a0fb58222cf1ec68f03daa6181ff7892c",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/src/uow_embedded.cpp",
+            "expected_blob": "ce64760a2bff70d9361217795f69dd5c0f02bba0",
+            "candidate_blob": "ce64760a2bff70d9361217795f69dd5c0f02bba0",
+            "worktree_blob": "ce64760a2bff70d9361217795f69dd5c0f02bba0",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/include/uow_embedded.hpp",
+            "expected_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+            "candidate_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+            "worktree_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/uno_q_authority/uno_q_authority.ino",
+            "expected_blob": "ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10",
+            "candidate_blob": "ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10",
+            "worktree_blob": "ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/uno_q_authority/uow_embedded.cpp",
+            "expected_blob": "a14e37bebce0dff8f647d148505579a5a6f1879d",
+            "candidate_blob": "a14e37bebce0dff8f647d148505579a5a6f1879d",
+            "worktree_blob": "a14e37bebce0dff8f647d148505579a5a6f1879d",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/uno_q_authority/uow_embedded.hpp",
+            "expected_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+            "candidate_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+            "worktree_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+            "passed": true
+          },
+          {
+            "path": "qualification/distributed_authority/authority_service_c.py",
+            "expected_blob": "37bc99587887de64083b1190d2a9da6dd430b929",
+            "candidate_blob": "37bc99587887de64083b1190d2a9da6dd430b929",
+            "worktree_blob": "37bc99587887de64083b1190d2a9da6dd430b929",
+            "passed": true
+          },
+          {
+            "path": "qualification/distributed_authority/physical_profile.py",
+            "expected_blob": "0a8682f624923c5bc0b6889dfcf2967411b9c0ad",
+            "candidate_blob": "0a8682f624923c5bc0b6889dfcf2967411b9c0ad",
+            "worktree_blob": "0a8682f624923c5bc0b6889dfcf2967411b9c0ad",
+            "passed": true
+          },
+          {
+            "path": "integrations/openvino_npu/adapter.py",
+            "expected_blob": "668bd2f14381a9b09d09b6e3506134cdab6b44f9",
+            "candidate_blob": "668bd2f14381a9b09d09b6e3506134cdab6b44f9",
+            "worktree_blob": "668bd2f14381a9b09d09b6e3506134cdab6b44f9",
+            "passed": true
+          },
+          {
+            "path": "integrations/openvino_npu/model.py",
+            "expected_blob": "b82f15dafb2df0699e0bb1f815b7658c75fbcbbd",
+            "candidate_blob": "b82f15dafb2df0699e0bb1f815b7658c75fbcbbd",
+            "worktree_blob": "b82f15dafb2df0699e0bb1f815b7658c75fbcbbd",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/host/intel_npu_adapter.py",
+            "expected_blob": "c13b03980ea71eac82e9edae8c9e7819e6248651",
+            "candidate_blob": "c13b03980ea71eac82e9edae8c9e7819e6248651",
+            "worktree_blob": "c13b03980ea71eac82e9edae8c9e7819e6248651",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/host/minsky_npu.onnx",
+            "expected_blob": "8d84323fcc091059ecfaf69cf1c9324f296ffd05",
+            "candidate_blob": "8d84323fcc091059ecfaf69cf1c9324f296ffd05",
+            "worktree_blob": "8d84323fcc091059ecfaf69cf1c9324f296ffd05",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/platformio.ini",
+            "expected_blob": "d33108e278a3d0ae97231df65f8551bc9b6d030d",
+            "candidate_blob": "d33108e278a3d0ae97231df65f8551bc9b6d030d",
+            "worktree_blob": "d33108e278a3d0ae97231df65f8551bc9b6d030d",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/host/interrogator.py",
+            "expected_blob": "c59d02a0f7860994cb9cc0a799ca3c45a2ac0385",
+            "candidate_blob": "c59d02a0f7860994cb9cc0a799ca3c45a2ac0385",
+            "worktree_blob": "c59d02a0f7860994cb9cc0a799ca3c45a2ac0385",
+            "passed": true
+          },
+          {
+            "path": "qualification/embedded/esp32_dual_core/host/router_campaign.py",
+            "expected_blob": "b1b4aa416c71276430317a832ba55262c149db30",
+            "candidate_blob": "b1b4aa416c71276430317a832ba55262c149db30",
+            "worktree_blob": "b1b4aa416c71276430317a832ba55262c149db30",
+            "passed": true
+          },
+          {
+            "path": "qualification/distributed_authority/physical_pair_campaign.py",
+            "expected_blob": "97fcf8592363fd3ca6a62a510baa5d99b43b3abe",
+            "candidate_blob": "97fcf8592363fd3ca6a62a510baa5d99b43b3abe",
+            "worktree_blob": "97fcf8592363fd3ca6a62a510baa5d99b43b3abe",
+            "passed": true
+          },
+          {
+            "path": "qualification/distributed_authority/physical_quorum_campaign.py",
+            "expected_blob": "f635a1f3b4025f1d473625966de87e76977dbb23",
+            "candidate_blob": "f635a1f3b4025f1d473625966de87e76977dbb23",
+            "worktree_blob": "f635a1f3b4025f1d473625966de87e76977dbb23",
+            "passed": true
+          },
+          {
+            "path": "qualification/npu_quorum_campaign.py",
+            "expected_blob": "544d445c824ac0a50dd1427e97f8c5c55b6db174",
+            "candidate_blob": "544d445c824ac0a50dd1427e97f8c5c55b6db174",
+            "worktree_blob": "544d445c824ac0a50dd1427e97f8c5c55b6db174",
+            "passed": true
+          }
+        ],
+        "binary_attestation": {
+          "esp32": {
+            "path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core\\.pio\\build\\esp32s3_p0_a1\\firmware.bin",
+            "sha256": "900e2942aaceb7bc9f98a40d601381d8d4a25aa08199a50a9637f232b44b4208",
+            "environment": "esp32s3_p0_a1"
+          },
+          "uno_q": {
+            "device": "3093395174",
+            "remote_build_dir": "/tmp/uno_q_authority/build",
+            "outputs": [
+              {
+                "sha256": "4bc93cd72b10979fd29823fd150877cf77f6284a546ae879564246c64c4aef1b",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_temp.map"
+              },
+              {
+                "sha256": "f2ae3b1983e52fb1ed416fe2ab6ca7f81a641cad9addefa2a75969fde6148910",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_temp.elf"
+              },
+              {
+                "sha256": "5b5df7ed76f281e6a2ad05bc1ce52e3c1a2e265961ca2155d704977e83e1bc08",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_debug.elf"
+              },
+              {
+                "sha256": "91c35ce871dad66616ab72a594b637502d5d4a0c028d6f14bddefa607d3781ae",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_check.tmp"
+              },
+              {
+                "sha256": "812215b39a492cafb49622a875dfcafc1d27d2511aa021146dc654de40ff98ee",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.map"
+              },
+              {
+                "sha256": "e63e1dc25384794c0283fa8ff163a8414fab05d0a66781f3b6bb8d1959d50676",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.hex"
+              },
+              {
+                "sha256": "4afe4b5fb9b362052d7a14507259afbf4b59ae21c205ea1a8b1b014a0f87c5b7",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.elf-zsk.bin"
+              },
+              {
+                "sha256": "043cf4bef2da0a6886ee8c8e3acaf7bb4346099ee8e97214aa7fedf50dca49c4",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.elf"
+              },
+              {
+                "sha256": "311ce191444132dd5932ce49f13acaf41b7f6d0e807af1dda5138dff7a85f30f",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.bin-zsk.bin"
+              },
+              {
+                "sha256": "fa4e693bc09cd0d21b24741514d4410f87dc8e282fe4e84752b2b97caa21ab81",
+                "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.bin"
+              }
+            ]
+          }
+        },
+        "candidate_ref_resolved": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+        "hardware": {
+          "esp_port_requested": "COM10",
+          "uno_port_requested": "COM5",
+          "serial_ports": [
+            "COM10",
+            "COM6",
+            "COM11",
+            "COM12",
+            "COM5"
+          ],
+          "cuda_available": true,
+          "cuda_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+          "openvino_devices": [
+            "CPU",
+            "GPU.0",
+            "GPU.1",
+            "NPU"
+          ],
+          "npu_device": "Intel(R) AI Boost",
+          "pio": "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\pio.EXE",
+          "adb": "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe"
+        }
+      },
+      "commands": [
+        {
+          "name": "f0_esp32_build",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\pio.EXE",
+            "run",
+            "-e",
+            "esp32s3_p0_a1"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:34:54.438967+00:00",
+          "duration_s": 1.526,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_esp32_build.log",
+          "passed": true
+        },
+        {
+          "name": "f0_esp32_upload",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\pio.EXE",
+            "run",
+            "-e",
+            "esp32s3_p0_a1",
+            "-t",
+            "upload"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:34:55.966158+00:00",
+          "duration_s": 8.16,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_esp32_upload.log",
+          "passed": true
+        },
+        {
+          "name": "f0_unoq_prepare",
+          "argv": [
+            "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe",
+            "-s",
+            "3093395174",
+            "shell",
+            "rm -rf /tmp/uno_q_authority; mkdir -p /tmp/uno_q_authority /tmp/uno_q_authority/build"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:35:04.127288+00:00",
+          "duration_s": 5.084,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_unoq_prepare.log",
+          "passed": true
+        },
+        {
+          "name": "f0_unoq_push_uno_q_authority_ino",
+          "argv": [
+            "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe",
+            "-s",
+            "3093395174",
+            "push",
+            "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority\\uno_q_authority.ino",
+            "/tmp/uno_q_authority/uno_q_authority.ino"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:35:09.211461+00:00",
+          "duration_s": 0.023,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_unoq_push_uno_q_authority_ino.log",
+          "passed": true
+        },
+        {
+          "name": "f0_unoq_push_uow_embedded_hpp",
+          "argv": [
+            "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe",
+            "-s",
+            "3093395174",
+            "push",
+            "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority\\uow_embedded.hpp",
+            "/tmp/uno_q_authority/uow_embedded.hpp"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:35:09.234594+00:00",
+          "duration_s": 0.022,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_unoq_push_uow_embedded_hpp.log",
+          "passed": true
+        },
+        {
+          "name": "f0_unoq_push_uow_embedded_cpp",
+          "argv": [
+            "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe",
+            "-s",
+            "3093395174",
+            "push",
+            "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority\\uow_embedded.cpp",
+            "/tmp/uno_q_authority/uow_embedded.cpp"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:35:09.256399+00:00",
+          "duration_s": 0.024,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_unoq_push_uow_embedded_cpp.log",
+          "passed": true
+        },
+        {
+          "name": "f0_unoq_compile",
+          "argv": [
+            "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe",
+            "-s",
+            "3093395174",
+            "shell",
+            "arduino-cli compile --output-dir /tmp/uno_q_authority/build -b arduino:zephyr:unoq /tmp/uno_q_authority"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:35:09.280913+00:00",
+          "duration_s": 86.297,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_unoq_compile.log",
+          "passed": true
+        },
+        {
+          "name": "f0_unoq_upload",
+          "argv": [
+            "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe",
+            "-s",
+            "3093395174",
+            "shell",
+            "arduino-cli upload --input-dir /tmp/uno_q_authority/build -b arduino:zephyr:unoq /tmp/uno_q_authority"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\uno_q_authority",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:36:35.727390+00:00",
+          "duration_s": 4.221,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F0\\f0_unoq_upload.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F1",
+      "passed": true,
+      "details": {},
+      "commands": [
+        {
+          "name": "f1_esp32_qualify_all",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "interrogator.py",
+            "--port",
+            "COM10",
+            "--baud",
+            "115200",
+            "--transcript",
+            "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\esp32-transcript.jsonl",
+            "qualify-all",
+            "--stress-trials",
+            "100",
+            "--seed",
+            "20260924",
+            "--report",
+            "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\esp32-qualification.json"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core\\host",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:36:41.949936+00:00",
+          "duration_s": 161.697,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\f1_esp32_qualify_all.log",
+          "passed": true
+        },
+        {
+          "name": "f1_physical_pair",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "qualification/distributed_authority/physical_pair_campaign.py"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:39:24.646823+00:00",
+          "duration_s": 3.879,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\f1_physical_pair.log",
+          "passed": true
+        },
+        {
+          "name": "f1_physical_quorum",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "qualification/distributed_authority/physical_quorum_campaign.py"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:39:29.526354+00:00",
+          "duration_s": 3.795,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F1\\f1_physical_quorum.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F2",
+      "passed": true,
+      "details": {},
+      "commands": [
+        {
+          "name": "f2_heterogeneous_router",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "router_campaign.py",
+            "--port",
+            "COM10",
+            "--baud",
+            "115200",
+            "--physical",
+            "--jobs",
+            "1200",
+            "--concurrency",
+            "4",
+            "--seed",
+            "20260924",
+            "--stochastic",
+            "--adversarial-at",
+            "600",
+            "--artifacts",
+            "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F2"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core\\host",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:39:33.322031+00:00",
+          "duration_s": 241.633,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F2\\f2_heterogeneous_router.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F3",
+      "passed": true,
+      "details": {},
+      "commands": [
+        {
+          "name": "f3_npu_adaptive",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "qualification/npu_adaptive_campaign.py"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:43:34.956898+00:00",
+          "duration_s": 4.745,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F3\\f3_npu_adaptive.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F4",
+      "passed": true,
+      "details": {},
+      "commands": [
+        {
+          "name": "f4_npu_hot_swap",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "qualification/npu_hot_swap_campaign.py"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:43:39.702395+00:00",
+          "duration_s": 4.853,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F4\\f4_npu_hot_swap.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F5",
+      "passed": true,
+      "details": {},
+      "commands": [
+        {
+          "name": "f5_continuous_adaptation",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "qualification/npu_continuous_drift_campaign.py",
+            "--device",
+            "NPU"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:43:44.556422+00:00",
+          "duration_s": 4.693,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F5\\f5_continuous_adaptation.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F6",
+      "passed": true,
+      "details": {},
+      "commands": [
+        {
+          "name": "f6_adaptive_physical_quorum",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "qualification/npu_quorum_campaign.py",
+            "--device",
+            "NPU"
+          ],
+          "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:43:49.249898+00:00",
+          "duration_s": 4.521,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F6\\f6_adaptive_physical_quorum.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F7",
+      "passed": true,
+      "details": {
+        "reference_ref": "qualification/a3-adaptive-compute-efficiency",
+        "reference_commit": "05c8094ac5c8572f7da6d00e781ce673754c5c59",
+        "physical_continuum_dependency": "F2",
+        "historical_long_soak_reused_only_for_original_head": true,
+        "new_long_soak_required_if_changed_mechanism_claimed": true
+      },
+      "commands": [
+        {
+          "name": "f7_a3_frozen_oracle",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/a3"
+          ],
+          "cwd": "C:\\Users\\nateb\\AppData\\Local\\Temp\\uow-f7_a3_frozen_oracle-8m977snu\\worktree",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:43:53.944042+00:00",
+          "duration_s": 8.35,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F7\\f7_a3_frozen_oracle.log",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "phase": "F8",
+      "passed": true,
+      "details": {
+        "layer": "POST_A3_POLICY_ORCHESTRATOR_P1_P5",
+        "candidate_exact_seal_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+        "candidate_shadow_tests_passed": 279,
+        "reference_ref": "architecture/policy-aware-uow-orchestrator",
+        "reference_tag": "policy-orchestrator-p5-qualified",
+        "reference_commit": "aa886329298f87e8b006501d47dd89eb8f0d4a3b",
+        "policy_suite_tests_passed": 44,
+        "historical_full_repository_tests_passed": 324,
+        "mandatory_invariants": [
+          "canonical_uow_requirement_projection",
+          "deterministic_world_state_snapshot",
+          "execution_realization_graph",
+          "qualified_versioned_policy_registry",
+          "discovery_without_authority",
+          "prospective_qualification",
+          "deterministic_policy_reuse",
+          "live_drift_invalidation_safe_replacement",
+          "transactional_registry_versioning",
+          "distributed_policy_authority",
+          "durable_persistence_atomic_recovery",
+          "zero_duplicate_external_effects",
+          "five_tier_cryptographic_provenance"
+        ],
+        "mandatory_invariant_count": 13,
+        "gate_map_sha256": "c846368225b5b370c6443c86412e4665b707c2dbadc19296bf6dc7ed64e48c64",
+        "physical_phase_dependencies": [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6"
+        ],
+        "a3_evidence_inherited_not_double_counted": true,
+        "p1_p5_specific_evidence_required": true,
+        "p6_required": false
+      },
+      "commands": [
+        {
+          "name": "f8_candidate_exact_seal_shadow",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "architecture/shadow/python/tests"
+          ],
+          "cwd": "C:\\Users\\nateb\\AppData\\Local\\Temp\\uow-f8_candidate_exact_seal_shadow-btkberbs\\worktree",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:44:02.550327+00:00",
+          "duration_s": 5.795,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F8\\f8_candidate_exact_seal_shadow.log",
+          "passed": true
+        },
+        {
+          "name": "f8_post_a3_p1_p5_frozen_oracle",
+          "argv": [
+            "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "-m",
+            "pytest",
+            "-q",
+            "tests/test_policy_orchestrator.py",
+            "tests/test_p1_end_to_end_orchestration.py",
+            "tests/test_p2_live_policy_promotion.py",
+            "tests/test_p3_live_drift_and_requalification.py",
+            "tests/test_p4_distributed_policy_authority.py",
+            "tests/test_p5_durable_recovery.py"
+          ],
+          "cwd": "C:\\Users\\nateb\\AppData\\Local\\Temp\\uow-f8_post_a3_p1_p5_frozen_oracle-rtjs1xov\\worktree",
+          "returncode": 0,
+          "started_at": "2026-09-24T20:44:08.617575+00:00",
+          "duration_s": 1.168,
+          "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F8\\f8_post_a3_p1_p5_frozen_oracle.log",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "physical_claims_promotable": true
+}

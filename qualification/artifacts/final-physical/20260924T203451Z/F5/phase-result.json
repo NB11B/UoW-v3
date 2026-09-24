@@ -1,0 +1,22 @@
+{
+  "phase": "F5",
+  "passed": true,
+  "details": {},
+  "commands": [
+    {
+      "name": "f5_continuous_adaptation",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "qualification/npu_continuous_drift_campaign.py",
+        "--device",
+        "NPU"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:43:44.556422+00:00",
+      "duration_s": 4.693,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F5\\f5_continuous_adaptation.log",
+      "passed": true
+    }
+  ]
+}

@@ -107,7 +107,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 174505
+                "local_clock": 9505
               }
             }
           },
@@ -153,7 +153,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 176005
+                "local_clock": 11005
               },
               "C": {
                 "event": "auth_snapshot",
@@ -168,7 +168,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 3078
+                "local_clock": 3086
               }
             }
           },
@@ -229,7 +229,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 3079
+                "local_clock": 3087
               }
             }
           },
@@ -301,7 +301,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 177505
+                "local_clock": 12505
               },
               "C": {
                 "event": "auth_snapshot",
@@ -316,7 +316,7 @@
                 "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
                 "evidence_steps": 1,
                 "ruleset_version": "uow-authority-v1",
-                "local_clock": 3080
+                "local_clock": 3088
               }
             }
           }
@@ -384,7 +384,7 @@
             "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
             "evidence_steps": 1,
             "ruleset_version": "uow-authority-v1",
-            "local_clock": 179005
+            "local_clock": 14005
           },
           "node_b_reconciled_sequence": 1,
           "state_hash_parity": true,
@@ -497,7 +497,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 174505
+              "local_clock": 9505
             }
           }
         },
@@ -543,7 +543,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 176005
+              "local_clock": 11005
             },
             "C": {
               "event": "auth_snapshot",
@@ -558,7 +558,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 3078
+              "local_clock": 3086
             }
           }
         },
@@ -619,7 +619,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 3079
+              "local_clock": 3087
             }
           }
         },
@@ -691,7 +691,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 177505
+              "local_clock": 12505
             },
             "C": {
               "event": "auth_snapshot",
@@ -706,7 +706,7 @@
               "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
               "evidence_steps": 1,
               "ruleset_version": "uow-authority-v1",
-              "local_clock": 3080
+              "local_clock": 3088
             }
           }
         }
@@ -774,7 +774,7 @@
           "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
           "evidence_steps": 1,
           "ruleset_version": "uow-authority-v1",
-          "local_clock": 179005
+          "local_clock": 14005
         },
         "node_b_reconciled_sequence": 1,
         "state_hash_parity": true,
@@ -801,5 +801,5 @@
     },
     "substitutions": {}
   },
-  "timestamp": "2026-09-24T20:21:41Z"
+  "timestamp": "2026-09-24T20:39:33Z"
 }

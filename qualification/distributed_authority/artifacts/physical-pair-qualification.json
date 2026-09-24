@@ -64,7 +64,7 @@
             "evidence_step": 0,
             "ruleset_version": "uow-authority-v1",
             "vote_hash": "cb360db0c6dcc41da5e75f9ccc4e261e363341d11bd776b363ed521fe979cab7",
-            "local_clock": 161005
+            "local_clock": 2001
           },
           "certificate_hash_match": true,
           "proposed_state_hash_match": true
@@ -83,7 +83,7 @@
         "passed": true,
         "details": {
           "node_a_clock": 1585,
-          "node_b_clock": 168505,
+          "node_b_clock": 3505,
           "clocks_differ": true,
           "certificate_hash_invariance": true
         }
@@ -134,7 +134,7 @@
             "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
             "evidence_steps": 1,
             "ruleset_version": "uow-authority-v1",
-            "local_clock": 170005
+            "local_clock": 5005
           },
           "node_a_sequence": 1,
           "node_b_post_sequence": 1,
@@ -210,7 +210,7 @@
           "evidence_step": 0,
           "ruleset_version": "uow-authority-v1",
           "vote_hash": "cb360db0c6dcc41da5e75f9ccc4e261e363341d11bd776b363ed521fe979cab7",
-          "local_clock": 161005
+          "local_clock": 2001
         },
         "certificate_hash_match": true,
         "proposed_state_hash_match": true
@@ -229,7 +229,7 @@
       "passed": true,
       "details": {
         "node_a_clock": 1585,
-        "node_b_clock": 168505,
+        "node_b_clock": 3505,
         "clocks_differ": true,
         "certificate_hash_invariance": true
       }
@@ -280,7 +280,7 @@
           "evidence_root": "d12d97affbbe42c9ddf7396018f26853911b40ba48dcd45133d52cfa8db7700f",
           "evidence_steps": 1,
           "ruleset_version": "uow-authority-v1",
-          "local_clock": 170005
+          "local_clock": 5005
         },
         "node_a_sequence": 1,
         "node_b_post_sequence": 1,
@@ -311,5 +311,5 @@
     },
     "substitutions": {}
   },
-  "timestamp": "2026-09-24T20:21:36Z"
+  "timestamp": "2026-09-24T20:39:28Z"
 }

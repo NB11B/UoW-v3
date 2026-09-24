@@ -1,0 +1,20 @@
+{
+  "campaign_passed": true,
+  "checks": {
+    "campaign": true,
+    "fault_matrix": true,
+    "resilience": true,
+    "stress": true,
+    "transcript_integrity": true
+  },
+  "evidence_level": "physical",
+  "fault_matrix_passed": true,
+  "observed_pass": true,
+  "passed": true,
+  "qualified": true,
+  "resilience_passed": true,
+  "schema_version": "uow-esp32-full-qualification-v0.4",
+  "stress_passed": true,
+  "transcript_audit_passed": true,
+  "transcript_root": "875324e424d8cd5fca61eb0c565e60d294c08b7c1625ee325527f5b493165493"
+}

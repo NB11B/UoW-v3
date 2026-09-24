@@ -1,0 +1,42 @@
+C:\Users\nateb\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\cuda\__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+================================================================================
+GATE U15.8: HETEROGENEOUS ADAPTIVE QUORUM ORCHESTRATION QUALIFICATION
+================================================================================
+OpenVINO Devices: ['CPU', 'GPU.0', 'GPU.1', 'NPU']
+Adaptive Proposer Accelerator: NPU (Intel(R) AI Boost)
+Adaptive Trainer Accelerator: NVIDIA GeForce RTX 5070 Laptop GPU
+Authority Domains: 3, Failure Domains: 3
+
+Connecting to physical authority nodes...
+Node A Initial: authority_a_esp32 seq=0 hash=00de5e736c29...
+Node B Initial: authority_b_unoq_stm32 seq=0 hash=00de5e736c29...
+Node C Initial: authority_c_laptop_x86 seq=0 hash=00de5e736c29...
+
+--- [GATE 1] Physical NPU Proposer Driving 3-of-3 Quorum Consensus ---
+Physical NPU Inference Latency: 145.0µs
+PASS [GATE 1]: All 3 physical authority nodes committed in lockstep driven by NPU proposer.
+
+--- [GATE 2] Single Node Failure Resilience (Node A partitioned, B+C commit) ---
+PASS [GATE 2]: 2-of-3 physical quorum made progress while Node A was offline.
+
+--- [GATE 3] Minority Partition Safety (1-of-3 Cannot Commit) ---
+  Minority partition cannot form valid 2-of-3 QC.
+PASS [GATE 3]: Minority partition failed closed with ZERO commits.
+
+--- [GATE 4] Byzantine Corrupt Proposal Rejection by Physical Quorum ---
+PASS [GATE 4]: Corrupt proposal rejected by Node B ('CONFLICTING_VOTE_LOCK') and Node C ('STATE_DIVERGENCE').
+
+--- [GATE 5] Closed-Loop Adaptation & Live Hot-Swap on Physical NPU ---
+Active Baseline NPU Generation: Gen 0 (hash: 01e02f61322a...)
+Physical NPU Model Hot-Swapped to Gen 1 (parent: 01e02f61322a...)
+PASS [GATE 5]: Physical NPU proposer adapted and hot-swapped under physical quorum authority.
+
+--- Formal Qualification Claims Registration ---
+Claim U15.ADAPTIVE_QUORUM_ORCHESTRATION.PORTABLE: qualified=True, passed=True
+Claim U15.ADAPTIVE_QUORUM_ORCHESTRATION.PHYSICAL: qualified=True, passed=True
+
+Saved qualification artifact to: C:\Users\nateb\OneDrive\Documents\UoW ESP32\qualification\artifacts\u15-adaptive-quorum-qualification.json
+================================================================================
+GATE U15.8 QUALIFICATION SUCCESS: HETEROGENEOUS ADAPTIVE QUORUM QUALIFIED
+================================================================================

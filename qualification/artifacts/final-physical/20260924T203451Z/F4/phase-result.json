@@ -1,0 +1,20 @@
+{
+  "phase": "F4",
+  "passed": true,
+  "details": {},
+  "commands": [
+    {
+      "name": "f4_npu_hot_swap",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "qualification/npu_hot_swap_campaign.py"
+      ],
+      "cwd": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:43:39.702395+00:00",
+      "duration_s": 4.853,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F4\\f4_npu_hot_swap.log",
+      "passed": true
+    }
+  ]
+}

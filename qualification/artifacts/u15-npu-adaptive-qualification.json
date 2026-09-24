@@ -1,25 +1,25 @@
 {
   "schema_version": "uow-npu-adaptive-qualification-v1.0",
-  "timestamp": "2026-09-24T20:24:56.516350+00:00",
+  "timestamp": "2026-09-24T20:43:39.116351+00:00",
   "hardware": {
     "npu_inference": "Intel(R) AI Boost",
     "gpu_training": "NVIDIA GeForce RTX 5070 Laptop GPU",
     "host_os": "Windows (OpenVINO + Level-Zero VCL)"
   },
   "lineage": {
-    "generation_0_hash": "05033914d4dc9325792581ca7c62183401115d0c1644518f878ce35909d25b6c",
-    "generation_1_hash": "a3eff83baf97a6f1971a2ae3760ebce518a992ede67d6222a322b9641b1d11a2",
+    "generation_0_hash": "314daffaac4c74a090da879d8616e4875c6674e86400081c737f354b0aecf931",
+    "generation_1_hash": "a2c4fe8b6eec3a1b40f98e90890fc56ba871b10e5abf70a9bce5b3c797515369",
     "parent_link_verified": true
   },
   "metrics": {
     "dag_trials": 20,
-    "tasks_committed": 3184,
+    "tasks_committed": 3686,
     "proposals_scored": 1890,
     "wrong_authoritative_commits": 0,
     "npu_latency_us": {
-      "p50": 1701.4,
-      "p95": 2507.3,
-      "p99": 3648.0
+      "p50": 1750.0,
+      "p95": 2477.6,
+      "p99": 3376.7
     }
   },
   "containment_matrix": {

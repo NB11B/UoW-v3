@@ -1,0 +1,209 @@
+{
+  "candidate_ref": "archive/uow-reduction-software-candidate-v4",
+  "candidate_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+  "harness_commit": "98a6687198fb78f233ac13091bff5cca3526585d",
+  "source_attestation": [
+    {
+      "path": "qualification/embedded/esp32_dual_core/src/main.cpp",
+      "expected_blob": "616e721a0fb58222cf1ec68f03daa6181ff7892c",
+      "candidate_blob": "616e721a0fb58222cf1ec68f03daa6181ff7892c",
+      "worktree_blob": "616e721a0fb58222cf1ec68f03daa6181ff7892c",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/src/uow_embedded.cpp",
+      "expected_blob": "ce64760a2bff70d9361217795f69dd5c0f02bba0",
+      "candidate_blob": "ce64760a2bff70d9361217795f69dd5c0f02bba0",
+      "worktree_blob": "ce64760a2bff70d9361217795f69dd5c0f02bba0",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/include/uow_embedded.hpp",
+      "expected_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+      "candidate_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+      "worktree_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/uno_q_authority/uno_q_authority.ino",
+      "expected_blob": "ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10",
+      "candidate_blob": "ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10",
+      "worktree_blob": "ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/uno_q_authority/uow_embedded.cpp",
+      "expected_blob": "a14e37bebce0dff8f647d148505579a5a6f1879d",
+      "candidate_blob": "a14e37bebce0dff8f647d148505579a5a6f1879d",
+      "worktree_blob": "a14e37bebce0dff8f647d148505579a5a6f1879d",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/uno_q_authority/uow_embedded.hpp",
+      "expected_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+      "candidate_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+      "worktree_blob": "7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a",
+      "passed": true
+    },
+    {
+      "path": "qualification/distributed_authority/authority_service_c.py",
+      "expected_blob": "37bc99587887de64083b1190d2a9da6dd430b929",
+      "candidate_blob": "37bc99587887de64083b1190d2a9da6dd430b929",
+      "worktree_blob": "37bc99587887de64083b1190d2a9da6dd430b929",
+      "passed": true
+    },
+    {
+      "path": "qualification/distributed_authority/physical_profile.py",
+      "expected_blob": "0a8682f624923c5bc0b6889dfcf2967411b9c0ad",
+      "candidate_blob": "0a8682f624923c5bc0b6889dfcf2967411b9c0ad",
+      "worktree_blob": "0a8682f624923c5bc0b6889dfcf2967411b9c0ad",
+      "passed": true
+    },
+    {
+      "path": "integrations/openvino_npu/adapter.py",
+      "expected_blob": "668bd2f14381a9b09d09b6e3506134cdab6b44f9",
+      "candidate_blob": "668bd2f14381a9b09d09b6e3506134cdab6b44f9",
+      "worktree_blob": "668bd2f14381a9b09d09b6e3506134cdab6b44f9",
+      "passed": true
+    },
+    {
+      "path": "integrations/openvino_npu/model.py",
+      "expected_blob": "b82f15dafb2df0699e0bb1f815b7658c75fbcbbd",
+      "candidate_blob": "b82f15dafb2df0699e0bb1f815b7658c75fbcbbd",
+      "worktree_blob": "b82f15dafb2df0699e0bb1f815b7658c75fbcbbd",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/host/intel_npu_adapter.py",
+      "expected_blob": "c13b03980ea71eac82e9edae8c9e7819e6248651",
+      "candidate_blob": "c13b03980ea71eac82e9edae8c9e7819e6248651",
+      "worktree_blob": "c13b03980ea71eac82e9edae8c9e7819e6248651",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/host/minsky_npu.onnx",
+      "expected_blob": "8d84323fcc091059ecfaf69cf1c9324f296ffd05",
+      "candidate_blob": "8d84323fcc091059ecfaf69cf1c9324f296ffd05",
+      "worktree_blob": "8d84323fcc091059ecfaf69cf1c9324f296ffd05",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/platformio.ini",
+      "expected_blob": "d33108e278a3d0ae97231df65f8551bc9b6d030d",
+      "candidate_blob": "d33108e278a3d0ae97231df65f8551bc9b6d030d",
+      "worktree_blob": "d33108e278a3d0ae97231df65f8551bc9b6d030d",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/host/interrogator.py",
+      "expected_blob": "c59d02a0f7860994cb9cc0a799ca3c45a2ac0385",
+      "candidate_blob": "c59d02a0f7860994cb9cc0a799ca3c45a2ac0385",
+      "worktree_blob": "c59d02a0f7860994cb9cc0a799ca3c45a2ac0385",
+      "passed": true
+    },
+    {
+      "path": "qualification/embedded/esp32_dual_core/host/router_campaign.py",
+      "expected_blob": "b1b4aa416c71276430317a832ba55262c149db30",
+      "candidate_blob": "b1b4aa416c71276430317a832ba55262c149db30",
+      "worktree_blob": "b1b4aa416c71276430317a832ba55262c149db30",
+      "passed": true
+    },
+    {
+      "path": "qualification/distributed_authority/physical_pair_campaign.py",
+      "expected_blob": "97fcf8592363fd3ca6a62a510baa5d99b43b3abe",
+      "candidate_blob": "97fcf8592363fd3ca6a62a510baa5d99b43b3abe",
+      "worktree_blob": "97fcf8592363fd3ca6a62a510baa5d99b43b3abe",
+      "passed": true
+    },
+    {
+      "path": "qualification/distributed_authority/physical_quorum_campaign.py",
+      "expected_blob": "f635a1f3b4025f1d473625966de87e76977dbb23",
+      "candidate_blob": "f635a1f3b4025f1d473625966de87e76977dbb23",
+      "worktree_blob": "f635a1f3b4025f1d473625966de87e76977dbb23",
+      "passed": true
+    },
+    {
+      "path": "qualification/npu_quorum_campaign.py",
+      "expected_blob": "544d445c824ac0a50dd1427e97f8c5c55b6db174",
+      "candidate_blob": "544d445c824ac0a50dd1427e97f8c5c55b6db174",
+      "worktree_blob": "544d445c824ac0a50dd1427e97f8c5c55b6db174",
+      "passed": true
+    }
+  ],
+  "binary_attestation": {
+    "esp32": {
+      "path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\embedded\\esp32_dual_core\\.pio\\build\\esp32s3_p0_a1\\firmware.bin",
+      "sha256": "900e2942aaceb7bc9f98a40d601381d8d4a25aa08199a50a9637f232b44b4208",
+      "environment": "esp32s3_p0_a1"
+    },
+    "uno_q": {
+      "device": "3093395174",
+      "remote_build_dir": "/tmp/uno_q_authority/build",
+      "outputs": [
+        {
+          "sha256": "4bc93cd72b10979fd29823fd150877cf77f6284a546ae879564246c64c4aef1b",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_temp.map"
+        },
+        {
+          "sha256": "f2ae3b1983e52fb1ed416fe2ab6ca7f81a641cad9addefa2a75969fde6148910",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_temp.elf"
+        },
+        {
+          "sha256": "5b5df7ed76f281e6a2ad05bc1ce52e3c1a2e265961ca2155d704977e83e1bc08",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_debug.elf"
+        },
+        {
+          "sha256": "91c35ce871dad66616ab72a594b637502d5d4a0c028d6f14bddefa607d3781ae",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino_check.tmp"
+        },
+        {
+          "sha256": "812215b39a492cafb49622a875dfcafc1d27d2511aa021146dc654de40ff98ee",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.map"
+        },
+        {
+          "sha256": "e63e1dc25384794c0283fa8ff163a8414fab05d0a66781f3b6bb8d1959d50676",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.hex"
+        },
+        {
+          "sha256": "4afe4b5fb9b362052d7a14507259afbf4b59ae21c205ea1a8b1b014a0f87c5b7",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.elf-zsk.bin"
+        },
+        {
+          "sha256": "043cf4bef2da0a6886ee8c8e3acaf7bb4346099ee8e97214aa7fedf50dca49c4",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.elf"
+        },
+        {
+          "sha256": "311ce191444132dd5932ce49f13acaf41b7f6d0e807af1dda5138dff7a85f30f",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.bin-zsk.bin"
+        },
+        {
+          "sha256": "fa4e693bc09cd0d21b24741514d4410f87dc8e282fe4e84752b2b97caa21ab81",
+          "path": "/tmp/uno_q_authority/build/uno_q_authority.ino.bin"
+        }
+      ]
+    }
+  },
+  "candidate_ref_resolved": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+  "hardware": {
+    "esp_port_requested": "COM10",
+    "uno_port_requested": "COM5",
+    "serial_ports": [
+      "COM10",
+      "COM6",
+      "COM11",
+      "COM12",
+      "COM5"
+    ],
+    "cuda_available": true,
+    "cuda_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "openvino_devices": [
+      "CPU",
+      "GPU.0",
+      "GPU.1",
+      "NPU"
+    ],
+    "npu_device": "Intel(R) AI Boost",
+    "pio": "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\pio.EXE",
+    "adb": "C:\\Program Files (x86)\\Android\\android-sdk\\platform-tools\\adb.exe"
+  }
+}

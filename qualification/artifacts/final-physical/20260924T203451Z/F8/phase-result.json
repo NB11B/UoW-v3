@@ -1,0 +1,81 @@
+{
+  "phase": "F8",
+  "passed": true,
+  "details": {
+    "layer": "POST_A3_POLICY_ORCHESTRATOR_P1_P5",
+    "candidate_exact_seal_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
+    "candidate_shadow_tests_passed": 279,
+    "reference_ref": "architecture/policy-aware-uow-orchestrator",
+    "reference_tag": "policy-orchestrator-p5-qualified",
+    "reference_commit": "aa886329298f87e8b006501d47dd89eb8f0d4a3b",
+    "policy_suite_tests_passed": 44,
+    "historical_full_repository_tests_passed": 324,
+    "mandatory_invariants": [
+      "canonical_uow_requirement_projection",
+      "deterministic_world_state_snapshot",
+      "execution_realization_graph",
+      "qualified_versioned_policy_registry",
+      "discovery_without_authority",
+      "prospective_qualification",
+      "deterministic_policy_reuse",
+      "live_drift_invalidation_safe_replacement",
+      "transactional_registry_versioning",
+      "distributed_policy_authority",
+      "durable_persistence_atomic_recovery",
+      "zero_duplicate_external_effects",
+      "five_tier_cryptographic_provenance"
+    ],
+    "mandatory_invariant_count": 13,
+    "gate_map_sha256": "c846368225b5b370c6443c86412e4665b707c2dbadc19296bf6dc7ed64e48c64",
+    "physical_phase_dependencies": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6"
+    ],
+    "a3_evidence_inherited_not_double_counted": true,
+    "p1_p5_specific_evidence_required": true,
+    "p6_required": false
+  },
+  "commands": [
+    {
+      "name": "f8_candidate_exact_seal_shadow",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "architecture/shadow/python/tests"
+      ],
+      "cwd": "C:\\Users\\nateb\\AppData\\Local\\Temp\\uow-f8_candidate_exact_seal_shadow-btkberbs\\worktree",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:44:02.550327+00:00",
+      "duration_s": 5.795,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F8\\f8_candidate_exact_seal_shadow.log",
+      "passed": true
+    },
+    {
+      "name": "f8_post_a3_p1_p5_frozen_oracle",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_policy_orchestrator.py",
+        "tests/test_p1_end_to_end_orchestration.py",
+        "tests/test_p2_live_policy_promotion.py",
+        "tests/test_p3_live_drift_and_requalification.py",
+        "tests/test_p4_distributed_policy_authority.py",
+        "tests/test_p5_durable_recovery.py"
+      ],
+      "cwd": "C:\\Users\\nateb\\AppData\\Local\\Temp\\uow-f8_post_a3_p1_p5_frozen_oracle-rtjs1xov\\worktree",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:44:08.617575+00:00",
+      "duration_s": 1.168,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F8\\f8_post_a3_p1_p5_frozen_oracle.log",
+      "passed": true
+    }
+  ]
+}

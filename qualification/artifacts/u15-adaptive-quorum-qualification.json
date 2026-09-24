@@ -1,6 +1,6 @@
 {
   "schema_version": "uow-adaptive-quorum-qualification-v1.0",
-  "timestamp": "2026-09-24T20:25:11.477202+00:00",
+  "timestamp": "2026-09-24T20:43:53.391844+00:00",
   "hardware": {
     "npu_inference": "Intel(R) AI Boost",
     "gpu_training": "NVIDIA GeForce RTX 5070 Laptop GPU",
@@ -13,7 +13,7 @@
       "passed": true,
       "sequence": 1,
       "state_hash": "cdd9e069f60be9b25831d94d8656926c5b6335a5c1c7a5b6a8142dfebbe0d650",
-      "npu_latency_us": 138.7,
+      "npu_latency_us": 145.0,
       "voters": [
         "authority_a_esp32",
         "authority_b_unoq_stm32",

@@ -1,0 +1,34 @@
+C:\Users\nateb\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\cuda\__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+================================================================================
+U15.5: PHYSICAL INTEL AI BOOST NPU ADAPTIVE PROPOSER QUALIFICATION
+================================================================================
+OpenVINO Available Devices: ['CPU', 'GPU.0', 'GPU.1', 'NPU']
+Physical NPU Device: NPU (Intel(R) AI Boost)
+PyTorch CUDA Device: NVIDIA GeForce RTX 5070 Laptop GPU
+
+--- [PART 1] Physical NPU Canonical Scheduling (fail_closed=True) ---
+Initialized Proposer G0 on: Intel(R) AI Boost
+Model G0 SHA-256 Hash: 314daffaac4c74a090da879d8616e4875c6674e86400081c737f354b0aecf931
+Completed 20 DAG trials (3686 tasks committed, 1890 proposals).
+Wrong Authoritative Commits: 0
+Physical NPU Inference Latency: p50=1750.0us, p95=2477.6us, p99=3376.7us
+
+--- [PART 2] Adversarial & Crash Containment Matrix on NPU ---
+PASS: Illegal task injection rejected by deterministic Judge with zero mutation.
+PASS: Injected physical accelerator crash safely resolved via deterministic fallback.
+
+--- [PART 3] Physical Closed-Loop Adaptation on Intel NPU ---
+Collected 181 certified observations on physical NPU under competing workload.
+Model G1 Cryptographic Hash: a2c4fe8b6eec3a1b40f98e90890fc56ba871b10e5abf70a9bce5b3c797515369
+Model G1 Parent Link: 59d098e2af10367db28158c4b588875fb7343d6ed29d7ef5146dc1f67a68520a
+PASS: Generation 1 adapted model verified on physical NPU.
+
+--- [PART 4] Formal Qualification Claim Registration ---
+Claim U15.NPU_ADAPTIVE_PROPOSER.PORTABLE: qualified=True, passed=True
+Claim U15.NPU_ADAPTIVE_PROPOSER.PHYSICAL: qualified=True, passed=True
+
+Saved qualification artifact to: qualification\artifacts\u15-npu-adaptive-qualification.json
+================================================================================
+GATE U15.5 QUALIFICATION SUCCESS: ALL ASSERTIONS PASSED ON INTEL AI BOOST NPU
+================================================================================

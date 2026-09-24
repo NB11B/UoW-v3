@@ -1,0 +1,29 @@
+{
+  "phase": "F7",
+  "passed": true,
+  "details": {
+    "reference_ref": "qualification/a3-adaptive-compute-efficiency",
+    "reference_commit": "05c8094ac5c8572f7da6d00e781ce673754c5c59",
+    "physical_continuum_dependency": "F2",
+    "historical_long_soak_reused_only_for_original_head": true,
+    "new_long_soak_required_if_changed_mechanism_claimed": true
+  },
+  "commands": [
+    {
+      "name": "f7_a3_frozen_oracle",
+      "argv": [
+        "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/a3"
+      ],
+      "cwd": "C:\\Users\\nateb\\AppData\\Local\\Temp\\uow-f7_a3_frozen_oracle-8m977snu\\worktree",
+      "returncode": 0,
+      "started_at": "2026-09-24T20:43:53.944042+00:00",
+      "duration_s": 8.35,
+      "log_path": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW ESP32\\qualification\\artifacts\\final-physical\\20260924T203451Z\\F7\\f7_a3_frozen_oracle.log",
+      "passed": true
+    }
+  ]
+}

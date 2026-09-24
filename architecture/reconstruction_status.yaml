@@ -1,4 +1,4 @@
-schema_version: "5.0"
+schema_version: "5.1"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: reduction-eligibility-shadow
@@ -26,31 +26,23 @@ r5:
   L0_behavior: PASS
   L1_rejection: PASS
   L2_evidence_semantics: PASS
-  L3_wire_schema:
-    status: PASS
-    profile: UOW-CORE-WIRE/1
-    objects: [State, Proposal, Certificate, Evidence]
-  L4_canonical_bytes:
-    status: PASS_BOUNDARY_SPECIFIC
-    profile: HETEROGENEOUS_AUTHORITY_V1
-  L5_canonical_hash:
-    status: PASS_BOUNDARY_SPECIFIC
-    profile: HETEROGENEOUS_AUTHORITY_V1
+  L3_wire_schema: PASS
+  L4_canonical_bytes: PASS_BOUNDARY_SPECIFIC
+  L5_canonical_hash: PASS_BOUNDARY_SPECIFIC
   global_L4_L5_claim: false
-  physical_replay:
-    retained_obligation: true
 
 r6:
   deletion_candidates: 0
-  K3_candidates:
-    - common_authority_application_spine
-    - authority_protocol_decoupling
-  K2_candidates:
-    - typed_requirement_capability_interface
-    - canonical_identity_interface
-    - serialization_generation
-  production_changes_allowed: false
+  prototypes:
+    common_authority_application_spine:
+      status: IMPLEMENTED_AWAITING_FULL_SUITE
+      execution_contexts: [OWNED, DETACHED]
+      production_changes: false
+    authority_provider_protocol:
+      status: IMPLEMENTED_AWAITING_FULL_SUITE
+      qualification_dependency: false
+      production_changes: false
   next:
-    - prototype common authority application spine
-    - prototype authority provider protocol independent of qualification package
-    - rerun reconstructed experiment suite against prototypes
+    - run complete reconstruction/conformance suite against R6 prototypes
+    - quantify surviving specialized paths
+    - determine whether typed requirement/capability interface merits K3 promotion

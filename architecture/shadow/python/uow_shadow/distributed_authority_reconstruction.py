@@ -28,6 +28,7 @@ from uow.engine import EvidenceLedger, EvidenceRecord, Proposal, certify
 from uow.state import WorldState, canonical_json
 
 from .adapters import adapt_world_state
+from .authority_protocol import submit_via_authority_provider
 from .identity import shadow_identity
 from .kernel import LocalAuthorization, apply_authorized_transition
 from .types import CausalCoordinate, ConformanceDecision, ConformanceResult, ProposalEnvelope
@@ -529,17 +530,30 @@ class ShadowDistributedAuthorityCluster:
     def collect_votes(self, uow: UoW, proposal: Proposal) -> Tuple[AuthorityVote, ...]:
         return tuple(self.nodes[n].evaluate(uow, proposal) for n in self.reachable_nodes())
 
+    def form_authorization(
+        self,
+        uow: UoW,
+        proposal: Proposal,
+        votes: Tuple[AuthorityVote, ...],
+    ) -> Optional[QuorumCertificate]:
+        return form_quorum_certificate(uow, proposal, votes, self.threshold)
+
+    def apply_authorization(
+        self,
+        node_id: str,
+        uow: UoW,
+        proposal: Proposal,
+        authorization: QuorumCertificate,
+    ) -> ShadowApplyResult:
+        return self.nodes[node_id].apply_qc(uow, proposal, authorization)
+
     def submit(self, uow: UoW, proposal: Proposal):
-        votes = self.collect_votes(uow, proposal)
-        qc = form_quorum_certificate(uow, proposal, votes, self.threshold)
-        if qc is None:
-            return False, None, votes, {}
-        results = {
-            n: self.nodes[n].apply_qc(uow, proposal, qc)
-            for n in self.reachable_nodes()
-        }
-        self.journal.append(ShadowJournalEntry(len(self.journal) + 1, uow, proposal, qc))
-        return True, qc, votes, results
+        committed, qc, votes, results = submit_via_authority_provider(self, uow, proposal)
+        if committed and qc is not None:
+            self.journal.append(
+                ShadowJournalEntry(len(self.journal) + 1, uow, proposal, qc)
+            )
+        return committed, qc, votes, results
 
     def catch_up(self, node_id: str) -> tuple[bool, str]:
         node = self.nodes[node_id]

@@ -13,13 +13,12 @@ from dataclasses import dataclass
 from typing import Mapping, Tuple
 
 from uow.contracts import UoW
-from uow.engine import Proposal, propose, validate_graph
+from uow.engine import validate_graph
 from uow.state import WorldState
 
-from .adapters import adapt_world_state, core_certify_adapter
 from .identity import shadow_identity
-from .kernel import apply_authorized_transition, authorize_local_conformance
-from .types import CausalCoordinate, EvidenceEntryRef, ProposalEnvelope
+from .spine import CursorPolicy, DEFAULT_APPLICATION_SPINE
+from .types import EvidenceEntryRef
 
 
 @dataclass(frozen=True)
@@ -35,91 +34,17 @@ class ReconstructionResult:
         )
 
 
-def _proposal_envelope(
-    before: WorldState,
-    proposal: Proposal,
-) -> tuple[ProposalEnvelope, WorldState]:
-    """Bind canonical proposal semantics into the R2 proposal shape.
-
-    The authoritative post-state identity is computed independently of the
-    canonical commit function by applying the canonical sequence advance to the
-    pure proposed state.
-    """
-    committed_mirror = proposal.proposed_state.advance_sequence()
-    payload = {
-        "proposed_state_id": proposal.proposed_state.state_hash,
-        "committed_state_id": committed_mirror.state_hash,
-        "next_semantic_payload": dict(committed_mirror.attributes),
-        "next_status": committed_mirror.status,
-        "next_cursor": committed_mirror.cursor,
-    }
-    proposal_id = shadow_identity(
-        "reconstruction-proposal",
-        {
-            "uow_id": proposal.uow_id,
-            "pre_state_hash": proposal.pre_state_hash,
-            "selected_route_index": proposal.selected_route_index,
-            "selected_successor": proposal.selected_successor,
-            "halted": proposal.halted,
-            "payload": payload,
-        },
-    )
-    envelope = ProposalEnvelope(
-        proposal_id=proposal_id,
-        proposal_kind="STATE_TRANSITION",
-        proposer_id="canonical-native-proposer",
-        subject_contract_id=proposal.uow_id,
-        precondition_context_id=before.state_hash,
-        causal_coordinate=CausalCoordinate("pre_state_hash", before.state_hash),
-        candidate_payload=payload,
-        proposal_identity=proposal_id,
-        source_type="r4.reconstruction",
-    )
-    return envelope, committed_mirror
-
-
 def execute_explicit_uow_reconstructed(
     uow: UoW,
     state: WorldState,
 ) -> tuple[WorldState, EvidenceEntryRef]:
-    """Apply an explicitly supplied UoW through the minimal authority kernel.
-
-    This path does not require the enclosing WorldState cursor to name the UoW.
-    It is intended for certified control-plane/bookkeeping transitions whose
-    contract explicitly preserves the enclosing cursor (for example Q1 effect
-    intent/result and saga progress updates).
-
-    Cursor-owned program execution should continue to use execute_one_reconstructed.
-    """
-    if state.status != "RUNNING":
-        raise ValueError("Explicit reconstruction transition requires RUNNING state.")
-
-    proposal = propose(uow, state)
-    conformance = core_certify_adapter(uow, state, proposal)
-    if not conformance.accepted:
-        raise ValueError(f"Canonical conformance rejected reconstruction proposal: {conformance.violations}")
-    authorization = authorize_local_conformance(conformance)
-    envelope, committed_mirror = _proposal_envelope(state, proposal)
-
-    after_ref, evidence = apply_authorized_transition(
-        adapt_world_state(state),
-        envelope,
-        conformance,
-        authorization,
+    """Apply an explicitly supplied UoW through the common R6 application spine."""
+    result = DEFAULT_APPLICATION_SPINE.execute(
+        uow,
+        state,
+        cursor_policy=CursorPolicy.DETACHED,
     )
-
-    if dict(after_ref.semantic_payload) != dict(committed_mirror.attributes):
-        raise AssertionError("Shadow kernel payload diverged from native proposed transition semantics.")
-    if after_ref.cursor != committed_mirror.cursor:
-        raise AssertionError("Shadow kernel cursor diverged from native proposed transition semantics.")
-    if after_ref.status != committed_mirror.status:
-        raise AssertionError("Shadow kernel status diverged from native proposed transition semantics.")
-    if int(after_ref.causal_coordinate.value) != committed_mirror.sequence:
-        raise AssertionError("Shadow kernel sequence diverged from native sequence semantics.")
-    if after_ref.state_id != committed_mirror.state_hash:
-        raise AssertionError("Shadow kernel post-state identity diverged from canonical WorldState identity.")
-
-    return committed_mirror, evidence
+    return result.state, result.evidence
 
 
 def execute_one_reconstructed(
@@ -131,8 +56,12 @@ def execute_one_reconstructed(
     if state.cursor not in graph:
         raise KeyError(f"Current UoW cursor {state.cursor!r} does not exist in graph.")
 
-    return execute_explicit_uow_reconstructed(graph[state.cursor], state)
-
+    result = DEFAULT_APPLICATION_SPINE.execute(
+        graph[state.cursor],
+        state,
+        cursor_policy=CursorPolicy.OWNED,
+    )
+    return result.state, result.evidence
 
 def run_reconstructed(
     graph: Mapping[str, UoW],

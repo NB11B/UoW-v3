@@ -1,10 +1,10 @@
 schema_version: "1.0"
-status: V3_READY_FOR_F0_BINARY_ATTESTATION
+status: V4_READY_FOR_FINAL_PHYSICAL_QUALIFICATION
 candidate_branch: architecture/uow-staged-relocation
-candidate_ref_planned: archive/uow-reduction-software-candidate-v3
+candidate_ref_planned: archive/uow-reduction-software-candidate-v4
 candidate_binding_mode: POST_FREEZE_OPERATOR_METADATA
-candidate_ref: archive/uow-reduction-software-candidate-v3
-candidate_commit: 3e28e4bba1023810aada953e25d3e3c46a58f113
+candidate_ref: archive/uow-reduction-software-candidate-v4
+candidate_commit: 9d95c11f4b09c34769e1f3a1e6d7b915291d43c8
 exact_seal_shadow_run: 167
 exact_seal_tests_passed: 279
 exact_seal_policy_tests_passed: 44
@@ -57,6 +57,24 @@ frozen_inputs:
   - path: qualification/embedded/esp32_dual_core/host/minsky_npu.onnx
     git_blob_sha: 8d84323fcc091059ecfaf69cf1c9324f296ffd05
     size_bytes: 280307
+  - path: qualification/embedded/esp32_dual_core/platformio.ini
+    git_blob_sha: d33108e278a3d0ae97231df65f8551bc9b6d030d
+    size_bytes: 496
+  - path: qualification/embedded/esp32_dual_core/host/interrogator.py
+    git_blob_sha: c59d02a0f7860994cb9cc0a799ca3c45a2ac0385
+    size_bytes: 45397
+  - path: qualification/embedded/esp32_dual_core/host/router_campaign.py
+    git_blob_sha: b1b4aa416c71276430317a832ba55262c149db30
+    size_bytes: 67791
+  - path: qualification/distributed_authority/physical_pair_campaign.py
+    git_blob_sha: 97fcf8592363fd3ca6a62a510baa5d99b43b3abe
+    size_bytes: 25373
+  - path: qualification/distributed_authority/physical_quorum_campaign.py
+    git_blob_sha: f635a1f3b4025f1d473625966de87e76977dbb23
+    size_bytes: 33782
+  - path: qualification/npu_quorum_campaign.py
+    git_blob_sha: 544d445c824ac0a50dd1427e97f8c5c55b6db174
+    size_bytes: 26466
 physical_campaign:
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
   machine_plan: qualification/final_physical_confirmation.yaml

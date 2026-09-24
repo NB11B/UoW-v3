@@ -1,6 +1,6 @@
 # Final Physical Confirmation Campaign
 
-Status: ready terminal qualification gate.
+Status: deferred until the policy-integrated v2 candidate passes exact combined qualification.
 
 R7 software/repository work is complete. The final cutover candidate is frozen at `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b`, which passed closure-shadow run **148** with **271/271** tests.
 

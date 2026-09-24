@@ -1,10 +1,10 @@
 schema_version: "1.0"
-status: FROZEN_EXACT_SEAL_PASS
+status: POLICY_INTEGRATED_CANDIDATE_EXACT_SEAL_ON_PASS
 candidate_branch: architecture/uow-staged-relocation
-candidate_parent_code_head: 97f015aba652feb7169cf73767e6078161940f05
-freeze_ref_planned: archive/uow-reduction-software-candidate
-freeze_ref: archive/uow-reduction-software-candidate
-freeze_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+candidate_parent_code_head: 8b6893f3b4db4da161a27f89fd905feb7a794a87
+freeze_ref_planned: archive/uow-reduction-software-candidate-v2
+freeze_ref: PENDING_POLICY_INTEGRATED_EXACT_SEAL
+freeze_commit: PENDING_POLICY_INTEGRATED_EXACT_SEAL
 freeze_commit_definition: the commit containing this manifest, after its full closure-shadow run passes
 package:
   name: uow
@@ -40,7 +40,9 @@ freeze_artifacts:
   physical_inputs: qualification/final_physical_candidate_inputs.yaml
 acceptance:
   full_shadow_required: true
-  minimum_preserved_test_count: 271
+  minimum_preserved_test_count: 277
+  post_a3_policy_suite_required: true
+  post_a3_policy_suite_expected: 44
   zero_failures_required: true
   no_expected_test_disappearance: true
   semantic_changes_after_freeze: false
@@ -58,7 +60,7 @@ preseal_shadow:
   run: 147
   tests_passed: 271
   conclusion: PASS
-exact_seal:
+previous_pre_policy_exact_seal:
   status: PASS
   commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
   run: 148
@@ -66,3 +68,14 @@ exact_seal:
   conclusion: PASS
   archive_ref: archive/uow-reduction-software-candidate
   rule: physical qualification must execute against this frozen candidate; later documentation commits do not redefine the candidate
+
+policy_integrated_candidate:
+  source_policy_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+  namespace: uow.policy
+  integration_validation_commit: 8b6893f3b4db4da161a27f89fd905feb7a794a87
+  integration_shadow_run: 156
+  integration_shadow_tests_passed: 277
+  integration_policy_tests_passed: 44
+  planned_ref: archive/uow-reduction-software-candidate-v2
+  exact_seal_status: PENDING
+  rule: the commit containing this manifest becomes the v2 candidate only if both shadow and P1-P5 policy suites pass

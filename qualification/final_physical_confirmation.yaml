@@ -1,5 +1,19 @@
 schema_version: "0.1"
-status: READY_FOR_EXECUTION
+status: DEFERRED_PENDING_POLICY_INTEGRATED_EXACT_SEAL
+
+previous_candidate:
+  ref: archive/uow-reduction-software-candidate
+  commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  disposition: IMMUTABLE_PRE_POLICY_EVIDENCE
+
+candidate_v2:
+  planned_ref: archive/uow-reduction-software-candidate-v2
+  source_policy_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+  integration_validation_run: 156
+  integration_shadow_tests_passed: 277
+  integration_policy_tests_passed: 44
+  exact_seal_status: PENDING
+  physical_execution_blocked_until_refreeze: true
 
 candidate:
   ref: archive/uow-reduction-software-candidate

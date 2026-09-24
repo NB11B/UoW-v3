@@ -1,8 +1,8 @@
 # Final Physical Confirmation Campaign
 
-Status: deferred until the policy-integrated v2 candidate passes exact combined qualification.
+Status: ready terminal qualification gate for the policy-integrated v2 candidate.
 
-R7 software/repository work is complete. The final cutover candidate is frozen at `archive/uow-reduction-software-candidate@f842d62c7d18355886e2c9fdc25e9cc5db17987b`, which passed closure-shadow run **148** with **271/271** tests.
+R7 software/repository work is complete. The final cutover candidate is frozen at `archive/uow-reduction-software-candidate-v2@728988f93a1ec0f634f450dc4d187fbd5e0e95c9`. Exact-seal run **158** passed **277/277** reduced shadow tests and **44/44** post-A3 P1-P5 policy tests.
 
 Historical physical evidence remains valid for its original qualified heads. Portable or shadow success never upgrades the final candidate to PHYSICAL.
 
@@ -84,7 +84,7 @@ Frozen reference:
 - historical complete repository verification at closeout: **324 passed, 0 failed**
 - mandatory architectural invariants: **13**
 
-The final campaign reruns the exact frozen reduced candidate's **271-test** closure-shadow suite and separately reruns the **44-test P1-P5 suite** from the frozen post-A3 reference.
+The final campaign reruns the exact frozen reduced candidate's **277-test** closure-shadow suite and separately reruns the **44-test P1-P5 suite** from the frozen post-A3 reference.
 
 Confirm all 13 invariants: U-to-W projection, deterministic snapshot resolution, graph realization, qualified policy registry, discovery without authority, prospective promotion, deterministic policy reuse, safe drift invalidation, transactional registry versioning, distributed policy authority, durable recovery, zero duplicate external effects, and five-tier provenance.
 
@@ -101,7 +101,7 @@ Each physical claim records observed_pass, qualified, passed = observed_pass AND
 The final candidate can be promoted as physically qualified only when every physical claim required for the intended release scope passes. A failure blocks only the affected physical claim/release scope until corrected and rerun.
 ## Operator entry point
 
-The post-freeze operator harness is `qualification/final_physical_campaign.py`. It records the frozen candidate commit separately from the harness commit and fails closed on missing named physical substrates. Harness commit `81612415d2211942831c608a1a8036fc1ffcf5d2` passed closure-shadow run **151** with **274/274** tests.
+The post-freeze operator harness is `qualification/final_physical_campaign.py`. It records the frozen candidate commit separately from the harness commit and fails closed on missing named physical substrates. The harness is repinned to the v2 candidate in post-freeze commit `173e8c376fdd51df605a839679af1a52af2d057f`; this repin receives its own shadow qualification before hardware execution.
 
 Preview the complete campaign without touching hardware:
 

@@ -1,5 +1,5 @@
 schema_version: "1.0"
-status: POLICY_INTEGRATED_CANDIDATE_EXACT_SEAL_ON_PASS
+status: FROZEN_POLICY_INTEGRATED_V2
 package: uow
 package_version: 0.1.0.dev0
 source:
@@ -217,7 +217,7 @@ namespaced_surfaces:
     source_branch: architecture/policy-aware-uow-orchestrator
     source_tag: policy-orchestrator-p5-qualified
     source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
-    status: INTEGRATION_PASS_RUN_156_EXACT_SEAL_PENDING
+    status: FROZEN_V2_EXACT_SEAL_PASS
     flatten_into_top_level: false
     collision_guard: uow.RealizationGraph != uow.policy.RealizationGraph
 
@@ -226,4 +226,9 @@ qualification:
   integration_shadow_tests_passed: 277
   integration_policy_tests_passed: 44
   exact_seal_required: true
+  exact_seal_run: 158
+  exact_seal_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  exact_seal_shadow_tests_passed: 277
+  exact_seal_policy_tests_passed: 44
   planned_candidate_ref: archive/uow-reduction-software-candidate-v2
+  frozen_candidate_ref: archive/uow-reduction-software-candidate-v2

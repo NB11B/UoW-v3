@@ -1,5 +1,5 @@
 schema_version: "1.0"
-status: INTEGRATION_PASS_RUN_156_EXACT_SEAL_PENDING
+status: FROZEN_V2_EXACT_SEAL_PASS
 source_branch: architecture/policy-aware-uow-orchestrator
 source_tag: policy-orchestrator-p5-qualified
 source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
@@ -26,5 +26,10 @@ integration_qualification:
   policy_tests_passed: 44
   conclusion: PASS
 exact_seal:
-  status: PENDING
-  planned_ref: archive/uow-reduction-software-candidate-v2
+  status: PASS
+  ref: archive/uow-reduction-software-candidate-v2
+  commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  run: 158
+  shadow_tests_passed: 277
+  policy_tests_passed: 44
+  conclusion: PASS

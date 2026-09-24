@@ -20,8 +20,8 @@ constraints:
 
 physical_confirmation:
   status: READY_FOR_CONSOLIDATED_FINAL_CAMPAIGN
-  candidate_ref: archive/uow-reduction-software-candidate
-  candidate_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  candidate_ref: archive/uow-reduction-software-candidate-v2
+  candidate_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
   plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
   manifest: qualification/final_physical_confirmation.yaml
   historical_evidence_rewritten: false
@@ -326,19 +326,20 @@ blocker_resolution:
     finding: no uow.implementations.engine module is architecturally required
 
 software_candidate:
-  status: FROZEN_EXACT_SEAL_PASS
+  status: FROZEN_POLICY_INTEGRATED_EXACT_SEAL_PASS
   manifest: architecture/software_candidate_freeze.yaml
-  planned_freeze_ref: archive/uow-reduction-software-candidate
-  freeze_ref: archive/uow-reduction-software-candidate
-  freeze_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
+  planned_freeze_ref: archive/uow-reduction-software-candidate-v2
+  freeze_ref: archive/uow-reduction-software-candidate-v2
+  freeze_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
   last_qualified_shadow_run: 145
   last_qualified_test_count: 271
   preseal_shadow_run: 147
   preseal_shadow_commit: 88b2802197c93d8a1a6e7bd52becad9c98e264c9
   preseal_shadow_test_count: 271
-  exact_seal_shadow_run: 148
-  exact_seal_shadow_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
-  exact_seal_shadow_test_count: 271
+  exact_seal_shadow_run: 158
+  exact_seal_shadow_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  exact_seal_shadow_test_count: 277
+  exact_seal_policy_test_count: 44
   exact_seal_conclusion: PASS
   unresolved_relocation_candidates: 0
   semantic_changes_after_freeze: false
@@ -364,7 +365,7 @@ post_freeze_operator_harness:
   purpose: orchestrate F0-F8 and bind candidate identity separately from qualification-tool identity
 
 post_a3_policy_api_integration:
-  status: INTEGRATION_PASS_RUN_156_EXACT_SEAL_PENDING
+  status: FROZEN_V2_EXACT_SEAL_PASS
   source_commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
   target_namespace: uow.policy
   flatten_policy_symbols_into_uow: false
@@ -372,10 +373,15 @@ post_a3_policy_api_integration:
   integration_shadow_run: 156
   integration_shadow_tests_passed: 277
   integration_policy_tests_passed: 44
+  policy_integrated_exact_seal_run: 158
+  policy_integrated_exact_seal_commit: 728988f93a1ec0f634f450dc4d187fbd5e0e95c9
+  policy_integrated_exact_seal_shadow_tests: 277
+  policy_integrated_exact_seal_policy_tests: 44
   failed_shadow_runs: [155]
   failure_evidence: historical R7 top-level API blob gate correctly detected the intentional namespace export
   historical_baseline_preserved: true
   previous_candidate_ref: archive/uow-reduction-software-candidate
   previous_candidate_commit: f842d62c7d18355886e2c9fdc25e9cc5db17987b
   next_candidate_ref_planned: archive/uow-reduction-software-candidate-v2
-  physical_harness_v1_blocked: true
+  physical_harness_v1_blocked: false
+  physical_harness_repin_commit: 173e8c376fdd51df605a839679af1a52af2d057f

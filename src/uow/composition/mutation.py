@@ -29,6 +29,7 @@ from uow.composition.binding import ActorBinding, validate_binding
 from uow.composition.contract import ParentContract
 from uow.composition.fabric import canonical_json
 from uow.composition.graph import RealizationGraph
+from uow.composition.history import AuthoritativeHistory, HistoryEntry, HistoryEntryKind
 from uow.composition.projection import check_conformance, project_semantics
 
 

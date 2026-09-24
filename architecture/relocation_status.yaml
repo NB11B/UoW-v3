@@ -196,7 +196,8 @@ staged_moves:
       target: src/uow/realizations/scheduling/heuristic.py
       class: K1
       compatibility_shim: true
-      status: IMPLEMENTED_AWAITING_SUITE
+      status: PASS_INITIAL
+      shadow_runs: [131]
       rationale: relocate zero-authority reference heuristic proposal generation while retaining proposer protocol and deterministic judge semantics
       preserves:
         - zero_authority_proposal_boundary

@@ -69,6 +69,12 @@ staged_moves:
       source: src/uow/resources/runtime.py
       target: src/uow/implementations/resources/runtime.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [110]
+    fourth_move:
+      source: src/uow/proposer/engine.py
+      target: src/uow/implementations/adaptation/runtime.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
     production_deletions: false
 

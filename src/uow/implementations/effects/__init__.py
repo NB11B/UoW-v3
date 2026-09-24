@@ -1,6 +1,6 @@
-"""Compatibility shim for the historical external-effect runtime path."""
+"""External-effect Python implementation."""
 
-from ..implementations.effects.runner import (
+from .runner import (
     EFFECT_CELL,
     ORCH_EFFECTS_KEY,
     EffectRunner,

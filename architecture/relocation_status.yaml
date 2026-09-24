@@ -75,7 +75,14 @@ staged_moves:
       source: src/uow/proposer/engine.py
       target: src/uow/implementations/adaptation/runtime.py
       compatibility_shim: true
+      status: PASS_INITIAL
+      shadow_runs: [111]
+    fifth_move:
+      source: src/uow/effects/runner.py
+      target: src/uow/implementations/effects/runner.py
+      compatibility_shim: true
       status: IMPLEMENTED_AWAITING_SUITE
+      external_invocation_remains_outside_spine: true
     production_deletions: false
 
 final_gate:

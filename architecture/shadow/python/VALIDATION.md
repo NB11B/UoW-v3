@@ -58,9 +58,18 @@ Closure result:
 - idempotent delegate failover can replace the registered delegation through a second evidence-linked UoW.
 - non-idempotent failover produces no replacement certificate and therefore no lowerable mutation.
 
+### Commit 6b52087
+Shadow workflow run 19: PASS.
+
+Closure result:
+- A2.5 integrity-verified canonical-history adoption can be lowered to an ordinary native UoW transition.
+- full serialized history payload, digest, tip hash, and tip sequence are preserved.
+- invalid history is rejected before lowering.
+- wrong application context fails closed.
+
 Scope limitation:
-- certificate issuance remains outside the application-closure claim.
-- attenuation/expiry/fabric validation remain canonical preconditions.
+- selecting which history is canonical remains outside the closure claim.
+- distributed consensus/authority over that choice remains outside the closure claim.
 
 ## Canonical CI observation
 
@@ -68,12 +77,10 @@ Normal repository CI continues to fail before test execution because existing NP
 
 This is not attributed to shadow code.
 
-## R3.2 next closure target
+## R3.4 minimal authority kernel
 
-A2.5 canonical-history reconciliation:
-- validate complete canonical history integrity first;
-- lower full history payload adoption, digest, tip hash, and sequence into an ordinary UoW;
-- invalid history must be rejected before UoW construction;
-- mismatched application context must fail closed.
-
-Choosing which history is canonical and distributed consensus over that choice remain outside the application-closure claim.
+Next test:
+- explicitly separate Proposal, Conformance, Local Authorization, Authorized Transition, and Evidence;
+- compare shadow post-state semantics against canonical core commit;
+- reject stale context, rejected conformance, and mismatched authorization;
+- treat the canonical local deterministic certifier as a profile in which accepted conformance is sufficient local authorization, without generalizing that rule to distributed/A2 authority.

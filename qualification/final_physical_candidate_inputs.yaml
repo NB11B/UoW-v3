@@ -1,0 +1,57 @@
+schema_version: "1.0"
+status: SOURCE_INPUTS_FROZEN_BINARY_ATTESTATION_REQUIRED_AT_F0
+candidate_branch: architecture/uow-staged-relocation
+historical_physical_evidence_promoted_to_candidate: false
+binary_policy:
+  repository_contains_final_flash_binaries: false
+  action_at_F0: build_or_export_from_frozen_sources_then_record_cryptographic_binary_hashes_before_flashing_or_execution
+  silent_substitution_allowed: false
+hardware_targets:
+  - host_x86_64_cpu
+  - cuda_gpu
+  - intel_ai_boost_npu
+  - esp32_s3
+  - arduino_uno_q_stm32u585
+  - laptop_x86_64_authority_participant
+frozen_inputs:
+  - path: qualification/embedded/esp32_dual_core/src/main.cpp
+    git_blob_sha: 616e721a0fb58222cf1ec68f03daa6181ff7892c
+    size_bytes: 68147
+  - path: qualification/embedded/esp32_dual_core/src/uow_embedded.cpp
+    git_blob_sha: ce64760a2bff70d9361217795f69dd5c0f02bba0
+    size_bytes: 13796
+  - path: qualification/embedded/esp32_dual_core/include/uow_embedded.hpp
+    git_blob_sha: 7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a
+    size_bytes: 5406
+  - path: qualification/embedded/uno_q_authority/uno_q_authority.ino
+    git_blob_sha: ea02abb5c8438a476f1a0a5c0902cc0c5ac22b10
+    size_bytes: 25762
+  - path: qualification/embedded/uno_q_authority/uow_embedded.cpp
+    git_blob_sha: a14e37bebce0dff8f647d148505579a5a6f1879d
+    size_bytes: 14075
+  - path: qualification/embedded/uno_q_authority/uow_embedded.hpp
+    git_blob_sha: 7b17c150d38e9cbcdf5ec75dfb91a7def0e1c56a
+    size_bytes: 5406
+  - path: qualification/distributed_authority/authority_service_c.py
+    git_blob_sha: 37bc99587887de64083b1190d2a9da6dd430b929
+    size_bytes: 26399
+  - path: qualification/distributed_authority/physical_profile.py
+    git_blob_sha: 0a8682f624923c5bc0b6889dfcf2967411b9c0ad
+    size_bytes: 5714
+  - path: integrations/openvino_npu/adapter.py
+    git_blob_sha: 668bd2f14381a9b09d09b6e3506134cdab6b44f9
+    size_bytes: 12172
+  - path: integrations/openvino_npu/model.py
+    git_blob_sha: b82f15dafb2df0699e0bb1f815b7658c75fbcbbd
+    size_bytes: 1895
+  - path: qualification/embedded/esp32_dual_core/host/intel_npu_adapter.py
+    git_blob_sha: c13b03980ea71eac82e9edae8c9e7819e6248651
+    size_bytes: 4402
+  - path: qualification/embedded/esp32_dual_core/host/minsky_npu.onnx
+    git_blob_sha: 8d84323fcc091059ecfaf69cf1c9324f296ffd05
+    size_bytes: 280307
+physical_campaign:
+  plan: qualification/FINAL_PHYSICAL_CONFIRMATION_PLAN.md
+  machine_plan: qualification/final_physical_confirmation.yaml
+  execute_before_software_freeze: false
+  execute_after_final_shadow_and_candidate_ref: true

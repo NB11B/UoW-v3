@@ -1,0 +1,47 @@
+schema_version: "1.0"
+status: PENDING_FINAL_SHADOW
+candidate_branch: architecture/uow-staged-relocation
+candidate_parent_code_head: 97f015aba652feb7169cf73767e6078161940f05
+freeze_ref_planned: archive/uow-reduction-software-candidate
+freeze_commit_definition: the commit containing this manifest, after its full closure-shadow run passes
+package:
+  name: uow
+  version: 0.1.0.dev0
+last_qualified_relocation:
+  move: 22
+  repair_head: 20095983bc3a07220f7fcd89fce461114b0d2e36
+  shadow_run: 145
+  tests_passed: 271
+qualification_oracles:
+  a2_reconstruction:
+    ref: research/uow-closure-architecture@29021acf15d4a964abb01d92f60cf47f74bcb87d
+  a3_adaptive_compute:
+    commit: 05c8094ac5c8572f7da6d00e781ce673754c5c59
+    tag: a3-qualification-complete
+  policy_orchestrator_p1_p5:
+    commit: aa886329298f87e8b006501d47dd89eb8f0d4a3b
+    tag: policy-orchestrator-p5-qualified
+    mandatory_invariants: 13
+  a4_ontology_adaptation:
+    status: CONCEPTUAL_UNQUALIFIED
+    constraint: Python enums, class names, dataclasses, and module paths are not frozen as universal ontology
+freeze_artifacts:
+  public_api: architecture/public_api_manifest.yaml
+  profiles: architecture/canonical_profiles_manifest.yaml
+  relocation_inventory: architecture/relocation_inventory.yaml
+  relocation_ledger: architecture/relocation_status.yaml
+  physical_inputs: qualification/final_physical_candidate_inputs.yaml
+acceptance:
+  full_shadow_required: true
+  minimum_preserved_test_count: 271
+  zero_failures_required: true
+  no_expected_test_disappearance: true
+  semantic_changes_after_freeze: false
+  physical_claims_upgraded_by_software_shadow: false
+known_failed_attempts_preserved:
+  - run: 139
+    repair: 44d7813fe87f3715ed72cbb73ae8a75f0f78cf08
+    evidence: eager adaptation-package import cycle
+  - run: 144
+    repair: 20095983bc3a07220f7fcd89fce461114b0d2e36
+    evidence: canonical history dependency is architectural mutation semantics

@@ -1,7 +1,7 @@
 schema_version: "1.0"
 branch: architecture/uow-staged-relocation
-basis_head: 4c34a5e4209b25134e3ae3cd4d1a77523c4ff237
-status: ACTIVE_RELOCATION_INVENTORY
+basis_head: 97f015aba652feb7169cf73767e6078161940f05
+status: SOFTWARE_CANDIDATE_READY_FOR_FINAL_SHADOW
 
 classification_rules:
   semantic_core: language-level representation of qualified semantics; keep near canonical semantic package
@@ -53,6 +53,7 @@ semantic_specializations_keep_near_canonical_package:
   - src/uow/composition/history.py
 
 compatibility_shims_already_established:
+  - src/uow/proposer/learned.py
   - src/uow/transactions/sequencer.py
   - src/uow/orchestration/runtime.py
   - src/uow/resources/runtime.py
@@ -104,7 +105,7 @@ remaining_clean_realization_candidates:
     class: K1
     disposition: RELOCATED_PASS_RUN_140
 
-mixed_or_unresolved_do_not_move_wholesale:
+semantic_splits_or_intentionally_retained:
   - path: src/uow/composition/delegation.py
     reason: authority-scope semantics and distributed realization were interleaved
     disposition: RELOCATED_PASS_RUN_142
@@ -116,10 +117,20 @@ mixed_or_unresolved_do_not_move_wholesale:
     semantic_retained: proposal, vote, QC, signing, verification, threshold and freshness rules
     realization_target: src/uow/realizations/authority/runtime_mutation.py
   - path: src/uow/orchestration/state.py
+    disposition: INTENTIONALLY_RETAIN_SEMANTIC
     reason: Python representation is language-specific but carries qualified orchestration-state semantics
   - path: src/uow/resources/state.py
+    disposition: INTENTIONALLY_RETAIN_SEMANTIC
     reason: Python representation is language-specific but carries qualified capability/lease semantics
 
 forward_compatibility:
   a4_status: CONCEPTUAL_UNQUALIFIED
   constraint: do not freeze Python enums, dataclasses, class names, or module paths as the universal ontology
+
+final_inventory:
+  unresolved_relocation_candidates: 0
+  intended_moves_complete: true
+  production_deletions_performed: false
+  public_api_manifest: architecture/public_api_manifest.yaml
+  canonical_profiles_manifest: architecture/canonical_profiles_manifest.yaml
+  physical_candidate_inputs: qualification/final_physical_candidate_inputs.yaml

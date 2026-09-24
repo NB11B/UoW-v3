@@ -1,0 +1,41 @@
+schema_version: "1.0"
+status: FROZEN_FOR_SOFTWARE_CANDIDATE
+profiles:
+  wire_core_v1:
+    path: architecture/conformance/wire/UOW_CORE_WIRE_V1.md
+    git_blob_sha: 1987e1eca9f3b008685b78c1773e20f41f736a18
+  authority_hash_profile_v1:
+    path: architecture/conformance/authority/AUTHORITY_HASH_PROFILE_V1.md
+    git_blob_sha: 0feeb283d04f8e8a10fee24e155d3cb34e48c10a
+  python_authority_hash_profile_v1:
+    path: architecture/conformance/authority/profile_v1.py
+    git_blob_sha: f6fc7776732999fb36f430d7fca8af78d6efc22a
+  network_wire_realization:
+    path: src/uow/realizations/network/wire.py
+    git_blob_sha: 3588e2bd4c21aadb9c604052a1d2d9808707ca13
+  authority_provider_protocol:
+    path: src/uow/authority/protocol.py
+    git_blob_sha: ec0fcdcc9f0b73095566e3f35bb36e6055d419bb
+  runtime_mutation_qc_semantics:
+    path: src/uow/composition/mutation.py
+    git_blob_sha: 83f2a50e4674ea9572a7cce3149c6ad8d49d5e56
+  graph_substitution_certification:
+    path: src/uow/composition/substitution.py
+    git_blob_sha: 745785f41382c9cc9f85fd9222bf41e247c33806
+  quorum_commit_realization:
+    path: src/uow/realizations/commit/quorum.py
+    git_blob_sha: b0c02b17d381d66917ec335079914c615962ad3c
+semantic_distinctions:
+  proposal_is_authorization: false
+  conformance_is_authorization: false
+  internal_commit_is_external_effect: false
+  application_closure_is_authorization_formation_closure: false
+  schema_version_sequence_epoch_generation_history_head_are_distinct: true
+  discovery_is_qualification: false
+  portable_evidence_is_physical_evidence: false
+conformance_levels:
+  - L0_behavioral_semantics
+  - L1_rejection_class
+  - L2_evidence_semantics
+  - L3_UOW_CORE_WIRE_1
+  - L4_L5_heterogeneous_authority_canonical_hash

@@ -342,3 +342,12 @@ software_candidate:
   exact_seal_conclusion: PASS
   unresolved_relocation_candidates: 0
   semantic_changes_after_freeze: false
+
+post_freeze_admin_transition:
+  failed_shadow_runs: [149]
+  failure_evidence: physical readiness manifest advanced correctly but the shadow gate still required the pre-freeze DEFERRED status
+  repair_commit: b03eea398afc14e51c397e02e9208cc6faebed51
+  repair_shadow_run: 150
+  repair_shadow_test_count: 271
+  repair_conclusion: PASS
+  semantic_candidate_changed: false

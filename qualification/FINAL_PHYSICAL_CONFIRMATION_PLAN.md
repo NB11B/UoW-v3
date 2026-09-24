@@ -86,3 +86,20 @@ Each physical claim records observed_pass, qualified, passed = observed_pass AND
 ## Final acceptance
 
 The final candidate can be promoted as physically qualified only when every physical claim required for the intended release scope passes. A failure blocks only the affected physical claim/release scope until corrected and rerun.
+## Operator entry point
+
+The post-freeze operator harness is `qualification/final_physical_campaign.py`. It records the frozen candidate commit separately from the harness commit and fails closed on missing named physical substrates.
+
+Preview the complete campaign without touching hardware:
+
+```powershell
+python qualification/final_physical_campaign.py
+```
+
+Execute F0 through F8 as one consolidated run:
+
+```powershell
+python qualification/final_physical_campaign.py --execute
+```
+
+The default hardware endpoints are the qualified topology: ESP32-S3 on COM10, Arduino UNO Q STM32U585 on COM5, laptop x86 authority on localhost:9527, CUDA GPU, and Intel AI Boost NPU. CPU fallback is not permitted for NPU-specific physical claims.

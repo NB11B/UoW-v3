@@ -7,6 +7,12 @@ candidate:
   exact_seal_shadow_run: 148
   exact_seal_tests_passed: 271
 
+operator_harness:
+  path: qualification/final_physical_campaign.py
+  status: POST_FREEZE_QUALIFICATION_TOOLING
+  candidate_identity_separate_from_harness_identity: true
+  one_command: python qualification/final_physical_campaign.py --execute
+
 execution_policy:
   mode: SINGLE_CONSOLIDATED_FINAL_CAMPAIGN
   run_during_r7_additive_work: false

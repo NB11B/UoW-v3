@@ -1,4 +1,4 @@
-schema_version: "2.1"
+schema_version: "2.2"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -21,41 +21,40 @@ current_invariants:
   src_uow_imports_shadow: false
 
 r4:
-  reconstruction_rule: preserve experiment capability and falsification boundary under minimal invariants
   canonical_commit_allowed_in_shadow_reconstruction: false
   results:
     U1_U10:
       status: RECONSTRUCTED_INITIAL
       shadow_runs: [23, 24]
-      preserved:
-        - primitive HALT/INC/DECJZ transition behavior
-        - multi-step Minsky execution
-        - independent Minsky reference agreement
-        - bounded-memory periodicity negative control
-        - extensible arithmetic beyond 1024 bits
-        - semantic matrix orthogonality
-        - replay determinism
-        - non-halting external step budget
-      retained_oracles:
-        - native UoW contract and pure proposal semantics
-        - deterministic canonical certifier
-        - independent Minsky reference interpreter
-      authority_application:
-        - minimal shadow local authorization
-        - shadow AuthorizedTransition
-        - shadow EvidenceEntry
-      canonical_commit_excluded: true
     U11:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      target:
-        - scheduler materialization
+      status: RECONSTRUCTED_INITIAL
+      shadow_runs: [25, 26]
+      preserved:
+        - self-hosted scheduler materialization
         - completion materialization
-        - independent materialization certification
+        - materialization certification
         - domain work
         - deadlock terminal transition
         - deterministic replay
-        - minimal shadow authority application
       canonical_orchestration_runtime_excluded: true
+    U12:
+      status: IMPLEMENTED_AWAITING_EXECUTION
+      reconstruction_model:
+        proposal_preparation: actual ThreadPoolExecutor workers
+        authority_application: minimal shadow authority kernel
+        concurrency_conformance: canonical OCC oracle
+        transaction_state_projection: canonical pure apply_transaction
+      preserved_targets:
+        - multi-active parallel proposal preparation
+        - disjoint commutativity
+        - read-write hazard rejection
+        - write-write hazard rejection
+        - hidden-coupling hazard rejection
+        - atomic abort/no dirty mutation
+        - timing entropy invariance
+        - replay determinism
+      architectural_finding:
+        - OCC provides typed causal compatibility that may remain valid even when whole-state hash changes
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

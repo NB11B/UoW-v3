@@ -1,41 +1,39 @@
-# R3/R4 Validation Record
+# R4 Validation Record
 
-## R3 summary
+## U1-U10
+Commit 7485dbb — shadow runs 23 and 24 PASS.
 
-Application closure supported for:
-- A2.7 QC-authorized runtime mutation;
-- A2.1 graph substitution;
-- A2.2/A2.3 actor rebinding, with authority caveat;
-- A2.4 delegation registration/idempotent failover;
-- A2.5 verified canonical-history application, with selection/consensus caveat.
+## U11
+Commit 63ef25a — shadow runs 25 and 26 PASS.
 
-Minimal authority kernel parity passed shadow runs 21 and 22.
+Preserved:
+- scheduler and completion materialization as ordinary UoWs;
+- independent materialization certification;
+- domain execution;
+- deadlock as a certified terminal transition;
+- deterministic replay.
 
-## R4 U1-U10
+The reconstruction path does not call canonical run_orchestration.
 
-Commit 7485dbb — shadow runs 23 and 24: PASS.
+## U12 in execution
 
-Initial reconstruction preserves:
-- primitive HALT/INC/DECJZ behavior;
-- multi-step two-counter computation;
-- independent reference-interpreter agreement;
-- bounded-state periodicity negative control;
-- extensible state beyond 1024 bits;
-- semantic-matrix orthogonality;
-- deterministic replay/evidence root;
-- externally bounded non-halting growth.
+The U12 reconstruction deliberately restores an actual threaded proposal realization rather than treating current OCC semantics alone as sufficient preservation.
 
-The reconstruction runner explicitly excludes canonical uow.engine.commit. Native UoW proposal and deterministic certification remain the initial semantic oracle; accepted transitions are applied by the R3 minimal authority kernel.
+Flow:
 
-Interpretation:
-- U1-U10 can already be reproduced through the recovered authority invariants without the canonical commit implementation.
-- This is not yet evidence that native proposal/certification code can be deleted or replaced.
+base authoritative snapshot
+-> parallel worker proposal + transaction descriptor
+-> deterministic core conformance
+-> current-state OCC conformance
+-> typed transaction-application proposal
+-> explicit local authorization
+-> minimal shadow AuthorizedTransition
+-> shadow evidence
 
-## R4 U11 next
+Important causal result under test:
 
-Self-hosted orchestration reconstruction:
-- scheduler and completion remain dynamically materialized ordinary UoWs;
-- every materialization must pass independent materialization certification;
-- accepted scheduler/domain/completion transitions use the minimal shadow authority kernel;
-- canonical run_orchestration and DeterministicSequencer.commit are excluded from the reconstruction path;
-- deadlock and tampered materialization controls remain required.
+whole-state precondition freshness is not the only valid freshness relation.
+
+A transaction proposed at S_base can remain valid at S_current after disjoint commits when its recorded read/write/coupled versions still conform under OCC.
+
+This is exactly why R2 retained typed causal coordinates rather than one universal state hash freshness rule.

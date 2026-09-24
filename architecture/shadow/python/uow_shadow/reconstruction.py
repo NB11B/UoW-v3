@@ -153,3 +153,61 @@ def run_reconstructed_steps(
         evidence.append(entry)
 
     return ReconstructionResult(state, tuple(evidence), len(evidence))
+
+
+
+def run_orchestration_reconstructed(
+    tasks: Mapping[str, UoW],
+    initial_state: WorldState,
+    *,
+    max_steps: int = 10_000,
+) -> ReconstructionResult:
+    """Reconstruct U11 self-hosted orchestration through the minimal authority kernel.
+
+    Scheduler and completion decisions are dynamically materialized and must pass
+    independent materialization certification before their resulting ordinary UoW
+    is allowed into the shadow authority path. No DeterministicSequencer or
+    canonical commit function is used.
+    """
+    from uow.orchestration.materialization import certify_materialization
+    from uow.orchestration.scheduler import (
+        COMPLETION_PREFIX,
+        SCHEDULER_ID,
+        CompletionMaterializer,
+        SchedulerMaterializer,
+    )
+
+    state = initial_state
+    evidence = []
+    scheduler = SchedulerMaterializer()
+
+    for step in range(max_steps):
+        if state.cursor is None or state.status != "RUNNING":
+            return ReconstructionResult(state, tuple(evidence), step)
+
+        cursor = state.cursor
+        if cursor == SCHEDULER_ID:
+            materialized = scheduler.materialize(state)
+            if not certify_materialization(scheduler, state, materialized):
+                raise ValueError("Scheduler materialization failed independent certification.")
+            active_uow = materialized.uow
+
+        elif cursor.startswith(COMPLETION_PREFIX):
+            task_id = cursor[len(COMPLETION_PREFIX):]
+            completion = CompletionMaterializer(task_id)
+            materialized = completion.materialize(state)
+            if not certify_materialization(completion, state, materialized):
+                raise ValueError("Completion materialization failed independent certification.")
+            active_uow = materialized.uow
+
+        else:
+            if cursor not in tasks:
+                raise KeyError(f"Orchestration cursor references unknown task {cursor!r}.")
+            active_uow = tasks[cursor]
+
+        # execute_one_reconstructed intentionally uses proposal/certifier oracle
+        # plus the independent minimal shadow authority/transition/evidence path.
+        state, entry = execute_one_reconstructed({active_uow.H.identity: active_uow}, state)
+        evidence.append(entry)
+
+    raise RuntimeError(f"Orchestration reconstruction step budget {max_steps} exceeded.")

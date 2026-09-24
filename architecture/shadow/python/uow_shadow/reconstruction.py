@@ -78,16 +78,22 @@ def _proposal_envelope(
     return envelope, committed_mirror
 
 
-def execute_one_reconstructed(
-    graph: Mapping[str, UoW],
+def execute_explicit_uow_reconstructed(
+    uow: UoW,
     state: WorldState,
 ) -> tuple[WorldState, EvidenceEntryRef]:
-    if state.cursor is None or state.status != "RUNNING":
-        raise ValueError("Reconstruction step requires a RUNNING state with an active cursor.")
-    if state.cursor not in graph:
-        raise KeyError(f"Current UoW cursor {state.cursor!r} does not exist in graph.")
+    """Apply an explicitly supplied UoW through the minimal authority kernel.
 
-    uow = graph[state.cursor]
+    This path does not require the enclosing WorldState cursor to name the UoW.
+    It is intended for certified control-plane/bookkeeping transitions whose
+    contract explicitly preserves the enclosing cursor (for example Q1 effect
+    intent/result and saga progress updates).
+
+    Cursor-owned program execution should continue to use execute_one_reconstructed.
+    """
+    if state.status != "RUNNING":
+        raise ValueError("Explicit reconstruction transition requires RUNNING state.")
+
     proposal = propose(uow, state)
     conformance = core_certify_adapter(uow, state, proposal)
     if not conformance.accepted:
@@ -102,7 +108,6 @@ def execute_one_reconstructed(
         authorization,
     )
 
-    # Semantic parity checks against the independently derived committed mirror.
     if dict(after_ref.semantic_payload) != dict(committed_mirror.attributes):
         raise AssertionError("Shadow kernel payload diverged from native proposed transition semantics.")
     if after_ref.cursor != committed_mirror.cursor:
@@ -115,6 +120,18 @@ def execute_one_reconstructed(
         raise AssertionError("Shadow kernel post-state identity diverged from canonical WorldState identity.")
 
     return committed_mirror, evidence
+
+
+def execute_one_reconstructed(
+    graph: Mapping[str, UoW],
+    state: WorldState,
+) -> tuple[WorldState, EvidenceEntryRef]:
+    if state.cursor is None or state.status != "RUNNING":
+        raise ValueError("Reconstruction step requires a RUNNING state with an active cursor.")
+    if state.cursor not in graph:
+        raise KeyError(f"Current UoW cursor {state.cursor!r} does not exist in graph.")
+
+    return execute_explicit_uow_reconstructed(graph[state.cursor], state)
 
 
 def run_reconstructed(

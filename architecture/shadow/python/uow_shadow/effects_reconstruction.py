@@ -29,7 +29,7 @@ from uow.effects.saga import (
 from uow.state import WorldState
 
 from .identity import shadow_identity
-from .reconstruction import execute_one_reconstructed
+from .reconstruction import execute_explicit_uow_reconstructed
 from .types import EvidenceEntryRef
 
 
@@ -69,7 +69,7 @@ class ShadowEffectRuntime:
             matrix_cell=EFFECT_CELL,
             parent_context="effects-shadow-reconstruction",
         )
-        self.state, entry = execute_one_reconstructed({uow.H.identity: uow}, self.state)
+        self.state, entry = execute_explicit_uow_reconstructed(uow, self.state)
         self.evidence.append(entry)
 
     def _commit_saga_record(self, record: SagaRecord) -> None:
@@ -88,7 +88,7 @@ class ShadowEffectRuntime:
             matrix_cell=EFFECT_CELL,
             parent_context="sagas-shadow-reconstruction",
         )
-        self.state, entry = execute_one_reconstructed({uow.H.identity: uow}, self.state)
+        self.state, entry = execute_explicit_uow_reconstructed(uow, self.state)
         self.evidence.append(entry)
 
     def commit_intent(self, effect: EffectDescriptor) -> EffectDescriptor:
@@ -196,7 +196,7 @@ class ShadowEffectRuntime:
             matrix_cell=EFFECT_CELL,
             parent_context="effects-shadow-reconstruction",
         )
-        self.state, entry = execute_one_reconstructed({uow.H.identity: uow}, self.state)
+        self.state, entry = execute_explicit_uow_reconstructed(uow, self.state)
         self.evidence.append(entry)
         return updated
 

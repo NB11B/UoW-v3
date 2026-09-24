@@ -1,4 +1,4 @@
-schema_version: "2.6"
+schema_version: "2.7"
 branch: research/uow-closure-architecture
 control_baseline: f4dc767322233cd3bd9afc6c1b7af45a3987111d
 mode: additive-research-reconstruction
@@ -33,26 +33,16 @@ r4:
       shadow_runs: [33, 34]
       preservation_gap_closed: true
       restored_from_archive: true
-      preserved:
-        - high-level goal to candidate task graph
-        - ontology/category validation
-        - dependency completeness
-        - DAG acyclicity
-        - certified graph execution
-        - deterministic replay
     Q1:
-      status: IMPLEMENTED_AWAITING_EXECUTION
-      preserved_targets:
-        - committed effect intent before external invocation
-        - external invocation remains non-closure boundary
-        - receipt certification before authoritative result commit
-        - deterministic idempotency/reconciliation
-        - crash-window no-duplicate recovery
-        - cursor/status preservation
-        - reverse-order saga compensation
-        - compensation failure retention
-      canonical_effect_runner_excluded: true
-      canonical_saga_coordinator_excluded: true
+      status: RERUN_PENDING_AFTER_CONTROL_PLANE_FIX
+      previous_shadow_run: 36
+      previous_result: CURSOR_OWNERSHIP_ASSUMPTION_MISMATCH
+      architectural_finding:
+        - cursor-owned program transitions and detached control-plane transitions are distinct execution contexts
+        - detached transitions preserve enclosing cursor/status but remain fully proposed, conformed, authorized, transitioned, and evidenced
+      fix:
+        - execute_explicit_uow_reconstructed added for detached certified transitions
+        - ordinary execute_one_reconstructed cursor semantics remain unchanged
 
 canonical_ci_observation:
   result: FAIL_BEFORE_TEST_EXECUTION

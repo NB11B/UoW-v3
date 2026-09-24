@@ -1,50 +1,44 @@
 # R4 Validation Record
 
-## U1-U10
-Shadow runs 23 and 24: PASS.
+## Reconstructed families already passing
 
-## U11
-Shadow runs 25 and 26: PASS.
+- U1-U10: shadow runs 23/24 PASS.
+- U11: shadow runs 25/26 PASS.
+- U12: shadow runs 27/28 PASS.
+- U13: shadow runs 29/30 PASS.
+- U14: shadow runs 31/32 PASS.
+- U14-B: shadow runs 33/34 PASS; archive-only preservation gap closed on the research branch.
 
-## U12
-Shadow runs 27 and 28: PASS.
+## Q1 first run
 
-## U13
-Shadow runs 29 and 30: PASS.
+Shadow run 36: 72 passed, 5 failed.
 
-## U14
-Shadow runs 31 and 32: PASS.
+All five failures had the same cause:
+- the generic reconstruction helper assumed an executing UoW must own WorldState.cursor;
+- Q1 effect-intent/result and saga-progress transitions intentionally preserve an enclosing cursor and execute as certified bookkeeping/control-plane transitions.
 
-## U14-B
-Commit e6b1080 — shadow runs 33 and 34: PASS.
+No Q1 receipt, idempotency, compensation, or authority assertion failed. The tests failed before those semantics were reached.
 
-The archive-only graph-synthesis capability is restored on the research branch:
-- valid reconcile goal produces a certified executable five-step graph;
-- cycle rejected before execution;
-- invalid ontology category rejected;
-- dangling dependency rejected;
-- replay deterministic.
+## Q1 correction
 
-This closes the U14-B preservation gap without adding the implementation to src/uow.
+A separate execution context is now explicit:
 
-## Q1 next
+1. cursor-owned program execution:
+   execute_one_reconstructed(graph, state)
+   requires state.cursor to select the UoW.
 
-The Q1 reconstruction keeps the external-action boundary explicit.
+2. detached certified control-plane transition:
+   execute_explicit_uow_reconstructed(uow, state)
+   does not claim cursor ownership and requires the UoW's own transition semantics to preserve/change cursor explicitly.
 
-Internal transitions:
-- intent commit;
+Both paths still use:
+Proposal -> Conformance -> Local Authorization -> AuthorizedTransition -> Evidence.
+
+The Q1 reconstruction now uses the detached path for:
+- effect intent state;
+- receipt/result state;
 - pending-external state;
-- result commit;
 - saga progress;
-- compensation state
+- compensation status.
 
-use the minimal shadow authority kernel.
-
-External operations:
-- invoke;
-- reconcile/query;
-- compensation invocation
-
-remain outside the internal transition algebra.
-
-Acceptance requires crash-window reconciliation without duplicate invocation, reverse compensation order, and preserved compensation-failure state.
+This preserves, rather than relaxes, cursor semantics.

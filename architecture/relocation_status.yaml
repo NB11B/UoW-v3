@@ -42,14 +42,21 @@ staged_moves:
     first_shim: src/uow/orchestration/runtime.py
     target_facade: implementations/python/uow_architecture_facade/application.py
   S3_typed_conformance_registry:
-    status: RERUN_PENDING_AFTER_FIXTURE_CORRECTION
+    status: PASS_INITIAL
+    shadow_runs: [106]
     first_run: 105
     first_run_result: TEST_FIXTURE_CONSTRUCTION_ONLY
     production_package: src/uow/conformance
     target_facade: implementations/python/uow_architecture_facade/conformance.py
     specialized_validators_replaced: false
   S4_repository_path_relocation:
-    status: NOT_STARTED
+    status: IN_PROGRESS
+    first_move:
+      source: src/uow/proposer/quorum_sequencer.py
+      target: src/uow/realizations/commit/quorum.py
+      compatibility_shim: true
+      status: IMPLEMENTED_AWAITING_SUITE
+    production_deletions: false
 
 final_gate:
   software_candidate_freeze_required: true

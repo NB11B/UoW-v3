@@ -174,7 +174,7 @@ Pairwise cosine similarities $C_{ij} = \cos(\Delta_i, \Delta_j)$ and separation 
 - **Minimum Pairwise Cosine**: **0.9854** ($\Delta_A$ vs. $\Delta_{\mathrm{Adv}}$)
 - **Mean Pairwise Cosine**: **0.9943**
 - **Maximum Separation Angle**: **9.80°** ($\Delta_A$ vs. $\Delta_{\mathrm{Adv}}$)
-- **Regime**: **`GENERIC_FAILURE_MACROSTATE_ATTRACTOR`**
+- **Regime**: **`COMMON_FAILURE_MACROSTATE_ATTRACTOR`**
 
 ---
 
@@ -190,24 +190,83 @@ For each candidate pair $(F_i, F_j)$, we compare the directional compositions $F
 
 ---
 
-### 6.5 Cybernetic Findings & Scientific Interpretation
+### 6.5 Two-Scale Geometric Decomposition ($\Delta_i = \Delta_G + \epsilon_i$)
 
-1. **Resolution of the Primary Scientific Question: Generic Macrostate Attractor**:
-   When conditioned on the identical unfulfillable commit outcome (uncommitted state, empty emitted keys, quorum margin $-1$), **all six distinct failure mechanisms collapse toward the same universal macrostate attractor direction**:
+The empirical geometry reveals a structured two-scale decomposition:
+$$\boxed{\Delta_i = \Delta_G + \epsilon_i}$$
+where:
+1. $\Delta_G$ is the dominant **governance-breakdown macrostate direction** ($\|\Delta_G\| = 1.6475$, accounting for $\ge 98.5\%$ of directional alignment).
+2. $\epsilon_i = \Delta_i - (\Delta_i \cdot \hat{\Delta}_G) \hat{\Delta}_G$ is the orthogonal **mechanism-specific residual**.
+
+#### Residual Magnitudes & Signal-to-Noise
+Every residual component $\epsilon_i$ is statistically significant above the replicate repeatability floor ($\sigma_{\text{rep}} = 0.0238$):
+
+| Operator | Mechanism | Residual Norm $\|\epsilon_i\|$ | Residual $\text{SNR} = \|\epsilon_i\|/\sigma_{\text{rep}}$ |
+| :--- | :--- | :---: | :---: |
+| **$\Delta_A$** | Authority Loss | 0.1150 | **4.83×** |
+| **$\Delta_E$** | Evidence Corruption | 0.1006 | **4.23×** |
+| **$\Delta_C$** | Causal Severance | 0.0657 | **2.76×** |
+| **$\Delta_T$** | Temporal Expiration | 0.0803 | **3.37×** |
+| **$\Delta_R$** | Resource Breach | 0.0751 | **3.15×** |
+| **$\Delta_{\mathrm{Adv}}$** | Adversarial Conflict | 0.2021 | **8.49×** |
+
+#### Singular Value Decomposition (SVD) of Residual Space
+Applying SVD to the residual matrix $E = [\epsilon_A, \epsilon_E, \epsilon_C, \epsilon_T, \epsilon_R, \epsilon_{\mathrm{Adv}}]^T$:
+
+| Mode | Singular Value ($s_k$) | Variance Explained | Cumulative Variance | Cybernetic Interpretation |
+| :---: | :---: | :---: | :---: | :--- |
+| **Mode 1** | **0.2275** | **64.24%** | **64.24%** | **Active Divergence Quarantine vs. Passive Rebinding** |
+| **Mode 2** | **0.1177** | **17.20%** | **81.44%** | **Contractual Rebindability vs. Parent Recertification** |
+| **Mode 3** | **0.1082** | **14.51%** | **95.95%** | **Semantic Boundary Integrity vs. Structural Severance** |
+| Mode 4 | 0.0565 | 3.96% | 99.91% | Minor execution timing adjustment |
+| Mode 5 | 0.0087 | 0.09% | 100.00% | Replicate noise residue |
+
+$$\boxed{\text{\textbf{95.95\% of the residual failure variance is captured in a compact 3D failure-coordinate system.}}}$$
+
+#### Orthogonal Residual Cosine Matrix $\cos(\epsilon_i, \epsilon_j)$
+Unlike the raw operators which cluster at $\ge 0.985$, the residuals $\epsilon_i$ form a rich, non-collinear geometric structure:
+
+| | $\epsilon_A$ | $\epsilon_E$ | $\epsilon_C$ | $\epsilon_T$ | $\epsilon_R$ | $\epsilon_{\mathrm{Adv}}$ |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **$\epsilon_A$** | 1.000 | -0.164 | +0.753 | -0.437 | +0.090 | **-0.592** |
+| **$\epsilon_E$** | -0.164 | 1.000 | +0.360 | -0.265 | -0.060 | -0.394 |
+| **$\epsilon_C$** | +0.753 | +0.360 | 1.000 | -0.317 | -0.124 | **-0.760** |
+| **$\epsilon_T$** | -0.437 | -0.265 | -0.317 | 1.000 | +0.416 | -0.068 |
+| **$\epsilon_R$** | +0.090 | -0.060 | -0.124 | +0.416 | 1.000 | -0.518 |
+| **$\epsilon_{\mathrm{Adv}}$** | **-0.592** | -0.394 | **-0.760** | -0.068 | -0.518 | 1.000 |
+
+- Adversarial quarantine ($\epsilon_{\mathrm{Adv}}$) is strongly anti-aligned with structural failures ($\epsilon_C$: $-0.760$, $\epsilon_A$: $-0.592$).
+- Authority loss ($\epsilon_A$) and Causal severance ($\epsilon_C$) correlate positively ($+0.753$), as both represent missing structural path components.
+- Evidence corruption ($\epsilon_E$) is largely orthogonal to Resource breach ($-0.060$) and Authority loss ($-0.164$).
+
+---
+
+### 6.6 Cybernetic Findings & Scientific Interpretation
+
+1. **Resolution of the Primary Question: Shared Macrostate + Structured Residual**:
+   Conditioned on the identical unfulfillable commit outcome (uncommitted state, empty emitted keys, quorum margin $-1$), all six failure mechanisms align with a **common governance-failure macrostate attractor across the tested mechanisms**:
    $$\min_{i \neq j} \cos(\Delta_i, \Delta_j) = \mathbf{0.9854}, \quad \text{mean } \cos = \mathbf{0.9943}$$
-   The separation angles between failure mechanisms are small ($\theta_{ij} \in [2.95^\circ, 9.80^\circ]$).
-   
-   > [!IMPORTANT] Core Architectural Insight
-   > In JEV representation space, governed failure is dominated by the **macroscopic breakdown of the regulatory envelope**, rather than fracturing into a scattered collection of disparate semantic operators. JEV does not perceive failure as a bag of independent, orthogonal causes; it observes that **governance has collapsed**, and projects the state into the universal authority-loss attractor $\Delta_A^*$.
+   The data reject both extremes: failure is neither an undifferentiated scalar flag nor a set of unrelated orthogonal vectors. It exhibits a **shared macrostate with structured fine-grained deviations**.
 
-2. **Subtle Mechanism-Specific Deflection (Fine Structure)**:
-   While macrostate collapse dominates the global direction ($\ge 98.5\%$ alignment), the fine structure reflects the nature of the breach:
-   - **Internal execution failures** (Authority $\Delta_A$, Causal $\Delta_C$, Resource $\Delta_R$, Temporal $\Delta_T$) cluster most tightly ($\cos \ge 0.994$).
-   - **Adversarial quarantine** ($\Delta_{\mathrm{Adv}}$) exhibits the largest angular deflection from authority loss ($\theta = 9.80^\circ$, $\cos = 0.9854$), driven by the distinct signature of active divergence quarantine.
-
-3. **Statistically Significant Noncommutativity ($\kappa_{ij} \gg \sigma_{\text{rep}}$)**:
-   Despite operating within the common macrostate attractor ($\cos \ge 0.997$ between forward and reverse orders), the **order in which failures are evaluated matters**:
+2. **Statistically Significant Noncommutative Ordering**:
+   For all evaluated pairs, the order of sequential failure evaluation produces an observable displacement difference:
    $$\kappa_{ij} \approx 0.15 - 0.19 \quad \implies \quad \eta_{ij} = \frac{\kappa_{ij}}{\sigma_{\text{rep}}} \in [\mathbf{6.24\times}, \mathbf{7.85\times}]$$
-   Because regulatory constraints form a sequential causal pipeline (e.g. an early evidence corruption halts execution before authority can be queried), the compound displacement vector depends on evaluation sequence.
-   This provides empirical evidence for **non-Abelian sequential composition** inside the macrostate attractor.
+   This confirms **statistically significant noncommutative ordering** in sequential failure composition. Because regulatory constraints are executed in a causal pipeline, an upstream failure truncates execution before downstream constraints can be evaluated, leaving a distinct geometric trace.
+
+3. **Enriched Empirical Factorization**:
+   Synthesizing results across all campaigns:
+   $$\boxed{
+   \begin{aligned}
+   \text{ensemble size } (M) &\longrightarrow \text{little observed effect on failure geometry}\\
+   \text{quorum policy } (q) &\longrightarrow \text{transition boundary location}\\
+   \text{realization topology } (T) &\longrightarrow \text{resilience under causal cuts}\\
+   \text{failure mechanism } (F_i) &\longrightarrow \text{shared macrostate } \Delta_G + \text{structured 3D residual } \epsilon_i\\
+   \text{sequential composition } (F_i F_j) &\longrightarrow \text{order-dependent state-space trajectory } (\kappa / \sigma_{\text{rep}} \approx 7.8\times).
+   \end{aligned}
+   }$$
+
+   This transitions UoW/JEV qualification from a static classifier to a **state-space dynamics**:
+   $$s \xrightarrow{F_i} s' \xrightarrow{F_j} s''$$
+   where the trajectory path matters, opening the path for rigorous cybernetic control.
+
 

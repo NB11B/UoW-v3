@@ -15,6 +15,8 @@
       },
       "mean_additivity_defect_eta": 9.02
     },
+    "continuous_lie_algebra_model_refuted_for_tested_operators": true,
+    "empirically_supported_model": "discrete_thresholded_causal_switching_dynamics",
     "gates": {
       "B0_deterministic_oracle": true,
       "B1_provider_complete": true,
@@ -22,6 +24,7 @@
       "B3_scalar_homogeneity": false,
       "B4_bracket_additivity": false
     },
+    "next_formal_candidate": "noncommutative_thresholded_causal_transformation_semigroup",
     "oracle_pass": true,
     "provider_complete": true,
     "repeatability_noise_floor_sigma_rep": 0.0267,

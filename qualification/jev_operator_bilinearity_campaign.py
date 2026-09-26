@@ -582,6 +582,9 @@ def analyze_bilinearity_observations(
             if supported
             else "NONLINEAR_BRACKET_DETECTED"
         ),
+        "continuous_lie_algebra_model_refuted_for_tested_operators": not supported,
+        "empirically_supported_model": "discrete_thresholded_causal_switching_dynamics",
+        "next_formal_candidate": "noncommutative_thresholded_causal_transformation_semigroup",
     }
 
 

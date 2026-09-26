@@ -204,15 +204,18 @@ To discriminate between **true nonclosure** (emergent missing dimension) and **i
 
 ---
 
-### 5.6 Preregistered Progression Toward Genuine Operator Algebra
+### 5.6 Resolution of the Operator Progression & Refutation of Continuous Lie Algebra
 
-With approximate residual closure validated and physical operator coefficients measured, the research progression advances through disciplined validation stages before any Jacobi identity testing:
+Following closure confirmation, the progression evaluated the essential algebra requirement of **bracket bilinearity** under physically controlled fractional perturbations ($[\alpha F_i + \beta F_j, F_k] \stackrel{?}{=} \alpha [F_i, F_k] + \beta [F_j, F_k]$) in [`docs/JEV_OPERATOR_BILINEARITY_EXPERIMENT.md`](file:///C:/Users/nateb/OneDrive/Documents/UoW-v2/docs/JEV_OPERATOR_BILINEARITY_EXPERIMENT.md):
 
 $$\boxed{\begin{aligned}
-&\text{1. Resolve the 3 low-SNR Resource pairs} \quad &&[\textbf{COMPLETED: } \bar{\zeta} \to 0.71\times \sigma_{\text{rep}}, R^2 \ge 93.8\%] \\
-&\text{2. Validate a common physical operator basis} \quad &&[\textbf{COMPLETED: } [F_i, F_j] \approx \sum_k c_{ij}^k \epsilon_k, \sum_k c_{ij}^k = 0] \\
-&\text{3. Test bilinearity and basis closure} \quad &&[\text{NEXT: Controlled perturbation scaling } \alpha F_i + \beta F_j] \\
-&\text{4. Estimate genuine structure constants } C_{ab}^c \quad &&[\text{Fit composable operator bracket } [B_a, B_b] \approx \sum_c C_{ab}^c B_c] \\
-&\text{5. Test Jacobi identity consistency} \quad &&[\text{Evaluate } \sum_m (C_{ij}^m C_{mk}^l + \dots) \stackrel{?}{\approx} 0] \\
-&\text{6. Only afterward revisit BCH} \quad &&[\text{Higher-order non-Abelian composition series}]
+&\text{1. Resolve low-SNR Resource pairs} \quad &&[\textbf{COMPLETED: } N=10 \implies \bar{\zeta} \to 0.71\times \sigma_{\text{rep}}, R^2 \ge 93.8\%] \\
+&\text{2. Validate common physical operator basis} \quad &&[\textbf{COMPLETED: } [F_i, F_j] \approx \sum_k c_{ij}^k \epsilon_k, \sum_k c_{ij}^k = 0] \\
+&\text{3. Test scalar homogeneity} \quad &&[\textbf{FAILS: } [F_i(\alpha), F_j] \approx [F_i(1), F_j], \text{ slope} \approx 0 \implies \text{step-saturation}] \\
+&\text{4. Test linear superposition} \quad &&[\textbf{FAILS: } \text{Combined interventions saturate, } \eta_{\text{add}} = 10.0\times \sigma_{\text{rep}}] \\
+&\text{5. Continuous Lie algebra model} \quad &&[\textbf{REFUTED FOR TESTED OPERATORS}] \\
+&\text{6. Jacobi / BCH campaign} \quad &&[\textbf{TERMINATED: } \text{Physically ungrounded for thresholded systems}] \\
+&\text{7. Empirical cybernetic model} \quad &&[\textbf{DISCRETE THRESHOLDED CAUSAL SWITCHING DYNAMICS}]
 \end{aligned}}$$
+
+The empirical failure of scalar homogeneity and linear superposition demonstrates that the tested physical failure operators act as **discrete guarded transitions** ($x \xrightarrow{g_i(x)} F_i(x)$ with Heaviside step boundaries $\Theta(\alpha)$), rather than infinitesimal continuous Lie generators. The formal mathematical candidate is a **noncommutative thresholded causal transformation semigroup**.

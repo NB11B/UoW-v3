@@ -49,7 +49,10 @@ flowchart TD
 2. **Dual Observation-Indexed Kernels ($Q_{*,O}$)**:
    The governance kernel is not a singular monolithic entity; minimal state retention is strictly indexed by the future behavioral contract being predicted:
    - **Regime-Predictive Kernel**: $|Q_{*,\mathcal{R}}| = 222$ classes (retaining channel failure distinctions and containment/recovery flags).
-   - **Admissibility-Predictive Kernel**: $|Q_{*,\mathcal{A}}| = 96$ classes in compliance under $\Sigma_*$ (contracting to 97 in UoW with slack margin).
+   - **Admissibility-Predictive Kernel**: $|Q_{U,\mathcal{A}}| = 97$ and $|Q_{C,\mathcal{A}}| = 96$, establishing the shared quotient:
+     $$\boxed{Q_{U,\mathcal{A}}^{97} \twoheadrightarrow Q_{*,\mathcal{A}}^{96} \cong Q_{C,\mathcal{A}}^{96}}.$$
+     UoW retains one additional admissibility-predictive distinction—associated with its slack-margin semantics—that is not preserved by the shared compliance contract. Quotienting that distinction yields the 96-state common admissibility kernel:
+     $$\boxed{Q_{*,\mathcal{R}} = 222, \qquad Q_{*,\mathcal{A}} = 96.}$$
 
 3. **Categorical Retract Formulation ($\pi_C \circ \iota = \operatorname{id}_{Q_{222}}$)**:
    Rejecting the unjustified "direct sum" hypothesis, the structural relationship between UoW and Compliance is formalized as a categorical **retract**:
@@ -61,12 +64,12 @@ flowchart TD
    - **14,816 / 15,810 transitions (93.7%)** commute directly under single-step projection.
    - The **994 discrepancies (6.3%)** mark precisely where domain-specific normative extensions (the 3-element dual-officer signatory lattice and administrative hardship waivers) exceed the UoW grammar.
 
-5. **Bounded Observer Discriminative Fidelity ($\mathrm{FCR} = 2.2\%$)**:
+5. **Bounded Observer Discriminative Fidelity ($\mathrm{FCR} = 2.2\%$) & Candidate Observer Quotient ($Q_{222} \twoheadrightarrow Q_J$)**:
    Evaluating 10 representative governance classes across 45 non-equivalent pairs against live `jev-1.13.0` ($\sigma_{\mathrm{rep}} = 0.0342$):
    - **False Collapse Rate**: $\mathrm{FCR} = \frac{1}{45} = 0.0222 \ (2.2\%) \le 0.05 \ (5.0\%)$.
    - **Mean Continuous Separation**: $\overline{\eta} = 20.08\sigma_{\mathrm{rep}}$ (ranging up to $45.45\sigma_{\mathrm{rep}}$).
    - **44 / 45 pairs (97.8%)** separated decisively above the noise floor.
-   - **Falsification of Exact Faithfulness**: The single collapse $\mathrm{RECOVERING}_A \approx_J \mathrm{RECOVERING}_E$ ($\eta = 0.53 \le 1.50$) falsifies exact mathematical injectivity, demonstrating that JEV naturally induces a coarser semantic quotient $Q_{222} \twoheadrightarrow Q_J$ where historical disruption channels are merged during recovery.
+   - **Candidate Observer Quotient**: The single collapse $\mathrm{RECOVERING}_A \approx_J \mathrm{RECOVERING}_E$ ($\eta = 0.53 \le 1.50$) falsifies exact mathematical injectivity. This provides empirical evidence that JEV may partially collapse channel identity within the recovering regime, inducing a candidate coarser observer quotient $Q_{222} \twoheadrightarrow Q_J$, rather than a complete characterization of $Q_J$.
 
 ---
 
@@ -148,8 +151,12 @@ To avoid arithmetic conflation, the campaign distinguishes concrete microstate v
 
 ### 2.4 Epistemological Significance: The Observation-Indexed Kernel Family
 The fact that $|Q_{*,\mathcal{R}}| = 222$ while $|Q_{*,\mathcal{A}}| = 96$ demonstrates that **there is no singular monolithic "universal cybernetic kernel"**. Instead, cybernetic systems admit an **observation-indexed family of quotients** $Q_{*,O}$:
-- To predict future coarse legal admissibility $\mathcal{A}$, an observer needs only 96 distinct states (or 97 with slack margin).
-- To predict future operational regime trajectories $\mathcal{R}$ under active perturbation, an observer must track 222 distinct states to differentiate which disruption channels are active, whether containment holds, and whether recovery is underway.
+- To predict future operational regime trajectories $\mathcal{R}$ under active perturbation, an observer must track 222 distinct states to differentiate which disruption channels are active, whether containment holds, and whether recovery is underway:
+  $$|Q_{*,\mathcal{R}}| = 222.$$
+- To predict future coarse legal admissibility $\mathcal{A}$, UoW tracks $|Q_{U,\mathcal{A}}| = 97$ classes, retaining an internal distinction associated with its slack-margin semantics. The compliance contract does not preserve this distinction, yielding $|Q_{C,\mathcal{A}}| = 96$ classes. Quotienting that extra distinction yields the maximal shared admissibility kernel:
+  $$\boxed{Q_{U,\mathcal{A}}^{97} \twoheadrightarrow Q_{*,\mathcal{A}}^{96} \cong Q_{C,\mathcal{A}}^{96}}.$$
+Different operational questions genuinely require different amounts of operational memory:
+$$\boxed{Q_{*,\mathcal{R}} = 222, \qquad Q_{*,\mathcal{A}} = 96.}$$
 
 ---
 
@@ -225,15 +232,16 @@ xychart-beta
     bar [0.53, 1.50, 20.52, 45.45]
 ```
 
-### 4.3 Theoretical Meaning: Falsification of Exact Faithfulness & The Observer Quotient Hypothesis
-Exact mathematical injectivity/faithfulness is strictly falsified by the single collapse between `RECOVERING_AUTH` and `RECOVERING_EVID`.
+### 4.3 Theoretical Meaning: Bounded Fidelity & The Candidate Observer Quotient ($Q_{222} \twoheadrightarrow Q_J$)
+Exact mathematical injectivity/faithfulness is strictly falsified by the single collapse between `RECOVERING_AUTH` and `RECOVERING_EVID` ($\eta = 0.53 \le 1.50$).
 
-Rather than treating this as experimental noise, this finding reveals an important structural property of the external observer:
-- Once a system enters the `RECOVERING` regime, JEV's latent representation ceases to distinguish the historical cause of the disruption (authority key loss vs ledger corruption).
-- This indicates that JEV naturally induces a **strictly coarser semantic quotient**:
-  $$Q_{222} \twoheadrightarrow Q_J$$
+Rather than treating this as experimental noise or claiming a complete erasure of all recovery distinctions, this finding provides evidence for a candidate coarser observer quotient:
+- The observed collapse between authority recovery and evidence recovery indicates that **JEV may partially collapse channel identity within the recovering regime**.
+- This supports the hypothesis that the neural observer naturally induces a **candidate coarser semantic quotient**:
+  $$\boxed{Q_{222} \twoheadrightarrow Q_J}$$
   in which recovery channels are partially merged.
-- Therefore, the empirical result is characterized strictly as **bounded observer discriminative fidelity** ($\mathrm{FCR} = 2.2\%$, 44/45 pairs separated), rather than exact mathematical faithfulness.
+- Crucially, this collapse provides empirical evidence that $Q_J$ is strictly coarser than $Q_{222}$, rather than a complete characterization of $Q_J$.
+- Therefore, the empirical result is characterized strictly as **bounded observer discriminative fidelity** ($\mathrm{FCR} = 2.2\%$, 44/45 pairs separated), with $Q_J$ established as a coarser candidate quotient.
 
 ---
 
@@ -259,9 +267,9 @@ $$\boxed{
 \textbf{Subautomaton Invariance} &:\quad \text{Exact microstate preservation } (661 \times 14 = 9{,}254 \text{ checks, } 0 \text{ violations}) \\
 \textbf{Common Quotient Theorem} &:\quad Q_{*,\mathcal{R}} \cong Q_{222} \text{ under shared alphabet } \Sigma_* \text{ and regime observable } \mathcal{R} \\
 \textbf{Categorical Retraction} &:\quad Q_{222} \text{ is a categorical retract of } Q_{930}: \pi_C \circ \iota = \operatorname{id}_{Q_{222}} \\
-\textbf{Dual Kernel Family} &:\quad \text{Observation-indexed: } |Q_{*,\mathcal{R}}| = 222 \text{ vs } |Q_{*,\mathcal{A}}| = 96 \\
+\textbf{Dual Kernel Family} &:\quad \text{Observation-indexed: } Q_{*,\mathcal{R}} = 222 \text{ vs } Q_{U,\mathcal{A}}^{97} \twoheadrightarrow Q_{*,\mathcal{A}}^{96} \cong Q_{C,\mathcal{A}}^{96} \\
 \textbf{Bounded Observer Fidelity} &:\quad \text{Live JEV False Collapse Rate } \mathrm{FCR} = 2.2\% \le 5.0\% \ (44/45 \text{ pairs separated, } \overline{\eta} = 20.08\sigma) \\
-\textbf{Observer Quotient Discovery} &:\quad 1 \text{ false collapse reveals coarser semantic quotient } Q_{222} \twoheadrightarrow Q_J \\
-\textbf{Definitive Theoretical Finding} &:\quad \textbf{UoW is the Exact Maximal Common Governance Retract under Shared Semantics } (\Sigma_*, \mathcal{R})
+\textbf{Candidate Observer Quotient} &:\quad \text{AUTH/EVID recovery collapse provides evidence for coarser } Q_{222} \twoheadrightarrow Q_J \\
+\textbf{Definitive Theoretical Finding} &:\quad \textbf{Operational grammar is contract-relative: retain exactly what is required to govern } (Q_{*,O})
 \end{aligned}
 }$$

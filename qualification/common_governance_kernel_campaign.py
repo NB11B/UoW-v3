@@ -28,7 +28,8 @@ Scientific Objectives:
        FCR = #{ (q_i, q_j) : q_i != q_j, ||J(q_i) - J(q_j)|| <= 1.50 * sigma_rep } / 45.
      Establish bounded discriminative fidelity (FCR = 2.2%, 44/45 pairs separated).
      Acknowledge that 1 false collapse (RECOVERING_A approx_J RECOVERING_E) falsifies exact
-     mathematical injectivity, suggesting JEV implements a coarser quotient Q_222 ->> Q_J.
+     mathematical injectivity, providing evidence that JEV may partially collapse channel
+     identity within the recovering regime (candidate observer quotient Q_222 ->> Q_J).
 """
 
 from __future__ import annotations
@@ -494,12 +495,15 @@ def run_common_governance_kernel_campaign(
             "governance alphabet Sigma_* and operational regime observable R is proved to have cardinality "
             "|Q_{*,R}| = 222. The canonical projection pi_U: Q_222 -> Q_{*,R} is a strict transition-preserving "
             "isomorphism (0 violations across 9,254 concrete subautomaton microstate checks and 3,108 quotient "
-            "class checks). Under the lawful admissibility observable A, the common quotient contracts to "
-            "|Q_{*,A}| = 96 classes, proving that minimal state retention is observation-indexed (Q_{*,O}). "
+            "class checks). Under the lawful admissibility observable A, UoW retains one additional distinction "
+            "associated with its slack-margin semantics (|Q_{U,A}| = 97) not preserved by the compliance contract "
+            "(|Q_{C,A}| = 96), yielding the common admissibility kernel Q_{U,A}^{97} ->> Q_{*,A}^{96} =~= Q_{C,A}^{96}. "
+            "This confirms that minimal state retention is observation-indexed (Q_{*,R} = 222 vs Q_{*,A} = 96). "
             "Furthermore, Q_222 is a categorical retract of Q_930 under the shared semantics: pi_C(iota(u)) = u "
             "holds for all 222 states. Live external observer evaluation against jev-1.13.0 establishes bounded "
-            "discriminative fidelity (FCR = 2.2%, 44/45 pairs separated), with the single false collapse "
-            "indicating a potentially coarser semantic observer quotient Q_222 ->> Q_J."
+            "discriminative fidelity (FCR = 2.2%, 44/45 pairs separated), with the single observed AUTH/EVID recovery "
+            "collapse providing evidence for a candidate coarser observer quotient Q_222 ->> Q_J that partially collapses "
+            "channel identity within recovery."
         ),
     }
 

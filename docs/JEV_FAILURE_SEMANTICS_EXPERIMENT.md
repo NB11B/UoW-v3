@@ -245,8 +245,10 @@ Unlike the raw operators which cluster at $\ge 0.985$, the residuals $\epsilon_i
 
 To determine whether the observed noncommutative ordering lives in the **mechanism-specific coordinate system** rather than the common failure axis, we remove the dominant macrostate direction $\Delta_G$ from each composed state:
 $$\epsilon_{ij} = \Delta_{ij} - (\Delta_{ij} \cdot \hat{\Delta}_G) \hat{\Delta}_G$$
-and project onto the 3D residual basis $V_3$:
-$$z_{ij} = V_3^T \epsilon_{ij} \in \mathbb{R}^3$$
+and project onto the $3\times8$ row basis $V_3$:
+$$z_{ij} = V_3 \epsilon_{ij} \in \mathbb{R}^3$$
+with reconstruction back into the 8-D observer space given by:
+$$\hat{\epsilon}_{ij} = V_3^T z_{ij} = V_3^T V_3 \epsilon_{ij}$$
 
 #### 1. Residual Noncommutativity in 3D Subspace
 We compare the residual displacement difference $\kappa^{(\epsilon)}_{ij} = \|\epsilon_{ij} - \epsilon_{ji}\|$ and its 3D projection $\kappa^{(3D)}_{ij} = \|z_{ij} - z_{ji}\|$:
@@ -264,14 +266,14 @@ This demonstrates that ordering effects are **intrinsic to the mechanism-specifi
 Testing whether sequential composition is linear/additive or generates an emergent interaction:
 $$\epsilon_{ij} = \epsilon_i + \epsilon_j + \chi_{ij} \quad \implies \quad \chi_{ij} = \epsilon_{ij} - (\epsilon_i + \epsilon_j)$$
 
-| Composition Sequence | Interaction Norm $\|\chi_{ij}\|$ | Ratio over Noise ($\|\chi_{ij}\|/\sigma_{\text{rep}}$) | Status |
+| Composition Sequence | Interaction Norm $\|\chi_{ij}\|$ | Ratio over Noise ($\|\chi_{ij}\|/\sigma_{\text{rep}}$) | Observation Status |
 | :--- | :---: | :---: | :---: |
-| $F_A F_E$ (`comp_AE`) | **0.0851** | **3.57×** | Statistically Significant |
-| $F_E F_A$ (`comp_EA`) | **0.1109** | **4.66×** | Statistically Significant |
-| $F_A F_C$ (`comp_AC`) | **0.0689** | **2.90×** | Near-Threshold |
-| $F_C F_A$ (`comp_CA`) | **0.1351** | **5.67×** | Statistically Significant |
-| $F_E F_R$ (`comp_ER`) | **0.1025** | **4.30×** | Statistically Significant |
-| $F_R F_E$ (`comp_RE`) | **0.1135** | **4.77×** | Statistically Significant |
+| $F_A F_E$ (`comp_AE`) | **0.0851** | **3.57×** | Well above repeatability noise |
+| $F_E F_A$ (`comp_EA`) | **0.1109** | **4.66×** | Well above repeatability noise |
+| $F_A F_C$ (`comp_AC`) | **0.0689** | **2.90×** | Near-threshold of repeatability noise |
+| $F_C F_A$ (`comp_CA`) | **0.1351** | **5.67×** | Well above repeatability noise |
+| $F_E F_R$ (`comp_ER`) | **0.1025** | **4.30×** | Well above repeatability noise |
+| $F_R F_E$ (`comp_RE`) | **0.1135** | **4.77×** | Well above repeatability noise |
 
 In all sequences, $\|\chi_{ij}\| \gg \sigma_{\text{rep}} = 0.0238$, confirming that sequential composition is **non-additive**. Furthermore:
 $$\chi_{ij} \neq \chi_{ji} \quad \implies \quad [F_i, F_j]_{\mathrm{emp}} = \chi_{ij} - \chi_{ji} = \epsilon_{ij} - \epsilon_{ji} \neq 0$$
@@ -286,10 +288,10 @@ producing an empirical commutator whose magnitude is **$3.2\times$ to $5.3\times
    $$\min_{i \neq j} \cos(\Delta_i, \Delta_j) = \mathbf{0.9854}, \quad \text{mean } \cos = \mathbf{0.9943}$$
    The data reject both extremes: failure is neither an undifferentiated scalar flag nor a set of unrelated orthogonal vectors. It exhibits a **shared macrostate with structured fine-grained deviations**.
 
-2. **Statistically Significant Noncommutative Ordering**:
+2. **Empirical Noncommutative Ordering**:
    For all evaluated pairs, the order of sequential failure evaluation produces an observable displacement difference:
    $$\kappa_{ij} \approx 0.15 - 0.19 \quad \implies \quad \eta_{ij} = \frac{\kappa_{ij}}{\sigma_{\text{rep}}} \in [\mathbf{6.24\times}, \mathbf{7.85\times}]$$
-   The 3D residual projection preserves up to $95.5\%$ of this commutator variance ($\kappa^{(3D)} / \sigma_{\text{rep}} \le 5.16\times$). This confirms **statistically significant noncommutative ordering** in sequential failure composition. Because regulatory constraints are executed in a causal pipeline, an upstream failure truncates execution before downstream constraints can be evaluated, leaving a distinct geometric trace in the 3D residual space.
+   The 3D residual projection preserves up to $95.5\%$ of this commutator variance ($\kappa^{(3D)} / \sigma_{\text{rep}} \le 5.16\times$). This confirms **empirical noncommutative ordering well above the repeatability noise floor** in sequential failure composition. Because regulatory constraints are executed in a causal pipeline, an upstream failure truncates execution before downstream constraints can be evaluated, leaving a distinct geometric trace in the 3D residual space.
 
 3. **Enriched Empirical Factorization**:
    Synthesizing results across all campaigns:

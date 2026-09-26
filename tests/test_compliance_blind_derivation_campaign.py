@@ -100,15 +100,21 @@ def test_trs_local_confluence_modulo_q2(compliance_universe):
 
 
 def test_structural_comparison_and_kernel_projection(compliance_universe):
-    """Verify falsification of naive isomorphism and confirm Governance Kernel Classification."""
+    """Verify falsification of naive isomorphism and confirm Subautomaton Embedding Q_222 (-> Q_930."""
     min_res = compliance_universe["min_res"]
-    struct_res = evaluate_structural_relationship_with_uow(min_res)
+    states = compliance_universe["states"]
+    visited = compliance_universe["visited"]
+    struct_res = evaluate_structural_relationship_with_uow(min_res, states, visited)
 
     assert struct_res["strict_isomorphism_candidate"] is False
     assert "FALSIFIED" in struct_res["strict_isomorphism_verdict"]
-    assert struct_res["sub_automaton_embedding_candidate"] is False
-    assert struct_res["governance_kernel_projection"] is True
-    assert struct_res["theoretical_classification"] == "CONSERVATIVE_NORMATIVE_SUPERSET"
+    assert struct_res["injective_embedding_qc_into_qu"] is False
+    assert struct_res["injective_embedding_qu_into_qc"] is True
+    assert struct_res["subautomaton_embedding_verified"] is True
+    assert struct_res["subautomaton_states_count"] == 222
+    assert struct_res["subautomaton_violations_count"] == 0
+    assert struct_res["full_transition_matching_rate"] >= 0.93
+    assert struct_res["theoretical_classification"] == "SUBAUTOMATON_EMBEDDING_AND_NORMATIVE_SUPERSET"
 
 
 def test_observer_invariance_and_faithfulness():

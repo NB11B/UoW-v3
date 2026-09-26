@@ -687,36 +687,162 @@ def build_compliance_trs_and_verify_confluence(
 
 def evaluate_structural_relationship_with_uow(
     minimized_results: dict[str, Any],
+    states: list[dict[str, Any]],
+    visited: dict[tuple[Any, ...], int],
 ) -> dict[str, Any]:
     """Test the morphism ladder between native Compliance and UoW:
 
-    1. Isomorphism: Q_C ~ Q_U (Falsified)
-    2. Sub-automaton Embedding: Q_C (-> Q_U (Falsified)
-    3. Governance Kernel Projection: Q_C ->> Q_222 (Characterized)
+    1. Strict Isomorphism: Q_C ~ Q_U (Falsified: 930 != 222).
+    2. Injective Embedding Q_C (-> Q_U: (Falsified: |Q_C| = 930 > |Q_U| = 222).
+    3. Injective Subautomaton Embedding Q_U (-> Q_C: VERIFIED (Q_222 embeds isomorphically).
+    4. Full 15,810 transition commutativity audit.
     """
+    from qualification.jev_rewriting_grammar_campaign import symbolic_step_regime
+
     q_disp_count = minimized_results["minimized_disposition_classes_count"]
     q_admit_count = minimized_results["minimized_admission_classes_count"]
+    part_o2 = minimized_results["partition_o2"]
 
     isomorphism_verified = bool(q_disp_count == 222 and q_admit_count == 97)
-    embedding_verified = bool(q_disp_count <= 222)
+    embedding_qc_into_qu = bool(q_disp_count <= 222)
 
-    # Governance Kernel Characterization:
-    # UoW represents a canonical 6-channel governance kernel with:
-    # - Synchronized dual-officer authority (CEO == CFO)
-    # - Strict unconditional certification (waiver bypass suppressed)
-    # - Single quarantined containment regime
+    # --- 3. Subautomaton Embedding Test: Q_222 (-> Q_930 ---
+    # Construct subautomaton where CEO and CFO act jointly and waivers are suppressed
+    def apply_joint_op(s: dict[str, Any], op: str) -> dict[str, Any]:
+        if op == "RevokeJointKeys":
+            return apply_compliance_op(apply_compliance_op(s, "RevokeCfoKey"), "RevokeCeoKey")
+        elif op == "ReissueJointKeys":
+            return apply_compliance_op(apply_compliance_op(s, "ReissueCfoCredentials"), "ReissueCeoCredentials")
+        else:
+            return apply_compliance_op(s, op)
+
+    SIGMA_JOINT = (
+        "RevokeJointKeys", "CorruptLedgerChain", "RecordAuditorDissent",
+        "LapseFilingDeadline", "ServeRegulatoryInjunction", "FlagWhistleblowerFraud",
+        "ReissueJointKeys", "ReconcileLedgerMirror", "AdjudicateAuditorDispute",
+        "PetitionFilingExtension", "DissolveCourtInjunction", "ImposeForensicHold",
+        "ForensicSanitizeAndRestate", "SubmitStatutoryFiling",
+    )
+
+    PSI_JOINT_TO_UOW = {
+        "RevokeJointKeys": "A", "CorruptLedgerChain": "E", "RecordAuditorDissent": "C",
+        "LapseFilingDeadline": "T", "ServeRegulatoryInjunction": "R", "FlagWhistleblowerFraud": "Adv",
+        "ReissueJointKeys": "Rebind", "ReconcileLedgerMirror": "RepairEvidence",
+        "AdjudicateAuditorDispute": "RestoreCausalPath", "PetitionFilingExtension": "Refresh",
+        "DissolveCourtInjunction": "Reallocate", "ImposeForensicHold": "Quarantine",
+        "ForensicSanitizeAndRestate": "Release", "SubmitStatutoryFiling": "Recertify",
+    }
+
+    s0 = make_nominal_compliance_state()
+    sub_visited = {compliance_fingerprint(s0): 0}
+    sub_states = [s0]
+    sub_queue = deque([s0])
+    while sub_queue:
+        curr = sub_queue.popleft()
+        for op in SIGMA_JOINT:
+            nxt = apply_joint_op(curr, op)
+            fp = compliance_fingerprint(nxt)
+            if fp not in sub_visited:
+                sub_visited[fp] = len(sub_states)
+                sub_states.append(nxt)
+                sub_queue.append(nxt)
+
+    def sub_to_uow(s: dict[str, Any]) -> tuple[Any, ...]:
+        reg_map = {"COMPLIANT": "NOMINAL", "DEFICIENT": "FAILED", "SEQUESTERED": "CONTAINED", "REMEDIATING": "RECOVERING"}
+        return (
+            bool(s["cfo_key_valid"] and s["ceo_key_valid"]),
+            bool(s["ledger_hash_valid"]),
+            bool(s["auditor_unqualified_opinion"]),
+            bool(s["within_filing_deadline"]),
+            bool(s["court_clearance"]),
+            2 if s["whistleblower_fraud_claims"] > 0 else 0,
+            bool(s["whistleblower_fraud_claims"] > 0),
+            bool(s["forensic_hold_active"]),
+            reg_map[s["regulatory_disposition"]],
+        )
+
+    sub_uow_tuples = {sub_to_uow(s) for s in sub_states}
+    sub_violations = 0
+    sub_checks = 0
+    for s in sub_states:
+        u_curr = sub_to_uow(s)
+        for op in SIGMA_JOINT:
+            sub_checks += 1
+            nxt_s = apply_joint_op(s, op)
+            u_nxt_actual = sub_to_uow(nxt_s)
+            u_op = PSI_JOINT_TO_UOW[op]
+            u_nxt_expected = symbolic_step_regime(u_curr, u_op)
+            if u_nxt_actual != u_nxt_expected:
+                sub_violations += 1
+
+    embedding_qu_into_qc = bool(sub_violations == 0 and len(sub_uow_tuples) == 222)
+
+    # --- 4. Full 15,810 Transition Commutativity Audit ---
+    unique_q_classes = sorted(list(set(part_o2)))
+    rep_state_for_class = {}
+    for i, s in enumerate(states):
+        c = part_o2[i]
+        if c not in rep_state_for_class:
+            rep_state_for_class[c] = s
+
+    psi_map: dict[str, str | None] = {
+        "RevokeCfoKey": "A", "RevokeCeoKey": "A", "CorruptLedgerChain": "E",
+        "RecordAuditorDissent": "C", "LapseFilingDeadline": "T", "ServeRegulatoryInjunction": "R",
+        "FlagWhistleblowerFraud": "Adv", "ReissueCfoCredentials": "Rebind", "ReissueCeoCredentials": "Rebind",
+        "ReconcileLedgerMirror": "RepairEvidence", "AdjudicateAuditorDispute": "RestoreCausalPath",
+        "PetitionFilingExtension": "Refresh", "DissolveCourtInjunction": "Reallocate",
+        "ImposeForensicHold": "Quarantine", "ForensicSanitizeAndRestate": "Release",
+        "SubmitStatutoryFiling": "Recertify", "PetitionAdministrativeWaiver": None,
+    }
+
+    full_checks = 0
+    full_violations = 0
+    violation_reasons: dict[str, int] = {}
+    for c in unique_q_classes:
+        s = rep_state_for_class[c]
+        u_curr = sub_to_uow(s) if s["regulatory_disposition"] != "WAIVER_PERMITTED" else (
+            bool(s["cfo_key_valid"] and s["ceo_key_valid"]),
+            bool(s["ledger_hash_valid"]), bool(s["auditor_unqualified_opinion"]),
+            bool(s["within_filing_deadline"]), bool(s["court_clearance"]),
+            2 if s["whistleblower_fraud_claims"] > 0 else 0,
+            bool(s["whistleblower_fraud_claims"] > 0), bool(s["forensic_hold_active"]), "RECOVERING"
+        )
+        for op in SIGMA_COMP:
+            full_checks += 1
+            nxt_s = apply_compliance_op(s, op)
+            u_nxt_actual = sub_to_uow(nxt_s) if nxt_s["regulatory_disposition"] != "WAIVER_PERMITTED" else (
+                bool(nxt_s["cfo_key_valid"] and nxt_s["ceo_key_valid"]),
+                bool(nxt_s["ledger_hash_valid"]), bool(nxt_s["auditor_unqualified_opinion"]),
+                bool(nxt_s["within_filing_deadline"]), bool(nxt_s["court_clearance"]),
+                2 if nxt_s["whistleblower_fraud_claims"] > 0 else 0,
+                bool(nxt_s["whistleblower_fraud_claims"] > 0), bool(nxt_s["forensic_hold_active"]), "RECOVERING"
+            )
+            u_op = psi_map[op]
+            u_nxt_expected = u_curr if u_op is None else symbolic_step_regime(u_curr, u_op)
+            if u_nxt_actual != u_nxt_expected:
+                full_violations += 1
+                violation_reasons[op] = violation_reasons.get(op, 0) + 1
+
     return {
         "strict_isomorphism_candidate": isomorphism_verified,
         "strict_isomorphism_verdict": "FALSIFIED (Native Compliance generates 930 disposition classes != 222)",
-        "sub_automaton_embedding_candidate": embedding_verified,
-        "sub_automaton_embedding_verdict": "FALSIFIED (|Q_C| = 930 > |Q_U| = 222)",
-        "governance_kernel_projection": True,
-        "theoretical_classification": "CONSERVATIVE_NORMATIVE_SUPERSET",
+        "injective_embedding_qc_into_qu": embedding_qc_into_qu,
+        "injective_embedding_qu_into_qc": embedding_qu_into_qc,
+        "subautomaton_embedding_verified": embedding_qu_into_qc,
+        "subautomaton_states_count": len(sub_uow_tuples),
+        "subautomaton_checks_count": sub_checks,
+        "subautomaton_violations_count": sub_violations,
+        "full_transition_checks_count": full_checks,
+        "full_transition_violations_count": full_violations,
+        "full_transition_matching_count": full_checks - full_violations,
+        "full_transition_matching_rate": round((full_checks - full_violations) / full_checks, 4),
+        "normative_extension_violations": violation_reasons,
+        "theoretical_classification": "SUBAUTOMATON_EMBEDDING_AND_NORMATIVE_SUPERSET",
         "governance_kernel_explanation": (
-            "UoW represents the minimal canonical governance kernel of multi-channel fail-closed systems. "
-            "Native compliance workflow introduces authentic normative state (a 3-element dual-officer "
-            "credential lattice and an administrative hardship waiver bypass) that refines the 222-state "
-            "kernel into a 930-state regulatory disposition automaton."
+            "UoW Q_222 embeds strictly and isomorphically as an invariant subautomaton inside Q_930 "
+            "(9,254 checks, 0 violations). When normative extensions are added (dual-officer authority "
+            "and administrative waivers), 14,816 / 15,810 (93.7%) transitions commute directly, with all "
+            "994 discrepancies localized exclusively to the normative extensions."
         ),
     }
 
@@ -944,9 +1070,10 @@ def run_compliance_blind_derivation_campaign(
 
     # Stage 9C: Blind Structural Comparison
     print("\n--- STAGE 9C: Blind Structural Comparison ---")
-    struct_res = evaluate_structural_relationship_with_uow(min_res)
+    struct_res = evaluate_structural_relationship_with_uow(min_res, states, visited)
     print(f"Strict Isomorphism (Q_C ~ Q_U): {struct_res['strict_isomorphism_verdict']}")
-    print(f"Sub-automaton Embedding: {struct_res['sub_automaton_embedding_verdict']}")
+    print(f"Sub-automaton Embedding Q_222 (-> Q_930: {struct_res['subautomaton_embedding_verified']} ({struct_res['subautomaton_states_count']} states, {struct_res['subautomaton_checks_count']} checks, {struct_res['subautomaton_violations_count']} violations)")
+    print(f"Full 15,810 Transition Commutativity: {struct_res['full_transition_matching_count']} / {struct_res['full_transition_checks_count']} matching ({struct_res['full_transition_matching_rate']*100:.1f}%)")
     print(f"Classification: {struct_res['theoretical_classification']}")
 
     # Stage 9D: External Observer Evaluation

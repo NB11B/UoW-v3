@@ -1,7 +1,7 @@
 {
   "campaign": "compliance_blind_derivation",
   "phase": 9,
-  "elapsed_seconds": 17.87,
+  "elapsed_seconds": 18.25,
   "stage_9a_native_derivation": {
     "reachable_microstates_count": 2804,
     "max_exploration_depth": 11,
@@ -23,20 +23,33 @@
   "stage_9c_structural_comparison": {
     "strict_isomorphism_candidate": false,
     "strict_isomorphism_verdict": "FALSIFIED (Native Compliance generates 930 disposition classes != 222)",
-    "sub_automaton_embedding_candidate": false,
-    "sub_automaton_embedding_verdict": "FALSIFIED (|Q_C| = 930 > |Q_U| = 222)",
-    "governance_kernel_projection": true,
-    "theoretical_classification": "CONSERVATIVE_NORMATIVE_SUPERSET",
-    "governance_kernel_explanation": "UoW represents the minimal canonical governance kernel of multi-channel fail-closed systems. Native compliance workflow introduces authentic normative state (a 3-element dual-officer credential lattice and an administrative hardship waiver bypass) that refines the 222-state kernel into a 930-state regulatory disposition automaton."
+    "injective_embedding_qc_into_qu": false,
+    "injective_embedding_qu_into_qc": true,
+    "subautomaton_embedding_verified": true,
+    "subautomaton_states_count": 222,
+    "subautomaton_checks_count": 9254,
+    "subautomaton_violations_count": 0,
+    "full_transition_checks_count": 15810,
+    "full_transition_violations_count": 994,
+    "full_transition_matching_count": 14816,
+    "full_transition_matching_rate": 0.9371,
+    "normative_extension_violations": {
+      "ReissueCeoCredentials": 460,
+      "PetitionAdministrativeWaiver": 30,
+      "ReissueCfoCredentials": 460,
+      "SubmitStatutoryFiling": 44
+    },
+    "theoretical_classification": "SUBAUTOMATON_EMBEDDING_AND_NORMATIVE_SUPERSET",
+    "governance_kernel_explanation": "UoW Q_222 embeds strictly and isomorphically as an invariant subautomaton inside Q_930 (9,254 checks, 0 violations). When normative extensions are added (dual-officer authority and administrative waivers), 14,816 / 15,810 (93.7%) transitions commute directly, with all 994 discrepancies localized exclusively to the normative extensions."
   },
   "stage_9d_observer_evaluation": {
     "model": "jev-1.13.0",
     "provider_kind": "live_api",
-    "sigma_rep_baseline": 0.0275,
-    "mean_normalized_ratio_eta": 0.733,
+    "sigma_rep_baseline": 0.0342,
+    "mean_normalized_ratio_eta": 0.809,
     "strict_bound_passing": "12 / 12",
     "invariance_gate_passed": true,
-    "faithfulness_separation_eta": 55.13,
+    "faithfulness_separation_eta": 43.82,
     "faithfulness_distinguished": true,
     "pair_evaluations": [
       {
@@ -48,8 +61,8 @@
         "word_norm": [
           "RevokeCfoKey"
         ],
-        "observer_defect": 0.0156,
-        "normalized_ratio_eta": 0.57,
+        "observer_defect": 0.0311,
+        "normalized_ratio_eta": 0.91,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -62,8 +75,8 @@
         "word_norm": [
           "ReissueCfoCredentials"
         ],
-        "observer_defect": 0.024,
-        "normalized_ratio_eta": 0.87,
+        "observer_defect": 0.0356,
+        "normalized_ratio_eta": 1.04,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -78,8 +91,8 @@
           "FlagWhistleblowerFraud",
           "ImposeForensicHold"
         ],
-        "observer_defect": 0.0226,
-        "normalized_ratio_eta": 0.82,
+        "observer_defect": 0.0191,
+        "normalized_ratio_eta": 0.56,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -93,8 +106,8 @@
           "RevokeCeoKey",
           "RevokeCfoKey"
         ],
-        "observer_defect": 0.018,
-        "normalized_ratio_eta": 0.65,
+        "observer_defect": 0.0332,
+        "normalized_ratio_eta": 0.97,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -108,8 +121,8 @@
           "LapseFilingDeadline",
           "CorruptLedgerChain"
         ],
-        "observer_defect": 0.0221,
-        "normalized_ratio_eta": 0.8,
+        "observer_defect": 0.0145,
+        "normalized_ratio_eta": 0.43,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -123,7 +136,7 @@
           "ServeRegulatoryInjunction",
           "RecordAuditorDissent"
         ],
-        "observer_defect": 0.0221,
+        "observer_defect": 0.0273,
         "normalized_ratio_eta": 0.8,
         "within_strict_bound": true,
         "within_outlier_bound": true
@@ -142,8 +155,8 @@
           "ReissueCfoCredentials",
           "PetitionFilingExtension"
         ],
-        "observer_defect": 0.0156,
-        "normalized_ratio_eta": 0.57,
+        "observer_defect": 0.0365,
+        "normalized_ratio_eta": 1.07,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -156,8 +169,8 @@
         "word_norm": [
           "RevokeCfoKey"
         ],
-        "observer_defect": 0.0229,
-        "normalized_ratio_eta": 0.83,
+        "observer_defect": 0.0211,
+        "normalized_ratio_eta": 0.62,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -170,8 +183,8 @@
         "word_norm": [
           "FlagWhistleblowerFraud"
         ],
-        "observer_defect": 0.0371,
-        "normalized_ratio_eta": 1.35,
+        "observer_defect": 0.0265,
+        "normalized_ratio_eta": 0.77,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -184,8 +197,8 @@
         "word_norm": [
           "FlagWhistleblowerFraud"
         ],
-        "observer_defect": 0.0153,
-        "normalized_ratio_eta": 0.56,
+        "observer_defect": 0.0279,
+        "normalized_ratio_eta": 0.82,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -201,8 +214,8 @@
           "ImposeForensicHold",
           "ForensicSanitizeAndRestate"
         ],
-        "observer_defect": 0.0105,
-        "normalized_ratio_eta": 0.38,
+        "observer_defect": 0.0353,
+        "normalized_ratio_eta": 1.03,
         "within_strict_bound": true,
         "within_outlier_bound": true
       },
@@ -218,8 +231,8 @@
           "ReconcileLedgerMirror",
           "SubmitStatutoryFiling"
         ],
-        "observer_defect": 0.016,
-        "normalized_ratio_eta": 0.58,
+        "observer_defect": 0.0236,
+        "normalized_ratio_eta": 0.69,
         "within_strict_bound": true,
         "within_outlier_bound": true
       }

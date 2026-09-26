@@ -200,6 +200,7 @@ To discriminate between **true nonclosure** (emergent missing dimension) and **i
 - Across the three previously unresolved Resource pairs, the mean defect ratio collapsed from $2.23\times \sigma_{\text{rep}}$ down to **$0.71\times \sigma_{\text{rep}} \le 1.0\times$**.
 - For $A-R$ and $E-R$, closure reached **$95.72\%$** and **$93.75\%$**, respectively.
 - Spurious alignment with the orthogonal complement mode (`perp2`) vanished, confirming that apparent nonclosure was an artifact of noise near the $SNR \approx 2.4\times$–$3.3\times$ floor.
+- **Metric Stability & Nuance for $C-R$**: While $A-R$ and $E-R$ show unqualified closure ($\ge 93.8\%$), $C-R$ closure rose to $63.20\%$ with defect $\zeta = 1.10\times \sigma_{\text{rep}}$. When the commutator amplitude itself is tiny ($\|c\| \approx 0.046$), percentage $R^2 = 1 - \|r\|^2 / \|c\|^2$ becomes mathematically unstable due to the small denominator. Therefore, in low-amplitude regimes, we privilege the **absolute closure defect relative to noise** ($\zeta = \|r\| / \sigma_{\text{rep}}$) over percentage $R^2$. At $\zeta = 1.10\times \sigma_{\text{rep}}$, the defect for $C-R$ is consistent with replicate noise, though it remains a subtle low-amplitude coupling rather than a fully resolved large signal.
 
 ---
 

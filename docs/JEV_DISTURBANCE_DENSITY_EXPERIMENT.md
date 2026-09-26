@@ -109,23 +109,50 @@ $$\text{Quorum Consensus } (Q=9, \rho_c=0.50) \quad \text{vs.} \quad \text{Seria
 
 ---
 
-## 5. Cybernetic Discoveries & Physical Phase Dynamics
+## 5. Cybernetic Discoveries & Regime Dynamics
 
-### 5.1 The Critical Phase Transition Jump ($+1.3657$)
+### 5.1 The Threshold-Aligned Cybernetic Regime Transition (+1.3657 Jump)
 The transition from sub-critical health to macroscopic failure in `quorum_consensus` is extraordinarily sharp:
 - At $k=6$ ($\rho = 0.375$): The system maintains a quorum margin of $+1$. The observer displacement is **$0.3508$**, reflecting mild operational strain while preserving contract semantics.
-- At $k=8$ ($\rho = 0.500$): The quorum margin drops to $-1$. Quorum fails closed, and the displacement norm jumps instantly to **$1.7165$**—an explosive **$+1.3657$ surge ($4.89\times$ amplification)** across a single two-unit decrement!
+- At $k=8$ ($\rho = 0.500$): The quorum margin drops to $-1$. Quorum fails closed, and the displacement norm jumps instantly to **$1.7165$**—a **$+1.3657$ jump ($4.89\times$ amplification)** across a single two-unit decrement!
 
-This confirms that collective cybernetic boundaries do not degrade smoothly into oblivion; they hold the operational line until the percolation threshold is breached, at which point an instantaneous macroscopic control phase transition occurs.
+**Scientific Demarcation**:
+This event is a **threshold-aligned cybernetic regime transition**, not an unconstrained percolation phase transition in the statistical-physics sense. The critical threshold was prescribed by the deterministic quorum contract ($M=16, Q=9$, requiring $16 - 8 = 8 < 9$). What the experiment rigorously establishes is that **JEV observer geometry sharply and faithfully tracks the deterministic governance boundary**, switching abruptly from a bounded strain state into an authority-loss macrostate.
 
-### 5.2 Quorum Shielding Damping ($5.88\times$ to $6.75\times$)
-Comparing the two regimes reveals the precise quantitative value of quorum governance:
+### 5.2 Quorum Governance as a Control Shock Absorber ($4.64\times$ to $6.75\times$ Damping)
+Comparing the two regimes reveals the precise quantitative role of quorum boundaries:
 - In the unshielded `serial_cascade`, a single disturbance ($k=1$) immediately collapses the root contract, driving JEV into a severe failure displacement of **$1.5771$**.
 - In `quorum_consensus`, the same disturbance is absorbed, resulting in a displacement of only **$0.2615$**.
-- Across the entire sub-critical range ($k \in [1, 6]$), quorum governance damps the semantic disturbance by **$4.64\times$ to $6.75\times$**, shielding the parent observer from internal component churn.
+- Across the entire sub-critical range ($k \in [1, 6]$), quorum governance damps the semantic disturbance by **$4.64\times$ to $6.75\times$**, converting local component failures ($u_i \to u_i'$) into a bounded macrostate perturbation until regulatory capacity is exhausted. This is classical cybernetic Ashby regulation.
 
-### 5.3 Supercritical Directional Saturation ($\cos \ge 0.9989$)
-Once the critical threshold $\rho_c$ is crossed ($k \in \{8, 12, 16\}$):
-- The pairwise cosine similarity between post-critical states is **$0.99887$**.
-- The displacement vector does not rotate; it locks directionally into the universal authority-loss attractor $\Delta_A^*$, while its magnitude gently saturates from $1.7165 \to 1.7687 \to 1.7965$.
+### 5.3 Post-Threshold Authority-Loss Attractor ($\Delta_A^*$)
+Once the deterministic quorum threshold is breached ($k \in \{8, 12, 16\}$):
+- The pairwise cosine similarity between post-threshold states is **$0.99887$**.
+- The displacement vector does not rotate; it locks directionally into the post-threshold authority-loss attractor $\Delta_A^*$ within this collective regime, while its magnitude gently saturates from $1.7165 \to 1.7687 \to 1.7965$.
+
+---
+
+## 6. The Five-Stage Empirical Chain & Future Finite-Size Scaling
+
+### 6.1 The Unified Qualification Arc
+This experiment closes the collective-behavior chapter. Across the entire series, the empirical progression forms a cohesive scientific chain:
+
+$$\boxed{
+\begin{aligned}
+\text{1. Recursive Invariance} &\implies \Delta_A \text{ invariant across depths } d \in \{0, 1, 2, 3\} \\
+\text{2. Raw-Evidence Invariance} &\implies \text{Geometry survives total ablation of outcome labels} \\
+\text{3. Extreme-Scale Invariance} &\implies \text{Operator preserved to } 19.17\text{M logical UoWs via } O(1) \text{ boundary contraction} \\
+\text{4. Collective Disturbance Shielding} &\implies \text{Quorum governance damps internal disturbance by } 4.64\times - 6.75\times \\
+\text{5. Threshold Regime Transition} &\implies \text{Sharp semantic jump } (+1.366) \text{ aligned to deterministic quorum exhaustion}
+\end{aligned}
+}$$
+
+### 6.2 Next Research Horizon: True Finite-Size Scaling
+To determine whether this threshold response represents an emergent statistical-physics phase transition or strictly tracks deterministic contract rules, a future finite-size scaling campaign should:
+1. Systematically vary constituent ensemble size: $M \in \{8, 16, 32, 64, 128\}$.
+2. Systematically vary the quorum fraction: $Q/M \in \{0.33, 0.50, 0.67, 0.75\}$.
+3. Vary topology: Flat collective fan-out vs. multi-tiered hierarchical voting trees.
+4. Test for finite-size scaling collapse:
+   $$\|\Delta(\rho, M)\| = M^{\beta/\nu} \cdot \tilde{f}\left( (\rho - \rho_c) M^{1/\nu} \right)$$
+   evaluating whether universal critical exponents $(\beta, \nu)$ govern collective authority breakdown.
 

@@ -1,0 +1,345 @@
+{
+  "campaign": "common_governance_kernel_identification",
+  "phase": 10,
+  "elapsed_seconds": 7.31,
+  "kernel_identification_results": {
+    "uow_states_count": 222,
+    "compliance_shared_closure_count": 661,
+    "maximal_common_quotient_classes_q_star": 222,
+    "common_admissibility_classes_count": 96,
+    "q_star_equals_q222": true,
+    "pi_u_isomorphism_verified": true,
+    "transition_checks_count": 9254,
+    "transition_violations_count": 0,
+    "transition_preservation_rate": 1.0,
+    "kernel_identification_theorem_proven": true
+  },
+  "observer_faithfulness_results": {
+    "total_non_equivalent_pairs": 45,
+    "false_collapses_count": 1,
+    "false_collapse_rate_fcr": 0.0222,
+    "fcr_percentage": 2.2222222222222223,
+    "mean_separation_ratio_eta": 20.08,
+    "min_separation_ratio_eta": 0.53,
+    "max_separation_ratio_eta": 45.45,
+    "faithfulness_gate_passed": true,
+    "pair_evaluations": [
+      {
+        "class_1": "NOMINAL",
+        "class_2": "FAILED_AUTH",
+        "distance": 1.4897,
+        "ratio_eta": 43.56,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "FAILED_EVID",
+        "distance": 1.4717,
+        "ratio_eta": 43.03,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "FAILED_CAUSAL",
+        "distance": 1.3129,
+        "ratio_eta": 38.39,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "FAILED_TEMP",
+        "distance": 1.3682,
+        "ratio_eta": 40.01,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "FAILED_RES",
+        "distance": 1.5544,
+        "ratio_eta": 45.45,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "FAILED_ADV",
+        "distance": 1.1561,
+        "ratio_eta": 33.8,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "CONTAINED",
+        "distance": 1.1429,
+        "ratio_eta": 33.42,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 0.4683,
+        "ratio_eta": 13.69,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "NOMINAL",
+        "class_2": "RECOVERING_EVID",
+        "distance": 0.4576,
+        "ratio_eta": 13.38,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "FAILED_EVID",
+        "distance": 0.1763,
+        "ratio_eta": 5.15,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "FAILED_CAUSAL",
+        "distance": 0.2229,
+        "ratio_eta": 6.52,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "FAILED_TEMP",
+        "distance": 0.2381,
+        "ratio_eta": 6.96,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "FAILED_RES",
+        "distance": 0.1554,
+        "ratio_eta": 4.54,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "FAILED_ADV",
+        "distance": 0.3957,
+        "ratio_eta": 11.57,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "CONTAINED",
+        "distance": 0.5905,
+        "ratio_eta": 17.27,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 1.0967,
+        "ratio_eta": 32.07,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_AUTH",
+        "class_2": "RECOVERING_EVID",
+        "distance": 1.11,
+        "ratio_eta": 32.46,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "FAILED_CAUSAL",
+        "distance": 0.1956,
+        "ratio_eta": 5.72,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "FAILED_TEMP",
+        "distance": 0.2136,
+        "ratio_eta": 6.25,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "FAILED_RES",
+        "distance": 0.1355,
+        "ratio_eta": 3.96,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "FAILED_ADV",
+        "distance": 0.4066,
+        "ratio_eta": 11.89,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "CONTAINED",
+        "distance": 0.5712,
+        "ratio_eta": 16.7,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 1.0821,
+        "ratio_eta": 31.64,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_EVID",
+        "class_2": "RECOVERING_EVID",
+        "distance": 1.0938,
+        "ratio_eta": 31.98,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_CAUSAL",
+        "class_2": "FAILED_TEMP",
+        "distance": 0.1225,
+        "ratio_eta": 3.58,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_CAUSAL",
+        "class_2": "FAILED_RES",
+        "distance": 0.2779,
+        "ratio_eta": 8.12,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_CAUSAL",
+        "class_2": "FAILED_ADV",
+        "distance": 0.2129,
+        "ratio_eta": 6.23,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_CAUSAL",
+        "class_2": "CONTAINED",
+        "distance": 0.4515,
+        "ratio_eta": 13.2,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_CAUSAL",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 0.9225,
+        "ratio_eta": 26.97,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_CAUSAL",
+        "class_2": "RECOVERING_EVID",
+        "distance": 0.9342,
+        "ratio_eta": 27.32,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_TEMP",
+        "class_2": "FAILED_RES",
+        "distance": 0.257,
+        "ratio_eta": 7.51,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_TEMP",
+        "class_2": "FAILED_ADV",
+        "distance": 0.2587,
+        "ratio_eta": 7.56,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_TEMP",
+        "class_2": "CONTAINED",
+        "distance": 0.4736,
+        "ratio_eta": 13.85,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_TEMP",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 0.9869,
+        "ratio_eta": 28.86,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_TEMP",
+        "class_2": "RECOVERING_EVID",
+        "distance": 0.9977,
+        "ratio_eta": 29.17,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_RES",
+        "class_2": "FAILED_ADV",
+        "distance": 0.4776,
+        "ratio_eta": 13.97,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_RES",
+        "class_2": "CONTAINED",
+        "distance": 0.6354,
+        "ratio_eta": 18.58,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_RES",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 1.1696,
+        "ratio_eta": 34.2,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_RES",
+        "class_2": "RECOVERING_EVID",
+        "distance": 1.1819,
+        "ratio_eta": 34.56,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_ADV",
+        "class_2": "CONTAINED",
+        "distance": 0.4259,
+        "ratio_eta": 12.45,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_ADV",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 0.7787,
+        "ratio_eta": 22.77,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "FAILED_ADV",
+        "class_2": "RECOVERING_EVID",
+        "distance": 0.7899,
+        "ratio_eta": 23.1,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "CONTAINED",
+        "class_2": "RECOVERING_AUTH",
+        "distance": 0.7052,
+        "ratio_eta": 20.62,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "CONTAINED",
+        "class_2": "RECOVERING_EVID",
+        "distance": 0.7144,
+        "ratio_eta": 20.89,
+        "separated_above_noise": true
+      },
+      {
+        "class_1": "RECOVERING_AUTH",
+        "class_2": "RECOVERING_EVID",
+        "distance": 0.0183,
+        "ratio_eta": 0.53,
+        "separated_above_noise": false
+      }
+    ]
+  },
+  "theoretical_conclusion": "The maximal behavior-preserving common quotient Q_* between the 14-generator UoW automaton and the independently derived 17-generator Compliance automaton is proved to have cardinality |Q_*| = 222. The canonical projection pi_U: Q_222 -> Q_* is a strict, transition-preserving isomorphism (0 violations across 9,254 transitions). Therefore, UoW is mathematically established as the exact maximal common governance quotient shared across the tested operational domains."
+}

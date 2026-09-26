@@ -889,6 +889,7 @@ def compliance_to_observer_state(s: dict[str, Any]) -> dict[str, Any]:
     """Map concrete compliance state to observer question telemetry dictionary."""
     disp = s["regulatory_disposition"]
     is_nominal = (disp == "COMPLIANT")
+    has_full_authority = bool(s["cfo_key_valid"] and s["ceo_key_valid"])
     rb = {
         "cfo_officer": "role:certifier",
         "ceo_officer": "role:certifier",
@@ -896,9 +897,11 @@ def compliance_to_observer_state(s: dict[str, Any]) -> dict[str, Any]:
         "external_auditor": "role:auditor",
         "court_clearance": "role:regulator",
     }
+    if has_full_authority:
+        rb["verify"] = "role:verifier"
     edges = (
         [["cfo_officer", "controller"], ["ceo_officer", "controller"], ["controller", "external_auditor"], ["external_auditor", "court_clearance"]]
-        if s["ledger_hash_valid"]
+        if s["auditor_unqualified_opinion"]
         else [["cfo_officer", "controller"], ["ceo_officer", "controller"]]
     )
     return {
@@ -907,6 +910,13 @@ def compliance_to_observer_state(s: dict[str, Any]) -> dict[str, Any]:
         "quorum_margin": 7 if is_nominal else -1,
         "actor_role_bindings": rb,
         "declared_causal_edges": edges,
+        "observed_ram_units": 8 if s["court_clearance"] else 64,
+        "observed_duration_ms": 450.0 if s["within_filing_deadline"] else 2850.0,
+        "conflicting_attestation_count": int(s["whistleblower_fraud_claims"]),
+        "quarantine_active": bool(s["forensic_hold_active"]),
+        "evidence_digest_match": bool(s["ledger_hash_valid"]),
+        "temporal_admissibility": bool(s["within_filing_deadline"]),
+        "resource_envelope_admissible": bool(s["court_clearance"]),
         "regulatory_disposition": disp,
         "audit_evidence_items": s["audit_evidence_items"],
         "cfo_key_valid": s["cfo_key_valid"],

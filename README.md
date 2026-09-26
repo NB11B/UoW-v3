@@ -109,6 +109,21 @@ Earlier **A2/A3** and **P1–P5** milestones remain part of the qualification li
 
 The top-level `uow` package remains a compatibility facade with a frozen manifest. Qualification, research, and integration surfaces do **not** become public API merely because an experiment passes; promotion requires an explicit compatibility/versioning decision.
 
+
+### Current Qualification Checkpoint
+
+The current `main` line integrates the recursive-composition and operational-grammar qualification program through the sealed Phase 10 governance-kernel checkpoint. The research history is retained in Git rather than flattened into the public API, with supporting reports under `docs/`, executable campaigns under `qualification/`, and pinned result artifacts under `qualification/artifacts/`.
+
+Current integrated verification status:
+
+- **Repository CI (Linux):** 405 passed, 4 platform-dependent tests skipped (409 collected).
+- **Sealed Phase 10 local checkpoint:** 409 / 409 tests passing before integration.
+- **Closure shadow:** passing.
+- **Recursive-scale stress workflow:** passing.
+- **Public API:** frozen compatibility facade remains unchanged; qualification results do not implicitly promote new top-level exports.
+
+The latest governance-grammar synthesis is documented in [`COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md`](docs/COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md). Its results are qualification evidence for the architectural lifecycle/operational-semantics layer, not a claim that experiment-specific classes, cardinalities, or observer machinery are permanent public API.
+
 ---
 
 ## 2. Clean API Quickstart & Guide

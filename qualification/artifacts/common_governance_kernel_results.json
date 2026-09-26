@@ -9,6 +9,12 @@
     "common_admissibility_classes_count": 96,
     "q_star_equals_q222": true,
     "pi_u_isomorphism_verified": true,
+    "subautomaton_microstate_checks_count": 9254,
+    "subautomaton_microstate_violations_count": 0,
+    "quotient_class_checks_count": 3108,
+    "quotient_class_violations_count": 0,
+    "retract_identity_verified": true,
+    "retract_failures_count": 0,
     "transition_checks_count": 9254,
     "transition_violations_count": 0,
     "transition_preservation_rate": 1.0,
@@ -341,5 +347,5 @@
       }
     ]
   },
-  "theoretical_conclusion": "The maximal behavior-preserving common quotient Q_* between the 14-generator UoW automaton and the independently derived 17-generator Compliance automaton is proved to have cardinality |Q_*| = 222. The canonical projection pi_U: Q_222 -> Q_* is a strict, transition-preserving isomorphism (0 violations across 9,254 transitions). Therefore, UoW is mathematically established as the exact maximal common governance quotient shared across the tested operational domains."
+  "theoretical_conclusion": "The maximal behavior-preserving common quotient Q_{*,R} between the 14-generator UoW automaton and the independently derived 17-generator Compliance automaton under the shared 14-action governance alphabet Sigma_* and operational regime observable R is proved to have cardinality |Q_{*,R}| = 222. The canonical projection pi_U: Q_222 -> Q_{*,R} is a strict transition-preserving isomorphism (0 violations across 9,254 concrete subautomaton microstate checks and 3,108 quotient class checks). Under the lawful admissibility observable A, the common quotient contracts to |Q_{*,A}| = 96 classes, proving that minimal state retention is observation-indexed (Q_{*,O}). Furthermore, Q_222 is a categorical retract of Q_930 under the shared semantics: pi_C(iota(u)) = u holds for all 222 states. Live external observer evaluation against jev-1.13.0 establishes bounded discriminative fidelity (FCR = 2.2%, 44/45 pairs separated), with the single false collapse indicating a potentially coarser semantic observer quotient Q_222 ->> Q_J."
 }

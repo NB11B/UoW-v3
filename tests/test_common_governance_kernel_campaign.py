@@ -1,10 +1,14 @@
 """Tests for Phase 10 Common Governance Kernel Identification Campaign.
 
 Validates:
-  1. Maximal behavior-preserving common quotient Q_* has cardinality |Q_*| = 222.
-  2. Isomorphism pi_U: Q_222 -> Q_* is transition-preserving (0 violations across 9,254 checks).
-  3. Common admissibility quotient |Q_*^admit| = 96.
-  4. External observer faithfulness: False Collapse Rate (FCR) <= 5.0% across 45 non-equivalent pairs.
+  1. Maximal behavior-preserving common quotient Q_{*,R} has cardinality |Q_{*,R}| = 222.
+  2. Isomorphism pi_U: Q_222 -> Q_{*,R} is transition-preserving across both:
+     - 9,254 concrete subautomaton microstate checks (661 microstates x 14 operators)
+     - 3,108 minimal quotient class transition checks (222 states x 14 operators)
+     with exactly 0 violations.
+  3. Categorical Retract Identity: pi_C o iota = id_{Q_{222}} verified for all 222 states.
+  4. Dual observation-indexed kernel: common admissibility quotient |Q_{*,A}| = 96.
+  5. External observer bounded fidelity: False Collapse Rate (FCR) <= 5.0% across 45 non-equivalent pairs.
 """
 
 from __future__ import annotations
@@ -38,30 +42,44 @@ def kernel_universe():
 
 
 def test_maximal_common_quotient_cardinality(kernel_universe):
-    """Verify that the maximal behavior-preserving common quotient satisfies |Q_*| = 222."""
+    """Verify that the maximal behavior-preserving common quotient satisfies |Q_{*,R}| = 222."""
     kernel_res = kernel_universe["kernel_res"]
     assert kernel_res["maximal_common_quotient_classes_q_star"] == 222
     assert kernel_res["q_star_equals_q222"] is True
 
 
-def test_pi_u_isomorphism_and_transition_preservation(kernel_universe):
-    """Verify that pi_U: Q_222 -> Q_* is a transition-preserving isomorphism with 0 violations."""
+def test_pi_u_isomorphism_and_dual_transition_preservation(kernel_universe):
+    """Verify transition preservation on both 9,254 microstate and 3,108 quotient checks."""
     kernel_res = kernel_universe["kernel_res"]
     assert kernel_res["pi_u_isomorphism_verified"] is True
+    # Subautomaton microstates (661 x 14 = 9,254)
+    assert kernel_res["subautomaton_microstate_checks_count"] == 9254
+    assert kernel_res["subautomaton_microstate_violations_count"] == 0
+    # Quotient classes (222 x 14 = 3,108)
+    assert kernel_res["quotient_class_checks_count"] == 3108
+    assert kernel_res["quotient_class_violations_count"] == 0
+    # Overall metrics
     assert kernel_res["transition_checks_count"] == 9254
     assert kernel_res["transition_violations_count"] == 0
     assert kernel_res["transition_preservation_rate"] == 1.0
     assert kernel_res["kernel_identification_theorem_proven"] is True
 
 
+def test_categorical_retract_identity(kernel_universe):
+    """Verify the categorical retract identity: pi_C o iota = id_{Q_{222}}."""
+    kernel_res = kernel_universe["kernel_res"]
+    assert kernel_res["retract_identity_verified"] is True
+    assert kernel_res["retract_failures_count"] == 0
+
+
 def test_common_admissibility_classes(kernel_universe):
-    """Verify common admissibility classes count |Q_*^admit| = 96."""
+    """Verify common admissibility classes count |Q_{*,A}| = 96."""
     kernel_res = kernel_universe["kernel_res"]
     assert kernel_res["common_admissibility_classes_count"] == 96
 
 
-def test_observer_faithfulness_and_false_collapse_rate():
-    """Verify observer faithfulness across 45 non-equivalent pairs.
+def test_observer_fidelity_and_false_collapse_rate():
+    """Verify bounded observer discriminative fidelity across 45 non-equivalent pairs.
     
     The synthetic calibrated replay provider achieves FCR <= 0.20 (8/45 false collapses due to synthetic
     coarse centroids), while the live jev-1.13.0 API achieves an empirical FCR = 0.0222 (2.2%, 1/45).

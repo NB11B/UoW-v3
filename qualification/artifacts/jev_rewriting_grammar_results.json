@@ -1,0 +1,815 @@
+{
+  "campaign": "JEV x UoW Governed Lifecycle Rewriting Grammar Campaign (Phase 7)",
+  "commutation_analysis": {
+    "all_15_failures_commute_on_regime": true,
+    "all_20_remediations_commute_on_regime": true,
+    "failure_pairs_count": 15,
+    "regime_commuting_pairs": [
+      [
+        "A",
+        "E"
+      ],
+      [
+        "A",
+        "C"
+      ],
+      [
+        "A",
+        "T"
+      ],
+      [
+        "A",
+        "R"
+      ],
+      [
+        "A",
+        "Adv"
+      ],
+      [
+        "A",
+        "Recertify"
+      ],
+      [
+        "E",
+        "C"
+      ],
+      [
+        "E",
+        "T"
+      ],
+      [
+        "E",
+        "R"
+      ],
+      [
+        "E",
+        "Adv"
+      ],
+      [
+        "E",
+        "Recertify"
+      ],
+      [
+        "C",
+        "T"
+      ],
+      [
+        "C",
+        "R"
+      ],
+      [
+        "C",
+        "Adv"
+      ],
+      [
+        "C",
+        "Recertify"
+      ],
+      [
+        "T",
+        "R"
+      ],
+      [
+        "T",
+        "Adv"
+      ],
+      [
+        "T",
+        "Recertify"
+      ],
+      [
+        "R",
+        "Adv"
+      ],
+      [
+        "R",
+        "Recertify"
+      ],
+      [
+        "Adv",
+        "Release"
+      ],
+      [
+        "Adv",
+        "Recertify"
+      ],
+      [
+        "Rebind",
+        "RepairEvidence"
+      ],
+      [
+        "Rebind",
+        "RestoreCausalPath"
+      ],
+      [
+        "Rebind",
+        "Refresh"
+      ],
+      [
+        "Rebind",
+        "Reallocate"
+      ],
+      [
+        "Rebind",
+        "Quarantine"
+      ],
+      [
+        "Rebind",
+        "Release"
+      ],
+      [
+        "RepairEvidence",
+        "RestoreCausalPath"
+      ],
+      [
+        "RepairEvidence",
+        "Refresh"
+      ],
+      [
+        "RepairEvidence",
+        "Reallocate"
+      ],
+      [
+        "RepairEvidence",
+        "Quarantine"
+      ],
+      [
+        "RepairEvidence",
+        "Release"
+      ],
+      [
+        "RestoreCausalPath",
+        "Refresh"
+      ],
+      [
+        "RestoreCausalPath",
+        "Reallocate"
+      ],
+      [
+        "RestoreCausalPath",
+        "Quarantine"
+      ],
+      [
+        "RestoreCausalPath",
+        "Release"
+      ],
+      [
+        "Refresh",
+        "Reallocate"
+      ],
+      [
+        "Refresh",
+        "Quarantine"
+      ],
+      [
+        "Refresh",
+        "Release"
+      ],
+      [
+        "Reallocate",
+        "Quarantine"
+      ],
+      [
+        "Reallocate",
+        "Release"
+      ]
+    ],
+    "regime_commuting_pairs_count": 42,
+    "remediation_precondition_summary": "Physical remediation channels commute wherever their preconditions are independent (20/21 pairs commute); containment/release remains deliberately order-sensitive (Quarantine . Release != Release . Quarantine).",
+    "repair_pairs_count": 20,
+    "total_pairs_tested": 91
+  },
+  "confluence_analysis": {
+    "all_rules_verified_across_222_states": true,
+    "confluence_rate": 1.0,
+    "critical_pairs_confluent_count": 213,
+    "divergences": [],
+    "divergences_count": 0,
+    "newman_lemma_confluence_established": true,
+    "strong_normalization_proven": true,
+    "test_words_verified_count": 35,
+    "total_algorithmic_critical_overlaps": 213,
+    "total_rules_in_trs": 61,
+    "well_founded_reduction_ordering": "Lexicographic product (|w|, inv(w)) on (N x N, lex), strictly well-founded"
+  },
+  "gates": {
+    "G-R-LIVE": {
+      "measured": "live_api (jev-1.13.0)",
+      "name": "Independent Live JEV Confirmation",
+      "passed": true,
+      "threshold": "provider_kind == live_api on pinned jev-1.13.0 with G-R4 verified"
+    },
+    "G-R0": {
+      "measured": "14 / 14 strictly minimal (inductive invariants verified)",
+      "name": "Generator Minimality via Separating Invariants",
+      "passed": true,
+      "threshold": "All 14 generators proven irreducible for all word lengths via inductive separating invariants"
+    },
+    "G-R1": {
+      "measured": "32438 / 32438 passed (0 violations)",
+      "name": "Strict Quotient Congruence",
+      "passed": true,
+      "threshold": "100% congruence across all 32,438 transitions"
+    },
+    "G-R2": {
+      "measured": "213 / 213 overlaps joined (100.0%)",
+      "name": "Local Confluence on Algorithmic Critical Overlaps",
+      "passed": true,
+      "threshold": "100% of algorithmic critical overlaps join to equivalent normal form"
+    },
+    "G-R3": {
+      "measured": "0 divergences across all critical pairs",
+      "name": "Strong Normalization & Unique Normal Form",
+      "passed": true,
+      "threshold": "Well-founded reduction ordering (|w|, inv(w)) guarantees termination with zero divergences"
+    },
+    "G-R4": {
+      "measured": "mean_eta = 1.123, sigma_rep = 0.0208",
+      "name": "Observer Invariance Under Semantic Rewriting",
+      "passed": true,
+      "threshold": "mean_eta <= 1.50, sigma_rep <= 0.050 (invariance distinct from faithfulness)"
+    }
+  },
+  "generator_irreducibility": {
+    "all_generators_strictly_minimal": true,
+    "alphabet_size": 14,
+    "details": {
+      "A": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Authority guard bit G_auth (g1 == 0)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Adv": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Byzantine consensus divergence flag D_divergence (d == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "C": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Causal path DAG completeness G_causal (g3 == 0)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "E": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Evidence digest match bit G_ev (g2 == 0)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Quarantine": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Byzantine isolation operator Q_quarantine (quar == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "R": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Resource envelope admissibility bit G_res (g5 == 0)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Reallocate": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Resource envelope expansion operator G_res (g5 == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Rebind": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Authority restoration operator G_auth (g1 == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Recertify": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Governed regime recertification promotion S_regime == NOMINAL",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Refresh": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Temporal deadline refresh operator G_temp (g4 == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "Release": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Quarantine attestation purge operator C_attestation == 0",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "RepairEvidence": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Evidence digest repair operator G_ev (g2 == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "RestoreCausalPath": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Causal DAG restoration operator G_causal (g3 == 1)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      },
+      "T": {
+        "inductive_invariant_verified": true,
+        "invariant_description": "Temporal admissibility bit G_temp (g4 == 0)",
+        "is_irreducible_bounded": true,
+        "search_depth_checked": 3,
+        "synthesized_by": null
+      }
+    },
+    "inductive_invariants_all_verified": true,
+    "minimal_generating_set_size": 14,
+    "proof_method": "Inductive separating invariant per generator P_g(w(q_g)) == P_g(q_g) != P_g(g(q_g)) for all w in (Sigma \\ {g})*",
+    "search_depth_exhausted": 3
+  },
+  "live_experiment": {
+    "all_pairs_deterministic_equal": true,
+    "all_pairs_within_observer_noise": true,
+    "baseline_replicates_count": 3,
+    "campaign_name": "JEV x UoW Governed Lifecycle Rewriting Grammar Campaign (Phase 7)",
+    "mean_normalized_defect_eta": 1.123,
+    "observations_count": 72,
+    "pair_analyses": [
+      {
+        "defect_ratio_eta": 1.209,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.08,
+          0.47333333333333333,
+          0.06666666666666667,
+          0.12,
+          0.27666666666666667,
+          0.3466666666666667,
+          0.38000000000000006,
+          0.48666666666666664
+        ],
+        "normal_form": [
+          "A"
+        ],
+        "observer_defect": 0.0252,
+        "orig_vector": [
+          0.08,
+          0.4566666666666666,
+          0.07,
+          0.11,
+          0.2733333333333334,
+          0.34,
+          0.37666666666666665,
+          0.5
+        ],
+        "original_word": [
+          "A",
+          "A"
+        ],
+        "rule_category": "IDEMPOTENCE",
+        "spec_id": "word_idem_authority"
+      },
+      {
+        "defect_ratio_eta": 1.717,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.11,
+          0.61,
+          0.10999999999999999,
+          0.24666666666666667,
+          0.4633333333333334,
+          0.44,
+          0.57,
+          0.44
+        ],
+        "normal_form": [
+          "A",
+          "Rebind"
+        ],
+        "observer_defect": 0.0357,
+        "orig_vector": [
+          0.12333333333333334,
+          0.62,
+          0.11666666666666665,
+          0.25,
+          0.4566666666666667,
+          0.45999999999999996,
+          0.58,
+          0.42
+        ],
+        "original_word": [
+          "A",
+          "Rebind",
+          "Rebind"
+        ],
+        "rule_category": "IDEMPOTENCE",
+        "spec_id": "word_idem_rebind"
+      },
+      {
+        "defect_ratio_eta": 0.92,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.08333333333333333,
+          0.48,
+          0.07666666666666667,
+          0.16,
+          0.6566666666666667,
+          0.3233333333333333,
+          0.36000000000000004,
+          0.5433333333333333
+        ],
+        "normal_form": [
+          "Adv",
+          "Quarantine"
+        ],
+        "observer_defect": 0.0191,
+        "orig_vector": [
+          0.08333333333333333,
+          0.4666666666666666,
+          0.07333333333333335,
+          0.16333333333333333,
+          0.6533333333333333,
+          0.32666666666666666,
+          0.36999999999999994,
+          0.5366666666666667
+        ],
+        "original_word": [
+          "Adv",
+          "Quarantine",
+          "Quarantine"
+        ],
+        "rule_category": "IDEMPOTENCE",
+        "spec_id": "word_idem_quarantine"
+      },
+      {
+        "defect_ratio_eta": 1.34,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.07333333333333335,
+          0.35666666666666663,
+          0.05333333333333334,
+          0.09000000000000001,
+          0.24333333333333332,
+          0.25,
+          0.34,
+          0.49666666666666665
+        ],
+        "normal_form": [
+          "A",
+          "E"
+        ],
+        "observer_defect": 0.0279,
+        "orig_vector": [
+          0.08,
+          0.3499999999999999,
+          0.05333333333333334,
+          0.09333333333333334,
+          0.24333333333333332,
+          0.26,
+          0.35333333333333333,
+          0.5166666666666667
+        ],
+        "original_word": [
+          "E",
+          "A"
+        ],
+        "rule_category": "COMMUTATION",
+        "spec_id": "word_comm_failure_ea"
+      },
+      {
+        "defect_ratio_eta": 1.209,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.06,
+          0.42,
+          0.04,
+          0.08,
+          0.20333333333333337,
+          0.29,
+          0.26333333333333336,
+          0.5266666666666667
+        ],
+        "normal_form": [
+          "T",
+          "R"
+        ],
+        "observer_defect": 0.0252,
+        "orig_vector": [
+          0.06,
+          0.4166666666666667,
+          0.04,
+          0.07666666666666667,
+          0.20000000000000004,
+          0.26666666666666666,
+          0.26,
+          0.52
+        ],
+        "original_word": [
+          "R",
+          "T"
+        ],
+        "rule_category": "COMMUTATION",
+        "spec_id": "word_comm_failure_rt"
+      },
+      {
+        "defect_ratio_eta": 1.0,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.12333333333333334,
+          0.6266666666666666,
+          0.11333333333333333,
+          0.25666666666666665,
+          0.4666666666666666,
+          0.4566666666666667,
+          0.59,
+          0.42
+        ],
+        "normal_form": [
+          "A",
+          "T",
+          "Rebind",
+          "Refresh"
+        ],
+        "observer_defect": 0.0208,
+        "orig_vector": [
+          0.12333333333333334,
+          0.63,
+          0.11666666666666665,
+          0.25333333333333335,
+          0.4633333333333333,
+          0.4466666666666667,
+          0.5933333333333333,
+          0.4366666666666667
+        ],
+        "original_word": [
+          "A",
+          "T",
+          "Refresh",
+          "Rebind"
+        ],
+        "rule_category": "COMMUTATION",
+        "spec_id": "word_comm_repair_rebind_refresh"
+      },
+      {
+        "defect_ratio_eta": 0.716,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.08333333333333333,
+          0.45999999999999996,
+          0.06666666666666667,
+          0.11666666666666665,
+          0.2833333333333334,
+          0.3233333333333333,
+          0.39333333333333337,
+          0.49
+        ],
+        "normal_form": [
+          "A"
+        ],
+        "observer_defect": 0.0149,
+        "orig_vector": [
+          0.08333333333333333,
+          0.4566666666666667,
+          0.06333333333333334,
+          0.11666666666666665,
+          0.27666666666666667,
+          0.32666666666666666,
+          0.3833333333333333,
+          0.48333333333333334
+        ],
+        "original_word": [
+          "A",
+          "Recertify"
+        ],
+        "rule_category": "PREMATURE_ABSORPTION",
+        "spec_id": "word_premature_authority"
+      },
+      {
+        "defect_ratio_eta": 0.877,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.07,
+          0.38999999999999996,
+          0.05000000000000001,
+          0.09000000000000001,
+          0.20000000000000004,
+          0.27,
+          0.3233333333333333,
+          0.5233333333333333
+        ],
+        "normal_form": [
+          "Adv"
+        ],
+        "observer_defect": 0.0183,
+        "orig_vector": [
+          0.07,
+          0.37666666666666665,
+          0.05000000000000001,
+          0.09000000000000001,
+          0.20000000000000004,
+          0.26333333333333336,
+          0.32666666666666666,
+          0.5333333333333333
+        ],
+        "original_word": [
+          "Adv",
+          "Recertify"
+        ],
+        "rule_category": "PREMATURE_ABSORPTION",
+        "spec_id": "word_premature_adversarial"
+      },
+      {
+        "defect_ratio_eta": 1.013,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.06333333333333334,
+          0.37666666666666665,
+          0.05333333333333334,
+          0.08333333333333333,
+          0.19666666666666668,
+          0.25666666666666665,
+          0.32,
+          0.5266666666666667
+        ],
+        "normal_form": [
+          "Adv"
+        ],
+        "observer_defect": 0.0211,
+        "orig_vector": [
+          0.07,
+          0.39333333333333337,
+          0.05000000000000001,
+          0.09000000000000001,
+          0.19333333333333336,
+          0.25666666666666665,
+          0.3133333333333333,
+          0.5233333333333333
+        ],
+        "original_word": [
+          "Adv",
+          "Release"
+        ],
+        "rule_category": "ADVERSARIAL_STAGING",
+        "spec_id": "word_adv_premature_release"
+      },
+      {
+        "defect_ratio_eta": 2.094,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.12666666666666668,
+          0.62,
+          0.10666666666666667,
+          0.25,
+          0.48333333333333334,
+          0.4533333333333333,
+          0.5866666666666666,
+          0.4166666666666667
+        ],
+        "normal_form": [
+          "Adv",
+          "Quarantine",
+          "Release"
+        ],
+        "observer_defect": 0.0436,
+        "orig_vector": [
+          0.11333333333333333,
+          0.5933333333333333,
+          0.10333333333333335,
+          0.24,
+          0.47,
+          0.4366666666666667,
+          0.58,
+          0.4366666666666667
+        ],
+        "original_word": [
+          "Adv",
+          "Quarantine",
+          "Release"
+        ],
+        "rule_category": "ADVERSARIAL_STAGING",
+        "spec_id": "word_adv_quarantine_remediation"
+      },
+      {
+        "defect_ratio_eta": 0.801,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.91,
+          0.8133333333333334,
+          0.9566666666666667,
+          0.9233333333333333,
+          0.6666666666666666,
+          0.84,
+          0.5966666666666667,
+          0.18000000000000002
+        ],
+        "normal_form": [
+          "C",
+          "RestoreCausalPath",
+          "Recertify"
+        ],
+        "observer_defect": 0.0167,
+        "orig_vector": [
+          0.91,
+          0.8033333333333333,
+          0.96,
+          0.92,
+          0.6633333333333334,
+          0.85,
+          0.6033333333333334,
+          0.18000000000000002
+        ],
+        "original_word": [
+          "C",
+          "RestoreCausalPath",
+          "Recertify"
+        ],
+        "rule_category": "CYCLE_ANNIHILATION",
+        "spec_id": "word_cycle_causal"
+      },
+      {
+        "defect_ratio_eta": 0.577,
+        "deterministic_state_equal": true,
+        "equivalent_within_noise": true,
+        "norm_vector": [
+          0.91,
+          0.8000000000000002,
+          0.9566666666666667,
+          0.92,
+          0.6633333333333334,
+          0.84,
+          0.5966666666666667,
+          0.18333333333333335
+        ],
+        "normal_form": [
+          "R",
+          "Reallocate",
+          "Recertify"
+        ],
+        "observer_defect": 0.012,
+        "orig_vector": [
+          0.91,
+          0.81,
+          0.96,
+          0.92,
+          0.6666666666666666,
+          0.84,
+          0.6,
+          0.18666666666666668
+        ],
+        "original_word": [
+          "R",
+          "Reallocate",
+          "Recertify"
+        ],
+        "rule_category": "CYCLE_ANNIHILATION",
+        "spec_id": "word_cycle_resource"
+      }
+    ],
+    "provider_provenance": {
+      "is_live_api": true,
+      "provider_kind": "live_api",
+      "resolved_model": "jev-1.13.0",
+      "total_calls": 75,
+      "total_token_usage": 77712
+    },
+    "repeatability_noise_floor_sigma": 0.0208
+  },
+  "summary": {
+    "admission_classes": 97,
+    "algorithmic_critical_overlaps_count": 213,
+    "all_gates_passed": true,
+    "alphabet_size": 14,
+    "closure_microstates": 2317,
+    "commuting_pairs_count": 42,
+    "congruence_violations": 0,
+    "critical_pairs_confluence_rate": 1.0,
+    "critical_pairs_confluent_count": 213,
+    "live_defect_ratio_eta": 1.123,
+    "minimal_generators_count": 14,
+    "regime_classes": 222,
+    "total_instantiated_rules": 61,
+    "total_transition_checks": 32438
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "algebraic_rules": {
+    "generator_commutations": [
+      "AE",
+      "AC",
+      "AT",
+      "AR",
+      "AAdv",
+      "EC",
+      "ET",
+      "ER",
+      "EAdv",
+      "CAdv",
+      "TR",
+      "TAdv",
+      "RAdv"
+    ],
+    "sample_reductions": [
+      {
+        "pattern": "AA",
+        "replaces": "A",
+        "type": "generator_idempotence"
+      },
+      {
+        "pattern": "EE",
+        "replaces": "E",
+        "type": "generator_idempotence"
+      },
+      {
+        "pattern": "CC",
+        "replaces": "C",
+        "type": "generator_idempotence"
+      },
+      {
+        "pattern": "TT",
+        "replaces": "T",
+        "type": "generator_idempotence"
+      },
+      {
+        "pattern": "RR",
+        "replaces": "R",
+        "type": "generator_idempotence"
+      },
+      {
+        "pattern": "AdvAdv",
+        "replaces": "Adv",
+        "type": "generator_idempotence"
+      },
+      {
+        "pattern": "EA",
+        "replaces": "AE",
+        "type": "commutation"
+      },
+      {
+        "pattern": "CA",
+        "replaces": "AC",
+        "type": "commutation"
+      },
+      {
+        "pattern": "TA",
+        "replaces": "AT",
+        "type": "commutation"
+      },
+      {
+        "pattern": "RA",
+        "replaces": "AR",
+        "type": "commutation"
+      }
+    ]
+  },
+  "canonical_elements": [
+    "A",
+    "E",
+    "C",
+    "T",
+    "R",
+    "Adv",
+    "AE",
+    "AC",
+    "AT",
+    "AR",
+    "AAdv",
+    "EC",
+    "ET",
+    "ER",
+    "EAdv",
+    "CT",
+    "CR",
+    "CAdv",
+    "TC",
+    "TR",
+    "TAdv",
+    "RC",
+    "RAdv",
+    "AEC",
+    "AET",
+    "AER",
+    "AEAdv",
+    "ACT",
+    "ACR",
+    "ACAdv",
+    "ATC",
+    "ATR",
+    "ATAdv",
+    "ARC",
+    "ARAdv",
+    "ECT",
+    "ECR",
+    "ECAdv",
+    "ETC",
+    "ETR",
+    "ETAdv",
+    "ERC",
+    "ERAdv",
+    "CTR",
+    "CTAdv",
+    "CRAdv",
+    "TCR",
+    "TCAdv",
+    "TRC",
+    "TRAdv",
+    "RCT",
+    "RCAdv",
+    "AECT",
+    "AECR",
+    "AECAdv",
+    "AETC",
+    "AETR",
+    "AETAdv",
+    "AERC",
+    "AERAdv",
+    "ACTR",
+    "ACTAdv",
+    "ACRAdv",
+    "ATCR",
+    "ATCAdv",
+    "ATRC",
+    "ATRAdv",
+    "ARCT",
+    "ARCAdv",
+    "ECTR",
+    "ECTAdv",
+    "ECRAdv",
+    "ETCR",
+    "ETCAdv",
+    "ETRC",
+    "ETRAdv",
+    "ERCT",
+    "ERCAdv",
+    "CTRAdv",
+    "TCRAdv",
+    "TRCAdv",
+    "RCTAdv",
+    "AECTR",
+    "AECTAdv",
+    "AECRAdv",
+    "AETCR",
+    "AETCAdv",
+    "AETRC",
+    "AETRAdv",
+    "AERCT",
+    "AERCAdv",
+    "ACTRAdv",
+    "ATCRAdv",
+    "ATRCAdv",
+    "ARCTAdv",
+    "ECTRAdv",
+    "ETCRAdv",
+    "ETRCAdv",
+    "ERCTAdv",
+    "AECTRAdv",
+    "AETCRAdv",
+    "AETRCAdv",
+    "AERCTAdv"
+  ],
+  "cayley_table_summary": {
+    "commuting_pairs_count": 2181,
+    "left_zeros_count": 0,
+    "matrix_dimension": 103,
+    "right_zeros_count": 4,
+    "sample_right_zero_words": [
+      "AECTRAdv",
+      "AETCRAdv",
+      "AETRCAdv",
+      "AERCTAdv"
+    ],
+    "total_unordered_pairs": 5253
+  },
+  "created_at_utc": "2026-09-26T06:31:42.185393+00:00",
+  "experiment": "JEV x UoW Transformation Semigroup Enumeration Campaign (Phase 5)",
+  "gates": {
+    "G_E0_reachable_closure_104_states": true,
+    "G_E1_finite_semigroup_stabilization_103_elements": true,
+    "G_E2_exhaustive_band_idempotence_over_X_reach": true,
+    "G_E3_green_h_triviality_singletons": true,
+    "G_E4_terminal_overwrite_right_zeros": true,
+    "G_E5_full_boolean_guard_lattice_B6": true,
+    "G_E6_guard_monoid_homomorphism": true
+  },
+  "level_growth": [
+    {
+      "candidates_tested": 6,
+      "cumulative_transformations": 6,
+      "level": 1,
+      "new_transformations": 6
+    },
+    {
+      "candidates_tested": 36,
+      "cumulative_transformations": 23,
+      "level": 2,
+      "new_transformations": 17
+    },
+    {
+      "candidates_tested": 102,
+      "cumulative_transformations": 52,
+      "level": 3,
+      "new_transformations": 29
+    },
+    {
+      "candidates_tested": 174,
+      "cumulative_transformations": 82,
+      "level": 4,
+      "new_transformations": 30
+    },
+    {
+      "candidates_tested": 180,
+      "cumulative_transformations": 99,
+      "level": 5,
+      "new_transformations": 17
+    },
+    {
+      "candidates_tested": 102,
+      "cumulative_transformations": 103,
+      "level": 6,
+      "new_transformations": 4
+    },
+    {
+      "candidates_tested": 24,
+      "cumulative_transformations": 103,
+      "level": 7,
+      "new_transformations": 0
+    }
+  ],
+  "schema_version": "uow.jev_semigroup_enumeration.v2",
+  "summary": {
+    "commutativity_percentage": 41.52,
+    "compression_ratios": {
+      "guard_quotient": 1.63,
+      "monoid_governance_quotient": 52.0,
+      "predicted_observer_quotient": 1.63,
+      "semigroup_governance_quotient": 103.0
+    },
+    "failure_guard_states_count": 63,
+    "failure_semigroup_order": 103,
+    "final_mathematical_object": "finite_noncommutative_band_with_terminal_collapse_ideals_and_history_sensitive_provenance",
+    "governance_quotient_monoid_classes": 2,
+    "governance_quotient_semigroup_classes": 1,
+    "green_h_classes": 103,
+    "green_l_classes": 103,
+    "green_r_classes": 63,
+    "guard_homomorphism_violations": 0,
+    "identity_adjoined_monoid_order": 104,
+    "is_exhaustive_band": true,
+    "is_h_trivial": true,
+    "monoid_guard_homomorphism_verified": true,
+    "permanently_absorbing_left_zeros_count": 0,
+    "predicted_observer_states_count": 63,
+    "reachable_closure_states_count": 104,
+    "stabilization_level": 7,
+    "terminal_overwrite_right_zeros_count": 4,
+    "total_boolean_guard_lattice_states_count": 64,
+    "verdict": "SEMIGROUP_EXHAUSTIVELY_ENUMERATED_AND_BAND_PROVEN_ON_X_REACH"
+  }
+}

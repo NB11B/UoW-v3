@@ -1,0 +1,5773 @@
+{
+  "analysis": {
+    "authority_loss_norm_cv_across_scale": 0.07434269692379646,
+    "authority_signal_to_noise": 75.01082272718962,
+    "authority_to_lawful_rebind_separation": 4.0540872425333685,
+    "gates": {
+      "J0_provider_complete": true,
+      "J1_authority_signal_above_repeatability": true,
+      "J2_authority_distinct_from_lawful_rebind": true,
+      "J3_cross_tier_direction_stable": true,
+      "J4_cross_tier_magnitude_stable": true,
+      "J5_lawful_rebind_attenuation_trend": true,
+      "U0_deterministic_oracle": true
+    },
+    "median_authority_loss_delta_norm": 1.5411924327355093,
+    "median_lawful_rebind_delta_norm": 0.38015768791705373,
+    "minimum_authority_loss_cosine_across_scale": 0.987432088926264,
+    "oracle_pass": true,
+    "pairwise_authority_loss_cosines": [
+      {
+        "cosine": 0.9902039822230764,
+        "tier_a": "S0",
+        "tier_b": "S1"
+      },
+      {
+        "cosine": 0.9877666537249784,
+        "tier_a": "S0",
+        "tier_b": "S2"
+      },
+      {
+        "cosine": 0.987432088926264,
+        "tier_a": "S0",
+        "tier_b": "S3"
+      },
+      {
+        "cosine": 0.9877528964867098,
+        "tier_a": "S0",
+        "tier_b": "S4"
+      },
+      {
+        "cosine": 0.9874330791223747,
+        "tier_a": "S0",
+        "tier_b": "S5"
+      },
+      {
+        "cosine": 0.9992113423826704,
+        "tier_a": "S1",
+        "tier_b": "S2"
+      },
+      {
+        "cosine": 0.9991086704939363,
+        "tier_a": "S1",
+        "tier_b": "S3"
+      },
+      {
+        "cosine": 0.9989625945246201,
+        "tier_a": "S1",
+        "tier_b": "S4"
+      },
+      {
+        "cosine": 0.9986522286996531,
+        "tier_a": "S1",
+        "tier_b": "S5"
+      },
+      {
+        "cosine": 0.9998193368711312,
+        "tier_a": "S2",
+        "tier_b": "S3"
+      },
+      {
+        "cosine": 0.9997097766775938,
+        "tier_a": "S2",
+        "tier_b": "S4"
+      },
+      {
+        "cosine": 0.9997551387263813,
+        "tier_a": "S2",
+        "tier_b": "S5"
+      },
+      {
+        "cosine": 0.9997967131484324,
+        "tier_a": "S3",
+        "tier_b": "S4"
+      },
+      {
+        "cosine": 0.9995249983985051,
+        "tier_a": "S3",
+        "tier_b": "S5"
+      },
+      {
+        "cosine": 0.9997565870594782,
+        "tier_a": "S4",
+        "tier_b": "S5"
+      }
+    ],
+    "provider_complete": true,
+    "repeatability_noise_floor_l2": 0.020546267547827655,
+    "supported_within_engineering_gates": true,
+    "thresholds": {
+      "max_authority_norm_cv": 0.25,
+      "min_authority_to_control_separation": 2.0,
+      "min_cross_tier_cosine": 0.9,
+      "min_signal_to_noise": 2.0
+    },
+    "tier_metrics": [
+      {
+        "authority_loss_delta": [
+          -0.5166666666666666,
+          -0.20999999999999996,
+          -0.72,
+          -0.6866666666666666,
+          -0.2966666666666667,
+          -0.36000000000000004,
+          -0.06,
+          0.2533333333333333
+        ],
+        "authority_loss_delta_norm": 1.2595016651217434,
+        "baseline_mean": [
+          0.8233333333333333,
+          0.75,
+          0.9233333333333333,
+          0.9,
+          0.56,
+          0.7333333333333334,
+          0.41333333333333333,
+          0.14333333333333334
+        ],
+        "branching_factor": 1,
+        "lawful_rebind_delta": [
+          -0.18666666666666654,
+          -0.1233333333333334,
+          -0.06333333333333335,
+          -0.08999999999999997,
+          0.029999999999999916,
+          -0.06333333333333335,
+          0.2433333333333334,
+          0.09999999999999998
+        ],
+        "lawful_rebind_delta_norm": 0.3691732505056249,
+        "logical_uow_count": 1,
+        "recursive_depth": 0,
+        "tier_id": "S0"
+      },
+      {
+        "authority_loss_delta": [
+          -0.6466666666666667,
+          -0.3433333333333332,
+          -0.8266666666666667,
+          -0.7466666666666667,
+          -0.3066666666666666,
+          -0.47666666666666657,
+          -0.16333333333333333,
+          0.42999999999999994
+        ],
+        "authority_loss_delta_norm": 1.5197953078549025,
+        "baseline_mean": [
+          0.8333333333333334,
+          0.7399999999999999,
+          0.9233333333333333,
+          0.89,
+          0.58,
+          0.8433333333333333,
+          0.44333333333333336,
+          0.15666666666666665
+        ],
+        "branching_factor": 4,
+        "lawful_rebind_delta": [
+          -0.18999999999999995,
+          -0.16999999999999993,
+          -0.06999999999999995,
+          -0.07666666666666666,
+          0.033333333333333326,
+          -0.05666666666666653,
+          0.22000000000000008,
+          0.11000000000000001
+        ],
+        "lawful_rebind_delta_norm": 0.37496666518505345,
+        "logical_uow_count": 85,
+        "recursive_depth": 3,
+        "tier_id": "S1"
+      },
+      {
+        "authority_loss_delta": [
+          -0.63,
+          -0.3566666666666666,
+          -0.8233333333333334,
+          -0.73,
+          -0.3233333333333333,
+          -0.5166666666666666,
+          -0.13999999999999996,
+          0.45333333333333325
+        ],
+        "authority_loss_delta_norm": 1.5269213761320157,
+        "baseline_mean": [
+          0.8266666666666667,
+          0.7433333333333333,
+          0.92,
+          0.88,
+          0.58,
+          0.8566666666666666,
+          0.42,
+          0.15333333333333332
+        ],
+        "branching_factor": 4,
+        "lawful_rebind_delta": [
+          -0.20000000000000007,
+          -0.17666666666666664,
+          -0.07666666666666677,
+          -0.06999999999999995,
+          0.043333333333333446,
+          -0.06999999999999984,
+          0.22666666666666663,
+          0.11333333333333334
+        ],
+        "lawful_rebind_delta_norm": 0.3911379409989382,
+        "logical_uow_count": 1365,
+        "recursive_depth": 5,
+        "tier_id": "S2"
+      },
+      {
+        "authority_loss_delta": [
+          -0.6666666666666667,
+          -0.37666666666666676,
+          -0.8433333333333334,
+          -0.7633333333333334,
+          -0.3533333333333333,
+          -0.5433333333333333,
+          -0.15999999999999998,
+          0.4633333333333334
+        ],
+        "authority_loss_delta_norm": 1.593908543312459,
+        "baseline_mean": [
+          0.8333333333333334,
+          0.7466666666666667,
+          0.93,
+          0.8866666666666667,
+          0.58,
+          0.86,
+          0.43,
+          0.16
+        ],
+        "branching_factor": 8,
+        "lawful_rebind_delta": [
+          -0.20999999999999996,
+          -0.18333333333333335,
+          -0.09666666666666668,
+          -0.08333333333333337,
+          0.033333333333333326,
+          -0.07666666666666666,
+          0.22666666666666674,
+          0.12333333333333338
+        ],
+        "lawful_rebind_delta_norm": 0.4093626482445337,
+        "logical_uow_count": 37449,
+        "recursive_depth": 5,
+        "tier_id": "S3"
+      },
+      {
+        "authority_loss_delta": [
+          -0.6533333333333333,
+          -0.37666666666666665,
+          -0.8266666666666667,
+          -0.7533333333333334,
+          -0.3566666666666667,
+          -0.5133333333333332,
+          -0.13999999999999996,
+          0.4666666666666667
+        ],
+        "authority_loss_delta_norm": 1.5645162546650357,
+        "baseline_mean": [
+          0.8266666666666667,
+          0.7533333333333333,
+          0.92,
+          0.8866666666666667,
+          0.59,
+          0.8566666666666666,
+          0.39999999999999997,
+          0.16333333333333333
+        ],
+        "branching_factor": 8,
+        "lawful_rebind_delta": [
+          -0.16000000000000003,
+          -0.16666666666666674,
+          -0.06666666666666665,
+          -0.06000000000000005,
+          0.040000000000000036,
+          -0.05333333333333323,
+          0.26666666666666666,
+          0.09333333333333332
+        ],
+        "lawful_rebind_delta_norm": 0.38169213888799036,
+        "logical_uow_count": 2396745,
+        "recursive_depth": 7,
+        "tier_id": "S4"
+      },
+      {
+        "authority_loss_delta": [
+          -0.6466666666666666,
+          -0.36000000000000004,
+          -0.8266666666666667,
+          -0.7466666666666667,
+          -0.33999999999999997,
+          -0.5199999999999999,
+          -0.12,
+          0.48
+        ],
+        "authority_loss_delta_norm": 1.555463489339003,
+        "baseline_mean": [
+          0.8233333333333333,
+          0.7333333333333334,
+          0.92,
+          0.88,
+          0.58,
+          0.8566666666666666,
+          0.37333333333333335,
+          0.16
+        ],
+        "branching_factor": 8,
+        "lawful_rebind_delta": [
+          -0.17666666666666664,
+          -0.16333333333333344,
+          -0.06333333333333346,
+          -0.06333333333333324,
+          0.026666666666666616,
+          -0.05666666666666642,
+          0.25333333333333324,
+          0.09666666666666665
+        ],
+        "lawful_rebind_delta_norm": 0.37862323694611705,
+        "logical_uow_count": 19173961,
+        "recursive_depth": 8,
+        "tier_id": "S5"
+      }
+    ],
+    "verdict": "SUPPORTED_WITHIN_PREREGISTERED_ENGINEERING_GATES"
+  },
+  "created_at_utc": "2026-09-26T03:55:32.123950+00:00",
+  "deterministic_states": [
+    {
+      "condition": "baseline",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "116aed817a2328eb531f1e267cacd1f87c05790259a9df05a62015bd1d4e846f"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 0,
+        "branching_factor": 1,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "leaf_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 1,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 0,
+        "scale_tier": "S0",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 1,
+        "logical_uow_count": 1,
+        "recursive_depth": 0,
+        "tier_id": "S0"
+      }
+    },
+    {
+      "condition": "lawful_rebind",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "231b209fc3f4be937b0c1a1b738e06e999b3b9a8dc0f2a41d536fe71f905fe6c"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 0,
+        "branching_factor": 1,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "leaf_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 1,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 0,
+        "scale_tier": "S0",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": true
+      },
+      "tier": {
+        "branching_factor": 1,
+        "logical_uow_count": 1,
+        "recursive_depth": 0,
+        "tier_id": "S0"
+      }
+    },
+    {
+      "condition": "authority_loss",
+      "diagnostics": {
+        "root_error_message": "ACTIVE_BINDING_INVALID:ACTOR_UNAVAILABLE: actor 'leaf:verify' bound to node 'verify' is offline",
+        "root_evidence_root": "7d4ac493e866fd5664e9920c973bcdeddd75f60c45e24e7eada972bb4615ec34"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "FAILED"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 0,
+        "branching_factor": 1,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [],
+        "evidence_records_present": [],
+        "hash_chain_continuity": false,
+        "logical_uow_count": 1,
+        "node_execution_sequence": [],
+        "recursive_depth": 0,
+        "scale_tier": "S0",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 1,
+        "logical_uow_count": 1,
+        "recursive_depth": 0,
+        "tier_id": "S0"
+      }
+    },
+    {
+      "condition": "baseline",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "a441d798fafa613c2a8b7295c48cd04647c033e956b3d528a9427cf9b53fe50b"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 3,
+        "branching_factor": 4,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level3_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 85,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 3,
+        "scale_tier": "S1",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 4,
+        "logical_uow_count": 85,
+        "recursive_depth": 3,
+        "tier_id": "S1"
+      }
+    },
+    {
+      "condition": "lawful_rebind",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "4b6762c65c9f5718743a0330508d8404a89c0b25c4b15e652bf036f643fc91af"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 3,
+        "branching_factor": 4,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level3_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 85,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 3,
+        "scale_tier": "S1",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": true
+      },
+      "tier": {
+        "branching_factor": 4,
+        "logical_uow_count": 85,
+        "recursive_depth": 3,
+        "tier_id": "S1"
+      }
+    },
+    {
+      "condition": "authority_loss",
+      "diagnostics": {
+        "root_error_message": "CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:ACTIVE_BINDING_INVALID:ACTOR_UNAVAILABLE: actor 'leaf:verify' bound to node 'verify' is offline",
+        "root_evidence_root": "1586d44538a30cc426c1faa82600636c40c8d9a6520841009c8e02aa0a4823eb"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "FAILED"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 3,
+        "branching_factor": 4,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [],
+        "evidence_records_present": [
+          "parse"
+        ],
+        "hash_chain_continuity": false,
+        "logical_uow_count": 85,
+        "node_execution_sequence": [
+          "parse"
+        ],
+        "recursive_depth": 3,
+        "scale_tier": "S1",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 4,
+        "logical_uow_count": 85,
+        "recursive_depth": 3,
+        "tier_id": "S1"
+      }
+    },
+    {
+      "condition": "baseline",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "56688b1182051c26d321b013febf6fb90ac505142d8c5f238b84ccc21b500081"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 5,
+        "branching_factor": 4,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level5_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 1365,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 5,
+        "scale_tier": "S2",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 4,
+        "logical_uow_count": 1365,
+        "recursive_depth": 5,
+        "tier_id": "S2"
+      }
+    },
+    {
+      "condition": "lawful_rebind",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "efdb06a49c3a07114e83500a85f2f91c95c0088a3764eb8e85366f11dd412989"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 5,
+        "branching_factor": 4,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level5_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 1365,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 5,
+        "scale_tier": "S2",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": true
+      },
+      "tier": {
+        "branching_factor": 4,
+        "logical_uow_count": 1365,
+        "recursive_depth": 5,
+        "tier_id": "S2"
+      }
+    },
+    {
+      "condition": "authority_loss",
+      "diagnostics": {
+        "root_error_message": "CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:ACTIVE_BINDING_INVALID:ACTOR_UNAVAILABLE: actor 'leaf:verify' bound to node 'verify' is offline",
+        "root_evidence_root": "04a8f5c2eaa5a7df18e7bf7f6ae1bba5d403c3d7afd5865d0f32d0118b752c54"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "FAILED"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 5,
+        "branching_factor": 4,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [],
+        "evidence_records_present": [
+          "parse"
+        ],
+        "hash_chain_continuity": false,
+        "logical_uow_count": 1365,
+        "node_execution_sequence": [
+          "parse"
+        ],
+        "recursive_depth": 5,
+        "scale_tier": "S2",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 4,
+        "logical_uow_count": 1365,
+        "recursive_depth": 5,
+        "tier_id": "S2"
+      }
+    },
+    {
+      "condition": "baseline",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "56688b1182051c26d321b013febf6fb90ac505142d8c5f238b84ccc21b500081"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 5,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level5_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 37449,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 5,
+        "scale_tier": "S3",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 37449,
+        "recursive_depth": 5,
+        "tier_id": "S3"
+      }
+    },
+    {
+      "condition": "lawful_rebind",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "efdb06a49c3a07114e83500a85f2f91c95c0088a3764eb8e85366f11dd412989"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 5,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level5_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 37449,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 5,
+        "scale_tier": "S3",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": true
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 37449,
+        "recursive_depth": 5,
+        "tier_id": "S3"
+      }
+    },
+    {
+      "condition": "authority_loss",
+      "diagnostics": {
+        "root_error_message": "CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:ACTIVE_BINDING_INVALID:ACTOR_UNAVAILABLE: actor 'leaf:verify' bound to node 'verify' is offline",
+        "root_evidence_root": "04a8f5c2eaa5a7df18e7bf7f6ae1bba5d403c3d7afd5865d0f32d0118b752c54"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "FAILED"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 5,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [],
+        "evidence_records_present": [
+          "parse"
+        ],
+        "hash_chain_continuity": false,
+        "logical_uow_count": 37449,
+        "node_execution_sequence": [
+          "parse"
+        ],
+        "recursive_depth": 5,
+        "scale_tier": "S3",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 37449,
+        "recursive_depth": 5,
+        "tier_id": "S3"
+      }
+    },
+    {
+      "condition": "baseline",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "46472c905fe1c2356bcecb47f4856ab3154449f068084ac47cd88c451fbdd24c"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 7,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level7_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 2396745,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 7,
+        "scale_tier": "S4",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 2396745,
+        "recursive_depth": 7,
+        "tier_id": "S4"
+      }
+    },
+    {
+      "condition": "lawful_rebind",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "a12a84da610f2bf9af87398bb5e4baba004adc953f5d8e845000ad189627303d"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 7,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level7_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 2396745,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 7,
+        "scale_tier": "S4",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": true
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 2396745,
+        "recursive_depth": 7,
+        "tier_id": "S4"
+      }
+    },
+    {
+      "condition": "authority_loss",
+      "diagnostics": {
+        "root_error_message": "CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:ACTIVE_BINDING_INVALID:ACTOR_UNAVAILABLE: actor 'leaf:verify' bound to node 'verify' is offline",
+        "root_evidence_root": "64091dc33edc89d3c126fa432a4bed468b7c7bb62c74987e750ee4d69e0899a9"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "FAILED"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 7,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [],
+        "evidence_records_present": [
+          "parse"
+        ],
+        "hash_chain_continuity": false,
+        "logical_uow_count": 2396745,
+        "node_execution_sequence": [
+          "parse"
+        ],
+        "recursive_depth": 7,
+        "scale_tier": "S4",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 2396745,
+        "recursive_depth": 7,
+        "tier_id": "S4"
+      }
+    },
+    {
+      "condition": "baseline",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "ef28dc9cd4da57efe1004b97bbb3754e685214386afc92e81327c139429ee86a"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 8,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level8_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 19173961,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 8,
+        "scale_tier": "S5",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 19173961,
+        "recursive_depth": 8,
+        "tier_id": "S5"
+      }
+    },
+    {
+      "condition": "lawful_rebind",
+      "diagnostics": {
+        "root_error_message": "",
+        "root_evidence_root": "7f8cdfc823e8eade4a050f0691bbc48717d47de8430496aeec3fab663b5bf5c1"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "SUCCESS"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 8,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [
+          "level8_result"
+        ],
+        "evidence_records_present": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "hash_chain_continuity": true,
+        "logical_uow_count": 19173961,
+        "node_execution_sequence": [
+          "parse",
+          "work",
+          "verify",
+          "commit"
+        ],
+        "recursive_depth": 8,
+        "scale_tier": "S5",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": true
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 19173961,
+        "recursive_depth": 8,
+        "tier_id": "S5"
+      }
+    },
+    {
+      "condition": "authority_loss",
+      "diagnostics": {
+        "root_error_message": "CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:CHILD_EXECUTION_FAILED:ACTIVE_BINDING_INVALID:ACTOR_UNAVAILABLE: actor 'leaf:verify' bound to node 'verify' is offline",
+        "root_evidence_root": "a83e9254e9931c5de90210657ebcd028fe718f9a0460dce5710f84f7a3fd9053"
+      },
+      "oracle": {
+        "boundary_valid": true,
+        "certificate_hashes_stable": true,
+        "passes_expected_behavior": true,
+        "root_status": "FAILED"
+      },
+      "state": {
+        "actor_role_bindings": {
+          "commit": "role:commit",
+          "parse": "role:parser",
+          "verify": "role:verifier",
+          "work": "role:worker"
+        },
+        "boundary_certificates_valid": true,
+        "boundary_levels_certified": 8,
+        "branching_factor": 8,
+        "declared_causal_edges": [
+          [
+            "parse",
+            "work"
+          ],
+          [
+            "work",
+            "verify"
+          ],
+          [
+            "verify",
+            "commit"
+          ]
+        ],
+        "emitted_output_keys": [],
+        "evidence_records_present": [
+          "parse"
+        ],
+        "hash_chain_continuity": false,
+        "logical_uow_count": 19173961,
+        "node_execution_sequence": [
+          "parse"
+        ],
+        "recursive_depth": 8,
+        "scale_tier": "S5",
+        "subject": "governed_recursive_unit",
+        "worker_binding_changed": false
+      },
+      "tier": {
+        "branching_factor": 8,
+        "logical_uow_count": 19173961,
+        "recursive_depth": 8,
+        "tier_id": "S5"
+      }
+    }
+  ],
+  "experiment": "JEV x UoW Extreme Recursive Scale Invariance Test",
+  "flat_control_profiles": [
+    {
+      "compression_ratio": 0.6451612903225806,
+      "flat_estimated_payload_bytes": 400,
+      "flat_estimated_tokens": 100,
+      "flat_total_edges": 3,
+      "flat_total_nodes": 4,
+      "logical_uow_count": 1,
+      "recursive_contracted_payload_bytes": 620,
+      "saturates_standard_context_window": false,
+      "tier_id": "S0"
+    },
+    {
+      "compression_ratio": 61.34193548387097,
+      "flat_estimated_payload_bytes": 38032,
+      "flat_estimated_tokens": 9508,
+      "flat_total_edges": 339,
+      "flat_total_nodes": 340,
+      "logical_uow_count": 85,
+      "recursive_contracted_payload_bytes": 620,
+      "saturates_standard_context_window": false,
+      "tier_id": "S1"
+    },
+    {
+      "compression_ratio": 986.2451612903226,
+      "flat_estimated_payload_bytes": 611472,
+      "flat_estimated_tokens": 152868,
+      "flat_total_edges": 5459,
+      "flat_total_nodes": 5460,
+      "logical_uow_count": 1365,
+      "recursive_contracted_payload_bytes": 620,
+      "saturates_standard_context_window": true,
+      "tier_id": "S2"
+    },
+    {
+      "compression_ratio": 27059.845161290323,
+      "flat_estimated_payload_bytes": 16777104,
+      "flat_estimated_tokens": 4194276,
+      "flat_total_edges": 149795,
+      "flat_total_nodes": 149796,
+      "logical_uow_count": 37449,
+      "recursive_contracted_payload_bytes": 620,
+      "saturates_standard_context_window": true,
+      "tier_id": "S3"
+    },
+    {
+      "compression_ratio": 1731841.470967742,
+      "flat_estimated_payload_bytes": 1073741712,
+      "flat_estimated_tokens": 268435428,
+      "flat_total_edges": 9586979,
+      "flat_total_nodes": 9586980,
+      "logical_uow_count": 2396745,
+      "recursive_contracted_payload_bytes": 620,
+      "saturates_standard_context_window": true,
+      "tier_id": "S4"
+    },
+    {
+      "compression_ratio": 13854733.032258065,
+      "flat_estimated_payload_bytes": 8589934480,
+      "flat_estimated_tokens": 2147483620,
+      "flat_total_edges": 76695843,
+      "flat_total_nodes": 76695844,
+      "logical_uow_count": 19173961,
+      "recursive_contracted_payload_bytes": 620,
+      "saturates_standard_context_window": true,
+      "tier_id": "S5"
+    }
+  ],
+  "hypothesis": "Control-relevant operator geometry remains invariant under recursive boundary contraction as logical system size increases across orders of magnitude (from 1 to 19,173,961+ UoWs), while lawful internal implementation details attenuate.",
+  "method": {
+    "conditions": [
+      "baseline",
+      "lawful_rebind",
+      "authority_loss"
+    ],
+    "jev_role": "observer_only",
+    "questions_per_request": 8,
+    "replicates_per_state": 3,
+    "requests_total": 54,
+    "tiers": [
+      {
+        "branching_factor": 1,
+        "logical_uow_count": 1,
+        "recursive_depth": 0,
+        "tier_id": "S0"
+      },
+      {
+        "branching_factor": 4,
+        "logical_uow_count": 85,
+        "recursive_depth": 3,
+        "tier_id": "S1"
+      },
+      {
+        "branching_factor": 4,
+        "logical_uow_count": 1365,
+        "recursive_depth": 5,
+        "tier_id": "S2"
+      },
+      {
+        "branching_factor": 8,
+        "logical_uow_count": 37449,
+        "recursive_depth": 5,
+        "tier_id": "S3"
+      },
+      {
+        "branching_factor": 8,
+        "logical_uow_count": 2396745,
+        "recursive_depth": 7,
+        "tier_id": "S4"
+      },
+      {
+        "branching_factor": 8,
+        "logical_uow_count": 19173961,
+        "recursive_depth": 8,
+        "tier_id": "S5"
+      }
+    ],
+    "uow_role": "deterministic_oracle_and_contraction_surface"
+  },
+  "observations": [
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.72,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.56,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.41,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.9,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.74,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-baseline-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 713,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.74,
+          0.92,
+          0.9,
+          0.56,
+          0.72,
+          0.41,
+          0.15
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.73,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.42,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.9,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-baseline-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 713,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.81,
+          0.75,
+          0.93,
+          0.9,
+          0.57,
+          0.73,
+          0.42,
+          0.14
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.55,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.41,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.9,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.76,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-baseline-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 713,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.76,
+          0.92,
+          0.9,
+          0.55,
+          0.75,
+          0.41,
+          0.14
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.68,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.68,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-lawful_rebind-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 713,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.64,
+          0.63,
+          0.86,
+          0.81,
+          0.58,
+          0.68,
+          0.68,
+          0.25
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.24,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-lawful_rebind-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 713,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.63,
+          0.62,
+          0.86,
+          0.8,
+          0.59,
+          0.66,
+          0.64,
+          0.24
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.67,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.6,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.24,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-lawful_rebind-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 713,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.64,
+          0.63,
+          0.86,
+          0.82,
+          0.6,
+          0.67,
+          0.65,
+          0.24
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.39,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.21,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.32,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.38,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.21,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.55,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-authority_loss-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 679,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.32,
+          0.55,
+          0.21,
+          0.21,
+          0.26,
+          0.39,
+          0.35,
+          0.38
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.36,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.21,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.31,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.41,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.2,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.52,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-authority_loss-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 679,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.31,
+          0.52,
+          0.21,
+          0.2,
+          0.26,
+          0.36,
+          0.35,
+          0.41
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.19,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.29,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.27,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.36,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.23,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.55,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S0-authority_loss-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 679,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.29,
+          0.55,
+          0.19,
+          0.23,
+          0.27,
+          0.37,
+          0.36,
+          0.4
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S0"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.44,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.89,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-baseline-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 715,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.75,
+          0.93,
+          0.89,
+          0.57,
+          0.84,
+          0.44,
+          0.15
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.45,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.89,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.73,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-baseline-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 715,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.73,
+          0.92,
+          0.89,
+          0.58,
+          0.85,
+          0.45,
+          0.16
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.44,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.89,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.74,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-baseline-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 715,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.84,
+          0.74,
+          0.92,
+          0.89,
+          0.59,
+          0.84,
+          0.44,
+          0.16
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.79,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.67,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-lawful_rebind-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 715,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.65,
+          0.57,
+          0.86,
+          0.81,
+          0.61,
+          0.79,
+          0.67,
+          0.26
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.78,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-lawful_rebind-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 715,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.64,
+          0.58,
+          0.85,
+          0.81,
+          0.61,
+          0.78,
+          0.66,
+          0.26
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.79,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.56,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-lawful_rebind-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 715,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.64,
+          0.56,
+          0.85,
+          0.82,
+          0.62,
+          0.79,
+          0.66,
+          0.28
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.36,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.19,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-authority_loss-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 686,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.19,
+          0.4,
+          0.09,
+          0.14,
+          0.28,
+          0.36,
+          0.28,
+          0.59
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.18,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-authority_loss-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 686,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.18,
+          0.4,
+          0.1,
+          0.14,
+          0.26,
+          0.37,
+          0.28,
+          0.57
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.19,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.6,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.39,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S1-authority_loss-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 686,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.19,
+          0.39,
+          0.1,
+          0.15,
+          0.28,
+          0.37,
+          0.28,
+          0.6
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S1"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.41,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.74,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-baseline-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 717,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.74,
+          0.92,
+          0.88,
+          0.57,
+          0.85,
+          0.41,
+          0.16
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.87,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.42,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-baseline-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 717,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.75,
+          0.92,
+          0.88,
+          0.59,
+          0.87,
+          0.42,
+          0.15
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.43,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.74,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-baseline-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 717,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.82,
+          0.74,
+          0.92,
+          0.88,
+          0.58,
+          0.85,
+          0.43,
+          0.15
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.79,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.55,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-lawful_rebind-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 717,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.63,
+          0.55,
+          0.85,
+          0.81,
+          0.62,
+          0.79,
+          0.65,
+          0.28
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.79,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-lawful_rebind-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 717,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.61,
+          0.57,
+          0.84,
+          0.8,
+          0.63,
+          0.79,
+          0.64,
+          0.26
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.78,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-lawful_rebind-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 717,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.64,
+          0.58,
+          0.84,
+          0.82,
+          0.62,
+          0.78,
+          0.65,
+          0.26
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.33,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.18,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.6,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-authority_loss-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 688,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.18,
+          0.37,
+          0.09,
+          0.15,
+          0.26,
+          0.33,
+          0.28,
+          0.6
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.2,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-authority_loss-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 688,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.2,
+          0.4,
+          0.1,
+          0.15,
+          0.26,
+          0.35,
+          0.28,
+          0.61
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.34,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.21,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.39,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S2-authority_loss-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 688,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.21,
+          0.39,
+          0.1,
+          0.15,
+          0.25,
+          0.34,
+          0.28,
+          0.61
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S2"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.6,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.43,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.9,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-baseline-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 718,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.84,
+          0.75,
+          0.93,
+          0.9,
+          0.6,
+          0.86,
+          0.43,
+          0.16
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.46,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-baseline-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 718,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.75,
+          0.93,
+          0.88,
+          0.57,
+          0.86,
+          0.46,
+          0.16
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.74,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-baseline-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 718,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.74,
+          0.93,
+          0.88,
+          0.57,
+          0.86,
+          0.4,
+          0.16
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.78,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.56,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-lawful_rebind-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 718,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.63,
+          0.56,
+          0.84,
+          0.8,
+          0.61,
+          0.78,
+          0.66,
+          0.28
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.78,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.56,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-lawful_rebind-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 718,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.62,
+          0.56,
+          0.83,
+          0.8,
+          0.61,
+          0.78,
+          0.65,
+          0.28
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.79,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.29,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-lawful_rebind-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 718,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.62,
+          0.57,
+          0.83,
+          0.81,
+          0.62,
+          0.79,
+          0.66,
+          0.29
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.31,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.22,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.12,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-authority_loss-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 689,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.16,
+          0.37,
+          0.09,
+          0.12,
+          0.22,
+          0.31,
+          0.26,
+          0.62
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.32,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.17,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.24,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.28,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.12,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.36,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-authority_loss-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 689,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.17,
+          0.36,
+          0.09,
+          0.12,
+          0.24,
+          0.32,
+          0.28,
+          0.61
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.32,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.08,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.17,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.22,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.27,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.38,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S3-authority_loss-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 689,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.17,
+          0.38,
+          0.08,
+          0.13,
+          0.22,
+          0.32,
+          0.27,
+          0.64
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S3"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.91,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.17,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.39,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-baseline-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 720,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.82,
+          0.75,
+          0.91,
+          0.88,
+          0.59,
+          0.86,
+          0.39,
+          0.17
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.89,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.75,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-baseline-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 720,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.75,
+          0.93,
+          0.89,
+          0.59,
+          0.86,
+          0.4,
+          0.16
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.41,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.89,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.76,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-baseline-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 720,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.76,
+          0.92,
+          0.89,
+          0.59,
+          0.85,
+          0.41,
+          0.16
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.67,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.67,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-lawful_rebind-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 720,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.67,
+          0.61,
+          0.86,
+          0.83,
+          0.63,
+          0.81,
+          0.67,
+          0.25
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.67,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.67,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-lawful_rebind-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 720,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.67,
+          0.58,
+          0.85,
+          0.83,
+          0.64,
+          0.8,
+          0.67,
+          0.26
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.66,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-lawful_rebind-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 720,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.66,
+          0.57,
+          0.85,
+          0.82,
+          0.62,
+          0.8,
+          0.66,
+          0.26
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.22,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.38,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-authority_loss-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 691,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.15,
+          0.38,
+          0.09,
+          0.13,
+          0.22,
+          0.35,
+          0.25,
+          0.63
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.34,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.18,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.23,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.27,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-authority_loss-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 691,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.18,
+          0.35,
+          0.09,
+          0.14,
+          0.23,
+          0.34,
+          0.27,
+          0.64
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.34,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.19,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S4-authority_loss-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 691,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.19,
+          0.4,
+          0.1,
+          0.13,
+          0.25,
+          0.34,
+          0.26,
+          0.62
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S4"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.56,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.73,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-baseline-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 721,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.82,
+          0.73,
+          0.92,
+          0.88,
+          0.56,
+          0.86,
+          0.37,
+          0.16
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.6,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.38,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.74,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-baseline-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 721,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.83,
+          0.74,
+          0.92,
+          0.88,
+          0.6,
+          0.86,
+          0.38,
+          0.16
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "baseline",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.16,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.88,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.73,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-baseline-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 721,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.82,
+          0.73,
+          0.92,
+          0.88,
+          0.58,
+          0.85,
+          0.37,
+          0.16
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.27,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-lawful_rebind-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 721,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.64,
+          0.57,
+          0.86,
+          0.82,
+          0.61,
+          0.8,
+          0.63,
+          0.27
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.61,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.81,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-lawful_rebind-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 721,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.65,
+          0.57,
+          0.86,
+          0.81,
+          0.61,
+          0.8,
+          0.63,
+          0.26
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "lawful_rebind",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.8,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.85,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.6,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.24,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.62,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.82,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-lawful_rebind-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 721,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.65,
+          0.57,
+          0.85,
+          0.82,
+          0.6,
+          0.8,
+          0.62,
+          0.24
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.36,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.18,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.38,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-authority_loss-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 692,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.18,
+          0.38,
+          0.1,
+          0.14,
+          0.25,
+          0.36,
+          0.25,
+          0.64
+        ]
+      },
+      "replicate": 0,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.3,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.08,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.17,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.22,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.26,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-authority_loss-r1",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 692,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.17,
+          0.37,
+          0.08,
+          0.13,
+          0.22,
+          0.3,
+          0.26,
+          0.65
+        ]
+      },
+      "replicate": 1,
+      "tier_id": "S5"
+    },
+    {
+      "condition": "authority_loss",
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.1,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.18,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.63,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.25,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.37,
+            "validation_status": "VALID"
+          }
+        },
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-extreme-scale-S5-authority_loss-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 692,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.18,
+          0.37,
+          0.1,
+          0.13,
+          0.25,
+          0.35,
+          0.25,
+          0.63
+        ]
+      },
+      "replicate": 2,
+      "tier_id": "S5"
+    }
+  ],
+  "questions": [
+    {
+      "instructions": "Does the described governed unit currently retain effective authority to complete its declared work without bypassing certification?",
+      "question_id": "effective_authority"
+    },
+    {
+      "instructions": "Does the described unit preserve the same externally declared work meaning despite its current internal condition?",
+      "question_id": "semantic_continuity"
+    },
+    {
+      "instructions": "Is there currently a viable end-to-end path from execution through verification to a lawful commit?",
+      "question_id": "commit_path_viable"
+    },
+    {
+      "instructions": "Does the described recursive system remain operationally coherent as a governed control unit?",
+      "question_id": "recursive_control_coherent"
+    },
+    {
+      "instructions": "If a disruption is present, is it being handled in a way that preserves the governing constraints rather than bypassing them?",
+      "question_id": "failure_handling_coherent"
+    },
+    {
+      "instructions": "Do the recursive composition boundaries still preserve the parent-visible semantics of the governed work?",
+      "question_id": "boundary_semantics_stable"
+    },
+    {
+      "instructions": "Could the described unit recover through lawful actor substitution or rebinding without changing the declared parent contract?",
+      "question_id": "recoverable_without_contract_change"
+    },
+    {
+      "instructions": "Would the parent need to change or recertify its own contract before this unit could lawfully continue?",
+      "question_id": "parent_recertification_required"
+    }
+  ],
+  "schema_version": "uow.jev_extreme_scale.v1"
+}

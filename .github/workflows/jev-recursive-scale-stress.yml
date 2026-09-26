@@ -1,0 +1,46 @@
+name: JEV Recursive Scale Stress
+
+on:
+  pull_request:
+    paths:
+      - "qualification/jev_provider.py"
+      - "qualification/jev_recursive_scale_campaign.py"
+      - "qualification/jev_recursive_stress_campaign.py"
+      - "tests/test_jev_recursive_scale_campaign.py"
+      - "tests/test_jev_recursive_stress_campaign.py"
+      - "docs/JEV_RECURSIVE_SCALE_EXPERIMENT.md"
+      - "docs/JEV_RECURSIVE_STRESS_EXPERIMENT.md"
+      - ".github/workflows/jev-recursive-scale-stress.yml"
+  workflow_dispatch:
+
+jobs:
+  recursive-scale-stress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install core package and pytest
+        run: python -m pip install -e . pytest
+      - name: Native recursive boundary regression
+        run: python -m pytest -q tests/test_composition_recursive_boundary.py
+      - name: Phase 1 depth-only observer harness
+        run: >
+          python -m pytest -q
+          tests/test_jev_recursive_scale_campaign.py
+      - name: Phase 1 deterministic preparation
+        run: >
+          python -m qualification.jev_recursive_scale_campaign
+          --prepare-only
+          --max-depth 3
+          --output /tmp/jev_recursive_scale_prepare.json
+      - name: Phase 2 multi-axis stress harness
+        run: >
+          python -m pytest -q
+          tests/test_jev_recursive_stress_campaign.py
+      - name: Phase 2 deterministic stress preparation
+        run: >
+          python -m qualification.jev_recursive_stress_campaign
+          --prepare-only
+          --output /tmp/jev_recursive_stress_prepare.json

@@ -186,7 +186,7 @@
     ],
     "total_unordered_pairs": 5253
   },
-  "created_at_utc": "2026-09-26T06:21:14.854438+00:00",
+  "created_at_utc": "2026-09-26T06:31:42.185393+00:00",
   "experiment": "JEV x UoW Transformation Semigroup Enumeration Campaign (Phase 5)",
   "gates": {
     "G_E0_reachable_closure_104_states": true,
@@ -194,7 +194,8 @@
     "G_E2_exhaustive_band_idempotence_over_X_reach": true,
     "G_E3_green_h_triviality_singletons": true,
     "G_E4_terminal_overwrite_right_zeros": true,
-    "G_E5_full_boolean_guard_lattice_B6": true
+    "G_E5_full_boolean_guard_lattice_B6": true,
+    "G_E6_guard_monoid_homomorphism": true
   },
   "level_growth": [
     {
@@ -244,19 +245,24 @@
   "summary": {
     "commutativity_percentage": 41.52,
     "compression_ratios": {
-      "governance_quotient": 103.0,
       "guard_quotient": 1.63,
-      "predicted_observer_quotient": 1.63
+      "monoid_governance_quotient": 52.0,
+      "predicted_observer_quotient": 1.63,
+      "semigroup_governance_quotient": 103.0
     },
     "failure_guard_states_count": 63,
     "failure_semigroup_order": 103,
     "final_mathematical_object": "finite_noncommutative_band_with_terminal_collapse_ideals_and_history_sensitive_provenance",
+    "governance_quotient_monoid_classes": 2,
+    "governance_quotient_semigroup_classes": 1,
     "green_h_classes": 103,
     "green_l_classes": 103,
     "green_r_classes": 63,
+    "guard_homomorphism_violations": 0,
     "identity_adjoined_monoid_order": 104,
     "is_exhaustive_band": true,
     "is_h_trivial": true,
+    "monoid_guard_homomorphism_verified": true,
     "permanently_absorbing_left_zeros_count": 0,
     "predicted_observer_states_count": 63,
     "reachable_closure_states_count": 104,

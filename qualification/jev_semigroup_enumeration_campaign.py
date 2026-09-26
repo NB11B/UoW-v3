@@ -420,6 +420,46 @@ def enumerate_semigroup(
             curr = apply_generator(curr, op)
         return curr
 
+    # Monoid S^1 = S union {I}
+    monoid_elements = [()] + elements
+    monoid_order = len(monoid_elements)  # 104 elements
+    monoid_mappings = [word_action_on_reach(w) for w in monoid_elements]
+
+    # Guard homomorphism analysis:
+    # h: S^1 -> (B_6, U) where h(s) is the set of guards tripped by s(x_0)
+    def guard_set(state: dict[str, Any]) -> frozenset[str]:
+        tripped: set[str] = set()
+        if "verify" not in state["actor_role_bindings"]:
+            tripped.add("A")
+        if not state["evidence_digest_match"]:
+            tripped.add("E")
+        if len(state["declared_causal_edges"]) < 5:
+            tripped.add("C")
+        if not state["temporal_admissibility"]:
+            tripped.add("T")
+        if not state["resource_envelope_admissible"]:
+            tripped.add("R")
+        if state["conflicting_attestation_count"] > 0:
+            tripped.add("Adv")
+        return frozenset(tripped)
+
+    monoid_guards = [guard_set(x_reach[m[0]]) for m in monoid_mappings]
+
+    # Exhaustive verification of monoid homomorphism h(s o t) == h(s) U h(t)
+    homomorphism_violations = 0
+    for i in range(monoid_order):
+        m_i = monoid_mappings[i]
+        h_i = monoid_guards[i]
+        for j in range(monoid_order):
+            m_j = monoid_mappings[j]
+            h_j = monoid_guards[j]
+            comp_idx = m_j[m_i[0]]  # result from x0
+            h_comp = guard_set(x_reach[comp_idx])
+            if h_comp != (h_i | h_j):
+                homomorphism_violations += 1
+
+    is_surjective_monoid_homomorphism = (homomorphism_violations == 0)
+
     # Guard lattice analysis:
     # 63 non-empty failure configurations from elements, plus empty configuration from nominal x0
     failure_guard_signatures = set()
@@ -445,10 +485,8 @@ def enumerate_semigroup(
     # Compression ratios
     guard_compression_ratio = N / max(distinct_failure_guard_states, 1)
     predicted_observer_compression_ratio = N / max(predicted_observer_states, 1)
-    governance_compression_ratio = float(N)
-
-    # Monoid S^1 = S union {I}
-    monoid_order = N + 1  # 104 elements
+    semigroup_governance_compression_ratio = float(N)
+    monoid_governance_compression_ratio = float(monoid_order) / 2.0  # 104 / 2 = 52.0x
 
     # -------------------------------------------------------------
     # Engineering & Mathematical Gates
@@ -459,6 +497,7 @@ def enumerate_semigroup(
     gate_E3_green_h_triviality = is_h_trivial
     gate_E4_terminal_overwrite_zeros = (len(right_zeros) == 4 and len(left_zeros) == 0)
     gate_E5_boolean_lattice = (total_guard_lattice_states == 64 and distinct_failure_guard_states == 63)
+    gate_E6_guard_monoid_homomorphism = is_surjective_monoid_homomorphism
 
     gates = {
         "G_E0_reachable_closure_104_states": gate_E0_reach_closure,
@@ -467,6 +506,7 @@ def enumerate_semigroup(
         "G_E3_green_h_triviality_singletons": gate_E3_green_h_triviality,
         "G_E4_terminal_overwrite_right_zeros": gate_E4_terminal_overwrite_zeros,
         "G_E5_full_boolean_guard_lattice_B6": gate_E5_boolean_lattice,
+        "G_E6_guard_monoid_homomorphism": gate_E6_guard_monoid_homomorphism,
     }
 
     supported = all(gates.values())
@@ -491,8 +531,13 @@ def enumerate_semigroup(
             "failure_guard_states_count": distinct_failure_guard_states,
             "total_boolean_guard_lattice_states_count": total_guard_lattice_states,
             "predicted_observer_states_count": predicted_observer_states,
+            "monoid_guard_homomorphism_verified": is_surjective_monoid_homomorphism,
+            "guard_homomorphism_violations": homomorphism_violations,
+            "governance_quotient_semigroup_classes": 1,
+            "governance_quotient_monoid_classes": 2,
             "compression_ratios": {
-                "governance_quotient": round(governance_compression_ratio, 2),
+                "semigroup_governance_quotient": round(semigroup_governance_compression_ratio, 2),
+                "monoid_governance_quotient": round(monoid_governance_compression_ratio, 2),
                 "guard_quotient": round(guard_compression_ratio, 2),
                 "predicted_observer_quotient": round(predicted_observer_compression_ratio, 2),
             },

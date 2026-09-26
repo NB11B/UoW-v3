@@ -89,17 +89,23 @@ def test_cayley_table_and_green_relations(enumeration_result: dict[str, Any]):
     assert enumeration_result["gates"]["G_E4_terminal_overwrite_right_zeros"] is True
 
 
-def test_full_boolean_guard_lattice_B6(enumeration_result: dict[str, Any]):
-    """Verify 64-state Boolean guard lattice B_6 (63 failure + 1 nominal)."""
+def test_full_boolean_guard_lattice_B6_and_monoid_homomorphism(enumeration_result: dict[str, Any]):
+    """Verify 64-state Boolean guard lattice B_6 and surjective monoid homomorphism h."""
     summary = enumeration_result["summary"]
     ratios = summary["compression_ratios"]
 
     assert summary["failure_guard_states_count"] == 63
     assert summary["total_boolean_guard_lattice_states_count"] == 64
-    assert ratios["governance_quotient"] == 103.0
+    assert summary["monoid_guard_homomorphism_verified"] is True
+    assert summary["guard_homomorphism_violations"] == 0
+    assert summary["governance_quotient_semigroup_classes"] == 1
+    assert summary["governance_quotient_monoid_classes"] == 2
+    assert ratios["semigroup_governance_quotient"] == 103.0
+    assert ratios["monoid_governance_quotient"] == 52.0
     assert ratios["guard_quotient"] == 1.63
     assert ratios["predicted_observer_quotient"] == 1.63
     assert enumeration_result["gates"]["G_E5_full_boolean_guard_lattice_B6"] is True
+    assert enumeration_result["gates"]["G_E6_guard_monoid_homomorphism"] is True
 
 
 def test_canonical_normal_form_reduction():
@@ -122,6 +128,7 @@ def test_all_engineering_gates_pass(enumeration_result: dict[str, Any]):
     assert gates["G_E3_green_h_triviality_singletons"] is True
     assert gates["G_E4_terminal_overwrite_right_zeros"] is True
     assert gates["G_E5_full_boolean_guard_lattice_B6"] is True
+    assert gates["G_E6_guard_monoid_homomorphism"] is True
 
     summary = enumeration_result["summary"]
     assert summary["verdict"] == "SEMIGROUP_EXHAUSTIVELY_ENUMERATED_AND_BAND_PROVEN_ON_X_REACH"

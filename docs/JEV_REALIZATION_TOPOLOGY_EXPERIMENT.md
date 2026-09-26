@@ -157,16 +157,52 @@ Pairwise directional cosine similarity of post-threshold authority loss vectors 
 
 ### 4.4 Cybernetic Findings & Scientific Interpretation
 
-1. **Topology Determines Transition Point ($\rho_c(T)$)**:
+1. **Topology Governs Resilience Under Tested Cut Patterns ($\rho_c(T)$)**:
    The effective threshold varies twofold across topologies:
    $$\rho_c(T_{\text{tree}}) = 0.250 \longrightarrow \rho_c(T_{\text{modular}}) = 0.3125 \longrightarrow \rho_c(T_{\text{ring}}) = 0.375 \longrightarrow \rho_c(T_{\text{star}}) = \rho_c(T_{\text{sw}}) = 0.500$$
-   Because evidence must travel through causal paths, structural bottlenecks drastically lower resilience. In the tree, cutting 4 units severs 2 branches, depriving the root of 8 units. In small-world and chordal rings, redundant pathways dynamically route around cuts until exhaustion.
+   Because evidence must travel through causal paths, structural bottlenecks drastically alter resilience. In the tree, cutting 4 units severs 2 branches, depriving the root of 8 units. In small-world and chordal rings, redundant pathways dynamically route around cuts until exhaustion.
+   
+   > [!NOTE] Methodological Qualification on Resilience Thresholds
+   > The reported $\rho_c(T)$ values are thresholds under the **specific preregistered disturbance/cut patterns** utilized for each topology. They reflect causal graph propagation under these concrete cut sequences rather than full graph-theoretic robustness distributions over arbitrary random or adversarial failure ensembles. The rigorous empirical claim is:
+   > $$\boxed{\text{Topology materially changes resilience under the tested causal cut patterns,}}$$
+   > rather than asserting intrinsic universal constants for each graph family.
 
-2. **Authority-Loss Geometry Is Topology-Invariant**:
-   Despite the 2× difference in critical threshold and fundamentally distinct causal graph structures, once quorum is severed and the root experiences authority loss, the induced displacement vector converges to a single universal direction:
-   $$\min_{i,j} \cos(\Delta_{A,T_i}^*, \Delta_{A,T_j}^*) = \mathbf{0.9988}$$
-   Post-threshold amplitude is also tightly constrained ($CV = 1.42\%$).
+2. **Authority-Loss Geometry Is Effectively Invariant Across the Tested Realization Topologies**:
+   Despite the 2× difference in critical resilience threshold and fundamentally distinct causal graph structures, once quorum is severed and the root experiences authority loss, the induced displacement vector converges to essentially the same state:
+   $$\min_{i,j} \cos(\Delta_{A,T_i}^*, \Delta_{A,T_j}^*) = \mathbf{0.9988} \quad (\text{mean } 0.9995)$$
+   Post-threshold amplitude is tightly constrained ($A_{\infty, T} \approx 1.75$, $CV = 1.42\%$), against a repeatable noise floor of $0.0187$ ($\text{SNR} = 93.7\times$).
 
 3. **Universal Discontinuous Transition Jump**:
    Every realization topology exhibits a sharp first-order cybernetic transition jump ($J_T \in [+1.19, +1.52]$, averaging $+1.35$), confirming that the phase transition is an intrinsic property of governed quorum dynamics, not an artifact of star fan-out.
+
+4. **Emerging Empirical Factorization**:
+   Synthesizing results across all campaigns to date:
+   $$\boxed{
+   \begin{aligned}
+   \text{ensemble size } (M) &\longrightarrow \text{little observed effect on failure geometry}\\
+   \text{quorum policy } (q) &\longrightarrow \text{moves the transition boundary}\\
+   \text{realization topology } (T) &\longrightarrow \text{changes resilience / reachable threshold}\\
+   \text{authority loss } (\Delta_A) &\longrightarrow \text{stable post-threshold geometry}.
+   \end{aligned}
+   }$$
+   At the architectural level:
+   $$\boxed{
+   \text{recursive governance preserves a stable failure macrostate}
+   \text{ even while size, policy, and causal topology change.}
+   }$$
+
+---
+
+## 5. Prospective Horizon: Failure Semantics Dimension
+
+With realization topology invariance established and frozen at commit `f0b86f2`, structural and topological axes are well qualified. The next genuinely new experimental dimension is **failure semantics**:
+- Authority loss (current baseline: verifier unbinding / unavailability)
+- Evidence corruption (tampered hash-chain / signature invalidation)
+- Causal severance (missing intermediate stage records)
+- Stale state / temporal expiration
+- Resource exhaustion (budget / memory exhaustion)
+- Adversarial false evidence injection
+
+This prospective campaign will test whether $\Delta_A^*$ is specifically an authority-loss invariant or part of a broader, structured family of cybernetic failure operators.
+
 

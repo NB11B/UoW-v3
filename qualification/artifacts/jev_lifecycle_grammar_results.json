@@ -1,7 +1,7 @@
 {
   "analysis": {
     "deterministic_lifecycle_confirmed": true,
-    "effective_noise_floor": 0.0226,
+    "effective_noise_floor": 0.0238,
     "formal_mathematical_object": "governed_lifecycle_system_with_closed_loop_recovery",
     "gates": {
       "G_L0_oracle_conformance": true,
@@ -12,7 +12,25 @@
     },
     "independent_live_jev_evidence": true,
     "lifecycle_closure": {
-      "coarse_governance_macrostates_count": 4,
+      "admission_factorization": {
+        "adversarial_configuration_states": 3,
+        "failure_obligation_configurations_product": 96,
+        "nominal_admissible_state": 1,
+        "physical_guard_lattice_B5_order": 32,
+        "state_variable_bijection_verified": true,
+        "state_variables": [
+          "G_auth",
+          "G_ev",
+          "G_causal",
+          "G_temp",
+          "G_res",
+          "C_attestation",
+          "Q_quarantine",
+          "A_admissible"
+        ],
+        "total_admission_predictive_classes": 97
+      },
+      "coarse_governance_observation_labels_count": 4,
       "max_reachable_depth": 10,
       "nerode_admission_classes_count": 97,
       "nerode_regime_classes_count": 222,
@@ -23,55 +41,74 @@
         "NOMINAL": 1,
         "RECERTIFIED": 1,
         "RECOVERING": 955
+      },
+      "regime_factorization": {
+        "contained_classes": 32,
+        "failed_classes": 95,
+        "nominal_recertified_classes": 1,
+        "recovering_classes": 94,
+        "state_variable_bijection_verified": true,
+        "state_variables": [
+          "G_auth",
+          "G_ev",
+          "G_causal",
+          "G_temp",
+          "G_res",
+          "C_attestation",
+          "D_divergence",
+          "Q_quarantine",
+          "S_regime"
+        ],
+        "total_regime_predictive_classes": 222
       }
     },
     "live_jev_validation_status": "CONFIRMED_LIVE_EVIDENCE",
-    "mean_recertification_defect_ratio_eta": 0.67,
+    "mean_recertification_defect_ratio_eta": 0.63,
     "oracle_pass": true,
     "path_results": {
       "adversarial": {
-        "containment_norm": 1.7451,
+        "containment_norm": 1.7476,
         "cycle_closed": true,
-        "failure_jump_norm": 1.679,
+        "failure_jump_norm": 1.693,
         "path": "adversarial",
-        "recovering_norm": 1.473,
-        "return_to_nominal_defect_norm": 0.0173,
-        "return_to_nominal_defect_ratio_eta": 0.77
+        "recovering_norm": 1.4711,
+        "return_to_nominal_defect_norm": 0.0125,
+        "return_to_nominal_defect_ratio_eta": 0.52
       },
       "authority": {
         "cycle_closed": true,
-        "failure_jump_norm": 1.4584,
+        "failure_jump_norm": 1.4487,
         "path": "authority",
-        "return_to_nominal_defect_norm": 0.0163,
-        "return_to_nominal_defect_ratio_eta": 0.72
+        "return_to_nominal_defect_norm": 0.0194,
+        "return_to_nominal_defect_ratio_eta": 0.82
       },
       "causal": {
         "cycle_closed": true,
-        "failure_jump_norm": 1.518,
+        "failure_jump_norm": 1.5311,
         "path": "causal",
-        "return_to_nominal_defect_norm": 0.0149,
-        "return_to_nominal_defect_ratio_eta": 0.66
+        "return_to_nominal_defect_norm": 0.0082,
+        "return_to_nominal_defect_ratio_eta": 0.34
       },
       "evidence": {
         "cycle_closed": true,
-        "failure_jump_norm": 1.6177,
+        "failure_jump_norm": 1.6523,
         "path": "evidence",
-        "return_to_nominal_defect_norm": 0.0141,
-        "return_to_nominal_defect_ratio_eta": 0.63
+        "return_to_nominal_defect_norm": 0.0105,
+        "return_to_nominal_defect_ratio_eta": 0.44
       },
       "resource": {
         "cycle_closed": true,
-        "failure_jump_norm": 1.5897,
+        "failure_jump_norm": 1.613,
         "path": "resource",
-        "return_to_nominal_defect_norm": 0.0125,
-        "return_to_nominal_defect_ratio_eta": 0.55
+        "return_to_nominal_defect_norm": 0.0183,
+        "return_to_nominal_defect_ratio_eta": 0.77
       },
       "temporal": {
         "cycle_closed": true,
-        "failure_jump_norm": 1.4798,
+        "failure_jump_norm": 1.5036,
         "path": "temporal",
-        "return_to_nominal_defect_norm": 0.0163,
-        "return_to_nominal_defect_ratio_eta": 0.72
+        "return_to_nominal_defect_norm": 0.0208,
+        "return_to_nominal_defect_ratio_eta": 0.87
       }
     },
     "premature_recertification_prevented": true,
@@ -79,14 +116,14 @@
     "provider_kinds": [
       "live_api"
     ],
-    "repeatability_noise_floor_sigma_rep": 0.0226,
+    "repeatability_noise_floor_sigma_rep": 0.0238,
     "replayed_observer_predicted_closure": true,
     "resolved_models": [
       "jev-1.13.0"
     ],
     "verdict": "GOVERNED_LIFECYCLE_GRAMMAR_CONFIRMED"
   },
-  "created_at_utc": "2026-09-26T06:46:48.474109+00:00",
+  "created_at_utc": "2026-09-26T06:55:29.062005+00:00",
   "deterministic_states": [
     {
       "oracle": {
@@ -2014,27 +2051,27 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.92,
+            "probability_true": 0.93,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.67,
+            "probability_true": 0.64,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.13,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.6,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.91,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
@@ -2063,14 +2100,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.92,
+          0.93,
           0.86,
           0.96,
-          0.91,
-          0.67,
+          0.92,
+          0.64,
           0.84,
-          0.6,
-          0.13
+          0.59,
+          0.14
         ]
       },
       "replicate": 0,
@@ -2096,12 +2133,12 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.63,
+            "probability_true": 0.67,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -2111,12 +2148,12 @@
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.91,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.86,
+            "probability_true": 0.87,
             "validation_status": "VALID"
           }
         },
@@ -2141,13 +2178,13 @@
         "validation_status": "VALID",
         "vector": [
           0.92,
-          0.86,
+          0.87,
           0.96,
-          0.91,
-          0.63,
+          0.92,
+          0.67,
           0.85,
           0.57,
-          0.14
+          0.13
         ]
       },
       "replicate": 1,
@@ -2158,7 +2195,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.84,
+            "probability_true": 0.85,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -2173,7 +2210,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.65,
+            "probability_true": 0.64,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -2183,17 +2220,17 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.56,
+            "probability_true": 0.58,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.91,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.86,
+            "probability_true": 0.87,
             "validation_status": "VALID"
           }
         },
@@ -2218,12 +2255,12 @@
         "validation_status": "VALID",
         "vector": [
           0.93,
-          0.86,
+          0.87,
           0.96,
-          0.91,
-          0.65,
-          0.84,
-          0.56,
+          0.92,
+          0.64,
+          0.85,
+          0.58,
           0.14
         ]
       },
@@ -2235,42 +2272,42 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.12,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.16,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.33,
+            "probability_true": 0.36,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.26,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           }
         },
@@ -2294,14 +2331,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.16,
-          0.46,
-          0.12,
-          0.26,
-          0.33,
-          0.4,
-          0.51,
-          0.41
+          0.19,
+          0.49,
+          0.14,
+          0.29,
+          0.36,
+          0.41,
+          0.53,
+          0.4
         ]
       },
       "replicate": 0,
@@ -2312,12 +2349,12 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.44,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.15,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -2327,17 +2364,17 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.37,
+            "probability_true": 0.36,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.38,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -2347,7 +2384,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.5,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           }
         },
@@ -2372,13 +2409,13 @@
         "validation_status": "VALID",
         "vector": [
           0.18,
-          0.5,
-          0.14,
+          0.49,
+          0.15,
           0.28,
-          0.37,
-          0.44,
-          0.53,
-          0.38
+          0.36,
+          0.43,
+          0.52,
+          0.4
         ]
       },
       "replicate": 1,
@@ -2389,7 +2426,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -2399,22 +2436,22 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.37,
+            "probability_true": 0.35,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -2448,14 +2485,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.18,
+          0.19,
           0.49,
           0.15,
           0.28,
-          0.37,
-          0.41,
-          0.51,
-          0.4
+          0.35,
+          0.42,
+          0.52,
+          0.41
         ]
       },
       "replicate": 2,
@@ -2471,32 +2508,32 @@
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.15,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.16,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.35,
+            "probability_true": 0.36,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.5,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.26,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
@@ -2525,14 +2562,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.19,
+          0.16,
           0.47,
-          0.15,
-          0.28,
-          0.35,
+          0.13,
+          0.26,
+          0.36,
           0.43,
-          0.52,
-          0.41
+          0.5,
+          0.4
         ]
       },
       "replicate": 0,
@@ -2543,22 +2580,22 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.44,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.15,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.17,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.37,
+            "probability_true": 0.38,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -2573,12 +2610,12 @@
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.46,
             "validation_status": "VALID"
           }
         },
@@ -2602,12 +2639,12 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.19,
-          0.47,
-          0.14,
-          0.28,
-          0.37,
-          0.44,
+          0.17,
+          0.46,
+          0.15,
+          0.27,
+          0.38,
+          0.43,
           0.52,
           0.4
         ]
@@ -2620,7 +2657,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -2640,22 +2677,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           }
         },
@@ -2680,94 +2717,17 @@
         "validation_status": "VALID",
         "vector": [
           0.17,
-          0.46,
+          0.48,
           0.14,
-          0.28,
+          0.27,
           0.35,
-          0.41,
-          0.52,
-          0.39
+          0.42,
+          0.53,
+          0.42
         ]
       },
       "replicate": 2,
       "spec_id": "life_A_recov"
-    },
-    {
-      "provider": {
-        "answers": {
-          "boundary_semantics_stable": {
-            "primitive": "noul",
-            "probability_true": 0.84,
-            "validation_status": "VALID"
-          },
-          "commit_path_viable": {
-            "primitive": "noul",
-            "probability_true": 0.96,
-            "validation_status": "VALID"
-          },
-          "effective_authority": {
-            "primitive": "noul",
-            "probability_true": 0.93,
-            "validation_status": "VALID"
-          },
-          "failure_handling_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.66,
-            "validation_status": "VALID"
-          },
-          "parent_recertification_required": {
-            "primitive": "noul",
-            "probability_true": 0.14,
-            "validation_status": "VALID"
-          },
-          "recoverable_without_contract_change": {
-            "primitive": "noul",
-            "probability_true": 0.58,
-            "validation_status": "VALID"
-          },
-          "recursive_control_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.91,
-            "validation_status": "VALID"
-          },
-          "semantic_continuity": {
-            "primitive": "noul",
-            "probability_true": 0.86,
-            "validation_status": "VALID"
-          }
-        },
-        "provider_kind": "live_api",
-        "question_ids": [
-          "effective_authority",
-          "semantic_continuity",
-          "commit_path_viable",
-          "recursive_control_coherent",
-          "failure_handling_coherent",
-          "boundary_semantics_stable",
-          "recoverable_without_contract_change",
-          "parent_recertification_required"
-        ],
-        "request_id": "uow-life-life_A_recert-r0",
-        "requested_model": "jev-1.13.0",
-        "resolved_model": "jev-1.13.0",
-        "usage": {
-          "input_tokens": 876,
-          "output_tokens": 167
-        },
-        "validation_status": "VALID",
-        "vector": [
-          0.93,
-          0.86,
-          0.96,
-          0.91,
-          0.66,
-          0.84,
-          0.58,
-          0.14
-        ]
-      },
-      "replicate": 0,
-      "spec_id": "life_A_recert"
     },
     {
       "provider": {
@@ -2799,7 +2759,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.6,
+            "probability_true": 0.57,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -2809,7 +2769,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.87,
+            "probability_true": 0.85,
             "validation_status": "VALID"
           }
         },
@@ -2824,7 +2784,7 @@
           "recoverable_without_contract_change",
           "parent_recertification_required"
         ],
-        "request_id": "uow-life-life_A_recert-r1",
+        "request_id": "uow-life-life_A_recert-r0",
         "requested_model": "jev-1.13.0",
         "resolved_model": "jev-1.13.0",
         "usage": {
@@ -2834,16 +2794,16 @@
         "validation_status": "VALID",
         "vector": [
           0.93,
-          0.87,
+          0.85,
           0.96,
           0.92,
           0.65,
           0.84,
-          0.6,
+          0.57,
           0.14
         ]
       },
-      "replicate": 1,
+      "replicate": 0,
       "spec_id": "life_A_recert"
     },
     {
@@ -2851,7 +2811,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.83,
+            "probability_true": 0.84,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -2866,7 +2826,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.63,
+            "probability_true": 0.65,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -2876,7 +2836,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.59,
+            "probability_true": 0.58,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -2901,7 +2861,7 @@
           "recoverable_without_contract_change",
           "parent_recertification_required"
         ],
-        "request_id": "uow-life-life_A_recert-r2",
+        "request_id": "uow-life-life_A_recert-r1",
         "requested_model": "jev-1.13.0",
         "resolved_model": "jev-1.13.0",
         "usage": {
@@ -2914,10 +2874,87 @@
           0.85,
           0.96,
           0.91,
-          0.63,
-          0.83,
-          0.59,
+          0.65,
+          0.84,
+          0.58,
           0.14
+        ]
+      },
+      "replicate": 1,
+      "spec_id": "life_A_recert"
+    },
+    {
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.83,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.96,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.64,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.57,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.91,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          }
+        },
+        "provider_kind": "live_api",
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-life-life_A_recert-r2",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 876,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.93,
+          0.86,
+          0.96,
+          0.91,
+          0.64,
+          0.83,
+          0.57,
+          0.13
         ]
       },
       "replicate": 2,
@@ -2928,7 +2965,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.32,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -2948,22 +2985,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.54,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.17,
+            "probability_true": 0.16,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.38,
+            "probability_true": 0.37,
             "validation_status": "VALID"
           }
         },
@@ -2988,13 +3025,13 @@
         "validation_status": "VALID",
         "vector": [
           0.13,
-          0.38,
+          0.37,
           0.09,
-          0.17,
+          0.16,
           0.24,
-          0.32,
-          0.4,
-          0.54
+          0.29,
+          0.42,
+          0.52
         ]
       },
       "replicate": 0,
@@ -3005,12 +3042,12 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.3,
+            "probability_true": 0.28,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.09,
+            "probability_true": 0.08,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -3020,17 +3057,17 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.22,
+            "probability_true": 0.21,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.55,
+            "probability_true": 0.54,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.38,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3040,7 +3077,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.37,
             "validation_status": "VALID"
           }
         },
@@ -3065,13 +3102,13 @@
         "validation_status": "VALID",
         "vector": [
           0.12,
-          0.39,
-          0.09,
+          0.37,
+          0.08,
           0.16,
-          0.22,
-          0.3,
-          0.4,
-          0.55
+          0.21,
+          0.28,
+          0.38,
+          0.54
         ]
       },
       "replicate": 1,
@@ -3102,12 +3139,12 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.54,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3117,7 +3154,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.38,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           }
         },
@@ -3142,17 +3179,94 @@
         "validation_status": "VALID",
         "vector": [
           0.13,
-          0.38,
+          0.43,
           0.1,
           0.17,
           0.24,
           0.31,
-          0.41,
-          0.54
+          0.4,
+          0.53
         ]
       },
       "replicate": 2,
       "spec_id": "life_Adv_fail"
+    },
+    {
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.27,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.06,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.09,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.4,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.59,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.35,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.13,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.34,
+            "validation_status": "VALID"
+          }
+        },
+        "provider_kind": "live_api",
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-life-life_Adv_contain-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 856,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.09,
+          0.34,
+          0.06,
+          0.13,
+          0.4,
+          0.27,
+          0.35,
+          0.59
+        ]
+      },
+      "replicate": 0,
+      "spec_id": "life_Adv_contain"
     },
     {
       "provider": {
@@ -3179,12 +3293,12 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.6,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.35,
+            "probability_true": 0.34,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3194,84 +3308,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.33,
-            "validation_status": "VALID"
-          }
-        },
-        "provider_kind": "live_api",
-        "question_ids": [
-          "effective_authority",
-          "semantic_continuity",
-          "commit_path_viable",
-          "recursive_control_coherent",
-          "failure_handling_coherent",
-          "boundary_semantics_stable",
-          "recoverable_without_contract_change",
-          "parent_recertification_required"
-        ],
-        "request_id": "uow-life-life_Adv_contain-r0",
-        "requested_model": "jev-1.13.0",
-        "resolved_model": "jev-1.13.0",
-        "usage": {
-          "input_tokens": 856,
-          "output_tokens": 167
-        },
-        "validation_status": "VALID",
-        "vector": [
-          0.09,
-          0.33,
-          0.07,
-          0.12,
-          0.39,
-          0.27,
-          0.35,
-          0.6
-        ]
-      },
-      "replicate": 0,
-      "spec_id": "life_Adv_contain"
-    },
-    {
-      "provider": {
-        "answers": {
-          "boundary_semantics_stable": {
-            "primitive": "noul",
-            "probability_true": 0.28,
-            "validation_status": "VALID"
-          },
-          "commit_path_viable": {
-            "primitive": "noul",
-            "probability_true": 0.07,
-            "validation_status": "VALID"
-          },
-          "effective_authority": {
-            "primitive": "noul",
-            "probability_true": 0.09,
-            "validation_status": "VALID"
-          },
-          "failure_handling_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.4,
-            "validation_status": "VALID"
-          },
-          "parent_recertification_required": {
-            "primitive": "noul",
-            "probability_true": 0.61,
-            "validation_status": "VALID"
-          },
-          "recoverable_without_contract_change": {
-            "primitive": "noul",
-            "probability_true": 0.35,
-            "validation_status": "VALID"
-          },
-          "recursive_control_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.12,
-            "validation_status": "VALID"
-          },
-          "semantic_continuity": {
-            "primitive": "noul",
-            "probability_true": 0.32,
+            "probability_true": 0.36,
             "validation_status": "VALID"
           }
         },
@@ -3296,13 +3333,13 @@
         "validation_status": "VALID",
         "vector": [
           0.09,
-          0.32,
+          0.36,
           0.07,
           0.12,
-          0.4,
-          0.28,
-          0.35,
-          0.61
+          0.39,
+          0.27,
+          0.34,
+          0.59
         ]
       },
       "replicate": 1,
@@ -3313,7 +3350,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.27,
+            "probability_true": 0.28,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -3323,22 +3360,22 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.08,
+            "probability_true": 0.09,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.34,
+            "probability_true": 0.33,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3348,7 +3385,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.35,
+            "probability_true": 0.34,
             "validation_status": "VALID"
           }
         },
@@ -3372,14 +3409,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.08,
-          0.35,
+          0.09,
+          0.34,
           0.07,
           0.12,
-          0.41,
-          0.27,
-          0.34,
-          0.58
+          0.43,
+          0.28,
+          0.33,
+          0.59
         ]
       },
       "replicate": 2,
@@ -3395,7 +3432,7 @@
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -3405,17 +3442,17 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.35,
+            "probability_true": 0.36,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.42,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3425,7 +3462,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.5,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           }
         },
@@ -3450,13 +3487,13 @@
         "validation_status": "VALID",
         "vector": [
           0.17,
-          0.5,
-          0.14,
+          0.48,
+          0.13,
           0.27,
-          0.35,
+          0.36,
           0.42,
-          0.51,
-          0.42
+          0.53,
+          0.41
         ]
       },
       "replicate": 0,
@@ -3467,7 +3504,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.44,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -3477,22 +3514,22 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.15,
+            "probability_true": 0.18,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.36,
+            "probability_true": 0.38,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3526,14 +3563,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.15,
+          0.18,
           0.48,
           0.13,
           0.27,
-          0.36,
-          0.44,
-          0.53,
-          0.4
+          0.38,
+          0.42,
+          0.52,
+          0.43
         ]
       },
       "replicate": 1,
@@ -3544,42 +3581,42 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.13,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.16,
+            "probability_true": 0.18,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.34,
+            "probability_true": 0.35,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.51,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.27,
+            "probability_true": 0.28,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.45,
+            "probability_true": 0.47,
             "validation_status": "VALID"
           }
         },
@@ -3603,14 +3640,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.16,
-          0.45,
-          0.13,
-          0.27,
-          0.34,
-          0.4,
-          0.52,
-          0.41
+          0.18,
+          0.47,
+          0.14,
+          0.28,
+          0.35,
+          0.42,
+          0.51,
+          0.42
         ]
       },
       "replicate": 2,
@@ -3636,7 +3673,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.68,
+            "probability_true": 0.65,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -3646,7 +3683,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -3684,9 +3721,9 @@
           0.87,
           0.96,
           0.92,
-          0.68,
+          0.65,
           0.84,
-          0.58,
+          0.59,
           0.14
         ]
       },
@@ -3708,7 +3745,7 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.93,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
@@ -3723,17 +3760,17 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.6,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.91,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.86,
+            "probability_true": 0.87,
             "validation_status": "VALID"
           }
         },
@@ -3757,13 +3794,13 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.93,
-          0.86,
+          0.92,
+          0.87,
           0.96,
-          0.91,
+          0.92,
           0.66,
           0.84,
-          0.58,
+          0.6,
           0.14
         ]
       },
@@ -3775,7 +3812,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.84,
+            "probability_true": 0.85,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -3790,7 +3827,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.65,
+            "probability_true": 0.66,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -3838,8 +3875,8 @@
           0.86,
           0.96,
           0.92,
-          0.65,
-          0.84,
+          0.66,
+          0.85,
           0.58,
           0.13
         ]
@@ -3852,42 +3889,42 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.33,
+            "probability_true": 0.3,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.13,
+            "probability_true": 0.12,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.16,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.33,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.47,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.48,
+            "probability_true": 0.45,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.2,
+            "probability_true": 0.18,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.33,
+            "probability_true": 0.3,
             "validation_status": "VALID"
           }
         },
@@ -3911,14 +3948,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.16,
-          0.33,
           0.13,
-          0.2,
-          0.33,
-          0.33,
-          0.48,
-          0.46
+          0.3,
+          0.12,
+          0.18,
+          0.29,
+          0.3,
+          0.45,
+          0.47
         ]
       },
       "replicate": 0,
@@ -3929,27 +3966,27 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.31,
+            "probability_true": 0.3,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.12,
+            "probability_true": 0.11,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.3,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.51,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -3964,7 +4001,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.34,
+            "probability_true": 0.33,
             "validation_status": "VALID"
           }
         },
@@ -3988,14 +4025,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.14,
-          0.34,
-          0.12,
+          0.13,
+          0.33,
+          0.11,
           0.2,
+          0.29,
           0.3,
-          0.31,
           0.45,
-          0.47
+          0.51
         ]
       },
       "replicate": 1,
@@ -4016,12 +4053,12 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.13,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.3,
+            "probability_true": 0.31,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -4031,12 +4068,12 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.45,
+            "probability_true": 0.47,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.2,
+            "probability_true": 0.21,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
@@ -4065,13 +4102,13 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.13,
+          0.14,
           0.32,
           0.12,
-          0.2,
+          0.21,
+          0.31,
           0.3,
-          0.3,
-          0.45,
+          0.47,
           0.49
         ]
       },
@@ -4083,42 +4120,42 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.62,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.23,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.24,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.35,
+            "probability_true": 0.32,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.55,
+            "probability_true": 0.56,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.42,
+            "probability_true": 0.45,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.5,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           }
         },
@@ -4142,14 +4179,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.19,
-          0.5,
-          0.23,
-          0.42,
-          0.47,
-          0.58,
-          0.55,
-          0.35
+          0.24,
+          0.49,
+          0.27,
+          0.45,
+          0.48,
+          0.62,
+          0.56,
+          0.32
         ]
       },
       "replicate": 0,
@@ -4160,27 +4197,27 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.56,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.24,
+            "probability_true": 0.23,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.23,
+            "probability_true": 0.2,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.35,
+            "probability_true": 0.34,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -4195,7 +4232,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.48,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           }
         },
@@ -4219,14 +4256,14 @@
         },
         "validation_status": "VALID",
         "vector": [
+          0.2,
+          0.49,
           0.23,
-          0.48,
-          0.24,
           0.41,
-          0.46,
-          0.58,
+          0.41,
           0.56,
-          0.35
+          0.56,
+          0.34
         ]
       },
       "replicate": 1,
@@ -4237,42 +4274,42 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.65,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.2,
+            "probability_true": 0.31,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.23,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.43,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.31,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.55,
+            "probability_true": 0.57,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.5,
             "validation_status": "VALID"
           }
         },
@@ -4296,14 +4333,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.19,
-          0.46,
-          0.2,
-          0.39,
-          0.43,
-          0.53,
-          0.55,
-          0.39
+          0.23,
+          0.5,
+          0.31,
+          0.49,
+          0.48,
+          0.65,
+          0.57,
+          0.31
         ]
       },
       "replicate": 2,
@@ -4314,7 +4351,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.84,
+            "probability_true": 0.85,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -4324,12 +4361,12 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.93,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.66,
+            "probability_true": 0.62,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -4373,12 +4410,12 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.93,
+          0.92,
           0.87,
           0.96,
           0.92,
-          0.66,
-          0.84,
+          0.62,
+          0.85,
           0.57,
           0.14
         ]
@@ -4391,7 +4428,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.83,
+            "probability_true": 0.84,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -4401,7 +4438,7 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.92,
+            "probability_true": 0.93,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
@@ -4416,7 +4453,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.6,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -4450,13 +4487,13 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.92,
+          0.93,
           0.86,
           0.96,
           0.92,
           0.65,
-          0.83,
-          0.6,
+          0.84,
+          0.59,
           0.14
         ]
       },
@@ -4468,7 +4505,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.84,
+            "probability_true": 0.85,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -4483,12 +4520,12 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.66,
+            "probability_true": 0.65,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.13,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -4498,12 +4535,12 @@
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.91,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.86,
+            "probability_true": 0.87,
             "validation_status": "VALID"
           }
         },
@@ -4528,94 +4565,17 @@
         "validation_status": "VALID",
         "vector": [
           0.93,
-          0.86,
+          0.87,
           0.96,
-          0.91,
-          0.66,
-          0.84,
+          0.92,
+          0.65,
+          0.85,
           0.58,
-          0.13
+          0.14
         ]
       },
       "replicate": 2,
       "spec_id": "life_E_recert"
-    },
-    {
-      "provider": {
-        "answers": {
-          "boundary_semantics_stable": {
-            "primitive": "noul",
-            "probability_true": 0.4,
-            "validation_status": "VALID"
-          },
-          "commit_path_viable": {
-            "primitive": "noul",
-            "probability_true": 0.14,
-            "validation_status": "VALID"
-          },
-          "effective_authority": {
-            "primitive": "noul",
-            "probability_true": 0.16,
-            "validation_status": "VALID"
-          },
-          "failure_handling_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.32,
-            "validation_status": "VALID"
-          },
-          "parent_recertification_required": {
-            "primitive": "noul",
-            "probability_true": 0.44,
-            "validation_status": "VALID"
-          },
-          "recoverable_without_contract_change": {
-            "primitive": "noul",
-            "probability_true": 0.49,
-            "validation_status": "VALID"
-          },
-          "recursive_control_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.24,
-            "validation_status": "VALID"
-          },
-          "semantic_continuity": {
-            "primitive": "noul",
-            "probability_true": 0.44,
-            "validation_status": "VALID"
-          }
-        },
-        "provider_kind": "live_api",
-        "question_ids": [
-          "effective_authority",
-          "semantic_continuity",
-          "commit_path_viable",
-          "recursive_control_coherent",
-          "failure_handling_coherent",
-          "boundary_semantics_stable",
-          "recoverable_without_contract_change",
-          "parent_recertification_required"
-        ],
-        "request_id": "uow-life-life_C_fail-r0",
-        "requested_model": "jev-1.13.0",
-        "resolved_model": "jev-1.13.0",
-        "usage": {
-          "input_tokens": 830,
-          "output_tokens": 167
-        },
-        "validation_status": "VALID",
-        "vector": [
-          0.16,
-          0.44,
-          0.14,
-          0.24,
-          0.32,
-          0.4,
-          0.49,
-          0.44
-        ]
-      },
-      "replicate": 0,
-      "spec_id": "life_C_fail"
     },
     {
       "provider": {
@@ -4642,22 +4602,99 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.49,
+            "probability_true": 0.5,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.24,
+            "probability_true": 0.25,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.45,
+            "probability_true": 0.43,
+            "validation_status": "VALID"
+          }
+        },
+        "provider_kind": "live_api",
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-life-life_C_fail-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 830,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.15,
+          0.43,
+          0.13,
+          0.25,
+          0.32,
+          0.4,
+          0.5,
+          0.43
+        ]
+      },
+      "replicate": 0,
+      "spec_id": "life_C_fail"
+    },
+    {
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.39,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.15,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.31,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.42,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.48,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.23,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.4,
             "validation_status": "VALID"
           }
         },
@@ -4682,13 +4719,13 @@
         "validation_status": "VALID",
         "vector": [
           0.15,
-          0.45,
-          0.13,
-          0.24,
-          0.32,
           0.4,
-          0.49,
-          0.4
+          0.14,
+          0.23,
+          0.31,
+          0.39,
+          0.48,
+          0.42
         ]
       },
       "replicate": 1,
@@ -4699,7 +4736,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -4709,32 +4746,32 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.16,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.32,
+            "probability_true": 0.34,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.44,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.21,
+            "probability_true": 0.24,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.43,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           }
         },
@@ -4758,14 +4795,14 @@
         },
         "validation_status": "VALID",
         "vector": [
+          0.16,
+          0.42,
           0.14,
-          0.43,
-          0.14,
-          0.21,
-          0.32,
-          0.41,
-          0.47,
-          0.41
+          0.24,
+          0.34,
+          0.4,
+          0.49,
+          0.44
         ]
       },
       "replicate": 2,
@@ -4776,22 +4813,22 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.55,
+            "probability_true": 0.54,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.21,
+            "probability_true": 0.2,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.17,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.45,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -4806,12 +4843,12 @@
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.44,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.5,
+            "probability_true": 0.46,
             "validation_status": "VALID"
           }
         },
@@ -4835,12 +4872,12 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.18,
-          0.5,
-          0.21,
-          0.44,
-          0.45,
-          0.55,
+          0.17,
+          0.46,
+          0.2,
+          0.4,
+          0.41,
+          0.54,
           0.53,
           0.32
         ]
@@ -4853,7 +4890,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.56,
+            "probability_true": 0.57,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -4863,7 +4900,7 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
@@ -4873,22 +4910,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.34,
+            "probability_true": 0.32,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.54,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           }
         },
@@ -4912,14 +4949,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.18,
-          0.46,
           0.19,
-          0.41,
+          0.49,
+          0.19,
+          0.43,
           0.45,
-          0.56,
-          0.53,
-          0.34
+          0.57,
+          0.54,
+          0.32
         ]
       },
       "replicate": 1,
@@ -4935,12 +4972,12 @@
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.17,
+            "probability_true": 0.18,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
@@ -4955,7 +4992,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -4965,7 +5002,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           }
         },
@@ -4989,13 +5026,13 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.17,
-          0.47,
           0.18,
+          0.48,
+          0.19,
           0.4,
           0.43,
           0.56,
-          0.53,
+          0.52,
           0.34
         ]
       },
@@ -5007,7 +5044,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.84,
+            "probability_true": 0.85,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -5017,22 +5054,22 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.93,
+            "probability_true": 0.92,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.64,
+            "probability_true": 0.65,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.56,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -5042,7 +5079,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.87,
+            "probability_true": 0.86,
             "validation_status": "VALID"
           }
         },
@@ -5066,14 +5103,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.93,
-          0.87,
+          0.92,
+          0.86,
           0.96,
           0.92,
-          0.64,
-          0.84,
-          0.56,
-          0.14
+          0.65,
+          0.85,
+          0.59,
+          0.13
         ]
       },
       "replicate": 0,
@@ -5099,7 +5136,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.66,
+            "probability_true": 0.63,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -5119,7 +5156,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.87,
+            "probability_true": 0.86,
             "validation_status": "VALID"
           }
         },
@@ -5144,10 +5181,10 @@
         "validation_status": "VALID",
         "vector": [
           0.93,
-          0.87,
+          0.86,
           0.96,
           0.92,
-          0.66,
+          0.63,
           0.85,
           0.59,
           0.14
@@ -5176,7 +5213,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.64,
+            "probability_true": 0.68,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -5186,7 +5223,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.59,
+            "probability_true": 0.56,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -5196,7 +5233,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.87,
+            "probability_true": 0.86,
             "validation_status": "VALID"
           }
         },
@@ -5221,12 +5258,12 @@
         "validation_status": "VALID",
         "vector": [
           0.93,
-          0.87,
+          0.86,
           0.96,
           0.91,
-          0.64,
+          0.68,
           0.84,
-          0.59,
+          0.56,
           0.14
         ]
       },
@@ -5243,7 +5280,7 @@
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.17,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -5258,22 +5295,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.54,
+            "probability_true": 0.57,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.27,
+            "probability_true": 0.26,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.42,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           }
         },
@@ -5298,13 +5335,13 @@
         "validation_status": "VALID",
         "vector": [
           0.17,
-          0.42,
-          0.19,
-          0.27,
+          0.43,
+          0.17,
+          0.26,
           0.32,
           0.5,
-          0.39,
-          0.54
+          0.42,
+          0.57
         ]
       },
       "replicate": 0,
@@ -5315,7 +5352,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -5325,7 +5362,7 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
@@ -5335,22 +5372,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.56,
+            "probability_true": 0.54,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.43,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.25,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.43,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           }
         },
@@ -5374,14 +5411,14 @@
         },
         "validation_status": "VALID",
         "vector": [
+          0.14,
+          0.41,
           0.19,
-          0.43,
-          0.19,
-          0.28,
+          0.25,
           0.32,
-          0.51,
-          0.43,
-          0.56
+          0.48,
+          0.41,
+          0.54
         ]
       },
       "replicate": 1,
@@ -5392,42 +5429,42 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.48,
+            "probability_true": 0.47,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.16,
+            "probability_true": 0.17,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.31,
+            "probability_true": 0.32,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.54,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.42,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.26,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           }
         },
@@ -5451,14 +5488,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.16,
-          0.41,
-          0.18,
-          0.26,
-          0.31,
-          0.48,
+          0.17,
           0.42,
-          0.54
+          0.19,
+          0.27,
+          0.32,
+          0.47,
+          0.43,
+          0.53
         ]
       },
       "replicate": 2,
@@ -5469,27 +5506,27 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.61,
+            "probability_true": 0.66,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.55,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.27,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.48,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.32,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -5499,12 +5536,12 @@
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.55,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.55,
             "validation_status": "VALID"
           }
         },
@@ -5528,14 +5565,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.27,
-          0.52,
-          0.51,
-          0.47,
-          0.48,
-          0.61,
+          0.29,
+          0.55,
+          0.55,
+          0.55,
+          0.49,
+          0.66,
           0.54,
-          0.32
+          0.29
         ]
       },
       "replicate": 0,
@@ -5546,7 +5583,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.64,
+            "probability_true": 0.63,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -5556,32 +5593,32 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.26,
+            "probability_true": 0.25,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.5,
+            "probability_true": 0.44,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.31,
+            "probability_true": 0.34,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.47,
+            "probability_true": 0.44,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.5,
             "validation_status": "VALID"
           }
         },
@@ -5605,14 +5642,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.26,
-          0.51,
+          0.25,
           0.5,
-          0.47,
           0.5,
-          0.64,
-          0.53,
-          0.31
+          0.44,
+          0.44,
+          0.63,
+          0.52,
+          0.34
         ]
       },
       "replicate": 1,
@@ -5623,12 +5660,12 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.65,
+            "probability_true": 0.66,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.55,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -5643,22 +5680,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.29,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.54,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.48,
+            "probability_true": 0.5,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.53,
             "validation_status": "VALID"
           }
         },
@@ -5683,13 +5720,13 @@
         "validation_status": "VALID",
         "vector": [
           0.29,
-          0.52,
-          0.52,
+          0.53,
+          0.55,
+          0.5,
           0.48,
-          0.48,
-          0.65,
-          0.54,
-          0.28
+          0.66,
+          0.53,
+          0.29
         ]
       },
       "replicate": 2,
@@ -5715,27 +5752,27 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.63,
+            "probability_true": 0.67,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.13,
+            "probability_true": 0.14,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.57,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.92,
+            "probability_true": 0.91,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.86,
+            "probability_true": 0.87,
             "validation_status": "VALID"
           }
         },
@@ -5760,13 +5797,13 @@
         "validation_status": "VALID",
         "vector": [
           0.93,
-          0.86,
+          0.87,
           0.96,
-          0.92,
-          0.63,
+          0.91,
+          0.67,
           0.84,
-          0.58,
-          0.13
+          0.57,
+          0.14
         ]
       },
       "replicate": 0,
@@ -5777,7 +5814,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.85,
+            "probability_true": 0.83,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -5792,7 +5829,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.66,
+            "probability_true": 0.67,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -5802,7 +5839,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.59,
+            "probability_true": 0.57,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -5840,9 +5877,9 @@
           0.86,
           0.96,
           0.92,
-          0.66,
-          0.85,
-          0.59,
+          0.67,
+          0.83,
+          0.57,
           0.14
         ]
       },
@@ -5854,7 +5891,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.85,
+            "probability_true": 0.84,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -5869,7 +5906,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.63,
+            "probability_true": 0.66,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -5879,7 +5916,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.57,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -5917,9 +5954,9 @@
           0.86,
           0.96,
           0.92,
-          0.63,
-          0.85,
-          0.57,
+          0.66,
+          0.84,
+          0.59,
           0.14
         ]
       },
@@ -5941,22 +5978,22 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.29,
+            "probability_true": 0.28,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.5,
+            "probability_true": 0.51,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.45,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -5990,14 +6027,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.14,
+          0.13,
           0.44,
           0.11,
           0.21,
-          0.29,
+          0.28,
           0.37,
-          0.45,
-          0.5
+          0.43,
+          0.51
         ]
       },
       "replicate": 0,
@@ -6008,22 +6045,22 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.38,
+            "probability_true": 0.33,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.12,
+            "probability_true": 0.1,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.12,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.3,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -6038,12 +6075,12 @@
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.21,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.44,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           }
         },
@@ -6067,12 +6104,12 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.14,
-          0.44,
           0.12,
-          0.21,
-          0.3,
-          0.38,
+          0.43,
+          0.1,
+          0.19,
+          0.27,
+          0.33,
           0.45,
           0.52
         ]
@@ -6085,12 +6122,12 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.37,
+            "probability_true": 0.39,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.11,
+            "probability_true": 0.12,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -6100,17 +6137,17 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.26,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.53,
+            "probability_true": 0.51,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.43,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -6120,7 +6157,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.43,
+            "probability_true": 0.45,
             "validation_status": "VALID"
           }
         },
@@ -6145,13 +6182,13 @@
         "validation_status": "VALID",
         "vector": [
           0.13,
-          0.43,
-          0.11,
+          0.45,
+          0.12,
           0.2,
-          0.26,
-          0.37,
-          0.43,
-          0.53
+          0.27,
+          0.39,
+          0.42,
+          0.51
         ]
       },
       "replicate": 2,
@@ -6162,12 +6199,12 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.15,
             "validation_status": "VALID"
           },
           "effective_authority": {
@@ -6182,22 +6219,22 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.44,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.26,
+            "probability_true": 0.25,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.45,
+            "probability_true": 0.44,
             "validation_status": "VALID"
           }
         },
@@ -6222,13 +6259,13 @@
         "validation_status": "VALID",
         "vector": [
           0.16,
-          0.45,
-          0.14,
-          0.26,
+          0.44,
+          0.15,
+          0.25,
           0.32,
-          0.39,
-          0.51,
-          0.41
+          0.41,
+          0.48,
+          0.44
         ]
       },
       "replicate": 0,
@@ -6249,32 +6286,32 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.17,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.37,
+            "probability_true": 0.36,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.39,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.27,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.49,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           }
         },
@@ -6298,14 +6335,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.18,
-          0.49,
+          0.17,
+          0.48,
           0.15,
-          0.28,
-          0.37,
+          0.27,
+          0.36,
           0.42,
-          0.51,
-          0.4
+          0.52,
+          0.39
         ]
       },
       "replicate": 1,
@@ -6316,7 +6353,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.4,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -6331,12 +6368,12 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.36,
+            "probability_true": 0.37,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.42,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -6351,7 +6388,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.47,
             "validation_status": "VALID"
           }
         },
@@ -6376,17 +6413,94 @@
         "validation_status": "VALID",
         "vector": [
           0.17,
-          0.46,
+          0.47,
           0.15,
           0.26,
-          0.36,
-          0.4,
+          0.37,
+          0.43,
           0.51,
-          0.41
+          0.42
         ]
       },
       "replicate": 2,
       "spec_id": "life_R_recov"
+    },
+    {
+      "provider": {
+        "answers": {
+          "boundary_semantics_stable": {
+            "primitive": "noul",
+            "probability_true": 0.84,
+            "validation_status": "VALID"
+          },
+          "commit_path_viable": {
+            "primitive": "noul",
+            "probability_true": 0.96,
+            "validation_status": "VALID"
+          },
+          "effective_authority": {
+            "primitive": "noul",
+            "probability_true": 0.93,
+            "validation_status": "VALID"
+          },
+          "failure_handling_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.65,
+            "validation_status": "VALID"
+          },
+          "parent_recertification_required": {
+            "primitive": "noul",
+            "probability_true": 0.14,
+            "validation_status": "VALID"
+          },
+          "recoverable_without_contract_change": {
+            "primitive": "noul",
+            "probability_true": 0.58,
+            "validation_status": "VALID"
+          },
+          "recursive_control_coherent": {
+            "primitive": "noul",
+            "probability_true": 0.92,
+            "validation_status": "VALID"
+          },
+          "semantic_continuity": {
+            "primitive": "noul",
+            "probability_true": 0.86,
+            "validation_status": "VALID"
+          }
+        },
+        "provider_kind": "live_api",
+        "question_ids": [
+          "effective_authority",
+          "semantic_continuity",
+          "commit_path_viable",
+          "recursive_control_coherent",
+          "failure_handling_coherent",
+          "boundary_semantics_stable",
+          "recoverable_without_contract_change",
+          "parent_recertification_required"
+        ],
+        "request_id": "uow-life-life_R_recert-r0",
+        "requested_model": "jev-1.13.0",
+        "resolved_model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 876,
+          "output_tokens": 167
+        },
+        "validation_status": "VALID",
+        "vector": [
+          0.93,
+          0.86,
+          0.96,
+          0.92,
+          0.65,
+          0.84,
+          0.58,
+          0.14
+        ]
+      },
+      "replicate": 0,
+      "spec_id": "life_R_recert"
     },
     {
       "provider": {
@@ -6413,7 +6527,7 @@
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
@@ -6422,85 +6536,8 @@
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.91,
-            "validation_status": "VALID"
-          },
-          "semantic_continuity": {
-            "primitive": "noul",
-            "probability_true": 0.87,
-            "validation_status": "VALID"
-          }
-        },
-        "provider_kind": "live_api",
-        "question_ids": [
-          "effective_authority",
-          "semantic_continuity",
-          "commit_path_viable",
-          "recursive_control_coherent",
-          "failure_handling_coherent",
-          "boundary_semantics_stable",
-          "recoverable_without_contract_change",
-          "parent_recertification_required"
-        ],
-        "request_id": "uow-life-life_R_recert-r0",
-        "requested_model": "jev-1.13.0",
-        "resolved_model": "jev-1.13.0",
-        "usage": {
-          "input_tokens": 876,
-          "output_tokens": 167
-        },
-        "validation_status": "VALID",
-        "vector": [
-          0.93,
-          0.87,
-          0.96,
-          0.91,
-          0.64,
-          0.84,
-          0.59,
-          0.14
-        ]
-      },
-      "replicate": 0,
-      "spec_id": "life_R_recert"
-    },
-    {
-      "provider": {
-        "answers": {
-          "boundary_semantics_stable": {
-            "primitive": "noul",
-            "probability_true": 0.84,
-            "validation_status": "VALID"
-          },
-          "commit_path_viable": {
-            "primitive": "noul",
-            "probability_true": 0.96,
-            "validation_status": "VALID"
-          },
-          "effective_authority": {
             "primitive": "noul",
             "probability_true": 0.92,
-            "validation_status": "VALID"
-          },
-          "failure_handling_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.65,
-            "validation_status": "VALID"
-          },
-          "parent_recertification_required": {
-            "primitive": "noul",
-            "probability_true": 0.14,
-            "validation_status": "VALID"
-          },
-          "recoverable_without_contract_change": {
-            "primitive": "noul",
-            "probability_true": 0.59,
-            "validation_status": "VALID"
-          },
-          "recursive_control_coherent": {
-            "primitive": "noul",
-            "probability_true": 0.91,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
@@ -6529,14 +6566,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.92,
+          0.93,
           0.86,
           0.96,
-          0.91,
-          0.65,
+          0.92,
+          0.64,
           0.84,
           0.59,
-          0.14
+          0.13
         ]
       },
       "replicate": 1,
@@ -6562,7 +6599,7 @@
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.65,
+            "probability_true": 0.62,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -6572,7 +6609,7 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.58,
+            "probability_true": 0.59,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -6610,9 +6647,9 @@
           0.86,
           0.96,
           0.92,
-          0.65,
+          0.62,
           0.84,
-          0.58,
+          0.59,
           0.13
         ]
       },
@@ -6624,37 +6661,37 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.14,
+            "probability_true": 0.16,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.18,
+            "probability_true": 0.19,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.37,
+            "probability_true": 0.38,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.41,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.52,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.28,
+            "probability_true": 0.3,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
@@ -6683,14 +6720,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.18,
+          0.19,
           0.49,
-          0.14,
-          0.28,
-          0.37,
-          0.41,
-          0.51,
-          0.41
+          0.16,
+          0.3,
+          0.38,
+          0.43,
+          0.52,
+          0.4
         ]
       },
       "replicate": 0,
@@ -6701,32 +6738,32 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.42,
+            "probability_true": 0.43,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
             "primitive": "noul",
-            "probability_true": 0.15,
+            "probability_true": 0.13,
             "validation_status": "VALID"
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.17,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.36,
+            "probability_true": 0.35,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
             "primitive": "noul",
-            "probability_true": 0.39,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.52,
+            "probability_true": 0.5,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
@@ -6736,7 +6773,7 @@
           },
           "semantic_continuity": {
             "primitive": "noul",
-            "probability_true": 0.46,
+            "probability_true": 0.48,
             "validation_status": "VALID"
           }
         },
@@ -6760,14 +6797,14 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.19,
-          0.46,
-          0.15,
+          0.17,
+          0.48,
+          0.13,
           0.28,
-          0.36,
-          0.42,
-          0.52,
-          0.39
+          0.35,
+          0.43,
+          0.5,
+          0.41
         ]
       },
       "replicate": 1,
@@ -6778,7 +6815,7 @@
         "answers": {
           "boundary_semantics_stable": {
             "primitive": "noul",
-            "probability_true": 0.44,
+            "probability_true": 0.41,
             "validation_status": "VALID"
           },
           "commit_path_viable": {
@@ -6788,12 +6825,12 @@
           },
           "effective_authority": {
             "primitive": "noul",
-            "probability_true": 0.19,
+            "probability_true": 0.2,
             "validation_status": "VALID"
           },
           "failure_handling_coherent": {
             "primitive": "noul",
-            "probability_true": 0.38,
+            "probability_true": 0.4,
             "validation_status": "VALID"
           },
           "parent_recertification_required": {
@@ -6803,12 +6840,12 @@
           },
           "recoverable_without_contract_change": {
             "primitive": "noul",
-            "probability_true": 0.51,
+            "probability_true": 0.49,
             "validation_status": "VALID"
           },
           "recursive_control_coherent": {
             "primitive": "noul",
-            "probability_true": 0.29,
+            "probability_true": 0.28,
             "validation_status": "VALID"
           },
           "semantic_continuity": {
@@ -6837,13 +6874,13 @@
         },
         "validation_status": "VALID",
         "vector": [
-          0.19,
+          0.2,
           0.48,
           0.14,
-          0.29,
-          0.38,
-          0.44,
-          0.51,
+          0.28,
+          0.4,
+          0.41,
+          0.49,
           0.39
         ]
       },

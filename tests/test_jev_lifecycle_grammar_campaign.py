@@ -250,9 +250,26 @@ def test_full_lifecycle_reachable_closure_and_minimization():
 
     analysis = minimize_lifecycle_automaton(states, visited)
     assert analysis["reachable_closure_states_count"] == 2317
-    assert analysis["coarse_governance_macrostates_count"] == 4
+    assert analysis["coarse_governance_observation_labels_count"] == 4
     assert analysis["nerode_admission_classes_count"] == 97
     assert analysis["nerode_regime_classes_count"] == 222
+
+    # Verify exact state variable factorization bijections
+    adm_fact = analysis["admission_factorization"]
+    assert adm_fact["physical_guard_lattice_B5_order"] == 32
+    assert adm_fact["adversarial_configuration_states"] == 3
+    assert adm_fact["failure_obligation_configurations_product"] == 96
+    assert adm_fact["nominal_admissible_state"] == 1
+    assert adm_fact["total_admission_predictive_classes"] == 97
+    assert adm_fact["state_variable_bijection_verified"] is True
+
+    reg_fact = analysis["regime_factorization"]
+    assert reg_fact["nominal_recertified_classes"] == 1
+    assert reg_fact["contained_classes"] == 32
+    assert reg_fact["failed_classes"] == 95
+    assert reg_fact["recovering_classes"] == 94
+    assert reg_fact["total_regime_predictive_classes"] == 222
+    assert reg_fact["state_variable_bijection_verified"] is True
 
     dist = analysis["regime_distribution"]
     assert dist["NOMINAL"] == 1

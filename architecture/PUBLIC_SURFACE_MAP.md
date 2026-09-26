@@ -2,7 +2,7 @@
 
 Status: software-candidate freeze view.
 
-The top-level `uow` package is intentionally retained as a compatibility facade. It currently exports **199 symbols**, pinned exactly in `architecture/public_api_manifest.yaml`. Export status is a compatibility fact, not a claim that a symbol belongs to the axiomatic kernel.
+The top-level `uow` package is intentionally retained as a compatibility facade. It currently exports **200 symbols**, pinned exactly in `architecture/public_api_manifest.yaml`. Export status is a compatibility fact, not a claim that a symbol belongs to the axiomatic kernel.
 
 ## Current hierarchy
 
@@ -19,6 +19,10 @@ The runtime no longer depends on qualification code for quorum authority. `Quoru
 
 `Proposal != Authorization`; `Conformance != Authorization`; `InternalCommit != ExternalEffect`; application closure is distinct from authority-formation closure; schema version, sequence, epoch, generation, and history head remain distinct; discovery is distinct from qualification; portable evidence is distinct from physical evidence.
 
+## Qualified architecture beyond the frozen facade
+
+The consolidated architecture now includes recursive system-as-actor composition and qualified development lines for semantic mediation, machine-readable design/policy state, polyglot/runtime-substrate conformance, and governed lifecycle semantics. These layers may advance independently of the compatibility facade and do not become top-level public API unless explicitly promoted.
+
 ## Forward-compatibility rule
 
-A4 remains conceptual/unqualified. This candidate does not declare Python enums, dataclasses, class names, or module paths to be the permanent universal ontology. Future ontology evolution must support versioning, authority, migration lineage, compatibility/rejection rules, and reconstruction of prior semantics.
+The candidate does not declare Python enums, dataclasses, class names, module paths, qualification harnesses, or research terminology to be the permanent universal ontology. Future ontology evolution must preserve versioning, authority, migration lineage, compatibility/rejection rules, reconstruction of prior semantics, and the invariant separation between proposal, certification, and authoritative commit.

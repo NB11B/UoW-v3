@@ -422,9 +422,20 @@ def runtime_gate(
                 torn_state.state_hash == recovered.state_hash
                 and torn_ledger.root_hash() == recovered_ledger.root_hash())
 
-        # Resume from the clean durable state and prove external-side-effect reconciliation.
+        # External-effect recovery is a distinct active authority context. The
+        # orchestration above has correctly terminated in HALTED state, and the
+        # application spine must not mutate that completed authority epoch.
+        # Carry the recovered business attributes into a new RUNNING context with
+        # its own WAL, then qualify crash/reconciliation there.
         client = MockExternalClient()
-        resumed = WALSequencer(wal_path, recovered, recovered_ledger)
+        effect_path = Path(td) / "canonical_acceptance_effects.wal"
+        effect_state = WorldState(
+            attributes=dict(recovered.attributes),
+            cursor=None,
+            status="RUNNING",
+            sequence=recovered.sequence,
+        )
+        resumed = WALSequencer(effect_path, effect_state)
         runner = EffectRunner(resumed, client)
 
         eff = create_effect_descriptor(
@@ -440,8 +451,8 @@ def runtime_gate(
         client.invoke(request, eff.idempotency_key)
         calls_before = client.invocation_count
 
-        rec2, led2 = WALSequencer.recover(wal_path, ignore_torn_tail=True)
-        resumed2 = WALSequencer(wal_path, rec2, led2)
+        rec2, led2 = WALSequencer.recover(effect_path, ignore_torn_tail=True)
+        resumed2 = WALSequencer(effect_path, rec2, led2)
         runner2 = EffectRunner(resumed2, client)
         result = runner2.execute_effect(eff)
         a.check(
@@ -497,7 +508,7 @@ def runtime_gate(
 
         # Final durable replay: no external endpoint execution during WAL recovery.
         calls_before_replay = client.invocation_count
-        replay_state, replay_ledger = WALSequencer.recover(wal_path, ignore_torn_tail=True)
+        replay_state, replay_ledger = WALSequencer.recover(effect_path, ignore_torn_tail=True)
         a.check("replay", "final recovered state identical",
                 replay_state.state_hash == resumed2.current_state.state_hash)
         a.check("replay", "final recovered evidence root identical",

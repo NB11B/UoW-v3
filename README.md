@@ -14,7 +14,7 @@
 1. [Theoretical Architecture](#1-theoretical-architecture)
    - [The Unit-of-Work Formalism](#the-unit-of-work-formalism)
    - [The Core Authority Invariant](#the-core-authority-invariant)
-   - [Theoretical Levels Hierarchy](#theoretical-levels-hierarchy)
+   - [Current Architectural Hierarchy](#current-architectural-hierarchy)
 2. [Clean API Quickstart & Guide](#2-clean-api-quickstart--guide)
    - [Installation](#installation)
    - [Level 0: Core Transition Algebra & Lifecycle](#level-0-core-transition-algebra--lifecycle)
@@ -23,8 +23,9 @@
    - [Level 3: Multi-Dimensional Resource Governance & Leases](#level-3-multi-dimensional-resource-governance--leases)
    - [Level 4: External Effects, Idempotency & Sagas](#level-4-external-effects-idempotency--sagas)
    - [Level 5: Replaceable & Adaptive Proposers](#level-5-replaceable--adaptive-proposers)
-   - [Level A2: Distributed Actor Fabric & Quorum-Certified Mutation](#level-a2-distributed-actor-fabric--quorum-certified-mutation)
-   - [Level P1–P5: Policy-Aware Autonomous Orchestration](#level-p1p5-policy-aware-autonomous-orchestration)
+   - [Level 6: Recursive Composition & System-as-Actor](#level-6-recursive-composition--system-as-actor)
+   - [Level 7: Distributed Authority & Quorum-Certified Mutation](#level-7-distributed-authority--quorum-certified-mutation)
+   - [Level 9: Design / Policy Plane](#level-9-design--policy-plane)
 3. [Heterogeneous Hardware & Distributed Deployment](#3-heterogeneous-hardware--distributed-deployment)
    - [Target Hardware Architecture](#target-hardware-architecture)
    - [Node A: ESP32-S3 Dual-Core FreeRTOS Firmware](#node-a-esp32-s3-dual-core-freertos-firmware)
@@ -66,29 +67,47 @@ $$\boxed{\text{PROPOSE} \longrightarrow \text{CERTIFY} \longrightarrow \text{COM
 - **CERTIFY ($\text{CERTIFY}(\pi_t, S_t) \to \sigma_t$):** Authoritative validators verify guards, validate optimistic concurrency control (OCC) footprints, check lease legitimacy, and authenticate cryptographic signatures.
 - **COMMIT ($\text{COMMIT}(\sigma_t, S_t) \to S_{t+1}$):** State is atomically advanced and recorded into an immutable, hash-linked write-ahead log (WAL) and evidence ledger.
 
-### Theoretical Levels Hierarchy
+### Current Architectural Hierarchy
+
+The hierarchy below describes the architecture, not the promotion status of individual Python symbols. Higher-level capabilities may remain qualification or integration surfaces until explicitly promoted into the frozen public API.
 
 ```mermaid
 graph TD
-    L0["Level 0: Core Transition Algebra & Matrix Cells<br/>(8 Categories, 64 Directed Cell Pairings, WorldState)"] --> L1["Level 1: Transactions & OCC<br/>(Durable Commit Sequencing, WAL Crash Replay)"]
-    L1 --> L2["Level 2: Self-Hosted Orchestration<br/>(DAG Materialization as Native UoW Transitions)"]
-    L2 --> L3["Level 3: Multi-Dimensional Resource Governance<br/>(Vector Leases, Capacity & Deadline Schedulers)"]
-    L3 --> L4["Level 4: External Effects & Sagas<br/>(Idempotency Descriptors, HMAC Receipts, Rollback Sagas)"]
-    L4 --> L5["Level 5: Replaceable Adaptive Proposers<br/>(Zero-Authority Learning, Telemetry Observation)"]
-    L5 --> LA2["Level A2: Distributed Actor Fabric & Quorum Mutation<br/>(Realization Graphs, Semantic Projection Φ, 2-of-3 Hardware Quorum)"]
-    LA2 --> LA3["Level A3: Heterogeneous Compute Optimization<br/>(Pareto-Optimal Frontiers across NPU, GPU, and CPU)"]
-    LA3 --> LP["Level P1-P5: Policy-Aware Autonomous Orchestration<br/>(Dynamic Registry, Drift Invalidation, Durable Recovery)"]
+    L0["Level 0: Core UoW Contract<br/>(Typed Work · Guards · Evidence · PROPOSE → CERTIFY → COMMIT)"] --> L1["Level 1: Transactional Authority<br/>(OCC · Durable Sequencing · WAL · Replay)"]
+    L1 --> L2["Level 2: Self-Hosted Orchestration<br/>(Scheduling and Completion as Governed UoW Transitions)"]
+    L2 --> L3["Level 3: Resource Governance<br/>(CPU · GPU · NPU · Memory · Energy · Leases)"]
+    L3 --> L4["Level 4: External Effects<br/>(Idempotency · Certified Receipts · Compensation Sagas)"]
+    L4 --> L5["Level 5: Replaceable Intelligence<br/>(Rules · Heuristics · Learned and Adaptive Proposers)"]
+    L5 --> L6["Level 6: Recursive Composition<br/>(Certified System-as-Actor · Boundary Contraction · Evidence Chaining)"]
+    L6 --> L7["Level 7: Distributed Authority<br/>(Delegation · Quorum-Certified Mutation · Failover)"]
+    L7 --> L8["Level 8: Semantic Mediation<br/>(Intent Compilation · Ambiguity/Capability Resolution · Zero Execution Authority)"]
+    L8 --> L9["Level 9: Design / Policy Plane<br/>(Goals · Modes · Policy Transitions · Drift / Recovery)"]
+    L9 --> L10["Level 10: Polyglot Runtime Substrate<br/>(Interoperability · Native Conformance · Capability-Oriented Execution)"]
+    L10 --> L11["Level 11: Governed Lifecycle Semantics<br/>(Guarded Operational State · Containment · Recovery · Recertification)"]
 ```
 
-1. **Level 0 — Core Primitives:** Pure transition contracts, 8 work categories, 64 directed semantic cells, immutable hash-bound `WorldState`, and evidence ledgers.
-2. **Level 1 — OCC & Transactions:** Optimistic concurrency control, footprint validation, deterministic sequencing, write-ahead logging (WAL), and crash replay.
-3. **Level 2 — Self-Hosted Orchestration:** Workflows modeled as DAGs where scheduler decisions and task completions are themselves first-class UoW transitions.
-4. **Level 3 — Resource Governance:** Multi-dimensional resource tracking (CPU, GPU, NPU, memory), deterministic lease lifetimes, and capacity-aware scheduling policies.
-5. **Level 4 — External Effects & Sagas:** Non-idempotent real-world interaction modeled via intent descriptors, cryptographic receipt authentication, and compensating rollback sagas.
-6. **Level 5 — Replaceable Adaptive Proposers:** Machine learning and reinforcement policies operate through an abstract proposer seam without altering the state validation kernel.
-7. **Level A2 — Composition & Quorum Mutation:** Semantic projection $\Phi(G, U)$ guaranteeing equivalence across realizations (sequential, parallel, accelerator, distributed quorum) and threshold multi-party quorum signatures (`RuntimeMutationQC`).
-8. **Level A3 — Heterogeneous Compute Frontier:** Multi-objective cost, energy, and latency Pareto optimization.
-9. **Level P1–P5 — Policy-Aware Architecture:** Dynamic versioned policy registries, prospective qualification, live drift detection, atomic requalification, and durable recovery with zero duplicate external effects.
+1. **Level 0 — Core UoW Contract:** Pure transition contracts, semantic work classification, immutable hash-bound state, evidence, and the authority invariant `PROPOSE → CERTIFY → COMMIT`.
+2. **Level 1 — Transactional Authority:** Optimistic concurrency control, deterministic commit sequencing, write-ahead logging, crash replay, and serializable state advancement.
+3. **Level 2 — Self-Hosted Orchestration:** Scheduler, dispatch, and completion decisions are represented as governed work rather than privileged control-plane mutation.
+4. **Level 3 — Resource Governance:** Multi-dimensional resource requirements, leases, capacity, deadlines, cost, and energy constraints remain subject to deterministic legality checks.
+5. **Level 4 — External Effects:** Non-idempotent real-world interactions are separated from internal commit through durable intent, idempotency, receipt certification, and compensation.
+6. **Level 5 — Replaceable Intelligence:** Deterministic rules, heuristics, learned models, and adaptive policies may change proposals without acquiring authoritative commit power.
+7. **Level 6 — Recursive Composition:** A qualified child runtime may be contracted to a certified parent-visible boundary and treated as a single governed actor without flattening child-local authority or provenance.
+8. **Level 7 — Distributed Authority:** Authority may be centralized or distributed; delegation, quorum-certified mutation, partition behavior, and failover remain explicit governed operations.
+9. **Level 8 — Semantic Mediation:** Natural-language or other probabilistic input is compiled into machine-routable intent while preserving source, ambiguity, provenance, and the rule that mediation has no independent execution authority.
+10. **Level 9 — Design / Policy Plane:** System design, goals, operating modes, policy activation, drift detection, replacement, escalation, and durable recovery are represented as machine-readable governed state.
+11. **Level 10 — Polyglot Runtime Substrate:** The UoW contract is defined independently of a single implementation language or device; conformance governs interchangeable native realizations.
+12. **Level 11 — Governed Lifecycle Semantics:** Operational status, failure, containment, remediation, and recertification are modeled as guarded state transitions rather than informal control flow.
+
+### Cross-Cutting Realization Substrate
+
+Heterogeneous realization spans the hierarchy rather than forming a separate authority level. CPU, GPU, NPU, embedded MCU, network services, and distributed actors may realize the same required work while remaining subject to the same certified contract.
+
+### Qualification Lineage and API Status
+
+Earlier **A2/A3** and **P1–P5** milestones remain part of the qualification lineage: A2 established distributed actor/composition semantics, A3 qualified heterogeneous compute optimization, and P1–P5 qualified policy discovery, promotion, drift/replacement, distributed authority, and durable recovery. Those research labels map into the consolidated hierarchy above; they are not separate authority models.
+
+The top-level `uow` package remains a compatibility facade with a frozen manifest. Qualification, research, and integration surfaces do **not** become public API merely because an experiment passes; promotion requires an explicit compatibility/versioning decision.
 
 ---
 
@@ -335,9 +354,45 @@ final_state, trace = engine.execute_adaptive_workload(tasks=[...])
 
 ---
 
-### Level A2: Distributed Actor Fabric & Quorum-Certified Mutation
+### Level 6: Recursive Composition & System-as-Actor
 
-In multi-node heterogeneous environments, runtime mutations require a Quorum Certificate (QC) verified across independent physical nodes.
+A qualified child runtime can be projected through a certified composition boundary and exposed to its parent as a single governed actor. Child-local authority and provenance remain inside the child boundary; the parent consumes only the certified surface.
+
+```python
+from uow.composition.boundary import (
+    certify_composition_boundary,
+    verify_composition_boundary,
+)
+from uow.implementations.composition.actor_execution import CertifiedRuntimeActor
+
+# Certify the child's exported realization against its parent contract.
+boundary_cert = certify_composition_boundary(
+    "child-runtime",
+    child_graph,
+    child_contract,
+)
+assert boundary_cert.is_accepted
+assert verify_composition_boundary(boundary_cert, child_graph, child_contract)
+
+# The certified runtime can then be registered as one parent-visible actor.
+child_actor = CertifiedRuntimeActor(
+    surface_id=boundary_cert.subject_id,
+    runtime=child_runtime,
+    boundary_certificate=boundary_cert,
+)
+```
+
+This preserves the recursive rule:
+
+[
+oxed{	ext{certify child internals} ightarrow 	ext{contract boundary} ightarrow 	ext{project parent-visible actor}}
+]
+
+---
+
+### Level 7: Distributed Authority & Quorum-Certified Mutation
+
+This section corresponds to the earlier A2 qualification lineage. In multi-node heterogeneous environments, runtime mutations require a Quorum Certificate (QC) verified across independent physical nodes.
 
 ```python
 from uow.composition import (
@@ -376,9 +431,9 @@ print("Quorum Certificate Certified:", qc.qc_id)
 
 ---
 
-### Level P1–P5: Policy-Aware Autonomous Orchestration
+### Level 9: Design / Policy Plane
 
-Autonomous policy-aware orchestration decouples execution policies from the core engine:
+This section corresponds to the earlier P1–P5 qualification lineage. Autonomous policy-aware orchestration decouples execution policies from the core engine:
 
 ```python
 from uow.policy import (
@@ -471,13 +526,13 @@ The runtime dynamically schedules neural proposal models across:
 
 ### Running the Repository Suite
 
-Run the 280-test automated verification suite:
+Run the automated verification suite:
 
 ```bash
 python -m pytest -q
 ```
 
-All 280 tests pass across all architectural modules:
+The suite covers the architectural modules below; the exact test count evolves as qualified capabilities are integrated and the current branch/CI result is authoritative:
 - `tests/test_contracts.py`: Core algebraic invariant tests
 - `tests/test_timing_independence.py`: 1,000-run clock drift perturbation tests
 - `tests/test_universal_computation.py`: Minsky two-counter universal kernel lowering

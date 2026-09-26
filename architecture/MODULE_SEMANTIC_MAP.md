@@ -40,6 +40,7 @@ This map is descriptive. Preservation labels are research classifications, not r
 | `src/uow/composition/contract.py` | `ParentContract`, O/D/A/E/T/R/F obligations | High-level semantic requirement/meta-contract | A2.0-A2.8 | P0/P1 |
 | `src/uow/composition/graph.py` | `RealizationNode`, `RealizationGraph`, DAG/resource/cost methods | Logical realization topology | A2.0-A2.8 | P0/P1 |
 | `src/uow/composition/projection.py` | `SemanticProjection`, `project_semantics`, equivalence/conformance | Realization -> parent-contract semantic conformance | A2.0-A2.8 | P0 |
+| `src/uow/composition/boundary.py` | `BoundaryProjection`, `CompositionBoundaryCertificate`, scope contraction/verification | Recursive black-box conformance boundary; child-local semantics are hidden before parent projection | A2 recursive boundary | P0/P1 |
 | `src/uow/composition/actor.py` | `ActorDescriptor`, `ActorRegistry`, `AuthorityClass` | Capability-bearing actor ontology | A2.2-A2.8 | P0/P1 |
 | `src/uow/composition/binding.py` | `ActorBinding`, `validate_binding` | Logical realization -> qualified physical/logical actor binding | A2.2-A2.8 | P0/P1 |
 | `src/uow/composition/substitution.py` | graph proposal/certificate, `CompositionCertifier` | Certified realization replacement meta-transition | A2.1-A2.8 | P1/P2 |
@@ -50,7 +51,8 @@ This map is descriptive. Preservation labels are research classifications, not r
 | `src/uow/composition/wire.py` | `WireEnvelope`, signatures, `AdversarialChannel` | Transport realization / authenticated adversarial network harness | A2.6-A2.8 | P1/P2 |
 | `src/uow/composition/host_node.py` | `DurableWAL`, `PhysicalHostNode`, crash/restart/catch-up | Independent process durability and physical-host realization | A2.6-A2.8 | P1/P2/P3 |
 | `src/uow/composition/mutation.py` | mutation proposal/vote/QC, `QuorumMutationCoordinator` | Quorum-governed meta-runtime mutation | A2.7-A2.8 | P0/P1/P2 |
-| `src/uow/composition/runtime.py` | `AdaptiveCompositionRuntime`, rebind, certify/replace, execute/fallback | Active graph/binding runtime realization | A2.1-A2.8 | P1 |
+| `src/uow/composition/runtime.py` | `AdaptiveCompositionRuntime`, rebind, certify/replace, execute/fallback | Compatibility surface for active graph/binding runtime realization | A2.1-A2.8, recursive boundary | P1 |
+| `src/uow/implementations/composition/actor_execution.py` | `ActorExecutor`, `ActorExecutionRegistry`, `CertifiedRuntimeActor` | Derived dispatch realization; exposes a boundary-certified child runtime as one actor without granting parent authority | A2 recursive boundary | P1 |
 | `src/uow/composition/endurance.py` | B0/B1/A2 runtimes, objective, hysteresis, poisoning, lineage | Integrated adaptive endurance + scientific controls | A2.8 | P1/P2/P3 |
 
 ## Cross-module semantic clusters
@@ -61,7 +63,7 @@ This map is descriptive. Preservation labels are research classifications, not r
 Research question: can representation boilerplate be reduced while preserving distinct semantic identities?
 
 ### Candidate/conformance/authority cluster
-Core proposal/certification, proposer judge, OCC, resource legality, materialization certification, effect receipt verification, A2 projection/binding/delegation/QC.
+Core proposal/certification, proposer judge, OCC, resource legality, materialization certification, effect receipt verification, A2 projection/boundary/binding/delegation/QC.
 
 Research question: are these specializations of one language-neutral conformance relation without flattening their semantics?
 

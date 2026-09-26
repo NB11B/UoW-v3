@@ -1,0 +1,37 @@
+name: Recursive Boundary Qualification
+
+on:
+  pull_request:
+    paths:
+      - "src/uow/composition/boundary.py"
+      - "src/uow/implementations/composition/actor_execution.py"
+      - "src/uow/implementations/composition/runtime.py"
+      - "tests/test_composition_recursive_boundary.py"
+      - "qualification/a2_recursive_boundary_campaign.py"
+      - "qualification/claim_registry.py"
+      - ".github/workflows/recursive-boundary-qualification.yml"
+  workflow_dispatch:
+
+jobs:
+  recursive-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install core package and pytest
+        run: python -m pip install -e . pytest
+      - name: Qualification claim lint
+        run: python -m qualification.claim_lint
+      - name: Recursive boundary qualification
+        run: >
+          python -m pytest -q
+          tests/test_composition_recursive_boundary.py
+          tests/test_composition_semantics.py
+          tests/test_composition_substitution.py
+          tests/test_composition_adaptive_proposer.py
+          tests/test_composition_delegation.py
+          tests/test_composition_fabric.py
+      - name: Recursive boundary campaign
+        run: python -m qualification.a2_recursive_boundary_campaign

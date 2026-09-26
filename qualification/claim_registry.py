@@ -171,6 +171,13 @@ CLAIMS: Mapping[str, ClaimSpec] = {
         requires_negative_control=True,
         scope="adaptive composition runtime qualification",
     ),
+    "A2.RECURSIVE_BOUNDARY.PORTABLE": ClaimSpec(
+        "A2.RECURSIVE_BOUNDARY.PORTABLE",
+        "A boundary-certified child UoW runtime executes as an actor inside a parent runtime while child-local semantics remain scoped, child evidence is chained upward, equivalent child reconfiguration requires no parent recertification, and boundary drift, recursive cycles, authority loss, or output deficits fail closed.",
+        EvidenceLevel.PORTABLE,
+        requires_negative_control=True,
+        scope="adaptive composition runtime qualification",
+    ),
     "A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE": ClaimSpec(
         "A2.MULTI_ORCHESTRATOR_CONCURRENCY.PORTABLE",
         "Multiple autonomous orchestrators concurrently propose realization graph mutations and sub-UoW delegations, deterministically resolving conflicts and merging commutative operations with strictly zero double commits.",

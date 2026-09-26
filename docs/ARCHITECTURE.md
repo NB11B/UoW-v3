@@ -200,15 +200,36 @@ other probabilistic proposal systems.
   - Gate U14 separates canonical executable qualification tests (reference heuristic vs random) from historical research campaign benchmarks (learned NPU model: 4.21 ms vs 2.61 ms, 2 rounds vs 3, 0 rejections vs 1).
 
 
+### 6. Recursive composition boundary (Cybernetic System-as-Actor)
+- **Conformance Boundary != Authority Grant**:
+  - `CompositionBoundaryCertificate` attests that a child realization satisfies its own `ParentContract`.
+  - It does not transfer parent mutation, verification, or commit authority. Explicit authority transfer remains governed by `DelegationCertificate` and authority attenuation.
+- **Scoped Semantic Projection**:
+  - Raw graph flattening is not a valid recursive operation because child-local roles would be interpreted as parent-local roles.
+  - A nested child scope is first contracted to one certified logical actor boundary; only that contracted surface participates in the parent O/D/A/E/T/R/F projection.
+  - The recursive conservation rule is therefore `Phi_parent(Contract(child), U_parent) = Phi(U_parent)`.
+- **System-as-Actor Dispatch**:
+  - `ActorRegistry` and `ActorBinding` continue to decide qualification and placement.
+  - `ActorExecutionRegistry` is a derived runtime realization that optionally supplies how a qualified actor executes.
+  - `CertifiedRuntimeActor` allows a complete boundary-certified `AdaptiveCompositionRuntime` to execute as one parent actor while the historical deterministic local simulator remains the fallback realization.
+- **Encapsulation and Evidence**:
+  - Only outputs explicitly declared by the parent logical node may cross the recursive boundary; unmapped or missing declared outputs fail closed.
+  - Child execution evidence is hash-linked into the parent node result and parent execution evidence root.
+  - Evidence chaining is timing-independent; diagnostic execution duration remains non-authoritative.
+- **Fractal Reconfiguration**:
+  - Child actor rebinding or semantically equivalent child topology replacement does not require parent recertification while the exported boundary projection remains invariant.
+  - Boundary drift, recursive cycles, actor/authority loss, and output deficits fail closed before parent completion.
+
+
 Dependency rule remains strictly invariant:
 ```
 ontology -> state / contracts -> certification / evidence (kernel)
-    ^                 ^
-    |                 |
-uow.transactions   uow.orchestration
-                          ^
-                          |
-                    uow.resources
+    ^                 ^                       ^
+    |                 |                       |
+uow.transactions   uow.orchestration      uow.composition
+                          ^                    |
+                          |                    v
+                    uow.resources       actor execution realizations
                           ^
                           |
                       uow.effects

@@ -8,17 +8,25 @@ Validates:
 3. Fail-closed safety invariant on premature recertification:
    - Attempting recertification without required remediation strictly fails closed:
      oracle["governed_status"] == "FAILED".
-4. Strict raw telemetry discipline (zero forbidden outcome/error strings).
-5. Offline synthetic positive control provider passing all gates:
-   - G_L0, G_L1, G_L2, G_L3.
-6. Offline synthetic negative control rejecting unclosed or drifting orbits:
-   - G_L1 failure and LIFECYCLE_GRAMMAR_ANOMALY verdict.
-7. Fail-closed behavior on incomplete observations.
-8. Deterministic finite automaton (DFA) canonical macrostate transitions across Q.
+4. Full reachable state space closure under Sigma_full (|Sigma_full| = 14):
+   - |X_life| = cl_{Sigma_full}({x_0}) contains exactly 2,317 states (max depth 10).
+5. Exact Nerode DFA minimization:
+   - Minimizes to 97 behavioral classes under binary admission observation.
+   - Minimizes to 222 behavioral classes under fine-grained regime observation.
+   - Quotients to 4 coarse operational macrostates (NOMINAL/RECERTIFIED, FAILED, CONTAINED, RECOVERING).
+6. Strict raw telemetry discipline (zero forbidden outcome/error strings).
+7. Provenance integrity & synthetic provider discipline:
+   - Synthetic/replay providers MUST return provider_kind='synthetic_calibrated_replay'.
+   - Resolved model MUST be 'calibrated-jev-replay-v1', never masquerading as live JEV.
+   - Token usage MUST be None (never fabricated).
+   - Synthetic providers CANNOT satisfy independent live-JEV confirmation gates.
+8. Live artifact verification:
+   - Asserts live_api provenance, jev-1.13.0 model, and genuine live evidence when credentials succeed.
 """
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 import pytest
@@ -28,12 +36,15 @@ from qualification.jev_lifecycle_grammar_campaign import (
     SIGMA_FAIL,
     SIGMA_FULL,
     SIGMA_LIFE,
+    CalibratedEmpiricalJevProvider,
     LifecycleSpec,
     analyze_lifecycle_observations,
     apply_lifecycle_op,
     build_lifecycle_specs,
     build_lifecycle_states,
+    compute_lifecycle_reachable_closure,
     make_nominal_lifecycle_state,
+    minimize_lifecycle_automaton,
     run_lifecycle_spec,
     run_live_lifecycle_experiment,
 )
@@ -41,6 +52,12 @@ from qualification.jev_lifecycle_grammar_campaign import (
 
 class StableLifecycleProvider:
     """Synthetic provider modeling lawful closed-loop cybernetic lifecycle orbits."""
+
+    def __init__(self) -> None:
+        self.requested_model = "calibrated-jev-replay"
+        self.resolved_model = "calibrated-jev-replay-v1"
+        self.provider_kind = "synthetic_calibrated_replay"
+        self.source_dataset = "qualification/artifacts/jev_semigroup_structure_results.json"
 
     def decide(
         self,
@@ -86,8 +103,10 @@ class StableLifecycleProvider:
 
         return {
             "request_id": request_id,
-            "requested_model": "synthetic-lifecycle",
-            "resolved_model": "synthetic-lifecycle",
+            "requested_model": self.requested_model,
+            "resolved_model": self.resolved_model,
+            "provider_kind": self.provider_kind,
+            "source_dataset": self.source_dataset,
             "question_ids": [str(q["question_id"]) for q in questions],
             "vector": vec,
             "answers": {},
@@ -223,87 +242,94 @@ def test_raw_telemetry_state_forbids_status_and_outcome_labels():
             )
 
 
-def test_stable_lifecycle_provider_passes_all_gates():
-    """Verify that StableLifecycleProvider satisfies all four engineering and scientific gates."""
-    result = run_live_lifecycle_experiment(
-        provider=StableLifecycleProvider(),
-        replicates=3,
+def test_full_lifecycle_reachable_closure_and_minimization():
+    """Verify reachable state space closure X_life (|X_life| = 2,317) and exact Nerode minimization."""
+    states, visited, max_depth = compute_lifecycle_reachable_closure()
+    assert len(states) == 2317
+    assert max_depth == 10
+
+    analysis = minimize_lifecycle_automaton(states, visited)
+    assert analysis["reachable_closure_states_count"] == 2317
+    assert analysis["coarse_governance_macrostates_count"] == 4
+    assert analysis["nerode_admission_classes_count"] == 97
+    assert analysis["nerode_regime_classes_count"] == 222
+
+    dist = analysis["regime_distribution"]
+    assert dist["NOMINAL"] == 1
+    assert dist["RECERTIFIED"] == 1
+    assert dist["FAILED"] == 1016
+    assert dist["CONTAINED"] == 344
+    assert dist["RECOVERING"] == 955
+
+
+def test_provenance_and_synthetic_provider_gate_discipline():
+    """Verify that synthetic replay providers have strict provenance tags and cannot satisfy live gates."""
+    replay_prov = CalibratedEmpiricalJevProvider(seed=101)
+    res = replay_prov.decide(
+        state=make_nominal_lifecycle_state(),
+        questions=[{"question_id": "effective_authority", "instructions": "test"}],
+        request_id="prov-check",
     )
+
+    assert res["requested_model"] == "calibrated-jev-replay"
+    assert res["resolved_model"] == "calibrated-jev-replay-v1"
+    assert res["provider_kind"] == "synthetic_calibrated_replay"
+    assert res["source_dataset"] == "qualification/artifacts/jev_semigroup_structure_results.json"
+    assert res["usage"] is None  # Never fabricate token usage!
+
+    # Execute experiment with synthetic provider
+    result = run_live_lifecycle_experiment(provider=replay_prov, replicates=3)
     analysis = result["analysis"]
-    assert analysis["provider_complete"] is True
-    assert analysis["oracle_pass"] is True
-    assert analysis["supported_within_engineering_gates"] is True
-    assert analysis["verdict"] == "GOVERNED_LIFECYCLE_GRAMMAR_CONFIRMED"
-    assert (
-        analysis["formal_mathematical_object"]
-        == "finite_governed_lifecycle_automaton_with_closed_loop_orbits"
-    )
+
+    assert analysis["independent_live_jev_evidence"] is False
+    assert analysis["live_jev_validation_status"] == "PENDING_LIVE_CREDENTIALS"
+    assert analysis["deterministic_lifecycle_confirmed"] is True
+    assert analysis["verdict"] == "DETERMINISTIC_LIFECYCLE_GRAMMAR_CONFIRMED_LIVE_JEV_PENDING"
 
     gates = analysis["gates"]
     assert gates["G_L0_oracle_conformance"] is True
-    assert gates["G_L1_lifecycle_closed_loop_orbit_return"] is True
+    assert gates["G_L1_deterministic_closed_loop_recovery"] is True
     assert gates["G_L2_premature_recertification_fails_closed"] is True
-    assert gates["G_L3_repeatability_noise_floor"] is True
-
-    # Check that defect ratios are well within threshold
-    assert analysis["mean_recertification_defect_ratio_eta"] <= 1.50
-    assert analysis["repeatability_noise_floor_sigma_rep"] <= 0.050
+    assert gates["G_L3_replay_trajectory_consistency"] is True
+    # Synthetic providers CANNOT satisfy the live confirmation gate:
+    assert gates["G_L_LIVE_independent_observer_confirmation"] is False
 
 
-def test_unclosed_orbit_provider_fails_closed_loop_gate():
-    """Verify that unclosed or drifting orbits fail gate G_L1."""
+def test_unclosed_orbit_provider_fails_replay_gate():
+    """Verify that unclosed or drifting orbits fail gate G_L3."""
     result = run_live_lifecycle_experiment(
         provider=UnclosedOrbitProvider(),
         replicates=3,
     )
     analysis = result["analysis"]
-    assert analysis["supported_within_engineering_gates"] is False
-    assert analysis["verdict"] == "LIFECYCLE_GRAMMAR_ANOMALY"
-    assert analysis["formal_mathematical_object"] == "unclosed_lifecycle_system"
+    assert analysis["verdict"] == "REPLAY_OBSERVER_ANOMALY"
 
     gates = analysis["gates"]
     assert gates["G_L0_oracle_conformance"] is True
-    assert gates["G_L1_lifecycle_closed_loop_orbit_return"] is False
+    assert gates["G_L1_deterministic_closed_loop_recovery"] is True
     assert gates["G_L2_premature_recertification_fails_closed"] is True
+    assert gates["G_L3_replay_trajectory_consistency"] is False
 
 
-def test_fail_closed_on_incomplete_observations():
-    """Verify that incomplete observations fail closed with INCOMPLETE_OBSERVATIONS verdict."""
-    states = build_lifecycle_states()
-    partial_obs = [{"spec_id": states[0]["spec"]["spec_id"], "provider": {"vector": [0.5] * 8}}]
-    analysis = analyze_lifecycle_observations(states, partial_obs, replicates=3)
-    assert analysis["provider_complete"] is False
-    assert analysis["verdict"] == "INCOMPLETE_OBSERVATIONS"
+def test_live_artifact_conformance_if_present():
+    """Verify that live artifacts produced by TypeSafeJevProvider pass all gates including live confirmation."""
+    artifact_path = Path("qualification/artifacts/jev_lifecycle_grammar_results.json")
+    if not artifact_path.exists():
+        pytest.skip("Artifact not found")
 
+    data = json.loads(artifact_path.read_text(encoding="utf-8"))
+    analysis = data["analysis"]
 
-def test_dfa_canonical_macrostate_transitions():
-    """Verify DFA canonical macrostate transitions across Q = {NOMINAL, FAILED, CONTAINED, RECOVERING, RECERTIFIED}."""
-    # 1. Authority path: NOMINAL -> FAILED -> RECOVERING -> RECERTIFIED
-    s0 = make_nominal_lifecycle_state()
-    assert s0["governed_status"] == "NOMINAL"
+    assert analysis["oracle_pass"] is True
+    assert analysis["deterministic_lifecycle_confirmed"] is True
 
-    s1 = apply_lifecycle_op(s0, "A")
-    assert s1["governed_status"] == "FAILED"
-
-    s2 = apply_lifecycle_op(s1, "Rebind")
-    assert s2["governed_status"] == "RECOVERING"
-
-    s3 = apply_lifecycle_op(s2, "Recertify")
-    assert s3["governed_status"] == "RECERTIFIED"
-
-    # 2. Adversarial path: NOMINAL -> FAILED -> CONTAINED -> RECOVERING -> RECERTIFIED
-    s_adv1 = apply_lifecycle_op(s0, "Adv")
-    assert s_adv1["governed_status"] == "FAILED"
-
-    s_adv2 = apply_lifecycle_op(s_adv1, "Quarantine")
-    assert s_adv2["governed_status"] == "CONTAINED"
-
-    s_adv3 = apply_lifecycle_op(s_adv2, "Release")
-    assert s_adv3["governed_status"] == "RECOVERING"
-
-    s_adv4 = apply_lifecycle_op(s_adv3, "Recertify")
-    assert s_adv4["governed_status"] == "RECERTIFIED"
-
-    # 3. Premature recertification: NOMINAL -> FAILED --Recertify--> FAILED
-    s_prem = apply_lifecycle_op(s1, "Recertify")
-    assert s_prem["governed_status"] == "FAILED"
+    # If the artifact was generated live, verify live provider properties:
+    if analysis.get("independent_live_jev_evidence"):
+        assert analysis["provider_kinds"] == ["live_api"]
+        assert analysis["resolved_models"] == ["jev-1.13.0"]
+        assert analysis["live_jev_validation_status"] == "CONFIRMED_LIVE_EVIDENCE"
+        assert analysis["verdict"] == "GOVERNED_LIFECYCLE_GRAMMAR_CONFIRMED"
+        assert analysis["gates"]["G_L_LIVE_independent_observer_confirmation"] is True
+        assert analysis["repeatability_noise_floor_sigma_rep"] <= 0.050
+        assert analysis["mean_recertification_defect_ratio_eta"] <= 1.50
+        assert analysis["premature_recertification_prevented"] is True

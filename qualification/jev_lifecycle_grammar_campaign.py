@@ -423,6 +423,122 @@ def build_lifecycle_states(specs: Sequence[LifecycleSpec] = DEFAULT_LIFECYCLE_SP
     return [run_lifecycle_spec(s) for s in specs]
 
 
+def state_fingerprint(s: dict[str, Any]) -> tuple[Any, ...]:
+    return (
+        s.get("governed_status"),
+        s.get("disturbed_constituent_units"),
+        s.get("admissible_constituent_units"),
+        s.get("quorum_margin"),
+        "verify" in s.get("actor_role_bindings", {}),
+        len(s.get("declared_causal_edges", [])),
+        s.get("evidence_digest_match"),
+        s.get("hash_chain_continuity"),
+        s.get("temporal_admissibility"),
+        s.get("observed_duration_ms"),
+        s.get("resource_envelope_admissible"),
+        s.get("observed_ram_units"),
+        s.get("conflicting_attestation_count"),
+        s.get("divergence_detected"),
+        s.get("quarantine_active"),
+        tuple(s.get("node_execution_sequence", [])),
+        tuple(s.get("emitted_output_keys", [])),
+    )
+
+
+def compute_lifecycle_reachable_closure() -> tuple[list[dict[str, Any]], dict[tuple[Any, ...], int], int]:
+    """Breadth-first exploration of X_life = cl_{Sigma_full}({x_0}) across all 14 operators."""
+    from collections import deque
+    x0 = make_nominal_lifecycle_state()
+    states = [x0]
+    visited = {state_fingerprint(x0): 0}
+    queue = deque([(x0, 0)])
+    max_depth = 0
+
+    while queue:
+        curr, depth = queue.popleft()
+        if depth > max_depth:
+            max_depth = depth
+        for op in SIGMA_FULL:
+            nxt = apply_lifecycle_op(curr, op)
+            k = state_fingerprint(nxt)
+            if k not in visited:
+                visited[k] = len(states)
+                states.append(nxt)
+                queue.append((nxt, depth + 1))
+
+    return states, visited, max_depth
+
+
+def minimize_lifecycle_automaton(
+    states: list[dict[str, Any]],
+    visited: dict[tuple[Any, ...], int],
+) -> dict[str, Any]:
+    """Compute Nerode behavioral equivalence classes and macrostate quotients."""
+    N = len(states)
+    transitions = {
+        op: [visited[state_fingerprint(apply_lifecycle_op(s, op))] for s in states]
+        for op in SIGMA_FULL
+    }
+
+    # Partition refinement under binary admission (O_adm: quorum_margin > 0)
+    part_adm = [1 if s.get("quorum_margin", -1) > 0 else 0 for s in states]
+    changed = True
+    while changed:
+        changed = False
+        signatures = {}
+        for i in range(N):
+            sig = (part_adm[i], tuple(part_adm[transitions[op][i]] for op in SIGMA_FULL))
+            signatures.setdefault(sig, []).append(i)
+        new_part = [0] * N
+        for new_id, (sig, state_indices) in enumerate(signatures.items()):
+            for idx in state_indices:
+                new_part[idx] = new_id
+        if len(signatures) != len(set(part_adm)):
+            part_adm = new_part
+            changed = True
+
+    # Partition refinement under governance regime observation
+    part_regime = []
+    for s in states:
+        st = s["governed_status"]
+        if st in ("NOMINAL", "RECERTIFIED"):
+            part_regime.append(0)
+        elif st == "FAILED":
+            part_regime.append(1)
+        elif st == "CONTAINED":
+            part_regime.append(2)
+        elif st == "RECOVERING":
+            part_regime.append(3)
+
+    changed = True
+    while changed:
+        changed = False
+        signatures = {}
+        for i in range(N):
+            sig = (part_regime[i], tuple(part_regime[transitions[op][i]] for op in SIGMA_FULL))
+            signatures.setdefault(sig, []).append(i)
+        new_part = [0] * N
+        for new_id, (sig, state_indices) in enumerate(signatures.items()):
+            for idx in state_indices:
+                new_part[idx] = new_id
+        if len(signatures) != len(set(part_regime)):
+            part_regime = new_part
+            changed = True
+
+    regimes: dict[str, int] = {}
+    for s in states:
+        st = str(s["governed_status"])
+        regimes[st] = regimes.get(st, 0) + 1
+
+    return {
+        "reachable_closure_states_count": N,
+        "regime_distribution": regimes,
+        "coarse_governance_macrostates_count": 4,  # (NOMINAL/RECERTIFIED, FAILED, CONTAINED, RECOVERING)
+        "nerode_admission_classes_count": len(set(part_adm)),
+        "nerode_regime_classes_count": len(set(part_regime)),
+    }
+
+
 def analyze_lifecycle_observations(
     deterministic_states: Sequence[dict[str, Any]],
     observations: Sequence[dict[str, Any]],
@@ -453,6 +569,31 @@ def analyze_lifecycle_observations(
             "provider_complete": False,
             "verdict": "INCOMPLETE_OBSERVATIONS",
         }
+
+    # Determine provider provenance
+    provider_kinds = {
+        str(obs.get("provider", {}).get("provider_kind", "unknown"))
+        for obs in observations
+    }
+    is_live_provider = bool(len(provider_kinds) == 1 and "live_api" in provider_kinds)
+    resolved_models = {
+        str(obs.get("provider", {}).get("resolved_model", "unknown"))
+        for obs in observations
+    }
+
+    # Deterministic verification
+    state_by_spec = {item["spec"]["spec_id"]: item["state"] for item in deterministic_states}
+    nom_state = state_by_spec["life_nom"]
+    deterministic_orbits_closed = all(
+        state_by_spec[f"life_{tag}_recert"] == nom_state
+        for tag in ("A", "Adv", "E", "C", "T", "R")
+    )
+    premature_state = state_by_spec["life_premature_fail"]
+    deterministic_premature_fails_closed = (
+        premature_state["quorum_margin"] == -1
+        and premature_state["disturbed_constituent_units"] == 8
+        and len(premature_state["emitted_output_keys"]) == 0
+    )
 
     # Noise floor
     within_noises: list[float] = []
@@ -500,46 +641,71 @@ def analyze_lifecycle_observations(
 
         path_results[p] = p_info
 
-    # Premature recertification test
+    # Premature recertification test in observer space
     v_premature = spec_means["life_premature_fail"]
     d_premature = float(np.linalg.norm(v_premature - v_nom))
-    premature_prevented = bool(d_premature >= 1.0)  # Remains far from nominal
+    premature_prevented = bool(d_premature >= 1.0)
 
     mean_eta_recert = float(np.mean(recertified_defects_eta))
 
     # Gates
     gate_L0_oracle = oracle_pass
-    gate_L1_cycle_closure = bool(mean_eta_recert <= 1.50)
-    gate_L2_fail_closed = premature_prevented
-    gate_L3_noise_floor = bool(noise_floor <= 0.050)
+    gate_L1_deterministic = deterministic_orbits_closed
+    gate_L2_premature = deterministic_premature_fails_closed
+    gate_L3_replay = bool(mean_eta_recert <= 1.50 and noise_floor <= 0.050)
+    gate_L_live = bool(is_live_provider and gate_L3_replay and premature_prevented)
 
     gates = {
         "G_L0_oracle_conformance": gate_L0_oracle,
-        "G_L1_lifecycle_closed_loop_orbit_return": gate_L1_cycle_closure,
-        "G_L2_premature_recertification_fails_closed": gate_L2_fail_closed,
-        "G_L3_repeatability_noise_floor": gate_L3_noise_floor,
+        "G_L1_deterministic_closed_loop_recovery": gate_L1_deterministic,
+        "G_L2_premature_recertification_fails_closed": gate_L2_premature,
+        "G_L3_replay_trajectory_consistency": gate_L3_replay,
+        "G_L_LIVE_independent_observer_confirmation": gate_L_live,
     }
 
-    supported = all(gates.values())
+    deterministic_confirmed = (
+        gate_L0_oracle
+        and gate_L1_deterministic
+        and gate_L2_premature
+    )
+
+    if is_live_provider:
+        if all(gates.values()):
+            verdict = "GOVERNED_LIFECYCLE_GRAMMAR_CONFIRMED"
+            live_status = "CONFIRMED_LIVE_EVIDENCE"
+        else:
+            verdict = "LIFECYCLE_GRAMMAR_ANOMALY"
+            live_status = "REJECTED"
+    else:
+        if deterministic_confirmed and gate_L3_replay:
+            verdict = "DETERMINISTIC_LIFECYCLE_GRAMMAR_CONFIRMED_LIVE_JEV_PENDING"
+            live_status = "PENDING_LIVE_CREDENTIALS"
+        elif deterministic_confirmed and not gate_L3_replay:
+            verdict = "REPLAY_OBSERVER_ANOMALY"
+            live_status = "PENDING_LIVE_CREDENTIALS"
+        else:
+            verdict = "LIFECYCLE_GRAMMAR_ANOMALY"
+            live_status = "REJECTED"
 
     return {
         "oracle_pass": oracle_pass,
         "provider_complete": True,
+        "provider_kinds": sorted(provider_kinds),
+        "resolved_models": sorted(resolved_models),
+        "independent_live_jev_evidence": is_live_provider,
+        "live_jev_validation_status": live_status,
+        "deterministic_lifecycle_confirmed": deterministic_confirmed,
+        "replayed_observer_predicted_closure": bool(mean_eta_recert <= 1.50),
         "repeatability_noise_floor_sigma_rep": round(noise_floor, 4),
         "effective_noise_floor": round(eff_noise, 4),
         "mean_recertification_defect_ratio_eta": round(mean_eta_recert, 2),
         "path_results": path_results,
         "premature_recertification_prevented": premature_prevented,
         "gates": gates,
-        "supported_within_engineering_gates": supported,
-        "verdict": (
-            "GOVERNED_LIFECYCLE_GRAMMAR_CONFIRMED"
-            if supported
-            else "LIFECYCLE_GRAMMAR_ANOMALY"
-        ),
+        "verdict": verdict,
         "formal_mathematical_object": (
-            "finite_governed_lifecycle_automaton_with_closed_loop_orbits"
-            if supported
+            "governed_lifecycle_system_with_closed_loop_recovery"
+            if deterministic_confirmed
             else "unclosed_lifecycle_system"
         ),
     }
@@ -589,6 +755,12 @@ def run_live_lifecycle_experiment(
         replicates=replicates,
     )
 
+    # Compute full reachable closure and automaton minimization
+    closure_states, closure_visited, max_depth = compute_lifecycle_reachable_closure()
+    closure_analysis = minimize_lifecycle_automaton(closure_states, closure_visited)
+    closure_analysis["max_reachable_depth"] = max_depth
+    analysis["lifecycle_closure"] = closure_analysis
+
     return {
         "schema_version": SCHEMA_VERSION,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -615,10 +787,20 @@ V_T   = np.array([0.1600, 0.4233, 0.1900, 0.2667, 0.3300, 0.4767, 0.4233, 0.5400
 
 
 class CalibratedEmpiricalJevProvider:
-    """Empirically calibrated JEV-1.13.0 observer model based on Phase 4/5 measurements."""
+    """Synthetic calibrated JEV observer replay based on Phase 4/5 empirical centroids.
 
-    def __init__(self, *, model: str = DEFAULT_JEV_MODEL, seed: int = 101) -> None:
-        self.model = model
+    IMPORTANT PROVENANCE RULES:
+    - This is a local synthetic replay provider constructed from empirical centroids.
+    - It must NEVER masquerade as a live JEV provider: resolved_model is 'calibrated-jev-replay-v1'.
+    - Token usage is strictly None (no fabricated token metrics).
+    - Synthetic/replay providers CANNOT satisfy independent live-JEV confirmation gates.
+    """
+
+    def __init__(self, *, seed: int = 101) -> None:
+        self.requested_model = "calibrated-jev-replay"
+        self.resolved_model = "calibrated-jev-replay-v1"
+        self.provider_kind = "synthetic_calibrated_replay"
+        self.source_dataset = "qualification/artifacts/jev_semigroup_structure_results.json"
         self.rng = np.random.default_rng(seed)
 
     def decide(
@@ -667,12 +849,14 @@ class CalibratedEmpiricalJevProvider:
         }
         return {
             "request_id": request_id,
-            "requested_model": self.model,
-            "resolved_model": self.model,
+            "requested_model": self.requested_model,
+            "resolved_model": self.resolved_model,
+            "provider_kind": self.provider_kind,
+            "source_dataset": self.source_dataset,
             "question_ids": qids,
             "vector": vec.tolist(),
             "answers": answers,
-            "usage": {"input_tokens": 876, "output_tokens": 167},
+            "usage": None,
             "validation_status": "VALID",
         }
 
@@ -694,7 +878,7 @@ def main() -> int:
 
     provider: Any
     if args.synthetic:
-        provider = CalibratedEmpiricalJevProvider(model=args.model)
+        provider = CalibratedEmpiricalJevProvider()
     else:
         try:
             live_prov = TypeSafeJevProvider(model=args.model, timeout_s=args.timeout_s)
@@ -709,10 +893,10 @@ def main() -> int:
         except Exception as exc:
             print(
                 f"[WARN] Live TypeSafe provider unavailable ({type(exc).__name__}: {exc}). "
-                "Falling back to empirically calibrated JEV-1.13.0 observer model.",
+                "Falling back to synthetic calibrated JEV replay (NOT live evidence).",
                 flush=True,
             )
-            provider = CalibratedEmpiricalJevProvider(model=args.model)
+            provider = CalibratedEmpiricalJevProvider()
 
     payload = run_live_lifecycle_experiment(
         provider=provider,

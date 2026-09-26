@@ -172,6 +172,7 @@ class TypeSafeJevProvider:
             "request_id": request_id,
             "requested_model": self.model,
             "resolved_model": resolved_model,
+            "provider_kind": "live_api",
             "question_ids": list(expected_ids),
             "vector": vector,
             "answers": answers,

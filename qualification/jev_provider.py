@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
+import os
+import sys
 from typing import Any, Mapping, Sequence
 
 
@@ -92,6 +94,15 @@ class TypeSafeJevProvider:
     ) -> None:
         self.model = model
         self.timeout_s = float(timeout_s)
+        if "TYPESAFE_API_KEY" not in os.environ and sys.platform == "win32":
+            try:
+                import winreg
+                with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Environment") as key:
+                    val, _ = winreg.QueryValueEx(key, "TYPESAFE_API_KEY")
+                    if val:
+                        os.environ["TYPESAFE_API_KEY"] = str(val)
+            except Exception:
+                pass
 
     def decide(
         self,

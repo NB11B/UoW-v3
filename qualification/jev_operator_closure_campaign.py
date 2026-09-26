@@ -602,6 +602,9 @@ def analyze_closure_observations(
 
     pure_variance_explained = [(float(s)**2) / float(np.sum(S**2)) * 100.0 for s in S]
 
+    # Precompute pseudo-inverse of pure residual matrix for physical operator basis expansion
+    pinv_ET = np.linalg.pinv(E_mat.T, rcond=1e-5)
+
     # 2. Pairwise Empirical Commutators across all 15 pairs
     pair_results: list[dict[str, Any]] = []
     commutator_norms: list[float] = []
@@ -640,8 +643,20 @@ def analyze_closure_observations(
             dim_r2[f"R2_{k}D"] = round(r2 * 100.0, 2)
             dim_zeta[f"zeta_{k}D"] = round(zeta, 2)
 
-        # Structure coefficients in full 5D basis: f_ij^a = c_ij . B_a
+        # Observer-space PCA projection coefficients: f_ij^a = c_ij . B_a
         f_coeffs = [round(float(np.dot(c_np, B[a])), 4) for a in range(5)]
+
+        # Physical operator basis reconstruction: [F_i, F_j] = sum_k c_ij^k eps_k
+        w_phys = pinv_ET @ c_np
+        w_phys = w_phys - np.mean(w_phys)  # zero-sum gauge
+        c_hat_phys = E_mat.T @ w_phys
+        norm_c_phys = float(np.linalg.norm(c_hat_phys))
+        r2_phys = (norm_c_phys**2) / (norm_c**2) if norm_c > 1e-15 else 1.0
+
+        phys_coeffs = {
+            MECH_SHORT[m]: round(float(w), 4)
+            for m, w in zip(PURE_MECHANISMS, w_phys)
+        }
 
         pair_results.append(
             {
@@ -654,7 +669,10 @@ def analyze_closure_observations(
                 "commutator_snr": snr_c,
                 "closure_r2_by_dim": dim_r2,
                 "defect_zeta_by_dim": dim_zeta,
-                "structure_coefficients_5D": f_coeffs,
+                "pca_projection_coefficients_5D": f_coeffs,
+                "structure_coefficients_5D": f_coeffs,  # backwards compatibility alias
+                "physical_basis_closure_R2_percent": round(r2_phys * 100.0, 2),
+                "physical_basis_coefficients": phys_coeffs,
             }
         )
 
@@ -696,7 +714,7 @@ def analyze_closure_observations(
         "mean_commutator_snr": mean_comm_snr,
         "dimensional_closure_spectrum": closure_spectrum,
         "closure_verdict": (
-            "ALGEBRAIC_CLOSURE_CONFIRMED"
+            "APPROXIMATE_RESIDUAL_SPAN_CLOSURE_SUPPORTED"
             if closes_in_residual_space and full_zeta <= thresholds.closure_defect_zeta_threshold
             else "EMERGENT_NEW_DIMENSIONS_DETECTED"
         ),

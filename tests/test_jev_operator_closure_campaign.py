@@ -177,6 +177,52 @@ def test_offline_analysis_accepts_stable_closure_provider():
     spectrum = analysis["dimensional_closure_spectrum"]
     assert len(spectrum) == 5
     assert spectrum["5D"]["mean_R2_percent"] >= 85.0
+    assert analysis["closure_verdict"] == "APPROXIMATE_RESIDUAL_SPAN_CLOSURE_SUPPORTED"
+
+    for pair in analysis["all_15_pair_results"]:
+        assert "physical_basis_coefficients" in pair
+        assert "physical_basis_closure_R2_percent" in pair
+        assert len(pair["physical_basis_coefficients"]) == 6
+        # Gauge condition: sum of physical coefficients is zero within rounding
+        assert abs(sum(pair["physical_basis_coefficients"].values())) < 1e-3
+
+
+def test_resource_resolution_analysis_offline():
+    """Verify targeted Resource resolution analysis on synthetic provider."""
+    from qualification.jev_resource_resolution_campaign import (
+        RESOURCE_SPECS,
+        analyze_resource_resolution,
+        run_closure_spec,
+    )
+    provider = StableClosureProvider()
+    states = [run_closure_spec(s) for s in RESOURCE_SPECS]
+    observations = []
+    for item in states:
+        sid = item["spec"]["spec_id"]
+        for rep in range(3):
+            pres = provider.decide(
+                state=item["state"],
+                questions=[],
+                request_id=f"test-{sid}-{rep}",
+            )
+            observations.append({"spec_id": sid, "replicate": rep, "provider": pres})
+
+    analysis = analyze_resource_resolution(
+        states,
+        observations,
+        specs=RESOURCE_SPECS,
+        replicates=3,
+    )
+    assert analysis["oracle_pass"]
+    assert analysis["provider_complete"]
+    assert len(analysis["targeted_pair_analyses"]) == 4
+    for p in analysis["targeted_pair_analyses"]:
+        assert "physical_basis_coefficients" in p
+        assert p["closure_R2_5D_percent"] >= 85.0
+    assert analysis["resource_triplet_summary"]["verdict"] in (
+        "COLLAPSED_TO_NOISE_CLOSURE_CONFIRMED",
+        "MISSING_DIMENSION_CONFIRMED",
+    )
 
 
 def test_offline_analysis_rejects_high_noise():

@@ -879,7 +879,8 @@ def main() -> int:
         )
 
     _write_json(args.output, payload)
-    print(json.dumps(payload.get("analysis", payload["deterministic_summary"]), indent=2, sort_keys=True))
+    summary = payload.get("analysis") or payload.get("deterministic_summary")
+    print(json.dumps(summary, indent=2, sort_keys=True))
     print(f"\nWrote: {args.output}")
     return 0
 

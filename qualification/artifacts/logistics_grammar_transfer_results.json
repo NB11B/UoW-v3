@@ -1,0 +1,302 @@
+{
+  "campaign": "Autonomous Logistics Domain Operational Grammar Transfer (Phase 8)",
+  "timestamp": "2026-09-26T07:27:17Z",
+  "elapsed_seconds": 17.6,
+  "isomorphism_summary": {
+    "isomorphism_certified": true,
+    "total_transitions_checked": 3108,
+    "isomorphism_violations": 0,
+    "admission_preservation_certified": true,
+    "logistics_alphabet_size": 14,
+    "uow_alphabet_size": 14,
+    "logistics_status_quotient_size": 222,
+    "uow_regime_quotient_size": 222,
+    "logistics_dispatch_quotient_size": 97,
+    "uow_admission_quotient_size": 97
+  },
+  "automata_minimization": {
+    "reachable_microstates_count": 330,
+    "minimized_status_classes_count": 222,
+    "minimized_dispatch_classes_count": 97,
+    "status_state_variable_count": 222,
+    "dispatch_state_variable_count": 97,
+    "status_bijection_verified": true,
+    "dispatch_bijection_verified": true
+  },
+  "generator_irreducibility": {
+    "all_generators_irreducible": true,
+    "generators_count": 14,
+    "proofs": {
+      "RevokeCustomsClearance": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "CorruptTelemetryDigest": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "SeverTransitCorridor": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "BreachDeliverySLA": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "OverloadGrossWeight": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "InjectDisputedWaybill": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "ReauthorizeCustoms": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "RecalibrateTelemetry": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "RerouteCorridor": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "ExtendDeliverySLA": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "RebalanceGrossWeight": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "ImpoundVehicle": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "ClearWaybillDispute": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      },
+      "PromoteToDispatch": {
+        "immediate_distinction": true,
+        "inductive_invariance_preserved": true,
+        "strictly_irreducible": true
+      }
+    }
+  },
+  "commutation_analysis": {
+    "total_commuting_pairs": 42,
+    "all_15_disruptions_commute": true,
+    "all_20_remediations_commute": true,
+    "impound_clear_order_sensitive": true
+  },
+  "confluence_analysis": {
+    "total_algorithmic_critical_overlaps": 213,
+    "confluent_critical_overlaps": 213,
+    "confluence_rate": 1.0,
+    "all_critical_overlaps_confluent": true
+  },
+  "observer_evaluation": {
+    "mean_defect_ratio_eta": 0.935,
+    "repeatability_noise_floor_sigma": 0.0308,
+    "pairs_evaluated": 12,
+    "provider_provenance": {
+      "provider_kind": "live_api",
+      "is_live_api": true,
+      "resolved_model": "jev-1.13.0",
+      "total_calls": 77,
+      "total_token_usage": 0
+    },
+    "evaluations": [
+      {
+        "raw_word": [
+          "RevokeCustomsClearance",
+          "RevokeCustomsClearance"
+        ],
+        "normal_form": [
+          "RevokeCustomsClearance"
+        ],
+        "observer_defect": 0.0327,
+        "defect_ratio_eta": 1.061,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "RevokeCustomsClearance",
+          "ReauthorizeCustoms",
+          "ReauthorizeCustoms"
+        ],
+        "normal_form": [
+          "RevokeCustomsClearance",
+          "ReauthorizeCustoms"
+        ],
+        "observer_defect": 0.0287,
+        "defect_ratio_eta": 0.931,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "InjectDisputedWaybill",
+          "ImpoundVehicle",
+          "ImpoundVehicle"
+        ],
+        "normal_form": [
+          "InjectDisputedWaybill",
+          "ImpoundVehicle"
+        ],
+        "observer_defect": 0.0387,
+        "defect_ratio_eta": 1.258,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "CorruptTelemetryDigest",
+          "RevokeCustomsClearance"
+        ],
+        "normal_form": [
+          "RevokeCustomsClearance",
+          "CorruptTelemetryDigest"
+        ],
+        "observer_defect": 0.0307,
+        "defect_ratio_eta": 0.998,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "OverloadGrossWeight",
+          "BreachDeliverySLA"
+        ],
+        "normal_form": [
+          "BreachDeliverySLA",
+          "OverloadGrossWeight"
+        ],
+        "observer_defect": 0.0298,
+        "defect_ratio_eta": 0.968,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "RevokeCustomsClearance",
+          "BreachDeliverySLA",
+          "ExtendDeliverySLA",
+          "ReauthorizeCustoms"
+        ],
+        "normal_form": [
+          "RevokeCustomsClearance",
+          "BreachDeliverySLA",
+          "ReauthorizeCustoms",
+          "ExtendDeliverySLA"
+        ],
+        "observer_defect": 0.067,
+        "defect_ratio_eta": 2.176,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "RevokeCustomsClearance",
+          "PromoteToDispatch"
+        ],
+        "normal_form": [
+          "RevokeCustomsClearance"
+        ],
+        "observer_defect": 0.0306,
+        "defect_ratio_eta": 0.992,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "InjectDisputedWaybill",
+          "PromoteToDispatch"
+        ],
+        "normal_form": [
+          "InjectDisputedWaybill"
+        ],
+        "observer_defect": 0.0205,
+        "defect_ratio_eta": 0.667,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "InjectDisputedWaybill",
+          "ClearWaybillDispute"
+        ],
+        "normal_form": [
+          "InjectDisputedWaybill"
+        ],
+        "observer_defect": 0.0205,
+        "defect_ratio_eta": 0.667,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "InjectDisputedWaybill",
+          "ImpoundVehicle",
+          "ClearWaybillDispute"
+        ],
+        "normal_form": [
+          "InjectDisputedWaybill",
+          "ImpoundVehicle",
+          "ClearWaybillDispute"
+        ],
+        "observer_defect": 0.0262,
+        "defect_ratio_eta": 0.853,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "SeverTransitCorridor",
+          "RerouteCorridor",
+          "PromoteToDispatch"
+        ],
+        "normal_form": [
+          "SeverTransitCorridor",
+          "RerouteCorridor",
+          "PromoteToDispatch"
+        ],
+        "observer_defect": 0.0094,
+        "defect_ratio_eta": 0.306,
+        "equivalent_within_noise": true
+      },
+      {
+        "raw_word": [
+          "OverloadGrossWeight",
+          "RebalanceGrossWeight",
+          "PromoteToDispatch"
+        ],
+        "normal_form": [
+          "OverloadGrossWeight",
+          "RebalanceGrossWeight",
+          "PromoteToDispatch"
+        ],
+        "observer_defect": 0.0105,
+        "defect_ratio_eta": 0.342,
+        "equivalent_within_noise": true
+      }
+    ]
+  },
+  "gates": {
+    "G-TRANS-0": true,
+    "G-TRANS-1": true,
+    "G-TRANS-2": true,
+    "G-TRANS-3": true,
+    "G-TRANS-4": true,
+    "G-TRANS-5": true,
+    "G-TRANS-LIVE": true
+  },
+  "all_gates_passed": true
+}

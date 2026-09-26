@@ -1,0 +1,228 @@
+{
+  "campaign": "compliance_blind_derivation",
+  "phase": 9,
+  "elapsed_seconds": 17.87,
+  "stage_9a_native_derivation": {
+    "reachable_microstates_count": 2804,
+    "max_exploration_depth": 11,
+    "minimized_admission_classes_count": 384,
+    "minimized_disposition_classes_count": 930
+  },
+  "stage_9b_native_grammar": {
+    "generator_count": 17,
+    "all_generators_irreducible": true,
+    "idempotent_operators_count": 16,
+    "disruption_commutation_pairs": "21 / 21",
+    "remediation_commutation_pairs": "28 / 45",
+    "containment_integrity": true,
+    "canonical_trs_rules_count": 65,
+    "critical_overlaps_count": 205,
+    "confluent_overlaps_count": 205,
+    "confluence_rate": 1.0
+  },
+  "stage_9c_structural_comparison": {
+    "strict_isomorphism_candidate": false,
+    "strict_isomorphism_verdict": "FALSIFIED (Native Compliance generates 930 disposition classes != 222)",
+    "sub_automaton_embedding_candidate": false,
+    "sub_automaton_embedding_verdict": "FALSIFIED (|Q_C| = 930 > |Q_U| = 222)",
+    "governance_kernel_projection": true,
+    "theoretical_classification": "CONSERVATIVE_NORMATIVE_SUPERSET",
+    "governance_kernel_explanation": "UoW represents the minimal canonical governance kernel of multi-channel fail-closed systems. Native compliance workflow introduces authentic normative state (a 3-element dual-officer credential lattice and an administrative hardship waiver bypass) that refines the 222-state kernel into a 930-state regulatory disposition automaton."
+  },
+  "stage_9d_observer_evaluation": {
+    "model": "jev-1.13.0",
+    "provider_kind": "live_api",
+    "sigma_rep_baseline": 0.0275,
+    "mean_normalized_ratio_eta": 0.733,
+    "strict_bound_passing": "12 / 12",
+    "invariance_gate_passed": true,
+    "faithfulness_separation_eta": 55.13,
+    "faithfulness_distinguished": true,
+    "pair_evaluations": [
+      {
+        "category": "IDEMPOTENCE",
+        "word_raw": [
+          "RevokeCfoKey",
+          "RevokeCfoKey"
+        ],
+        "word_norm": [
+          "RevokeCfoKey"
+        ],
+        "observer_defect": 0.0156,
+        "normalized_ratio_eta": 0.57,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "IDEMPOTENCE",
+        "word_raw": [
+          "ReissueCfoCredentials",
+          "ReissueCfoCredentials"
+        ],
+        "word_norm": [
+          "ReissueCfoCredentials"
+        ],
+        "observer_defect": 0.024,
+        "normalized_ratio_eta": 0.87,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "IDEMPOTENCE",
+        "word_raw": [
+          "FlagWhistleblowerFraud",
+          "ImposeForensicHold",
+          "ImposeForensicHold"
+        ],
+        "word_norm": [
+          "FlagWhistleblowerFraud",
+          "ImposeForensicHold"
+        ],
+        "observer_defect": 0.0226,
+        "normalized_ratio_eta": 0.82,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "COMMUTATION",
+        "word_raw": [
+          "RevokeCfoKey",
+          "RevokeCeoKey"
+        ],
+        "word_norm": [
+          "RevokeCeoKey",
+          "RevokeCfoKey"
+        ],
+        "observer_defect": 0.018,
+        "normalized_ratio_eta": 0.65,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "COMMUTATION",
+        "word_raw": [
+          "CorruptLedgerChain",
+          "LapseFilingDeadline"
+        ],
+        "word_norm": [
+          "LapseFilingDeadline",
+          "CorruptLedgerChain"
+        ],
+        "observer_defect": 0.0221,
+        "normalized_ratio_eta": 0.8,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "COMMUTATION",
+        "word_raw": [
+          "RecordAuditorDissent",
+          "ServeRegulatoryInjunction"
+        ],
+        "word_norm": [
+          "ServeRegulatoryInjunction",
+          "RecordAuditorDissent"
+        ],
+        "observer_defect": 0.0221,
+        "normalized_ratio_eta": 0.8,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "COMPOSITE_COMMUTATION",
+        "word_raw": [
+          "RevokeCfoKey",
+          "LapseFilingDeadline",
+          "PetitionFilingExtension",
+          "ReissueCfoCredentials"
+        ],
+        "word_norm": [
+          "RevokeCfoKey",
+          "LapseFilingDeadline",
+          "ReissueCfoCredentials",
+          "PetitionFilingExtension"
+        ],
+        "observer_defect": 0.0156,
+        "normalized_ratio_eta": 0.57,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "PREMATURE_ABSORPTION",
+        "word_raw": [
+          "RevokeCfoKey",
+          "SubmitStatutoryFiling"
+        ],
+        "word_norm": [
+          "RevokeCfoKey"
+        ],
+        "observer_defect": 0.0229,
+        "normalized_ratio_eta": 0.83,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "PREMATURE_ABSORPTION",
+        "word_raw": [
+          "FlagWhistleblowerFraud",
+          "SubmitStatutoryFiling"
+        ],
+        "word_norm": [
+          "FlagWhistleblowerFraud"
+        ],
+        "observer_defect": 0.0371,
+        "normalized_ratio_eta": 1.35,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "PREMATURE_ABSORPTION",
+        "word_raw": [
+          "FlagWhistleblowerFraud",
+          "ForensicSanitizeAndRestate"
+        ],
+        "word_norm": [
+          "FlagWhistleblowerFraud"
+        ],
+        "observer_defect": 0.0153,
+        "normalized_ratio_eta": 0.56,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "CONTAINMENT_STAGING",
+        "word_raw": [
+          "FlagWhistleblowerFraud",
+          "ImposeForensicHold",
+          "ForensicSanitizeAndRestate"
+        ],
+        "word_norm": [
+          "FlagWhistleblowerFraud",
+          "ImposeForensicHold",
+          "ForensicSanitizeAndRestate"
+        ],
+        "observer_defect": 0.0105,
+        "normalized_ratio_eta": 0.38,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      },
+      {
+        "category": "CYCLE_NORMALIZATION",
+        "word_raw": [
+          "CorruptLedgerChain",
+          "ReconcileLedgerMirror",
+          "SubmitStatutoryFiling"
+        ],
+        "word_norm": [
+          "CorruptLedgerChain",
+          "ReconcileLedgerMirror",
+          "SubmitStatutoryFiling"
+        ],
+        "observer_defect": 0.016,
+        "normalized_ratio_eta": 0.58,
+        "within_strict_bound": true,
+        "within_outlier_bound": true
+      }
+    ]
+  }
+}

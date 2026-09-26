@@ -32,6 +32,23 @@ each in verified 1-to-1 bijection with explicit state variables $q_{\mathrm{adm}
 **Phase 7 completes the formalization program** by constructing the operational grammar operating on this cybernetic state space:
 $$G = (V, \Sigma_{\mathrm{full}}, R, S)$$
 
+### The Cybernetic Abstraction Hierarchy:
+The relationship between concrete microstates and governed semantics is governed by a strict five-tier quotient hierarchy, where each successive quotient intentionally forgets non-behavioral distinctions:
+
+$$\boxed{
+\begin{aligned}
+\textbf{Provenance Tree} &:\quad \text{Full history and causal trace events} \\
+\downarrow & \\
+\textbf{Physical Transformations} &:\quad \text{Noncommutative 103-element failure band } \mathcal{S}^1 \\
+\downarrow & \\
+\mathbf{Q_{222}} &:\quad \text{Predictive operational semantics (regime-determining quotient)} \\
+\downarrow & \\
+\mathbf{Q_{97}} &:\quad \text{Admission semantics (future admissibility-determining quotient)} \\
+\downarrow & \\
+\textbf{Regime Labels} &:\quad \text{Coarse current condition } \{\text{NOMINAL}, \text{FAILED}, \text{CONTAINED}, \text{RECOVERING}\}
+\end{aligned}
+}$$
+
 ### Key Discoveries Established in Phase 7:
 
 1. **Strict Algebraic Irreducibility via Inductive Invariants ($|G_{\min}| = 14$)**:
@@ -40,14 +57,18 @@ $$G = (V, \Sigma_{\mathrm{full}}, R, S)$$
 2. **Strict Endofunction Congruence on Minimal Quotients ($Q_{222}$ and $Q_{97}$)**:
    Every operator in $\Sigma_{\mathrm{full}}$ defines a deterministic, single-valued endofunction on $Q_{222}$ and $Q_{97}$. Tested exhaustively across all $2,317 \times 14 = 32,438$ concrete transitions, the closed-form symbolic state variable rules match the physical realization transitions with **0 violations (100% congruence)**.
 
-3. **Church-Rosser Confluence on All 213 Algorithmic Critical Overlaps**:
-   - The 5 physical failure dimensions and adversarial divergence form an abelian failure monoid: **all 15 failure pairs commute on $Q_{222}$**.
+3. **Confluence Modulo Operational Equivalence ($\equiv_{Q_{222}}$)**:
+   - **Physical vs Operational Commutation**: Order matters physically, but not operationally. While the raw 103-element failure band is noncommutative on physical microstates, **the induced failure action on $Q_{222}$ forms a commutative idempotent substructure**: all 15 failure pairs commute on $Q_{222}$.
    - Physical remediation channels commute pairwise and with containment/release (**20 / 21 pairs commute on $Q_{222}$**), while containment/release remains sequence-sensitive ($\text{Quarantine} \cdot \text{Release} \neq \text{Release} \cdot \text{Quarantine}$).
-   - The 61-rule Term Rewriting System (TRS) generates exactly 213 algorithmic critical overlaps $(a, b, d)$; **100% (213 / 213) join to identical transformations on $Q_{222}$**.
-   - Under the well-founded lexicographic reduction ordering $\mu(w) = (|w|, \operatorname{inv}(w))$, the TRS is strongly normalizing (terminating in $\le O(|w|^2)$ steps) and locally confluent, establishing Church-Rosser confluence by Newman's Lemma.
+   - The 61-rule Term Rewriting System (TRS) generates exactly 213 algorithmic critical overlaps $(a, b, d)$; **100% (213 / 213) join to identical endofunctions on $Q_{222}$** ($u \equiv_{Q_{222}} v$).
+   - The canonical normal form is a representative of an operational equivalence class:
+     $$N: \Sigma_{\mathrm{full}}^* \longrightarrow \Sigma_{\mathrm{full}}^*/\!\equiv_{Q_{222}}$$
+   - Under the well-founded lexicographic reduction ordering $\mu(w) = (|w|, \operatorname{inv}(w))$, the rewriting system is strongly normalizing and confluent modulo $\equiv_{Q_{222}}$ by Newman's Lemma.
 
 4. **Observer Invariance Under Semantic-Preserving Rewrites (`jev-1.13.0`)**:
-   In live external observation against pinned `jev-1.13.0` ($N = 75$ requests, 77,712 tokens), evaluating an operational word $w$ versus its canonical normal form $N(w)$ yields identical deterministic macrostates and observer representations within the repeatability noise floor ($\overline{\eta} = 1.123 \le 1.50$, $\sigma_{\mathrm{rep}} = 0.0208$). This rigorously establishes **empirical observer invariance under semantic rewrites** ($w \equiv N(w) \implies J(w) \approx J(N(w))$), clearly distinguished from observer faithfulness.
+   In live external observation against pinned `jev-1.13.0` ($N = 75$ requests, 77,712 tokens), evaluating an operational word $w$ versus its normal form $N(w)$ yields identical deterministic macrostates and observer representations within the repeatability noise floor ($\overline{\eta} = 1.123 \le 1.50$, $\sigma_{\mathrm{rep}} = 0.0208$). This rigorously establishes:
+   $$\boxed{\text{Deterministic Semantic Equivalence } (w \equiv_{Q_{222}} N(w)) \quad\Longrightarrow\quad \text{Probabilistic Observational Invariance } (J(w) \approx J(N(w)))}$$
+   distinct from observer faithfulness.
 
 ```mermaid
 flowchart TD
@@ -178,9 +199,9 @@ Both $Q_{222}$ and $Q_{97}$ are certified as **strict homomorphic congruence quo
 Out of all $\binom{14}{2} = 91$ operator pairs, exactly **42 pairs commute on $Q_{222}$**:
 
 1. **Failure Subspace ($15 / 15$ Commuting Pairs)**:
-   All physical failures and adversarial divergence commute pairwise:
+   All physical failures and adversarial divergence commute pairwise on $Q_{222}$:
    $$X \cdot Y \equiv_{Q_{222}} Y \cdot X \quad \forall X, Y \in \{A, E, C, T, R, \mathrm{Adv}\}$$
-   Because physical failures manipulate disjoint boolean coordinates in $B_5$ and independently trip $S_{\mathrm{regime}} \to \text{FAILED}$, the failure semigroup acts as a semilattice $(B_5 \times \mathcal{A}_{\mathrm{adv}}, \cup)$.
+   **Order matters physically, but not operationally**: while the raw 103-element failure band $\mathcal{S}$ is strictly noncommutative over concrete physical traces ($F_i F_j \neq F_j F_i$ preserves trace differences), **the induced failure action on $Q_{222}$ forms a commutative idempotent substructure** $(B_5 \times \mathcal{A}_{\mathrm{adv}}, \cup)$. Quotienting to $Q_{222}$ intentionally eliminates microstate distinctions that cannot affect future governed behavior.
 
 2. **Remediation Subspace ($20 / 21$ Commuting Pairs)**:
    Every pair of physical repair operators commutes pairwise, and all physical repairs commute with both $\mathrm{Quarantine}$ and $\mathrm{Release}$:
@@ -190,7 +211,7 @@ Out of all $\binom{14}{2} = 91$ operator pairs, exactly **42 pairs commute on $Q
    The single non-commuting pair in remediation is $(\text{Quarantine}, \text{Release})$, because $\text{Release}$ requires $\text{Quarantine}$ to be active as a precondition.
 
 ### The Canonical Term Rewriting Rules ($\mathcal{R}$):
-An operational word $w \in \Sigma_{\mathrm{full}}^*$ reduces to a unique canonical normal form $N(w)$ via **61 base rewrite rules**:
+An operational word $w \in \Sigma_{\mathrm{full}}^*$ reduces to a canonical normal form $N(w)$ via **61 base rewrite rules**:
 
 1. **Idempotence Reductions (14 rules)**:
    $$x \cdot x \longrightarrow x \quad \forall x \in \Sigma_{\mathrm{full}}$$
@@ -207,11 +228,15 @@ An operational word $w \in \Sigma_{\mathrm{full}}^*$ reduces to a unique canonic
 7. **Fail-Closed Recertification Absorption (6 rules)**:
    $$f_i \cdot \text{Recertify} \longrightarrow f_i \quad (\text{Premature recertify fails closed})$$
 
-### Church-Rosser & Strong Normalization:
+### Church-Rosser & Strong Normalization Modulo $\equiv_{Q_{222}}$:
 - **Algorithmic Critical Overlaps**: Overlaps occur at length-3 subwords $w = (a, b, d)$ where $(a, b) \to r_1$ and $(b, d) \to r_2$. Enumeration over all 61 rules identifies exactly **213 algorithmic critical overlaps**.
-- **Local Confluence across $Q_{222}$**: For each critical overlap $(a, b, d)$, reducing the first redex yields $u$ and reducing the second redex yields $v$. Evaluating on all 222 regime states shows that $u(q) = v(q)$ for all $q \in Q_{222}$. Thus, **100% of critical overlaps (213 / 213) join on $Q_{222}$**.
+- **Joinability Modulo Operational Equivalence ($\equiv_{Q_{222}}$)**: For each critical overlap $(a, b, d)$, reducing the first redex yields $u$ and reducing the second redex yields $v$. Evaluating on all 222 regime states shows that $u(q) = v(q)$ for all $q \in Q_{222}$. Thus:
+  $$u \leftarrow w \rightarrow v \implies u \equiv_{Q_{222}} v$$
+  Across all 213 algorithmic critical overlaps, **100% (213 / 213) join modulo $\equiv_{Q_{222}}$**.
 - **Well-Founded Reduction Ordering**: Let $\mu(w) = (|w|, \operatorname{inv}(w)) \in (\mathbb{N} \times \mathbb{N}, \text{lex})$, where $\operatorname{inv}(w)$ counts inversion pairs $(i < j)$ where $w[i] >_{\mathrm{prec}} w[j]$ according to rule precedence. Every reduction step in $\mathcal{R}$ either strictly shortens $|w|$ (idempotence, absorption, cancellation) or preserves $|w|$ while strictly decreasing $\operatorname{inv}(w)$ (commutation normalizations). Since $(\mathbb{N} \times \mathbb{N}, \text{lex})$ is well-founded, the rewriting system is **strongly normalizing** (terminating in at most $O(|w|^2)$ steps).
-- **Global Confluence by Newman's Lemma**: Since the rewriting system $\mathcal{R}$ is terminating and locally confluent across all 213 algorithmic critical overlaps, Newman's Lemma proves that $\mathcal{R}$ is **globally confluent (Church-Rosser)**. Every operational history $w$ reduces to a **unique canonical normal form $N(w)$**.
+- **Confluence Modulo $\equiv_{Q_{222}}$ by Newman's Lemma**: Because the rewriting system $\mathcal{R}$ is terminating and locally confluent modulo $\equiv_{Q_{222}}$ across all 213 algorithmic critical overlaps, Newman's Lemma establishes that $\mathcal{R}$ is **confluent modulo operational equivalence**:
+  $$\boxed{N: \Sigma_{\mathrm{full}}^* \longrightarrow \Sigma_{\mathrm{full}}^*/\!\equiv_{Q_{222}}}$$
+  Every operational history $w$ reduces to a canonical normal form $N(w)$ that serves as the canonical representative of its operational equivalence class.
 
 ---
 

@@ -127,13 +127,36 @@ $$\begin{pmatrix}
 Without certified boundary contraction, representing a governed tree of $19.17\text{M}$ UoWs would require:
 - $76,695,844$ realization nodes
 - $76,695,843$ realization edges
-- Approximately $8.59\text{ GB}$ of JSON payload (~$2.15\text{ billion}$ LLM tokens)
+- Approximately $8.59\text{ GB}$ of JSON payload (~$2.15\text{ billion}$ analytical token footprint estimate)
 
-Even at Tier S2 ($N=1,365$), a flat representation requires $152,868$ tokens, which immediately saturates standard 32k and 128k context windows.
+Even at Tier S2 ($N=1,365$), the analytical footprint reaches $152,868$ tokens, which immediately saturates standard 32k and 128k context windows.
 
-Under deterministic boundary certification, each composite boundary collapses into an $O(1)$ certified actor token. The observer payload remains fixed at **620 bytes** regardless of scale, achieving a **13,854,733:1 compression ratio** at $N=19.17\text{M}$ with **zero loss of control geometry**.
+Under deterministic boundary certification, each composite boundary collapses into an $O(1)$ certified actor token. The observer payload remains fixed at **620 bytes** regardless of scale, achieving a **13,854,733:1 analytical compression ratio** at $N=19.17\text{M}$ while **preserving the measured governance-failure geometry with very high fidelity** ($\min \cos = 0.9874$ overall, $\ge 0.9987$ across recursive tiers).
 
-### 6.2 Bounded Demarcation
+### 6.2 The Recursive Fixed-Point Representation Attractor
+An important structural nuance visible in the pairwise cosine matrix is the asymmetry between $S_0$ (the atomic, non-recursive root) and $S_1 \dots S_5$:
+$$\cos(S_0, S_3) \approx 0.9874 \quad \text{vs.} \quad \cos(S_1, S_5) = 0.9987, \quad \cos(S_2, S_5) = 0.9998$$
+
+This demonstrates a clear transition from the atomic regime ($S_0$) into the recursive regime ($d \ge 1$), after which the operator rapidly converges to a stable representation attractor:
+$$\Delta_A^{(d)} \longrightarrow \Delta_A^* \qquad (d \ge 1)$$
+Formalizing this cybernetic contraction:
+$$C_N(G) \longrightarrow z_N, \qquad z_N \xrightarrow{\text{authority loss}} z_N', \qquad J(z_N') - J(z_N) \approx \Delta_A^*$$
+where $C_N$ is the boundary contraction operator, $z_N$ is the root-visible state, and $J$ is the JEV observer projection. The certified boundary acts as a projection operator that preserves control invariants while filtering implementation noise.
+
+### 6.3 Bounded Demarcation & Freezing
 - **Tested scale**: $b \in \{1, 4, 8\}$, $d \in \{0, 3, 5, 7, 8\}$, $N \in [1, 19,173,961]$.
 - **Hardware footprint**: Materializing the $O(d)$ witness path requires only 8 runtime instances in memory, executing in under 200 ms on a standard workstation with zero memory blowup.
-- **Model qualification**: Live qualification was conducted against `jev-1.13.0` via `typesafe-sdk==0.7.1`.
+- **Model qualification**: Live qualification was conducted against pinned `jev-1.13.0` via `typesafe-sdk==0.7.1`.
+- **Campaign Status**: **FROZEN**. The four-stage qualification progression:
+  $$\boxed{\text{Explicit State} \longrightarrow \text{Blinded Derived Evidence} \longrightarrow \text{Raw Telemetry} \longrightarrow \text{Extreme Logical Scale (19.17M UoWs)}}$$
+  is complete and verified against 580/580 passing tests.
+
+### 6.4 Next Research Horizon: Disturbance Density & Phase Transitions
+With single-disturbance scale invariance established, the next fundamental cybernetic question shifts from **scale** to **disturbance density**:
+> How does the collective observer geometry respond when multiple independent disturbances occur simultaneously across the hierarchy at fraction $\rho$?
+
+Key questions for future study:
+1. **Operator Superposition vs. Saturation**: Does $\Delta_{A_1 + A_2} \approx \Delta_{A_1} + \Delta_{A_2}$, or does JEV exhibit non-linear saturation as failure count increases?
+2. **Critical Percolation Threshold**: Is there a critical disruption density $\rho_c$ such that:
+   $$\rho < \rho_c \implies \text{systemic governance remains recoverable}$$
+   $$\rho \ge \rho_c \implies \text{discontinuous transition to catastrophic governance collapse}$$

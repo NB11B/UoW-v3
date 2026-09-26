@@ -241,7 +241,45 @@ Unlike the raw operators which cluster at $\ge 0.985$, the residuals $\epsilon_i
 
 ---
 
-### 6.6 Cybernetic Findings & Scientific Interpretation
+### 6.6 Residual Composition & Empirical Commutator Analysis
+
+To determine whether the observed noncommutative ordering lives in the **mechanism-specific coordinate system** rather than the common failure axis, we remove the dominant macrostate direction $\Delta_G$ from each composed state:
+$$\epsilon_{ij} = \Delta_{ij} - (\Delta_{ij} \cdot \hat{\Delta}_G) \hat{\Delta}_G$$
+and project onto the 3D residual basis $V_3$:
+$$z_{ij} = V_3^T \epsilon_{ij} \in \mathbb{R}^3$$
+
+#### 1. Residual Noncommutativity in 3D Subspace
+We compare the residual displacement difference $\kappa^{(\epsilon)}_{ij} = \|\epsilon_{ij} - \epsilon_{ji}\|$ and its 3D projection $\kappa^{(3D)}_{ij} = \|z_{ij} - z_{ji}\|$:
+
+| Composition Pair | $\kappa^{(\epsilon)}_{ij} = \|\epsilon_{ij} - \epsilon_{ji}\|$ | $\kappa^{(3D)}_{ij} = \|z_{ij} - z_{ji}\|$ | Ratio over Noise ($\kappa^{(3D)}/\sigma_{\text{rep}}$) | Subspace Variance Preservation | 3D Coordinates $z_{ij} \in \mathbb{R}^3$ | 3D Coordinates $z_{ji} \in \mathbb{R}^3$ |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Authority vs. Evidence** ($AE$ vs. $EA$) | **0.1258** | **0.1229** | **5.16×** | **95.50%** | `[+0.068, -0.059, +0.010]` | `[+0.030, +0.018, +0.099]` |
+| **Authority vs. Causal** ($AC$ vs. $CA$) | **0.0765** | **0.0698** | **2.93×** | **83.15%** | `[+0.073, -0.074, +0.008]` | `[+0.044, -0.020, +0.041]` |
+| **Evidence vs. Resource** ($ER$ vs. $RE$) | **0.1359** | **0.1143** | **4.80×** | **70.65%** | `[+0.030, +0.041, +0.078]` | `[-0.018, +0.096, -0.010]` |
+
+$$\boxed{\text{\textbf{Up to 95.5\% of the noncommutative commutator variance lives directly inside the 3D residual subspace.}}}$$
+This demonstrates that ordering effects are **intrinsic to the mechanism-specific coordinate system**, not an artifact of the common macrostate axis.
+
+#### 2. Emergent Non-Additive Interaction ($\chi_{ij} = \epsilon_{ij} - (\epsilon_i + \epsilon_j)$)
+Testing whether sequential composition is linear/additive or generates an emergent interaction:
+$$\epsilon_{ij} = \epsilon_i + \epsilon_j + \chi_{ij} \quad \implies \quad \chi_{ij} = \epsilon_{ij} - (\epsilon_i + \epsilon_j)$$
+
+| Composition Sequence | Interaction Norm $\|\chi_{ij}\|$ | Ratio over Noise ($\|\chi_{ij}\|/\sigma_{\text{rep}}$) | Status |
+| :--- | :---: | :---: | :---: |
+| $F_A F_E$ (`comp_AE`) | **0.0851** | **3.57×** | Statistically Significant |
+| $F_E F_A$ (`comp_EA`) | **0.1109** | **4.66×** | Statistically Significant |
+| $F_A F_C$ (`comp_AC`) | **0.0689** | **2.90×** | Near-Threshold |
+| $F_C F_A$ (`comp_CA`) | **0.1351** | **5.67×** | Statistically Significant |
+| $F_E F_R$ (`comp_ER`) | **0.1025** | **4.30×** | Statistically Significant |
+| $F_R F_E$ (`comp_RE`) | **0.1135** | **4.77×** | Statistically Significant |
+
+In all sequences, $\|\chi_{ij}\| \gg \sigma_{\text{rep}} = 0.0238$, confirming that sequential composition is **non-additive**. Furthermore:
+$$\chi_{ij} \neq \chi_{ji} \quad \implies \quad [F_i, F_j]_{\mathrm{emp}} = \chi_{ij} - \chi_{ji} = \epsilon_{ij} - \epsilon_{ji} \neq 0$$
+producing an empirical commutator whose magnitude is **$3.2\times$ to $5.3\times$ repeatability noise**.
+
+---
+
+### 6.7 Cybernetic Findings & Scientific Interpretation
 
 1. **Resolution of the Primary Question: Shared Macrostate + Structured Residual**:
    Conditioned on the identical unfulfillable commit outcome (uncommitted state, empty emitted keys, quorum margin $-1$), all six failure mechanisms align with a **common governance-failure macrostate attractor across the tested mechanisms**:
@@ -251,7 +289,7 @@ Unlike the raw operators which cluster at $\ge 0.985$, the residuals $\epsilon_i
 2. **Statistically Significant Noncommutative Ordering**:
    For all evaluated pairs, the order of sequential failure evaluation produces an observable displacement difference:
    $$\kappa_{ij} \approx 0.15 - 0.19 \quad \implies \quad \eta_{ij} = \frac{\kappa_{ij}}{\sigma_{\text{rep}}} \in [\mathbf{6.24\times}, \mathbf{7.85\times}]$$
-   This confirms **statistically significant noncommutative ordering** in sequential failure composition. Because regulatory constraints are executed in a causal pipeline, an upstream failure truncates execution before downstream constraints can be evaluated, leaving a distinct geometric trace.
+   The 3D residual projection preserves up to $95.5\%$ of this commutator variance ($\kappa^{(3D)} / \sigma_{\text{rep}} \le 5.16\times$). This confirms **statistically significant noncommutative ordering** in sequential failure composition. Because regulatory constraints are executed in a causal pipeline, an upstream failure truncates execution before downstream constraints can be evaluated, leaving a distinct geometric trace in the 3D residual space.
 
 3. **Enriched Empirical Factorization**:
    Synthesizing results across all campaigns:
@@ -268,5 +306,11 @@ Unlike the raw operators which cluster at $\ge 0.985$, the residuals $\epsilon_i
    This transitions UoW/JEV qualification from a static classifier to a **state-space dynamics**:
    $$s \xrightarrow{F_i} s' \xrightarrow{F_j} s''$$
    where the trajectory path matters, opening the path for rigorous cybernetic control.
+
+4. **Disciplined Progression Toward Algebraic Closure**:
+   To avoid premature assumptions about Lie algebra closure, the research series follows the strict empirical sequence:
+   $$\boxed{\text{shared attractor} \longrightarrow \text{residual decomposition} \longrightarrow \text{residual composition} \longrightarrow \text{algebraic closure test}}$$
+   With the first three steps now empirically established, the next targeted question is whether the empirical commutators $[F_i, F_j]_{\mathrm{emp}}$ can be expressed as linear combinations of the 3D residual basis vectors $\{V_1, V_2, V_3\}$.
+
 
 

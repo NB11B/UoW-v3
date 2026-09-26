@@ -108,25 +108,53 @@ $$\begin{pmatrix}
 
 ---
 
-## 5. Discoveries: Size-Independent Cybernetic Laws
+## 5. Discoveries: Size-Independent Cybernetic Dynamics (Tested Range $M \in \{8, 16, 32\}$)
 
-The empirical findings confirm that the collective behavior of governed UoW ensembles is governed by **size-independent cybernetic laws**:
+The empirical findings confirm that the collective behavior of governed UoW ensembles is characterized by **size-independent cybernetic dynamics across the tested range**:
 
-1. **Scale-Invariant Subcritical Shielding ($S^* \approx 6.9\times$)**:
-   The ability of quorum governance to absorb subcritical disturbance ($\rho = 0.25$) is invariant across ensemble size:
+1. **Subcritical Shielding Invariance ($S^* \approx 6.9\times$)**:
+   The shock-absorbing capacity of quorum boundaries against a $25\%$ internal disturbance remains stable across ensemble size:
    $$S(M=8) = 6.48\times, \quad S(M=16) = 7.66\times, \quad S(M=32) = 6.66\times$$
-   Larger collectives do not suffer governance decay or noise amplification; the regulatory shock-absorbing capacity plateaus at an invariant constant $S^*(q=0.50, \rho=0.25) \approx 6.9\times$.
+   Larger collective assemblies do not accumulate noise or suffer organizational decay; the governance boundary suppresses local failure signals by an invariant factor of $\approx 6.9\times$.
 
 2. **Invariant Discontinuous Transition Jump ($J^* \approx +1.28 \pm 0.06$)**:
-   Across all ensemble sizes, the instant the quorum margin drops from $0$ to $-1$, the observer displacement undergoes the identical discontinuous jump:
+   Across all tested sizes, the instant the quorum margin drops from $0$ to $-1$, the observer displacement undergoes an essentially identical discontinuous jump:
    $$J(M=8) = +1.34, \quad J(M=16) = +1.22, \quad J(M=32) = +1.28$$
    The transition does not soften into a continuous curve as size expands; it remains a sharp, discrete step of magnitude $J^* \approx +1.28$.
 
-3. **Universal Directional Alignment of the Post-Threshold Attractor**:
+3. **Directional Invariance Across Tested Ensemble Sizes**:
    Between $M=8$, $M=16$, and $M=32$, the post-threshold authority-loss vector has pairwise cosine similarities:
    $$\cos(M8, M16) = 0.9997, \quad \cos(M8, M32) = 0.9997, \quad \cos(M16, M32) = 0.9999$$
-   The operator geometry is completely independent of the size of the collective that underwent failure.
+   Within the tested range, the post-threshold authority-loss geometry is effectively invariant to ensemble size.
 
-4. **Policy Independence of the Failure Geometry**:
-   Shifting the quorum policy from strict majority ($q=0.50$, $Q=9$) to supermajority ($q=0.75$, $Q=12$) relocated the transition from $k=8$ ($\rho=0.50$) to $k=5$ ($\rho=0.3125$). Yet the post-threshold displacement vector produced under $q=0.75$ aligns with $q=0.50$ with **$\cos = 0.99971$**! The governing policy controls *where* the boundary fails, but *what* failure looks like to the observer is an invariant property of authority loss.
+4. **The Cybernetic Separation: Policy vs. Failure Geometry**:
+   Shifting the quorum policy from strict majority ($q=0.50$, $Q=9$) to supermajority ($q=0.75$, $Q=12$) relocated the transition from $k=8$ ($\rho=0.50$) to $k=5$ ($\rho=0.3125$). Yet the post-threshold displacement vector produced under $q=0.75$ aligns with $q=0.50$ with **$\cos = 0.99971$**!
+   This establishes a fundamental cybernetic separation:
+   $$\boxed{\text{policy determines transition location}} \quad \text{while} \quad \boxed{\text{authority loss determines transition geometry}}$$
+
+---
+
+## 6. The Established Hierarchy of Governance Dynamics & The Topology Horizon
+
+### 6.1 The Established Hierarchy
+Across recursive depth, serialization blinding, extreme logical scale, disturbance density, and finite-size scaling, the system exhibits an extraordinarily coherent operational hierarchy:
+
+$$\boxed{
+\begin{aligned}
+\text{local disturbance} &\longrightarrow \text{subcritical shielding } (S^* \approx 6.9\times) \\
+\text{threshold crossing} &\longrightarrow \text{macrostate transition } (J^* \approx +1.28) \\
+\text{post-threshold state} &\longrightarrow \Delta_A^* \text{ (amplitude } A_\infty^* \approx 1.79, \, CV=0.37\%) \\
+\text{ensemble size } (M=8 \to 32) &\centernot\longrightarrow \text{meaningful change in } \Delta_A^* \text{ or } S^* \\
+\text{quorum policy } (q=0.50 \to 0.75) &\longrightarrow \text{transition location, not failure geometry}
+\end{aligned}
+}$$
+
+### 6.2 The Next Scientific Horizon: Network Topology Invariance
+With ensemble size and quorum policy established as decoupled from failure geometry, the next fundamental question is **interaction graph topology**:
+> Keeping ensemble size $M=16$ and quorum fraction $Q/M$ fixed, what happens when the underlying realization topology changes?
+> $$\text{star / fan-out}, \quad \text{ring}, \quad \text{hierarchical tree}, \quad \text{small-world / random sparse}, \quad \text{modular clusters}$$
+
+Does the post-threshold authority-loss operator $\Delta_A^*$ survive across varying communication and consensus topologies with the same $\cos \ge 0.999$ fidelity?
+If so, the empirical case for an **architecture-level cybernetic invariant** becomes complete.
+
 

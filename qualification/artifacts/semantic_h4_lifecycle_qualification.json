@@ -1,7 +1,7 @@
 {
   "experiment": "H4-LIFECYCLE-QUALIFICATION",
   "title": "H4: Authoritative UoW Lifecycle Integration Qualification",
-  "timestamp_utc": "2026-09-27T05:31:24.169899+00:00",
+  "timestamp_utc": "2026-09-27T05:37:55.146178+00:00",
   "summary": {
     "all_gates_passed": true,
     "system_safety_guarantee": true,
@@ -311,26 +311,28 @@
     "H4.0": {
       "name": "Deterministic Ingress (Zero-Inference Commit)",
       "passed": true,
-      "elapsed_ms": 0.504,
+      "elapsed_ms": 0.506,
       "evidence_root": "96a3ee8033a8e4c201d2cc720b16a92cd24a7ff53722992f8f12c2d958dd2444"
     },
     "H4.1": {
       "name": "Native Model Transaction Commit",
       "passed": true,
-      "elapsed_ms": 0.307,
+      "elapsed_ms": 0.299,
       "evidence_root": "77518ecaee9b88ac970e99d748b0fe9bcc34ecfdcdeeb59e8c28afd55a2f6529"
     },
     "H4.2": {
-      "name": "Unsafe Model Error Interception (U_system = 0)",
+      "name": "Unsafe Model Error Interception & Nonce Generalization (U_system = 0)",
       "passed": true,
-      "elapsed_ms": 0.028,
+      "elapsed_ms": 0.199,
       "quibble_verdict": "UNKNOWN",
-      "negative_qty_verdict": "CONTRADICTORY"
+      "negative_qty_verdict": "CONTRADICTORY",
+      "nonce_bank_size": 75,
+      "nonce_generalization_passed": true
     },
     "H4.3": {
       "name": "State Drift Pre-Execution Detection",
       "passed": true,
-      "elapsed_ms": 0.032,
+      "elapsed_ms": 0.034,
       "rejection_mode": "FailClosed_SemanticStateDriftError"
     },
     "H4.4": {
@@ -342,37 +344,37 @@
     "H4.5": {
       "name": "Concurrent Disjoint Requests Serialization",
       "passed": true,
-      "elapsed_ms": 0.687,
+      "elapsed_ms": 0.7,
       "records_committed": 2
     },
     "H4.6": {
       "name": "Concurrent Conflicting Requests Conflict Detection",
       "passed": true,
-      "elapsed_ms": 0.304,
+      "elapsed_ms": 0.299,
       "rejection_mode": "OCC_StateDrift_Rejected"
     },
     "H4.7": {
       "name": "Crash Recovery After Semantic Closure",
       "passed": true,
-      "elapsed_ms": 0.025,
+      "elapsed_ms": 0.023,
       "audit_drift_safeguard": true
     },
     "H4.8": {
       "name": "Crash Recovery During Commit (WAL Replay)",
       "passed": true,
-      "elapsed_ms": 12.855,
+      "elapsed_ms": 5.277,
       "ledger_integrity": true
     },
     "H4.9": {
       "name": "Replay / Duplicate Signal Determinism",
       "passed": true,
-      "elapsed_ms": 0.008,
+      "elapsed_ms": 0.006,
       "derived_uow_id": "uow-sem-b1b56b21d034607f837df674"
     },
     "H4.10": {
       "name": "Audit Chain Provenance Traversal",
       "passed": true,
-      "elapsed_ms": 0.004,
+      "elapsed_ms": 0.003,
       "traversal_chain": "EvidenceRecord.uow_id -> UoW.parent_context -> ClosureCertificate.hash -> IntentEnvelope.signal_id"
     }
   }

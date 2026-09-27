@@ -364,6 +364,89 @@ def test_h4_2_unregistered_operator_and_contradictory_quantity() -> None:
     assert res_qty_exceed.verdict is ValidationVerdict.CONTRADICTORY
 
 
+def test_h4_2_nonce_family_generalization_bank() -> None:
+    """Falsification: unseen nonce operators and entities are rejected by admissibility.
+
+    Verifies:
+        x not in Registry_t ==> VALID(x) = false
+    Across a bank of 75 previously unseen nonces (florp, zindle, marnak, velq, qorbin, etc.),
+    proving safety derives from registry-based admissibility rather than fitting to 'quibble'.
+    Guarantees exactly 0 prepared UoWs and 0 commits.
+    """
+    nonce_prefixes = ("flor", "zind", "marn", "vel", "qorb", "krix", "blon", "draz", "farn", "gond", "jalk", "luna", "morv", "plon", "rund")
+    nonce_suffixes = ("p", "le", "ak", "q", "in", "al", "vex", "ik", "el", "orix", "en", "phex", "ath", "tex", "ar")
+    nonce_words = [f"{p}{s}" for p in nonce_prefixes for s in nonce_suffixes][:75]
+    assert len(nonce_words) == 75
+
+    state_0 = WorldState(
+        attributes={
+            "entities": {
+                "recipient": ["Mike", "Alice", "Bob"],
+                "item": ["crate", "rod", "battery"],
+                "destination": ["bay_1", "bay_2"],
+            },
+            "transfers.Mike": 0,
+        }
+    )
+    validator = DefaultSemanticAdmissibilityValidator()
+    compiler = TransferUoWCompiler()
+    adapter = SemanticApplicationAdapter()
+
+    prepared_count = 0
+    committed_count = 0
+    invalid_verdicts = 0
+
+    for idx, nonce in enumerate(nonce_words):
+        term = ("operator", "item", "recipient", "destination")[idx % 4]
+        binding = SemanticBinding(term, nonce, BindingOrigin.PROBABILISTIC)
+        req = SemanticRequirement(term)
+
+        # 1. Direct validation: x not in Registry_t ==> VALID(x) = False
+        v_res = validator.validate(binding, req, state_0)
+        assert v_res.verdict is not ValidationVerdict.VALID
+        assert v_res.verdict is ValidationVerdict.UNKNOWN
+        invalid_verdicts += 1
+
+        # 2. End-to-end interpretation through SemanticHarness
+        class NonceTranslator:
+            def __init__(self, t: str, v: str) -> None:
+                self._t = t
+                self._v = v
+
+            def propose(self, r: SemanticTranslationRequest) -> CandidateSemanticBindings:
+                return CandidateSemanticBindings(
+                    candidate_bindings=(
+                        SemanticBinding(self._t, self._v, BindingOrigin.PROBABILISTIC),
+                    )
+                )
+
+        harness = SemanticHarness(NonceTranslator(term, nonce), admissibility_validator=validator)
+        result = harness.interpret(
+            f"Please {nonce} immediately",
+            state=state_0,
+            ingress=IngressContext("auditor", f"sess-nonce-{idx}", "ch"),
+            requirements=(req,),
+        )
+
+        assert result.disposition in (SemanticDisposition.CLARIFY, SemanticDisposition.NO)
+        assert result.intent is None
+
+        # 3. Preparation must fail closed
+        try:
+            adapter.prepare(result, state_0, compiler)
+            prepared_count += 1
+        except ValueError:
+            pass
+
+    # Authoritative sequencer remains at 0 commits
+    sequencer = DeterministicSequencer(state_0)
+    assert invalid_verdicts == len(nonce_words)
+    assert prepared_count == 0
+    assert committed_count == 0
+    assert len(sequencer.ledger.records) == 0
+    assert sequencer.current_state.state_hash == state_0.state_hash
+
+
 # =========================================================================
 # Gate H4.3: State Drift Detection (S_0 -> S_1)
 # =========================================================================

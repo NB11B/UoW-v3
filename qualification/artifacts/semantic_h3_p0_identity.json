@@ -1,0 +1,36 @@
+{
+  "experiment": "H3-P0",
+  "base_model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "tokenizer_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "tokenizer_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "adapter_path": "C:\\Users\\nateb\\OneDrive\\Documents\\jevtest\\checkpoints\\test_lora",
+  "adapter_sha256": "2cdec4d6cb153bd4dc7d45a79fbae81b6981c77d479e17c05f0f048748bae03d",
+  "adapter_config_sha256": "2f8f59c2f237c97e14db1044e345e76c213a99820d1a6af5b2d0155c882b4806",
+  "adapter_format": "peft-lora",
+  "lora_rank": 8,
+  "lora_alpha": 16,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "observed_trainable_parameter_count": 460800,
+  "expected_trainable_parameter_count": 460800,
+  "parameter_count_match": true,
+  "parameter_topology_breakdown": {
+    "num_layers": 30,
+    "q_proj_lora_A_per_layer": 4608,
+    "q_proj_lora_B_per_layer": 4608,
+    "v_proj_lora_A_per_layer": 4608,
+    "v_proj_lora_B_per_layer": 1536,
+    "total_per_layer": 15360,
+    "total_all_layers": 460800
+  },
+  "provenance_notes": {
+    "corpus_version": "jevl-j2.9-provenance-gap",
+    "grammar_version": "jevl-j2.10-provenance-gap",
+    "note": "Recovered from J2.9/J2.10 physical adaptation run. Formal provenance gap declared; candidate checkpoint under qualification."
+  },
+  "manifest_hash": "2c9cbccc25366ebf3c80e83fd2b8060a70a9e3959a93f2e19d7d9093de1ea8f2",
+  "artifact_identity_pass": true
+}

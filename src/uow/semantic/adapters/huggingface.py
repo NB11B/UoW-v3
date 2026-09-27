@@ -92,7 +92,7 @@ class DefaultHuggingFaceBackend:
         base_id = manifest.base_model_id
 
         self._tokenizer = AutoTokenizer.from_pretrained(
-            base_id,
+            manifest.tokenizer_id,
             revision=manifest.tokenizer_revision,
             local_files_only=config.local_files_only,
         )
@@ -177,6 +177,7 @@ class HuggingFaceSemanticTranslator:
         self._state = AdapterLifecycleState.UNLOADED
         self._manifest: SemanticModelManifest | None = None
         self._last_failure: tuple[AdapterFailureCategory, str] | None = None
+        self._last_validation_failure: tuple[AdapterFailureCategory, str] | None = None
 
     @property
     def state(self) -> AdapterLifecycleState:
@@ -189,6 +190,10 @@ class HuggingFaceSemanticTranslator:
     @property
     def last_failure(self) -> tuple[AdapterFailureCategory, str] | None:
         return self._last_failure
+
+    @property
+    def last_validation_failure(self) -> tuple[AdapterFailureCategory, str] | None:
+        return self._last_validation_failure
 
     def _evidence_ref(self) -> str:
         if self._manifest is not None:
@@ -264,7 +269,9 @@ class HuggingFaceSemanticTranslator:
                 max_new_tokens=self.config.max_new_tokens,
             )
         except Exception as exc:
-            # Inference failure fails closed to UNKNOWN
+            # Inference failure transitions to terminal FAILED
+            self._state = AdapterLifecycleState.FAILED
+            self._last_failure = (AdapterFailureCategory.INFERENCE_FAILURE, str(exc))
             return CandidateSemanticBindings(
                 unknowns=tuple(r.name for r in request.frontier),
                 evidence_refs=(
@@ -274,9 +281,16 @@ class HuggingFaceSemanticTranslator:
             )
 
         # Deterministically parse and validate candidate bindings IR
-        return self._output_parser.parse(
+        parsed = self._output_parser.parse(
             raw_text,
             request,
             evidence_ref=evidence_ref,
             fail_closed=True,
         )
+        if any("codec_parse_failure" in ref for ref in parsed.evidence_refs):
+            # OUTPUT_VALIDATION_FAILURE fails individual translation to UNKNOWN, preserves READY, records diagnostic
+            self._last_validation_failure = (
+                AdapterFailureCategory.OUTPUT_VALIDATION_FAILURE,
+                raw_text[:100],
+            )
+        return parsed

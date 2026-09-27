@@ -369,3 +369,34 @@ def test_h3_10_generation_failure_fails_closed(tmp_path: Path) -> None:
     assert result.disposition is SemanticDisposition.CLARIFY
     assert result.intent is None
     assert tuple(r.name for r in result.unresolved) == ("recipient",)
+    # Lifecycle contract: INFERENCE_FAILURE transitions adapter to terminal FAILED
+    assert translator.state is AdapterLifecycleState.FAILED
+    assert translator.last_failure is not None
+    assert translator.last_failure[0] is AdapterFailureCategory.INFERENCE_FAILURE
+
+
+def test_h3_10_output_validation_failure_preserves_ready_state(tmp_path: Path) -> None:
+    model_dir = _setup_mock_model_dir(tmp_path)
+    # Model generates malformed JSON
+    backend = MockHuggingFaceBackend(response_text="not valid json")
+
+    config = HuggingFaceSemanticTranslatorConfig(model_path=model_dir)
+    translator = HuggingFaceSemanticTranslator(config, backend=backend)
+    harness = SemanticHarness(translator)
+
+    ingress = IngressContext(principal_id="user-1", session_id="s-1", channel="text")
+    result = harness.interpret(
+        "send to alice",
+        state=WorldState({}),
+        ingress=ingress,
+        requirements=(SemanticRequirement("recipient"),),
+    )
+
+    # Must fail closed to CLARIFY
+    assert result.disposition is SemanticDisposition.CLARIFY
+    assert result.intent is None
+    # Lifecycle contract: OUTPUT_VALIDATION_FAILURE fails the individual translation
+    # but preserves READY state on the adapter
+    assert translator.state is AdapterLifecycleState.READY
+    assert translator.last_validation_failure is not None
+    assert translator.last_validation_failure[0] is AdapterFailureCategory.OUTPUT_VALIDATION_FAILURE

@@ -189,8 +189,7 @@ class SemanticOutputParser:
             raise SemanticOutputValidationError("bindings must be a JSON list.")
 
         candidate_bindings: list[SemanticBinding] = []
-        seen_bindings: dict[str, Any] = {}
-        ambiguous_from_duplicates: set[str] = set()
+        seen_pairs: set[tuple[str, str]] = set()
 
         for item in raw_bindings:
             if not isinstance(item, dict):
@@ -210,12 +209,13 @@ class SemanticOutputParser:
                 )
             self._validate_value(val)
 
-            if terminal in seen_bindings:
-                if seen_bindings[terminal] != val:
-                    ambiguous_from_duplicates.add(terminal)
+            val_canonical = canonical_json(val)
+            pair_key = (terminal, val_canonical)
+            if pair_key in seen_pairs:
+                # Duplicate equal binding normalized
                 continue
 
-            seen_bindings[terminal] = val
+            seen_pairs.add(pair_key)
             candidate_bindings.append(
                 SemanticBinding(
                     terminal=terminal,
@@ -274,20 +274,6 @@ class SemanticOutputParser:
                 if isinstance(k, str) and k in allowed_terminals and isinstance(v, (int, float)):
                     if not math.isnan(v) and not math.isinf(v) and 0.0 <= v <= 1.0:
                         confidence_map[k] = float(v)
-
-        # If duplicate conflicting bindings occurred, preserve ambiguity in candidate bindings
-        if ambiguous_from_duplicates:
-            # We append the conflicting duplicates as additional bindings to let the closure engine
-            # trigger AMBIGUOUS_PRIMARY_BINDINGS -> CLARIFY
-            for terminal in ambiguous_from_duplicates:
-                candidate_bindings.append(
-                    SemanticBinding(
-                        terminal=terminal,
-                        value=f"__conflict_{terminal}__",
-                        origin=BindingOrigin.PROBABILISTIC,
-                        evidence_refs=evidence_tuple,
-                    )
-                )
 
         return CandidateSemanticBindings(
             candidate_bindings=tuple(candidate_bindings),

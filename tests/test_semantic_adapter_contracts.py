@@ -365,10 +365,12 @@ def test_parser_preserves_duplicate_conflicting_bindings_as_ambiguous() -> None:
     })
 
     candidate = parser.parse(output, req, fail_closed=False)
-    # Parser preserves ambiguity with conflicting values
-    values = [b.value for b in candidate.candidate_bindings]
-    assert "alice" in values
-    assert any("__conflict" in str(v) for v in values)
+    # Parser preserves exact model values and provenance for both candidate bindings
+    values = {b.value for b in candidate.candidate_bindings}
+    assert values == {"alice", "bob"}
+    for b in candidate.candidate_bindings:
+        assert b.terminal == "recipient"
+        assert b.origin is BindingOrigin.PROBABILISTIC
 
 
 def test_parser_parses_unknowns_and_alternatives() -> None:

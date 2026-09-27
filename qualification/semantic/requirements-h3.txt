@@ -1,0 +1,4 @@
+# Optional dependencies for physical 135M SmolLM2/LoRA qualification
+torch>=2.0.0
+transformers>=4.40.0
+peft>=0.10.0

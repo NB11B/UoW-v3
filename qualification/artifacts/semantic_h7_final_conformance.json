@@ -1,0 +1,146 @@
+{
+  "experiment": "H7-FINAL-INTEGRATED-CONFORMANCE-QUALIFICATION",
+  "title": "H7: Final Integrated Conformance Qualification",
+  "timestamp_utc": "2026-09-27T06:08:59.589026+00:00",
+  "summary": {
+    "all_gates_passed": true,
+    "closed_loop_bidirectional_interface_verified": true,
+    "core_uow_runs_without_llm": true,
+    "model_free_when_frontier_empty": true,
+    "beta_D": 0,
+    "epsilon_system_unsafe": 0.0,
+    "epsilon_egress_drift": 0.0,
+    "elapsed_seconds": 0.0014
+  },
+  "sections": [
+    {
+      "section": "H7.1_end_to_end_paths",
+      "passed": true,
+      "path_1_deterministic_calls": 0,
+      "path_2_probabilistic_success": "YES",
+      "path_3_clarification_success": "YES",
+      "path_4_safe_rejection": "NO",
+      "path_5_persistent_ambiguity": "CLARIFY"
+    },
+    {
+      "section": "H7.2_fault_matrix",
+      "passed": true,
+      "faults_verified": 15,
+      "fault_names": [
+        "1_state_drift_pre_execution",
+        "2_authority_revocation",
+        "3_expired_lease",
+        "4_concurrent_disjoint_work",
+        "5_concurrent_conflicting_work",
+        "6_duplicate_replay_signal",
+        "7_crash_after_semantic_closure",
+        "8_crash_during_commit_wal_recovery",
+        "9_crash_before_egress",
+        "10_crash_during_egress",
+        "11_stale_clarification",
+        "12_invalid_model_artifact_fallback",
+        "13_translator_inference_failure",
+        "14_renderer_inference_failure",
+        "15_semantic_round_trip_mismatch"
+      ]
+    },
+    {
+      "section": "H7.3_adversarial_bank",
+      "passed": true,
+      "cases_evaluated": 11,
+      "zero_system_commits": true,
+      "results": [
+        {
+          "case_id": "ADV_nonce_op_florp",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_nonce_op_zindle",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_nonce_op_marnak",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_nonce_recip_velq",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_nonce_recip_qorbin",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_nonce_recip_drazel",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_ambiguous_recip",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_missing_qty",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_negative_qty",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_zero_qty",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        },
+        {
+          "case_id": "ADV_overflow_qty",
+          "disposition": "CLARIFY",
+          "prepared": false,
+          "committed": 0
+        }
+      ]
+    },
+    {
+      "section": "H7.4_invariant_matrix",
+      "passed": true,
+      "canonical_uow_invariants": [
+        "I_I",
+        "I_Phi",
+        "I_P",
+        "I_S",
+        "I_C",
+        "I_L",
+        "I_tau"
+      ],
+      "semantic_subordinate_invariants": {
+        "H1_deterministic_primacy": "beta_D = 0 (model cannot overwrite deterministic state)",
+        "H2_frontier_confinement": "F_P subset allowed_requirements",
+        "H3_probabilistic_non_authority": "epsilon_{unsafe}^{system} = 0",
+        "H4_explicit_uncertainty": "UNKNOWN/ambiguity => CLARIFY",
+        "H5_semantic_conservation": "I_t^{partial} + Delta I_{t+1} -> I_{t+1}^{complete}",
+        "H6_non_YES_exclusion": "CLARIFY, NO => 0 executable commits",
+        "H7_authority_non_escalation": "principal capability limits strictly enforced",
+        "H8_failure_non_amplification": "egress drift triggers fail-safe deterministic fallback"
+      },
+      "definition_of_done_satisfied": true
+    }
+  ]
+}

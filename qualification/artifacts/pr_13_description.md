@@ -1,6 +1,6 @@
-## Summary & Review Scope: Milestones H0–H4
+## Summary & Review Scope: Milestones H0–H5
 
-This PR implements the minimal-LLM semantic harness and its authoritative lifecycle integration within `UoW-v2`, spanning **Milestones H0 through H4**:
+This PR implements the minimal-LLM semantic harness, its authoritative lifecycle integration, and incremental multi-turn clarification within `UoW-v2`, spanning **Milestones H0 through H5**:
 
 1. **H0–H2 (Foundational Harness & Bounded Closure)**:
    - Qualified `uow.semantic` subpackage without modifying frozen public facades (`src/uow/__init__.py`, `pyproject.toml`).
@@ -39,20 +39,45 @@ This PR implements the minimal-LLM semantic harness and its authoritative lifecy
      - H4.9: Replay / Duplicate Signal Determinism
      - H4.10: 4-Tier Cryptographic Provenance Traversal
 
+4. **H5 (Incremental Clarification over Residual Semantic Frontiers)**:
+   - **Residual Frontier Invariant**:
+     $$\boxed{\text{resolved}_t \cap F_{P, t+1} = \emptyset}$$
+     Probabilistic adapter is never asked to re-predict or alter already certified terminals.
+   - **Closure Reconstitution**:
+     $$\boxed{I_t^{\text{partial}} + \Delta I_{t+1} \longrightarrow I_{t+1}^{\text{complete}}}$$
+     Reconstitutes full intent across multi-turn continuations without reparsing certified bindings.
+   - **Fast-Path Alternative Selection**: Ambiguous options (e.g. "Mike Jones" vs "Mike Smith") selected directly without invoking model inference (0 model calls).
+   - **Ephemeral Clarification Context**: $\text{ClarificationContext} \neq \text{WorldState}$; carries zero commit authority and fails closed upon state drift ($S_t \neq S_{t+1}$) via `StaleClarificationError`.
+   - **Contradiction Rejection**: `ContradictoryContinuationError` prevents continuation from mutating previously certified bindings.
+   - **Ten Verified Clarification Gates (H5.1–H5.10)**:
+     - H5.1: Single missing terminal resolution
+     - H5.2: Multi-turn monotonic frontier reduction ($2 \to 1 \to 0$)
+     - H5.3: Ambiguous alternatives exact selection (fast-path)
+     - H5.4: Unrelated / invalid continuation fails closed (remains `CLARIFY`)
+     - H5.5: Contradictory continuation rejection
+     - H5.6: State drift during clarification fails closed
+     - H5.7: Downstream authority revocation halts multi-turn execution
+     - H5.8: Replay / duplicate continuation idempotence
+     - H5.9: Ephemeral context crash/recovery (zero authority)
+     - H5.10: Multi-turn cryptographic provenance chaining (`original_signal:<id>`, `clarification:<id>`, `continuation_turn:<n>`)
+
 ## Invariants Upheld
 
 - $\boxed{\text{probabilistic translation} \neq \text{authority}}$
 - $\boxed{\beta_D = 0}$ (zero deterministic context/primacy pollution)
 - $\boxed{\text{CLARIFY, NO} \implies 0\text{ UoWs committed}}$
 - $\boxed{\text{state drift} \implies 0\text{ commits}}$ (strict pre-execution state hash match)
+- $\boxed{\text{resolved}_t \cap F_{P, t+1} = \emptyset}$ (strictly residual prompt frontiers)
 - Top-level `pyproject.toml` and `src/uow/__init__.py` frozen hashes strictly preserved.
 - Model weights remain outside Git tracking.
 
 ## Test & Qualification Status
 
-- Total pytest suite: **466 passed** (453 core + 13 lifecycle integration tests) in ~52s.
+- Total pytest suite: **476 passed** (453 core + 13 H4 lifecycle gates + 10 H5 clarification gates) with 0 failures and 0 regressions.
 - Nonce bank: 75/75 unseen nonces successfully rejected ($x \notin \text{Registry}_t \implies \text{VALID}(x) = \text{false}$).
 - Qualification artifacts:
   - `qualification/artifacts/semantic_h3_native_holdout_results.json`
   - `qualification/artifacts/semantic_h4_lifecycle_qualification.json`
+  - `qualification/artifacts/semantic_h5_clarification_qualification.json`
   - `h4_authoritative_lifecycle_qualification_report.md`
+  - `h5_incremental_clarification_qualification_report.md`

@@ -1,0 +1,125 @@
+{
+  "experiment": "H6-GOVERNED-EGRESS-QUALIFICATION",
+  "title": "H6: Governed Egress and Round-Trip Semantic Verification Qualification",
+  "timestamp_utc": "2026-09-27T05:59:18.057007+00:00",
+  "summary": {
+    "all_gates_passed": true,
+    "gates_verified": 12,
+    "roundtrip_invariant_verified": true,
+    "epsilon_egress_drift": 0.0,
+    "elapsed_seconds": 0.0022
+  },
+  "gates": [
+    {
+      "gate": 1,
+      "name": "recipient_projection_isolation",
+      "passed": true,
+      "human_isolated_keys": [
+        "internal_secret_route",
+        "uow_id",
+        "state_hash",
+        "evidence_refs"
+      ],
+      "auditor_entitled_keys": [
+        "internal_secret_route",
+        "uow_id",
+        "state_hash",
+        "evidence_refs"
+      ]
+    },
+    {
+      "gate": 2,
+      "name": "deterministic_formatter_bypasses_model",
+      "passed": true,
+      "model_calls": 0,
+      "committed_text": "TRANSFER committed: quantity=3, recipient=Mike Jones.",
+      "clarification_text": "Request requires clarification: recipient.",
+      "rejection_text": "Request rejected: quantity outside permitted range."
+    },
+    {
+      "gate": 3,
+      "name": "valid_natural_rendering_round_trips",
+      "passed": true,
+      "mode": "NATURAL_VERIFIED",
+      "rendered_text": "Successfully executed transfer of 5 items to Alice.",
+      "drift_detected": false
+    },
+    {
+      "gate": 4,
+      "name": "recipient_identity_preservation",
+      "passed": true,
+      "drift_detected": true,
+      "fallback_reason": "EgressDriftRejected: Recipient mutation: expected 'Mike Jones', found 'Mike Smith'.",
+      "delivered_text": "TRANSFER committed: quantity=3, recipient=Mike Jones, unit=items."
+    },
+    {
+      "gate": 5,
+      "name": "quantity_unit_preservation",
+      "passed": true,
+      "qty_drift_detected": true,
+      "unit_drift_detected": true
+    },
+    {
+      "gate": 6,
+      "name": "temporal_preservation",
+      "passed": true,
+      "drift_detected": true,
+      "fallback_reason": "EgressDriftRejected: Temporal mutation: expected 'before 17:00', found 'after 17:00'."
+    },
+    {
+      "gate": 7,
+      "name": "negation_preservation",
+      "passed": true,
+      "drift_detected": true,
+      "fallback_reason": "EgressDriftRejected: Negation polarity shift: expected negation=True, found negation=False."
+    },
+    {
+      "gate": 8,
+      "name": "modality_preservation",
+      "passed": true,
+      "drift_detected": true,
+      "fallback_reason": "EgressDriftRejected: Modality shift: expected modality=MUST, found modality=SHOULD."
+    },
+    {
+      "gate": 9,
+      "name": "condition_preservation",
+      "passed": true,
+      "drift_detected": true,
+      "fallback_reason": "EgressDriftRejected: Condition mutation: expected 'if authorized', found 'unless authorized'."
+    },
+    {
+      "gate": 10,
+      "name": "omission_and_hallucination_rejection",
+      "passed": true,
+      "omission_rejected": true,
+      "hallucination_rejected": true
+    },
+    {
+      "gate": 11,
+      "name": "invalid_renderer_output_falls_back_deterministically",
+      "passed": true,
+      "mode": "DETERMINISTIC_FALLBACK",
+      "fallback_text": "TRANSFER committed: quantity=10, recipient=Alice.",
+      "fallback_reason": "RendererException: RuntimeError: Renderer GPU out of memory"
+    },
+    {
+      "gate": 12,
+      "name": "full_provenance_traversal",
+      "passed": true,
+      "uow_id": "uow-sem-5812554bc00595b46928c6ae",
+      "certificate_hash": "4c1dfcca6a3f52de5112065fba64eb7423e07f7d1c78a4877d736480d5390350",
+      "state_hash": "82aa2defcb83b2f9e4ef4c806a7b99b021081833e07e3c8affcba2ed97955667",
+      "projection_hash": "a73fe82b602fccc86fd43df8ad71786690ef03de8cb6ec5d296b1a338042efa3",
+      "evidence_refs": [
+        "world-state:1c893c2d320ba321e5948fdd2a30759a6abb25356e5a6dd6c7e5e82a1d870bed",
+        "semantic_admissibility_filtered",
+        "projection:a73fe82b602fccc86fd43df8ad71786690ef03de8cb6ec5d296b1a338042efa3",
+        "egress_mode:NATURAL_VERIFIED",
+        "roundtrip_verified:true",
+        "uow:uow-sem-5812554bc00595b46928c6ae",
+        "state:82aa2defcb83b2f9e4ef4c806a7b99b021081833e07e3c8affcba2ed97955667",
+        "cert:4c1dfcca6a3f52de5112065fba64eb7423e07f7d1c78a4877d736480d5390350"
+      ]
+    }
+  ]
+}

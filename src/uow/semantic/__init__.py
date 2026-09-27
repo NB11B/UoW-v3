@@ -23,9 +23,23 @@ from .compiler import (
     derive_semantic_uow_id,
 )
 from .context import SemanticContextProjector
+from .egress import GovernedEgressEngine, GovernedEgressMessage
 from .frontier import DeterministicSemanticResolver, SemanticFrontierBuilder
 from .handoff import SemanticHandoff
 from .harness import SemanticHarness
+from .projection import (
+    ProjectedSemanticIntent,
+    RecipientClass,
+    RecipientProfile,
+    SemanticRecipientProjector,
+)
+from .rendering import (
+    ConfigurableRenderer,
+    DeterministicEgressFormatter,
+    DeterministicTemplateRenderer,
+    SemanticRenderer,
+)
+from .roundtrip import SemanticRoundTripResult, SemanticRoundTripVerifier
 from .schema import (
     BindingOrigin,
     CandidateSemanticBindings,
@@ -56,16 +70,24 @@ __all__ = [
     "BindingValidationResult",
     "CandidateSemanticBindings",
     "ClarificationContext",
+    "ConfigurableRenderer",
     "ContradictoryContinuationError",
     "DefaultSemanticAdmissibilityValidator",
+    "DeterministicEgressFormatter",
     "DeterministicSemanticResolver",
+    "DeterministicTemplateRenderer",
     "ExternalSignal",
+    "GovernedEgressEngine",
+    "GovernedEgressMessage",
     "IngressContext",
     "IntentEnvelope",
     "MinimalSemanticContext",
     "NullSemanticTranslator",
     "PreparedSemanticUoW",
+    "ProjectedSemanticIntent",
     "PurgeUoWCompiler",
+    "RecipientClass",
+    "RecipientProfile",
     "SemanticAlternative",
     "SemanticApplicationAdapter",
     "SemanticBinding",
@@ -79,8 +101,12 @@ __all__ = [
     "SemanticHandoff",
     "SemanticHarness",
     "SemanticInvariantError",
+    "SemanticRecipientProjector",
+    "SemanticRenderer",
     "SemanticRequirement",
     "SemanticResult",
+    "SemanticRoundTripResult",
+    "SemanticRoundTripVerifier",
     "SemanticStateDriftError",
     "SemanticTranslationRequest",
     "SemanticTranslator",

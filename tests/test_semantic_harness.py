@@ -2,14 +2,28 @@ from __future__ import annotations
 
 import pytest
 
-from uow import Guard, GuardOp, Route, Successor, WorldState
+from uow import (
+    Guard,
+    GuardOp,
+    Mutation,
+    MutationOp,
+    Route,
+    Successor,
+    WorldState,
+    certify,
+    commit,
+    propose,
+)
 from uow.semantic import (
     BindingOrigin,
     CandidateSemanticBindings,
+    DeterministicSemanticResolver,
     IngressContext,
     SemanticAlternative,
     SemanticBinding,
+    SemanticClosureCertificate,
     SemanticDisposition,
+    SemanticFrontierBuilder,
     SemanticHandoff,
     SemanticHarness,
     SemanticRequirement,
@@ -224,3 +238,188 @@ def test_only_yes_lowers_through_native_make_uow_api() -> None:
             uow_id="must-not-exist",
             route_builder=lambda intent: (),
         )
+
+
+def test_semantic_yes_executes_through_native_propose_certify_commit_lifecycle() -> None:
+    class MockTranslator:
+        def propose(self, req):
+            return CandidateSemanticBindings(
+                candidate_bindings=(
+                    SemanticBinding("target", "user-42", BindingOrigin.PROBABILISTIC),
+                    SemanticBinding("amount", 200, BindingOrigin.PROBABILISTIC),
+                )
+            )
+
+    harness = SemanticHarness(MockTranslator())
+    state = WorldState({"balance": 500, "user-42": 0})
+    result = harness.interpret(
+        "transfer 200 to user-42",
+        state=state,
+        ingress=_ingress(),
+        requirements=(
+            SemanticRequirement("target"),
+            SemanticRequirement("amount"),
+            SemanticRequirement("balance", state_key="balance"),
+        ),
+    )
+
+    assert result.disposition is SemanticDisposition.YES
+    assert result.intent is not None
+
+    handoff = SemanticHandoff()
+    uow = handoff.to_uow(
+        result,
+        uow_id="transfer-e2e-uow",
+        route_builder=lambda intent: (
+            Route(
+                guard=Guard(GuardOp.ALWAYS),
+                mutations=(
+                    Mutation(
+                        MutationOp.SET,
+                        "balance",
+                        intent.binding_map()["balance"] - intent.binding_map()["amount"],
+                    ),
+                    Mutation(
+                        MutationOp.SET,
+                        intent.binding_map()["target"],
+                        intent.binding_map()["amount"],
+                    ),
+                ),
+                successor=Successor.halt(),
+            ),
+        ),
+    )
+
+    # Authority spine: PROPOSE -> CERTIFY -> COMMIT
+    proposal = propose(uow, state)
+    assert proposal.uow_id == "transfer-e2e-uow"
+
+    cert = certify(uow, state, proposal)
+    assert cert.is_valid
+
+    new_state, record = commit(
+        uow,
+        state,
+        proposal,
+        cert,
+        prev_evidence_hash="genesis",
+        step_number=1,
+    )
+    assert new_state.attributes["balance"] == 300
+    assert new_state.attributes["user-42"] == 200
+    assert uow.H.parent_context == f"semantic:{result.certificate.certificate_hash}"
+
+
+def test_semantic_handoff_has_no_execution_authority_and_validates_routes() -> None:
+    handoff = SemanticHandoff()
+    assert not hasattr(handoff, "execute")
+    assert not hasattr(handoff, "commit")
+    assert not hasattr(handoff, "apply")
+
+    yes = SemanticHarness().interpret(
+        "ping",
+        state=WorldState({"key": "val"}),
+        ingress=_ingress(),
+        requirements=(SemanticRequirement("key", state_key="key"),),
+    )
+    with pytest.raises(ValueError, match="at least one deterministic route"):
+        handoff.to_uow(yes, uow_id="empty-routes", route_builder=lambda intent: ())
+
+
+def test_multi_step_deterministic_resolver_fixed_point_derivation() -> None:
+    class TaxResolver:
+        def resolve(self, requirement, known, context):
+            if requirement.name == "tax" and "amount" in known:
+                return SemanticBinding(
+                    "tax",
+                    known["amount"].value * 0.10,
+                    BindingOrigin.DERIVED,
+                    ("rule:tax_10pct",),
+                )
+            return None
+
+    class TotalResolver:
+        def resolve(self, requirement, known, context):
+            if requirement.name == "total" and "amount" in known and "tax" in known:
+                return SemanticBinding(
+                    "total",
+                    known["amount"].value + known["tax"].value,
+                    BindingOrigin.DERIVED,
+                    ("rule:total_sum",),
+                )
+            return None
+
+    class AmountOnlyTranslator:
+        def propose(self, req):
+            return CandidateSemanticBindings(
+                candidate_bindings=(
+                    SemanticBinding("amount", 100.0, BindingOrigin.PROBABILISTIC),
+                )
+            )
+
+    frontier_builder = SemanticFrontierBuilder(
+        resolvers=(TaxResolver(), TotalResolver())
+    )
+    harness = SemanticHarness(
+        AmountOnlyTranslator(),
+        frontier_builder=frontier_builder,
+    )
+
+    result = harness.interpret(
+        "pay 100",
+        state=WorldState({}),
+        ingress=_ingress(),
+        requirements=(
+            SemanticRequirement("amount"),
+            SemanticRequirement("tax"),
+            SemanticRequirement("total"),
+        ),
+    )
+
+    assert result.disposition is SemanticDisposition.YES
+    assert result.intent is not None
+    assert result.intent.binding_map()["amount"] == 100.0
+    assert result.intent.binding_map()["tax"] == 10.0
+    assert result.intent.binding_map()["total"] == 110.0
+    assert "rule:tax_10pct" in result.evidence_refs
+    assert "rule:total_sum" in result.evidence_refs
+
+
+def test_certificate_hash_tamper_detection() -> None:
+    harness = SemanticHarness()
+    result = harness.interpret(
+        "noop",
+        state=WorldState({"k": "v"}),
+        ingress=_ingress(),
+        requirements=(SemanticRequirement("k", state_key="k"),),
+    )
+    cert = result.certificate
+
+    with pytest.raises(ValueError, match="hash does not match contents"):
+        SemanticClosureCertificate(
+            disposition=cert.disposition,
+            state_hash=cert.state_hash,
+            signal_id=cert.signal_id,
+            resolved_bindings=cert.resolved_bindings,
+            probabilistic_bindings=cert.probabilistic_bindings,
+            unresolved=cert.unresolved,
+            reason_codes=cert.reason_codes,
+            evidence_refs=cert.evidence_refs,
+            certificate_hash="0000000000000000000000000000000000000000000000000000000000000000",
+        )
+
+
+def test_frozen_facade_and_zero_framework_import_leaks() -> None:
+    import sys
+    import uow
+
+    # Frozen top-level facade
+    assert not hasattr(uow, "SemanticHarness")
+    assert not hasattr(uow, "SemanticHandoff")
+    assert not hasattr(uow, "SemanticTranslator")
+
+    # Framework quarantine
+    assert "torch" not in sys.modules
+    assert "transformers" not in sys.modules
+    assert "huggingface_hub" not in sys.modules
+

@@ -9,9 +9,11 @@ scratch/
 storage_authority_c/
 qualification/distributed_authority/storage_authority_c/
 /artifacts/
+.artifacts/
 *.onnx
 *.safetensors
 checkpoints/*_arm_*
-sdk/rust/target/
+sdk/
+
 
 

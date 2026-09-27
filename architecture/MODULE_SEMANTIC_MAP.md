@@ -54,6 +54,22 @@ This map is descriptive. Preservation labels are research classifications, not r
 | `src/uow/composition/runtime.py` | `AdaptiveCompositionRuntime`, rebind, certify/replace, execute/fallback | Compatibility surface for active graph/binding runtime realization | A2.1-A2.8, recursive boundary | P1 |
 | `src/uow/implementations/composition/actor_execution.py` | `ActorExecutor`, `ActorExecutionRegistry`, `CertifiedRuntimeActor` | Derived dispatch realization; exposes a boundary-certified child runtime as one actor without granting parent authority | A2 recursive boundary | P1 |
 | `src/uow/composition/endurance.py` | B0/B1/A2 runtimes, objective, hysteresis, poisoning, lineage | Integrated adaptive endurance + scientific controls | A2.8 | P1/P2/P3 |
+| `src/uow/semantic/schema.py` | `ExternalSignal`, `IngressContext`, `SemanticRequirement`, `SemanticBinding`, `CandidateSemanticBindings`, `SemanticClosureCertificate`, `IntentEnvelope`, `SemanticResult` | Immutable semantic mediation data contracts and envelopes | H0-H7 | P0 |
+| `src/uow/semantic/context.py` | `SemanticContextProjector` | Minimal deterministic context projection ($C^{\min}$) from `WorldState` | H0-H7 | P0 |
+| `src/uow/semantic/frontier.py` | `SemanticFrontierBuilder`, `DeterministicSemanticResolver` | Fixed-point deterministic closure ($Cl_D$) and residual prompt frontier ($F_P$); enforces $\beta_D = 0$ | H0-H7 | P0/P2 |
+| `src/uow/semantic/closure.py` | `SemanticClosureEngine` | Frontier evaluation and closure oracle producing `YES`, `NO`, or `CLARIFY` | H0-H7 | P0/P2 |
+| `src/uow/semantic/validation.py` | `DefaultSemanticAdmissibilityValidator` | Holdout admissibility interception and nonce generalization ($U_{\text{system}} = 0$) | H4, H7 | P0/P2 |
+| `src/uow/semantic/compiler.py` | `SemanticCompilerRegistry`, `TransferUoWCompiler`, `PurgeUoWCompiler`, `derive_semantic_uow_id` | Deterministic lowering from qualified intent to canonical `make_uow` | H4, H7 | P1 |
+| `src/uow/semantic/application.py` | `SemanticApplicationAdapter` | State-hash conformance check ($S_t \equiv S_{\text{cert}}$) and `ApplicationSpine` execution delegation | H4, H7 | P1 |
+| `src/uow/semantic/clarification.py` | `ClarificationContext`, anti-drift and continuation errors | Ephemeral multi-turn clarification state with zero execution authority | H5, H7 | P1/P2 |
+| `src/uow/semantic/harness.py` | `SemanticHarness` | Orchestration of interpretation, frontier construction, and clarification | H0-H7 | P1 |
+| `src/uow/semantic/adapters/codec.py` | `SemanticPromptBuilder`, `SemanticOutputParser` | H3 native bidirectional prompt serialization and JSON candidate parsing | H3-H7 | P1 |
+| `src/uow/semantic/adapters/manifest.py` | `SemanticModelManifest`, `verify_adapter_artifact` | Adapter cryptographic manifest validation and SHA-256 weight verification | H3-H7 | P0/P1 |
+| `src/uow/semantic/adapters/huggingface.py` | `HuggingFaceSemanticTranslator`, `DefaultHuggingFaceBackend` | Lazy-loaded SmolLM2-135M / LoRA translation adapter | H3-H7 | P1 |
+| `src/uow/semantic/projection.py` | `SemanticRecipientProjector` | Deterministic recipient projection ($I_B = \pi_B(I)$) and internal state isolation | H6, H7 | P0 |
+| `src/uow/semantic/rendering.py` | `DeterministicEgressFormatter`, `DeterministicTemplateRenderer`, `ConfigurableRenderer` | Deterministic egress formatting and natural-language rendering | H6, H7 | P1 |
+| `src/uow/semantic/roundtrip.py` | `SemanticRoundTripVerifier` | Bidirectional semantic round-trip certification across 10 dimensions ($\epsilon_{\text{drift}} = 0$) | H6, H7 | P2 |
+| `src/uow/semantic/egress.py` | `GovernedEgressEngine` | Governed egress coordination, round-trip verification, and deterministic fallback | H6, H7 | P1 |
 
 ## Cross-module semantic clusters
 

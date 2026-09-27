@@ -23,6 +23,18 @@ The runtime no longer depends on qualification code for quorum authority. `Quoru
 
 The consolidated architecture now includes recursive system-as-actor composition and qualified development lines for semantic mediation, machine-readable design/policy state, polyglot/runtime-substrate conformance, and governed lifecycle semantics. These layers may advance independently of the compatibility facade and do not become top-level public API unless explicitly promoted.
 
+### Bounded Semantic Mediation Subsystem (`uow.semantic`)
+
+- **Surface status:** Qualified namespaced surface exporting 49 symbols via `uow.semantic.__all__`.
+- **Top-level status:** Intentionally not flattened into the frozen top-level facade (`src/uow/__init__.py`), strictly preserving the 200-symbol baseline.
+- **Invariants upheld:**
+  - $\beta_D = 0$ (Deterministic primacy: probabilistic output cannot overwrite deterministic state).
+  - $U_{\text{system}} = 0.0\%$ (Probabilistic mistakes intercepted before UoW preparation).
+  - $\text{resolved}_t \cap F_{P, t+1} = \emptyset$ (Residual frontier isolation).
+  - $\text{ClarificationContext} \neq \text{WorldState}$ (Zero direct execution authority).
+  - $\text{parse}(\text{render}(I_B)) \equiv I_B$ ($\epsilon_{\text{egress-drift}} = 0.0$; deterministic fallback on drift).
+- **Realization isolation:** Heavy neural model backends (Transformers / PyTorch / PEFT) are isolated behind lazy imports in `uow.semantic.adapters.huggingface`.
+
 ## Forward-compatibility rule
 
 The candidate does not declare Python enums, dataclasses, class names, module paths, qualification harnesses, or research terminology to be the permanent universal ontology. Future ontology evolution must preserve versioning, authority, migration lineage, compatibility/rejection rules, reconstruction of prior semantics, and the invariant separation between proposal, certification, and authoritative commit.

@@ -25,6 +25,7 @@
    - [Level 5: Replaceable & Adaptive Proposers](#level-5-replaceable--adaptive-proposers)
    - [Level 6: Recursive Composition & System-as-Actor](#level-6-recursive-composition--system-as-actor)
    - [Level 7: Distributed Authority & Quorum-Certified Mutation](#level-7-distributed-authority--quorum-certified-mutation)
+   - [Level 8: Bounded Semantic Mediation & Governed Egress](#level-8-bounded-semantic-mediation--governed-egress)
    - [Level 9: Design / Policy Plane](#level-9-design--policy-plane)
 3. [Heterogeneous Hardware & Distributed Deployment](#3-heterogeneous-hardware--distributed-deployment)
    - [Target Hardware Architecture](#target-hardware-architecture)
@@ -112,17 +113,20 @@ The top-level `uow` package remains a compatibility facade with a frozen manifes
 
 ### Current Qualification Checkpoint
 
-The current `main` line integrates the recursive-composition and operational-grammar qualification program through the sealed Phase 10 governance-kernel checkpoint. The research history is retained in Git rather than flattened into the public API, with supporting reports under `docs/`, executable campaigns under `qualification/`, and pinned result artifacts under `qualification/artifacts/`.
+The current `main` line integrates both the recursive-composition/operational-grammar qualification program (Phase 10) and the bounded bidirectional semantic boundary (Milestones H0–H7) through the sealed release [`semantic-harness-v1-qualified`](https://github.com/NB11B/UoW-v2/releases/tag/semantic-harness-v1-qualified). The research history is retained in Git rather than flattened into the public API, with supporting synthesis reports under `docs/`, executable campaigns under `qualification/`, and pinned result artifacts under `qualification/artifacts/`.
 
 Current integrated verification status:
 
-- **Repository CI (Linux):** 405 passed, 4 platform-dependent tests skipped (409 collected).
-- **Sealed Phase 10 local checkpoint:** 409 / 409 tests passing before integration.
-- **Closure shadow:** passing.
-- **Recursive-scale stress workflow:** passing.
-- **Public API:** frozen compatibility facade remains unchanged; qualification results do not implicitly promote new top-level exports.
+- **Repository CI / Full Test Suite:** **520 passed tests** (0 failures, 0 regressions in ~52s).
+- **Core UoW Kernel & Distributed Suites:** 412 tests passed.
+- **Level 8 Semantic Mediation Suite (H0–H7):** 108 tests passed across 7 test modules.
+- **Closure shadow:** 279 / 279 tests passing (`architecture/shadow/python/tests`).
+- **Claim lint:** 42 registered qualification claims passing (`qualification.claim_lint`).
+- **System acceptance smoke:** 31 / 31 assertions passing (`qualification/uow_system_acceptance.py`).
+- **Semantic qualification campaigns (H4–H7):** All passing with 0% system unsafe errors ($U_{\text{system}} = 0.0\%$), monotonic residual frontier reduction ($\text{resolved}_t \cap F_{P, t+1} = \emptyset$), zero egress drift ($\epsilon_{\text{drift}} = 0.0$), and 15-fault matrix conformance.
+- **Public API:** Frozen top-level compatibility facade strictly preserved at 200 symbols (`src/uow/__init__.py`). Level 8 functionality is cleanly namespaced under `uow.semantic`.
 
-The latest governance-grammar synthesis is documented in [`COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md`](docs/COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md). Its results are qualification evidence for the architectural lifecycle/operational-semantics layer, not a claim that experiment-specific classes, cardinalities, or observer machinery are permanent public API.
+The definitive semantic subsystem synthesis is documented in [`SEMANTIC_HARNESS_H0_H7_FINAL_SYNTHESIS.md`](docs/SEMANTIC_HARNESS_H0_H7_FINAL_SYNTHESIS.md), and prior governance-kernel synthesis is in [`COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md`](docs/COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md).
 
 ---
 
@@ -152,40 +156,48 @@ from uow import (
     propose,
     certify,
     commit,
+    Route,
+    Guard,
     GuardOp,
+    Mutation,
     MutationOp,
+    Successor,
+    MatrixCell,
     WorkCategory,
 )
 
 # 1. Initialize an immutable WorldState
-initial_state = WorldState({"balance": 100, "status": "ACTIVE"})
+initial_state = WorldState(attributes={"balance": 100, "status": "ACTIVE", "transfers_completed": 0})
 
-# 2. Construct a Unit of Work
+# 2. Construct a Unit of Work U = (H, Gamma, M, R, B, E, T)
 uow = make_uow(
-    uow_id="transfer_tx_001",
-    guards=[
-        ("balance", GuardOp.GREATER_EQUAL, 30),
-        ("status", GuardOp.EQUAL, "ACTIVE"),
+    "transfer_tx_001",
+    routes=[
+        Route(
+            guard=Guard(GuardOp.GTE, "balance", 30),
+            mutations=(
+                Mutation(MutationOp.SUB, "balance", 30),
+                Mutation(MutationOp.ADD, "transfers_completed", 1),
+            ),
+            successor=Successor.halt(),
+        )
     ],
-    mutations=[
-        ("balance", MutationOp.SUBTRACT, 30),
-        ("transfers_completed", MutationOp.ADD, 1),
-    ],
-    category=WorkCategory.TRANSACTION,
+    matrix_cell=MatrixCell(WorkCategory.PROCESSES, WorkCategory.DATA),
 )
 
 # 3. PROPOSE: Generate candidate transition proposal
 proposal = propose(uow, initial_state)
-assert proposal.is_valid
+assert proposal.uow_id == "transfer_tx_001"
 
 # 4. CERTIFY: Authoritatively verify guards and invariants
-cert = certify(proposal, initial_state)
-assert cert.is_certified
+cert = certify(uow, initial_state, proposal)
+assert cert.is_valid
 
-# 5. COMMIT: Atomically apply mutations and yield updated WorldState
-new_state, record = commit(cert, initial_state)
+# 5. COMMIT: Atomically apply mutations and record evidence
+new_state, record = commit(uow, initial_state, proposal, cert, prev_evidence_hash="0" * 64, step_number=1)
 print("Updated State:", new_state.to_dict())
 # Output: {'balance': 70, 'status': 'ACTIVE', 'transfers_completed': 1}
+assert new_state.require("balance") == 70
 ```
 
 ---
@@ -196,35 +208,52 @@ UoW provides built-in Optimistic Concurrency Control (OCC) and Write-Ahead Loggi
 
 ```python
 from uow.transactions import (
-    WALSequencer,
+    DeterministicSequencer,
     create_transaction_descriptor,
-    apply_transaction,
+    validate_occ,
 )
-from uow import WorldState, MutationOp
+from uow import (
+    WorldState,
+    Route,
+    Guard,
+    GuardOp,
+    Mutation,
+    MutationOp,
+    Successor,
+    make_uow,
+    propose,
+    certify,
+)
 
-state = WorldState({"account_A": 500, "account_B": 200})
-sequencer = WALSequencer(wal_path="transactions.wal")
+state = WorldState(attributes={"account_A": 500, "account_B": 200})
+sequencer = DeterministicSequencer(state)
 
-# Create transaction with explicit read/write footprint
-tx = create_transaction_descriptor(
-    tx_id="tx_transfer_01",
-    read_keys=["account_A"],
-    write_mutations=[
-        ("account_A", MutationOp.SUBTRACT, 100),
-        ("account_B", MutationOp.ADD, 100),
+# Define transactional UoW
+tx_uow = make_uow(
+    "tx_transfer_01",
+    routes=[
+        Route(
+            guard=Guard(GuardOp.ALWAYS),
+            mutations=(
+                Mutation(MutationOp.SUB, "account_A", 100),
+                Mutation(MutationOp.ADD, "account_B", 100),
+            ),
+            successor=Successor.halt(),
+        )
     ],
-    expected_read_versions={"account_A": state.get_version("account_A")},
 )
 
-# Atomically commit and record to WAL
-success, new_state, error = apply_transaction(tx, state, sequencer)
-assert success
-assert new_state["account_A"] == 400
-assert new_state["account_B"] == 300
+# Proposal, transaction descriptor footprint projection, and certification
+proposal = propose(tx_uow, state)
+tx_desc = create_transaction_descriptor(tx_uow, state)
+cert = certify(tx_uow, state, proposal)
 
-# Crash replay recovers authoritative state from the WAL
-recovered_state = sequencer.replay_all(WorldState({"account_A": 500, "account_B": 200}))
-assert recovered_state == new_state
+# Concurrency validation and atomic sequencer commit
+is_valid, hazard, _ = validate_occ(state, tx_desc)
+assert is_valid
+new_state, evidence = sequencer.commit(tx_uow, proposal, tx_desc, cert)
+assert new_state.require("account_A") == 400
+assert new_state.require("account_B") == 300
 ```
 
 ---
@@ -239,30 +268,26 @@ from uow.orchestration import (
     make_domain_task,
     run_orchestration,
 )
+from uow import Route, Guard, GuardOp, Mutation, MutationOp
 
 # Define tasks with causal dependencies
-task1 = make_domain_task(
-    task_id="extract_features",
-    dependencies=[],
-    payload={"source": "telemetry.csv"},
-)
-task2 = make_domain_task(
-    task_id="train_model",
-    dependencies=["extract_features"],
-    payload={"epochs": 10},
-)
-task3 = make_domain_task(
-    task_id="publish_metrics",
-    dependencies=["train_model"],
-    payload={"target": "dashboard"},
-)
+task_a = make_domain_task("extract_features", [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "features_ready", 1),))])
+task_b = make_domain_task("train_model", [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "model_trained", 1),))])
 
 # Execute the DAG through self-hosted UoW transitions
-initial_orch = create_initial_orchestration_state([task1, task2, task3])
-final_orch, ledger = run_orchestration(initial_orch)
+initial_orch = create_initial_orchestration_state(
+    queue=["extract_features", "train_model"],
+    dependencies={"train_model": ["extract_features"]},
+    attributes={"features_ready": 0, "model_trained": 0},
+)
+final_orch, sequencer = run_orchestration(
+    tasks={"extract_features": task_a, "train_model": task_b},
+    initial_state=initial_orch,
+)
 
-assert final_orch.is_all_completed
-print("Completed Tasks:", final_orch.completed_tasks)
+assert final_orch.status == "HALTED"
+assert final_orch.require("features_ready") == 1
+assert final_orch.require("model_trained") == 1
 ```
 
 ---
@@ -275,36 +300,32 @@ Tasks acquire certified, authoritative leases over physical resources (CPU, GPU,
 from uow.resources import (
     ResourceState,
     ResourceRequirement,
-    ResourceBoundTask,
-    CostEnergySchedulingPolicy,
+    make_resource_domain_task,
+    set_authoritative_resource_state,
     run_resource_orchestration,
+    FIFOSchedulingPolicy,
+    get_authoritative_resource_state,
 )
+from uow.orchestration import create_initial_orchestration_state
+from uow import Route, Guard, GuardOp, Mutation, MutationOp
 
 # Define total physical node capacity
-cluster_resources = ResourceState(
-    capacities={
-        "cpu_cores": 16.0,
-        "gpu_vram_gb": 8.0,
-        "npu_engines": 2.0,
-    }
-)
+cluster_resources = ResourceState(capacities={"cpu_cores": 16.0, "ram_units": 16.0, "gpu_slots": 2})
 
 # Bind resource demands to tasks
-npu_task = ResourceBoundTask(
-    task_id="inference_batch",
-    dependencies=[],
-    resource_requirement=ResourceRequirement(
-        demands={"cpu_cores": 2.0, "npu_engines": 1.0},
-        lease_duration_ms=50.0,
-    ),
+npu_task = make_resource_domain_task(
+    "inference_batch",
+    [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "inferences", 10),))],
+    requirement=ResourceRequirement(cpu_cores=2, ram_units=4),
 )
 
-# Schedule using energy/cost-aware scheduling policy
-final_state, ledger = run_resource_orchestration(
-    initial_resources=cluster_resources,
-    tasks=[npu_task],
-    policy=CostEnergySchedulingPolicy(),
-)
+# Schedule using energy/cost-aware or FIFO scheduling policy
+initial_base = create_initial_orchestration_state(["inference_batch"], {}, attributes={"inferences": 0})
+initial_state = set_authoritative_resource_state(initial_base, cluster_resources)
+final_state, seq = run_resource_orchestration({"inference_batch": npu_task}, initial_state, FIFOSchedulingPolicy())
+
+assert final_state.require("inferences") == 10
+assert len(get_authoritative_resource_state(final_state).leases) == 0
 ```
 
 ---
@@ -315,33 +336,36 @@ External interactions (such as hardware actuators, external network APIs, or dis
 
 ```python
 from uow.effects import (
-    EffectDescriptor,
+    EffectRunner,
     SagaStep,
     SagaCoordinator,
     MockExternalClient,
+    create_effect_descriptor,
 )
+from uow.transactions import DeterministicSequencer
+from uow import WorldState
 
 client = MockExternalClient()
-coordinator = SagaCoordinator(client=client)
+sequencer = DeterministicSequencer(WorldState(attributes={}))
+runner = EffectRunner(sequencer, client)
+coordinator = SagaCoordinator(runner)
 
 # Define forward action and compensating rollback
 step = SagaStep(
-    step_id="provision_storage",
-    forward_effect=EffectDescriptor(
-        target_service="storage_svc",
-        action="allocate",
-        params={"volume_id": "vol_42", "size_gb": 100},
-    ),
-    compensation_effect=EffectDescriptor(
-        target_service="storage_svc",
-        action="deallocate",
-        params={"volume_id": "vol_42"},
+    "provision_storage",
+    lambda state: create_effect_descriptor(
+        uow_id="provision_storage",
+        pre_state_hash=state.state_hash,
+        intent="allocate_volume",
+        request={"volume_id": "vol_42", "size_gb": 100},
+        compensation_intent="deallocate_volume",
+        compensation_request={"volume_id": "vol_42"},
     ),
 )
 
 # Execute with automated atomic rollback upon failure
-receipt = coordinator.execute_saga([step])
-assert receipt.is_success
+coordinator.execute_saga([step], saga_id="storage_saga_01")
+assert len(client.call_log) > 0
 ```
 
 ---
@@ -412,36 +436,85 @@ This section corresponds to the earlier A2 qualification lineage. In multi-node 
 ```python
 from uow.composition import (
     QuorumMutationCoordinator,
-    RuntimeMutationProposal,
     assemble_mutation_qc,
-    verify_mutation_qc,
-    AuthorityClass,
 )
+from uow import ActorBinding, AuthoritativeHistory
 
+# 1. Initialize Quorum Mutation Coordinator across physical authorities
 coordinator = QuorumMutationCoordinator(
-    quorum_threshold=2,  # 2-of-3 threshold consensus
-    known_authorities=["authority_esp32", "authority_uno_q", "authority_node_c"],
+    parent_contract=parent_contract,
+    active_graph=baseline_graph,
+    active_binding=baseline_binding,
+    history=AuthoritativeHistory(),
+    authority_keys={"authority_esp32": "k1", "authority_uno_q": "k2", "authority_node_c": "k3"},
+    generation=0,
+    quorum_threshold=2,
 )
 
-# Propose a topological mutation
-proposal = RuntimeMutationProposal(
-    proposal_id="mut_epoch_004",
-    parent_contract_hash="7b17c150...",
-    candidate_graph_hash="ce64760a...",
-    epoch=4,
+# 2. Propose mutation and collect cryptographic threshold votes
+proposal = coordinator.propose_mutation("npu_proposer", candidate_graph, candidate_binding)
+votes = coordinator.collect_votes(proposal)
+
+# 3. Assemble Quorum Certificate (QC) and atomically apply mutation
+qc, msg = assemble_mutation_qc(proposal, votes[:2], threshold=2)
+ok, status = coordinator.apply_mutation(qc, candidate_graph, candidate_binding)
+assert ok is True and status == "MUTATION_COMMITTED"
+assert coordinator.generation == 1
+```
+
+---
+
+### Level 8: Bounded Semantic Mediation & Governed Egress
+
+This section corresponds to the H0–H7 qualification lineage. Natural-language and perceptual signals are compiled into machine-routable intent representations without granting execution or state-mutation authority. The compiled intent must flow through the canonical `PROPOSE → CERTIFY → COMMIT` boundary, and egress renderings are verified against round-trip semantic drift ($\epsilon_{\text{egress-drift}} = 0$):
+
+```python
+from uow import WorldState, DeterministicSequencer
+from uow.semantic import (
+    IngressContext,
+    SemanticHarness,
+    SemanticRequirement,
+    SemanticDisposition,
+    DefaultSemanticAdmissibilityValidator,
+    SemanticApplicationAdapter,
+    TransferUoWCompiler,
+    GovernedEgressEngine,
+    RecipientProfile,
 )
 
-# Collect cryptographic threshold signatures from physical authorities
-# (Node A: ESP32, Node B: UNO Q, Node C: Host C)
-votes = [
-    coordinator.vote_authority("authority_esp32", proposal, secret_key=b"k1"),
-    coordinator.vote_authority("authority_uno_q", proposal, secret_key=b"k2"),
-]
+# 1. State and Ingress Context (Minimal deterministic context projection)
+state = WorldState(attributes={"default_operator": "transfer", "default_quantity": 10})
+ingress = IngressContext(principal_id="user-1", session_id="s1", channel="text", metadata={"recipient": "Bob"})
 
-# Assemble and verify Quorum Certificate (QC)
-qc = assemble_mutation_qc(proposal, votes, threshold=2)
-assert verify_mutation_qc(qc, known_authorities=coordinator.known_authorities)
-print("Quorum Certificate Certified:", qc.qc_id)
+# 2. Bounded interpretation with deterministic primacy (beta_D = 0)
+harness = SemanticHarness(admissibility_validator=DefaultSemanticAdmissibilityValidator())
+result = harness.interpret(
+    "Execute standard transfer",
+    state=state,
+    ingress=ingress,
+    requirements=(
+        SemanticRequirement("operator", state_key="default_operator"),
+        SemanticRequirement("quantity", state_key="default_quantity"),
+        SemanticRequirement("recipient", ingress_key="recipient"),
+    ),
+)
+assert result.disposition is SemanticDisposition.YES
+assert result.intent is not None
+
+# 3. Deterministic compilation into governed UoW execution
+# (Semantic mediation has ZERO direct mutation authority; mutation requires ApplicationSpine)
+adapter = SemanticApplicationAdapter()
+prepared = adapter.prepare(result, state, TransferUoWCompiler())
+sequencer = DeterministicSequencer(state)
+app_res = adapter.execute(prepared, sequencer)
+assert app_res.state.attributes["transfers.Bob"] == 10
+
+# 4. Governed Egress with Zero-Drift Verification (parse(render(I_B)) == I_B)
+egress_engine = GovernedEgressEngine()
+egress = egress_engine.emit(result, RecipientProfile.default_human(), status="COMMITTED")
+assert egress.mode == "DETERMINISTIC"
+print("Delivered Output:", egress.text)
+# Output: TRANSFER committed: quantity=10, recipient=Bob.
 ```
 
 ---
@@ -453,17 +526,20 @@ This section corresponds to the earlier P1–P5 qualification lineage. Autonomou
 ```python
 from uow.policy import (
     PolicyRegistry,
-    PolicyAwareOrchestrator,
-    PolicyDriftDetector,
+    PolicyResolver,
+    DiscoveryEngine,
+    QualificationEngine,
+    DriftMonitor,
 )
 
 # Register qualified, versioned policies
 registry = PolicyRegistry()
-# Autonomous orchestrator detects live drift and triggers hot-replacement
-orchestrator = PolicyAwareOrchestrator(
-    registry=registry,
-    drift_detector=PolicyDriftDetector(latency_threshold_ms=15.0),
-)
+resolver = PolicyResolver(registry)
+discovery = DiscoveryEngine()
+qualifier = QualificationEngine(registry)
+drift_monitor = DriftMonitor(registry=registry)
+
+assert registry.total_policies == 0
 ```
 
 ---
@@ -554,6 +630,20 @@ The suite covers the architectural modules below; the exact test count evolves a
 - `tests/test_composition_*.py`: Actor fabric, network partitions, and quorum mutation
 - `tests/test_npu_*.py`: OpenVINO NPU adaptive proposer and dynamic hot-swap failovers
 - `tests/test_policy_orchestrator.py`: P1–P5 policy-aware orchestrator invariants
+- `tests/test_semantic_*.py`, `tests/test_h*.py`: Level 8 bounded semantic mediation, deterministic closure, authoritative lifecycle (H4), incremental clarification (H5), governed egress (H6), and final integrated conformance (H7)
+
+---
+
+### Running the Bounded Semantic Qualification Campaigns
+
+To execute the Level 8 qualification campaigns and verify cryptographic evidence artifacts:
+
+```bash
+python qualification/semantic/run_h4_qualification.py
+python qualification/semantic/run_h5_qualification.py
+python qualification/semantic/run_h6_qualification.py
+python qualification/semantic/run_h7_final_conformance.py
+```
 
 ---
 

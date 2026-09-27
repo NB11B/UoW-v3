@@ -1,0 +1,75 @@
+schema_version: "1.0"
+name: UoW-v2 Bounded Semantic Subsystem (Milestones H0-H7) Consolidation Record
+status: QUALIFIED_AND_SEALED
+
+consolidation:
+  source_ref: "feat/semantic-harness-uow-api"
+  target_base: "ce5a711210bdc548e561f8a2562c072b3eb44cad"
+  target_head: "251505cd46725242b4f664908e9810ae9462d49f"
+  release_tag: "semantic-harness-v1-qualified"
+  capability:
+    - "Bounded bidirectional semantic mediation boundary (Milestones H0-H7)"
+    - "Minimal deterministic context projection (C_min, F_P)"
+    - "Native bounded 135M model translation adapter with cryptographic manifest validation"
+    - "Deterministic holdout admissibility interception with nonce generalization"
+    - "Deterministic closure oracle (Cl_D -> YES | NO | CLARIFY) with zero-model invocation on F_P = empty"
+    - "Multi-turn residual frontier clarification with state-drift fail-closed semantics"
+    - "Deterministic lowering to canonical make_uow with state-hash attestation"
+    - "Zero direct execution authority; mutation exclusively delegated to ApplicationSpine"
+    - "Deterministic recipient projection (I_B = pi_B(I)) isolating internal state from observers"
+    - "Governed egress rendering with 10-dimension round-trip certification (epsilon_drift = 0.0)"
+
+reduction:
+  reused:
+    - "src/uow/application.py (ApplicationSpine, ApplicationResult, CursorPolicy)"
+    - "src/uow/state.py (WorldState, canonical_json, state hash)"
+    - "src/uow/contracts.py (UoW, make_uow, GuardOp, MutationOp, Header)"
+    - "src/uow/transactions/sequencer.py (CommitSequencer, DeterministicSequencer, WALSequencer)"
+    - "src/uow/transactions/occ.py (validate_occ, HazardType)"
+  extended:
+    - "architecture/MODULE_SEMANTIC_MAP.md (registered 16 Level 8 semantic modules)"
+    - "architecture/PUBLIC_SURFACE_MAP.md (registered uow.semantic as qualified namespaced surface)"
+    - "README.md (Level 8 Quickstart, TOC, and verification sections)"
+  adapters_added:
+    - "src/uow/semantic/application.py (SemanticApplicationAdapter)"
+    - "src/uow/semantic/adapters/huggingface.py (HuggingFaceSemanticTranslator, DefaultHuggingFaceBackend)"
+    - "src/uow/semantic/adapters/codec.py (SemanticPromptBuilder, SemanticOutputParser)"
+  new_realizations:
+    - "src/uow/semantic/rendering.py (DeterministicEgressFormatter, DeterministicTemplateRenderer, ConfigurableRenderer)"
+    - "src/uow/semantic/compiler.py (TransferUoWCompiler, PurgeUoWCompiler)"
+  new_semantics:
+    - "uow.semantic (49 namespaced symbols exported; zero top-level API inflation)"
+  duplicate_code_removed:
+    - "sdk/ (removed 158MB of stale uncommitted compilation cache)"
+
+api:
+  top_level_changed: false
+  top_level_symbol_count: 200
+  namespaces_changed:
+    - "uow.semantic"
+  compatibility_preserved: true
+
+qualification:
+  claim_lint: PASS
+  repository_tests: PASS
+  total_tests_passed: 520
+  closure_shadow: PASS
+  closure_shadow_tests_passed: 279
+  system_acceptance_smoke: PASS
+  affected_specialized_suites:
+    H4_lifecycle: PASS
+    H5_clarification: PASS
+    H6_egress: PASS
+    H7_conformance: PASS
+  physical_rerun_required: false
+
+evidence:
+  preserved_negative_controls: true
+  preserved_lineage: true
+  holdout_model_unsafe_rate: 0.05
+  holdout_system_unsafe_rate: 0.00
+  egress_semantic_drift: 0.00
+  notes: >-
+    Level 8 bounded semantic mediation satisfies all non-collapsible distinctions:
+    Proposal != Authorization, Conformance != Authorization, InternalCommit != ExternalEffect,
+    and PortableEvidence != PhysicalEvidence.

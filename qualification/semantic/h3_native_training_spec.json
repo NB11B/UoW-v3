@@ -1,0 +1,33 @@
+{
+  "grammar_version": "grammar-h3-native-v1",
+  "bindings_schema_version": "uow.semantic.bindings.v1",
+  "base_model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "lora_r": 8,
+  "lora_alpha": 16,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "bias": "none",
+  "task_type": "CAUSAL_LM",
+  "optimizer": "AdamW",
+  "learning_rate": 0.0003,
+  "epochs": 3,
+  "loss_masking": "target_token_only_causal_ce",
+  "corpus_manifest": "qualification/artifacts/semantic_h3_native_corpus_manifest.json",
+  "expected_trainable_parameters": 460800,
+  "arms": {
+    "N_A": {
+      "name": "Fresh H3 Native LoRA",
+      "starting_weights": "base_M0",
+      "output_checkpoint": "checkpoints/uow_h3_native_smollm2_135m_arm_na"
+    },
+    "N_B": {
+      "name": "Grammar Transfer LoRA",
+      "starting_weights": "reproduced_j2_10_mvg_135m",
+      "output_checkpoint": "checkpoints/uow_h3_native_smollm2_135m_arm_nb"
+    }
+  }
+}

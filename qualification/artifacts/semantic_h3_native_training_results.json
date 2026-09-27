@@ -1,0 +1,53 @@
+{
+  "experiment": "H3-N-TRAINING",
+  "title": "Native UoW Semantic Grammar Training Campaign (Arms N-A vs N-B)",
+  "timestamp_utc": "2026-09-27T04:45:49Z",
+  "base_model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "device": "cuda",
+  "training_examples_count": 44,
+  "arms": {
+    "N_A": {
+      "arm_id": "N_A",
+      "arm_name": "Fresh H3 Native LoRA (M_0 -> M_H3)",
+      "starting_weights": "base_M0",
+      "output_dir": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW-v2\\checkpoints\\uow_h3_native_smollm2_135m_arm_na",
+      "trainable_parameters": 460800,
+      "total_parameters": 134975808,
+      "trainable_percent": 0.3414,
+      "initial_loss": 0.6323,
+      "final_loss": 0.1519,
+      "loss_reduction_pct": 75.98,
+      "epoch_losses": [
+        0.4027,
+        0.2225,
+        0.1519
+      ],
+      "wall_time_seconds": 17.48
+    },
+    "N_B": {
+      "arm_id": "N_B",
+      "arm_name": "Grammar Transfer LoRA (M_VG -> M_J2->H3)",
+      "starting_weights": "reproduced_j2_10_mvg_135m",
+      "output_dir": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW-v2\\checkpoints\\uow_h3_native_smollm2_135m_arm_nb",
+      "trainable_parameters": 460800,
+      "total_parameters": 134975808,
+      "trainable_percent": 0.3414,
+      "initial_loss": 0.6213,
+      "final_loss": 0.1698,
+      "loss_reduction_pct": 72.68,
+      "epoch_losses": [
+        0.3711,
+        0.2341,
+        0.1698
+      ],
+      "wall_time_seconds": 16.46
+    }
+  },
+  "comparison": {
+    "initial_loss_delta": 0.011,
+    "final_loss_delta": -0.0179,
+    "loss_reduction_pct_delta": 3.3,
+    "wall_time_delta_seconds": 1.02
+  }
+}

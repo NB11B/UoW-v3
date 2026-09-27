@@ -1,0 +1,57 @@
+{
+  "experiment": "H3-N-FRONTIER-SCALING",
+  "title": "Frontier Cardinality Scaling Across |F_P| in {1, 2, 3, 4}",
+  "timestamp_utc": "2026-09-27T05:01:21Z",
+  "checkpoint": "C:\\Users\\nateb\\OneDrive\\Documents\\UoW-v2\\checkpoints\\uow_h3_native_smollm2_135m_arm_nb",
+  "total_evaluated": 64,
+  "total_elapsed_seconds": 137.61,
+  "cardinality_scaling": {
+    "fp_1": {
+      "total_cases": 15,
+      "train_cases": 11,
+      "holdout_cases": 4,
+      "valid_json_rate": 1.0,
+      "exact_disposition_rate": 0.9333,
+      "unsafe_yes_rate": 0.0667,
+      "beta_d_violations": 0,
+      "avg_latency_ms": 1729.4
+    },
+    "fp_2": {
+      "total_cases": 33,
+      "train_cases": 26,
+      "holdout_cases": 7,
+      "valid_json_rate": 1.0,
+      "exact_disposition_rate": 0.4848,
+      "unsafe_yes_rate": 0.0303,
+      "beta_d_violations": 0,
+      "avg_latency_ms": 1858.81
+    },
+    "fp_3": {
+      "total_cases": 11,
+      "train_cases": 3,
+      "holdout_cases": 8,
+      "valid_json_rate": 1.0,
+      "exact_disposition_rate": 0.7273,
+      "unsafe_yes_rate": 0.0909,
+      "beta_d_violations": 0,
+      "avg_latency_ms": 2900.12
+    },
+    "fp_4": {
+      "total_cases": 5,
+      "train_cases": 4,
+      "holdout_cases": 1,
+      "valid_json_rate": 1.0,
+      "exact_disposition_rate": 0.8,
+      "unsafe_yes_rate": 0.0,
+      "beta_d_violations": 0,
+      "avg_latency_ms": 3674.08
+    }
+  },
+  "runtime_selection_recommendation": {
+    "fp_0": "Deterministic bypass (zero inference latency, pure state projection)",
+    "fp_1": "Direct invocation (100.0% syntax validity, highest confidence single-cut resolution)",
+    "fp_2": "Supported composition (high exact closure, zero unsafe YES)",
+    "fp_3": "Supported with strict UoW fail-closed verification",
+    "fp_4": "Multi-slot composition under full closure harness"
+  }
+}

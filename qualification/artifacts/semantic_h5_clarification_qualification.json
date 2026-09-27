@@ -1,0 +1,132 @@
+{
+  "experiment": "H5-INCREMENTAL-CLARIFICATION-QUALIFICATION",
+  "title": "H5: Incremental Clarification over Residual Semantic Frontiers Qualification",
+  "timestamp_utc": "2026-09-27T05:44:32.099124+00:00",
+  "summary": {
+    "all_gates_passed": true,
+    "gates_verified": 10,
+    "residual_frontier_invariant_verified": true,
+    "zero_execution_authority_verified": true,
+    "state_drift_safeguard_verified": true,
+    "elapsed_seconds": 0.0026
+  },
+  "gates": [
+    {
+      "gate": 1,
+      "name": "single_missing_terminal_resolution",
+      "passed": true,
+      "disposition_t1": "CLARIFY",
+      "disposition_t2": "YES",
+      "residual_frontier": [
+        "recipient"
+      ],
+      "resolved_t1_intersect_fp2_empty": true,
+      "intent_bindings": {
+        "operator": "transfer",
+        "quantity": 3,
+        "recipient": "Mike"
+      },
+      "committed_transfer_value": 3
+    },
+    {
+      "gate": 2,
+      "name": "multiple_missing_terminals_multi_turn",
+      "passed": true,
+      "turn1_disposition": "CLARIFY",
+      "turn2_disposition": "CLARIFY",
+      "turn3_disposition": "YES",
+      "turn1_unresolved": [
+        "recipient",
+        "quantity"
+      ],
+      "turn2_unresolved": [
+        "quantity"
+      ],
+      "turn3_resolved_bindings": {
+        "operator": "transfer",
+        "recipient": "Mike",
+        "quantity": 42
+      }
+    },
+    {
+      "gate": 3,
+      "name": "ambiguous_alternatives_exact_selection",
+      "passed": true,
+      "fast_path_model_calls": 0,
+      "selected_recipient": "Mike Jones",
+      "resolved_bindings": {
+        "operator": "transfer",
+        "quantity": 5,
+        "recipient": "Mike Jones"
+      }
+    },
+    {
+      "gate": 4,
+      "name": "unrelated_answer_fails_closed",
+      "passed": true,
+      "disposition": "CLARIFY",
+      "intent_is_none": true,
+      "unresolved": [
+        "recipient"
+      ]
+    },
+    {
+      "gate": 5,
+      "name": "contradictory_continuation_rejection",
+      "passed": true,
+      "contradictory_error_raised": true,
+      "error_message": "Continuation contradicts previously resolved terminal 'operator': existing='transfer', proposed='purge'."
+    },
+    {
+      "gate": 6,
+      "name": "state_drift_during_clarification_fails_closed",
+      "passed": true,
+      "stale_clarification_error_raised": true,
+      "error_message": "State drift detected during clarification: clarification was evaluated against state 9288e0a0db6ebdaca8fa613bb6859c138d55f2172c7ee4620533c0bb3e9a6133, but current state is a4797c7e3d95ef2c4ef1407e8a5a903f3620209e168bd3436a0ceb216617b3d3."
+    },
+    {
+      "gate": 7,
+      "name": "authority_revocation_halts_downstream",
+      "passed": true,
+      "execution_rejected": true,
+      "error_message": "Application spine requires RUNNING authoritative state.",
+      "ledger_records": 0
+    },
+    {
+      "gate": 8,
+      "name": "replay_duplicate_continuation_idempotence",
+      "passed": true,
+      "cert_hashes_identical": true,
+      "second_commit_failed_as_expected": true,
+      "committed_records": 1
+    },
+    {
+      "gate": 9,
+      "name": "ephemeral_clarification_no_authority",
+      "passed": true,
+      "restored_continuation_succeeded": true,
+      "drift_against_restored_context_rejected": true
+    },
+    {
+      "gate": 10,
+      "name": "multi_turn_provenance_traversal",
+      "passed": true,
+      "evidence_refs": [
+        "world-state:74cba2447bbfd3c414f8a9936fcd7e5ba65b2030d81d03a80b82e804c20e018b",
+        "semantic_admissibility_filtered",
+        "clarification:clarif-5ee5afdf828c2c9e",
+        "original_signal:sig-orig-100",
+        "continuation_turn:2"
+      ],
+      "intent_evidence_refs": [
+        "world-state:74cba2447bbfd3c414f8a9936fcd7e5ba65b2030d81d03a80b82e804c20e018b",
+        "semantic_admissibility_filtered",
+        "clarification:clarif-5ee5afdf828c2c9e",
+        "original_signal:sig-orig-100",
+        "continuation_turn:2"
+      ],
+      "parent_context": "semantic:547bf08d713b8cbc9828ffed1737f0ee9ea9ea851afbdaa473686601520ca7fc",
+      "ledger_record_uow_id": "uow-sem-ccd1c3705704469c2e30c5b9"
+    }
+  ]
+}

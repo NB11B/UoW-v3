@@ -1,0 +1,1310 @@
+[
+  {
+    "case_id": "O1_cmd_transfer_yes",
+    "surface_utterance": "Transfer two batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_performative",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_performative": "COMMAND",
+      "req_op": "TRANSFER"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O1_query_transfer_yes",
+    "surface_utterance": "Did Mike receive the two batteries?",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_performative",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_performative": "QUERY",
+      "req_op": "TRANSFER"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S0_canonical_yes",
+    "surface_utterance": "Transfer two batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S1_synonym_yes",
+    "surface_utterance": "Send two batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S2_paraphrase_yes",
+    "surface_utterance": "Get two batteries over to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S3_shorthand_yes",
+    "surface_utterance": "Two batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S4_idiolect_yes",
+    "surface_utterance": "Kick two batteries over to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S0_clarify",
+    "surface_utterance": "Transfer two batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "CLARIFY",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": [
+        "Mike_29",
+        "Mike_42"
+      ],
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O2_head_transfer_S0_no",
+    "surface_utterance": "Transfer two batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "NO",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O3_roleswap_mike_actor_alice_recip",
+    "surface_utterance": "Mike sent two batteries to Alice.",
+    "partition": "H_metrology",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_actor",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_actor": "Mike_29",
+      "req_recip": "Alice_1"
+    },
+    "notes": "Tests that 'Mike' is identified as actor, not recipient shortcut."
+  },
+  {
+    "case_id": "O4_reference_here_yes",
+    "surface_utterance": "Deliver the package here.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_dest",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_dest": "SITE_17"
+    },
+    "notes": "Model must identify destination resolver, deterministic state supplies SITE_17."
+  },
+  {
+    "case_id": "O5_qty_universal_all_yes",
+    "surface_utterance": "Send all remaining batteries to Mike.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_qty": "ALL"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O6_negation_action_yes",
+    "surface_utterance": "Do not send the battery.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "NOT_TRANSFER"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O7_temporal_after_inspection_yes",
+    "surface_utterance": "Send two batteries to Mike after the inspection.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_temporal",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_dep",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_temporal": "AFTER",
+      "req_dep": "inspection_7"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O8_conditional_unless_lockout_yes",
+    "surface_utterance": "Transfer the battery unless the safety lockout is active.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_cond",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_cond": "UNLESS(lockout_active)"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O9_modality_must_yes",
+    "surface_utterance": "You must transfer the battery immediately.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_modality",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_modality": "MUST"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "O_unknown_florp_clarify",
+    "surface_utterance": "Florp the battery.",
+    "partition": "H_metrology",
+    "difficulty": 1,
+    "difficulty_name": "LEVEL_1_CANONICAL",
+    "disposition": "CLARIFY",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": null
+    },
+    "notes": "Model must emit UNKNOWN; guessing any known verb is an invented-certainty failure."
+  },
+  {
+    "case_id": "H_surf_passive_transfer",
+    "surface_utterance": "Two batteries are to be transferred to Mike.",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_topicalized_transfer",
+    "surface_utterance": "To Mike, transfer two batteries.",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_polite_transfer",
+    "surface_utterance": "Could you please transfer two batteries to Mike?",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_nominalized_transfer",
+    "surface_utterance": "Initiate the transfer of two batteries to Mike.",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_colon_dispatch",
+    "surface_utterance": "Dispatch: 2 batteries -> Mike.",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_query_inverted",
+    "surface_utterance": "Were two batteries transferred to Mike?",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_prep_drop",
+    "surface_utterance": "Drop two batteries off with Mike.",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_surf_neg_passive",
+    "surface_utterance": "No batteries are to be sent.",
+    "partition": "H_surface",
+    "difficulty": 2,
+    "difficulty_name": "LEVEL_2_SURFACE",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "NOT_TRANSFER"
+    },
+    "notes": "H_surface syntactic variation on canonical transfer graph."
+  },
+  {
+    "case_id": "H_lex_relinquish",
+    "surface_utterance": "Relinquish two batteries to Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_convey",
+    "surface_utterance": "Convey two batteries to Mike immediately.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_consign",
+    "surface_utterance": "Consign the two batteries into Mike's custody.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_allocate",
+    "surface_utterance": "Allocate two batteries for Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "RESERVE",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_quarantine",
+    "surface_utterance": "Quarantine two batteries from Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "ISOLATE",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_procure",
+    "surface_utterance": "Procure two batteries from Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "ACQUIRE",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_purge",
+    "surface_utterance": "Purge the two battery records.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "DESTROY",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_disgorge",
+    "surface_utterance": "Disgorge all battery inventory to Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": "ALL"
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_bequeath",
+    "surface_utterance": "Bequeath custody of two batteries to Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_lex_remit",
+    "surface_utterance": "Remit two batteries to Mike.",
+    "partition": "H_lexical",
+    "difficulty": 3,
+    "difficulty_name": "LEVEL_3_LEXICAL_EXT",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_recip": "Mike_29",
+      "req_qty": 2
+    },
+    "notes": "H_lexical rare synonym / domain-specific lexical mapping."
+  },
+  {
+    "case_id": "H_comp_cmd_head_qty_temporal",
+    "surface_utterance": "Transfer all batteries to Mike after the inspection.",
+    "partition": "H_composition",
+    "difficulty": 4,
+    "difficulty_name": "LEVEL_4_COMPOSITIONAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_cmd",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_temporal",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_cmd": "COMMAND",
+      "req_op": "TRANSFER",
+      "req_qty": "ALL",
+      "req_temporal": "AFTER"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_comp_modality_neg_head_cond",
+    "surface_utterance": "You must not transfer the battery unless the override key is inserted.",
+    "partition": "H_composition",
+    "difficulty": 4,
+    "difficulty_name": "LEVEL_4_COMPOSITIONAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_modality",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_cond",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_modality": "MUST",
+      "req_op": "NOT_TRANSFER",
+      "req_cond": "UNLESS(override_key)"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_comp_query_ref_qty_head",
+    "surface_utterance": "Did you deliver two batteries here?",
+    "partition": "H_composition",
+    "difficulty": 4,
+    "difficulty_name": "LEVEL_4_COMPOSITIONAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_query",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_dest",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_query": "QUERY",
+      "req_op": "TRANSFER",
+      "req_dest": "SITE_17",
+      "req_qty": 2
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_comp_shorthand_recip_qty_temporal",
+    "surface_utterance": "Mike: 3 batteries before 17:00.",
+    "partition": "H_composition",
+    "difficulty": 4,
+    "difficulty_name": "LEVEL_4_COMPOSITIONAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_recip",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_temporal",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_recip": "Mike_29",
+      "req_qty": 3,
+      "req_temporal": "BEFORE"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_comp_modality_neg_head_ref",
+    "surface_utterance": "Do not leave the battery here under any circumstances.",
+    "partition": "H_composition",
+    "difficulty": 4,
+    "difficulty_name": "LEVEL_4_COMPOSITIONAL",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_modality",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_dest",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_modality": "MUST_NOT",
+      "req_op": "NOT_LEAVE",
+      "req_dest": "SITE_17"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_topo_multihop_chain",
+    "surface_utterance": "Transfer the battery after calibration following recharge.",
+    "partition": "H_topology",
+    "difficulty": 5,
+    "difficulty_name": "LEVEL_5_NOVEL_TOPOLOGY",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_stage1",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_stage2",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "TRANSFER",
+      "req_stage1": "CALIBRATE",
+      "req_stage2": "RECHARGE"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_topo_dual_split_allocation",
+    "surface_utterance": "Send 2 batteries to Mike and 3 batteries to Alice.",
+    "partition": "H_topology",
+    "difficulty": 5,
+    "difficulty_name": "LEVEL_5_NOVEL_TOPOLOGY",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_recip1",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty1",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_recip2",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_qty2",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_recip1": "Mike_29",
+      "req_qty1": 2,
+      "req_recip2": "Alice_1",
+      "req_qty2": 3
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_topo_conditional_branching_gate",
+    "surface_utterance": "Transfer to Mike if authorization token present, otherwise hold.",
+    "partition": "H_topology",
+    "difficulty": 5,
+    "difficulty_name": "LEVEL_5_NOVEL_TOPOLOGY",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_primary_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_policy_gate",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_fallback_op",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_primary_op": "TRANSFER",
+      "req_policy_gate": "IF(auth_token)",
+      "req_fallback_op": "HOLD"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_topo_hierarchical_delegation",
+    "surface_utterance": "Supervisor authorized technician to inspect device.",
+    "partition": "H_topology",
+    "difficulty": 5,
+    "difficulty_name": "LEVEL_5_NOVEL_TOPOLOGY",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_approver",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_executor",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_target",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_approver": "Supervisor_1",
+      "req_executor": "Tech_7",
+      "req_op": "INSPECT",
+      "req_target": "DEV_01"
+    },
+    "notes": ""
+  },
+  {
+    "case_id": "H_topo_convergent_merge",
+    "surface_utterance": "Assemble module from cell A and cell B.",
+    "partition": "H_topology",
+    "difficulty": 5,
+    "difficulty_name": "LEVEL_5_NOVEL_TOPOLOGY",
+    "disposition": "YES",
+    "requirements": [
+      {
+        "req_id": "req_op",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_part1",
+        "description": "",
+        "expected_category": null
+      },
+      {
+        "req_id": "req_part2",
+        "description": "",
+        "expected_category": null
+      }
+    ],
+    "gold_bindings": {
+      "req_op": "ASSEMBLE",
+      "req_part1": "CELL_A",
+      "req_part2": "CELL_B"
+    },
+    "notes": ""
+  }
+]

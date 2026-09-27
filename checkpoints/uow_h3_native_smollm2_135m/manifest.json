@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "semantic_codec_id": "uow.semantic.h3.smollm2_135m",
+  "base_model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "tokenizer_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "tokenizer_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "adapter_format": "peft-lora",
+  "adapter_sha256": "64d77db036472c86403a1d98490526fc5412d56e8c1640a47fd9eeed5f92ad6a",
+  "adapter_parameter_count": 460800,
+  "corpus_version": "h3-native-corpus-v1",
+  "grammar_version": "grammar-h3-native-v1",
+  "qualification_version": "h3-native-qualification-v1",
+  "conformance_suite_version": "h3-native-conformance-v1",
+  "supported_operator_families": [
+    "performative",
+    "semantic_head",
+    "argument",
+    "reference",
+    "quantity",
+    "negation",
+    "temporal",
+    "conditional",
+    "modality"
+  ],
+  "supported_output_schema": "uow.semantic.bindings.v1"
+}

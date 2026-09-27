@@ -10,6 +10,11 @@ from .application import (
     SemanticApplicationAdapter,
     SemanticStateDriftError,
 )
+from .clarification import (
+    ClarificationContext,
+    ContradictoryContinuationError,
+    StaleClarificationError,
+)
 from .compiler import (
     PurgeUoWCompiler,
     SemanticCompilerRegistry,
@@ -50,6 +55,8 @@ __all__ = [
     "BindingOrigin",
     "BindingValidationResult",
     "CandidateSemanticBindings",
+    "ClarificationContext",
+    "ContradictoryContinuationError",
     "DefaultSemanticAdmissibilityValidator",
     "DeterministicSemanticResolver",
     "ExternalSignal",
@@ -78,6 +85,7 @@ __all__ = [
     "SemanticTranslationRequest",
     "SemanticTranslator",
     "SemanticUoWCompiler",
+    "StaleClarificationError",
     "TransferUoWCompiler",
     "ValidationVerdict",
     "derive_semantic_uow_id",

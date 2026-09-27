@@ -410,6 +410,7 @@ def test_certificate_hash_tamper_detection() -> None:
 
 
 def test_frozen_facade_and_zero_framework_import_leaks() -> None:
+    import subprocess
     import sys
     import uow
 
@@ -418,8 +419,15 @@ def test_frozen_facade_and_zero_framework_import_leaks() -> None:
     assert not hasattr(uow, "SemanticHandoff")
     assert not hasattr(uow, "SemanticTranslator")
 
-    # Framework quarantine
-    assert "torch" not in sys.modules
-    assert "transformers" not in sys.modules
-    assert "huggingface_hub" not in sys.modules
+    # Framework quarantine verified in an isolated process
+    code = (
+        "import sys, uow, uow.semantic, uow.semantic.adapters\n"
+        "assert 'torch' not in sys.modules, 'torch leaked into sys.modules'\n"
+        "assert 'transformers' not in sys.modules, 'transformers leaked into sys.modules'\n"
+        "assert 'peft' not in sys.modules, 'peft leaked into sys.modules'\n"
+        "assert 'huggingface_hub' not in sys.modules, 'huggingface_hub leaked into sys.modules'\n"
+    )
+    res = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    assert res.returncode == 0, f"Import quarantine failed: {res.stderr}"
+
 

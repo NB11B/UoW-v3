@@ -1,0 +1,26 @@
+{
+  "experiment": "J2.10-MVG-REPRODUCTION",
+  "base_model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "training_corpus_digest": "66530c95a4f36010b2a9f46ab194544d296b434318848bcd99db5a237151862b",
+  "holdout_corpus_digest": "90ef9be169a9cae385069fc54a0b6d2f4d3f966cf0e9639f83b06e6ec5953dbb",
+  "training_examples": 37,
+  "holdout_cases": 45,
+  "epochs": 3,
+  "learning_rate": 0.0002,
+  "optimizer": "AdamW",
+  "lora_r": 8,
+  "lora_alpha": 16,
+  "lora_dropout": 0.05,
+  "bias": "none",
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "loss_masking": "target-only",
+  "prompt_codec_version": "jevl-j2.10-canonical",
+  "expected_trainable_parameters": 460800,
+  "expected_base_score": "30/45",
+  "expected_mvg_score": "42/45",
+  "output_checkpoint_dir": "checkpoints/reproduced_j2_10_mvg_135m"
+}

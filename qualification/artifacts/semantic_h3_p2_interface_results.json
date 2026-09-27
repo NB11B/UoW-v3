@@ -1,0 +1,1558 @@
+{
+  "experiment": "H3-P2",
+  "title": "Paired Negative Control (M_0) Interface Campaign",
+  "timestamp_utc": "2026-09-27T04:13:09Z",
+  "base_model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "device": "cuda",
+  "total_cases": 45,
+  "elapsed_seconds": 686.45,
+  "arms": {
+    "C0_J2": {
+      "description": "Base model (M_0, Delta W=0) + Legacy J2 Prompt + Deterministic Lowering Bridge",
+      "exact_closures": 2,
+      "closure_rate": 0.0444,
+      "yes_count": 0,
+      "clarify_count": 45,
+      "no_count": 0,
+      "beta_D": 0,
+      "epsilon_unsafe": 0
+    },
+    "C0_H3": {
+      "description": "Base model (M_0, Delta W=0) + New H3 IR Prompt + Native Output Parser",
+      "exact_closures": 2,
+      "closure_rate": 0.0444,
+      "yes_count": 0,
+      "clarify_count": 45,
+      "no_count": 0,
+      "beta_D": 0,
+      "epsilon_unsafe": 0
+    }
+  },
+  "interface_migration_effect": {
+    "exact_closures_delta": 0,
+    "rate_delta": 0.0,
+    "interpretation": "Measures output grammar/interface serialization burden on base model without weight changes."
+  },
+  "all_invariants_preserved": true,
+  "case_details": [
+    {
+      "case_id": "O1_cmd_transfer_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Transfer two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_performative": "COMMAND",
+        "req_op": "TRANSFER"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_performative\",\n        \"value\": \"Mike\"\n      },\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Mike\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Mike\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Mike\"\n      }\n    ],\n    \"unknowns\": [\"Mike\"]\n  }\n}\n\n{\n  \"bindings\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Mike\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Mike\"\n    }\n  ]\n}\n\n{\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Mike\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Mike\"\n    }\n  ]\n}\n\n{\n  \"unknowns\": [\"Mike\"]\n}\n\n{\n  \"signal\": \"Transfer two batteries to Mike.\"\n}",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 2,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O1_query_transfer_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Did Mike receive the two batteries?",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_performative": "QUERY",
+        "req_op": "TRANSFER"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_performative\"},{\"name\":\"req_op\"}],\"signal\":\"Did Mike receive the two batteries?\"}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_performative\"}],\"signal\":\"Did Mike receive the two batteries?\"}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_performative\"},{\"name\":\"req_op\"}],\"signal\":\"Did Mike receive the two batteries?\"}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_performative\"}],\"signal\":\"Did Mike receive the two batteries?\"}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_performative\"}],\"signal\":\"Did Mike receive the two batteries?\"}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_performative\"}],\"signal\":\"Did Mike receive the two batteries?\"}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_performative\"}],\"signal\":\"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 2,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S0_canonical_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Transfer two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"2019-01-01 12:00:00\",\n        \"reason\": \"2019-01-01 12:00:00\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"2019-01-01 12:00:00\",\n        \"reason\": \"2019-01-01 12:00:00\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\",\n        \"reason\": \"10\"\n      }\n    ],\n    \"signal\": \"Transfer two batteries to Mike.\"\n  },",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S1_synonym_yes",
+      "partition": "H_metrology",
+      "difficulty": 2,
+      "signal": "Send two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Send two batteries to Mike.\",\n        \"reason\": \"Send two batteries to Mike.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"Send two batteries to Mike.\",\n            \"reason\": \"Send two batteries to Mike.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"10\",\n                \"reason\": \"Send two batteries to Mike.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_qty\",\n            \"value\": \"15\",\n            \"reason\": \"Send two batteries to Mike.\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n{\n  \"bindings\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": <value>\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": <value>\n    }\n  ]\n}\n\n{\n  \"alternatives\": [\n    {\n      \"terminal\": \"<",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S2_paraphrase_yes",
+      "partition": "H_metrology",
+      "difficulty": 2,
+      "signal": "Get two batteries over to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Get two batteries over to Mike.\"}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S3_shorthand_yes",
+      "partition": "H_metrology",
+      "difficulty": 2,
+      "signal": "Two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Two batteries to Mike\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Two batteries to Mike\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Two batteries to Mike\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Two batteries to Mike\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Two batteries to Mike\"\n      }\n    ],\n    \"unknowns\": [\"<name>\"]\n  }\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Two batteries to Mike\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Two batteries to Mike\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\"\n      }\n    ],\n    \"altern",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S4_idiolect_yes",
+      "partition": "H_metrology",
+      "difficulty": 2,
+      "signal": "Kick two batteries over to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Kick two batteries over to Mike.\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Mike\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Kick two batteries over to Mike.\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Mike\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"Kick two batteries over to Mike.\"\n      }\n    ],\n    \"unknowns\": [\"Mike\"]\n  }\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": \"<value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": \"<value>}],\n  \"unknowns\": [\"Mike\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S0_clarify",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Transfer two batteries to Mike.",
+      "expected_disposition": "CLARIFY",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": [
+          "Mike_29",
+          "Mike_42"
+        ],
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": true
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"2019-01-01 12:00:00\",\n        \"reason\": \"2019-01-01 12:00:00\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"2019-01-01 12:00:00\",\n        \"reason\": \"2019-01-01 12:00:00\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\",\n        \"reason\": \"10\"\n      }\n    ],\n    \"signal\": \"Transfer two batteries to Mike.\"\n  },",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": true
+      }
+    },
+    {
+      "case_id": "O2_head_transfer_S0_no",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Transfer two batteries to Mike.",
+      "expected_disposition": "NO",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"2019-01-01 12:00:00\",\n        \"reason\": \"2019-01-01 12:00:00\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"2019-01-01 12:00:00\",\n        \"reason\": \"2019-01-01 12:00:00\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\",\n        \"reason\": \"10\"\n      }\n    ],\n    \"signal\": \"Transfer two batteries to Mike.\"\n  },",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O3_roleswap_mike_actor_alice_recip",
+      "partition": "H_metrology",
+      "difficulty": 2,
+      "signal": "Mike sent two batteries to Alice.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_actor": "Mike_29",
+        "req_recip": "Alice_1"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_actor\"},{\"name\":\"req_recip\"}],\"signal\":\"Mike sent two batteries to Alice.\"}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_actor\"},{\"name\":\"req_recip\"}],\"signal\":\"Mike sent two batteries to Alice.\"}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_recip\"},{\"name\":\"req_actor\"}],\"signal\":\"Mike sent two batteries to Alice.\"}",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 2,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O4_reference_here_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Deliver the package here.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_dest": "SITE_17"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_dest\",\n        \"value\": \"Deliver the package here.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"Deliver the package here.\"\n      }\n    ]\n  },\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Deliver the package here.\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Deliver the package here.\"\n    }\n  ]\n}\n\n{\n  \"bindings\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Deliver the package here.\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Deliver the package here.\"\n    }\n  ]\n}\n\n{\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Deliver the package here.\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"Deliver the package here.\"\n    }\n  ]\n}\n\n{\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"signal\": \"Deliver the",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O5_qty_universal_all_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Send all remaining batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_qty": "ALL"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"100\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"Send all remaining batteries to Mike.\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"100\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"Send all remaining batteries to Mike.\"\n      }\n    ],\n    \"unknowns\": [\"req_qty\"]\n  }\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"req_qty\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"100\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"Send all remaining batteries to Mike.\"\n      }\n    ],\n    \"alternatives\": [\n      {",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O6_negation_action_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Do not send the battery.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "NOT_TRANSFER"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Do not send the battery.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"Do not send the battery.\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Do not send the battery.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"Do not send the battery.\"\n      }\n    ],\n    \"unknowns\": [\"<name>\"]\n  }\n}\n\n{\n  \"bindings\": [{\n    \"terminal\": \"<name>\",\n    \"value\": \"<value>}],\n    \"alternatives\": [{\n      \"terminal\": \"<name>\",\n      \"value\": \"<value>}],\n    \"unknowns\": [\"<name>\"]\n  }]\n}\n\n{\n  \"alternatives\": [{\n    \"terminal\": \"<name>\",\n    \"value\": \"<value>}],\n    \"unknowns\": [\"<name>\"]\n  }]\n}\n\n{\n  \"bindings\": [{\n    \"terminal\": \"<name>\",\n    \"value\": \"<value>}],",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O7_temporal_after_inspection_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Send two batteries to Mike after the inspection.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_temporal": "AFTER",
+        "req_dep": "inspection_7"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_temporal\",\n        \"value\": \"Send two batteries to Mike after the inspection.\",\n        \"reason\": \"Mike is not a battery.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_dep\",\n            \"value\": \"Mike is not a battery.\",\n            \"reason\": \"Mike is not a battery.\"\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_signal\",\n            \"value\": \"Send two batteries to Mike after the inspection.\",\n            \"reason\": \"Mike is not a battery.\"\n          }\n        ]\n      }\n    ]\n  },\n  \"alternatives\": [\n    {\n      \"frontier\": [\n        {\n          \"name\": \"req_temporal\",\n          \"value\": \"Send two batteries to Mike after the inspection.\",\n          \"reason\": \"Mike is not a battery.\"\n        },\n        {\n          \"frontier\": [\n            {\n              \"name\": \"req_dep\",\n              \"value\": \"Mike is not a battery.\",\n              \"reason\": \"Mike is not a battery.\"\n            }\n          ]",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 2,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O8_conditional_unless_lockout_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Transfer the battery unless the safety lockout is active.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_cond": "UNLESS(lockout_active)"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_cond\",\n        \"value\": \"Transfer the battery unless the safety lockout is active.\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"req_cond\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"bindings\": [\n          {\n            \"terminal\": \"<name>\",\n            \"value\": \"req_cond\"\n          }\n        ],\n        \"reason\": \"Transfer the battery unless the safety lockout is active.\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"req_cond\"\n      }\n    ],\n    \"unknowns\": [\"req_cond\"]\n  }\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_cond\",\n        \"value\": \"Transfer the battery unless the safety lockout is active.\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"req_cond\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"bindings\": [\n          {\n            \"terminal\": \"<name>\",\n            \"value\": \"req_cond\"\n          }",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O9_modality_must_yes",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "You must transfer the battery immediately.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_modality": "MUST"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_modality\",\n        \"value\": \"You must transfer the battery immediately.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"You must transfer the battery immediately.\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"name\": \"req_modality\",\n        \"value\": \"You must transfer the battery immediately.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"You must transfer the battery immediately.\"\n      }\n    ],\n    \"unknowns\": [\"<name>\"]\n  }\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_modality\",\n        \"value\": \"You must transfer the battery immediately.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"You must transfer the battery immediately.\"\n      }\n    ],\n    \"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "O_unknown_florp_clarify",
+      "partition": "H_metrology",
+      "difficulty": 1,
+      "signal": "Florp the battery.",
+      "expected_disposition": "CLARIFY",
+      "expected_gold": {
+        "req_op": null
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": true
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },\n      {\n        \"name\": \"frontier\",\n        \"value\": \"Florp the battery.\"\n      },",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": true
+      }
+    },
+    {
+      "case_id": "H_surf_passive_transfer",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "Two batteries are to be transferred to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Two batteries are to be transferred to Mike.\",\n      \"binding_value\": \"UNKNOWN\",\n      \"matrix_class\": \"People|Processes|Data|Devices|Rules|Policies|Agents|Guidance\",\n      \"confidence\": 0.0,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Two batteries are to be transferred to Mike.\",\n      \"binding_value\": \"UNKNOWN\",\n      \"matrix_class\": \"People|Processes|Data|Devices|Rules|Policies|Agents|Guidance\",\n      \"confidence\": 0.0,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Two batteries are to be transferred to Mike.\",\n      \"binding_value\": \"UNKNOWN\",\n      \"matrix_class\": \"People|Processes|Data|Devices|Rules",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Two batteries are to be transferred to Mike.\",\n        \"reason\": \"Two batteries are to be transferred to Mike.\",\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"Two batteries are to be transferred to Mike.\",\n            \"reason\": \"Two batteries are to be transferred to Mike.\",\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"Two batteries are to be transferred to Mike.\",\n                \"reason\": \"Two batteries are to be transferred to Mike.\",\n              },\n              {\n                \"frontier\": [\n                  {\n                    \"name\": \"req_qty\",\n                    \"value\": \"Two batteries are to be transferred to Mike",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_topicalized_transfer",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "To Mike, transfer two batteries.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"To Mike, transfer two batteries.\"}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"To Mike, transfer two batteries.\"}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"To Mike, transfer two batteries.\"}\n\n{\n  \"bindings\": [{\"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_polite_transfer",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "Could you please transfer two batteries to Mike?",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Could you please transfer two batteries to Mike?\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Could you please transfer two batteries to Mike?\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Could you please transfer two batteries to Mike?\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_nominalized_transfer",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "Initiate the transfer of two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Initiate the transfer of two batteries to Mike.\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Mike\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\"\n      }\n    ]\n  },\n  \"signal\": \"Initiate the transfer of two batteries to Mike.\"\n}\n\n{\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": <value>\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": <value>\n    }\n  ]\n}\n\n{\n  \"unknowns\": [\"<name>\"]\n}",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_colon_dispatch",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "Dispatch: 2 batteries -> Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Dispatch: 2 batteries -> Mike.\"}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_query_inverted",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "Were two batteries transferred to Mike?",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Were two batteries transferred to Mike?\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Mike has two batteries\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"Mike has 2 batteries\"\n      }\n    ]\n  },\n  \"signal\": \"Were two batteries transferred to Mike?\"\n}",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_prep_drop",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "Drop two batteries off with Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Drop two batteries off with Mike.\",\n        \"reason\": \"Mike's battery is not available.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"Mike's battery is not available.\",\n            \"reason\": \"Mike's battery is not available.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"Mike's battery is not available.\",\n                \"reason\": \"Mike's battery is not available.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_qty\",\n            \"value\": \"Mike's battery is not available.\",\n            \"reason\": \"Mike's battery is not available.\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\nOutput:\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Drop two batteries off with Mike.\",\n        \"reason\":",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_surf_neg_passive",
+      "partition": "H_surface",
+      "difficulty": 2,
+      "signal": "No batteries are to be sent.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "NOT_TRANSFER"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"No batteries are to be sent.\"\n      },\n      {\n        \"name\": \"signal\",\n        \"value\": \"No batteries are to be sent.\"\n      }\n    ]\n  },\n  \"alternatives\": [\n    {\n      \"name\": \"req_op\",\n      \"value\": \"No batteries are to be sent.\"\n    },\n    {\n      \"name\": \"signal\",\n      \"value\": \"No batteries are to be sent.\"\n    }\n  ]\n}\n\n{\n  \"frontier\": [\n    {\n      \"name\": \"req_op\",\n      \"value\": \"No batteries are to be sent.\"\n    },\n    {\n      \"name\": \"signal\",\n      \"value\": \"No batteries are to be sent.\"\n    }\n  ]\n}\n\n{\n  \"frontier\": [\n    {\n      \"name\": \"req_op\",\n      \"value\": \"No batteries are to be sent.\"\n    },\n    {\n      \"name\": \"signal\",\n      \"value\": \"No batteries are to be sent.\"\n    }\n  ]\n}\n\n{\n  \"frontier\": [\n    {",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 1,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_relinquish",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Relinquish two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Relinquish two batteries to Mike.\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Mike\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\"\n      }\n    ]\n  },\n  \"signal\": \"Relinquish two batteries to Mike.\"\n}\n\n{\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": <value>\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": <value>\n    }\n  ]\n}\n\n{\n  \"unknowns\": [\"<name>\"]\n}",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_convey",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Convey two batteries to Mike immediately.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Convey two batteries to Mike immediately.\",\n        \"reason\": \"The signal is not a battery, so we can't use it.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"Convey two batteries to Mike immediately.\",\n            \"reason\": \"The signal is not a battery, so we can't use it.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"Convey two batteries to Mike immediately.\",\n                \"reason\": \"The signal is not a battery, so we can't use it.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_qty\",\n            \"value\": \"Convey two batteries to Mike immediately.\",\n            \"reason\": \"The signal is not a battery, so we can't use it.\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_consign",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Consign the two batteries into Mike's custody.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"consign the two batteries into Mike's custody.\",\n        \"reason\": \"consign the two batteries into Mike's custody.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"consign the two batteries into Mike's custody.\",\n            \"reason\": \"consign the two batteries into Mike's custody.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"consign the two batteries into Mike's custody.\",\n                \"reason\": \"consign the two batteries into Mike's custody.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_qty",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_allocate",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Allocate two batteries for Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "RESERVE",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Allocate two batteries for Mike.\",\n      \"binding_value\": \"UNKNOWN\",\n      \"matrix_class\": \"People|Processes|Data|Devices|Rules|Policies|Agents|Guidance\",\n      \"confidence\": 0.0,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Allocate two batteries for Mike.\",\n      \"binding_value\": \"UNKNOWN\",\n      \"matrix_class\": \"People|Processes|Data|Devices|Rules|Policies|Agents|Guidance\",\n      \"confidence\": 0.0,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Allocate two batteries for Mike.\",\n      \"binding_value\": \"UNKNOWN\",\n      \"matrix_class\": \"People|Processes|Data|Devices|Rules|Policies|Agents",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Allocate two batteries for Mike.\",\n        \"reason\": \"Allocate two batteries for Mike.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"Allocate two batteries for Mike.\",\n            \"reason\": \"Allocate two batteries for Mike.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"Allocate two batteries for Mike.\",\n                \"reason\": \"Allocate two batteries for Mike.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_qty\",\n            \"value\": \"Allocate two batteries for Mike.\",\n            \"reason\": \"Allocate two batteries for Mike.\"\n          }\n        ]\n      }\n    ]\n  }\n}\n\nOutput:\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Allocate two batteries for Mike.\",\n        \"reason\": \"Allocate two batteries for Mike",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_quarantine",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Quarantine two batteries from Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "ISOLATE",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Quarantine two batteries from Mike.\",\n        \"reason\": \"Quarantine two batteries from Mike.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_recip\",\n            \"value\": \"Two batteries from Mike.\",\n            \"reason\": \"Two batteries from Mike.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"Two batteries from Mike.\",\n                \"reason\": \"Two batteries from Mike.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_qty\",\n            \"value\": \"Two batteries from Mike.\",\n            \"reason\": \"Two batteries from Mike.\"\n          }",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_procure",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Procure two batteries from Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "ACQUIRE",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Procure two batteries from Mike.\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Procure two batteries from Mike.\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\"\n      }\n    ]\n  },\n  \"signal\": \"Procure two batteries from Mike.\"\n}\n\n{\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"frontier\": [\n    {\n      \"name\": \"req_op\",\n      \"value\": \"Procure two batteries from Mike.\"\n    },\n    {\n      \"name\": \"req_rec",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_purge",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Purge the two battery records.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "DESTROY",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"purge the two battery records\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"2\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"purge the two battery records\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"purge the two battery records\"\n      }\n    ],\n    \"unknowns\": [\"<name>\"]\n  }\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"purge the two battery records\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"2\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 2,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_disgorge",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Disgorge all battery inventory to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": "ALL"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Disgorge all battery inventory to Mike.\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"Disgorge all battery inventory to Mike.\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"Disgorge all battery inventory to Mike.\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"<value>},\n        {\n          \"terminal\": \"<name>\",\n          \"value\": \"<value>},\n          {\n            \"terminal\": \"<name>\",\n            \"value\": \"<value>},\n            {\n              \"terminal\": \"<name>\",\n              \"value\": \"<value>},\n              {\n                \"terminal\": \"<name>\",\n                \"value\": \"<value>},\n                {\n                  \"terminal\": \"<name>\",\n                  \"value\": \"<value>},\n                  {\n                    \"terminal\": \"<name>\",\n                    \"value\": \"<value>},\n                  {\n                    \"terminal\": \"<name>\",\n                    \"value\": \"<value>},\n                  {\n                    \"terminal\": \"<name>\",\n                    \"value\": \"<value>},",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_bequeath",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Bequeath custody of two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Bequeath custody of two batteries to Mike.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_op\"},{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Bequeath custody of two batteries to Mike.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_recip\"},{\"name\":\"req_qty\"}],\"signal\":\"Bequeath custody of two batteries to Mike.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_lex_remit",
+      "partition": "H_lexical",
+      "difficulty": 3,
+      "signal": "Remit two batteries to Mike.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_recip": "Mike_29",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"2023-01-01 00:00:00\",\n        \"reason\": \"2023-01-01 00:00:00\"\n      },\n      {\n        \"name\": \"req_recip\",\n        \"value\": \"2023-01-01 00:00:00\",\n        \"reason\": \"2023-01-01 00:00:00\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"10\",\n        \"reason\": \"10\"\n      }\n    ],\n    \"alternatives\": [\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"2023-01-01 00:00:00\",\n        \"reason\": \"2023-01-01 00:00:00\"\n      },\n      {\n        \"terminal\": \"<name>\",\n        \"value\": \"2023",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_comp_cmd_head_qty_temporal",
+      "partition": "H_composition",
+      "difficulty": 4,
+      "signal": "Transfer all batteries to Mike after the inspection.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_cmd": "COMMAND",
+        "req_op": "TRANSFER",
+        "req_qty": "ALL",
+        "req_temporal": "AFTER"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Mike_29\",\n      \"binding_value\": \"TRANSFER\",\n      \"matrix_class\": \"COMMAND\",\n      \"confidence\": 0.9,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Mike_29\",\n      \"binding_value\": \"TRANSFER\",\n      \"matrix_class\": \"COMMAND\",\n      \"confidence\": 0.9,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"Mike_29\",\n      \"binding_value\": \"TRANSFER\",\n      \"matrix_class\": \"COMMAND\",\n      \"confidence\": 0.9,\n      \"is_unknown\": false,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_cmd\",\n        \"value\": \"Mike will be replaced by Mike after the inspection.\",\n        \"reason\": \"Mike will be replaced by Mike after the inspection.\",\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_op\",\n            \"value\": \"Mike will be replaced by Mike after the inspection.\",\n            \"reason\": \"Mike will be replaced by Mike after the inspection.\",\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_qty\",\n                \"value\": \"Mike will be replaced by Mike after the inspection.\",\n                \"reason\": \"Mike will be replaced by Mike after the inspection.\",\n              },\n              {\n                \"frontier\": [\n                  {\n                    \"name\": \"req_temporal\",\n                    \"value\": \"Mike will be replaced by Mike after the inspection.\",\n                    \"reason\": \"Mike will be replaced by Mike after the inspection.\",\n                  },\n                  {\n                    \"frontier\": [\n                      {\n                        \"name\": \"req_cmd\",\n                        \"value\": \"Mike will be replaced by Mike after the inspection.\",\n                        \"reason\":",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 4,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_comp_modality_neg_head_cond",
+      "partition": "H_composition",
+      "difficulty": 4,
+      "signal": "You must not transfer the battery unless the override key is inserted.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_modality": "MUST",
+        "req_op": "NOT_TRANSFER",
+        "req_cond": "UNLESS(override_key)"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_modality\"},{\"name\":\"req_op\"},{\"name\":\"req_cond\"}],\"signal\":\"You must not transfer the battery unless the override key is inserted.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_modality\"},{\"name\":\"req_op\"},{\"name\":\"req_cond\"}],\"signal\":\"You must not transfer the battery unless the override key is inserted.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_modality\"},{\"name\":\"req_op\"},{\"name\":\"req_cond\"}],\"signal\":\"You must not transfer the battery unless the override key is inserted.\"}\n\n{\"bindings",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_comp_query_ref_qty_head",
+      "partition": "H_composition",
+      "difficulty": 4,
+      "signal": "Did you deliver two batteries here?",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_query": "QUERY",
+        "req_op": "TRANSFER",
+        "req_dest": "SITE_17",
+        "req_qty": 2
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"DO NOT TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY TO TRY",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_query\",\n        \"value\": \"Did you deliver two batteries here?\"\n      },\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Did you deliver two batteries here?\"\n      },\n      {\n        \"name\": \"req_dest\",\n        \"value\": \"Did you deliver two batteries here?\"\n      },\n      {\n        \"name\": \"req_qty\",\n        \"value\": \"Did you deliver two batteries here?\"\n      }\n    ],\n    \"signal\": \"Did you deliver two batteries here?\"\n  },\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"<value>\"}\n  ],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"frontier\": [\n    {\n      \"name\": \"req_query\",",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 4,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_comp_shorthand_recip_qty_temporal",
+      "partition": "H_composition",
+      "difficulty": 4,
+      "signal": "Mike: 3 batteries before 17:00.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_recip": "Mike_29",
+        "req_qty": 3,
+        "req_temporal": "BEFORE"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\"context\":{},\"frontier\":[{\"name\":\"req_recip\"},{\"name\":\"req_qty\"},{\"name\":\"req_temporal\"}],\"signal\":\"Mike: 3 batteries before 17:00.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_recip\"},{\"name\":\"req_qty\"},{\"name\":\"req_temporal\"}],\"signal\":\"Mike: 3 batteries before 17:00.\"}\n\n{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"alternatives\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"unknowns\": [\"<name>\"]}\n\n{\"context\":{},\"frontier\":[{\"name\":\"req_recip\"},{\"name\":\"req_qty\"},{\"name\":\"req_temporal\"}],\"signal\":\"Mike: 3 batteries before 17:00.\"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_comp_modality_neg_head_ref",
+      "partition": "H_composition",
+      "difficulty": 4,
+      "signal": "Do not leave the battery here under any circumstances.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_modality": "MUST_NOT",
+        "req_op": "NOT_LEAVE",
+        "req_dest": "SITE_17"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_modality\",\n        \"value\": \"Do not leave the battery here under any circumstances.\",\n        \"reason\": \"Do not leave the battery here under any circumstances.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_op\",\n            \"value\": \"Do not leave the battery here under any circumstances.\",\n            \"reason\": \"Do not leave the battery here under any circumstances.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_dest\",\n                \"value\": \"Do not leave the battery here under any circumstances.\",\n                \"reason\": \"Do not leave the battery here under any circumstances.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_modality\",",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_topo_multihop_chain",
+      "partition": "H_topology",
+      "difficulty": 5,
+      "signal": "Transfer the battery after calibration following recharge.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "TRANSFER",
+        "req_stage1": "CALIBRATE",
+        "req_stage2": "RECHARGE"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_op\",\n        \"value\": \"Transfer the battery after calibration following recharge.\",\n        \"reason\": \"Transfer the battery after calibration following recharge.\"\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_stage1\",\n            \"value\": \"Transfer the battery after calibration following recharge.\",\n            \"reason\": \"Transfer the battery after calibration following recharge.\"\n          },\n          {\n            \"frontier\": [\n              {\n                \"name\": \"req_stage2\",\n                \"value\": \"Transfer the battery after calibration following recharge.\",\n                \"reason\": \"Transfer the battery after calibration following recharge.\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"frontier\": [\n          {\n            \"name\": \"req_stage1\",\n            \"value\": \"",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_topo_dual_split_allocation",
+      "partition": "H_topology",
+      "difficulty": 5,
+      "signal": "Send 2 batteries to Mike and 3 batteries to Alice.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_recip1": "Mike_29",
+        "req_qty1": 2,
+        "req_recip2": "Alice_1",
+        "req_qty2": 3
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": [\n        {\n          \"target_requirement\": \"<req_id>\",\n          \"binding_value\": <value>,\n          \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n          \"confidence\": <float between 0.0 and 1.0>,\n          \"is_unknown\": <boolean>,\n          \"alternatives\": [\n            {\n              \"target_requirement\": \"<req_id>\",\n              \"binding_value\": <value>,\n              \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n              \"confidence\": <float between 0.0 and 1.0>,\n              \"is_unknown\": <boolean>,\n              \"alternatives\":",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_recip1\",\n        \"value\": \"2 batteries\"\n      },\n      {\n        \"name\": \"req_qty1\",\n        \"value\": \"3 batteries\"\n      },\n      {\n        \"name\": \"req_recip2\",\n        \"value\": \"3 batteries\"\n      }\n    ],\n    \"signal\": \"Send 2 batteries to Mike and 3 batteries to Alice.\"\n  },\n  \"alternatives\": [\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"req_recip1\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"req_qty1\"\n    },\n    {\n      \"terminal\": \"<name>\",\n      \"value\": \"req_recip2\"\n    }\n  ],\n  \"unknowns\": [\"req_recip1\"]\n}\n\n{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": \"<value>}],\n  \"alternatives\": [{\"terminal\": \"<name>\", \"value\": \"<value>}],\n  \"unknowns\": [\"req_recip1\"]\n}\n\n{\n  \"context\": {",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 4,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_topo_conditional_branching_gate",
+      "partition": "H_topology",
+      "difficulty": 5,
+      "signal": "Transfer to Mike if authorization token present, otherwise hold.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_primary_op": "TRANSFER",
+        "req_policy_gate": "IF(auth_token)",
+        "req_fallback_op": "HOLD"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"req_primary_op\": {\n      \"name\": \"req_primary_op\",\n      \"value\": \"req_primary_op\"\n    },\n    \"req_policy_gate\": {\n      \"name\": \"req_policy_gate\",\n      \"value\": \"req_policy_gate\"\n    },\n    \"req_fallback_op\": {\n      \"name\": \"req_fallback_op\",\n      \"value\": \"req_fallback_op\"\n    }\n  },\n  \"signal\": {\n    \"req_primary_op\": {\n      \"name\": \"req_primary_op\",\n      \"value\": \"req_primary_op\"\n    },\n    \"req_policy_gate\": {\n      \"name\": \"req_policy_gate\",\n      \"value\": \"req_policy_gate\"\n    },\n    \"req_fall",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_topo_hierarchical_delegation",
+      "partition": "H_topology",
+      "difficulty": 5,
+      "signal": "Supervisor authorized technician to inspect device.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_approver": "Supervisor_1",
+        "req_executor": "Tech_7",
+        "req_op": "INSPECT",
+        "req_target": "DEV_01"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_approver\",\n        \"value\": \"Supervisor authorized technician to inspect device\"\n      },\n      {\n        \"name\": \"req_executor\",\n        \"value\": \"Supervisor authorized technician to inspect device\"\n      },\n      {\n        \"name\": \"req_target\",\n        \"value\": \"Supervisor authorized technician to inspect device\"\n      }\n    ]\n  },\n  \"signal\": \"Supervisor authorized technician to inspect device.\"\n}\n\n{\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"frontier\": [\n      {\n        \"name\": \"req_approver",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 4,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    },
+    {
+      "case_id": "H_topo_convergent_merge",
+      "partition": "H_topology",
+      "difficulty": 5,
+      "signal": "Assemble module from cell A and cell B.",
+      "expected_disposition": "YES",
+      "expected_gold": {
+        "req_op": "ASSEMBLE",
+        "req_part1": "CELL_A",
+        "req_part2": "CELL_B"
+      },
+      "c0_j2": {
+        "raw_text": "{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies|Agents|Guidance>\",\n      \"confidence\": <float between 0.0 and 1.0>,\n      \"is_unknown\": <boolean>,\n      \"alternatives\": []\n    }\n  ]\n}\n\n\nOutput:\n{\n  \"proposals\": [\n    {\n      \"target_requirement\": \"<req_id>\",\n      \"binding_value\": <value>,\n      \"matrix_class\": \"<People|Processes|Data|Devices|Rules|Policies",
+        "proposals_count": 0,
+        "syntactically_valid": false,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      },
+      "c0_h3": {
+        "raw_text": "{\n  \"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}],\n  \"alternatives\": [{\"bindings\": [{\"terminal\": \"<name>\", \"value\": <value>}], \"reason\": \"<optional_reason>\"}],\n  \"unknowns\": [\"<name>\"]\n}\n\n{\n  \"context\": {\n    \"cellA\": {\n      \"name\": \"cellA\",\n      \"value\": \"A\",\n      \"frontier\": [\n        {\n          \"name\": \"cellA_frontier\",\n          \"value\": \"A\",\n          \"frontier\": [\n            {\n              \"name\": \"cellA_frontier_1\",\n              \"value\": \"A\",\n              \"frontier\": [\n                {\n                  \"name\": \"cellA_frontier_2\",\n                  \"value\": \"A\",\n                  \"frontier\": [\n                    {\n                      \"name\": \"cellA_frontier_3\",\n                      \"value\": \"A\",\n                      \"frontier\": [\n                        {\n                          \"name\": \"cellA_frontier_4\",\n                          \"value\": \"A\",\n                          \"frontier\": [\n                            {\n                              \"name\": \"cellA_frontier_5\",",
+        "candidate_bindings_count": 0,
+        "unknowns_count": 3,
+        "disposition": "CLARIFY",
+        "reason_codes": [
+          "EXPLICIT_UNKNOWN",
+          "REQUIRED_TERMINALS_OPEN"
+        ],
+        "exact_closed": false
+      }
+    }
+  ]
+}

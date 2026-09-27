@@ -10,5 +10,8 @@ storage_authority_c/
 qualification/distributed_authority/storage_authority_c/
 /artifacts/
 *.onnx
+*.safetensors
+checkpoints/*_arm_*
+sdk/rust/target/
 
 

@@ -1,0 +1,1994 @@
+{
+  "grammar_version": "grammar-h3-native-v1",
+  "bindings_schema_version": "uow.semantic.bindings.v1",
+  "system_prompt": "You are a bounded semantic translator.\n\nTranslate the external signal only into bindings for the declared unresolved terminals.\n\nDo not make policy decisions.\nDo not authorize actions.\nDo not plan execution.\nDo not invent missing information.\nDo not modify deterministic context.\nUse UNKNOWN when a terminal cannot be uniquely resolved.\nReturn only the required structured output.",
+  "total_admitted": 64,
+  "train_count": 44,
+  "train_digest": "f5d0742042880a6407755cf20c8ff576273ba4879428e78eb06a12dd97bfb2be",
+  "holdout_count": 20,
+  "holdout_digest": "726ce22286da9a2793670dee000f7710d4c5c9b45cc054e5f26b16f9f1aded9d",
+  "cardinality_breakdown": {
+    "train": {
+      "fp_1": 11,
+      "fp_2": 26,
+      "fp_3": 3,
+      "fp_4": 4
+    },
+    "holdout": {
+      "fp_1": 4,
+      "fp_2": 7,
+      "fp_3": 8,
+      "fp_4": 1
+    }
+  },
+  "behavior_class_breakdown": {
+    "train": {
+      "A_unique": 10,
+      "B_composition": 29,
+      "C_unknown": 3,
+      "D_ambiguous": 2
+    },
+    "holdout": {
+      "A_unique": 4,
+      "B_composition": 11,
+      "C_unknown": 3,
+      "D_ambiguous": 2
+    }
+  },
+  "family_breakdown": {
+    "performative": {
+      "train": 4,
+      "holdout": 2
+    },
+    "semantic_head": {
+      "train": 10,
+      "holdout": 5
+    },
+    "argument": {
+      "train": 9,
+      "holdout": 4
+    },
+    "reference": {
+      "train": 2,
+      "holdout": 2
+    },
+    "quantity": {
+      "train": 4,
+      "holdout": 2
+    },
+    "negation": {
+      "train": 3,
+      "holdout": 1
+    },
+    "temporal": {
+      "train": 4,
+      "holdout": 2
+    },
+    "conditional": {
+      "train": 4,
+      "holdout": 1
+    },
+    "modality": {
+      "train": 4,
+      "holdout": 1
+    }
+  },
+  "train_examples": [
+    {
+      "example_id": "TR_perf_cmd_fp1",
+      "partition": "train",
+      "family": "performative",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Transfer five batteries to Mike.",
+      "context": {
+        "operator": "transfer",
+        "recipient": "Mike",
+        "quantity": 5
+      },
+      "frontier": [
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "performative",
+          "value": "command"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_perf_query_fp1",
+      "partition": "train",
+      "family": "performative",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Did Mike receive the five batteries?",
+      "context": {
+        "operator": "query_transfer",
+        "recipient": "Mike",
+        "quantity": 5
+      },
+      "frontier": [
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "performative",
+          "value": "query"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_perf_cmd_fp2",
+      "partition": "train",
+      "family": "performative",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Dispatch diagnostic kit to Station East.",
+      "context": {
+        "item": "diagnostic_kit",
+        "destination": "Station_East"
+      },
+      "frontier": [
+        "performative",
+        "operator"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "performative",
+          "value": "command"
+        },
+        {
+          "terminal": "operator",
+          "value": "dispatch"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_perf_query_fp2",
+      "partition": "train",
+      "family": "performative",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Has diagnostic kit reached Station East?",
+      "context": {
+        "item": "diagnostic_kit",
+        "destination": "Station_East"
+      },
+      "frontier": [
+        "performative",
+        "operator"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "performative",
+          "value": "query"
+        },
+        {
+          "terminal": "operator",
+          "value": "query_status"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_transfer_fp4",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 4,
+      "signal": "Send three batteries to Alice immediately.",
+      "context": {},
+      "frontier": [
+        "operator",
+        "recipient",
+        "quantity",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "transfer"
+        },
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        },
+        {
+          "terminal": "quantity",
+          "value": 3
+        },
+        {
+          "terminal": "temporal",
+          "value": "IMMEDIATE"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_transfer_fp3",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Send three batteries to Alice immediately.",
+      "context": {
+        "operator": "transfer"
+      },
+      "frontier": [
+        "recipient",
+        "quantity",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        },
+        {
+          "terminal": "quantity",
+          "value": 3
+        },
+        {
+          "terminal": "temporal",
+          "value": "IMMEDIATE"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_transfer_fp2",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Send three batteries to Alice immediately.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 3
+      },
+      "frontier": [
+        "recipient",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        },
+        {
+          "terminal": "temporal",
+          "value": "IMMEDIATE"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_transfer_fp1",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Send three batteries to Alice immediately.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 3,
+        "temporal": "IMMEDIATE"
+      },
+      "frontier": [
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_allocate_fp3",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Allocate ten sensor units to Lab 2.",
+      "context": {},
+      "frontier": [
+        "operator",
+        "quantity",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "allocate"
+        },
+        {
+          "terminal": "quantity",
+          "value": 10
+        },
+        {
+          "terminal": "recipient",
+          "value": "Lab_2"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_consign_fp2",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Consign diagnostic module to Operator Chen.",
+      "context": {
+        "operator": "consign"
+      },
+      "frontier": [
+        "item",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "item",
+          "value": "diagnostic_module"
+        },
+        {
+          "terminal": "recipient",
+          "value": "Operator_Chen"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_op_quarantine_fp2",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Quarantine contaminated batch at Storage B.",
+      "context": {},
+      "frontier": [
+        "operator",
+        "destination"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "quarantine"
+        },
+        {
+          "terminal": "destination",
+          "value": "Storage_B"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_arg_actor_recip_fp2",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Mike transferred four cells to Alice.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 4
+      },
+      "frontier": [
+        "actor",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "actor",
+          "value": "Mike"
+        },
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_arg_roleswap_fp2",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Alice received four cells from Mike.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 4
+      },
+      "frontier": [
+        "actor",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "actor",
+          "value": "Mike"
+        },
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_ref_here_fp2",
+      "partition": "train",
+      "family": "reference",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Send three batteries here.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 3
+      },
+      "frontier": [
+        "destination",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "destination",
+          "value": "SITE_17"
+        },
+        {
+          "terminal": "recipient",
+          "value": "LOCAL_AGENT"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_ref_base_fp2",
+      "partition": "train",
+      "family": "reference",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Return the rover to base station.",
+      "context": {
+        "item": "rover"
+      },
+      "frontier": [
+        "operator",
+        "destination"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "return"
+        },
+        {
+          "terminal": "destination",
+          "value": "BASE_STATION"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_qty_universal_all_fp2",
+      "partition": "train",
+      "family": "quantity",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Convey all available cells to Station Alpha.",
+      "context": {
+        "operator": "convey",
+        "destination": "Station_Alpha"
+      },
+      "frontier": [
+        "quantity",
+        "item"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "quantity",
+          "value": "ALL"
+        },
+        {
+          "terminal": "item",
+          "value": "cells"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_qty_numeric_fp2",
+      "partition": "train",
+      "family": "quantity",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Allocate twelve batteries to Bay 4.",
+      "context": {
+        "operator": "allocate",
+        "destination": "Bay_4"
+      },
+      "frontier": [
+        "quantity",
+        "item"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "quantity",
+          "value": 12
+        },
+        {
+          "terminal": "item",
+          "value": "batteries"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_neg_action_fp2",
+      "partition": "train",
+      "family": "negation",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Do not transfer the batteries to Mike.",
+      "context": {
+        "recipient": "Mike",
+        "item": "batteries"
+      },
+      "frontier": [
+        "operator",
+        "modality"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "transfer"
+        },
+        {
+          "terminal": "modality",
+          "value": "MUST_NOT"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_neg_halt_fp2",
+      "partition": "train",
+      "family": "negation",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Halt dispatch of cargo immediately.",
+      "context": {
+        "item": "cargo"
+      },
+      "frontier": [
+        "operator",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "halt_dispatch"
+        },
+        {
+          "terminal": "temporal",
+          "value": "IMMEDIATE"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_temp_before_fp2",
+      "partition": "train",
+      "family": "temporal",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Complete safety inspection before 17:00.",
+      "context": {
+        "operator": "safety_inspection"
+      },
+      "frontier": [
+        "temporal",
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1700"
+        },
+        {
+          "terminal": "performative",
+          "value": "command"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_temp_after_fp2",
+      "partition": "train",
+      "family": "temporal",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Transfer diagnostic data after calibration.",
+      "context": {
+        "operator": "transfer",
+        "item": "diagnostic_data"
+      },
+      "frontier": [
+        "temporal",
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "temporal",
+          "value": "AFTER_CALIBRATION"
+        },
+        {
+          "terminal": "performative",
+          "value": "command"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_cond_unless_fp2",
+      "partition": "train",
+      "family": "conditional",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Unless lockout is active, dispatch fuel cell.",
+      "context": {
+        "operator": "dispatch",
+        "item": "fuel_cell"
+      },
+      "frontier": [
+        "condition",
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "condition",
+          "value": "UNLESS_LOCKOUT"
+        },
+        {
+          "terminal": "performative",
+          "value": "command"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_cond_if_approved_fp2",
+      "partition": "train",
+      "family": "conditional",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "If approved by admin, allocate 50 units.",
+      "context": {
+        "operator": "allocate",
+        "quantity": 50
+      },
+      "frontier": [
+        "condition",
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "condition",
+          "value": "IF_APPROVED"
+        },
+        {
+          "terminal": "performative",
+          "value": "command"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_mod_must_fp2",
+      "partition": "train",
+      "family": "modality",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Operator must verify checksum before commit.",
+      "context": {
+        "actor": "Operator",
+        "operator": "verify_checksum"
+      },
+      "frontier": [
+        "modality",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "modality",
+          "value": "MUST"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_COMMIT"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_mod_may_fp2",
+      "partition": "train",
+      "family": "modality",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Technician may postpone routine sync.",
+      "context": {
+        "actor": "Technician",
+        "operator": "postpone_sync"
+      },
+      "frontier": [
+        "modality",
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "modality",
+          "value": "MAY"
+        },
+        {
+          "terminal": "performative",
+          "value": "permission"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_unk_florp_fp2",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "C_unknown",
+      "frontier_cardinality": 2,
+      "signal": "Florp five batteries to Mike.",
+      "context": {
+        "quantity": 5
+      },
+      "frontier": [
+        "operator",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Mike"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [
+        "operator"
+      ],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "TR_unk_blurg_fp2",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "C_unknown",
+      "frontier_cardinality": 2,
+      "signal": "Send three blurg units to Alice.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 3
+      },
+      "frontier": [
+        "item",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [
+        "item"
+      ],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "TR_unk_glarch_fp3",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "C_unknown",
+      "frontier_cardinality": 3,
+      "signal": "Glarch the packages to Site 17 before noon.",
+      "context": {
+        "item": "packages"
+      },
+      "frontier": [
+        "operator",
+        "destination",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "destination",
+          "value": "Site_17"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1200"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [
+        "operator"
+      ],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "TR_amb_mike_alice_fp2",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "D_ambiguous",
+      "frontier_cardinality": 2,
+      "signal": "Transfer five batteries to Mike or Alice.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 5
+      },
+      "frontier": [
+        "recipient",
+        "performative"
+      ],
+      "target_bindings": [],
+      "target_alternatives": [
+        {
+          "bindings": [
+            {
+              "terminal": "recipient",
+              "value": "Mike"
+            },
+            {
+              "terminal": "performative",
+              "value": "command"
+            }
+          ],
+          "reason": "admissible_disjunction"
+        },
+        {
+          "bindings": [
+            {
+              "terminal": "recipient",
+              "value": "Alice"
+            },
+            {
+              "terminal": "performative",
+              "value": "command"
+            }
+          ],
+          "reason": "admissible_disjunction"
+        }
+      ],
+      "target_unknowns": [],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "TR_amb_bay_east_west_fp1",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "D_ambiguous",
+      "frontier_cardinality": 1,
+      "signal": "Deliver equipment to Bay East or Bay West.",
+      "context": {
+        "operator": "deliver",
+        "item": "equipment"
+      },
+      "frontier": [
+        "destination"
+      ],
+      "target_bindings": [],
+      "target_alternatives": [
+        {
+          "bindings": [
+            {
+              "terminal": "destination",
+              "value": "Bay_East"
+            }
+          ],
+          "reason": "alternative_target"
+        },
+        {
+          "bindings": [
+            {
+              "terminal": "destination",
+              "value": "Bay_West"
+            }
+          ],
+          "reason": "alternative_target"
+        }
+      ],
+      "target_unknowns": [],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "TR_more_qty_item_fp2",
+      "partition": "train",
+      "family": "quantity",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Consign 15 solar panels to Station 4.",
+      "context": {
+        "operator": "consign",
+        "destination": "Station_4"
+      },
+      "frontier": [
+        "quantity",
+        "item"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "quantity",
+          "value": 15
+        },
+        {
+          "terminal": "item",
+          "value": "solar_panels"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_op_temp_fp2",
+      "partition": "train",
+      "family": "temporal",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Purge log files after midnight.",
+      "context": {
+        "target": "log_files"
+      },
+      "frontier": [
+        "operator",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "purge"
+        },
+        {
+          "terminal": "temporal",
+          "value": "AFTER_MIDNIGHT"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_dest_actor_fp2",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Supervisor Chen ordered delivery to Depot 9.",
+      "context": {
+        "operator": "delivery"
+      },
+      "frontier": [
+        "actor",
+        "destination"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "actor",
+          "value": "Supervisor_Chen"
+        },
+        {
+          "terminal": "destination",
+          "value": "Depot_9"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_mod_cond_fp2",
+      "partition": "train",
+      "family": "modality",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Units must not be moved if alarm sounds.",
+      "context": {
+        "operator": "move"
+      },
+      "frontier": [
+        "modality",
+        "condition"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "modality",
+          "value": "MUST_NOT"
+        },
+        {
+          "terminal": "condition",
+          "value": "IF_ALARM_SOUNDS"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_op",
+      "partition": "train",
+      "family": "semantic_head",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Dispatch three batteries to Alice.",
+      "context": {
+        "recipient": "Alice",
+        "quantity": 3,
+        "item": "batteries"
+      },
+      "frontier": [
+        "operator"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "dispatch"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_recip",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Dispatch three batteries to Alice.",
+      "context": {
+        "operator": "dispatch",
+        "quantity": 3,
+        "item": "batteries"
+      },
+      "frontier": [
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_qty",
+      "partition": "train",
+      "family": "quantity",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Dispatch three batteries to Alice.",
+      "context": {
+        "operator": "dispatch",
+        "recipient": "Alice",
+        "item": "batteries"
+      },
+      "frontier": [
+        "quantity"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "quantity",
+          "value": 3
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_item",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Dispatch three batteries to Alice.",
+      "context": {
+        "operator": "dispatch",
+        "recipient": "Alice",
+        "quantity": 3
+      },
+      "frontier": [
+        "item"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "item",
+          "value": "batteries"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_temp",
+      "partition": "train",
+      "family": "temporal",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Send cargo to Alice before 16:00.",
+      "context": {
+        "operator": "send",
+        "recipient": "Alice",
+        "item": "cargo"
+      },
+      "frontier": [
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1600"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_cond",
+      "partition": "train",
+      "family": "conditional",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Dispatch cargo unless storm warning active.",
+      "context": {
+        "operator": "dispatch",
+        "item": "cargo"
+      },
+      "frontier": [
+        "condition"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "condition",
+          "value": "UNLESS_STORM_WARNING"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp1_mod",
+      "partition": "train",
+      "family": "modality",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "You must consign these units.",
+      "context": {
+        "operator": "consign",
+        "item": "units"
+      },
+      "frontier": [
+        "modality"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "modality",
+          "value": "MUST"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp4_full1",
+      "partition": "train",
+      "family": "argument",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 4,
+      "signal": "Supervisor Dave: allocate 20 batteries to Alice before 15:00.",
+      "context": {},
+      "frontier": [
+        "actor",
+        "quantity",
+        "recipient",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "actor",
+          "value": "Dave"
+        },
+        {
+          "terminal": "quantity",
+          "value": 20
+        },
+        {
+          "terminal": "recipient",
+          "value": "Alice"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1500"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp4_full2",
+      "partition": "train",
+      "family": "conditional",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 4,
+      "signal": "Unless lockout, convey 8 sensors to Site 01 immediately.",
+      "context": {},
+      "frontier": [
+        "condition",
+        "quantity",
+        "destination",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "condition",
+          "value": "UNLESS_LOCKOUT"
+        },
+        {
+          "terminal": "quantity",
+          "value": 8
+        },
+        {
+          "terminal": "destination",
+          "value": "SITE_01"
+        },
+        {
+          "terminal": "temporal",
+          "value": "IMMEDIATE"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "TR_more_fp4_full3",
+      "partition": "train",
+      "family": "negation",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 4,
+      "signal": "Operator must not transfer 10 cells to Lab 1.",
+      "context": {},
+      "frontier": [
+        "actor",
+        "modality",
+        "quantity",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "actor",
+          "value": "Operator"
+        },
+        {
+          "terminal": "modality",
+          "value": "MUST_NOT"
+        },
+        {
+          "terminal": "quantity",
+          "value": 10
+        },
+        {
+          "terminal": "recipient",
+          "value": "Lab_1"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    }
+  ],
+  "holdout_examples": [
+    {
+      "example_id": "HO_perf_inverted_query_fp2",
+      "partition": "holdout",
+      "family": "performative",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "To Mike, were the five cells delivered?",
+      "context": {
+        "quantity": 5,
+        "recipient": "Mike"
+      },
+      "frontier": [
+        "performative",
+        "operator"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "performative",
+          "value": "query"
+        },
+        {
+          "terminal": "operator",
+          "value": "query_delivery"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_op_purge_fp3",
+      "partition": "holdout",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Purge buffer cache at Sector 7 before reboot.",
+      "context": {},
+      "frontier": [
+        "operator",
+        "destination",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "purge"
+        },
+        {
+          "terminal": "destination",
+          "value": "Sector_7"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_REBOOT"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_op_disgorge_fp2",
+      "partition": "holdout",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Disgorge unallocated fuel cells to Depot East.",
+      "context": {
+        "item": "fuel_cells"
+      },
+      "frontier": [
+        "operator",
+        "destination"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "disgorge"
+        },
+        {
+          "terminal": "destination",
+          "value": "Depot_East"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_arg_passive_roleswap_fp2",
+      "partition": "holdout",
+      "family": "argument",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 2,
+      "signal": "Four cells were entrusted to Dave by Chen.",
+      "context": {
+        "operator": "transfer",
+        "quantity": 4
+      },
+      "frontier": [
+        "actor",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "actor",
+          "value": "Chen"
+        },
+        {
+          "terminal": "recipient",
+          "value": "Dave"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_ref_query_here_fp3",
+      "partition": "holdout",
+      "family": "reference",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Did Chen dispatch two sensor packs here before noon?",
+      "context": {
+        "actor": "Chen",
+        "quantity": 2
+      },
+      "frontier": [
+        "operator",
+        "destination",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "query_dispatch"
+        },
+        {
+          "terminal": "destination",
+          "value": "SITE_17"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1200"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_qty_colon_universal_fp3",
+      "partition": "holdout",
+      "family": "quantity",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Station Alpha: deliver everything before 18:00.",
+      "context": {
+        "operator": "deliver",
+        "destination": "Station_Alpha"
+      },
+      "frontier": [
+        "quantity",
+        "temporal",
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "quantity",
+          "value": "ALL"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1800"
+        },
+        {
+          "terminal": "performative",
+          "value": "command"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_neg_conditional_fp3",
+      "partition": "holdout",
+      "family": "negation",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Unless authorized by supervisor, no items may be transferred to Bay 2.",
+      "context": {
+        "destination": "Bay_2"
+      },
+      "frontier": [
+        "condition",
+        "operator",
+        "modality"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "condition",
+          "value": "UNLESS_AUTHORIZED"
+        },
+        {
+          "terminal": "operator",
+          "value": "transfer"
+        },
+        {
+          "terminal": "modality",
+          "value": "MUST_NOT"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_temp_window_fp3",
+      "partition": "holdout",
+      "family": "temporal",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Between 14:00 and 16:00, convey seven sensors to Lab 3.",
+      "context": {
+        "operator": "convey",
+        "recipient": "Lab_3"
+      },
+      "frontier": [
+        "temporal",
+        "quantity",
+        "item"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "temporal",
+          "value": "WINDOW_1400_1600"
+        },
+        {
+          "terminal": "quantity",
+          "value": 7
+        },
+        {
+          "terminal": "item",
+          "value": "sensors"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_cond_multi_gate_fp3",
+      "partition": "holdout",
+      "family": "conditional",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Unless inspection fails and power dips, Mike: three cells before 17:00.",
+      "context": {
+        "recipient": "Mike",
+        "item": "cells"
+      },
+      "frontier": [
+        "condition",
+        "quantity",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "condition",
+          "value": "UNLESS_INSPECTION_FAILS_AND_POWER_DIPS"
+        },
+        {
+          "terminal": "quantity",
+          "value": 3
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_1700"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_unk_zord_fp2",
+      "partition": "holdout",
+      "family": "semantic_head",
+      "behavior_class": "C_unknown",
+      "frontier_cardinality": 2,
+      "signal": "Zord two diagnostic packs to Dave.",
+      "context": {
+        "quantity": 2,
+        "item": "diagnostic_packs"
+      },
+      "frontier": [
+        "operator",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "recipient",
+          "value": "Dave"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [
+        "operator"
+      ],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "HO_unk_quibble_fp3",
+      "partition": "holdout",
+      "family": "argument",
+      "behavior_class": "C_unknown",
+      "frontier_cardinality": 3,
+      "signal": "Dispatch five quibble modules here immediately.",
+      "context": {
+        "operator": "dispatch",
+        "quantity": 5
+      },
+      "frontier": [
+        "item",
+        "destination",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "destination",
+          "value": "SITE_17"
+        },
+        {
+          "terminal": "temporal",
+          "value": "IMMEDIATE"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [
+        "item"
+      ],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "HO_amb_inspect_repair_fp2",
+      "partition": "holdout",
+      "family": "semantic_head",
+      "behavior_class": "D_ambiguous",
+      "frontier_cardinality": 2,
+      "signal": "Inspect or repair the cooling unit at Bay 3.",
+      "context": {
+        "item": "cooling_unit",
+        "destination": "Bay_3"
+      },
+      "frontier": [
+        "operator",
+        "performative"
+      ],
+      "target_bindings": [],
+      "target_alternatives": [
+        {
+          "bindings": [
+            {
+              "terminal": "operator",
+              "value": "inspect"
+            },
+            {
+              "terminal": "performative",
+              "value": "command"
+            }
+          ],
+          "reason": "operator_disjunction"
+        },
+        {
+          "bindings": [
+            {
+              "terminal": "operator",
+              "value": "repair"
+            },
+            {
+              "terminal": "performative",
+              "value": "command"
+            }
+          ],
+          "reason": "operator_disjunction"
+        }
+      ],
+      "target_unknowns": [],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "HO_more_colon_dispatch_fp4",
+      "partition": "holdout",
+      "family": "semantic_head",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 4,
+      "signal": "DEPOT_CENTRAL: transfer 14 batteries to Mike before sunset.",
+      "context": {},
+      "frontier": [
+        "destination",
+        "quantity",
+        "recipient",
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "destination",
+          "value": "DEPOT_CENTRAL"
+        },
+        {
+          "terminal": "quantity",
+          "value": 14
+        },
+        {
+          "terminal": "recipient",
+          "value": "Mike"
+        },
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_SUNSET"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_more_multihop_fp3",
+      "partition": "holdout",
+      "family": "argument",
+      "behavior_class": "B_composition",
+      "frontier_cardinality": 3,
+      "signal": "Route the relays via Gateway 2 to Substation 5.",
+      "context": {
+        "item": "relays"
+      },
+      "frontier": [
+        "operator",
+        "destination",
+        "recipient"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "operator",
+          "value": "route"
+        },
+        {
+          "terminal": "destination",
+          "value": "Gateway_2"
+        },
+        {
+          "terminal": "recipient",
+          "value": "Substation_5"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_more_ambig_qty_fp2",
+      "partition": "holdout",
+      "family": "quantity",
+      "behavior_class": "D_ambiguous",
+      "frontier_cardinality": 2,
+      "signal": "Send three or four batteries to Dave.",
+      "context": {
+        "operator": "send",
+        "item": "batteries",
+        "recipient": "Dave"
+      },
+      "frontier": [
+        "quantity",
+        "performative"
+      ],
+      "target_bindings": [],
+      "target_alternatives": [
+        {
+          "bindings": [
+            {
+              "terminal": "quantity",
+              "value": 3
+            },
+            {
+              "terminal": "performative",
+              "value": "command"
+            }
+          ],
+          "reason": "quantity_disjunction"
+        },
+        {
+          "bindings": [
+            {
+              "terminal": "quantity",
+              "value": 4
+            },
+            {
+              "terminal": "performative",
+              "value": "command"
+            }
+          ],
+          "reason": "quantity_disjunction"
+        }
+      ],
+      "target_unknowns": [],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "HO_more_unknown_item_fp2",
+      "partition": "holdout",
+      "family": "argument",
+      "behavior_class": "C_unknown",
+      "frontier_cardinality": 2,
+      "signal": "Convey six plonkers to Site 17 immediately.",
+      "context": {
+        "operator": "convey",
+        "quantity": 6
+      },
+      "frontier": [
+        "item",
+        "destination"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "destination",
+          "value": "SITE_17"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [
+        "item"
+      ],
+      "expected_disposition": "CLARIFY"
+    },
+    {
+      "example_id": "HO_more_mod_should_fp1",
+      "partition": "holdout",
+      "family": "modality",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Operator should verify power status.",
+      "context": {
+        "operator": "verify_power_status",
+        "actor": "Operator"
+      },
+      "frontier": [
+        "modality"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "modality",
+          "value": "SHOULD"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_more_perf_query_fp1",
+      "partition": "holdout",
+      "family": "performative",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Is the storage array locked?",
+      "context": {
+        "operator": "query_lock_status",
+        "target": "storage_array"
+      },
+      "frontier": [
+        "performative"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "performative",
+          "value": "query"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_more_temp_fp1",
+      "partition": "holdout",
+      "family": "temporal",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Transfer cargo before dusk.",
+      "context": {
+        "operator": "transfer",
+        "item": "cargo"
+      },
+      "frontier": [
+        "temporal"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "temporal",
+          "value": "BEFORE_DUSK"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    },
+    {
+      "example_id": "HO_more_ref_dest_fp1",
+      "partition": "holdout",
+      "family": "reference",
+      "behavior_class": "A_unique",
+      "frontier_cardinality": 1,
+      "signal": "Deliver the diagnostic report here.",
+      "context": {
+        "operator": "deliver",
+        "item": "diagnostic_report"
+      },
+      "frontier": [
+        "destination"
+      ],
+      "target_bindings": [
+        {
+          "terminal": "destination",
+          "value": "SITE_17"
+        }
+      ],
+      "target_alternatives": [],
+      "target_unknowns": [],
+      "expected_disposition": "YES"
+    }
+  ]
+}

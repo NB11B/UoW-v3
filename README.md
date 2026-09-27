@@ -117,9 +117,10 @@ The current `main` line integrates both the recursive-composition/operational-gr
 
 Current integrated verification status:
 
-- **Repository CI / Full Test Suite:** **520 passed tests** (0 failures, 0 regressions in ~52s).
+- **Repository CI / Full Test Suite:** **542 passed tests** (0 failures, 0 regressions in ~52s).
 - **Core UoW Kernel & Distributed Suites:** 412 tests passed.
 - **Level 8 Semantic Mediation Suite (H0–H7):** 108 tests passed across 7 test modules.
+- **Continuous API & User Guide Verification:** 22 tests passed across 2 dedicated verification harnesses.
 - **Closure shadow:** 279 / 279 tests passing (`architecture/shadow/python/tests`).
 - **Claim lint:** 42 registered qualification claims passing (`qualification.claim_lint`).
 - **System acceptance smoke:** 31 / 31 assertions passing (`qualification/uow_system_acceptance.py`).
@@ -131,6 +132,8 @@ The definitive semantic subsystem synthesis is documented in [`SEMANTIC_HARNESS_
 ---
 
 ## 2. Clean API Quickstart & Guide
+
+> 📖 **Comprehensive User & Operator Guide:** For an exhaustive guide, architecture deep dives, hardware spectrum deployment (host accelerators, ESP32-S3, and Arduino edge LLM harnesses), and anti-pattern reviews, see [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md). All demos and tests in the user guide are verified automatically by CI.
 
 ### Installation
 

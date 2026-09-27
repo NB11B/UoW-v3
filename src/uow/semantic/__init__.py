@@ -5,6 +5,18 @@ compatibility facade. Import from uow.semantic explicitly while qualification
 is in progress.
 """
 
+from .application import (
+    PreparedSemanticUoW,
+    SemanticApplicationAdapter,
+    SemanticStateDriftError,
+)
+from .compiler import (
+    PurgeUoWCompiler,
+    SemanticCompilerRegistry,
+    SemanticUoWCompiler,
+    TransferUoWCompiler,
+    derive_semantic_uow_id,
+)
 from .context import SemanticContextProjector
 from .frontier import DeterministicSemanticResolver, SemanticFrontierBuilder
 from .handoff import SemanticHandoff
@@ -27,19 +39,32 @@ from .schema import (
     SemanticTranslationRequest,
 )
 from .translator import NullSemanticTranslator, SemanticTranslator
+from .validation import (
+    BindingValidationResult,
+    DefaultSemanticAdmissibilityValidator,
+    SemanticBindingValidator,
+    ValidationVerdict,
+)
 
 __all__ = [
     "BindingOrigin",
+    "BindingValidationResult",
     "CandidateSemanticBindings",
+    "DefaultSemanticAdmissibilityValidator",
     "DeterministicSemanticResolver",
     "ExternalSignal",
     "IngressContext",
     "IntentEnvelope",
     "MinimalSemanticContext",
     "NullSemanticTranslator",
+    "PreparedSemanticUoW",
+    "PurgeUoWCompiler",
     "SemanticAlternative",
+    "SemanticApplicationAdapter",
     "SemanticBinding",
+    "SemanticBindingValidator",
     "SemanticClosureCertificate",
+    "SemanticCompilerRegistry",
     "SemanticContextProjector",
     "SemanticDisposition",
     "SemanticFrontierBuilder",
@@ -49,6 +74,11 @@ __all__ = [
     "SemanticInvariantError",
     "SemanticRequirement",
     "SemanticResult",
+    "SemanticStateDriftError",
     "SemanticTranslationRequest",
     "SemanticTranslator",
+    "SemanticUoWCompiler",
+    "TransferUoWCompiler",
+    "ValidationVerdict",
+    "derive_semantic_uow_id",
 ]

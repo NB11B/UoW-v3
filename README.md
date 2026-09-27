@@ -7,10 +7,13 @@
 
 > **A typed, certifiable Unit-of-Work architecture for deterministic authority over flexible computation across heterogeneous distributed hardware.**
 
+> 📖 **Developer & Operator Guide:** For an exhaustive guide, API tutorials across all 10 architectural levels, testing recipes, and edge hardware deployment details (including Arduino micro-GPU LLM harnesses), see the [**Comprehensive User Guide (`docs/USER_GUIDE.md`)**](docs/USER_GUIDE.md).
+
 ---
 
 ## Table of Contents
 
+- 📘 [**Comprehensive User Guide (`docs/USER_GUIDE.md`)**](docs/USER_GUIDE.md)
 1. [Theoretical Architecture](#1-theoretical-architecture)
    - [The Unit-of-Work Formalism](#the-unit-of-work-formalism)
    - [The Core Authority Invariant](#the-core-authority-invariant)

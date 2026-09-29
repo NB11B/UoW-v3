@@ -8,7 +8,7 @@
 - **Frozen evaluator tag:** `e1c-gate0-evaluator`
 - **Integration strategy:** Qualified-reference to condensed production transplant (PR #54 preserved as research history)
 - **Production candidate commit:** `230a7d10b6aa514dd655d60acc07a665d9677951` (PR #55)
-- **Production merge commit (`main`):** `7cfc56b6bfe36495bebf647614d93e117ddca047`
+- **Production merge commit (`main`):** `7cfc56bbdbe5100a791a1971fcf09c4fa4cb6102`
 
 ## Operational Parameters
 

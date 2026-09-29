@@ -1,0 +1,471 @@
+{
+  "reference_commit": "c559d6c1c962b436fa9c05c68de42f29afa4ad6f",
+  "generated_at": "2026-09-29T17:22:25.348507+00:00",
+  "fixture_sha256": "941adef420a283d123aab1f40dabc54cea3030a4f19e2331581441fa371e59b7",
+  "cases": {
+    "goal_already_satisfied": {
+      "success": true,
+      "terminal_state": "COMPLETE",
+      "work_count": 0,
+      "work_transcript": [],
+      "authority_trace": [],
+      "budget_steps": 3,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "status": "done"
+      },
+      "final_state_hash": "f37e502a7886f36ab3ccf1c8fc3ca3ac7b52b87a76bb353d37a89a7cedbd8755",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->VERIFY",
+        "VERIFY->COMPLETE"
+      ],
+      "rejection_reasons": [],
+      "has_closure_certificate": true,
+      "has_deficit_certificate": false
+    },
+    "single_step_completion": {
+      "success": true,
+      "terminal_state": "COMPLETE",
+      "work_count": 1,
+      "work_transcript": [
+        "w_c1:init_cap:True"
+      ],
+      "authority_trace": [
+        "w_c1:authority.default"
+      ],
+      "budget_steps": 6,
+      "budget_cost": 1.0,
+      "budget_energy": 1.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "status": "ready"
+      },
+      "final_state_hash": "2dce0b98846400b792d095ae6175b8350277b83c76f89554e389b29752743cfd",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->COMPLETE"
+      ],
+      "rejection_reasons": [],
+      "has_closure_certificate": true,
+      "has_deficit_certificate": false
+    },
+    "multi_step_dependency": {
+      "success": true,
+      "terminal_state": "COMPLETE",
+      "work_count": 2,
+      "work_transcript": [
+        "w_pre_stepA_1:cap_a:True",
+        "w_cb:cap_b:True"
+      ],
+      "authority_trace": [
+        "w_pre_stepA_1:authority.default",
+        "w_cb:authority.default"
+      ],
+      "budget_steps": 6,
+      "budget_cost": 2.0,
+      "budget_energy": 2.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "stepA": "done",
+        "stepB": "done"
+      },
+      "final_state_hash": "6d4535c6b1a8d6861038fa0dee5d651cad0ab555aa390e782d99fc4047fdb967",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->COMPLETE"
+      ],
+      "rejection_reasons": [],
+      "has_closure_certificate": true,
+      "has_deficit_certificate": false
+    },
+    "missing_capability": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 0,
+      "work_transcript": [],
+      "authority_trace": [],
+      "budget_steps": 3,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "status": "init"
+      },
+      "final_state_hash": "d30f4d491f7c299531988b51fa3cef081c4a54dcff971822ce8ca26007b5a938",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->ACQUIRE",
+        "ACQUIRE->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "GOAL_UNKNOWN_SURFACE",
+        "CAPABILITY_ACQUISITION_UNAVAILABLE"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    },
+    "semantic_non_derivability": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 0,
+      "work_transcript": [],
+      "authority_trace": [],
+      "budget_steps": 2,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "status": "init"
+      },
+      "final_state_hash": "d30f4d491f7c299531988b51fa3cef081c4a54dcff971822ce8ca26007b5a938",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "GOAL_UNREPRESENTABLE",
+        "SEMANTIC_DEFICIT_DETECTED"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": true,
+      "deficit_basis_id": "5b6aad2b30a1225f7443327dbdbe7644b3977f964ea79135fc6e0c42f67a5b6f",
+      "deficit_missing_effects": [
+        "teleport"
+      ]
+    },
+    "authority_rejection": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 0,
+      "work_transcript": [],
+      "authority_trace": [],
+      "budget_steps": 3,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "restricted": "locked"
+      },
+      "final_state_hash": "9c044ed2d7d927b777e924dec59cd4a042f465f7b66f0d81068af946c53810a4",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->FAILED"
+      ],
+      "rejection_reasons": [
+        "UNAUTHORIZED_WORK_AUTHORITY:top_secret"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    },
+    "resource_exhaustion": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 0,
+      "work_transcript": [],
+      "authority_trace": [],
+      "budget_steps": 1,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "step": 0
+      },
+      "final_state_hash": "f9e8657f833dca59f724a0850029669214818ae82106044347f83159e668819e",
+      "transitions": [
+        "OBSERVE->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "EXCEEDED_MAX_STEPS:1>0"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    },
+    "bounded_repair_on_transient_failure": {
+      "success": true,
+      "terminal_state": "COMPLETE",
+      "work_count": 4,
+      "work_transcript": [
+        "w_pre_stepA_1:cap_a:True",
+        "w_c_b:cap_b:False",
+        "w_pre_stepA_1:cap_a:True",
+        "repair:w_c_b:cap_b:True"
+      ],
+      "authority_trace": [
+        "w_pre_stepA_1:authority.default",
+        "w_c_b:authority.default",
+        "w_pre_stepA_1:authority.default",
+        "repair:w_c_b:authority.default"
+      ],
+      "budget_steps": 10,
+      "budget_cost": 4.0,
+      "budget_energy": 4.0,
+      "budget_repairs": 1,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "stepA": "done",
+        "stepB": "done"
+      },
+      "final_state_hash": "6d4535c6b1a8d6861038fa0dee5d651cad0ab555aa390e782d99fc4047fdb967",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->COMPLETE"
+      ],
+      "rejection_reasons": [],
+      "has_closure_certificate": true,
+      "has_deficit_certificate": false
+    },
+    "repeated_failure_routes_to_adaptation": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 3,
+      "work_transcript": [
+        "w_c_adapt:flaky_cap:False",
+        "repair:w_c_adapt:flaky_cap:False",
+        "repair:repair:w_c_adapt:flaky_cap:False"
+      ],
+      "authority_trace": [
+        "w_c_adapt:authority.default",
+        "repair:w_c_adapt:authority.default",
+        "repair:repair:w_c_adapt:authority.default"
+      ],
+      "budget_steps": 16,
+      "budget_cost": 3.0,
+      "budget_energy": 3.0,
+      "budget_repairs": 3,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "step": "pending"
+      },
+      "final_state_hash": "8ff71f8db3faa98399ae450bffabb889b423e5991d9f82faa48e76a58c78ec15",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "EXECUTION_FAILED:w_c_adapt:PERM_FAULT",
+        "EXECUTION_FAILED:repair:w_c_adapt:PERM_FAULT",
+        "EXECUTION_FAILED:repair:repair:w_c_adapt:PERM_FAULT",
+        "EXCEEDED_MAX_STEPS:16>15"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    },
+    "provider_disappearance": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 11,
+      "work_transcript": [
+        "w_c_vanish:cap_vanish:False",
+        "repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:cap_vanish:False",
+        "repair:repair:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:cap_vanish:False"
+      ],
+      "authority_trace": [
+        "w_c_vanish:authority.default",
+        "repair:w_c_vanish:authority.default",
+        "repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:authority.default",
+        "repair:repair:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:authority.default"
+      ],
+      "budget_steps": 48,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 11,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "step": "pending"
+      },
+      "final_state_hash": "8ff71f8db3faa98399ae450bffabb889b423e5991d9f82faa48e76a58c78ec15",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->REPAIR",
+        "REPAIR->CERTIFY",
+        "CERTIFY->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "EXECUTION_FAILED:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXECUTION_FAILED:repair:repair:repair:repair:repair:repair:repair:repair:repair:repair:w_c_vanish:CAPABILITY_UNAVAILABLE",
+        "EXCEEDED_MAX_REPAIRS:11>10"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    },
+    "environmental_state_change": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 1,
+      "work_transcript": [
+        "w_c_shift:cap_shift:True"
+      ],
+      "authority_trace": [
+        "w_c_shift:authority.default"
+      ],
+      "budget_steps": 9,
+      "budget_cost": 1.0,
+      "budget_energy": 1.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "step": "shifted"
+      },
+      "final_state_hash": "fbebcdd28603c8ad345a505f09b77066f295fa3e35406f470ebb1f0b2ff49a38",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->CERTIFY",
+        "CERTIFY->EXECUTE",
+        "EXECUTE->VERIFY",
+        "VERIFY->OBSERVE",
+        "OBSERVE->ASSESS",
+        "ASSESS->PLAN",
+        "PLAN->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "EXCEEDED_MAX_STEPS:9>8"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    },
+    "cycle_stagnation_termination": {
+      "success": false,
+      "terminal_state": "FAILED",
+      "work_count": 0,
+      "work_transcript": [],
+      "authority_trace": [],
+      "budget_steps": 3,
+      "budget_cost": 0.0,
+      "budget_energy": 0.0,
+      "budget_repairs": 0,
+      "budget_adaptations": 0,
+      "final_attributes": {
+        "step": "pending"
+      },
+      "final_state_hash": "8ff71f8db3faa98399ae450bffabb889b423e5991d9f82faa48e76a58c78ec15",
+      "transitions": [
+        "OBSERVE->ASSESS",
+        "ASSESS->ACQUIRE",
+        "ACQUIRE->ESCALATE",
+        "ESCALATE->FAILED"
+      ],
+      "rejection_reasons": [
+        "GOAL_UNKNOWN_SURFACE",
+        "CAPABILITY_ACQUISITION_UNAVAILABLE"
+      ],
+      "has_closure_certificate": false,
+      "has_deficit_certificate": false
+    }
+  }
+}

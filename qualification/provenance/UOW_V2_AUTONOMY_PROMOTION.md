@@ -20,7 +20,7 @@
 
 ## Verification Status
 
-- **Differential reference conformance:** PASS (12/12 test cases against frozen reference at `c559d6c`)
+- **Differential reference conformance:** PASS (12/12 test cases against frozen reference vectors at `tests/fixtures/autonomy_reference_c559d6c.json`, SHA-256 `941adef420a283d123aab1f40dabc54cea3030a4f19e2331581441fa371e59b7`)
 - **Authority-boundary enforcement:** PASS (4/4 tests: Spine execution, unauthorized denial, self-grant rejection, certification isolation)
 - **Public API namespace isolation:** PASS (4/4 tests: public surface import, zero research imports in fresh subprocess, clean root `uow` namespace, simulated smoke test)
 - **Full regression test suite:** PASS (562 passed, 81 warnings, 0 failures)

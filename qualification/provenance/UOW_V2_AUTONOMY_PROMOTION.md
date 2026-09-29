@@ -7,15 +7,21 @@
 - **Freeze digest:** `8bc28b79646a72aff2f389d007592169a859b69c8904ca723ff3dffa9f01d35d`
 - **Frozen evaluator tag:** `e1c-gate0-evaluator`
 - **Integration strategy:** Qualified-reference to condensed production transplant (PR #54 preserved as research history)
+- **Integration branch:** `integration/uow-v2-autonomy-api`
 
 ## Operational Parameters
 
-- **Canonical Authority Stack:** `WorldState`, `canonical_json`, `UoW`, `ApplicationSpine`, `CommitSequencer`, `EvidenceLedger` reused without replacement.
+- **Canonical Authority Stack:** `WorldState`, `canonical_json`, `UoW`, `ApplicationSpine`, `CommitSequencer`, `EvidenceLedger` reused directly without shadow replacement.
 - **Production Autonomy Package:** `src/uow/autonomy/`
-- **Authority Boundary Invariant:** `Autonomy decides/proposes work; existing UoW machinery governs work.` The controller executes work items exclusively through `ExecutionPort` -> `ApplicationSpine` -> `PROPOSE -> CERTIFY -> COMMIT`. Direct mutation of authoritative state is rejected.
+- **Minimal Public Surface:** `AutonomousRuntime`, `AutonomyBudget`, `AutonomyRequest`, `AutonomyResult`, `CapabilitySpec`, `ExecutionPort`, `GoalSpec`, `TerminalDisposition`.
+- **Frozen Seven-Letter Work Basis:** `O, E, K, C, F, D, S` certified at SHA-256 `5b6aad2b30a1225f7443327dbdbe7644b3977f964ea79135fc6e0c42f67a5b6f`.
+- **Authority Boundary Invariant:** $\boxed{\text{Autonomy decides/proposes work; existing UoW machinery governs work.}}$
+  The controller executes work items exclusively through `ExecutionPort` -> `ApplicationSpine` (`PROPOSE -> CERTIFY -> COMMIT`). Direct mutation of authoritative state or direct calls to `commit()` are strictly forbidden.
 
-## Status
+## Verification Status
 
-- **Differential conformance:** IN_PROGRESS
-- **Authority-boundary test:** PENDING
-- **Production promotion commit:** PENDING
+- **Differential reference conformance:** PASS (12/12 test cases against frozen reference at `c559d6c`)
+- **Authority-boundary enforcement:** PASS (4/4 tests: Spine execution, unauthorized denial, self-grant rejection, certification isolation)
+- **Public API namespace isolation:** PASS (4/4 tests: public surface import, zero research imports in fresh subprocess, clean root `uow` namespace, simulated smoke test)
+- **Full regression test suite:** PASS (562 passed, 81 warnings, 0 failures)
+- **Lint / Static analysis:** PASS (`ruff check src/uow/autonomy` clean, `compileall src/uow` clean, zero forbidden research imports in `src/uow`)

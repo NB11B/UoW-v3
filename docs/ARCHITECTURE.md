@@ -14,7 +14,8 @@ Tier 2: Foundational Constructions (foundations/)
             │
             ▼
 Tier 3: Derived Runtime (src/uow/...)
-        Orchestration, OCC Transactions, Resource Governance, External Effects, Proposers
+        Orchestration, OCC Transactions, Resource Governance, External Effects, Proposers,
+        Semantic Mediation, and Autonomous Goal-Directed Control
             │
             ▼
 Tier 4: Qualification Scenarios (qualification/ & tests/)
@@ -200,7 +201,23 @@ other probabilistic proposal systems.
   - Gate U14 separates canonical executable qualification tests (reference heuristic vs random) from historical research campaign benchmarks (learned NPU model: 4.21 ms vs 2.61 ms, 2 rounds vs 3, 0 rejections vs 1).
 
 
-### 6. Recursive composition boundary (Cybernetic System-as-Actor)
+### 6. `uow.autonomy` (Goal-Directed Control Without Commit Authority)
+- **Qualified production control layer:**
+  - `AutonomousRuntime` composes goal decomposition, metacognitive deficit detection, bounded repair, adaptation routing, and autonomous closure.
+  - The promoted runtime is under `src/uow/autonomy/`; the frozen research/evaluator implementation remains a provenance reference and is not imported at runtime.
+- **Authority remains below autonomy:**
+  - Autonomy produces and organizes `WorkItem` proposals.
+  - A domain `WorkItemCompiler` lowers proposed work into a native `UoW`.
+  - `ApplicationExecutionPort` routes that UoW through `ApplicationSpine.execute()` and therefore the existing `PROPOSE -> CERTIFY -> COMMIT` sequence.
+  - Direct authoritative `WorldState` mutation and direct `commit()` calls are outside the autonomy controller's authority surface.
+- **Execution ports:**
+  - `SimulatedExecutionPort` exists for deterministic tests and exploratory runs.
+  - `ApplicationExecutionPort` is the production authority path and binds execution to the canonical sequencer/evidence machinery.
+- **Public namespace isolation:**
+  - High-level application code imports the small facade from `uow.autonomy`.
+  - Typed builders and execution adapters remain namespaced under `uow.autonomy.model` and `uow.autonomy.ports`.
+
+### 7. Recursive composition boundary (Cybernetic System-as-Actor)
 - **Conformance Boundary != Authority Grant**:
   - `CompositionBoundaryCertificate` attests that a child realization satisfies its own `ParentContract`.
   - It does not transfer parent mutation, verification, or commit authority. Explicit authority transfer remains governed by `DelegationCertificate` and authority attenuation.
@@ -238,3 +255,5 @@ uow.transactions   uow.orchestration      uow.composition
                       uow.proposer
 ```
 The kernel never imports derived layers.
+
+`uow.autonomy` is also a derived layer: it depends on canonical `WorldState`, native `UoW` contracts, `ApplicationSpine`, and commit sequencing, but none of those lower authority layers import autonomy. `uow.semantic` and `uow.autonomy` may be composed by an application (`semantic intent -> autonomy request -> native UoW`), but neither receives independent commit authority.

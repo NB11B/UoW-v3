@@ -20,6 +20,7 @@
    - [Current Architectural Hierarchy](#current-architectural-hierarchy)
 2. [Clean API Quickstart & Guide](#2-clean-api-quickstart--guide)
    - [Installation](#installation)
+   - [Production Autonomy API](#production-autonomy-api)
    - [Level 0: Core Transition Algebra & Lifecycle](#level-0-core-transition-algebra--lifecycle)
    - [Level 1: OCC Transactions & WAL Crash Replay](#level-1-occ-transactions--wal-crash-replay)
    - [Level 2: Self-Hosted DAG Orchestration](#level-2-self-hosted-dag-orchestration)
@@ -116,19 +117,18 @@ The top-level `uow` package remains a compatibility facade with a frozen manifes
 
 ### Current Qualification Checkpoint
 
-The current `main` line integrates both the recursive-composition/operational-grammar qualification program (Phase 10) and the bounded bidirectional semantic boundary (Milestones H0–H7) through the sealed release [`semantic-harness-v1-qualified`](https://github.com/NB11B/UoW-v2/releases/tag/semantic-harness-v1-qualified). The research history is retained in Git rather than flattened into the public API, with supporting synthesis reports under `docs/`, executable campaigns under `qualification/`, and pinned result artifacts under `qualification/artifacts/`.
+The current `main` line includes the bounded semantic boundary under `uow.semantic` and the qualified autonomous-control stack under `uow.autonomy`. The autonomy promotion was performed as a condensed production transplant rather than a wholesale merge of the research branch: the qualified reference remains pinned at tag `e1c-gate0-evaluator` (`c559d6c`), while production authority continues to flow through the existing native UoW `ApplicationSpine`. Research history remains in Git and qualification artifacts rather than becoming runtime dependencies.
 
 Current integrated verification status:
 
-- **Repository CI / Full Test Suite:** **542 passed tests** (0 failures, 0 regressions in ~52s).
-- **Core UoW Kernel & Distributed Suites:** 412 tests passed.
-- **Level 8 Semantic Mediation Suite (H0–H7):** 108 tests passed across 7 test modules.
-- **Continuous API & User Guide Verification:** 22 tests passed across 2 dedicated verification harnesses.
+- **Repository CI / Full Test Suite:** **562 passed tests**, 81 warnings, 0 failures on the production promotion verification run.
+- **Autonomy promotion suite:** 12/12 frozen-reference conformance cases, 4/4 authority-boundary tests, and 4/4 public-API/isolation tests passed.
+- **Core, distributed-authority, semantic, and policy suites:** remain green under the same `main` CI and closure-shadow workflows.
 - **Closure shadow:** 279 / 279 tests passing (`architecture/shadow/python/tests`).
 - **Claim lint:** 42 registered qualification claims passing (`qualification.claim_lint`).
 - **System acceptance smoke:** 31 / 31 assertions passing (`qualification/uow_system_acceptance.py`).
 - **Semantic qualification campaigns (H4–H7):** All passing with 0% system unsafe errors ($U_{\text{system}} = 0.0\%$), monotonic residual frontier reduction ($\text{resolved}_t \cap F_{P, t+1} = \emptyset$), zero egress drift ($\epsilon_{\text{drift}} = 0.0$), and 15-fault matrix conformance.
-- **Public API:** Frozen top-level compatibility facade strictly preserved at 200 symbols (`src/uow/__init__.py`). Level 8 functionality is cleanly namespaced under `uow.semantic`.
+- **Public API:** The top-level `uow` compatibility facade remains unchanged. Semantic mediation is namespaced under `uow.semantic`; autonomous goal execution is namespaced under `uow.autonomy` with a deliberately small facade (`AutonomousRuntime`, `AutonomyBudget`, `AutonomyRequest`, `AutonomyResult`, `CapabilitySpec`, `ExecutionPort`, `GoalSpec`, `TerminalDisposition`).
 
 The definitive semantic subsystem synthesis is documented in [`SEMANTIC_HARNESS_H0_H7_FINAL_SYNTHESIS.md`](docs/SEMANTIC_HARNESS_H0_H7_FINAL_SYNTHESIS.md), and prior governance-kernel synthesis is in [`COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md`](docs/COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md).
 
@@ -149,6 +149,60 @@ python -m pip install -e .
 python -m pip install pytest
 ```
 
+---
+
+### Production Autonomy API
+
+The production autonomy layer organizes goal-directed work while preserving the core authority invariant:
+
+```text
+uow.semantic -> uow.autonomy -> native UoW -> ApplicationSpine -> authoritative WorldState
+```
+
+`uow.autonomy` plans, diagnoses deficits, performs bounded repair/adaptation routing, and proposes work. It does **not** acquire commit authority. For authoritative execution, proposed work must be lowered by a domain `WorkItemCompiler` and executed through `ApplicationExecutionPort`, which delegates to `ApplicationSpine.execute()` (`PROPOSE -> CERTIFY -> COMMIT`).
+
+A minimal simulation:
+
+```python
+from uow import WorldState
+from uow.autonomy import (
+    AutonomousRuntime,
+    AutonomyBudget,
+    AutonomyRequest,
+    CapabilitySpec,
+    GoalSpec,
+    TerminalDisposition,
+)
+from uow.autonomy.model import PredicateOp, StatePredicate
+from uow.autonomy.ports import SimulatedExecutionPort
+
+initial = WorldState(attributes={"stage": "pending"})
+request = AutonomyRequest(
+    goal=GoalSpec(
+        goal_id="finish_stage",
+        desired_state=(StatePredicate("stage", PredicateOp.EQ, "done"),),
+    ),
+    capabilities=(
+        CapabilitySpec(
+            capability_id="finish",
+            effects=(StatePredicate("stage", PredicateOp.EQ, "done"),),
+        ),
+    ),
+    initial_state=initial,
+    budget=AutonomyBudget(max_steps=20),
+)
+
+runtime = AutonomousRuntime(
+    execution_port=SimulatedExecutionPort(initial_state=initial)
+)
+result = runtime.run(request)
+
+assert result.success
+assert result.disposition is TerminalDisposition.COMPLETE
+assert result.final_state.require("stage") == "done"
+```
+
+`SimulatedExecutionPort` is for tests and exploratory execution. Production integrations should use `ApplicationExecutionPort` plus a domain-specific `WorkItemCompiler`; see [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md#production-autonomy-api) for the authoritative example.
 ---
 
 ### Level 0: Core Transition Algebra & Lifecycle

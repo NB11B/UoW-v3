@@ -13,6 +13,7 @@
    - [Deterministic Primacy Invariant ($\beta_D = 0$)](#deterministic-primacy-invariant-beta_d--0)
 3. [Installation & Environment Setup](#3-installation--environment-setup)
 4. [Step-by-Step API Tutorials](#4-step-by-step-api-tutorials)
+   - [Production Autonomy API](#production-autonomy-api)
    - [Level 0: Core State Transitions & Algebraic Invariants](#level-0-core-state-transitions--algebraic-invariants)
    - [Level 1: Optimistic Concurrency Control (OCC) & Crash Recovery](#level-1-optimistic-concurrency-control-occ--crash-recovery)
    - [Level 2: Self-Hosted DAG Workflow Orchestration](#level-2-self-hosted-dag-workflow-orchestration)
@@ -122,19 +123,168 @@ pip install -e .
 Verify your installation by running the public API verification test suite:
 
 ```bash
-python -m pytest tests/test_api_quickstart_verification.py -v
+python -m pytest tests/test_api_quickstart_verification.py tests/test_autonomy_public_api.py -v
 ```
 
 ---
 
 ## 4. Step-by-Step API Tutorials
 
-All examples in this section use the official public APIs:
+All examples in this section use production APIs:
 - `uow`: Core transitions, transactions, orchestrators, resources, sagas, proposers, composition, distributed quorums, and policies.
-- `uow.semantic`: Natural language ingress, bounded semantic harnesses, compilers, and governed egress engines.
+- `uow.semantic`: Natural-language ingress, bounded semantic harnesses, compilers, and governed egress engines.
+- `uow.autonomy`: Goal-directed planning, metacognitive deficit detection, bounded repair/adaptation routing, and autonomous closure. Its high-level facade is intentionally small; typed construction and execution adapters live under `uow.autonomy.model` and `uow.autonomy.ports`.
 
 ---
 
+### Production Autonomy API
+
+The production autonomy layer is the goal-directed control plane promoted to `main`. Its governing separation is:
+
+```text
+Autonomy proposes/organizes work
+        ↓
+WorkItemCompiler lowers proposed work
+        ↓
+native UoW
+        ↓
+ApplicationSpine: PROPOSE -> CERTIFY -> COMMIT
+        ↓
+authoritative WorldState + EvidenceLedger
+```
+
+`AutonomousRuntime` combines planning, semantic-deficit detection, bounded repair, adaptation routing, and closure. It never receives direct `commit()` authority.
+
+#### Simulation / local development
+
+Use `SimulatedExecutionPort` for deterministic tests and exploratory runs:
+
+```python
+from uow import WorldState
+from uow.autonomy import (
+    AutonomousRuntime,
+    AutonomyBudget,
+    AutonomyRequest,
+    CapabilitySpec,
+    GoalSpec,
+    TerminalDisposition,
+)
+from uow.autonomy.model import PredicateOp, StatePredicate
+from uow.autonomy.ports import SimulatedExecutionPort
+
+initial = WorldState(attributes={"stepA": "pending", "stepB": "pending"})
+
+request = AutonomyRequest(
+    goal=GoalSpec(
+        goal_id="complete_pipeline",
+        desired_state=(
+            StatePredicate("stepA", PredicateOp.EQ, "done"),
+            StatePredicate("stepB", PredicateOp.EQ, "done"),
+        ),
+    ),
+    capabilities=(
+        CapabilitySpec(
+            capability_id="do_a",
+            effects=(StatePredicate("stepA", PredicateOp.EQ, "done"),),
+        ),
+        CapabilitySpec(
+            capability_id="do_b",
+            preconditions=(StatePredicate("stepA", PredicateOp.EQ, "done"),),
+            effects=(StatePredicate("stepB", PredicateOp.EQ, "done"),),
+        ),
+    ),
+    initial_state=initial,
+    budget=AutonomyBudget(max_steps=20),
+)
+
+runtime = AutonomousRuntime(
+    execution_port=SimulatedExecutionPort(initial_state=initial)
+)
+result = runtime.run(request)
+
+assert result.success
+assert result.disposition is TerminalDisposition.COMPLETE
+assert result.final_state.require("stepA") == "done"
+assert result.final_state.require("stepB") == "done"
+```
+
+`SimulatedExecutionPort` mutates only its simulation environment. Do not use it as the authoritative production state path.
+
+#### Authoritative production execution
+
+For production, implement a domain `WorkItemCompiler`, then use `ApplicationExecutionPort`. The compiler translates a domain-neutral autonomy `WorkItem` into the native UoW contract; the port performs authority checks and sends the resulting UoW through `ApplicationSpine`.
+
+```python
+from uow import (
+    Guard,
+    GuardOp,
+    MatrixCell,
+    Mutation,
+    MutationOp,
+    Route,
+    Successor,
+    WorkCategory,
+    WorldState,
+    make_uow,
+)
+from uow.autonomy import AutonomousRuntime, AutonomyRequest, CapabilitySpec, GoalSpec
+from uow.autonomy.model import AuthorityScope, PredicateOp, StatePredicate, WorkItem
+from uow.autonomy.ports import ApplicationExecutionPort
+from uow.transactions import DeterministicSequencer
+
+class DomainCompiler:
+    def compile(self, item: WorkItem, state: WorldState):
+        # In a real integration this mapping belongs to the domain adapter.
+        if item.work_kind != "finish":
+            raise ValueError(f"Unsupported work kind: {item.work_kind}")
+        return make_uow(
+            item.work_id,
+            [
+                Route(
+                    guard=Guard(GuardOp.ALWAYS),
+                    mutations=(Mutation(MutationOp.SET, "stage", "done"),),
+                    successor=Successor.halt(),
+                )
+            ],
+            MatrixCell(WorkCategory.PROCESSES, WorkCategory.DATA),
+        )
+
+initial = WorldState(attributes={"stage": "pending"})
+sequencer = DeterministicSequencer(initial)
+port = ApplicationExecutionPort(sequencer=sequencer, compiler=DomainCompiler())
+
+request = AutonomyRequest(
+    goal=GoalSpec(
+        goal_id="finish_stage",
+        desired_state=(StatePredicate("stage", PredicateOp.EQ, "done"),),
+        authority_scope=AuthorityScope(("authority.default",)),
+    ),
+    capabilities=(
+        CapabilitySpec(
+            capability_id="finish",
+            effects=(StatePredicate("stage", PredicateOp.EQ, "done"),),
+            required_authority=("authority.default",),
+        ),
+    ),
+    initial_state=initial,
+)
+
+result = AutonomousRuntime(execution_port=port).run(request)
+
+assert result.success
+assert sequencer.current_state.require("stage") == "done"
+assert len(sequencer.ledger.records) == 1
+```
+
+Important boundaries:
+
+- `AutonomousRuntime` may decide what work is necessary, but it cannot directly commit authoritative state.
+- `CapabilitySpec` describes what the planner may use; `WorkItemCompiler` defines how that proposed work becomes a native UoW.
+- `ApplicationExecutionPort` rejects missing authority before calling `ApplicationSpine`.
+- If native UoW certification fails, authoritative state and the evidence ledger remain unchanged.
+- The frozen research/evaluator implementation is not a runtime dependency of `uow.autonomy`; conformance is checked against sealed reference vectors.
+
+---
 ### Level 0: Core State Transitions & Algebraic Invariants
 
 Level 0 is the foundational algebraic transition kernel. You define preconditions (`Guard`), deterministic state transformations (`Mutation`), and causal routing (`Route`).
@@ -663,12 +813,12 @@ To ensure hardware-wide parity, future testing will systematically benchmark:
 
 1. **Keep Mutations Pure:** Never invoke network, file I/O, or random number generators inside a `Mutation`. Use Level 4 Effects / Sagas for external operations.
 2. **Timing Decoupling:** Never use `time.time()` or wall-clock timestamps inside state transition guards. Rely on monotonic causal ticks ($T$).
-3. **Zero Mutation Privileges for AI:** Language models and neural heuristics must strictly emit `Proposal` objects. Only the sequencer or authority engine may commit state.
+3. **Zero Mutation Privileges for AI or Autonomy:** Language models, neural heuristics, and `uow.autonomy` may propose or organize work, but authoritative state changes must flow through the native certification/commit path (`ApplicationSpine` for autonomy integrations).
 4. **Always Verify Egress Drift:** When rendering natural language confirmations to users, verify bidirectional round-trip consistency ($\text{parse}(\text{render}(I_B)) == I_B$).
 
 ### Writing Clean Pytest Suites via the Public API
 
-Always import strictly from `uow` and `uow.semantic`. Here is a complete test template:
+Use the documented production namespaces: `uow`, `uow.semantic`, and `uow.autonomy`. Avoid `architecture.shadow`, `uow_shadow`, and qualification modules in application or production tests. Here is a complete core test template:
 
 ```python
 import pytest
@@ -715,7 +865,8 @@ def test_governed_counter_increment():
 | **Direct Mutation by LLM** | Stochastic corruption, lack of audit trail | Use `SemanticHarness` + `SemanticApplicationAdapter` |
 | **Wall Clock in Guards** | Clock drift causes distributed nodes to diverge | Use causal tick sequence numbers ($T$) |
 | **Side Effects in State Mutator** | Network failure during commit corrupts WAL replay | Use Level 4 `EffectRunner` and `SagaCoordinator` |
-| **Private Submodule Imports** | Fragile against internal refactors | Import strictly from `uow` or `uow.semantic` |
+| **Research / Qualification Imports in Runtime Code** | Couples production to experiment-only implementations | Import from `uow`, `uow.semantic`, or `uow.autonomy`; keep `uow_shadow` and `qualification` outside runtime dependencies |
+| **Direct Autonomous State Mutation** | Bypasses certification, evidence, and authority checks | Use `ApplicationExecutionPort` + a domain `WorkItemCompiler` so work passes through `ApplicationSpine` |
 
 ---
 
@@ -732,6 +883,14 @@ def test_governed_counter_increment():
 - **Composition:** `ParentContract`, `RealizationGraph`, `RealizationNode`, `ActorBinding`, `QuorumMutationCoordinator`
 - **Boundary & Quorum Helpers:** `from uow.composition.boundary import certify_composition_boundary, verify_composition_boundary`, `from uow.composition import assemble_mutation_qc`
 - **Policy Plane:** `PolicyRegistry`, `PolicyResolver`, `DiscoveryEngine`, `QualificationEngine`, `DriftMonitor`
+
+### Autonomy Facade (`from uow.autonomy import ...`)
+- **Runtime:** `AutonomousRuntime`
+- **Request/Result:** `AutonomyRequest`, `AutonomyResult`, `TerminalDisposition`
+- **Public Specs:** `GoalSpec`, `CapabilitySpec`, `AutonomyBudget`
+- **Execution Boundary:** `ExecutionPort`
+- **Typed construction helpers:** `PredicateOp`, `StatePredicate`, `AuthorityScope`, `ResourceEnvelope`, and `WorkItem` are available from `uow.autonomy.model`
+- **Execution adapters:** `SimulatedExecutionPort`, `ApplicationExecutionPort`, and `WorkItemCompiler` are available from `uow.autonomy.ports`
 
 ### Semantic Facade (`from uow.semantic import ...`)
 - **Ingress:** `IngressContext`, `SemanticRequirement`, `SemanticDisposition`, `DefaultSemanticAdmissibilityValidator`

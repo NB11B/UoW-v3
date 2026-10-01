@@ -1,0 +1,79 @@
+{
+  "vector_id": "001_execute_one_success",
+  "description": "Valid single transition: increment counter, set flag, halt with evidence receipt.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-001",
+      "correlation_id": "corr-001",
+      "actor": {
+        "id": "agent-alpha",
+        "role": "executor",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-001",
+          "routes": [
+            {
+              "guard": {
+                "op": "GTE",
+                "key": "counter",
+                "operand": 0
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "counter",
+                  "operand": 1
+                },
+                {
+                  "op": "SET",
+                  "key": "flag",
+                  "operand": true
+                }
+              ],
+              "successor": {
+                "kind": "HALT",
+                "value": null
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "counter": 10
+          },
+          "cursor": "uow-001",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "SUCCESS",
+    "result": {
+      "attributes": {
+        "counter": 11,
+        "flag": true
+      },
+      "cursor": null,
+      "status": "HALTED",
+      "sequence": 1,
+      "state_hash": "d75f6de32e68c6d211dc3379d0b90729c69797559b78080581b1325c26a636a8"
+    },
+    "evidence": {
+      "step_number": 1,
+      "uow_id": "uow-001",
+      "pre_state_hash": "ee324a170e5dfa8acb6ec449a9a0aae5bbef5e3c89c177b7d87658f89437fa06",
+      "post_state_hash": "d75f6de32e68c6d211dc3379d0b90729c69797559b78080581b1325c26a636a8",
+      "record_hash": "adabc72a6b3b8fb850bcb16c4ff765f525f92f095be15b0a02bacdb24f4ae611",
+      "prev_evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "errors": []
+  }
+}

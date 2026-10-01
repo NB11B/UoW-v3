@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/effector_intent.json",
+  "title": "EffectorIntent",
+  "description": "Formal schema for certified external effect execution requests dispatched to actuators, external APIs, and gateways.",
+  "type": "object",
+  "required": [
+    "intent_id",
+    "target_system",
+    "action",
+    "certificate_hash",
+    "idempotency_key",
+    "payload"
+  ],
+  "properties": {
+    "intent_id": {
+      "type": "string",
+      "description": "Unique intent identifier."
+    },
+    "target_system": {
+      "type": "string",
+      "description": "External target: REST_API, TELECOM_SMS, HARDWARE_ACTUATOR, DATABASE_SAGA, CLOUD_MQ."
+    },
+    "action": {
+      "type": "string",
+      "description": "Action to invoke on external effector."
+    },
+    "certificate_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 certificate proving authoritative governance approval."
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Deterministic key guaranteeing at-most-once execution."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Action arguments.",
+      "additionalProperties": true
+    },
+    "compensation_spec": {
+      "type": "object",
+      "description": "Compensating rollback saga contract if the effect experiences non-recoverable failure.",
+      "properties": {
+        "compensation_uow_id": { "type": "string" },
+        "timeout_ms": { "type": "integer" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -5,6 +5,9 @@ __pycache__/
 *.egg-info/
 .*_cache/
 build/
+target/
+*.exe
+node_modules/
 scratch/
 storage_authority_c/
 qualification/distributed_authority/storage_authority_c/
@@ -13,7 +16,4 @@ qualification/distributed_authority/storage_authority_c/
 *.onnx
 *.safetensors
 checkpoints/*_arm_*
-sdk/
-
-
-
+.venv/

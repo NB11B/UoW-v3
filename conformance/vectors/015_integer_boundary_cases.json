@@ -1,0 +1,75 @@
+{
+  "vector_id": "015_integer_boundary_cases",
+  "description": "Integer boundaries including zero, negative transitions, and 64-bit safe bounds.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-boundary-001",
+      "correlation_id": "corr-boundary-001",
+      "actor": {
+        "id": "worker-math",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-boundaries",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "big_int",
+                  "operand": 1
+                },
+                {
+                  "op": "SUB",
+                  "key": "zero_val",
+                  "operand": 10
+                }
+              ],
+              "successor": {
+                "kind": "HALT"
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "big_int": 9007199254740990,
+            "zero_val": 0
+          },
+          "cursor": "uow-boundaries",
+          "status": "RUNNING",
+          "sequence": 0,
+          "state_hash": "529db055a7c7aa1f5e01ada86a18398f4f1fddd42448c02749ca663c4b37f365"
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "SUCCESS",
+    "result": {
+      "attributes": {
+        "big_int": 9007199254740991,
+        "zero_val": -10
+      },
+      "cursor": null,
+      "status": "HALTED",
+      "sequence": 1,
+      "state_hash": "682bdff550be5c91f1da8a5a340c272b2d498f2b00a1531ac8f2d0ce948f7076"
+    },
+    "evidence": {
+      "step_number": 1,
+      "uow_id": "uow-boundaries",
+      "post_state_hash": "682bdff550be5c91f1da8a5a340c272b2d498f2b00a1531ac8f2d0ce948f7076",
+      "record_hash": "8053a2fb38789d4e6ba5a0716e65ade2b2fe91668f634826ec36e43f5dde4700"
+    },
+    "errors": []
+  }
+}

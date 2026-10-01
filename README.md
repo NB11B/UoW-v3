@@ -1,754 +1,194 @@
-# Unit-of-Work (UoW) v2.0
+# Unit-of-Work (UoW) v3.0
 
-[![CI Test Suite](https://github.com/NB11B/UoW-v2/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NB11B/UoW-v2/actions)
+[![CI Test Suite](https://github.com/NB11B/UoW-v3/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NB11B/UoW-v3/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python: 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Physical Qualification: Sealed](https://img.shields.io/badge/Physical%20Qualification-F0--F8%20Passed-success.svg)](qualification/artifacts/final-physical-campaign-summary.json)
+[![Rust: 1.80+](https://img.shields.io/badge/rust-1.80+-orange.svg)](https://www.rust-lang.org/)
+[![TypeScript: 5.0+](https://img.shields.io/badge/typescript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![Physical Qualification: Sealed](https://img.shields.io/badge/Physical%20Qualification-ESP32%20%2B%20Arduino%20Passed-success.svg)](docs/V2_TO_V3_PROVENANCE.md)
 
-> **A typed, certifiable Unit-of-Work architecture for deterministic authority over flexible computation across heterogeneous distributed hardware.**
+> **A typed, certifiable Unit-of-Work protocol and multi-language runtime architecture for deterministic authority over flexible computation across heterogeneous distributed hardware.**
 
-> 📖 **Developer & Operator Guide:** For an exhaustive guide, API tutorials across all 10 architectural levels, testing recipes, and edge hardware deployment details (including Arduino micro-GPU LLM harnesses), see the [**Comprehensive User Guide (`docs/USER_GUIDE.md`)**](docs/USER_GUIDE.md).
-
----
-
-## Table of Contents
-
-- 📘 [**Comprehensive User Guide (`docs/USER_GUIDE.md`)**](docs/USER_GUIDE.md)
-1. [Theoretical Architecture](#1-theoretical-architecture)
-   - [The Unit-of-Work Formalism](#the-unit-of-work-formalism)
-   - [The Core Authority Invariant](#the-core-authority-invariant)
-   - [Current Architectural Hierarchy](#current-architectural-hierarchy)
-2. [Clean API Quickstart & Guide](#2-clean-api-quickstart--guide)
-   - [Installation](#installation)
-   - [Production Autonomy API](#production-autonomy-api)
-   - [Level 0: Core Transition Algebra & Lifecycle](#level-0-core-transition-algebra--lifecycle)
-   - [Level 1: OCC Transactions & WAL Crash Replay](#level-1-occ-transactions--wal-crash-replay)
-   - [Level 2: Self-Hosted DAG Orchestration](#level-2-self-hosted-dag-orchestration)
-   - [Level 3: Multi-Dimensional Resource Governance & Leases](#level-3-multi-dimensional-resource-governance--leases)
-   - [Level 4: External Effects, Idempotency & Sagas](#level-4-external-effects-idempotency--sagas)
-   - [Level 5: Replaceable & Adaptive Proposers](#level-5-replaceable--adaptive-proposers)
-   - [Level 6: Recursive Composition & System-as-Actor](#level-6-recursive-composition--system-as-actor)
-   - [Level 7: Distributed Authority & Quorum-Certified Mutation](#level-7-distributed-authority--quorum-certified-mutation)
-   - [Level 8: Bounded Semantic Mediation & Governed Egress](#level-8-bounded-semantic-mediation--governed-egress)
-   - [Level 9: Design / Policy Plane](#level-9-design--policy-plane)
-3. [Heterogeneous Hardware & Distributed Deployment](#3-heterogeneous-hardware--distributed-deployment)
-   - [Target Hardware Architecture](#target-hardware-architecture)
-   - [Node A: ESP32-S3 Dual-Core FreeRTOS Firmware](#node-a-esp32-s3-dual-core-freertos-firmware)
-   - [Node B: Arduino UNO Q (STM32U585) Embedded Authority](#node-b-arduino-uno-q-stm32u585-embedded-authority)
-   - [Node C: HTTP Authority Microservice](#node-c-http-authority-microservice)
-   - [Accelerators: Intel AI Boost NPU & NVIDIA CUDA GPU](#accelerators-intel-ai-boost-npu--nvidia-cuda-gpu)
-4. [Verification, Testing & Chain of Custody](#4-verification-testing--chain-of-custody)
-   - [Running the Repository Suite](#running-the-repository-suite)
-   - [Running the Full Physical Qualification Campaign](#running-the-full-physical-qualification-campaign)
-   - [Cryptographic Provenance & Invariants](#cryptographic-provenance--invariants)
+Repository: [**https://github.com/NB11B/UoW-v3**](https://github.com/NB11B/UoW-v3)
 
 ---
 
-## 1. Theoretical Architecture
+## 1. Minimal Public API
 
-### The Unit-of-Work Formalism
+The root API in v3 is intentionally minimal and ergonomic:
 
-Every unit of computational progress in the UoW architecture is an immutable, mathematically typed 7-tuple:
-
-$$U = (H, \Gamma, M, R, B, E, T)$$
-
-| Element | Formal Name | Description |
-|:---:|---|---|
-| **$H$** | **Header** | Identity, version, epoch, lineage ancestry, and immutable content fingerprint. |
-| **$\Gamma$** | **Guards** | Preconditions over `WorldState` that must evaluate to `True` for legal execution. |
-| **$M$** | **Mutations** | Deterministic state transition functions mapping $S_t \to S_{t+1}$. |
-| **$R$** | **Routing** | Directed successor emission criteria ($\text{CONTINUE}, \text{HALT}, \text{DELEGATE}, \text{FAIL}$). |
-| **$B$** | **Boundary** | Authority constraints, leases, and resource boundary requirements. |
-| **$E$** | **Evidence** | Cryptographic hash links and witness obligations proving execution validity. |
-| **$T$** | **Timing** | Local causal timing domain (strictly decoupled from any global wall clock). |
-
-### The Core Authority Invariant
-
-The fundamental principle governing all UoW systems is the separation of **proposal** from **authority**:
-
-$$\boxed{\text{PROPOSE} \longrightarrow \text{CERTIFY} \longrightarrow \text{COMMIT}}$$
-
-- **PROPOSE ($P_\theta(S_t) \to \pi_t$):** Candidate transitions may originate from anywhere: untrusted stochastic samplers, neural network policies (NPU/GPU), heuristic schedulers, distributed network agents, or external microservices. Proposers possess **zero authoritative mutation power**.
-- **CERTIFY ($\text{CERTIFY}(\pi_t, S_t) \to \sigma_t$):** Authoritative validators verify guards, validate optimistic concurrency control (OCC) footprints, check lease legitimacy, and authenticate cryptographic signatures.
-- **COMMIT ($\text{COMMIT}(\sigma_t, S_t) \to S_{t+1}$):** State is atomically advanced and recorded into an immutable, hash-linked write-ahead log (WAL) and evidence ledger.
-
-### Current Architectural Hierarchy
-
-The hierarchy below describes the architecture, not the promotion status of individual Python symbols. Higher-level capabilities may remain qualification or integration surfaces until explicitly promoted into the frozen public API.
-
-```mermaid
-graph TD
-    L0["Level 0: Core UoW Contract<br/>(Typed Work · Guards · Evidence · PROPOSE → CERTIFY → COMMIT)"] --> L1["Level 1: Transactional Authority<br/>(OCC · Durable Sequencing · WAL · Replay)"]
-    L1 --> L2["Level 2: Self-Hosted Orchestration<br/>(Scheduling and Completion as Governed UoW Transitions)"]
-    L2 --> L3["Level 3: Resource Governance<br/>(CPU · GPU · NPU · Memory · Energy · Leases)"]
-    L3 --> L4["Level 4: External Effects<br/>(Idempotency · Certified Receipts · Compensation Sagas)"]
-    L4 --> L5["Level 5: Replaceable Intelligence<br/>(Rules · Heuristics · Learned and Adaptive Proposers)"]
-    L5 --> L6["Level 6: Recursive Composition<br/>(Certified System-as-Actor · Boundary Contraction · Evidence Chaining)"]
-    L6 --> L7["Level 7: Distributed Authority<br/>(Delegation · Quorum-Certified Mutation · Failover)"]
-    L7 --> L8["Level 8: Semantic Mediation<br/>(Intent Compilation · Ambiguity/Capability Resolution · Zero Execution Authority)"]
-    L8 --> L9["Level 9: Design / Policy Plane<br/>(Goals · Modes · Policy Transitions · Drift / Recovery)"]
-    L9 --> L10["Level 10: Polyglot Runtime Substrate<br/>(Interoperability · Native Conformance · Capability-Oriented Execution)"]
-    L10 --> L11["Level 11: Governed Lifecycle Semantics<br/>(Guarded Operational State · Containment · Recovery · Recertification)"]
+```python
+from uow import UoW, WorldState, execute
 ```
 
-1. **Level 0 — Core UoW Contract:** Pure transition contracts, semantic work classification, immutable hash-bound state, evidence, and the authority invariant `PROPOSE → CERTIFY → COMMIT`.
-2. **Level 1 — Transactional Authority:** Optimistic concurrency control, deterministic commit sequencing, write-ahead logging, crash replay, and serializable state advancement.
-3. **Level 2 — Self-Hosted Orchestration:** Scheduler, dispatch, and completion decisions are represented as governed work rather than privileged control-plane mutation.
-4. **Level 3 — Resource Governance:** Multi-dimensional resource requirements, leases, capacity, deadlines, cost, and energy constraints remain subject to deterministic legality checks.
-5. **Level 4 — External Effects:** Non-idempotent real-world interactions are separated from internal commit through durable intent, idempotency, receipt certification, and compensation.
-6. **Level 5 — Replaceable Intelligence:** Deterministic rules, heuristics, learned models, and adaptive policies may change proposals without acquiring authoritative commit power.
-7. **Level 6 — Recursive Composition:** A qualified child runtime may be contracted to a certified parent-visible boundary and treated as a single governed actor without flattening child-local authority or provenance.
-8. **Level 7 — Distributed Authority:** Authority may be centralized or distributed; delegation, quorum-certified mutation, partition behavior, and failover remain explicit governed operations.
-9. **Level 8 — Semantic Mediation:** Natural-language or other probabilistic input is compiled into machine-routable intent while preserving source, ambiguity, provenance, and the rule that mediation has no independent execution authority.
-10. **Level 9 — Design / Policy Plane:** System design, goals, operating modes, policy activation, drift detection, replacement, escalation, and durable recovery are represented as machine-readable governed state.
-11. **Level 10 — Polyglot Runtime Substrate:** The UoW contract is defined independently of a single implementation language or device; conformance governs interchangeable native realizations.
-12. **Level 11 — Governed Lifecycle Semantics:** Operational status, failure, containment, remediation, and recertification are modeled as guarded state transitions rather than informal control flow.
+Execution is unified and deterministic:
 
-### Cross-Cutting Realization Substrate
+```python
+# Execute a single Unit of Work:
+state, ledger = execute(my_uow, state=initial_state)
 
-Heterogeneous realization spans the hierarchy rather than forming a separate authority level. CPU, GPU, NPU, embedded MCU, network services, and distributed actors may realize the same required work while remaining subject to the same certified contract.
+# Execute an entire DAG of Work:
+final_state, ledger = execute(uow_graph, state=initial_state)
+```
 
-### Qualification Lineage and API Status
+All subsystem internals are strictly namespaced:
 
-Earlier **A2/A3** and **P1–P5** milestones remain part of the qualification lineage: A2 established distributed actor/composition semantics, A3 qualified heterogeneous compute optimization, and P1–P5 qualified policy discovery, promotion, drift/replacement, distributed authority, and durable recovery. Those research labels map into the consolidated hierarchy above; they are not separate authority models.
-
-The top-level `uow` package remains a compatibility facade with a frozen manifest. Qualification, research, and integration surfaces do **not** become public API merely because an experiment passes; promotion requires an explicit compatibility/versioning decision.
-
-
-### Current Qualification Checkpoint
-
-The current `main` line includes the bounded semantic boundary under `uow.semantic` and the qualified autonomous-control stack under `uow.autonomy`. The autonomy promotion was performed as a condensed production transplant rather than a wholesale merge of the research branch: the qualified reference remains pinned at tag `e1c-gate0-evaluator` (`c559d6c`), while production authority continues to flow through the existing native UoW `ApplicationSpine`. Research history remains in Git and qualification artifacts rather than becoming runtime dependencies.
-
-Current integrated verification status:
-
-- **Repository CI / Full Test Suite:** **562 passed tests**, 81 warnings, 0 failures on the production promotion verification run.
-- **Autonomy promotion suite:** 12/12 frozen-reference conformance cases, 4/4 authority-boundary tests, and 4/4 public-API/isolation tests passed.
-- **Core, distributed-authority, semantic, and policy suites:** remain green under the same `main` CI and closure-shadow workflows.
-- **Closure shadow:** 279 / 279 tests passing (`architecture/shadow/python/tests`).
-- **Claim lint:** 42 registered qualification claims passing (`qualification.claim_lint`).
-- **System acceptance smoke:** 31 / 31 assertions passing (`qualification/uow_system_acceptance.py`).
-- **Semantic qualification campaigns (H4–H7):** All passing with 0% system unsafe errors ($U_{\text{system}} = 0.0\%$), monotonic residual frontier reduction ($\text{resolved}_t \cap F_{P, t+1} = \emptyset$), zero egress drift ($\epsilon_{\text{drift}} = 0.0$), and 15-fault matrix conformance.
-- **Public API:** The top-level `uow` compatibility facade remains unchanged. Semantic mediation is namespaced under `uow.semantic`; autonomous goal execution is namespaced under `uow.autonomy` with a deliberately small facade (`AutonomousRuntime`, `AutonomyBudget`, `AutonomyRequest`, `AutonomyResult`, `CapabilitySpec`, `ExecutionPort`, `GoalSpec`, `TerminalDisposition`).
-
-The definitive semantic subsystem synthesis is documented in [`SEMANTIC_HARNESS_H0_H7_FINAL_SYNTHESIS.md`](docs/SEMANTIC_HARNESS_H0_H7_FINAL_SYNTHESIS.md), and prior governance-kernel synthesis is in [`COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md`](docs/COMMON_GOVERNANCE_KERNEL_EXPERIMENT.md).
-
----
-
-## 2. Clean API Quickstart & Guide
-
-> 📖 **Comprehensive User & Operator Guide:** For an exhaustive guide, architecture deep dives, hardware spectrum deployment (host accelerators, ESP32-S3, and Arduino edge LLM harnesses), and anti-pattern reviews, see [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md). All demos and tests in the user guide are verified automatically by CI.
-
-### Installation
-
-Requires Python 3.10+ (tested on Python 3.10, 3.11, 3.12, 3.13):
-
-```bash
-git clone https://github.com/NB11B/UoW-v2.git
-cd UoW-v2
-python -m pip install -e .
-python -m pip install pytest
+```python
+import uow.authority   # PROPOSE -> CERTIFY -> COMMIT, distributed quorum, evidence ledgers
+import uow.runtime     # DAG orchestration, OCC transactions, resource leases, effects, proposers
+import uow.autonomy    # Goal profiles, gap/deficit analysis, autonomous repair, closure
+import uow.semantic    # Semantic mediation, 64-cell ontology matrix, governed egress filters
+import uow.economics   # Economic observations (compute/energy/market costs) as protocol data
+import uow.protocol    # Canonical schemas and wire envelope definitions
+import uow.adapters    # Hardware and neural model adapters (e.g. OpenVINO NPU)
 ```
 
 ---
 
-### Production Autonomy API
+## 2. Protocol Boundaries & Repository Architecture
 
-The production autonomy layer organizes goal-directed work while preserving the core authority invariant:
+The v3 repository is structured strictly around protocol boundaries:
 
 ```text
-uow.semantic -> uow.autonomy -> native UoW -> ApplicationSpine -> authoritative WorldState
-```
-
-`uow.autonomy` plans, diagnoses deficits, performs bounded repair/adaptation routing, and proposes work. It does **not** acquire commit authority. For authoritative execution, proposed work must be lowered by a domain `WorkItemCompiler` and executed through `ApplicationExecutionPort`, which delegates to `ApplicationSpine.execute()` (`PROPOSE -> CERTIFY -> COMMIT`).
-
-A minimal simulation:
-
-```python
-from uow import WorldState
-from uow.autonomy import (
-    AutonomousRuntime,
-    AutonomyBudget,
-    AutonomyRequest,
-    CapabilitySpec,
-    GoalSpec,
-    TerminalDisposition,
-)
-from uow.autonomy.model import PredicateOp, StatePredicate
-from uow.autonomy.ports import SimulatedExecutionPort
-
-initial = WorldState(attributes={"stage": "pending"})
-request = AutonomyRequest(
-    goal=GoalSpec(
-        goal_id="finish_stage",
-        desired_state=(StatePredicate("stage", PredicateOp.EQ, "done"),),
-    ),
-    capabilities=(
-        CapabilitySpec(
-            capability_id="finish",
-            effects=(StatePredicate("stage", PredicateOp.EQ, "done"),),
-        ),
-    ),
-    initial_state=initial,
-    budget=AutonomyBudget(max_steps=20),
-)
-
-runtime = AutonomousRuntime(
-    execution_port=SimulatedExecutionPort(initial_state=initial)
-)
-result = runtime.run(request)
-
-assert result.success
-assert result.disposition is TerminalDisposition.COMPLETE
-assert result.final_state.require("stage") == "done"
-```
-
-`SimulatedExecutionPort` is for tests and exploratory execution. Production integrations should use `ApplicationExecutionPort` plus a domain-specific `WorkItemCompiler`; see [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md#production-autonomy-api) for the authoritative example.
----
-
-### Level 0: Core Transition Algebra & Lifecycle
-
-Every atomic state change is expressed as a `UoW`, containing typed `Guard` and `Mutation` operations over a `WorldState`.
-
-```python
-from uow import (
-    WorldState,
-    make_uow,
-    propose,
-    certify,
-    commit,
-    Route,
-    Guard,
-    GuardOp,
-    Mutation,
-    MutationOp,
-    Successor,
-    MatrixCell,
-    WorkCategory,
-)
-
-# 1. Initialize an immutable WorldState
-initial_state = WorldState(attributes={"balance": 100, "status": "ACTIVE", "transfers_completed": 0})
-
-# 2. Construct a Unit of Work U = (H, Gamma, M, R, B, E, T)
-uow = make_uow(
-    "transfer_tx_001",
-    routes=[
-        Route(
-            guard=Guard(GuardOp.GTE, "balance", 30),
-            mutations=(
-                Mutation(MutationOp.SUB, "balance", 30),
-                Mutation(MutationOp.ADD, "transfers_completed", 1),
-            ),
-            successor=Successor.halt(),
-        )
-    ],
-    matrix_cell=MatrixCell(WorkCategory.PROCESSES, WorkCategory.DATA),
-)
-
-# 3. PROPOSE: Generate candidate transition proposal
-proposal = propose(uow, initial_state)
-assert proposal.uow_id == "transfer_tx_001"
-
-# 4. CERTIFY: Authoritatively verify guards and invariants
-cert = certify(uow, initial_state, proposal)
-assert cert.is_valid
-
-# 5. COMMIT: Atomically apply mutations and record evidence
-new_state, record = commit(uow, initial_state, proposal, cert, prev_evidence_hash="0" * 64, step_number=1)
-print("Updated State:", new_state.to_dict())
-# Output: {'balance': 70, 'status': 'ACTIVE', 'transfers_completed': 1}
-assert new_state.require("balance") == 70
+UoW-v3/
+├── protocol/
+│   ├── core/                  # Tuple definition, determinism rules, error taxonomy
+│   ├── state/                 # WorldState immutability and RFC-8785 canonical hashing
+│   ├── requirements/          # Resource envelopes and constraint definitions
+│   ├── capabilities/          # Capability ontology, discovery, and placement
+│   ├── realization/           # Sensor and execution harness boundaries
+│   ├── authority/             # PROPOSE -> CERTIFY -> COMMIT specification
+│   ├── evidence/              # Merkle hash chaining and non-repudiation
+│   ├── transition/            # Route selection, guard evaluation, atomic mutations
+│   ├── effects/               # Side-effect intents, receipts, and sagas
+│   ├── lifecycle/             # Operating modes, goal profiles, policy transitions
+│   └── economics/             # Economic observations (data plane) vs pricing policies
+│
+├── schemas/
+│   ├── canonical/             # Authoritative schema definitions for all 11 core objects
+│   ├── json/                  # 21 JSON schemas for contract, envelope, proposals, etc.
+│   └── wire/                  # OpenAPI and wire protocol envelope definitions
+│
+├── conformance/
+│   ├── vectors/               # 16 canonical cross-language golden test vectors
+│   ├── semantic/              # Semantic equivalence test vectors
+│   ├── wire/                  # Wire envelope executor reference
+│   ├── authority/             # Authority verification vectors
+│   └── negative_controls/     # Comprehensive rejection and boundary verification suite
+│
+├── runtimes/
+│   ├── python/                # Python reference runtime
+│   ├── rust/                  # Rust high-performance runtime
+│   ├── cpp/                   # Native C++ runtime and wire serialization
+│   └── embedded/              # Microcontroller authority kernels (ESP32-S3, Arduino UNO Q)
+│
+├── sdk/
+│   ├── typescript/            # Primary TypeScript/JavaScript SDK and executor
+│   ├── rust/                  # Native Rust SDK crate
+│   └── legacy/                # Enterprise & legacy surfaces (COBOL, Pascal, Perl)
+│
+├── adapters/                  # Hardware, model, and legacy compatibility adapters
+├── examples/                  # Multilingual quickstarts (JS, TS, Rust, Python, COBOL, Pascal, Perl)
+├── docs/                      # Capability ledger, language matrix, and provenance records
+└── tests/                     # Comprehensive test suite
 ```
 
 ---
 
-### Level 1: OCC Transactions & WAL Crash Replay
+## 3. Language Support Matrix
 
-UoW provides built-in Optimistic Concurrency Control (OCC) and Write-Ahead Logging (WAL) for transactional crash-recovery.
+| Language | V3 Role | Technical Surface | Primary Location | Test Coverage |
+|---|---|---|---|---|
+| **Python** | Reference runtime | Full algebraic engine, OCC, DAG, Autonomy | `src/uow/` | 580 pytest tests |
+| **C++** | Native runtime | High-performance state machine & hash profile | `runtimes/cpp/` | Native g++ & cross-language suite |
+| **C** | ABI + embedded profile | Portable C header (`uow.h`) | `abi/c/` | FFI / ABI bounds |
+| **Rust** | Native SDK / runtime candidate | Crate (`uow-core` / `uow-sdk`) | `sdk/rust/`, `runtimes/rust/` | `cargo test` |
+| **TypeScript** | Primary integration SDK | Client, envelope factory, and local executor | `sdk/typescript/` | `node --test` (16 golden vectors) |
+| **JavaScript** | SDK consumer | Client interoperability demo | `examples/javascript/` | Pure JS execution |
+| **Perl** | Compatibility adapter | `UoW::Client` protocol adapter | `sdk/legacy/perl/` | `conformance.t` (62 checks) |
+| **COBOL** | Enterprise compatibility | 80-column card copybooks (`UOWENVLP.cpy`) | `sdk/legacy/cobol/` | Batch card codec |
+| **Pascal** | Compatibility / reference | Type specification (`UoWTypes.pas`) | `sdk/legacy/pascal/` | Type alignment |
+| **ESP32 / Arduino C++**| Embedded runtime | Dual-core FreeRTOS & microcontroller authority | `runtimes/embedded/` | Hardware qualification sealed |
 
-```python
-from uow.transactions import (
-    DeterministicSequencer,
-    create_transaction_descriptor,
-    validate_occ,
-)
-from uow import (
-    WorldState,
-    Route,
-    Guard,
-    GuardOp,
-    Mutation,
-    MutationOp,
-    Successor,
-    make_uow,
-    propose,
-    certify,
-)
-
-state = WorldState(attributes={"account_A": 500, "account_B": 200})
-sequencer = DeterministicSequencer(state)
-
-# Define transactional UoW
-tx_uow = make_uow(
-    "tx_transfer_01",
-    routes=[
-        Route(
-            guard=Guard(GuardOp.ALWAYS),
-            mutations=(
-                Mutation(MutationOp.SUB, "account_A", 100),
-                Mutation(MutationOp.ADD, "account_B", 100),
-            ),
-            successor=Successor.halt(),
-        )
-    ],
-)
-
-# Proposal, transaction descriptor footprint projection, and certification
-proposal = propose(tx_uow, state)
-tx_desc = create_transaction_descriptor(tx_uow, state)
-cert = certify(tx_uow, state, proposal)
-
-# Concurrency validation and atomic sequencer commit
-is_valid, hazard, _ = validate_occ(state, tx_desc)
-assert is_valid
-new_state, evidence = sequencer.commit(tx_uow, proposal, tx_desc, cert)
-assert new_state.require("account_A") == 400
-assert new_state.require("account_B") == 300
-```
+See [**`docs/LANGUAGE_MATRIX.md`**](docs/LANGUAGE_MATRIX.md) for detailed surface profiles.
 
 ---
 
-### Level 2: Self-Hosted DAG Orchestration
+## 4. The Canonical Protocol Envelope
 
-Workflows are modeled as directed acyclic graphs where scheduling, dispatching, and completion are self-hosted UoW transitions.
+All language runtimes, SDKs, and wire codecs conform to the same 11 canonical objects:
 
-```python
-from uow.orchestration import (
-    create_initial_orchestration_state,
-    make_domain_task,
-    run_orchestration,
-)
-from uow import Route, Guard, GuardOp, Mutation, MutationOp
+1. `UoWContract`
+2. `State`
+3. `Requirement`
+4. `Capability`
+5. `Proposal`
+6. `Certificate`
+7. `EvidenceRecord`
+8. `ExecutionResult`
+9. `EffectIntent`
+10. `ResourceObservation`
+11. `CostObservation`
 
-# Define tasks with causal dependencies
-task_a = make_domain_task("extract_features", [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "features_ready", 1),))])
-task_b = make_domain_task("train_model", [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "model_trained", 1),))])
+The core invariant across all implementations is:
 
-# Execute the DAG through self-hosted UoW transitions
-initial_orch = create_initial_orchestration_state(
-    queue=["extract_features", "train_model"],
-    dependencies={"train_model": ["extract_features"]},
-    attributes={"features_ready": 0, "model_trained": 0},
-)
-final_orch, sequencer = run_orchestration(
-    tasks={"extract_features": task_a, "train_model": task_b},
-    initial_state=initial_orch,
-)
-
-assert final_orch.status == "HALTED"
-assert final_orch.require("features_ready") == 1
-assert final_orch.require("model_trained") == 1
-```
+\[
+\boxed{
+\text{Same semantic work} + \text{same input state} + \text{same authority/evidence conditions} = \text{same valid result}
+}
+\]
 
 ---
 
-### Level 3: Multi-Dimensional Resource Governance & Leases
+## 5. Economics: Data, Not Policy
 
-Tasks acquire certified, authoritative leases over physical resources (CPU, GPU, NPU, memory).
+In UoW v3, economics is treated as data, not policy:
 
-```python
-from uow.resources import (
-    ResourceState,
-    ResourceRequirement,
-    make_resource_domain_task,
-    set_authoritative_resource_state,
-    run_resource_orchestration,
-    FIFOSchedulingPolicy,
-    get_authoritative_resource_state,
-)
-from uow.orchestration import create_initial_orchestration_state
-from uow import Route, Guard, GuardOp, Mutation, MutationOp
+\[
+\boxed{
+\begin{aligned}
+\text{Economic Observation} &= \text{Protocol (Data Plane)} \\
+\text{Pricing Decision} &= \text{Replaceable Realization (Policy Plane)}
+\end{aligned}
+}
+\]
 
-# Define total physical node capacity
-cluster_resources = ResourceState(capacities={"cpu_cores": 16.0, "ram_units": 16.0, "gpu_slots": 2})
-
-# Bind resource demands to tasks
-npu_task = make_resource_domain_task(
-    "inference_batch",
-    [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "inferences", 10),))],
-    requirement=ResourceRequirement(cpu_cores=2, ram_units=4),
-)
-
-# Schedule using energy/cost-aware or FIFO scheduling policy
-initial_base = create_initial_orchestration_state(["inference_batch"], {}, attributes={"inferences": 0})
-initial_state = set_authoritative_resource_state(initial_base, cluster_resources)
-final_state, seq = run_resource_orchestration({"inference_batch": npu_task}, initial_state, FIFOSchedulingPolicy())
-
-assert final_state.require("inferences") == 10
-assert len(get_authoritative_resource_state(final_state).leases) == 0
-```
+The protocol carries compute cost, human cost, energy (Watts/Joules), resource cost, latency penalties, failure/recovery cost, market prices, and capacity/scarcity observations without dictating any specific pricing algorithm.
 
 ---
 
-### Level 4: External Effects, Idempotency & Sagas
+## 6. Verification and Conformance
 
-External interactions (such as hardware actuators, external network APIs, or disk writes) are encapsulated in idempotency descriptors and reversible sagas.
-
-```python
-from uow.effects import (
-    EffectRunner,
-    SagaStep,
-    SagaCoordinator,
-    MockExternalClient,
-    create_effect_descriptor,
-)
-from uow.transactions import DeterministicSequencer
-from uow import WorldState
-
-client = MockExternalClient()
-sequencer = DeterministicSequencer(WorldState(attributes={}))
-runner = EffectRunner(sequencer, client)
-coordinator = SagaCoordinator(runner)
-
-# Define forward action and compensating rollback
-step = SagaStep(
-    "provision_storage",
-    lambda state: create_effect_descriptor(
-        uow_id="provision_storage",
-        pre_state_hash=state.state_hash,
-        intent="allocate_volume",
-        request={"volume_id": "vol_42", "size_gb": 100},
-        compensation_intent="deallocate_volume",
-        compensation_request={"volume_id": "vol_42"},
-    ),
-)
-
-# Execute with automated atomic rollback upon failure
-coordinator.execute_saga([step], saga_id="storage_saga_01")
-assert len(client.call_log) > 0
-```
-
----
-
-### Level 5: Replaceable & Adaptive Proposers
-
-Machine learning models, heuristic algorithms, or external neural networks propose transitions via an abstract seam without acquiring authority.
-
-```python
-from uow.proposer import (
-    PortableAdaptiveProposer,
-    ProposerOrchestrationEngine,
-    ModelIdentity,
-)
-
-# The adaptive proposer tracks runtime telemetry and adapts scheduling
-proposer = PortableAdaptiveProposer(
-    model_id=ModelIdentity(name="minsky_adaptive_v2", version="2.1.0"),
-    alpha=0.1,  # Learning rate
-)
-
-engine = ProposerOrchestrationEngine(proposer=proposer)
-final_state, trace = engine.execute_adaptive_workload(tasks=[...])
-```
-
----
-
-### Level 6: Recursive Composition & System-as-Actor
-
-A qualified child runtime can be projected through a certified composition boundary and exposed to its parent as a single governed actor. Child-local authority and provenance remain inside the child boundary; the parent consumes only the certified surface.
-
-```python
-from uow.composition.boundary import (
-    certify_composition_boundary,
-    verify_composition_boundary,
-)
-from uow.implementations.composition.actor_execution import CertifiedRuntimeActor
-
-# Certify the child's exported realization against its parent contract.
-boundary_cert = certify_composition_boundary(
-    "child-runtime",
-    child_graph,
-    child_contract,
-)
-assert boundary_cert.is_accepted
-assert verify_composition_boundary(boundary_cert, child_graph, child_contract)
-
-# The certified runtime can then be registered as one parent-visible actor.
-child_actor = CertifiedRuntimeActor(
-    surface_id=boundary_cert.subject_id,
-    runtime=child_runtime,
-    boundary_certificate=boundary_cert,
-)
-```
-
-This preserves the recursive rule:
-
-[
-oxed{	ext{certify child internals} ightarrow 	ext{contract boundary} ightarrow 	ext{project parent-visible actor}}
-]
-
----
-
-### Level 7: Distributed Authority & Quorum-Certified Mutation
-
-This section corresponds to the earlier A2 qualification lineage. In multi-node heterogeneous environments, runtime mutations require a Quorum Certificate (QC) verified across independent physical nodes.
-
-```python
-from uow.composition import (
-    QuorumMutationCoordinator,
-    assemble_mutation_qc,
-)
-from uow import ActorBinding, AuthoritativeHistory
-
-# 1. Initialize Quorum Mutation Coordinator across physical authorities
-coordinator = QuorumMutationCoordinator(
-    parent_contract=parent_contract,
-    active_graph=baseline_graph,
-    active_binding=baseline_binding,
-    history=AuthoritativeHistory(),
-    authority_keys={"authority_esp32": "k1", "authority_uno_q": "k2", "authority_node_c": "k3"},
-    generation=0,
-    quorum_threshold=2,
-)
-
-# 2. Propose mutation and collect cryptographic threshold votes
-proposal = coordinator.propose_mutation("npu_proposer", candidate_graph, candidate_binding)
-votes = coordinator.collect_votes(proposal)
-
-# 3. Assemble Quorum Certificate (QC) and atomically apply mutation
-qc, msg = assemble_mutation_qc(proposal, votes[:2], threshold=2)
-ok, status = coordinator.apply_mutation(qc, candidate_graph, candidate_binding)
-assert ok is True and status == "MUTATION_COMMITTED"
-assert coordinator.generation == 1
-```
-
----
-
-### Level 8: Bounded Semantic Mediation & Governed Egress
-
-This section corresponds to the H0–H7 qualification lineage. Natural-language and perceptual signals are compiled into machine-routable intent representations without granting execution or state-mutation authority. The compiled intent must flow through the canonical `PROPOSE → CERTIFY → COMMIT` boundary, and egress renderings are verified against round-trip semantic drift ($\epsilon_{\text{egress-drift}} = 0$):
-
-```python
-from uow import WorldState, DeterministicSequencer
-from uow.semantic import (
-    IngressContext,
-    SemanticHarness,
-    SemanticRequirement,
-    SemanticDisposition,
-    DefaultSemanticAdmissibilityValidator,
-    SemanticApplicationAdapter,
-    TransferUoWCompiler,
-    GovernedEgressEngine,
-    RecipientProfile,
-)
-
-# 1. State and Ingress Context (Minimal deterministic context projection)
-state = WorldState(attributes={"default_operator": "transfer", "default_quantity": 10})
-ingress = IngressContext(principal_id="user-1", session_id="s1", channel="text", metadata={"recipient": "Bob"})
-
-# 2. Bounded interpretation with deterministic primacy (beta_D = 0)
-harness = SemanticHarness(admissibility_validator=DefaultSemanticAdmissibilityValidator())
-result = harness.interpret(
-    "Execute standard transfer",
-    state=state,
-    ingress=ingress,
-    requirements=(
-        SemanticRequirement("operator", state_key="default_operator"),
-        SemanticRequirement("quantity", state_key="default_quantity"),
-        SemanticRequirement("recipient", ingress_key="recipient"),
-    ),
-)
-assert result.disposition is SemanticDisposition.YES
-assert result.intent is not None
-
-# 3. Deterministic compilation into governed UoW execution
-# (Semantic mediation has ZERO direct mutation authority; mutation requires ApplicationSpine)
-adapter = SemanticApplicationAdapter()
-prepared = adapter.prepare(result, state, TransferUoWCompiler())
-sequencer = DeterministicSequencer(state)
-app_res = adapter.execute(prepared, sequencer)
-assert app_res.state.attributes["transfers.Bob"] == 10
-
-# 4. Governed Egress with Zero-Drift Verification (parse(render(I_B)) == I_B)
-egress_engine = GovernedEgressEngine()
-egress = egress_engine.emit(result, RecipientProfile.default_human(), status="COMMITTED")
-assert egress.mode == "DETERMINISTIC"
-print("Delivered Output:", egress.text)
-# Output: TRANSFER committed: quantity=10, recipient=Bob.
-```
-
----
-
-### Level 9: Design / Policy Plane
-
-This section corresponds to the earlier P1–P5 qualification lineage. Autonomous policy-aware orchestration decouples execution policies from the core engine:
-
-```python
-from uow.policy import (
-    PolicyRegistry,
-    PolicyResolver,
-    DiscoveryEngine,
-    QualificationEngine,
-    DriftMonitor,
-)
-
-# Register qualified, versioned policies
-registry = PolicyRegistry()
-resolver = PolicyResolver(registry)
-discovery = DiscoveryEngine()
-qualifier = QualificationEngine(registry)
-drift_monitor = DriftMonitor(registry=registry)
-
-assert registry.total_policies == 0
-```
-
----
-
-## 3. Heterogeneous Hardware & Distributed Deployment
-
-The UoW reference implementation coordinates across a 6-tier heterogeneous hardware fabric:
-
-```
-+---------------------------------------------------------------------------------------+
-|                                    UoW Host System                                    |
-|   +--------------------------+  +--------------------------+  +-------------------+   |
-|   |   Intel AI Boost NPU     |  | NVIDIA GeForce RTX GPU   |  |   x86_64 CPU      |   |
-|   | (OpenVINO ONNX Runtime)  |  |   (PyTorch CUDA Driver)  |  | (Deterministic)   |   |
-|   +--------------------------+  +--------------------------+  +-------------------+   |
-+------------------------------+------------------------------+-------------------------+
-                               |              |
-                      USB CDC  |              | ADB / Serial
-                      (COM10)  |              | (COM5)
-                               v              v
-               +-----------------------+  +-----------------------+
-               | Node A: ESP32-S3      |  | Node B: Arduino UNO Q |
-               | Dual-Core FreeRTOS    |  | STM32U585 Micro       |
-               +-----------------------+  +-----------------------+
-                               \              /
-                                \   HTTP     /
-                                 v  :9527   v
-                        +---------------------------+
-                        | Node C: Authority Service |
-                        | (Distributed 2-of-3 Quorum)|
-                        +---------------------------+
-```
-
-### Node A: ESP32-S3 Dual-Core FreeRTOS Firmware
-
-The ESP32-S3 authority runs native C++ FreeRTOS firmware (`qualification/embedded/esp32_dual_core`):
-- **Core 0:** Protocol parsing, cryptographic validation, and command framing.
-- **Core 1:** Deterministic state machine, transaction reservation, and commit logging.
-
-```bash
-# Build and flash via PlatformIO
-cd qualification/embedded/esp32_dual_core
-pio run -e esp32s3_p0_a1 -t upload --upload-port COM10
-```
-
-### Node B: Arduino UNO Q (STM32U585) Embedded Authority
-
-The Arduino UNO Q authority runs embedded firmware (`qualification/embedded/uno_q_authority`):
-
-```bash
-# Build and upload via ADB / arduino-cli
-adb push qualification/embedded/uno_q_authority /tmp/
-adb shell "arduino-cli compile --fqbn arduino:zephyr:unoq /tmp/uno_q_authority"
-adb shell "arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:zephyr:unoq /tmp/uno_q_authority"
-```
-
-### Node C: HTTP Authority Microservice
-
-The third authority node runs an independent HTTP service:
-
-```bash
-python qualification/distributed_authority/authority_service_c.py --port 9527
-```
-
-### Accelerators: Intel AI Boost NPU & NVIDIA CUDA GPU
-
-The runtime dynamically schedules neural proposal models across:
-- **Intel AI Boost NPU:** Native OpenVINO execution (`integrations/openvino_npu`).
-- **NVIDIA GPU:** PyTorch CUDA device acceleration.
-- **CPU:** Deterministic fallback when accelerators are undergoing dynamic hot-swaps.
-
----
-
-## 4. Verification, Testing & Chain of Custody
-
-### Running the Repository Suite
-
-Run the automated verification suite:
-
-```bash
+### Python Test Suite
+```powershell
 python -m pytest -q
 ```
 
-The suite covers the architectural modules below; the exact test count evolves as qualified capabilities are integrated and the current branch/CI result is authoritative:
-- `tests/test_contracts.py`: Core algebraic invariant tests
-- `tests/test_timing_independence.py`: 1,000-run clock drift perturbation tests
-- `tests/test_universal_computation.py`: Minsky two-counter universal kernel lowering
-- `tests/test_composition_*.py`: Actor fabric, network partitions, and quorum mutation
-- `tests/test_npu_*.py`: OpenVINO NPU adaptive proposer and dynamic hot-swap failovers
-- `tests/test_policy_orchestrator.py`: P1–P5 policy-aware orchestrator invariants
-- `tests/test_semantic_*.py`, `tests/test_h*.py`: Level 8 bounded semantic mediation, deterministic closure, authoritative lifecycle (H4), incremental clarification (H5), governed egress (H6), and final integrated conformance (H7)
+### Cross-Language Golden Vectors (TypeScript / JavaScript)
+```powershell
+node --experimental-strip-types --test sdk/typescript/test/conformance.test.js
+```
 
----
+### Rust SDK
+```powershell
+cd sdk/rust
+cargo test
+```
 
-### Running the Bounded Semantic Qualification Campaigns
+### Native C++ Core
+```powershell
+g++ -std=c++17 -I runtimes/embedded/esp32 runtimes/cpp/core_semantics.cpp runtimes/embedded/esp32/uow_embedded.cpp -o runtimes/cpp/core_semantics.exe
+./runtimes/cpp/core_semantics.exe transfer
+```
 
-To execute the Level 8 qualification campaigns and verify cryptographic evidence artifacts:
-
-```bash
-python qualification/semantic/run_h4_qualification.py
-python qualification/semantic/run_h5_qualification.py
-python qualification/semantic/run_h6_qualification.py
-python qualification/semantic/run_h7_final_conformance.py
+### Perl Conformance
+```powershell
+perl -I sdk/legacy/perl sdk/legacy/perl/t/conformance.t
 ```
 
 ---
 
-### Running the Full Physical Qualification Campaign
+## 7. Provenance & Research Campaigns
 
-The complete end-to-end physical campaign exercises the live ESP32-S3, Arduino UNO Q, Authority Node C, Intel NPU, and NVIDIA GPU:
-
-```bash
-python qualification/final_physical_campaign.py --execute
-```
-
-This campaign executes 9 distinct phases:
-- **Phase F0:** Source code cryptographic attestation (18/18 blobs) & live physical flashing of ESP32 and UNO Q.
-- **Phase F1:** Standalone diagnostics & 2-of-3 physical quorum verification.
-- **Phase F2:** Heterogeneous router qualification across 13 capability gates (G0–G12), 2,400 SHA-256 evidence links, and 4 live adversarial rollbacks.
-- **Phase F3:** Intel AI Boost NPU adaptive execution.
-- **Phase F4:** Dynamic NPU $\leftrightarrow$ GPU $\leftrightarrow$ CPU hot-swap and recovery.
-- **Phase F5:** Continuous drift adaptation.
-- **Phase F6:** Adaptive physical quorum rebalancing.
-- **Phase F7:** Frozen A3 oracle regression test.
-- **Phase F8:** Exact candidate shadow seal (279 tests) and P1–P5 policy suite (44 tests).
-
----
-
-### Cryptographic Provenance & Invariants
-
-The campaign seals an immutable chain of custody captured in [`final-physical-campaign-summary.json`](qualification/artifacts/final-physical-campaign-summary.json):
-
-```json
-{
-  "schema_version": "uow-final-physical-campaign-v1.0",
-  "candidate_ref": "archive/uow-reduction-software-candidate-v4",
-  "candidate_commit": "9d95c11f4b09c34769e1f3a1e6d7b915291d43c8",
-  "passed": true,
-  "physical_claims_promotable": true
-}
-```
-
-- **ESP32 Firmware SHA-256:** `900e2942aaceb7bc9f98a40d601381d8d4a25aa08199a50a9637f232b44b4208`
-- **UNO Q Firmware ELF SHA-256:** `f2ae3b1983e52fb1ed416fe2ab6ca7f81a641cad9addefa2a75969fde6148910`
-- **Mandatory Invariants:** 13/13 satisfied
-- **Evidence Verification:** 2,400/2,400 cryptographic links intact
-
----
-
-## License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+All empirical proofs and mathematical campaign records (JEV operator closure, semigroup associativity, bilinearity, finite-size scaling, and physical qualification artifacts) are permanently sealed and immutable in UoW v2 history.
+See [**`docs/V2_TO_V3_PROVENANCE.md`**](docs/V2_TO_V3_PROVENANCE.md) and [**`docs/CAPABILITY_LEDGER.md`**](docs/CAPABILITY_LEDGER.md).

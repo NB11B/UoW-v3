@@ -1,0 +1,54 @@
+{
+  "vector_id": "005_evidence_chain_continuity",
+  "description": "Sequential execution across 2 steps proves continuous hash-chaining and valid ledger root.",
+  "operation": "uow.transition.chain",
+  "input": {
+    "initial_state": {
+      "attributes": {
+        "x": 100
+      },
+      "cursor": "step-1",
+      "status": "RUNNING",
+      "sequence": 0,
+      "state_hash": "88ba729ad1281b057cfc8505bab01cc8f9fed102b64572c5b878245ea0e270f2"
+    },
+    "steps": [
+      {
+        "uow_id": "step-1",
+        "post_attributes": {
+          "x": 105
+        }
+      },
+      {
+        "uow_id": "step-2",
+        "post_attributes": {
+          "x": 115
+        }
+      }
+    ]
+  },
+  "expected": {
+    "status": "SUCCESS",
+    "ledger_length": 2,
+    "final_state": {
+      "attributes": {
+        "x": 115
+      },
+      "cursor": null,
+      "status": "HALTED",
+      "sequence": 2,
+      "state_hash": "4ec207a28b7224cb51f3196c35a2f768205ad6577b5b0fdb691ac0964f282dde"
+    },
+    "record_1": {
+      "step_number": 1,
+      "prev_evidence_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "3238645a9bee96a14aef5ba312fd1a0dd57a473ac81e4edd1aae9bf43eb3a772"
+    },
+    "record_2": {
+      "step_number": 2,
+      "prev_evidence_hash": "3238645a9bee96a14aef5ba312fd1a0dd57a473ac81e4edd1aae9bf43eb3a772",
+      "record_hash": "dd3f667886a41b0ab58b43da6a93898bfe3e45334b48880254f6ec4cd27676c1"
+    },
+    "ledger_integrity": true
+  }
+}

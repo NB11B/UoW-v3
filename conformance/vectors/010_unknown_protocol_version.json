@@ -1,0 +1,50 @@
+{
+  "vector_id": "010_unknown_protocol_version",
+  "description": "Envelope declares protocol_version 99.0.0 which exceeds supported range. Expect ERR_VERSION_MISMATCH.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "99.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-ver-001",
+      "correlation_id": "corr-ver-001",
+      "actor": {
+        "id": "client-ver",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-ver",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [],
+              "successor": {
+                "kind": "HALT"
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {},
+          "cursor": "uow-ver",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {},
+    "errors": [
+      {
+        "code": "ERR_VERSION_MISMATCH",
+        "message": "Unsupported protocol version 99.0.0; expected 1.x."
+      }
+    ]
+  }
+}

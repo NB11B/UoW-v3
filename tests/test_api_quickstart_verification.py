@@ -10,8 +10,20 @@ import uow
 
 
 def test_public_api_symbol_freeze():
-    """Verify top-level API freeze remains at exactly 200 symbols."""
-    assert len(uow.__all__) == 200
+    """Verify v3 top-level API freeze remains minimal: root primitives and namespaces."""
+    expected_v3_root = {
+        "UoW",
+        "WorldState",
+        "execute",
+        "authority",
+        "runtime",
+        "autonomy",
+        "semantic",
+        "economics",
+        "protocol",
+        "adapters",
+    }
+    assert set(uow.__all__) == expected_v3_root
 
 
 def test_level_0_core_transition_algebra():

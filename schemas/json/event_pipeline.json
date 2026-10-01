@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/event_pipeline.json",
+  "title": "EventPipelineRecord",
+  "description": "Formal schema for the 4-stage event pipeline: O_t -> E_t -> C_t -> U_t.",
+  "type": "object",
+  "required": [
+    "pipeline_id",
+    "stage",
+    "observation",
+    "timestamp"
+  ],
+  "properties": {
+    "pipeline_id": {
+      "type": "string",
+      "description": "Unique causal correlation ID spanning all 4 stages."
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["OBSERVATION", "EVENT", "CONDITION_TRIGGER", "UOW_INSTANTIATION"]
+    },
+    "observation": {
+      "type": "object",
+      "required": ["sensor_id", "modality", "reading", "confidence"],
+      "properties": {
+        "sensor_id": { "type": "string" },
+        "modality": { "type": "string" },
+        "reading": { "type": "object" },
+        "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "observed_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": ["event_id", "event_type", "detected_at"],
+      "properties": {
+        "event_id": { "type": "string" },
+        "event_type": { "type": "string" },
+        "metric": { "type": "string" },
+        "threshold": { "type": "number" },
+        "actual_value": { "type": "number" },
+        "detected_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "condition": {
+      "type": "object",
+      "required": ["condition_id", "rule_expression", "is_triggered"],
+      "properties": {
+        "condition_id": { "type": "string" },
+        "rule_expression": { "type": "string" },
+        "duration_seconds": { "type": "number", "minimum": 0.0 },
+        "is_triggered": { "type": "boolean" },
+        "evaluated_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "uow_candidate": {
+      "type": "object",
+      "required": ["target_capability_id", "arguments", "pre_state_hash"],
+      "properties": {
+        "target_capability_id": { "type": "string" },
+        "arguments": { "type": "object" },
+        "pre_state_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "instantiated_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

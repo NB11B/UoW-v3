@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/evidence_record.json",
+  "title": "EvidenceRecord",
+  "description": "Formal schema for durable, cryptographic audit evidence records. Distinct from ephemeral diagnostic telemetry.",
+  "type": "object",
+  "required": [
+    "step_number",
+    "uow_id",
+    "pre_state_hash",
+    "proposed_state_hash",
+    "certificate_hash",
+    "post_state_hash",
+    "prev_evidence_hash",
+    "record_hash",
+    "is_cryptographic_proof"
+  ],
+  "properties": {
+    "step_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "uow_id": {
+      "type": "string"
+    },
+    "source_category": {
+      "type": "string"
+    },
+    "target_category": {
+      "type": "string"
+    },
+    "pre_state_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "selected_route_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "proposed_state_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "certificate_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "post_state_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "next_uow_pointer": {
+      "type": ["string", "null"]
+    },
+    "prev_evidence_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "record_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "is_cryptographic_proof": {
+      "type": "boolean",
+      "const": true,
+      "description": "Formal barrier: Must be true. Diagnostic telemetry cannot satisfy evidence requirements."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/policy_transition.json",
+  "title": "PolicyTransition",
+  "description": "Formal schema for certified operating mode transitions: O_t -> certified condition -> mode transition -> G_{t+1}.",
+  "type": "object",
+  "required": [
+    "transition_id",
+    "profile_id",
+    "profile_version",
+    "previous_mode",
+    "target_mode",
+    "trigger_event",
+    "evaluated_at",
+    "causal_epoch",
+    "certified_by"
+  ],
+  "properties": {
+    "transition_id": {
+      "type": "string",
+      "description": "Unique identifier for this certified policy transition."
+    },
+    "profile_id": {
+      "type": "string",
+      "description": "Identifier of the active SystemDesignProfile governing the transition."
+    },
+    "profile_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the governing SystemDesignProfile."
+    },
+    "previous_mode": {
+      "type": "string",
+      "description": "Operating mode prior to transition."
+    },
+    "target_mode": {
+      "type": "string",
+      "description": "New active operating mode."
+    },
+    "trigger_event": {
+      "type": "object",
+      "required": ["trigger_type", "trigger_id", "condition_matched"],
+      "properties": {
+        "trigger_type": {
+          "type": "string",
+          "enum": ["SENSOR_OBSERVATION", "INVARIANT_WARNING", "OPERATOR_COMMAND", "EXPIRATION_TIMEOUT"]
+        },
+        "trigger_id": {
+          "type": "string",
+          "description": "Reference ID to observation_id, trigger rule, or command."
+        },
+        "condition_matched": {
+          "type": "string",
+          "description": "Formal predicate that evaluated to True."
+        },
+        "observed_value": {
+          "description": "Telemetry value or state attribute that triggered the match."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Observation confidence at time of evaluation."
+        }
+      },
+      "additionalProperties": false
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp of governance evaluation."
+    },
+    "causal_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonically increasing sequence epoch at transition time."
+    },
+    "certified_by": {
+      "type": "string",
+      "description": "Authority identity (kernel certifier / governance node) that evaluated and certified the transition."
+    },
+    "witness_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash linking this transition to the Evidence Ledger."
+    }
+  },
+  "additionalProperties": false
+}

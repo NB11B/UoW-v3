@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/capability_descriptor.json",
+  "title": "CapabilityDescriptor",
+  "description": "Formal schema for canonical system capabilities. Enforces Function != Capability.",
+  "type": "object",
+  "required": [
+    "capability_id",
+    "version",
+    "description",
+    "contracts",
+    "effect_semantics",
+    "authority_requirements",
+    "preconditions",
+    "resource_profile",
+    "evidence_produced",
+    "supported_transports",
+    "supported_locations"
+  ],
+  "properties": {
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+$",
+      "description": "Canonical capability identifier (e.g. inventory.reserve)."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the capability specification."
+    },
+    "description": {
+      "type": "string",
+      "description": "Formal statement of what the system accomplishes."
+    },
+    "contracts": {
+      "type": "object",
+      "required": ["input_schema", "output_schema"],
+      "properties": {
+        "input_schema": { "type": "string" },
+        "output_schema": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "effect_semantics": {
+      "type": "object",
+      "required": ["side_effect_class", "read_scope", "write_scope", "is_idempotent"],
+      "properties": {
+        "side_effect_class": {
+          "type": "string",
+          "enum": [
+            "PURE_READ",
+            "REVERSIBLE",
+            "COMPENSATABLE",
+            "IRREVERSIBLE",
+            "EXTERNAL_UNCERTAIN",
+            "PHYSICAL"
+          ]
+        },
+        "read_scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "write_scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "is_idempotent": { "type": "boolean" },
+        "idempotency_key_pattern": { "type": "string" },
+        "compensation": {
+          "type": "object",
+          "required": ["compensating_capability_id", "strategy"],
+          "properties": {
+            "compensating_capability_id": { "type": "string" },
+            "strategy": {
+              "type": "string",
+              "enum": ["FORWARD_COMPENSATING_UOW", "ATOMIC_ROLLBACK", "MANUAL_RECONCILIATION"]
+            },
+            "max_compensation_window_seconds": { "type": "number", "minimum": 0.0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "authority_requirements": {
+      "type": "object",
+      "required": ["min_claim_type"],
+      "properties": {
+        "min_claim_type": {
+          "type": "string",
+          "enum": ["ANONYMOUS", "UNVERIFIED_CLAIM", "AUTHENTICATED", "AUTHORIZED", "CERTIFIED", "ROOT_SAFETY"]
+        },
+        "required_roles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "quorum_required": { "type": "boolean", "default": false },
+        "min_quorum_count": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "preconditions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Formal expressions over WorldState that must evaluate to True before execution."
+    },
+    "resource_profile": {
+      "type": "object",
+      "required": ["execution_budget_ms"],
+      "properties": {
+        "execution_budget_ms": { "type": "number", "minimum": 0.1 },
+        "financial_cost_microusds": { "type": "integer", "minimum": 0 },
+        "cpu_cores": { "type": "number", "minimum": 0.1 },
+        "ram_units": { "type": "number", "minimum": 0.1 },
+        "bandwidth_bytes": { "type": "integer", "minimum": 0 },
+        "rate_limit_per_minute": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "evidence_produced": {
+      "type": "object",
+      "required": ["generates_receipt", "hash_chain_bound"],
+      "properties": {
+        "generates_receipt": { "type": "boolean" },
+        "receipt_type": { "type": "string" },
+        "hash_chain_bound": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "observations_consumed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["namespace", "max_staleness_ms", "min_confidence"],
+        "properties": {
+          "namespace": { "type": "string" },
+          "max_staleness_ms": { "type": "integer", "minimum": 1 },
+          "min_confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "supported_transports": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "supported_locations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

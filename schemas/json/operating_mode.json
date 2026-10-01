@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/operating_mode.json",
+  "title": "OperatingModeDefinition",
+  "description": "Formal schema for discrete operating modes within the Design / Policy Plane.",
+  "type": "object",
+  "required": [
+    "mode_id",
+    "description",
+    "allowed_operations",
+    "fallback_mode"
+  ],
+  "properties": {
+    "mode_id": {
+      "type": "string",
+      "enum": ["NORMAL", "DEGRADED", "EMERGENCY", "RECOVERY"],
+      "description": "Standard operational mode identifier, or custom domain mode."
+    },
+    "description": {
+      "type": "string",
+      "description": "Operational context and posture of this mode."
+    },
+    "allowed_operations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of UoW contract operation IDs permitted during this mode."
+    },
+    "forbidden_operations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Explicitly blacklisted operations that fail closed in this mode."
+    },
+    "required_sensor_namespaces": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Observation namespaces that must be actively reporting valid data."
+    },
+    "fallback_mode": {
+      "type": "string",
+      "description": "Degradation target mode if invariants or sensors are threatened."
+    },
+    "entry_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "State and observation predicates required to enter this mode."
+    },
+    "exit_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Predicates required to exit this mode."
+    },
+    "max_duration_seconds": {
+      "type": "number",
+      "minimum": 0.0,
+      "description": "Optional timeout after which system must force fallback mode."
+    }
+  },
+  "additionalProperties": false
+}

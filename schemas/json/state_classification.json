@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/state_classification.json",
+  "title": "StateClassificationEnvelope",
+  "description": "Formal schema for partitioned state envelopes. Enforces Observation != Authoritative Fact and Agent Context != World State.",
+  "type": "object",
+  "required": [
+    "state_id",
+    "category",
+    "payload",
+    "updated_at"
+  ],
+  "properties": {
+    "state_id": {
+      "type": "string",
+      "description": "Unique identifier for this state partition."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "AUTHORITATIVE",
+        "OBSERVED",
+        "DERIVED",
+        "CACHED",
+        "SESSION_CONTEXT",
+        "POLICY",
+        "EXECUTION",
+        "EXTERNAL_WORLD"
+      ]
+    },
+    "payload": {
+      "type": "object",
+      "description": "JSON payload containing attributes belonging to this state partition."
+    },
+    "causal_sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonically increasing OCC sequence (mandatory for AUTHORITATIVE and POLICY)."
+    },
+    "state_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 fingerprint over the partition payload and sequence."
+    },
+    "ttl_ms": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Time-To-Live expiration window (mandatory for CACHED)."
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source_principal", "witness_attestation"],
+      "properties": {
+        "source_principal": { "type": "string" },
+        "witness_attestation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

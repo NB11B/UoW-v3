@@ -1,0 +1,29 @@
+........................................................................ [ 12%]
+........................................................................ [ 25%]
+........................................................................ [ 38%]
+........................................................................ [ 51%]
+........................................................................ [ 64%]
+........................................................................ [ 76%]
+........................................................................ [ 89%]
+..........................................................               [100%]
+============================== warnings summary ===============================
+..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\cuda\__init__.py:61
+  C:\Users\nateb\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\cuda\__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+    import pynvml  # type: ignore[import]
+
+tests/test_adaptive_quorum.py: 2 warnings
+tests/test_continuous_drift.py: 18 warnings
+tests/test_npu_adaptive_proposer.py: 6 warnings
+tests/test_npu_hot_swap.py: 14 warnings
+  C:\Users\nateb\Documents\UoW-v3\integrations\openvino_npu\model.py:43: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter has become the default. Learn more about the new export logic: https://docs.pytorch.org/docs/stable/onnx_export.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html
+    torch.onnx.export(
+
+tests/test_adaptive_quorum.py: 2 warnings
+tests/test_continuous_drift.py: 18 warnings
+tests/test_npu_adaptive_proposer.py: 6 warnings
+tests/test_npu_hot_swap.py: 14 warnings
+  C:\Users\nateb\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\onnx\_internal\torchscript_exporter\utils.py:218: DeprecationWarning: The feature will be removed. Please remove usage of this function
+    setup_onnx_logging(verbose) as log_ctx,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+562 passed, 81 warnings in 68.02s (0:01:08)

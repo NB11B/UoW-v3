@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/version_placement_record.json",
+  "title": "VersionPlacementRecord",
+  "description": "Formal schema for capability version negotiation and execution target placement.",
+  "type": "object",
+  "required": [
+    "record_id",
+    "capability_id",
+    "requested_version_constraint",
+    "resolved_version",
+    "compatibility_status",
+    "selected_placement_target"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "capability_id": {
+      "type": "string"
+    },
+    "requested_version_constraint": {
+      "type": "string",
+      "description": "SemVer range or exact version requested (e.g. ^1.2.0, ~2.0.0, 1.2.3)."
+    },
+    "resolved_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "compatibility_status": {
+      "type": "string",
+      "enum": [
+        "EXACT_MATCH",
+        "BACKWARD_COMPATIBLE_MINOR",
+        "DOWNGRADED_PATCH",
+        "INCOMPATIBLE_VERSION_ERROR"
+      ]
+    },
+    "selected_placement_target": {
+      "type": "string",
+      "enum": [
+        "IN_PROCESS_LOCAL",
+        "EDGE_MICROCONTROLLER",
+        "CLOUD_GRPC",
+        "MAINFRAME_CONNECTOR",
+        "EXTERNAL_REST"
+      ]
+    },
+    "target_endpoint_url": {
+      "type": "string"
+    },
+    "latency_budget_ms": {
+      "type": "number",
+      "minimum": 0.1
+    },
+    "negotiated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,78 @@
+{
+  "vector_id": "003_stale_pre_state_rejection",
+  "description": "Proposal pre_state_hash differs from authoritative pre_state. Rejection ERR_STALE_PRE_STATE.",
+  "operation": "uow.transition.certify",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.certify",
+      "operation_version": "1.0.0",
+      "request_id": "req-003",
+      "correlation_id": "corr-003",
+      "actor": {
+        "id": "agent-gamma",
+        "role": "certifier",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-003",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "counter",
+                  "operand": 1
+                }
+              ],
+              "successor": {
+                "kind": "HALT",
+                "value": null
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "counter": 10
+          },
+          "cursor": "uow-003",
+          "status": "RUNNING",
+          "sequence": 5
+        },
+        "proposal": {
+          "uow_id": "uow-003",
+          "pre_state_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "selected_route_index": 0,
+          "proposed_state": {
+            "attributes": {
+              "counter": 11
+            },
+            "cursor": null,
+            "status": "HALTED",
+            "sequence": 5
+          },
+          "selected_successor": null,
+          "halted": true
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {
+      "is_valid": false,
+      "rejection_reason": "PRE_STATE_HASH_MISMATCH"
+    },
+    "errors": [
+      {
+        "code": "ERR_STALE_PRE_STATE",
+        "message": "Proposal pre_state_hash does not match current state."
+      }
+    ]
+  }
+}

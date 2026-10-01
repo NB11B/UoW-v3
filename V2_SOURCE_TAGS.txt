@@ -1,0 +1,15 @@
+﻿a3-qualification-complete
+e1c-gate0-evaluator
+integrated-generality-v1-qualified
+mdss1-1h-qualified
+policy-orchestrator-p5-qualified
+semantic-harness-v1-qualified
+semantic-ingress-h0-h5-qualified
+uow-v2-m1-x3-qualified
+uow-v2-s1-qualified
+uow-v2-s2-qualified
+v2.0-polyglot-m1
+v2.0-polyglot-m1.1
+v2.0-runtime-substrate-m2
+v2.0.0-qualified
+x2-cross-plane-qualified

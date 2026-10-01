@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/schemas/canonical/canonical_objects.json",
+  "title": "UoWCanonicalObjects",
+  "description": "Authoritative canonical schemas for all 11 core UoW v3 protocol objects across all language runtimes, SDKs, and wire codecs.",
+  "$defs": {
+    "UoWContract": {
+      "type": "object",
+      "required": ["identity", "source_category", "target_category", "routes"],
+      "properties": {
+        "identity": { "type": "string" },
+        "source_category": { "type": "string", "enum": ["People", "Processes", "Data", "Devices", "Rules", "Policies", "Agents", "Guidance"] },
+        "target_category": { "type": "string", "enum": ["People", "Processes", "Data", "Devices", "Rules", "Policies", "Agents", "Guidance"] },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["route_index", "guards", "mutations"],
+            "properties": {
+              "route_index": { "type": "integer" },
+              "guards": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["key", "op", "value"],
+                  "properties": {
+                    "key": { "type": "string" },
+                    "op": { "type": "string", "enum": ["EQ", "NEQ", "LT", "LTE", "GT", "GTE", "IN", "NOT_IN", "CONTAINS", "PREFIX", "SUFFIX"] },
+                    "value": {}
+                  }
+                }
+              },
+              "mutations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["key", "op", "value"],
+                  "properties": {
+                    "key": { "type": "string" },
+                    "op": { "type": "string", "enum": ["SET", "INCREMENT", "DECREMENT", "DELETE", "APPEND", "EXTEND"] },
+                    "value": {}
+                  }
+                }
+              },
+              "successor": {
+                "type": "object",
+                "required": ["kind"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["HALT", "CONTINUE", "CALL"] },
+                  "target_uow_id": { "type": ["string", "null"] }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "State": {
+      "type": "object",
+      "required": ["values", "state_hash", "sequence_number", "status"],
+      "properties": {
+        "values": { "type": "object" },
+        "state_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sequence_number": { "type": "integer", "minimum": 0 },
+        "cursor": { "type": ["string", "null"] },
+        "status": { "type": "string", "enum": ["RUNNING", "HALTED", "FAILED"] }
+      }
+    },
+    "Requirement": {
+      "type": "object",
+      "required": ["cpu_cores", "ram_units"],
+      "properties": {
+        "cpu_cores": { "type": "integer", "minimum": 1 },
+        "ram_units": { "type": "integer", "minimum": 1 },
+        "gpu_slots": { "type": "integer", "minimum": 0, "default": 0 },
+        "npu_slots": { "type": "integer", "minimum": 0, "default": 0 },
+        "energy_budget": { "type": "integer", "minimum": 0, "default": 0 },
+        "duration_est": { "type": "integer", "minimum": 1, "default": 1 },
+        "deadline": { "type": ["integer", "null"] },
+        "priority": { "type": "integer", "default": 10 },
+        "cost": { "type": "number", "minimum": 0.0, "default": 0.0 }
+      }
+    },
+    "Capability": {
+      "type": "object",
+      "required": ["id", "kind", "status"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "type": "string" },
+        "version": { "type": "string" },
+        "status": { "type": "string", "enum": ["AVAILABLE", "DEGRADED", "OFFLINE"] },
+        "attributes": { "type": "object" }
+      }
+    },
+    "Proposal": {
+      "type": "object",
+      "required": ["uow_id", "pre_state_hash", "selected_route_index", "proposed_state", "halted"],
+      "properties": {
+        "uow_id": { "type": "string" },
+        "pre_state_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "selected_route_index": { "type": "integer" },
+        "proposed_state": { "$ref": "#/$defs/State" },
+        "selected_successor": { "type": ["string", "null"] },
+        "halted": { "type": "boolean" }
+      }
+    },
+    "Certificate": {
+      "type": "object",
+      "required": ["is_valid", "certificate_hash", "uow_id", "pre_state_hash", "proposed_state_hash", "selected_route_index", "halted"],
+      "properties": {
+        "is_valid": { "type": "boolean" },
+        "certificate_hash": { "type": "string" },
+        "uow_id": { "type": "string" },
+        "pre_state_hash": { "type": "string" },
+        "proposed_state_hash": { "type": "string" },
+        "selected_route_index": { "type": "integer" },
+        "selected_successor": { "type": ["string", "null"] },
+        "halted": { "type": "boolean" },
+        "rejection_reason": { "type": ["string", "null"] }
+      }
+    },
+    "EvidenceRecord": {
+      "type": "object",
+      "required": ["step_number", "uow_id", "pre_state_hash", "post_state_hash", "certificate_hash", "prev_evidence_hash"],
+      "properties": {
+        "step_number": { "type": "integer", "minimum": 1 },
+        "uow_id": { "type": "string" },
+        "source_category": { "type": "string" },
+        "target_category": { "type": "string" },
+        "pre_state_hash": { "type": "string" },
+        "selected_route_index": { "type": "integer" },
+        "proposed_state_hash": { "type": "string" },
+        "certificate_hash": { "type": "string" },
+        "post_state_hash": { "type": "string" },
+        "next_uow_pointer": { "type": ["string", "null"] },
+        "prev_evidence_hash": { "type": "string" }
+      }
+    },
+    "ExecutionResult": {
+      "type": "object",
+      "required": ["status", "committed_state", "evidence"],
+      "properties": {
+        "status": { "type": "string", "enum": ["SUCCESS", "REJECTED", "ERROR"] },
+        "committed_state": { "$ref": "#/$defs/State" },
+        "evidence": { "$ref": "#/$defs/EvidenceRecord" },
+        "error_code": { "type": ["string", "null"] },
+        "error_message": { "type": ["string", "null"] }
+      }
+    },
+    "EffectIntent": {
+      "type": "object",
+      "required": ["intent_id", "uow_id", "target_system", "action", "idempotency_key"],
+      "properties": {
+        "intent_id": { "type": "string" },
+        "uow_id": { "type": "string" },
+        "target_system": { "type": "string" },
+        "action": { "type": "string" },
+        "parameters": { "type": "object" },
+        "idempotency_key": { "type": "string" },
+        "compensation_action": { "type": ["string", "null"] }
+      }
+    },
+    "ResourceObservation": {
+      "type": "object",
+      "required": ["host_id", "timestamp_epoch_ms", "available_cpu_cores", "available_ram_units"],
+      "properties": {
+        "host_id": { "type": "string" },
+        "timestamp_epoch_ms": { "type": "integer" },
+        "available_cpu_cores": { "type": "integer" },
+        "available_ram_units": { "type": "integer" },
+        "available_gpu_slots": { "type": "integer", "default": 0 },
+        "available_npu_slots": { "type": "integer", "default": 0 },
+        "power_draw_watts": { "type": ["number", "null"] },
+        "capacity_scarcity_ratio": { "type": ["number", "null"], "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "CostObservation": {
+      "type": "object",
+      "required": ["observation_id", "resource_type", "metric_unit", "observed_cost"],
+      "properties": {
+        "observation_id": { "type": "string" },
+        "resource_type": { "type": "string", "enum": ["COMPUTE", "HUMAN", "ENERGY", "RESOURCE", "LATENCY", "RECOVERY", "MARKET"] },
+        "metric_unit": { "type": "string" },
+        "observed_cost": { "type": "number", "minimum": 0.0 },
+        "spot_market_price": { "type": ["number", "null"] },
+        "realization_overhead": { "type": ["number", "null"] },
+        "metadata": { "type": "object" }
+      }
+    }
+  }
+}

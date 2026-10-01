@@ -1,0 +1,124 @@
+openapi: 3.1.0
+info:
+  title: UoW Portable Wire Protocol API
+  description: >
+    The canonical wire API for dispatching and evaluating Units of Work across
+    heterogeneous runtimes, legacy systems, and transport adapters.
+  version: 1.0.0
+servers:
+  - url: /v1/uow
+    description: Canonical UoW Wire Endpoint
+
+paths:
+  /execute:
+    post:
+      summary: Execute single-shot UoW transition
+      description: Atomically proposes, certifies, and commits a state transition under the canonical envelope.
+      operationId: executeUoW
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UoWEnvelope'
+      responses:
+        '200':
+          description: Execution outcome (success, rejection, or error) with evidence record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoWResult'
+        '400':
+          description: Malformed wire envelope or schema violation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoWResult'
+
+  /propose:
+    post:
+      summary: Propose candidate state transition
+      description: Zero-authority stochastic or deterministic proposal generation.
+      operationId: proposeUoW
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UoWEnvelope'
+      responses:
+        '200':
+          description: Proposal produced with proposed next state and pre-state hash binding.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoWResult'
+
+  /certify:
+    post:
+      summary: Certify candidate proposal
+      description: Authoritative guard and OCC footprint evaluation yielding CertificateResult.
+      operationId: certifyUoW
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UoWEnvelope'
+      responses:
+        '200':
+          description: Certification decision and hash.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoWResult'
+
+  /commit:
+    post:
+      summary: Commit certified proposal
+      description: Atomically advances WorldState and emits hash-chained evidence record.
+      operationId: commitUoW
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UoWEnvelope'
+      responses:
+        '200':
+          description: Committed state and immutable evidence receipt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UoWResult'
+
+  /operations:
+    get:
+      summary: Query canonical operations catalog
+      description: Returns all registered callable operations, versions, schemas, and authority rules.
+      operationId: listOperations
+      responses:
+        '200':
+          description: Operation manifest list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        version: { type: string }
+                        description: { type: string }
+                        authority_level: { type: string }
+                        idempotent: { type: boolean }
+
+components:
+  schemas:
+    UoWEnvelope:
+      $ref: '../schemas/uow_envelope.json'
+    UoWResult:
+      $ref: '../schemas/uow_result.json'

@@ -315,3 +315,49 @@ def run(
         state = execute_one(graph, state, ledger)
 
     raise RuntimeError(f"Step budget {max_steps} exceeded.")
+
+
+def execute(
+    target: Any,
+    state: Optional[WorldState] = None,
+    *,
+    ledger: Optional[EvidenceLedger] = None,
+    max_steps: int = 1_000_000,
+) -> tuple[WorldState, EvidenceLedger]:
+    """Execute a single Unit of Work or a full UoW graph.
+
+    Args:
+        target: A UoW instance, or a dictionary mapping uow_id -> UoW (UoWGraph).
+        state: Initial WorldState. If None, a default WorldState is created.
+        ledger: EvidenceLedger to record transitions. If None, a new ledger is created.
+        max_steps: Step budget when executing a graph.
+
+    Returns:
+        tuple[WorldState, EvidenceLedger]: The committed post-state and evidence ledger.
+    """
+    from typing import Any
+    ledger = ledger if ledger is not None else EvidenceLedger()
+    if isinstance(target, UoW):
+        current_state = state if state is not None else WorldState()
+        proposal = propose(target, current_state)
+        cert = certify(target, current_state, proposal)
+        committed, ev = commit(
+            target,
+            current_state,
+            proposal,
+            cert,
+            prev_evidence_hash=ledger.root_hash(),
+            step_number=len(ledger.records) + 1,
+        )
+        ledger.append(ev)
+        return committed, ledger
+    elif isinstance(target, dict):
+        if state is None:
+            first_cursor = next(iter(target.keys()), None)
+            current_state = WorldState(cursor=first_cursor)
+        else:
+            current_state = state
+        return run(target, current_state, max_steps=max_steps, ledger=ledger)
+    else:
+        raise TypeError(f"Target must be a UoW instance or a UoWGraph dict, got {type(target).__name__}")
+

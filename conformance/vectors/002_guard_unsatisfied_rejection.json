@@ -1,0 +1,62 @@
+{
+  "vector_id": "002_guard_unsatisfied_rejection",
+  "description": "Precondition guard counter > 100 fails when counter is 10. Rejection ERR_GUARD_UNSATISFIED.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-002",
+      "correlation_id": "corr-002",
+      "actor": {
+        "id": "agent-beta",
+        "role": "executor",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-002",
+          "routes": [
+            {
+              "guard": {
+                "op": "GT",
+                "key": "counter",
+                "operand": 100
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "counter",
+                  "operand": 1
+                }
+              ],
+              "successor": {
+                "kind": "HALT",
+                "value": null
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "counter": 10
+          },
+          "cursor": "uow-002",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {},
+    "errors": [
+      {
+        "code": "ERR_GUARD_UNSATISFIED",
+        "message": "No applicable route exists for the current state."
+      }
+    ]
+  }
+}

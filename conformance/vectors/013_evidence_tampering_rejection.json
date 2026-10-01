@@ -1,0 +1,77 @@
+{
+  "vector_id": "013_evidence_tampering_rejection",
+  "description": "Proposal pre_state_hash is valid but proposed_state has been tampered with. Expect ERR_ROUTE_DIVERGENCE.",
+  "operation": "uow.transition.certify",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.certify",
+      "operation_version": "1.0.0",
+      "request_id": "req-tamper-001",
+      "correlation_id": "corr-tamper-001",
+      "actor": {
+        "id": "certifier-node",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-tamper",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "SET",
+                  "key": "approved",
+                  "operand": true
+                }
+              ],
+              "successor": {
+                "kind": "HALT"
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "approved": false
+          },
+          "cursor": "uow-tamper",
+          "status": "RUNNING",
+          "sequence": 1
+        },
+        "proposal": {
+          "uow_id": "uow-tamper",
+          "pre_state_hash": "eda6b14ca1f7abae768a3d4041a49cc8f1886aa029ef6730ba3cf7a62e61ddec",
+          "selected_route_index": 0,
+          "proposed_state": {
+            "attributes": {
+              "approved": false,
+              "tampered_token": "malicious"
+            },
+            "cursor": null,
+            "status": "HALTED",
+            "sequence": 1
+          },
+          "selected_successor": null,
+          "halted": true
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {
+      "is_valid": false,
+      "rejection_reason": "STATE_DIVERGENCE"
+    },
+    "errors": [
+      {
+        "code": "ERR_ROUTE_DIVERGENCE",
+        "message": "Proposal validation failed."
+      }
+    ]
+  }
+}

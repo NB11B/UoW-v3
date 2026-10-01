@@ -1,0 +1,88 @@
+schema_version: "1.0.0"
+taxonomy_id: "uow.canonical.errors"
+description: "Canonical error taxonomy and rejection classes for cross-language UoW interoperability."
+
+error_classes:
+  - code: "ERR_UNKNOWN_OPERATION"
+    http_status: 404
+    category: "PROTOCOL"
+    retryable: false
+    description: "The requested operation identifier is not recognized by the contract registry."
+
+  - code: "ERR_VERSION_MISMATCH"
+    http_status: 400
+    category: "PROTOCOL"
+    retryable: false
+    description: "The protocol version or operation contract version is unsupported."
+
+  - code: "ERR_SCHEMA_VIOLATION"
+    http_status: 400
+    category: "VALIDATION"
+    retryable: false
+    description: "Envelope, payload, or state fails JSON Schema constraints."
+
+  - code: "ERR_GUARD_UNSATISFIED"
+    http_status: 422
+    category: "SEMANTIC_REJECTION"
+    retryable: false
+    description: "Precondition guards on WorldState evaluated to False; transition cannot legally execute."
+
+  - code: "ERR_STALE_PRE_STATE"
+    http_status: 409
+    category: "CONCURRENCY"
+    retryable: true
+    description: "Pre-state hash does not match current state hash; OCC sequence hazard detected."
+
+  - code: "ERR_ROUTE_DIVERGENCE"
+    http_status: 422
+    category: "AUTHORITY_REJECTION"
+    retryable: false
+    description: "The proposed next state does not match the deterministic mutation function of the selected route."
+
+  - code: "ERR_CERTIFICATE_INVALID"
+    http_status: 403
+    category: "AUTHORITY_REJECTION"
+    retryable: false
+    description: "Certificate hash, signatures, or validity flag failed authoritative verification."
+
+  - code: "ERR_EVIDENCE_DISCONTINUITY"
+    http_status: 500
+    category: "INTEGRITY"
+    retryable: false
+    description: "Evidence record chain break; previous record hash does not match ledger head."
+
+  - code: "ERR_AUTHORITY_DENIED"
+    http_status: 403
+    category: "AUTHORIZATION"
+    retryable: false
+    description: "Actor does not possess the requisite authority level or scope for this operation."
+
+  - code: "ERR_IDEMPOTENCY_CONFLICT"
+    http_status: 409
+    category: "CONCURRENCY"
+    retryable: false
+    description: "An invocation with this idempotency key was executed with a conflicting payload."
+
+  - code: "ERR_INSUFFICIENT_STOCK"
+    http_status: 422
+    category: "DOMAIN"
+    retryable: false
+    description: "Requested inventory reservation exceeds available on-hand stock."
+
+  - code: "ERR_TIMEOUT"
+    http_status: 504
+    category: "EXECUTION"
+    retryable: true
+    description: "Execution exceeded allocated constraint deadline or timeout_ms."
+
+  - code: "ERR_INVARIANT_VIOLATION"
+    http_status: 422
+    category: "POLICY_VIOLATION"
+    retryable: false
+    description: "Proposed transition violates a hard invariant constraint in the active SystemDesignProfile."
+
+  - code: "ERR_OPERATION_PROHIBITED_IN_MODE"
+    http_status: 403
+    category: "POLICY_VIOLATION"
+    retryable: false
+    description: "Requested operation is prohibited in the current operating mode of the active SystemDesignProfile."

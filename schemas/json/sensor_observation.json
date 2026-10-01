@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/sensor_observation.json",
+  "title": "SensorObservation",
+  "description": "Formal schema for raw or calibrated physical, digital, and telecom observations entering the Observation Plane.",
+  "type": "object",
+  "required": [
+    "observation_id",
+    "sensor_id",
+    "sensor_type",
+    "causal_epoch",
+    "modality",
+    "reading",
+    "confidence"
+  ],
+  "properties": {
+    "observation_id": {
+      "type": "string",
+      "description": "Globally unique observation identifier."
+    },
+    "sensor_id": {
+      "type": "string",
+      "description": "Identity of the physical device, monitor, or telecom gateway."
+    },
+    "sensor_type": {
+      "type": "string",
+      "enum": [
+        "TEMPERATURE_SENSOR",
+        "PRESSURE_GAUGE",
+        "VOLTAGE_MONITOR",
+        "NETWORK_TRAFFIC_PROBE",
+        "SMS_CARRIER_GATEWAY",
+        "STORAGE_HEARTBEAT",
+        "OPTICAL_CAMERA",
+        "ENVIRONMENTAL_PROBE"
+      ]
+    },
+    "causal_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonically increasing causal epoch sequence decoupled from wall clock."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modality": {
+      "type": "string",
+      "enum": ["NUMERIC_GAUGE", "BINARY_FLAG", "CATEGORICAL_STATE", "DISCRETE_VECTOR", "TEXT_PAYLOAD"]
+    },
+    "reading": {
+      "type": "object",
+      "description": "Modality-specific measurement data.",
+      "additionalProperties": true
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "calibration_profile": {
+      "type": "string",
+      "description": "Calibration profile identifier verifying sensor linearity and baseline."
+    },
+    "witness_signature": {
+      "type": "string",
+      "description": "Cryptographic signature from device secure element (e.g. Ed25519 or HMAC)."
+    }
+  },
+  "additionalProperties": false
+}

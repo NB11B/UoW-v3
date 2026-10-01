@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/agent_state_projection.json",
+  "title": "AgentStateProjection",
+  "description": "Formal schema for sanitized state projections legally consumable by autonomous agents and planners. Prevents authority and credential leakage.",
+  "type": "object",
+  "required": [
+    "projection_id",
+    "pre_state_hash",
+    "causal_epoch",
+    "logical_sequence",
+    "active_mode",
+    "visible_attributes",
+    "active_goals",
+    "authorized_capabilities",
+    "invariant_constraints"
+  ],
+  "properties": {
+    "projection_id": {
+      "type": "string",
+      "description": "Unique identifier for this state projection."
+    },
+    "pre_state_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "64-char SHA-256 fingerprint of the authoritative WorldState at projection time."
+    },
+    "causal_epoch": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "logical_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "active_mode": {
+      "type": "string",
+      "enum": ["NORMAL", "DEGRADED", "EMERGENCY", "RECOVERY"]
+    },
+    "visible_attributes": {
+      "type": "object",
+      "description": "Sanitized attributes filtered strictly to the agent's read scope, with kernel/security attributes stripped.",
+      "additionalProperties": true
+    },
+    "active_goals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["goal_id", "name", "priority_rank", "direction"],
+        "properties": {
+          "goal_id": { "type": "string" },
+          "name": { "type": "string" },
+          "priority_rank": { "type": "integer", "minimum": 1 },
+          "direction": { "type": "string" },
+          "target_predicate": { "type": "string" },
+          "utility_metric": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "authorized_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Catalog of capability IDs permitted in the active operating mode."
+    },
+    "invariant_constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Formal expressions defining the boundary of the feasible state space Omega."
+    },
+    "remaining_budget": {
+      "type": "object",
+      "properties": {
+        "execution_time_budget_ms": { "type": "number", "minimum": 0.0 },
+        "api_credits": { "type": "number", "minimum": 0.0 }
+      },
+      "additionalProperties": false
+    },
+    "projected_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

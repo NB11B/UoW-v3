@@ -89,6 +89,16 @@ class WorldState:
         }
         return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
 
+    @property
+    def values(self) -> Mapping[str, Any]:
+        """Canonical protocol alias for attributes."""
+        return self.attributes
+
+    @property
+    def sequence_number(self) -> int:
+        """Canonical protocol alias for sequence."""
+        return self.sequence
+
     def get(self, key: str, default: Any = None) -> Any:
         return self.attributes.get(key, default)
 

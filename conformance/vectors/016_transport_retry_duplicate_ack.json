@@ -1,0 +1,62 @@
+{
+  "vector_id": "016_transport_retry_duplicate_ack",
+  "description": "Simulates transport-layer duplicate packet arriving after commitment; returns cached evidence receipt with replayed=true.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-retry-dup-016",
+      "correlation_id": "corr-retry-016",
+      "actor": {
+        "id": "carrier-gateway",
+        "claim_type": "AUTHENTICATED"
+      },
+      "constraints": {
+        "idempotency_key": "idem-key-777"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-007",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "n",
+                  "operand": 1
+                }
+              ],
+              "successor": {
+                "kind": "HALT"
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "n": 42
+          },
+          "cursor": "uow-007",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "SUCCESS",
+    "replayed": true,
+    "result": {
+      "attributes": {
+        "n": 43
+      },
+      "sequence": 1
+    },
+    "errors": []
+  }
+}

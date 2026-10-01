@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/resource_lease_contract.json",
+  "title": "ResourceLeaseContract",
+  "description": "Formal schema for universal resource lease contracts distinguishing capacity from consumable budgets.",
+  "type": "object",
+  "required": [
+    "lease_id",
+    "uow_id",
+    "principal_id",
+    "valid_from",
+    "valid_until",
+    "status"
+  ],
+  "properties": {
+    "lease_id": {
+      "type": "string",
+      "description": "Unique cryptographic lease identifier."
+    },
+    "uow_id": {
+      "type": "string"
+    },
+    "principal_id": {
+      "type": "string"
+    },
+    "leased_capacities": {
+      "type": "object",
+      "description": "Capacities temporarily held and returned to pool upon completion.",
+      "properties": {
+        "cpu_cores": { "type": "number", "minimum": 0.0 },
+        "ram_units": { "type": "number", "minimum": 0.0 },
+        "gpu_slots": { "type": "integer", "minimum": 0 },
+        "npu_slots": { "type": "integer", "minimum": 0 },
+        "lock_keys": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "consumable_budgets": {
+      "type": "object",
+      "description": "Consumables debited permanently upon execution dispatch.",
+      "properties": {
+        "financial_cost_microusds": { "type": "integer", "minimum": 0 },
+        "energy_millijoules": { "type": "integer", "minimum": 0 },
+        "api_credits": { "type": "integer", "minimum": 0 },
+        "bandwidth_bytes": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "priority_level": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 10,
+      "description": "Priority tier for preemption resolution (1 = highest priority)."
+    },
+    "lease_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["RESERVED", "ACTIVE", "RELEASED", "EXPIRED", "PREEMPTED"]
+    }
+  },
+  "additionalProperties": false
+}

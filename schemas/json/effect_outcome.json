@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/effect_outcome.json",
+  "title": "EffectOutcomeRecord",
+  "description": "Formal schema for effect execution outcomes. Enforces Failure != Unknown Outcome.",
+  "type": "object",
+  "required": [
+    "outcome_id",
+    "uow_id",
+    "effect_class",
+    "status",
+    "is_deterministic",
+    "requires_reconciliation_probe"
+  ],
+  "properties": {
+    "outcome_id": {
+      "type": "string"
+    },
+    "uow_id": {
+      "type": "string"
+    },
+    "effect_class": {
+      "type": "string",
+      "enum": [
+        "PURE_READ",
+        "REVERSIBLE",
+        "COMPENSATABLE",
+        "IRREVERSIBLE",
+        "EXTERNAL_UNCERTAIN",
+        "PHYSICAL"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["SUCCESS", "REJECTED", "FAILED", "UNCERTAIN", "COMPENSATED"]
+    },
+    "failure_category": {
+      "type": "string",
+      "enum": [
+        "SEMANTIC_REJECTION",
+        "VALIDATION_FAILURE",
+        "EXECUTION_CRASH",
+        "TRANSPORT_DROP",
+        "TIMEOUT",
+        "PARTIAL_EFFECT",
+        "STALE_STATE",
+        "RESOURCE_EXHAUSTED",
+        "DEPENDENCY_FAILURE",
+        "POLICY_DENIAL",
+        "AUTHORITY_DENIAL",
+        "UNCERTAIN_OUTCOME"
+      ]
+    },
+    "is_deterministic": {
+      "type": "boolean"
+    },
+    "requires_reconciliation_probe": {
+      "type": "boolean"
+    },
+    "receipt_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "response_payload": {
+      "type": "object"
+    },
+    "error_message": {
+      "type": "string"
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

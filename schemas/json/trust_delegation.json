@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/trust_delegation.json",
+  "title": "TrustDelegationGrant",
+  "description": "Formal schema for capability grants, delegations, and mid-flight revocations.",
+  "type": "object",
+  "required": [
+    "grant_id",
+    "principal_id",
+    "grantor_id",
+    "allowed_capabilities",
+    "lease_bounds",
+    "signature"
+  ],
+  "properties": {
+    "grant_id": {
+      "type": "string",
+      "description": "Unique identifier for this authority grant."
+    },
+    "principal_id": {
+      "type": "string",
+      "description": "Identity of the agent or service receiving the capability grant."
+    },
+    "grantor_id": {
+      "type": "string",
+      "description": "Identity of the parent authority or human granting the delegation."
+    },
+    "allowed_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "roles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "lease_bounds": {
+      "type": "object",
+      "required": ["valid_from", "valid_until"],
+      "properties": {
+        "valid_from": { "type": "string", "format": "date-time" },
+        "valid_until": { "type": "string", "format": "date-time" },
+        "max_invocations": { "type": "integer", "minimum": 1 },
+        "max_financial_microusds": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "delegation_depth": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Maximum allowed re-delegation depth (0 = cannot delegate further)."
+    },
+    "is_revoked": {
+      "type": "boolean",
+      "default": false
+    },
+    "revocation": {
+      "type": "object",
+      "required": ["revoked_at", "revoked_by", "reason"],
+      "properties": {
+        "revoked_at": { "type": "string", "format": "date-time" },
+        "revoked_by": { "type": "string" },
+        "reason": { "type": "string" },
+        "revocation_signature": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "signature": {
+      "type": "string",
+      "description": "Cryptographic signature from grantor."
+    }
+  },
+  "additionalProperties": false
+}

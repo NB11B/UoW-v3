@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/uow_result.json",
+  "title": "UoWResult",
+  "description": "Canonical wire response returned by any Unit-of-Work operation across all language bindings and transports.",
+  "type": "object",
+  "required": [
+    "request_id",
+    "operation",
+    "status",
+    "result",
+    "evidence",
+    "execution_metadata",
+    "errors"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "description": "Matches the request_id of the originating UoWEnvelope."
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Propagated correlation identifier from the invocation envelope."
+    },
+    "operation": {
+      "type": "string",
+      "description": "Operation executed or evaluated."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["SUCCESS", "REJECTED", "ERROR", "PENDING"],
+      "description": "Outcome status of the invocation."
+    },
+    "result": {
+      "type": "object",
+      "description": "Operation-specific output payload, updated world state attributes, or projection values.",
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Cryptographic witness obligation and ledger attestation.",
+      "required": [
+        "evidence_hash",
+        "prev_record_hash",
+        "certificate_hash",
+        "ledger_index"
+      ],
+      "properties": {
+        "evidence_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash uniquely identifying this committed state change."
+        },
+        "prev_record_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash linking to previous ledger record, forming append-only chain."
+        },
+        "certificate_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of the certification validating the transition."
+        },
+        "pre_state_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "post_state_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "proposal_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "ledger_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "signatures": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Quorum or validator node cryptographic signatures."
+        }
+      },
+      "additionalProperties": true
+    },
+    "execution_metadata": {
+      "type": "object",
+      "required": ["duration_ms", "host_node", "execution_backend"],
+      "properties": {
+        "duration_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "host_node": {
+          "type": "string",
+          "description": "Identity of node executing the work (e.g. node-a-esp32, node-b-stm32, node-c-http, python-kernel)."
+        },
+        "execution_backend": {
+          "type": "string",
+          "description": "Backend implementation (e.g. python-reference, rust-native, c-abi, microservice)."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "errors": {
+      "type": "array",
+      "description": "List of canonical errors or rejection reasons if status is REJECTED or ERROR.",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Canonical error code from spec/errors/taxonomy.yaml."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of rejection or failure."
+          },
+          "path": {
+            "type": "string",
+            "description": "Field or state key associated with violation."
+          },
+          "retryable": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,80 @@
+{
+  "vector_id": "004_tampered_proposal_rejection",
+  "description": "Proposed state modifies balance to 9999 instead of expected 60. Rejection ERR_ROUTE_DIVERGENCE.",
+  "operation": "uow.transition.certify",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.certify",
+      "operation_version": "1.0.0",
+      "request_id": "req-004",
+      "correlation_id": "corr-004",
+      "actor": {
+        "id": "agent-delta",
+        "role": "certifier",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-004",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "balance",
+                  "operand": 10
+                }
+              ],
+              "successor": {
+                "kind": "HALT",
+                "value": null
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "balance": 50
+          },
+          "cursor": "uow-004",
+          "status": "RUNNING",
+          "sequence": 0,
+          "state_hash": "0b3720ae530a3886c012819971a9a01e9fab33364fb437ce55d751d7cc452e97"
+        },
+        "proposal": {
+          "uow_id": "uow-004",
+          "pre_state_hash": "0b3720ae530a3886c012819971a9a01e9fab33364fb437ce55d751d7cc452e97",
+          "selected_route_index": 0,
+          "proposed_state": {
+            "attributes": {
+              "balance": 9999
+            },
+            "cursor": null,
+            "status": "HALTED",
+            "sequence": 0,
+            "state_hash": "664e85fb88eca3ed61e881664f08298679d8bf2ae67ccefec64c65788e7360e7"
+          },
+          "selected_successor": null,
+          "halted": true
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {
+      "is_valid": false,
+      "rejection_reason": "STATE_DIVERGENCE"
+    },
+    "errors": [
+      {
+        "code": "ERR_ROUTE_DIVERGENCE",
+        "message": "Proposed state diverged from contract mutations."
+      }
+    ]
+  }
+}

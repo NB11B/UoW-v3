@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/goal_profile.json",
+  "title": "GoalProfile",
+  "description": "Formal schema for mission objectives active within an operating mode. Distinct from hard invariants (constraints != objectives).",
+  "type": "object",
+  "required": [
+    "goal_id",
+    "name",
+    "description",
+    "mode",
+    "priority_rank",
+    "target_predicate",
+    "direction"
+  ],
+  "properties": {
+    "goal_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+$",
+      "description": "Unique identifier for the goal objective."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable label for the goal."
+    },
+    "description": {
+      "type": "string",
+      "description": "Operational intent and purpose of this goal."
+    },
+    "mode": {
+      "type": "string",
+      "description": "Operating mode where this goal is active (e.g., NORMAL, DEGRADED, RECOVERY)."
+    },
+    "priority_rank": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Lexicographic priority rank within the operating mode. 1 is highest priority."
+    },
+    "target_predicate": {
+      "type": "string",
+      "description": "Formal boolean predicate or condition over WorldState representing goal satisfaction."
+    },
+    "utility_metric": {
+      "type": "string",
+      "description": "Quantitative metric name used to measure optimization progress toward this goal."
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0.0,
+      "default": 1.0,
+      "description": "Relative optimization weight when optimizing multiple non-conflicting objectives."
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["MAXIMIZE", "MINIMIZE", "SATISFY_THRESHOLD", "MAINTAIN_RANGE"],
+      "description": "Optimization objective direction."
+    },
+    "threshold_value": {
+      "type": "number",
+      "description": "Target numeric threshold if direction is SATISFY_THRESHOLD or MAINTAIN_RANGE."
+    },
+    "is_hard_constraint": {
+      "type": "boolean",
+      "const": false,
+      "description": "Formal barrier: Goals cannot be hard constraints. Constraints != Objectives."
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,47 @@
+{
+  "vector_id": "012_authority_escalation_attempt",
+  "description": "Unverified actor claims QUORUM_CERTIFIED role without threshold signature witness. Expect ERR_AUTHORITY_DENIED.",
+  "operation": "uow.quorum.verify_qc",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.quorum.verify_qc",
+      "operation_version": "1.0.0",
+      "request_id": "req-esc-001",
+      "correlation_id": "corr-esc-001",
+      "actor": {
+        "id": "adversary-node",
+        "role": "root_admin",
+        "claim_type": "QUORUM_CERTIFIED"
+      },
+      "authority_context": {
+        "tokens": [],
+        "signature": "fake-sig"
+      },
+      "payload": {
+        "qc": {
+          "proposal_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "votes": []
+        },
+        "fabric_nodes": [
+          "node-a",
+          "node-b",
+          "node-c"
+        ]
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {
+      "valid": false,
+      "threshold_met": false
+    },
+    "errors": [
+      {
+        "code": "ERR_AUTHORITY_DENIED",
+        "message": "Quorum threshold not satisfied; zero valid votes presented."
+      }
+    ]
+  }
+}

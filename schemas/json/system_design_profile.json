@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/system_design_profile.json",
+  "title": "SystemDesignProfile",
+  "description": "Formal schema for the Design / Policy Plane Mission Profile. Authoritative source of success definitions, invariant bounds, operating modes, and action spaces.",
+  "type": "object",
+  "required": [
+    "system_identity",
+    "mission_statement",
+    "invariants",
+    "operating_modes",
+    "goals_by_mode",
+    "priority_rules",
+    "performance_metrics",
+    "observation_requirements",
+    "action_space",
+    "escalation_triggers",
+    "decommission_criteria"
+  ],
+  "properties": {
+    "system_identity": {
+      "type": "object",
+      "required": ["name", "version", "domain", "classification", "authority_boundary"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "domain": { "type": "string" },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "SAFETY_CRITICAL",
+            "FINANCIAL_AUDITED",
+            "MISSION_CRITICAL",
+            "OPERATIONAL_STANDARD",
+            "RESEARCH_EXPERIMENTAL"
+          ]
+        },
+        "authority_boundary": {
+          "type": "object",
+          "required": ["issuing_authority_id", "root_public_key"],
+          "properties": {
+            "issuing_authority_id": { "type": "string" },
+            "root_public_key": { "type": "string" },
+            "min_quorum_signatures": { "type": "integer", "minimum": 1, "default": 1 },
+            "activation_signature": { "type": "string" },
+            "activation_timestamp": { "type": "string", "format": "date-time" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "mission_statement": {
+      "type": "object",
+      "required": ["purpose", "operational_scope", "rationale"],
+      "properties": {
+        "purpose": { "type": "string" },
+        "operational_scope": { "type": "string" },
+        "rationale": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "formal_expression", "severity", "enforcement"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^INV-[0-9A-Z_-]+$" },
+          "description": { "type": "string" },
+          "formal_expression": { "type": "string" },
+          "severity": { "type": "string", "enum": ["HARD_CONSTRAINT"] },
+          "enforcement": { "type": "string", "enum": ["FAIL_CLOSED", "IMMEDIATE_HALT"] },
+          "violation_code": { "type": "string", "default": "ERR_INVARIANT_VIOLATION" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "operating_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["mode_id", "description", "fallback_mode"],
+        "properties": {
+          "mode_id": { "type": "string" },
+          "description": { "type": "string" },
+          "fallback_mode": { "type": "string" },
+          "entry_criteria": { "type": "array", "items": { "type": "string" } },
+          "exit_criteria": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "goals_by_mode": {
+      "type": "object",
+      "description": "Active goals keyed by operating mode identifier.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["goal_id", "name", "priority_rank", "target_predicate", "direction"],
+          "properties": {
+            "goal_id": { "type": "string" },
+            "name": { "type": "string" },
+            "priority_rank": { "type": "integer", "minimum": 1 },
+            "target_predicate": { "type": "string" },
+            "direction": {
+              "type": "string",
+              "enum": ["MAXIMIZE", "MINIMIZE", "SATISFY_THRESHOLD", "MAINTAIN_RANGE"]
+            },
+            "utility_metric": { "type": "string" },
+            "weight": { "type": "number", "minimum": 0.0, "default": 1.0 },
+            "is_hard_constraint": { "type": "boolean", "const": false }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "priority_rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "rule_type", "description"],
+        "properties": {
+          "rule_id": { "type": "string" },
+          "rule_type": {
+            "type": "string",
+            "enum": [
+              "INVARIANT_DOMINATES_OBJECTIVE",
+              "LEXICOGRAPHIC_ORDER",
+              "MODE_HIERARCHY",
+              "FAIL_SAFE_DOMINANCE"
+            ]
+          },
+          "description": { "type": "string" },
+          "precedence_order": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "performance_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["metric_id", "name", "unit", "evaluation_window_seconds"],
+        "properties": {
+          "metric_id": { "type": "string" },
+          "name": { "type": "string" },
+          "unit": { "type": "string" },
+          "target_threshold": { "type": "number" },
+          "critical_threshold": { "type": "number" },
+          "evaluation_window_seconds": { "type": "number", "minimum": 0.0 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "observation_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["namespace", "min_confidence", "max_staleness_ms"],
+        "properties": {
+          "namespace": { "type": "string" },
+          "modality": { "type": "string" },
+          "min_confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "max_staleness_ms": { "type": "integer", "minimum": 1 },
+          "quorum_witness_count": { "type": "integer", "minimum": 1, "default": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "action_space": {
+      "type": "object",
+      "description": "Authorized operations per operating mode.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["operation_id", "min_authority_level"],
+          "properties": {
+            "operation_id": { "type": "string" },
+            "min_authority_level": { "type": "string" },
+            "rate_limit_per_minute": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "escalation_triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["trigger_id", "from_mode", "to_mode", "trigger_condition"],
+        "properties": {
+          "trigger_id": { "type": "string" },
+          "from_mode": { "type": "string" },
+          "to_mode": { "type": "string" },
+          "trigger_condition": { "type": "string" },
+          "evidence_requirement": { "type": "string" },
+          "auto_reversion_allowed": { "type": "boolean", "default": false }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decommission_criteria": {
+      "type": "object",
+      "required": ["expiration_timestamp", "max_causal_epoch", "irreversible_breach_conditions"],
+      "properties": {
+        "expiration_timestamp": { "type": "string", "format": "date-time" },
+        "max_causal_epoch": { "type": "integer", "minimum": 1 },
+        "irreversible_breach_conditions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tombstone_signature": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

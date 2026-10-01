@@ -1,0 +1,63 @@
+{
+  "vector_id": "006_authority_unauthorized_rejection",
+  "description": "High-privilege state mutation initiated by unauthenticated claim without required authority token.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-006",
+      "correlation_id": "corr-006",
+      "actor": {
+        "id": "+15550199",
+        "role": "sms_user",
+        "claim_type": "UNVERIFIED_CLAIM"
+      },
+      "authority_context": {
+        "tokens": []
+      },
+      "payload": {
+        "uow": {
+          "identity": "fund_transfer",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "SUB",
+                  "key": "balance",
+                  "operand": 50000
+                }
+              ],
+              "successor": {
+                "kind": "HALT",
+                "value": null
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "balance": 100000
+          },
+          "cursor": "fund_transfer",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {},
+    "errors": [
+      {
+        "code": "ERR_AUTHORITY_DENIED",
+        "message": "Operation requires AUTHENTICATED or higher authority; UNVERIFIED_CLAIM not permitted."
+      }
+    ]
+  }
+}

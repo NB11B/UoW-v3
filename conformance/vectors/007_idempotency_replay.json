@@ -1,0 +1,64 @@
+{
+  "vector_id": "007_idempotency_replay",
+  "description": "Duplicate request with identical idempotency_key returns original execution evidence without duplicate mutation.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-007-dup",
+      "correlation_id": "corr-007",
+      "actor": {
+        "id": "agent-zeta",
+        "role": "executor",
+        "claim_type": "AUTHENTICATED"
+      },
+      "constraints": {
+        "idempotency_key": "idem-key-777"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-007",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "n",
+                  "operand": 1
+                }
+              ],
+              "successor": {
+                "kind": "HALT",
+                "value": null
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "n": 42
+          },
+          "cursor": "uow-007",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "SUCCESS",
+    "replayed": true,
+    "result": {
+      "attributes": {
+        "n": 43
+      },
+      "sequence": 1
+    },
+    "errors": []
+  }
+}

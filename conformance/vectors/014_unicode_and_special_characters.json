@@ -1,0 +1,71 @@
+{
+  "vector_id": "014_unicode_and_special_characters",
+  "description": "Multilingual UTF-8 state attributes and emoji values ensure identical canonical byte sorting across runtimes.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-uni-001",
+      "correlation_id": "corr-uni-001",
+      "actor": {
+        "id": "user-café-99",
+        "claim_type": "AUTHENTICATED"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-unicode",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "SET",
+                  "key": "message",
+                  "operand": "café / こんにちは / 🚀"
+                }
+              ],
+              "successor": {
+                "kind": "HALT"
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "greeting": "Hola señora",
+            "city": "München"
+          },
+          "cursor": "uow-unicode",
+          "status": "RUNNING",
+          "sequence": 0,
+          "state_hash": "755f366b9ed3da3e7ba81fe9102d268fb1b731eecd86edbe42e5b7ca89c95732"
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "SUCCESS",
+    "result": {
+      "attributes": {
+        "greeting": "Hola señora",
+        "city": "München",
+        "message": "café / こんにちは / 🚀"
+      },
+      "cursor": null,
+      "status": "HALTED",
+      "sequence": 1,
+      "state_hash": "aecb3dc4b6e16eb7925024b9208b8a8533fdeb9870e623cde96ee5ddc37ae7a3"
+    },
+    "evidence": {
+      "step_number": 1,
+      "uow_id": "uow-unicode",
+      "post_state_hash": "aecb3dc4b6e16eb7925024b9208b8a8533fdeb9870e623cde96ee5ddc37ae7a3",
+      "record_hash": "9cb8eed7052e59823a9c52087febadd5b3f0fd6c7ffabf439a3025d950e818f9"
+    },
+    "errors": []
+  }
+}

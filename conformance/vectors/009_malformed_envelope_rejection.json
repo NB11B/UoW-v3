@@ -1,0 +1,24 @@
+{
+  "vector_id": "009_malformed_envelope_rejection",
+  "description": "Envelope missing required request_id and actor fields fails schema validation. Expect ERR_SCHEMA_VIOLATION.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "correlation_id": "corr-bad-001",
+      "payload": {}
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {},
+    "errors": [
+      {
+        "code": "ERR_SCHEMA_VIOLATION",
+        "message": "Schema validation failed: missing required fields."
+      }
+    ]
+  }
+}

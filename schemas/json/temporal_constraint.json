@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/temporal_constraint.json",
+  "title": "TemporalConstraint",
+  "description": "Formal schema for temporal boundaries, causal epochs, validity intervals, and deadlines.",
+  "type": "object",
+  "required": [
+    "constraint_id",
+    "causal_epoch",
+    "logical_sequence",
+    "validity_window"
+  ],
+  "properties": {
+    "constraint_id": {
+      "type": "string"
+    },
+    "causal_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Topological epoch boundary; advances on reboot/reconfiguration."
+    },
+    "logical_sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonically increasing OCC state sequence."
+    },
+    "observed_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "received_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validity_window": {
+      "type": "object",
+      "required": ["max_staleness_ms"],
+      "properties": {
+        "valid_from": { "type": "string", "format": "date-time" },
+        "valid_until": { "type": "string", "format": "date-time" },
+        "max_staleness_ms": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "execution_deadline_ms": {
+      "type": "number",
+      "minimum": 1.0,
+      "description": "Monotonic execution budget after which task must abort."
+    },
+    "clock_source": {
+      "type": "string",
+      "enum": ["HARDWARE_SENSOR_CLOCK", "GATEWAY_WALL_CLOCK", "LOGICAL_OCC_SEQUENCE"],
+      "default": "LOGICAL_OCC_SEQUENCE"
+    }
+  },
+  "additionalProperties": false
+}

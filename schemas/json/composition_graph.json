@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/composition_graph.json",
+  "title": "CompositionGraph",
+  "description": "Formal schema for directed capability composition graphs (U_1 o U_2).",
+  "type": "object",
+  "required": [
+    "graph_id",
+    "version",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "graph_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["node_id", "capability_id", "read_scope", "write_scope"],
+        "properties": {
+          "node_id": { "type": "string" },
+          "capability_id": { "type": "string" },
+          "read_scope": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "write_scope": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "compensation_node_id": { "type": "string" },
+          "failure_policy": {
+            "type": "string",
+            "enum": ["ROLLBACK", "COMPENSATE", "HALT", "CONTINUE_ON_FAILURE"],
+            "default": "COMPENSATE"
+          },
+          "is_idempotent": { "type": "boolean", "default": true }
+        },
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from_node", "to_node", "dependency_type"],
+        "properties": {
+          "from_node": { "type": "string" },
+          "to_node": { "type": "string" },
+          "dependency_type": {
+            "type": "string",
+            "enum": ["SEQUENTIAL", "PARALLEL_DISJOINT", "JOIN_BARRIER", "CONDITIONAL_BRANCH"]
+          },
+          "condition_expression": { "type": "string" },
+          "data_mappings": {
+            "type": "object",
+            "description": "JSONPointer mappings from predecessor output to successor input.",
+            "additionalProperties": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "compensation_policy": {
+      "type": "string",
+      "enum": ["REVERSE_TOPOLOGICAL", "BEST_EFFORT", "MANUAL_RECOVERY"],
+      "default": "REVERSE_TOPOLOGICAL"
+    }
+  },
+  "additionalProperties": false
+}

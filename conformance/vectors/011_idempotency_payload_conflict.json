@@ -1,0 +1,61 @@
+{
+  "vector_id": "011_idempotency_payload_conflict",
+  "description": "Repeated dispatch using an existing idempotency_key but with conflicting payload arguments. Expect ERR_IDEMPOTENCY_CONFLICT.",
+  "operation": "uow.transition.execute_one",
+  "input": {
+    "envelope": {
+      "protocol_version": "1.0.0",
+      "operation": "uow.transition.execute_one",
+      "operation_version": "1.0.0",
+      "request_id": "req-conflict-001",
+      "correlation_id": "corr-conflict-001",
+      "actor": {
+        "id": "client-idem",
+        "claim_type": "AUTHENTICATED"
+      },
+      "constraints": {
+        "idempotency_key": "idem-key-777"
+      },
+      "payload": {
+        "uow": {
+          "identity": "uow-007",
+          "routes": [
+            {
+              "guard": {
+                "op": "ALWAYS"
+              },
+              "mutations": [
+                {
+                  "op": "ADD",
+                  "key": "n",
+                  "operand": 999
+                }
+              ],
+              "successor": {
+                "kind": "HALT"
+              }
+            }
+          ]
+        },
+        "state": {
+          "attributes": {
+            "n": 999
+          },
+          "cursor": "uow-007",
+          "status": "RUNNING",
+          "sequence": 0
+        }
+      }
+    }
+  },
+  "expected": {
+    "status": "REJECTED",
+    "result": {},
+    "errors": [
+      {
+        "code": "ERR_IDEMPOTENCY_CONFLICT",
+        "message": "Idempotency key replayed with conflicting payload parameters."
+      }
+    ]
+  }
+}

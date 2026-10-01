@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/uow_contract.json",
+  "title": "UoWContract",
+  "description": "Formal schema for the Unit-of-Work 7-tuple contract U = (H, Gamma, M, R, B, E, T).",
+  "type": "object",
+  "required": ["H", "Gamma"],
+  "properties": {
+    "H": {
+      "type": "object",
+      "description": "Header H: identity and semantic work classification.",
+      "required": ["identity", "source_category", "target_category"],
+      "properties": {
+        "identity": { "type": "string" },
+        "source_category": {
+          "type": "string",
+          "enum": ["PROMPT", "DATA", "WEIGHTS", "PROCESSES", "COMMUNICATIONS", "STORAGE", "INTERFACES", "ENVIRONMENT"]
+        },
+        "target_category": {
+          "type": "string",
+          "enum": ["PROMPT", "DATA", "WEIGHTS", "PROCESSES", "COMMUNICATIONS", "STORAGE", "INTERFACES", "ENVIRONMENT"]
+        },
+        "layer": { "type": "string", "default": "uow" },
+        "parent_context": { "type": "string", "default": "native" }
+      }
+    },
+    "Gamma": {
+      "type": "object",
+      "description": "Contract Gamma: ordered conditional transition routes.",
+      "required": ["routes"],
+      "properties": {
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["guard"],
+            "properties": {
+              "guard": {
+                "type": "object",
+                "required": ["op"],
+                "properties": {
+                  "op": {
+                    "type": "string",
+                    "enum": ["ALWAYS", "EXISTS", "NOT_EXISTS", "EQ", "NE", "GT", "GTE", "LT", "LTE"]
+                  },
+                  "key": { "type": ["string", "null"] },
+                  "operand": {}
+                }
+              },
+              "mutations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["op"],
+                  "properties": {
+                    "op": {
+                      "type": "string",
+                      "enum": ["NOOP", "SET", "ADD", "SUB", "DELETE"]
+                    },
+                    "key": { "type": ["string", "null"] },
+                    "operand": {}
+                  }
+                }
+              },
+              "successor": {
+                "type": "object",
+                "required": ["kind"],
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": ["STATIC", "FROM_ATTRIBUTE", "HALT", "PRESERVE"]
+                  },
+                  "value": { "type": ["string", "null"] }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "M": {
+      "type": "object",
+      "description": "Lifecycle descriptor M.",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "enum": ["READY", "PROPOSED", "CERTIFIED", "COMMITTED", "HALTED", "REJECTED"],
+          "default": "READY"
+        }
+      }
+    },
+    "R": {
+      "type": "object",
+      "description": "Realization descriptor R.",
+      "properties": {
+        "implementation": { "type": "string", "default": "state-transition" }
+      }
+    },
+    "B": {
+      "type": "object",
+      "description": "Boundary descriptor B.",
+      "properties": {
+        "input_type": { "type": "string", "default": "WorldState" },
+        "output_type": { "type": "string", "default": "WorldState" },
+        "schema_version": { "type": "string", "default": "1.0.0" }
+      }
+    },
+    "E": {
+      "type": "object",
+      "description": "Evidence descriptor E.",
+      "properties": {
+        "verifier": { "type": "string", "default": "deterministic-transition-judge" },
+        "require_hash_chain": { "type": "boolean", "default": true }
+      }
+    },
+    "T": {
+      "type": "object",
+      "description": "Timing descriptor T.",
+      "properties": {
+        "clock_owner": { "type": "string", "default": "uow" },
+        "causal_epoch": { "type": "integer", "default": 0 }
+      }
+    }
+  }
+}

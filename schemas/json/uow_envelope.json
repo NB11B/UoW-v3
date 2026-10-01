@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uow.network/spec/schemas/uow_envelope.json",
+  "title": "UoWEnvelope",
+  "description": "Canonical wire envelope for invoking any Unit-of-Work operation across language and transport boundaries.",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "operation",
+    "operation_version",
+    "request_id",
+    "correlation_id",
+    "actor",
+    "payload"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of the UoW wire protocol."
+    },
+    "operation": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
+      "description": "Canonical namespaced operation identifier (e.g. uow.transition.execute_one, inventory.reserve)."
+    },
+    "operation_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Version of the specific operation contract."
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Globally unique identifier for this request invocation."
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Identifier linking related operations across distributed causal call chains."
+    },
+    "actor": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Actor identity or declared sender."
+        },
+        "role": {
+          "type": "string",
+          "description": "Role or persona assumed by the actor."
+        },
+        "claim_type": {
+          "type": "string",
+          "enum": ["UNVERIFIED_CLAIM", "AUTHENTICATED", "DELEGATED", "QUORUM_CERTIFIED"],
+          "default": "UNVERIFIED_CLAIM",
+          "description": "Confidence classification of the actor identity."
+        },
+        "key_fingerprint": {
+          "type": "string",
+          "description": "Cryptographic public key fingerprint (e.g. SHA-256 of public key), if available."
+        }
+      },
+      "additionalProperties": true
+    },
+    "authority_context": {
+      "type": "object",
+      "description": "Cryptographic proofs, delegations, or tokens authorizing this transition.",
+      "properties": {
+        "tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Bearer authority tokens or OTP challenge validations."
+        },
+        "delegations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["delegator", "delegatee", "scope", "signature"],
+            "properties": {
+              "delegator": { "type": "string" },
+              "delegatee": { "type": "string" },
+              "scope": { "type": "string" },
+              "signature": { "type": "string" }
+            }
+          }
+        },
+        "signature": {
+          "type": "string",
+          "description": "HMAC or asymmetric cryptographic signature over envelope payload bytes."
+        }
+      },
+      "additionalProperties": true
+    },
+    "payload": {
+      "type": "object",
+      "description": "Operation-specific typed parameters.",
+      "additionalProperties": true
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Execution constraints governing this invocation.",
+      "properties": {
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "idempotency_key": {
+          "type": "string",
+          "description": "Deterministic key guaranteeing at-most-once execution."
+        },
+        "causal_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "evidence_context": {
+      "type": "object",
+      "description": "Contextual evidence requirements and parent causal chains.",
+      "properties": {
+        "parent_evidence_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "64-char hex SHA-256 of the immediate causal ancestor evidence record."
+        },
+        "require_hash_chain": {
+          "type": "boolean",
+          "default": true
+        },
+        "trace_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "reply_to": {
+      "type": "string",
+      "description": "Optional transport address for asynchronous response (e.g. webhook URL, phone number, MQ topic)."
+    }
+  },
+  "additionalProperties": false
+}

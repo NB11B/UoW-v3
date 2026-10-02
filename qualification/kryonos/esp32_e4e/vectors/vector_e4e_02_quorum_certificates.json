@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-E4E-02",
+  "name": "Native Quorum Certificate Verification Gate",
+  "target": "ESP32-S3 Physical Silicon",
+  "runtime": "KryonOS Native Authority Gate",
+  "cluster_id": "cluster-uow-primary",
+  "active_authority_epoch": 11,
+  "threshold_m_of_n": "2-of-3",
+  "cases": [
+    {
+      "case_id": "A",
+      "description": "Valid 2-signer certificate [R1, R2] with matching HMAC-SHA256",
+      "signers": ["R1", "R2"],
+      "authority_epoch": 11,
+      "expected_status": 0,
+      "status_name": "UOW_STATUS_OK",
+      "outcome": "ACCEPTED"
+    },
+    {
+      "case_id": "B",
+      "description": "Minority quorum (1 signer instead of >= 2)",
+      "signers": ["R1"],
+      "authority_epoch": 11,
+      "expected_status": 17,
+      "status_name": "UOW_STATUS_INVALID_QUORUM_CERT",
+      "outcome": "REJECTED"
+    },
+    {
+      "case_id": "C",
+      "description": "Duplicate signer identity [R1, R1] in proposal certificate",
+      "signers": ["R1", "R1"],
+      "authority_epoch": 11,
+      "expected_status": 17,
+      "status_name": "UOW_STATUS_INVALID_QUORUM_CERT",
+      "outcome": "REJECTED"
+    },
+    {
+      "case_id": "D",
+      "description": "Unknown or untrusted signer identity [RogueNode]",
+      "signers": ["R1", "RogueNode"],
+      "authority_epoch": 11,
+      "expected_status": 17,
+      "status_name": "UOW_STATUS_INVALID_QUORUM_CERT",
+      "outcome": "REJECTED"
+    },
+    {
+      "case_id": "E",
+      "description": "Cryptographically forged signature (single bit flip in HMAC)",
+      "signers": ["R1", "R2"],
+      "signature_tampered": true,
+      "authority_epoch": 11,
+      "expected_status": 17,
+      "status_name": "UOW_STATUS_INVALID_QUORUM_CERT",
+      "outcome": "REJECTED"
+    },
+    {
+      "case_id": "F",
+      "description": "Stale authority epoch in quorum certificate (10 < 11)",
+      "signers": ["R1", "R2"],
+      "authority_epoch": 10,
+      "expected_status": 14,
+      "status_name": "UOW_STATUS_STALE_AUTHORITY_EPOCH",
+      "outcome": "REJECTED"
+    }
+  ],
+  "invariants": {
+    "adversarial_cases_tested": 6,
+    "adversarial_cases_passed": 6
+  }
+}

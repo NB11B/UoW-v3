@@ -58,12 +58,20 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
   - `executor.ts`: Client-side deterministic execution engine
 - **Test Suite**: `test/conformance.test.js` validating all 16 cross-language golden test vectors against canonical schemas.
 
-### 2.5 Embedded C++ (ESP32-S3 & Arduino UNO Q)
-- **Role**: Physical root-of-trust and deterministic edge authority.
-- **Firmware Targets**:
-  - ESP32-S3: Dual-core FreeRTOS firmware with core-affinity isolation (Core 0 = deterministic authority kernel, Core 1 = serial communication and proposal queue).
-  - Arduino UNO Q: Microcontroller authority boundary for 2-of-3 heterogeneous quorum.
-- **Evidence Reference**: Physical qualification logs preserved in v2 branch `feat/s2-heterogeneous-physical-qualification`.
+### 2.5 Embedded C++ (ESP32-S3, Arduino UNO Q, and KryonOS)
+- **Role**: Physical root-of-trust, edge authority, and sandboxed application execution.
+- **Firmware & Realization Targets**:
+  - **ESP32-S3 / KryonOS**: Dual-core FreeRTOS operating system with Duktape JavaScript engine as dynamic application proposer and Native C++ Authority Gate v1 enforcing 2D epoch/generation fencing and HMAC-SHA256 quorum certificates.
+  - **Arduino UNO Q**: Microcontroller authority boundary for 2-of-3 heterogeneous quorum.
+- **Physical Invariant**: Dynamic application replacement inside Duktape cannot replace or escalate native hardware authority:
+  \[
+  \boxed{\text{Application Replacement} \not\Rightarrow \text{Authority Replacement}}
+  \]
+- **Evidence Reference**:
+  - Historical physical qualification logs sealed in v2 (`feat/s2-heterogeneous-physical-qualification`).
+  - Physical silicon qualification campaign Phase E4E (`qualification/kryonos/esp32_e4e/`), confirming 4/4 fencing quadrants and 10,000 operations of continuous endurance with zero unauthorized mutations.
+  - Cumulative parity: E4E confirms ESP32 parity with the already-qualified host/native semantics; combined with the prior Arduino qualification, the cumulative evidence supports heterogeneous realization parity.
+- **Profile Specification**: See [`docs/KRYONOS_REALIZATION_PROFILE.md`](KRYONOS_REALIZATION_PROFILE.md).
 
 ### 2.6 Legacy Compatibility Surfaces (COBOL, Pascal, Perl)
 - **COBOL (Wire/Batch Compatibility Profile)**:

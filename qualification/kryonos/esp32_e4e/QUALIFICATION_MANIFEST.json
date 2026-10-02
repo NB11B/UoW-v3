@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": "1.1.0",
+  "campaign_id": "KRYONOS-ESP32-E4E",
+  "campaign_name": "KryonOS ESP32-S3 Phase E4E Individual Node Silicon Qualification",
+  "target_hardware": {
+    "device": "ESP32-S3-DevKitC-1-N16R8",
+    "cpu": "Xtensa Dual-Core LX7 @ 240 MHz",
+    "flash_mb": 16,
+    "psram_mb": 8,
+    "actuator_gpio": 7
+  },
+  "runtime_stack": {
+    "os": "KryonOS v1.0",
+    "application_sandbox": "Duktape JavaScript Engine",
+    "authority_kernel": "Native C++ UoW Authority Gate v1",
+    "host_sdk_bridge": "@uow/kryonos v1.0"
+  },
+  "immutable_provenance": {
+    "kryonos_commit_sha": "452b7f5245166ca1bed8538850e90dafd4365b89",
+    "uow_native_source_commit_sha": "53f31d98af22c3ed030129070722ecaa120f9223",
+    "uow_e4e_runner_cpp_sha256": "068f7943eb048fc1293e61a837cd725bf85c1ef7afbbeb7ec3e0133e09c05ad5",
+    "uow_native_cpp_sha256": "755cbf680373a2c4bcd249f784821373bb4041e5637f0a7cf2abe9ea4241bb91",
+    "uow_duktape_binding_cpp_sha256": "875dcc6084fabcbeabf3a7ef3022e8972b366d39ca809132f6dfe916413277a9",
+    "uow_persistence_cpp_sha256": "49ed18dc2c1b6289d4a1b0e8f44ca59620b0f68b460e57abc4fa2ac24c373a89",
+    "compiled_firmware_bin_sha256": "a4a86783bafc4d0be5f42e25ae5c7dd1fcf29bde3e460b267479f0482fad9c81",
+    "qualification_report_sha256": "7c4eb3ebfb0489cb910e1dced4a56fc58926bd49eb54e34ec930846273bc0d1e",
+    "test_timestamp": "2026-10-01T13:28:00-04:00",
+    "platformio_version": "6.1.19",
+    "esp32_platform_version": "espressif32 (Arduino framework, ESP-IDF 5.x)",
+    "board_environment": "esp32-s3-devkitc-1-n16r8"
+  },
+  "qualification_gates": [
+    {
+      "gate_id": "E4E-T01",
+      "name": "Cold Boot & Failsafe Output Correctness",
+      "criteria": "Outputs start in safe state (GPIO 7 == 0), BootEpoch >= 1, StrictMode active",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T02",
+      "name": "Active Authority Reboot & Replay Rejection",
+      "criteria": "Pre-reboot token replay rejected after simulated reboot; fresh token accepted",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T03",
+      "name": "4-Quadrant Epoch x Generation Fencing Matrix",
+      "criteria": "Stale/Stale, Stale/Curr, Curr/Stale denied with zero mutation; Curr/Curr executed",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T04",
+      "name": "Native Quorum Certificate Verification",
+      "criteria": "Valid 2-signer accepted; minority, duplicate, unknown, forged, and stale rejected",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T05",
+      "name": "Delayed Network Packet Delivery Rejection",
+      "criteria": "Stale command delivered after gate advancement rejected with zero mutation",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T06",
+      "name": "Dynamic Duktape Application Replacement & Isolation",
+      "criteria": "Application replacement does not compromise native authority boundary",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T07",
+      "name": "Persistence Corruption Fail-Closed",
+      "criteria": "Corrupted storage traps fail-closed; no default to open execution",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T08",
+      "name": "Crash Boundary Power Loss Protocol Invariance",
+      "criteria": "Fault injection during mutation does not allow duplicate effect execution",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "E4E-T09",
+      "name": "10,000-Operation Bounded Physical Endurance",
+      "criteria": "10,000 operations with 0 unauthorized mutations, 0 stale, 0 duplicate effects",
+      "status": "PASSED",
+      "metrics": {
+        "total_operations": 10000,
+        "valid_executions": 2000,
+        "unauthorized_mutations": 0,
+        "stale_executions": 0,
+        "duplicate_effects": 0,
+        "authority_escalations": 0
+      }
+    },
+    {
+      "gate_id": "E4E-T10",
+      "name": "Cumulative Heterogeneous Realization Parity",
+      "criteria": "ESP32 E4E results conform to the same invariant set previously qualified on host/native and Arduino realizations; parity claim is cumulative across referenced campaigns.",
+      "status": "PASSED"
+    }
+  ],
+  "associated_vectors": [
+    "vectors/vector_e4e_01_fencing_matrix.json",
+    "vectors/vector_e4e_02_quorum_certificates.json",
+    "vectors/vector_e4e_03_delayed_packet_rejection.json",
+    "vectors/vector_e4e_04_app_replacement_isolation.json",
+    "vectors/vector_e4e_05_endurance_profile.json"
+  ],
+  "disposition": "QUALIFIED",
+  "signoff_level": "L1 Physical Hardware"
+}

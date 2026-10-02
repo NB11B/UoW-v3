@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - "curation/**"
+      - "v3.2/**"
   pull_request:
 
 jobs:
@@ -19,10 +20,11 @@ jobs:
         run: python -m pip install -e . pytest numpy openvino torch onnx requests PyYAML hypothesis
       - name: Qualification claim lint
         run: python -m qualification.claim_lint
+      - name: v3.2 governance intake validation
+        run: python -m qualification.v32_intake --validate-all
       - name: Test
         run: python -m pytest -q
       - name: Acceptance smoke
         run: python qualification/uow_system_acceptance.py --step-programs 2 --steps-per-program 2 --terminating-runs 2 --timing-seeds 10 --output /tmp/uow_acceptance_smoke.txt
       - name: Distributed authority campaign (D1)
         run: python -m qualification.distributed_authority.campaign
-

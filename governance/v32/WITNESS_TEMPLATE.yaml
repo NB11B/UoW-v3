@@ -1,0 +1,58 @@
+schema_version: "uow.v32.witness.v1"
+
+witness:
+  id: "V32-W0001"
+  title: ""
+  observed_at: ""
+  reporter: ""
+
+baseline:
+  release_tag: "v3.1.0"
+  release_commit: "65acfc0177a3037433b09e2fde582f23368dfb8b"
+  development_commit: ""
+
+classification:
+  category: ""
+  # exactly one of:
+  # MISSING_ARCHITECTURAL_PRIMITIVE
+  # BOUNDARY_FAILURE_NEW_CONDITION
+  # SUBSTRATE_REALIZATION_INCOMPATIBILITY
+
+requirement:
+  description: ""
+  current_expression_attempt: ""
+  expected_invariant: ""
+
+observation:
+  observed_behavior: ""
+  expected_behavior: ""
+  difference: ""
+
+reproduction:
+  environment: ""
+  commands: []
+  artifacts: []
+  deterministic_reproduction: false
+
+falsification:
+  null_hypothesis: "The current qualified UoW architecture is sufficient."
+  minimal_campaign: ""
+  negative_controls: []
+  acceptance_criteria: []
+  rejection_criteria: []
+
+disposition:
+  status: "INTAKE"
+  # INTAKE | REPRODUCED | FALSIFIED | QUALIFIES | CLOSED
+  result: "PENDING"
+  # PENDING
+  # NO_DEFICIT
+  # EXISTING_ARCHITECTURE_SUFFICIENT
+  # PATCH_ONLY
+  # MISSING_ARCHITECTURAL_PRIMITIVE
+  # BOUNDARY_FAILURE_NEW_CONDITION
+  # SUBSTRATE_REALIZATION_INCOMPATIBILITY
+
+change_authorization:
+  architectural_change_allowed: false
+  authorized_campaign: null

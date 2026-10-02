@@ -1,0 +1,101 @@
+{
+  "test_suite": "RUST-M4-G06: Proposer Non-Escalation & Zero Authority Boundary",
+  "description": "Verifies that an adversarial, broken, or rogue proposer cannot bypass transition certification or induce uncertified mutations.",
+  "vectors": [
+    {
+      "vector_id": "PROPOSER_01_WRONG_ROUTE",
+      "threat_model": "Proposer returns a route whose guard evaluates to false given current authoritative state.",
+      "envelope": {
+        "protocol_version": "1.0.0",
+        "operation": "uow.transition.execute_one",
+        "operation_version": "1.0.0",
+        "request_id": "malicious-req-01",
+        "correlation_id": "corr-adv-01",
+        "actor": { "id": "adversarial-proposer", "claim_type": "AUTHENTICATED" },
+        "payload": {
+          "uow": {
+            "identity": "exploit-uow",
+            "routes": [
+              {
+                "guard": { "op": "EQ", "key": "authorized", "operand": true },
+                "mutations": [{ "op": "SET", "key": "admin", "operand": true }]
+              }
+            ]
+          },
+          "state": {
+            "attributes": { "authorized": false },
+            "status": "RUNNING",
+            "sequence": 0
+          }
+        }
+      },
+      "expected_status": "REJECTED",
+      "expected_error_code": "ERR_GUARD_UNSATISFIED"
+    },
+    {
+      "vector_id": "PROPOSER_02_STALE_PRE_STATE",
+      "threat_model": "Proposer submits proposal bound to obsolete or fabricated pre-state hash.",
+      "envelope": {
+        "protocol_version": "1.0.0",
+        "operation": "uow.transition.certify",
+        "operation_version": "1.0.0",
+        "request_id": "malicious-req-02",
+        "correlation_id": "corr-adv-02",
+        "actor": { "id": "adversarial-proposer" },
+        "payload": {
+          "state": { "attributes": { "balance": 100 }, "sequence": 5, "status": "RUNNING" },
+          "proposal": {
+            "pre_state_hash": "stale_or_forged_hash_0000000000000000000000000000000000000000000000",
+            "proposed_state": { "attributes": { "balance": 500 } }
+          }
+        }
+      },
+      "expected_status": "REJECTED",
+      "expected_error_code": "ERR_STALE_PRE_STATE"
+    },
+    {
+      "vector_id": "PROPOSER_03_FORGED_PROPOSED_STATE",
+      "threat_model": "Proposer submits forged state containing unauthorized mutations or tampered tokens.",
+      "envelope": {
+        "protocol_version": "1.0.0",
+        "operation": "uow.transition.certify",
+        "operation_version": "1.0.0",
+        "request_id": "malicious-req-03",
+        "correlation_id": "corr-adv-03",
+        "actor": { "id": "adversarial-proposer" },
+        "payload": {
+          "state": { "attributes": { "balance": 100 }, "sequence": 1, "status": "RUNNING" },
+          "proposal": {
+            "pre_state_hash": "compute_dynamically",
+            "proposed_state": {
+              "attributes": {
+                "balance": 9999,
+                "tampered_token": "forged_privilege"
+              }
+            }
+          }
+        }
+      },
+      "expected_status": "REJECTED",
+      "expected_error_code": "ERR_ROUTE_DIVERGENCE"
+    },
+    {
+      "vector_id": "PROPOSER_04_UNAUTHORIZED_ESCALATION",
+      "threat_model": "Unverified actor attempts to invoke privileged fund transfer without required tokens.",
+      "envelope": {
+        "protocol_version": "1.0.0",
+        "operation": "uow.transition.execute_one",
+        "operation_version": "1.0.0",
+        "request_id": "malicious-req-04",
+        "correlation_id": "corr-adv-04",
+        "actor": { "id": "guest", "claim_type": "UNVERIFIED_CLAIM" },
+        "payload": {
+          "uow": { "identity": "fund_transfer", "routes": [] },
+          "state": { "attributes": {} }
+        }
+      },
+      "expected_status": "REJECTED",
+      "expected_error_code": "ERR_AUTHORITY_DENIED"
+    }
+  ]
+}

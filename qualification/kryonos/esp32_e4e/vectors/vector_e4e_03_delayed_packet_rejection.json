@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-E4E-03",
+  "name": "Delayed Network Packet Delivery Rejection",
+  "target": "ESP32-S3 Physical Silicon",
+  "runtime": "KryonOS Native Authority Gate",
+  "description": "Verifies that an authorized command prepared under a prior epoch/generation is rejected when delivered after gate advancement, causing zero physical mutation.",
+  "sequence": [
+    {
+      "step": 1,
+      "action": "AUTHORIZE_COMMAND_A",
+      "authority_epoch": 20,
+      "fencing_generation": 50,
+      "operation": "SET_LOW",
+      "target_pin": 7,
+      "target_value": 0,
+      "token_issued": true
+    },
+    {
+      "step": 2,
+      "action": "GATE_ADVANCEMENT",
+      "new_authority_epoch": 21,
+      "new_fencing_generation": 51,
+      "reason": "Host epoch renegotiation"
+    },
+    {
+      "step": 3,
+      "action": "DELIVER_DELAYED_COMMAND_A",
+      "token_epoch": 20,
+      "gate_epoch": 21,
+      "expected_status": 14,
+      "status_name": "UOW_STATUS_STALE_AUTHORITY_EPOCH",
+      "observed_gpio_pin": 7,
+      "pin_level_before": 1,
+      "pin_level_after": 1,
+      "mutation_occurred": false
+    },
+    {
+      "step": 4,
+      "action": "DELIVER_CURRENT_COMMAND_B",
+      "token_epoch": 21,
+      "gate_epoch": 21,
+      "expected_status": 0,
+      "status_name": "UOW_STATUS_OK",
+      "observed_gpio_pin": 7,
+      "pin_level_before": 1,
+      "pin_level_after": 0,
+      "mutation_occurred": true
+    }
+  ],
+  "invariants": {
+    "stale_command_executed": false,
+    "physical_leakage_on_stale_packet": 0
+  }
+}

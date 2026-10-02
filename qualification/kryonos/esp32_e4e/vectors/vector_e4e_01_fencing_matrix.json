@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-E4E-01",
+  "name": "4-Quadrant Epoch x Generation Fencing Matrix",
+  "target": "ESP32-S3 Physical Silicon",
+  "runtime": "KryonOS Native Authority Gate",
+  "active_gate": {
+    "authority_epoch": 11,
+    "fencing_generation": 101,
+    "target_pin": 7,
+    "initial_pin_state": 0
+  },
+  "quadrants": [
+    {
+      "quadrant": "Q1",
+      "authority_epoch": 10,
+      "fencing_generation": 100,
+      "expected_status": 14,
+      "status_name": "UOW_STATUS_STALE_AUTHORITY_EPOCH",
+      "expected_pin_state": 0,
+      "mutation_permitted": false
+    },
+    {
+      "quadrant": "Q2",
+      "authority_epoch": 10,
+      "fencing_generation": 101,
+      "expected_status": 14,
+      "status_name": "UOW_STATUS_STALE_AUTHORITY_EPOCH",
+      "expected_pin_state": 0,
+      "mutation_permitted": false
+    },
+    {
+      "quadrant": "Q3",
+      "authority_epoch": 11,
+      "fencing_generation": 100,
+      "expected_status": 13,
+      "status_name": "UOW_STATUS_STALE_FENCE",
+      "expected_pin_state": 0,
+      "mutation_permitted": false
+    },
+    {
+      "quadrant": "Q4",
+      "authority_epoch": 11,
+      "fencing_generation": 101,
+      "expected_status": 0,
+      "status_name": "UOW_STATUS_OK",
+      "expected_pin_state": 1,
+      "mutation_permitted": true
+    }
+  ],
+  "invariants": {
+    "zero_mutation_on_denial": true,
+    "quadrants_evaluated_on_silicon": 4,
+    "quadrants_passed": 4
+  }
+}

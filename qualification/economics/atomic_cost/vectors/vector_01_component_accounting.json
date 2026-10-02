@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-ECON-01",
+  "name": "Component-Wise Atomic Accounting Vector",
+  "description": "Demonstrates reproducible 6-dimension atomic cost accounting C(u) = C_H + C_M + C_E + C_R + C_K + C_D across diverse execution domains.",
+  "formula": "C(u) = C_H + C_M + C_E + C_R + C_K + C_D",
+  "test_cases": [
+    {
+      "case_id": "TC-01-COMPUTE-INTENSIVE",
+      "uow_id": "uow://analytics/matrix-multiply-001",
+      "work_category_source": "PROCESSES",
+      "work_category_target": "DATA",
+      "components": {
+        "c_h": 0.0,
+        "c_m": 0.045,
+        "c_e": 0.008,
+        "c_r": 0.0035,
+        "c_k": 0.0012,
+        "c_d": 0.002
+      },
+      "expected_total": 0.0597,
+      "currency": "USD"
+    },
+    {
+      "case_id": "TC-02-HUMAN-SUPERVISED",
+      "uow_id": "uow://compliance/manual-signoff-441",
+      "work_category_source": "AGENTS",
+      "work_category_target": "GOVERNANCE",
+      "components": {
+        "c_h": 1.25,
+        "c_m": 0.002,
+        "c_e": 0.0005,
+        "c_r": 0.005,
+        "c_k": 0.0001,
+        "c_d": 0.15
+      },
+      "expected_total": 1.4076,
+      "currency": "USD"
+    },
+    {
+      "case_id": "TC-03-EMBEDDED-SENSOR",
+      "uow_id": "uow://kryonos/esp32-telemetry-read-99",
+      "work_category_source": "PHYSICAL",
+      "work_category_target": "SIGNALS",
+      "components": {
+        "c_h": 0.0,
+        "c_m": 0.00004,
+        "c_e": 0.00001,
+        "c_r": 0.000005,
+        "c_k": 0.00002,
+        "c_d": 0.000005
+      },
+      "expected_total": 0.00008,
+      "currency": "USD"
+    }
+  ],
+  "invariants": {
+    "dimensional_orthogonality": true,
+    "non_negative_costs": true,
+    "exact_additive_reconciliation": true
+  }
+}

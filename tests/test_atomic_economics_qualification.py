@@ -43,7 +43,7 @@ def test_m2_manifest_structure_and_gates() -> None:
     for vec_file in VECTORS_DIR.glob("*.json"):
         hasher = hashlib.sha256()
         with open(vec_file, "rb") as f:
-            hasher.update(f.read())
+            hasher.update(f.read().replace(b"\r\n", b"\n"))
         actual_hash = hasher.hexdigest()
         key = f"{vec_file.stem}_sha256"
         assert key in vectors_prov, f"Missing provenance key {key}"

@@ -9,8 +9,8 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
 | Campaign ID | Focus / Domain | Target Platform | Campaign Type | Evidence Level | Status | Milestone |
 |---|---|---|---|---|---|---|
 | **`KRYONOS-ESP32-E4E`** | Physical Authority & Application Isolation | ESP32-S3 (Xtensa Dual-Core) + KryonOS | Physical Silicon Qualification | L1 Physical Hardware | **QUALIFIED** | v3.1-M1 |
-| *`V31-ECON-ATOMIC`* | Atomic Economics ($C_H, C_M, C_E, C_R, C_K, C_D$) | Multi-host / Cloud | Schema & Protocol Verification | L3 Protocol Qualified | *STAGED* | v3.1-M2 |
-| *`V31-CPP-16VEC`* | Full C++ Conformance (16/16 Vectors) | Native Host C++17 | Conformance Matrix Verification | L3 Cross-Language | *STAGED* | v3.1-M3 |
+| **`ECON-ATOMIC-COST-M2`** | Atomic Economics ($C_H, C_M, C_E, C_R, C_K, C_D$) | Multi-host / Cloud | Schema & Protocol Verification | L2 Formal & Conformance | **QUALIFIED** | v3.1-M2 |
+| **`V31-CPP-16VEC`** | Full C++ Conformance (16/16 Vectors) | Native Host C++17 | Conformance Matrix Verification | L3 Cross-Language | **QUALIFIED** | v3.1-M3 |
 | *`V31-RUST-RUNTIME`* | Rust Native Runtime (OCC & Orchestration) | Rust Native (`runtimes/rust/`) | Independent Runtime Qualification | L3 Runtime Qualified | *STAGED* | v3.1-M4 |
 | *`V31-PHYS-CONFIRM`* | Hardware Reflash & Reconfirmation | ESP32-S3 + Arduino UNO Q | Dual-Node Quorum Confirmation | L1 Physical Hardware | *STAGED* | v3.1-M5 |
 
@@ -43,3 +43,31 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
 
 ### 2.3 Optimization vs Protocol Separation
 - Flash wear-leveling (batched persistence) and FreeRTOS task yielding are classified strictly as **KryonOS realization optimizations**, not UoW protocol rules.
+
+---
+
+## 3. Campaign Detail: `ECON-ATOMIC-COST-M2`
+
+### 3.1 Artifacts & Invariants
+- **Target Subsystem**: `src/uow/economics/`
+- **Cost Representation**: $C(u) = C_H + C_M + C_E + C_R + C_K + C_D$
+- **Governing Separation**:
+  - $\text{Cost Observation} \neq \text{Pricing Decision}$
+  - $\text{Production Cost} \neq \text{Market Price} \neq \text{Consumer Value}$
+  - $\text{Economic Optimizer Proposes} \rightarrow \text{Authority Gate Certifies} \rightarrow \text{State Changes}$
+- **Directory**: [`qualification/economics/atomic_cost/`](../qualification/economics/atomic_cost/)
+- **Status**: **QUALIFIED** (6/6 gates verified in `tests/test_atomic_economics_qualification.py`).
+
+---
+
+## 4. Campaign Detail: `V31-CPP-16VEC`
+
+### 4.1 Artifacts & Invariants
+- **Target Runtime**: `runtimes/cpp/`
+- **Compiler**: `g++.exe (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8) 13.2.0`
+- **Execution Target**: `runtimes/cpp/conformance_runner.exe`
+- **Coverage**: **16/16 Canonical Vectors** passed without modifying the vectors.
+- **Directory**: [`qualification/cpp/full_conformance/`](../qualification/cpp/full_conformance/)
+- **Claim**: **Native C++ semantic conformance: 16/16 canonical UoW v3 vectors.**
+- **Status**: **QUALIFIED** (17/17 tests passing in `tests/test_cpp_full_conformance.py`).
+

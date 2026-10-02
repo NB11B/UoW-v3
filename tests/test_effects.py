@@ -7,7 +7,7 @@ import tempfile
 import time
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     DeterministicSequencer,
     EffectDescriptor,
     EffectReceipt,

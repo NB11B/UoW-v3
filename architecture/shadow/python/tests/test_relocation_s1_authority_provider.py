@@ -4,7 +4,7 @@ import inspect
 
 from qualification.distributed_authority.authority import AuthorityNode, DistributedAuthorityCluster
 from qualification.distributed_authority.network import NetworkFabric
-from uow import (
+from uow.compat.v2 import (
     Guard,
     GuardOp,
     Mutation,

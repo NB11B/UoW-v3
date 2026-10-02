@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 import numpy as np
 
-from uow import (
+from uow.compat.v2 import (
     Guard,
     GuardOp,
     Mutation,

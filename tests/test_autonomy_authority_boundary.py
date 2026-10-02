@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     Guard,
     GuardOp,
     MatrixCell,

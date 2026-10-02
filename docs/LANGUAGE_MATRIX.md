@@ -9,16 +9,16 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 
 | Language | Existing Role (v2) | V3 Role | Surface Type | Primary Target Location | Provenance Branch | Evidence Level | Conformance Vector Coverage |
 |---|---|---|---|---|---|---|---|
-| **Python** | Full canonical runtime | Reference runtime | Runtime | `runtimes/python/uow/` | `v2-origin/main` | L4 Formal & Host Qualified | 16/16 vectors |
-| **C++** | Native/embedded qualification | Native runtime | Runtime | `runtimes/cpp/` | `feat/s2-heterogeneous-physical-qualification` | L3 Cross-language Qualified | Vectors 001, 002, 003, 004, 006 |
+| **Python** | Full canonical runtime | Reference runtime | Runtime (packaged from `src/uow/`) | `src/uow/` | `v2-origin/main` | L4 Formal & Host Qualified | 16/16 vectors |
+| **C++** | Native/embedded qualification | Native C++ core runtime | Native Core Runtime | `runtimes/cpp/` | `feat/s2-heterogeneous-physical-qualification` | L3 Cross-language Qualified | Vectors 001, 002, 003, 004, 006 (subset until full 16/16 conformance) |
 | **C** | ABI / constrained interface | ABI + embedded profile | C ABI Header | `abi/c/`, `runtimes/cpp/abi/` | `feat/runtime-substrate-semantics` | L3 ABI Qualified | Header ABI bounds |
-| **Rust** | SDK + conformance work | Native SDK / runtime candidate | SDK / Runtime | `sdk/rust/`, `runtimes/rust/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | Vectors 001, 002, 003, 007 |
-| **TypeScript** | SDK + executor + conformance | Primary integration SDK | SDK & Executor | `sdk/typescript/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | 16/16 vectors (`test/conformance.test.js`) |
+| **Rust** | SDK + conformance work | Rust native SDK / runtime candidate | SDK / Runtime Candidate | `sdk/rust/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | Vectors 001, 002, 003, 007 |
+| **TypeScript** | SDK + executor + conformance | Integration SDK + deterministic reference executor | Integration SDK & Reference Executor | `sdk/typescript/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | 16/16 vectors (`test/conformance.test.js`) |
 | **JavaScript** | Example / client interoperability | SDK consumer | Example / Consumer | `examples/javascript/` | `feat/runtime-substrate-semantics` | L3 Example / Client | Client submission vector |
-| **Perl** | Legacy client / conformance | Compatibility adapter | Adapter | `sdk/legacy/perl/`, `adapters/perl/` | `feat/runtime-substrate-semantics` | L3 Legacy Qualified | `legacy/perl/t/conformance.t` |
-| **COBOL** | Copybooks / batch interface | Enterprise compatibility | Compatibility Surface | `sdk/legacy/cobol/` | `feat/runtime-substrate-semantics` | L3 Enterprise Qualified | 80-column card codec & copybooks |
-| **Pascal** | Type / interface example | Compatibility / reference | Specification / Reference | `sdk/legacy/pascal/` | `feat/runtime-substrate-semantics` | L3 Type Qualified | Canonical record types |
-| **ESP32 / Arduino C++** | Physical authority | Embedded runtime | Embedded Firmware | `runtimes/embedded/esp32/`, `runtimes/embedded/arduino/` | `feat/s2-heterogeneous-physical-qualification` | L1 Physical Hardware | Physical serial execution & quorum |
+| **Perl** | Legacy client / conformance | Tested protocol adapter | Protocol Adapter | `sdk/legacy/perl/`, `adapters/perl/` | `feat/runtime-substrate-semantics` | L3 Tested Adapter | `sdk/legacy/perl/t/conformance.t` (62 checks) |
+| **COBOL** | Copybooks / batch interface | Wire/batch compatibility profile | Compatibility Surface | `sdk/legacy/cobol/` | `feat/runtime-substrate-semantics` | L3 Enterprise Qualified | 80-column card codec & copybooks |
+| **Pascal** | Type / interface example | Type/interface compatibility profile | Specification / Reference | `sdk/legacy/pascal/` | `feat/runtime-substrate-semantics` | L3 Type Qualified | Canonical record types |
+| **ESP32 / Arduino C++** | Physical authority | Embedded runtime | Embedded Firmware | `runtimes/embedded/esp32/`, `runtimes/embedded/arduino/` | `feat/s2-heterogeneous-physical-qualification` | L1 Physical Hardware | Physical serial execution & quorum (sealed in v2) |
 
 ---
 
@@ -35,27 +35,28 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
   - `uow.economics`: Economic observations, cost/energy metering
   - `uow.protocol`: Envelope, schemas, canonical types
   - `uow.adapters`: Hardware/model adapters (Intel AI Boost OpenVINO NPU, HuggingFace)
-- **Testing**: 562 unit, integration, and qualification tests in `tests/`.
+- **Backward Compatibility**: `from uow.compat.v2 import ...`
+- **Testing**: 584 unit, integration, and qualification tests in `tests/`.
 
-### 2.2 C++ & C ABI (Native Runtime & Interface)
-- **Role**: High-performance native execution and portable FFI boundary for system integration.
+### 2.2 C++ & C ABI (Native Core Runtime & Interface)
+- **Role**: High-performance native execution and portable FFI boundary for system integration. Covers subset of golden vectors until full 16/16 conformance.
 - **Header**: `abi/c/include/uow.h` defines `uow_envelope_t`, `uow_state_t`, `uow_proposal_t`, `uow_certificate_t`, `uow_result_t`.
 - **Wire & Conformance**: `runtimes/cpp/` implements SHA-256 state hashing and binary wire packing matching Python RFC-8785 canonical hashes.
 
 ### 2.3 Rust (Native SDK & Runtime Candidate)
-- **Role**: Type-safe systems SDK with standalone serialization and kernel evaluation logic.
-- **Crate**: `sdk/rust/` (`uow-sdk`)
+- **Role**: Rust native SDK and runtime candidate with standalone serialization and kernel evaluation logic.
+- **Crate**: `sdk/rust/` (`uow-core`)
 - **Key Types**: `UoWContract`, `WorldState`, `Proposal`, `Certificate`, `EvidenceRecord`
 - **Feature Set**: Cryptographic hash chaining (`sha2`), Serde JSON canonicalization, error taxonomy mapping.
 
-### 2.4 TypeScript & JavaScript (Integration SDK & Consumer)
-- **Role**: Web/Node integration tier providing complete envelope builders, validation against JSON schemas, and local deterministic execution harness.
+### 2.4 TypeScript & JavaScript (Integration SDK & Deterministic Reference Executor)
+- **Role**: Integration SDK and deterministic reference executor tier providing complete envelope builders, validation against JSON schemas, and local deterministic execution harness.
 - **Package**: `sdk/typescript/` (`@uow/sdk`)
 - **Components**:
   - `client.ts`: High-level submission and validation client
   - `envelope.ts`: Envelope factory and canonical validator
   - `executor.ts`: Client-side deterministic execution engine
-- **Test Suite**: `test/conformance.test.js` validating cross-language test vectors against canonical schemas.
+- **Test Suite**: `test/conformance.test.js` validating all 16 cross-language golden test vectors against canonical schemas.
 
 ### 2.5 Embedded C++ (ESP32-S3 & Arduino UNO Q)
 - **Role**: Physical root-of-trust and deterministic edge authority.
@@ -65,12 +66,12 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 - **Evidence Reference**: Physical qualification logs preserved in v2 branch `feat/s2-heterogeneous-physical-qualification`.
 
 ### 2.6 Legacy Compatibility Surfaces (COBOL, Pascal, Perl)
-- **COBOL**:
+- **COBOL (Wire/Batch Compatibility Profile)**:
   - `UOWENVLP.cpy`: 80-column standard card layout copybook for batch transaction processing.
   - `UOWRSLT.cpy`: Execution result card layout copybook.
   - `card_codec.py`: Punch-card / fixed-width parser and canonical JSON bridge.
-- **Pascal**:
+- **Pascal (Type/Interface Compatibility Profile)**:
   - `UoWTypes.pas`: Pascal record structures specifying standard field offsets and boundary constraints.
-- **Perl**:
+- **Perl (Tested Protocol Adapter)**:
   - `UoW::Client`: Protocol client implementing envelope generation and REST/wire submission.
-  - `t/conformance.t`: Test harness verifying protocol envelope compliance.
+  - `t/conformance.t`: Test harness verifying protocol envelope compliance with 62 test assertions.

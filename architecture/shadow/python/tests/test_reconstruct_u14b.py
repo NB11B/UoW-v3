@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from uow import FIFOSchedulingPolicy, OrchestrationState
+from uow.compat.v2 import FIFOSchedulingPolicy, OrchestrationState
 
 from uow_shadow.goal_synthesis import (
     CandidateGraphProposal,

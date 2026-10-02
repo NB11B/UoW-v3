@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 
-from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
+from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
 from uow.conformance import DEFAULT_CONFORMANCE_REGISTRY as PRODUCTION_REGISTRY
 from uow_shadow.conformance_registry import DEFAULT_CONFORMANCE_REGISTRY as SHADOW_REGISTRY
 from uow.application import DEFAULT_APPLICATION_SPINE as PRODUCTION_SPINE

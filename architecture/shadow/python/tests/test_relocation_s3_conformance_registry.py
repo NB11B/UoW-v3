@@ -16,7 +16,7 @@ from uow.resources.requirement import ResourceRequirement, make_resource_domain_
 from uow.resources.state import ResourceState
 from uow.state import WorldState, canonical_json
 from uow.transactions.descriptor import create_transaction_descriptor
-from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, make_uow
+from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route, Successor, make_uow
 
 from uow_shadow.conformance_registry import DEFAULT_CONFORMANCE_REGISTRY as SHADOW
 

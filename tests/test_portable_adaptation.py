@@ -13,7 +13,7 @@ import hashlib
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     AdaptationObservation,
     AdaptiveProposer,
     BaseProposer,

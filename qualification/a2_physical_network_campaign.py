@@ -16,7 +16,7 @@ from pathlib import Path
 import tempfile
 from typing import Dict, List
 
-from uow import (
+from uow.compat.v2 import (
     AdversarialChannel,
     AuthoritativeHistory,
     DurableWAL,

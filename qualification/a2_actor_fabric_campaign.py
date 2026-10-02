@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-from uow import (
+from uow.compat.v2 import (
     ActorBinding,
     ActorDescriptor,
     ActorLease,

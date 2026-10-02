@@ -11,7 +11,7 @@ import pytest
 
 def test_user_guide_level_0():
     """Verify Level 0 Core State Transitions snippet from docs/USER_GUIDE.md."""
-    from uow import (
+    from uow.compat.v2 import (
         Guard,
         GuardOp,
         MatrixCell,
@@ -66,7 +66,7 @@ def test_user_guide_level_0():
 
 def test_user_guide_level_1():
     """Verify Level 1 OCC & WAL Recovery snippet from docs/USER_GUIDE.md."""
-    from uow import (
+    from uow.compat.v2 import (
         Guard,
         GuardOp,
         Mutation,
@@ -111,7 +111,7 @@ def test_user_guide_level_1():
 
 def test_user_guide_level_2():
     """Verify Level 2 DAG Workflow Orchestration snippet from docs/USER_GUIDE.md."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route
     from uow.orchestration import (
         create_initial_orchestration_state,
         make_domain_task,
@@ -134,7 +134,7 @@ def test_user_guide_level_2():
 
 def test_user_guide_level_3():
     """Verify Level 3 Multi-Dimensional Resource Governance snippet from docs/USER_GUIDE.md."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route
     from uow.orchestration import create_initial_orchestration_state
     from uow.resources import (
         FIFOSchedulingPolicy,
@@ -190,7 +190,7 @@ def test_user_guide_level_4():
 
 def test_user_guide_level_5():
     """Verify Level 5 Adaptive Proposer snippet from docs/USER_GUIDE.md."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route
     from uow.orchestration import create_initial_orchestration_state
     from uow.proposer import PortableAdaptiveProposer, ProposerOrchestrationEngine
     from uow.resources import ResourceRequirement, ResourceState, make_resource_domain_task, set_authoritative_resource_state
@@ -210,7 +210,7 @@ def test_user_guide_level_5():
 
 def test_user_guide_level_6():
     """Verify Level 6 Recursive Composition snippet from docs/USER_GUIDE.md."""
-    from uow import (
+    from uow.compat.v2 import (
         AuthorityObligation,
         CausalConstraint,
         EvidenceObligation,
@@ -254,7 +254,7 @@ def test_user_guide_level_6():
 
 def test_user_guide_level_7():
     """Verify Level 7 Quorum Authority snippet from docs/USER_GUIDE.md."""
-    from uow import (
+    from uow.compat.v2 import (
         ActorBinding,
         AuthoritativeHistory,
         AuthorityObligation,
@@ -383,7 +383,7 @@ def test_user_guide_level_9():
 
 def test_user_guide_section_6_testing_pattern():
     """Verify Section 6 Pytest snippet from docs/USER_GUIDE.md."""
-    from uow import (
+    from uow.compat.v2 import (
         Guard,
         GuardOp,
         Mutation,

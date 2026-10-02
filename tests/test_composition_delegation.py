@@ -5,7 +5,7 @@ import time
 from typing import Tuple
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     ActorDescriptor,
     ActorRegistry,
     AuthorityClass,

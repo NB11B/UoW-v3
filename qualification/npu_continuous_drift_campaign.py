@@ -35,7 +35,7 @@ from integrations.openvino_npu import (
     ModelLifecycleState,
     generate_epoch_workload,
 )
-from uow import (
+from uow.compat.v2 import (
     DeterministicSequencer,
     EvidenceLedger,
     OrchestrationState,

@@ -36,7 +36,7 @@ from integrations.openvino_npu import (
     extract_training_samples,
     train_surrogate_model,
 )
-from uow import (
+from uow.compat.v2 import (
     AdaptiveProposer,
     DeterministicSequencer,
     Guard,

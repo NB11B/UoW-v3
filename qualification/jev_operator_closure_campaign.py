@@ -44,7 +44,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any, Mapping, Protocol, Sequence
 
-from uow import (
+from uow.compat.v2 import (
     ActorBinding,
     ActorDescriptor,
     ActorRegistry,

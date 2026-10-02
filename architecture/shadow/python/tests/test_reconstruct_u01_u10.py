@@ -17,7 +17,7 @@ from foundations.universal_computation.uow_minsky_compiler import (
     compile_minsky,
     create_initial_world_state,
 )
-from uow import ALL_MATRIX_CELLS, MatrixCell, WorkCategory
+from uow.compat.v2 import ALL_MATRIX_CELLS, MatrixCell, WorkCategory
 
 from uow_shadow.reconstruction import (
     run_reconstructed,

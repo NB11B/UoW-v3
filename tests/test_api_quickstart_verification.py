@@ -28,7 +28,7 @@ def test_public_api_symbol_freeze():
 
 def test_level_0_core_transition_algebra():
     """Level 0: Core Transition Algebra & Lifecycle."""
-    from uow import (
+    from uow.compat.v2 import (
         MatrixCell,
         Mutation,
         MutationOp,
@@ -70,7 +70,7 @@ def test_level_0_core_transition_algebra():
 
 def test_level_1_occ_transactions_and_sequencing():
     """Level 1: OCC Transactions & Sequencing."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, certify, make_uow, propose
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, certify, make_uow, propose
     from uow.transactions import DeterministicSequencer, create_transaction_descriptor, validate_occ
 
     state = WorldState(attributes={"account_A": 500, "account_B": 200})
@@ -102,7 +102,7 @@ def test_level_1_occ_transactions_and_sequencing():
 
 def test_level_2_self_hosted_dag_orchestration():
     """Level 2: Self-Hosted DAG Orchestration."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route
     from uow.orchestration import create_initial_orchestration_state, make_domain_task, run_orchestration
 
     task_a = make_domain_task("extract_features", [Route(Guard(GuardOp.ALWAYS), (Mutation(MutationOp.ADD, "r0", 10),))])
@@ -115,7 +115,7 @@ def test_level_2_self_hosted_dag_orchestration():
 
 def test_level_3_resource_governance_and_leases():
     """Level 3: Multi-Dimensional Resource Governance & Leases."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route
     from uow.orchestration import create_initial_orchestration_state
     from uow.resources import (
         FIFOSchedulingPolicy,
@@ -169,7 +169,7 @@ def test_level_4_external_effects_and_sagas():
 
 def test_level_5_replaceable_and_adaptive_proposers():
     """Level 5: Replaceable & Adaptive Proposers."""
-    from uow import Guard, GuardOp, Mutation, MutationOp, Route
+    from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route
     from uow.orchestration import create_initial_orchestration_state
     from uow.proposer import PortableAdaptiveProposer, ProposerOrchestrationEngine
     from uow.resources import ResourceRequirement, ResourceState, make_resource_domain_task, set_authoritative_resource_state
@@ -188,7 +188,7 @@ def test_level_5_replaceable_and_adaptive_proposers():
 
 def test_level_6_recursive_composition_and_system_as_actor():
     """Level 6: Recursive Composition & System-as-Actor."""
-    from uow import (
+    from uow.compat.v2 import (
         AuthorityObligation,
         CausalConstraint,
         EvidenceObligation,
@@ -232,7 +232,7 @@ def test_level_6_recursive_composition_and_system_as_actor():
 
 def test_level_7_distributed_authority_and_quorum():
     """Level 7: Distributed Authority & Quorum Consensus."""
-    from uow import (
+    from uow.compat.v2 import (
         ActorBinding,
         AuthoritativeHistory,
         AuthorityObligation,

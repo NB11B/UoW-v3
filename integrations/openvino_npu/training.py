@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from uow import AdaptationObservation
+from uow.compat.v2 import AdaptationObservation
 from .features import CandidateFeatureEncoder
 from .model import UoWSchedulingNet, export_and_hash_onnx
 

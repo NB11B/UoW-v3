@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 
 import uow
-from uow import (
+from uow.compat.v2 import (
     DeterministicSequencer,
     EffectRunner,
     EffectStatus,

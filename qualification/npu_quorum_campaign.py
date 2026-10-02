@@ -42,7 +42,7 @@ from integrations.openvino_npu import (
     IntelNPUAdaptiveProposer,
     ModelLifecycleState,
 )
-from uow import (
+from uow.compat.v2 import (
     ModelProposal,
     OrchestrationState,
     ProposerOrchestrationEngine,

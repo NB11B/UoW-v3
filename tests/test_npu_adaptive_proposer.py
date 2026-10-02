@@ -13,7 +13,7 @@ from integrations.openvino_npu import (
     UoWSchedulingNet,
     export_and_hash_onnx,
 )
-from uow import (
+from uow.compat.v2 import (
     AdaptiveProposer,
     BaseProposer,
     DeterministicSequencer,

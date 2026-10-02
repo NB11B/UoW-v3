@@ -1,7 +1,7 @@
 {
   "name": "@uow/sdk",
-  "version": "1.0.0",
-  "description": "Canonical TypeScript/JavaScript SDK and Client for Unit-of-Work (UoW) v2.0",
+  "version": "3.0.0-rc1",
+  "description": "Canonical TypeScript/JavaScript SDK and Client for Unit-of-Work (UoW) v3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -9,6 +9,6 @@
     "test": "node --experimental-strip-types test/conformance.test.js"
   },
   "keywords": ["uow", "unit-of-work", "polyglot", "orchestration", "conformance"],
-  "author": "Google DeepMind / UoW Architecture Team",
+  "author": "UoW Architecture Team",
   "license": "MIT"
 }

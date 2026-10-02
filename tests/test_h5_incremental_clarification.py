@@ -21,7 +21,7 @@ import json
 from pathlib import Path
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     DeterministicSequencer,
     EvidenceRecord,
     WorldState,

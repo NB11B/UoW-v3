@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import inspect
 
-from uow import (
+from uow.compat.v2 import (
     Guard,
     GuardOp,
     Mutation,

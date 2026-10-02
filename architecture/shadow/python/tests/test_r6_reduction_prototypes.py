@@ -4,7 +4,7 @@ import inspect
 
 import pytest
 
-from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
+from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
 from uow.engine import propose
 
 from uow_shadow.authority_protocol import QuorumAuthorityProvider, submit_via_authority_provider

@@ -31,7 +31,7 @@ if str(PACKAGE_ROOT / "src") not in sys.path:
 if str(PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(PACKAGE_ROOT))
 
-from uow import DeterministicSequencer, WorldState
+from uow.compat.v2 import DeterministicSequencer, WorldState
 from uow.semantic import (
     BindingOrigin,
     CandidateSemanticBindings,

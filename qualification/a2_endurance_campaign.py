@@ -33,7 +33,7 @@ from pathlib import Path
 import tempfile
 from typing import Any, Dict, List
 
-from uow import (
+from uow.compat.v2 import (
     ActorBinding,
     AdaptiveGraphProposer,
     AntiThrashingHysteresis,

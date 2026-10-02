@@ -15,7 +15,7 @@ import json
 from pathlib import Path
 from typing import Dict
 
-from uow import (
+from uow.compat.v2 import (
     ActorDescriptor,
     ActorRegistry,
     AuthorityClass,

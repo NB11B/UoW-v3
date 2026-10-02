@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
+from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
 from uow.engine import propose
 
 from uow_shadow.distributed_authority_reconstruction import (

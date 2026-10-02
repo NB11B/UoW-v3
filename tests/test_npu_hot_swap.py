@@ -16,7 +16,7 @@ from integrations.openvino_npu import (
     StagedModel,
     UoWSchedulingNet,
 )
-from uow import (
+from uow.compat.v2 import (
     Guard,
     GuardOp,
     Mutation,

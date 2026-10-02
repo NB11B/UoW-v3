@@ -23,7 +23,7 @@ import json
 from typing import Any
 import pytest
 
-from uow import DeterministicSequencer, WorldState
+from uow.compat.v2 import DeterministicSequencer, WorldState
 from uow.semantic import (
     BindingOrigin,
     ConfigurableRenderer,

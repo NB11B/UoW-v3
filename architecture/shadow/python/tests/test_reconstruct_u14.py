@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping, Sequence
 
-from uow import (
+from uow.compat.v2 import (
     BaseProposer,
     Guard,
     GuardOp,

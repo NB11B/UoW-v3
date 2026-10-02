@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import replace
 import random
 
-from uow import (
+from uow.compat.v2 import (
     CompletionMaterializer,
     Contract,
     Guard,

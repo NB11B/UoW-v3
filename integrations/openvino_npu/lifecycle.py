@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 import numpy as np
 import openvino as ov
 
-from uow import ModelIdentity
+from uow.compat.v2 import ModelIdentity
 from .features import CandidateFeatureEncoder, FEATURE_DIM
 from .model import UoWSchedulingNet, export_and_hash_onnx
 

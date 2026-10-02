@@ -19,7 +19,7 @@ from qualification.distributed_authority.authority import (
     NodeMode,
 )
 from qualification.distributed_authority.network import NetworkFabric
-from uow import (
+from uow.compat.v2 import (
     OrchestrationState,
     PortableAdaptiveProposer,
     ProposerOrchestrationEngine,

@@ -32,7 +32,7 @@ import tempfile
 from typing import Any, Mapping, Optional, Tuple
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     DeterministicSequencer,
     EvidenceRecord,
     HazardType,

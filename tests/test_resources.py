@@ -2,7 +2,7 @@
 import copy
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     COMPLETION_PREFIX,
     Contract,
     CostEnergySchedulingPolicy,

@@ -8,7 +8,7 @@ from typing import Any
 
 from qualification.claim_registry import get_claim
 from qualification.evidence import ClaimRequirement, EvidenceContext, EvidenceLevel, evaluate_claim
-from uow import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
+from uow.compat.v2 import Guard, GuardOp, Mutation, MutationOp, Route, Successor, WorldState, make_uow
 from uow.engine import propose
 
 from .authority import (

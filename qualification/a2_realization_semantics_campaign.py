@@ -24,7 +24,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
-from uow import (
+from uow.compat.v2 import (
     AuthorityObligation,
     CausalConstraint,
     EvidenceObligation,

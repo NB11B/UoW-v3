@@ -1,6 +1,6 @@
 /**
  * @file uow.h
- * @brief Canonical C ABI Boundary for Unit-of-Work (UoW) v2.0
+ * @brief Canonical C ABI Boundary for Unit-of-Work (UoW) v3.0
  *
  * Provides a portable, foreign-function-interface (FFI) boundary for linking
  * UoW execution into C, C++, Pascal/Delphi, Ada, Fortran, Swift, Go (cgo),

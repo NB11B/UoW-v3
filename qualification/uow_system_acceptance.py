@@ -40,7 +40,7 @@ from foundations.universal_computation.uow_minsky_compiler import (
     create_initial_world_state,
 )
 
-from uow import (
+from uow.compat.v2 import (
     ALL_MATRIX_CELLS,
     DeterministicSequencer,
     EvidenceLedger,

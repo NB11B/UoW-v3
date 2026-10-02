@@ -5,7 +5,7 @@
 [![Python: 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Rust: 1.80+](https://img.shields.io/badge/rust-1.80+-orange.svg)](https://www.rust-lang.org/)
 [![TypeScript: 5.0+](https://img.shields.io/badge/typescript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Physical Qualification: Sealed](https://img.shields.io/badge/Physical%20Qualification-ESP32%20%2B%20Arduino%20Passed-success.svg)](docs/V2_TO_V3_PROVENANCE.md)
+[![Inherited Physical Evidence](https://img.shields.io/badge/Inherited%20Physical%20Evidence-v2%20Qualified-success.svg)](docs/V2_TO_V3_PROVENANCE.md)
 
 > **A typed, certifiable Unit-of-Work protocol and multi-language runtime architecture for deterministic authority over flexible computation across heterogeneous distributed hardware.**
 
@@ -43,6 +43,26 @@ import uow.protocol    # Canonical schemas and wire envelope definitions
 import uow.adapters    # Hardware and neural model adapters (e.g. OpenVINO NPU)
 ```
 
+Full backward compatibility with legacy v2 APIs is maintained via the compatibility layer:
+
+```python
+from uow.compat.v2 import (
+    Guard,
+    GuardOp,
+    Mutation,
+    MutationOp,
+    Route,
+    Successor,
+    make_uow,
+    DeterministicSequencer,
+    FIFOSchedulingPolicy,
+    CostEnergySchedulingPolicy,
+    AdaptiveProposer,
+    RealizationGraph,
+    run,
+)
+```
+
 ---
 
 ## 2. Protocol Boundaries & Repository Architecture
@@ -77,14 +97,13 @@ UoW-v3/
 │   └── negative_controls/     # Comprehensive rejection and boundary verification suite
 │
 ├── runtimes/
-│   ├── python/                # Python reference runtime
-│   ├── rust/                  # Rust high-performance runtime
-│   ├── cpp/                   # Native C++ runtime and wire serialization
+│   ├── python/                # Python reference runtime pointer (packaged from src/uow/)
+│   ├── cpp/                   # Native C++ core runtime and wire serialization
 │   └── embedded/              # Microcontroller authority kernels (ESP32-S3, Arduino UNO Q)
 │
 ├── sdk/
-│   ├── typescript/            # Primary TypeScript/JavaScript SDK and executor
-│   ├── rust/                  # Native Rust SDK crate
+│   ├── typescript/            # Integration SDK + deterministic reference executor
+│   ├── rust/                  # Rust native SDK / runtime candidate crate
 │   └── legacy/                # Enterprise & legacy surfaces (COBOL, Pascal, Perl)
 │
 ├── adapters/                  # Hardware, model, and legacy compatibility adapters
@@ -99,16 +118,16 @@ UoW-v3/
 
 | Language | V3 Role | Technical Surface | Primary Location | Test Coverage |
 |---|---|---|---|---|
-| **Python** | Reference runtime | Full algebraic engine, OCC, DAG, Autonomy | `src/uow/` | 580 pytest tests |
-| **C++** | Native runtime | High-performance state machine & hash profile | `runtimes/cpp/` | Native g++ & cross-language suite |
+| **Python** | Reference runtime | Full algebraic engine, OCC, DAG, Autonomy | `src/uow/` | 584 pytest tests |
+| **C++** | Native C++ core runtime | Core state machine & wire verification (golden vector subset) | `runtimes/cpp/` | Native g++ execution & rejection tests |
 | **C** | ABI + embedded profile | Portable C header (`uow.h`) | `abi/c/` | FFI / ABI bounds |
-| **Rust** | Native SDK / runtime candidate | Crate (`uow-core` / `uow-sdk`) | `sdk/rust/`, `runtimes/rust/` | `cargo test` |
-| **TypeScript** | Primary integration SDK | Client, envelope factory, and local executor | `sdk/typescript/` | `node --test` (16 golden vectors) |
+| **Rust** | Rust native SDK / runtime candidate | Crate (`uow-core`) | `sdk/rust/` | `cargo test` |
+| **TypeScript** | Integration SDK + deterministic reference executor | Client, envelope factory, and local executor | `sdk/typescript/` | `node --test` (16 golden vectors) |
 | **JavaScript** | SDK consumer | Client interoperability demo | `examples/javascript/` | Pure JS execution |
-| **Perl** | Compatibility adapter | `UoW::Client` protocol adapter | `sdk/legacy/perl/` | `conformance.t` (62 checks) |
-| **COBOL** | Enterprise compatibility | 80-column card copybooks (`UOWENVLP.cpy`) | `sdk/legacy/cobol/` | Batch card codec |
-| **Pascal** | Compatibility / reference | Type specification (`UoWTypes.pas`) | `sdk/legacy/pascal/` | Type alignment |
-| **ESP32 / Arduino C++**| Embedded runtime | Dual-core FreeRTOS & microcontroller authority | `runtimes/embedded/` | Hardware qualification sealed |
+| **Perl** | Tested protocol adapter | `UoW::Client` protocol adapter | `sdk/legacy/perl/` | `conformance.t` (62 checks) |
+| **COBOL** | Wire/batch compatibility profile | 80-column card copybooks (`UOWENVLP.cpy`) | `sdk/legacy/cobol/` | Batch card codec |
+| **Pascal** | Type/interface compatibility profile | Type specification (`UoWTypes.pas`) | `sdk/legacy/pascal/` | Type alignment |
+| **ESP32 / Arduino C++**| Embedded runtime | Dual-core FreeRTOS & microcontroller authority | `runtimes/embedded/` | Hardware qualification sealed in v2 |
 
 See [**`docs/LANGUAGE_MATRIX.md`**](docs/LANGUAGE_MATRIX.md) for detailed surface profiles.
 
@@ -171,8 +190,7 @@ node --experimental-strip-types --test sdk/typescript/test/conformance.test.js
 
 ### Rust SDK
 ```powershell
-cd sdk/rust
-cargo test
+cargo test --manifest-path sdk/rust/Cargo.toml
 ```
 
 ### Native C++ Core

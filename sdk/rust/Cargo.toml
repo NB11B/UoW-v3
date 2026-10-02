@@ -1,9 +1,9 @@
 [package]
 name = "uow-core"
-version = "1.0.0"
+version = "3.0.0-rc1"
 edition = "2021"
-authors = ["Google DeepMind / UoW Architecture Team"]
-description = "Canonical Rust Native SDK and Execution Engine for Unit-of-Work (UoW) v2.0"
+authors = ["UoW Architecture Team"]
+description = "Canonical Rust Native SDK and Execution Engine for Unit-of-Work (UoW) v3.0"
 license = "MIT"
 
 [lib]

@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import Any, List, Mapping, Optional, Sequence, Tuple
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     BaseProposer,
     DeterministicFallbackScheduler,
     DeterministicSequencer,

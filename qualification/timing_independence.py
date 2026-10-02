@@ -19,7 +19,7 @@ import random
 from typing import Dict, Mapping, Tuple
 from unittest.mock import patch
 
-from uow import (
+from uow.compat.v2 import (
     Guard,
     GuardOp,
     Mutation,

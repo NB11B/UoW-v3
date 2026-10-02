@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import pytest
 
-from uow import (
+from uow.compat.v2 import (
     ALL_MATRIX_CELLS,
     Guard,
     GuardOp,

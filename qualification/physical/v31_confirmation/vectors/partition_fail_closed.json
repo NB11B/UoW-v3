@@ -1,0 +1,58 @@
+{
+  "gate_id": "PHYS-M5-G04",
+  "name": "Partition and Fail-Closed Behavior",
+  "description": "Verifies that communication loss never grants authority; partitions without quorum fail-closed with zero state advancement.",
+  "invariant": "Loss of communication != Gain of authority",
+  "scenarios": [
+    {
+      "scenario_id": "PARTITION_01_DISCONNECT_ESP32",
+      "disconnected_nodes": ["auth_a_esp32"],
+      "active_nodes": ["auth_b_uno_q", "auth_c_laptop"],
+      "active_count": 2,
+      "quorum_available": true,
+      "system_disposition": "EXECUTE_WITH_QUORUM",
+      "state_advancement_permitted": true
+    },
+    {
+      "scenario_id": "PARTITION_02_DISCONNECT_ARDUINO",
+      "disconnected_nodes": ["auth_b_uno_q"],
+      "active_nodes": ["auth_a_esp32", "auth_c_laptop"],
+      "active_count": 2,
+      "quorum_available": true,
+      "system_disposition": "EXECUTE_WITH_QUORUM",
+      "state_advancement_permitted": true
+    },
+    {
+      "scenario_id": "PARTITION_03_DISCONNECT_LAPTOP",
+      "disconnected_nodes": ["auth_c_laptop"],
+      "active_nodes": ["auth_a_esp32", "auth_b_uno_q"],
+      "active_count": 2,
+      "quorum_available": true,
+      "system_disposition": "EXECUTE_WITH_QUORUM",
+      "state_advancement_permitted": true
+    },
+    {
+      "scenario_id": "PARTITION_04_DUAL_DISCONNECT_ISOLATION",
+      "disconnected_nodes": ["auth_b_uno_q", "auth_c_laptop"],
+      "active_nodes": ["auth_a_esp32"],
+      "active_count": 1,
+      "quorum_available": false,
+      "system_disposition": "FAIL_CLOSED",
+      "state_advancement_permitted": false,
+      "unauthorized_mutations": 0
+    },
+    {
+      "scenario_id": "PARTITION_05_CONFLICTING_STATE_INJECTION",
+      "disconnected_nodes": ["auth_b_uno_q"],
+      "active_nodes": ["auth_a_esp32", "auth_c_laptop"],
+      "injected_conflict": {
+        "claimed_isolated_commit": true,
+        "divergent_state_hash": "divergent_hash_bad_00000000000000000000000000000000000000000000"
+      },
+      "system_disposition": "FAIL_CLOSED_REJECT",
+      "error_code": "ERR_PARTITION_DESYNC",
+      "state_advancement_permitted": false,
+      "unauthorized_mutations": 0
+    }
+  ]
+}

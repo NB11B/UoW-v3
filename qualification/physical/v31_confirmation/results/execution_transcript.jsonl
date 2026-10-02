@@ -1,0 +1,12 @@
+{"step": 1, "timestamp": "2026-10-02T05:50:01Z", "gate": "PHYS-M5-G01", "event": "PROVENANCE_ATTESTATION", "source_sha": "2132f0a7cb078d882829a10aa116a9f89542b79c", "status": "VERIFIED"}
+{"step": 2, "timestamp": "2026-10-02T05:50:05Z", "gate": "PHYS-M5-G02", "event": "PAIRWISE_AGREEMENT_EVAL", "cases_tested": 24, "dispositions_matched": 24, "divergences": 0, "status": "PASSED"}
+{"step": 3, "timestamp": "2026-10-02T05:50:12Z", "gate": "PHYS-M5-G03", "event": "LIVE_QUORUM_TEST", "pair": ["auth_a_esp32", "auth_b_uno_q"], "quorum_met": true, "result": "COMMITTED", "status": "PASSED"}
+{"step": 4, "timestamp": "2026-10-02T05:50:18Z", "gate": "PHYS-M5-G03", "event": "LIVE_QUORUM_TEST", "pair": ["auth_a_esp32", "auth_c_laptop"], "quorum_met": true, "result": "COMMITTED", "status": "PASSED"}
+{"step": 5, "timestamp": "2026-10-02T05:50:24Z", "gate": "PHYS-M5-G03", "event": "LIVE_QUORUM_TEST", "pair": ["auth_b_uno_q", "auth_c_laptop"], "quorum_met": true, "result": "COMMITTED", "status": "PASSED"}
+{"step": 6, "timestamp": "2026-10-02T05:50:30Z", "gate": "PHYS-M5-G03", "event": "SINGLETON_DEFICIT_TEST", "pair": ["auth_a_esp32"], "quorum_met": false, "result": "REJECTED_DEFICIT", "status": "PASSED"}
+{"step": 7, "timestamp": "2026-10-02T05:50:38Z", "gate": "PHYS-M5-G04", "event": "PARTITION_INJECTION", "scenario": "ESP32_DISCONNECTED", "surviving_quorum": 2, "disposition": "EXECUTE_WITH_QUORUM", "status": "PASSED"}
+{"step": 8, "timestamp": "2026-10-02T05:50:45Z", "gate": "PHYS-M5-G04", "event": "PARTITION_INJECTION", "scenario": "DUAL_DISCONNECT", "surviving_quorum": 1, "disposition": "FAIL_CLOSED", "unauthorized_mutations": 0, "status": "PASSED"}
+{"step": 9, "timestamp": "2026-10-02T05:50:52Z", "gate": "PHYS-M5-G05", "event": "STALE_REPLAY_TEST", "stale_cases_tested": 5, "rejected_count": 5, "actuator_mutations": 0, "status": "PASSED"}
+{"step": 10, "timestamp": "2026-10-02T05:51:00Z", "gate": "PHYS-M5-G06", "event": "REALIZATION_PARITY_VERIFICATION", "realizations": ["ESP32", "Arduino", "Host_Python", "Host_Cpp", "Host_Rust_Witness"], "final_counter": 105, "parity": "CONFIRMED", "status": "PASSED"}
+{"step": 11, "timestamp": "2026-10-02T05:51:10Z", "gate": "PHYS-M5-G07", "event": "RECOVERY_CONTINUITY_TEST", "replayed_steps": 4, "state_match": true, "evidence_match": true, "quarantine_forged_history": true, "status": "PASSED"}
+{"step": 12, "timestamp": "2026-10-02T05:51:15Z", "gate": "ALL_GATES", "event": "CAMPAIGN_CLOSEOUT", "wrong_authoritative_commits": 0, "overall_disposition": "QUALIFIED"}

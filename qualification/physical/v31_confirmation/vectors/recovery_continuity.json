@@ -1,0 +1,52 @@
+{
+  "gate_id": "PHYS-M5-G07",
+  "name": "Recovery and Evidence Continuity",
+  "description": "Verifies that an authority restarted after simulated power loss catches up strictly from qualified history, and non-prefix or divergent logs are quarantined.",
+  "workflow": {
+    "initial_state": { "account_balance": 1000, "status": "ACTIVE", "sequence": 0 },
+    "committed_sequence": [
+      { "step": 1, "op": "DEPOSIT", "amount": 200, "expected_balance": 1200 },
+      { "step": 2, "op": "WITHDRAW", "amount": 150, "expected_balance": 1050 },
+      { "step": 3, "op": "TRANSFER", "amount": 50, "expected_balance": 1000 },
+      { "step": 4, "op": "INTEREST", "amount": 25, "expected_balance": 1025 }
+    ],
+    "canonical_post_state": {
+      "account_balance": 1025,
+      "status": "ACTIVE",
+      "sequence": 4
+    }
+  },
+  "recovery_cases": [
+    {
+      "case_id": "REC_01_CLEAN_REBOOT_CATCHUP",
+      "restarted_node": "auth_a_esp32",
+      "ledger_source": "QUALIFIED_QUORUM_HISTORY",
+      "steps_replayed": 4,
+      "expected_recovery_state": { "account_balance": 1025, "sequence": 4 },
+      "state_matches_canonical": true,
+      "evidence_matches_canonical": true,
+      "quarantined": false
+    },
+    {
+      "case_id": "REC_02_ARDUINO_RESTART_CATCHUP",
+      "restarted_node": "auth_b_uno_q",
+      "ledger_source": "QUALIFIED_QUORUM_HISTORY",
+      "steps_replayed": 4,
+      "expected_recovery_state": { "account_balance": 1025, "sequence": 4 },
+      "state_matches_canonical": true,
+      "evidence_matches_canonical": true,
+      "quarantined": false
+    },
+    {
+      "case_id": "REC_03_DIVERGENT_HISTORY_QUARANTINE",
+      "restarted_node": "auth_a_esp32",
+      "ledger_source": "FORGED_NON_PREFIX_HISTORY",
+      "tampered_step": 3,
+      "tampered_balance": 9999,
+      "expected_disposition": "QUARANTINED",
+      "error_code": "ERR_HISTORY_DIVERGENCE",
+      "state_restoration_prevented": true,
+      "quarantined": true
+    }
+  ]
+}

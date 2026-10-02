@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "manifest_version": "1.0.0",
+  "manifest_version": "1.1.0",
   "campaign_id": "KRYONOS-ESP32-E4E",
   "campaign_name": "KryonOS ESP32-S3 Phase E4E Individual Node Silicon Qualification",
   "target_hardware": {
@@ -15,6 +15,20 @@
     "application_sandbox": "Duktape JavaScript Engine",
     "authority_kernel": "Native C++ UoW Authority Gate v1",
     "host_sdk_bridge": "@uow/kryonos v1.0"
+  },
+  "immutable_provenance": {
+    "kryonos_commit_sha": "452b7f5245166ca1bed8538850e90dafd4365b89",
+    "uow_native_source_commit_sha": "53f31d98af22c3ed030129070722ecaa120f9223",
+    "uow_e4e_runner_cpp_sha256": "068f7943eb048fc1293e61a837cd725bf85c1ef7afbbeb7ec3e0133e09c05ad5",
+    "uow_native_cpp_sha256": "755cbf680373a2c4bcd249f784821373bb4041e5637f0a7cf2abe9ea4241bb91",
+    "uow_duktape_binding_cpp_sha256": "875dcc6084fabcbeabf3a7ef3022e8972b366d39ca809132f6dfe916413277a9",
+    "uow_persistence_cpp_sha256": "49ed18dc2c1b6289d4a1b0e8f44ca59620b0f68b460e57abc4fa2ac24c373a89",
+    "compiled_firmware_bin_sha256": "a4a86783bafc4d0be5f42e25ae5c7dd1fcf29bde3e460b267479f0482fad9c81",
+    "qualification_report_sha256": "7c4eb3ebfb0489cb910e1dced4a56fc58926bd49eb54e34ec930846273bc0d1e",
+    "test_timestamp": "2026-10-01T13:28:00-04:00",
+    "platformio_version": "6.1.19",
+    "esp32_platform_version": "espressif32 (Arduino framework, ESP-IDF 5.x)",
+    "board_environment": "esp32-s3-devkitc-1-n16r8"
   },
   "qualification_gates": [
     {
@@ -81,8 +95,8 @@
     },
     {
       "gate_id": "E4E-T10",
-      "name": "Heterogeneous Realization Parity",
-      "criteria": "Cross-realization invariant compatibility between ESP32, Arduino, and Host",
+      "name": "Cumulative Heterogeneous Realization Parity",
+      "criteria": "ESP32 E4E results conform to the same invariant set previously qualified on host/native and Arduino realizations; parity claim is cumulative across referenced campaigns.",
       "status": "PASSED"
     }
   ],

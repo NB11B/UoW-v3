@@ -78,8 +78,9 @@ To maintain protocol universality, hardware-specific engineering practices withi
 
 | Mechanism | Classification | Architectural Justification |
 |---|---|---|
-| **2D Epoch x Generation Fencing** | **UoW Protocol Rule** | Core causality invariant; required across all distributed authorities to prevent split-brain and stale leases. |
-| **Fail-Closed on Corrupted State** | **UoW Protocol Rule** | Core evidence invariant; unverified or corrupted state must never execute optimistically. |
+| **Authority/resource freshness and stale-effect rejection** | **UoW Protocol Obligation** | Core causality invariant; stale authority or stale resource ownership must not authorize effects. Required across all valid realizations (databases, FPGAs, PLCs, distributed services). |
+| **2D Epoch × Generation Fencing** | **KryonOS Qualified Realization Mechanism** | Concrete implementation tuple `(authority epoch, fencing generation)` satisfying freshness on embedded microcontroller silicon. |
+| **Fail-Closed on Corrupted State** | **UoW Protocol Obligation** | Core evidence invariant; unverified or corrupted state must never execute optimistically. |
 | **Batched Persistence** | **KryonOS Realization Optimization** | Flash memory wear-leveling and write-amplification mitigation on SPI flash. Not required for memory-only or battery-backed systems. |
 | **FreeRTOS Yielding (`yield()`)** | **KryonOS Realization Optimization** | Prevents Task Watchdog Timer (TWDT) expiration on dual-core ESP32-S3. Unrelated to mathematical transition semantics. |
 

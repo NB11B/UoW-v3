@@ -1,4 +1,9 @@
-"""Qualification test verifying the KryonOS ESP32-S3 Phase E4E manifest and vectors."""
+"""Qualification evidence-package integrity tests for KryonOS ESP32-S3 Phase E4E.
+
+NOTE: This test suite verifies the qualification artifacts, evidence-package integrity,
+manifest schemas, and conformance vectors in the host Python environment. It does NOT
+serve as an independent physical silicon runner.
+"""
 from __future__ import annotations
 
 import json
@@ -19,10 +24,27 @@ def test_e4e_manifest_structure_and_gates() -> None:
     assert manifest["disposition"] == "QUALIFIED"
     assert manifest["signoff_level"] == "L1 Physical Hardware"
 
+    # Verify immutable provenance block
+    prov = manifest.get("immutable_provenance", {})
+    assert prov["kryonos_commit_sha"] == "452b7f5245166ca1bed8538850e90dafd4365b89"
+    assert prov["uow_native_source_commit_sha"] == "53f31d98af22c3ed030129070722ecaa120f9223"
+    assert prov["uow_e4e_runner_cpp_sha256"] == "068f7943eb048fc1293e61a837cd725bf85c1ef7afbbeb7ec3e0133e09c05ad5"
+    assert prov["uow_native_cpp_sha256"] == "755cbf680373a2c4bcd249f784821373bb4041e5637f0a7cf2abe9ea4241bb91"
+    assert prov["uow_duktape_binding_cpp_sha256"] == "875dcc6084fabcbeabf3a7ef3022e8972b366d39ca809132f6dfe916413277a9"
+    assert prov["uow_persistence_cpp_sha256"] == "49ed18dc2c1b6289d4a1b0e8f44ca59620b0f68b460e57abc4fa2ac24c373a89"
+    assert prov["compiled_firmware_bin_sha256"] == "a4a86783bafc4d0be5f42e25ae5c7dd1fcf29bde3e460b267479f0482fad9c81"
+    assert prov["qualification_report_sha256"] == "7c4eb3ebfb0489cb910e1dced4a56fc58926bd49eb54e34ec930846273bc0d1e"
+    assert prov["platformio_version"] == "6.1.19"
+    assert prov["board_environment"] == "esp32-s3-devkitc-1-n16r8"
+
     gates = manifest["qualification_gates"]
     assert len(gates) == 10, f"Expected 10 qualification gates, found {len(gates)}"
     for gate in gates:
         assert gate["status"] == "PASSED", f"Gate {gate['gate_id']} did not pass: {gate}"
+
+    # Verify gate E4E-T10 name and criteria
+    e10_gate = next(g for g in gates if g["gate_id"] == "E4E-T10")
+    assert e10_gate["name"] == "Cumulative Heterogeneous Realization Parity"
 
     # Verify 10,000-op endurance gate metrics
     e9_gate = next(g for g in gates if g["gate_id"] == "E4E-T09")

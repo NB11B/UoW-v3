@@ -1,6 +1,6 @@
 [package]
 name = "uow-core"
-version = "3.1.0-rc1"
+version = "3.1.0"
 edition = "2021"
 authors = ["UoW Architecture Team"]
 description = "Canonical Rust Native SDK for Unit-of-Work (UoW) v3.1"

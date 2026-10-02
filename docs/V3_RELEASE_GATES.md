@@ -28,6 +28,6 @@ This document formalizes the 15 mandatory qualification gates required for the `
 
 ## Qualification Signoff
 
-- **Target Tag**: `v3.0-rc1`
-- **Branch**: `v3/api-hardening`
-- **Release Disposition**: Ready for release candidate tagging and multi-platform staging.
+- **Target Tag**: `v3.0.0`
+- **Branch**: `main`
+- **Release Disposition**: Ready for production release and general availability.

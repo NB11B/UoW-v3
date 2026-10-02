@@ -1,0 +1,101 @@
+{
+  "test_suite": "RUST-M4-G02: OCC Footprint Hazard Equivalence",
+  "description": "Cross-language OCC conflict verification vectors for typed transaction footprints.",
+  "cases": [
+    {
+      "case_id": "OCC_01_DISJOINT_WRITES",
+      "description": "Two transactions modify disjoint write sets; both are accepted concurrently.",
+      "base_sequence": 1,
+      "prior_commit": {
+        "tx_id": "tx_prior",
+        "sequence": 1,
+        "read_set": ["x"],
+        "write_set": ["y"]
+      },
+      "candidate": {
+        "tx_id": "tx_candidate",
+        "base_sequence": 1,
+        "read_set": ["a"],
+        "write_set": ["b"]
+      },
+      "expected_disposition": "Accept",
+      "expected_hazard": null
+    },
+    {
+      "case_id": "OCC_02_WRITE_WRITE_COLLISION",
+      "description": "Candidate writes to a key modified by a prior committed transaction.",
+      "base_sequence": 0,
+      "prior_commit": {
+        "tx_id": "tx_prior",
+        "sequence": 1,
+        "read_set": ["x"],
+        "write_set": ["y"]
+      },
+      "candidate": {
+        "tx_id": "tx_candidate",
+        "base_sequence": 0,
+        "read_set": ["a"],
+        "write_set": ["y"]
+      },
+      "expected_disposition": "Reject",
+      "expected_hazard": "WriteWriteConflict"
+    },
+    {
+      "case_id": "OCC_03_READ_WRITE_HAZARD",
+      "description": "Candidate read a key whose value was mutated by a concurrent commit (stale read).",
+      "base_sequence": 0,
+      "prior_commit": {
+        "tx_id": "tx_prior",
+        "sequence": 1,
+        "read_set": ["x"],
+        "write_set": ["y"]
+      },
+      "candidate": {
+        "tx_id": "tx_candidate",
+        "base_sequence": 0,
+        "read_set": ["y"],
+        "write_set": ["z"]
+      },
+      "expected_disposition": "Reject",
+      "expected_hazard": "ReadWriteConflict"
+    },
+    {
+      "case_id": "OCC_04_WRITE_READ_COLLISION",
+      "description": "Candidate writes to a key read by a concurrently committed transaction.",
+      "base_sequence": 0,
+      "prior_commit": {
+        "tx_id": "tx_prior",
+        "sequence": 1,
+        "read_set": ["x"],
+        "write_set": ["y"]
+      },
+      "candidate": {
+        "tx_id": "tx_candidate",
+        "base_sequence": 0,
+        "read_set": ["a"],
+        "write_set": ["x"]
+      },
+      "expected_disposition": "Reject",
+      "expected_hazard": "WriteReadConflict"
+    },
+    {
+      "case_id": "OCC_05_STALE_BASE_SEQUENCE",
+      "description": "Candidate specifies a base sequence strictly older than authoritative state without explicit footprints.",
+      "base_sequence": 0,
+      "prior_commit": {
+        "tx_id": "tx_prior",
+        "sequence": 1,
+        "read_set": ["x"],
+        "write_set": ["y"]
+      },
+      "candidate": {
+        "tx_id": "tx_candidate",
+        "base_sequence": 0,
+        "read_set": [],
+        "write_set": []
+      },
+      "expected_disposition": "Reject",
+      "expected_hazard": "StaleBaseSequence"
+    }
+  ]
+}

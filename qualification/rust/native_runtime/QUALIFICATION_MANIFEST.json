@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": "1.0.0",
+  "campaign_id": "V31-RUST-RUNTIME",
+  "campaign_name": "Unit-of-Work v3.1 Milestone 4: Independent Rust Runtime Qualification (Levels 0-2)",
+  "signoff_level": "L3 Runtime Qualified",
+  "disposition": "QUALIFIED",
+  "claim": "Rust is an independently executing UoW runtime qualified for canonical Level-0 semantics, transactional authority, crash replay, and deterministic DAG orchestration.",
+  "scope_boundary": "Qualified through Levels 0, 1, and 2 (transition authority, OCC, deterministic sequencing, WAL replay, DAG orchestration). Autonomy, semantic mediation, learned proposers, economics, quorum, and physical hardware remain out of scope.",
+  "compiler": {
+    "binary": "rustc",
+    "version": "1.98.1 (48a229cea 2026-09-01)",
+    "edition": "2021",
+    "target": "x86_64-pc-windows-msvc"
+  },
+  "immutable_provenance": {
+    "base_commit_sha": "9c0be9836e84fe978b9429fb9799d9e9807b2bfa",
+    "source_files": {
+      "cargo_toml_sha256": "53e64ca5db397629dc69ad0f01d06620cbd9ce576ea03df6b9220dd4a27e4df2",
+      "conformance_runner_rs_sha256": "20c532c9129278bed1584e9c773e68b71062f330d5fe7e53daa95edd246b678d",
+      "engine_rs_sha256": "d1abf5ef79536ef60a3cff3b3aa207ed045c0917138c210194208154c66d38f3",
+      "evidence_rs_sha256": "2639404c11153c407923f4830951feee0335841149debe0eb3ddb8a4c39c56fd",
+      "idempotency_rs_sha256": "6f7b253274e0db7d2be1c797e4b10711ce849be14d795b5a10055029c4b064d1",
+      "lib_rs_sha256": "1107b9961c720f6d9673bca56807acb45732bec5959e76f0eea5889b7a6c5974",
+      "orchestration_rs_sha256": "0f695d1f27ac9471444ffc6a24dd6653bbf8325be9b2caa12f469a3dbb9beea4",
+      "state_rs_sha256": "ae11656c26014514ed8fe7c3526193f7c1b70240519ec6972e026e66cabbe3cb",
+      "transactions_rs_sha256": "248146b33dbbacaa001a38f8b3c449129032ac5d4025b3c08171ed30a219a577",
+      "wal_rs_sha256": "a0694f973835635e7bb2835e3ee011db530c3a0170621eb7dec8f4a8a5590d6e"
+    },
+    "vectors": {
+      "occ_vectors_sha256": "6ef7c562d0465d603d4a71e4c3529fc200543e714b68f74fefd987bc63dd3b6c",
+      "orchestration_vectors_sha256": "0ccb8a03c4748f719bf933957ba35fc2026badefe1cd244cdcb40e74009e41d2",
+      "proposer_boundary_vectors_sha256": "b03b4a0f534be80674de618adced15d11a7616f62d9799ce5a9dab8ce823c84b",
+      "sequencing_vectors_sha256": "adfd16b7e057e13248c9e2345c563f102e532bdb7b6b3efcea97c7828aa587f4",
+      "wal_replay_vectors_sha256": "9600ff7133d0c16e05fbf376f03dc90ca0f2a5adda6bbae3b50f5022b1bd53ee"
+    },
+    "canonical_vectors": {
+      "001_execute_one_success": "f8d3bfcc8d7c0fd077be0c864aef9b58680bd715717302d963c760250a3e9215",
+      "002_guard_unsatisfied_rejection": "ad0f436993d838f71cb8006f73806586cc9595c5ecbda5014c9c2ea2e8cccc99",
+      "003_stale_pre_state_rejection": "913b0b373b6110fbeda8848fd6799de215072b533de617ccd4dea62f737ae1ab",
+      "004_tampered_proposal_rejection": "5e5d1464ccbe9422b17970f23f7abf7ba36cd3a6930e1c8acbb0e6814665c406",
+      "005_evidence_chain_continuity": "72053c1382e6763f61deb6e355c227d707745bd7975679523e900b19289af91a",
+      "006_authority_unauthorized_rejection": "7f93305051fe716f11f7b791b0d1e5ce352f59e03cf427f22bd04d9d80a2ce61",
+      "007_idempotency_replay": "723d183119b40811f6221253c9a7e06ff9bdfa7c1780db57d238b6e9b3e9bd11",
+      "008_domain_inventory_reserve": "370dbb0ba8b9910edefa91ee03b30dcee0488fd05553c130bfc239f1541d7c0d",
+      "009_malformed_envelope_rejection": "2c53a20bf612a08e5d95214ffd5d940e7df7d9a291010c27a94968ca50891421",
+      "010_unknown_protocol_version": "d3a22e0fc418d8256e32f39ac9ccd99b94d85a44a086c0a0db4062ffce7a0be5",
+      "011_idempotency_payload_conflict": "1e075351de1f4fd15d20d329e02e0655403795418d126b6cc7a67c33ddf75dc4",
+      "012_authority_escalation_attempt": "37282c156124daf53d9a5cae0cc6834d5f872ffc23162fbf87281bfc4009cb17",
+      "013_evidence_tampering_rejection": "f18e7202b9d6d44c8c3051d631bf7b52455a1b69f8e1fe3646055522ca276000",
+      "014_unicode_and_special_characters": "ca894bd657c6ca51220430840dde937fbb2d08255d6882b757b270b0c70157bf",
+      "015_integer_boundary_cases": "cdd2146ecc12ae2de046f706c9d5999b067722fef71280b19c561f53aa3d6890",
+      "016_transport_retry_duplicate_ack": "313f921b80978437b0c2c47e078a57b283af43e9e963498ab5b6251d73082161"
+    }
+  },
+  "qualification_gates": [
+    {
+      "gate_id": "RUST-M4-G01",
+      "name": "Canonical 16/16 Semantic Vectors",
+      "criteria": "Independent native Rust runtime executes all 16 canonical golden vectors with identical disposition and state hashes without vector modification.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "RUST-M4-G02",
+      "name": "OCC Conflict Equivalence",
+      "criteria": "Typed transaction footprints detect disjoint writes (ACCEPT), write/write collisions, write/read collisions, read/write hazards, and stale base sequence (REJECT).",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "RUST-M4-G03",
+      "name": "Deterministic Commit Sequencing",
+      "criteria": "Given identical initial state and transaction input sequence, committed sequence and state hashes are 100% invariant across repeated trials with zero wall-clock dependence.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "RUST-M4-G04",
+      "name": "WAL Crash Replay Equivalence",
+      "criteria": "Replaying committed WAL records onto initial state reconstructs exact authoritative state (S_replayed = S_committed) and evidence ledger (E_replayed = E_committed); duplicate replay is idempotent.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "RUST-M4-G05",
+      "name": "Deterministic DAG Orchestration",
+      "criteria": "Correct task eligibility frontier calculation (A,B -> B -> C -> D -> HALT), cycle detection defense, duplicate completion rejection, and dependency violation prevention.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "RUST-M4-G06",
+      "name": "Proposer Non-Escalation & Zero Authority Boundary",
+      "criteria": "Runtime enforces Proposer != Authority: wrong route, stale pre-state, forged proposed state, invalid authority, and impossible mutation are strictly rejected.",
+      "status": "PASSED"
+    }
+  ]
+}

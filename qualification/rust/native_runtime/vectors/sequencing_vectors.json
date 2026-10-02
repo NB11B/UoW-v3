@@ -1,0 +1,61 @@
+{
+  "test_suite": "RUST-M4-G03: Deterministic Sequencing Invariance",
+  "description": "Verifies that given identical initial state and transaction input sequence, committed sequence and state hashes are 100% invariant across repeated trials.",
+  "initial_state": {
+    "attributes": {
+      "balance": 0,
+      "stock": 10,
+      "status": "INIT"
+    },
+    "cursor": null,
+    "status": "RUNNING",
+    "sequence": 0
+  },
+  "transactions": [
+    {
+      "tx_id": "t1",
+      "read_set": ["balance"],
+      "write_set": ["balance"],
+      "base_sequence": 0,
+      "mutations": { "balance": 100 },
+      "expected_disposition": "COMMITTED",
+      "expected_sequence_after": 1
+    },
+    {
+      "tx_id": "t2",
+      "read_set": ["stock"],
+      "write_set": ["stock"],
+      "base_sequence": 0,
+      "mutations": { "stock": 50 },
+      "expected_disposition": "COMMITTED",
+      "expected_sequence_after": 2
+    },
+    {
+      "tx_id": "t3",
+      "read_set": ["balance"],
+      "write_set": ["balance"],
+      "base_sequence": 0,
+      "mutations": { "balance": 200 },
+      "expected_disposition": "REJECTED_WriteWriteConflict",
+      "expected_sequence_after": 2
+    },
+    {
+      "tx_id": "t4",
+      "read_set": ["status"],
+      "write_set": ["status"],
+      "base_sequence": 1,
+      "mutations": { "status": "ACTIVE" },
+      "expected_disposition": "COMMITTED",
+      "expected_sequence_after": 3
+    }
+  ],
+  "expected_final_state": {
+    "attributes": {
+      "balance": 100,
+      "stock": 50,
+      "status": "ACTIVE"
+    },
+    "sequence": 3,
+    "status": "RUNNING"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "test_suite": "RUST-M4-G05: Deterministic DAG Orchestration",
+  "description": "Verifies eligible frontier calculation, completion transitions, cycle defense, and halt detection across DAG workloads.",
+  "dag_definition": {
+    "nodes": ["A", "B", "C", "D"],
+    "dependencies": {
+      "A": [],
+      "B": [],
+      "C": ["A", "B"],
+      "D": ["C"]
+    }
+  },
+  "execution_steps": [
+    {
+      "step": 0,
+      "event": "INITIAL_EVALUATION",
+      "expected_eligible": ["A", "B"],
+      "expected_halted": false
+    },
+    {
+      "step": 1,
+      "event": "DISPATCH_AND_COMPLETE_A",
+      "dispatched": "A",
+      "completed": "A",
+      "expected_eligible": ["B"],
+      "expected_halted": false
+    },
+    {
+      "step": 2,
+      "event": "DISPATCH_AND_COMPLETE_B",
+      "dispatched": "B",
+      "completed": "B",
+      "expected_eligible": ["C"],
+      "expected_halted": false
+    },
+    {
+      "step": 3,
+      "event": "DISPATCH_AND_COMPLETE_C",
+      "dispatched": "C",
+      "completed": "C",
+      "expected_eligible": ["D"],
+      "expected_halted": false
+    },
+    {
+      "step": 4,
+      "event": "DISPATCH_AND_COMPLETE_D",
+      "dispatched": "D",
+      "completed": "D",
+      "expected_eligible": [],
+      "expected_halted": true
+    }
+  ],
+  "negative_controls": [
+    {
+      "case": "CYCLE_DETECTION",
+      "edges": [["node1", ["node2"]], ["node2", ["node1"]]],
+      "expected_error": "CycleDetected"
+    },
+    {
+      "case": "DEPENDENCY_VIOLATION",
+      "attempted_dispatch": "C",
+      "completed_set": [],
+      "expected_error": "DependencyViolation"
+    },
+    {
+      "case": "DUPLICATE_COMPLETION",
+      "attempted_complete": "A",
+      "already_completed": true,
+      "expected_error": "DuplicateCompletion"
+    },
+    {
+      "case": "MISSING_NODE",
+      "attempted_dispatch": "NON_EXISTENT",
+      "expected_error": "MissingNode"
+    }
+  ]
+}

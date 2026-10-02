@@ -1,0 +1,48 @@
+{
+  "test_suite": "RUST-M4-G04: WAL Crash Replay Equivalence",
+  "description": "Verifies that replaying committed WAL records onto initial state reconstructs exact authoritative state and hash-chained evidence ledger.",
+  "initial_state": {
+    "attributes": {
+      "counter": 0
+    },
+    "cursor": null,
+    "status": "RUNNING",
+    "sequence": 0
+  },
+  "wal_records": [
+    {
+      "sequence": 1,
+      "uow_id": "uow-step-1",
+      "mutations": { "counter": 1 },
+      "next_pointer": "uow-step-2"
+    },
+    {
+      "sequence": 2,
+      "uow_id": "uow-step-2",
+      "mutations": { "counter": 2 },
+      "next_pointer": "uow-step-3"
+    },
+    {
+      "sequence": 3,
+      "uow_id": "uow-step-3",
+      "mutations": { "counter": 3 },
+      "next_pointer": "uow-step-4"
+    },
+    {
+      "sequence": 4,
+      "uow_id": "uow-step-4",
+      "mutations": { "counter": 4 },
+      "next_pointer": null
+    }
+  ],
+  "expected_replay_outcome": {
+    "expected_sequence": 4,
+    "expected_attributes": {
+      "counter": 4
+    },
+    "expected_status": "HALTED",
+    "expected_ledger_length": 4,
+    "expected_ledger_integrity": true,
+    "idempotent_duplicate_replay_applied_count": 0
+  }
+}

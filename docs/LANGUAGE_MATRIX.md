@@ -12,7 +12,7 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 | **Python** | Full canonical runtime | Reference runtime | Runtime (packaged from `src/uow/`) | `src/uow/` | `v2-origin/main` | L4 Formal & Host Qualified | 16/16 vectors |
 | **C++** | Native/embedded qualification | Native C++ core runtime | Native Core Runtime | `runtimes/cpp/` | `feat/s2-heterogeneous-physical-qualification` | L3 Cross-language Qualified | Canonical semantic conformance: 16/16 |
 | **C** | ABI / constrained interface | ABI + embedded profile | C ABI Header | `abi/c/`, `runtimes/cpp/abi/` | `feat/runtime-substrate-semantics` | L3 ABI Qualified | Header ABI bounds |
-| **Rust** | SDK + conformance work | Rust native SDK / runtime candidate | SDK / Runtime Candidate | `sdk/rust/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | Vectors 001, 002, 003, 007 |
+| **Rust** | SDK + conformance work | Native Runtime + SDK | Native Runtime & SDK | `runtimes/rust/`, `sdk/rust/` | `feat/runtime-substrate-semantics` | L3 Runtime Qualified | Canonical semantic conformance: 16/16; Levels 0–2 Qualified |
 | **TypeScript** | SDK + executor + conformance | Integration SDK + deterministic reference executor | Integration SDK & Reference Executor | `sdk/typescript/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | 16/16 vectors (`test/conformance.test.js`) |
 | **JavaScript** | Example / client interoperability | SDK consumer | Example / Consumer | `examples/javascript/` | `feat/runtime-substrate-semantics` | L3 Example / Client | Client submission vector |
 | **Perl** | Legacy client / conformance | Tested protocol adapter | Protocol Adapter | `sdk/legacy/perl/`, `adapters/perl/` | `feat/runtime-substrate-semantics` | L3 Tested Adapter | `sdk/legacy/perl/t/conformance.t` (62 checks) |
@@ -46,11 +46,15 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 - **Header**: `abi/c/include/uow.h` defines C ABI boundary.
 - **Testing**: `tests/test_cpp_full_conformance.py` and `runtimes/cpp/conformance_runner.exe --all conformance/vectors` (16/16 canonical vectors verified).
 
-### 2.3 Rust (Native SDK & Runtime Candidate)
-- **Role**: Rust native SDK and runtime candidate with standalone serialization and kernel evaluation logic.
-- **Crate**: `sdk/rust/` (`uow-core`)
-- **Key Types**: `UoWContract`, `WorldState`, `Proposal`, `Certificate`, `EvidenceRecord`
-- **Feature Set**: Cryptographic hash chaining (`sha2`), Serde JSON canonicalization, error taxonomy mapping.
+### 2.3 Rust (Native Runtime & SDK)
+- **Role**: Native Runtime + SDK
+- **Evidence**: L3 Runtime Qualified
+- **Canonical semantic conformance**: 16/16 vectors
+- **Runtime qualification**: Levels 0–2 (authoritative transitions, OCC footprints, deterministic commit sequencing, WAL crash replay, DAG orchestration).
+- **Separation**:
+  - `sdk/rust/` (`uow-core` v3.0.0): Protocol models, envelopes, serialization, C ABI validation.
+  - `runtimes/rust/` (`uow-runtime` v3.1.0): Standalone execution engine, WorldState, OCC tracker, deterministic sequencer, WAL crash replay, and DAG scheduler.
+- **Testing**: `tests/test_rust_full_conformance.py` (17/17), `tests/test_rust_qualification_gates.py` (7/7), and `cargo test --manifest-path runtimes/rust/Cargo.toml` (8/8 integration tests).
 
 ### 2.4 TypeScript & JavaScript (Integration SDK & Deterministic Reference Executor)
 - **Role**: Integration SDK and deterministic reference executor tier providing complete envelope builders, validation against JSON schemas, and local deterministic execution harness.

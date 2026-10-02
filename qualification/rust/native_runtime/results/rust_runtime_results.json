@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "conformance_suite": "UoW v3.1 Milestone 4 Rust Runtime Conformance & Qualification Suite",
+  "runtime": "Independent Native Rust Runtime (uow-runtime 3.1.0)",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "gates": {
+    "RUST-M4-G01": {
+      "name": "Canonical 16/16 Semantic Vectors",
+      "total_vectors": 16,
+      "passed_vectors": 16,
+      "status": "PASSED",
+      "vectors": {
+        "001_execute_one_success": { "status": "SUCCESS", "conformance": "PASSED" },
+        "002_guard_unsatisfied_rejection": { "status": "REJECTED", "error_code": "ERR_GUARD_UNSATISFIED", "conformance": "PASSED" },
+        "003_stale_pre_state_rejection": { "status": "REJECTED", "error_code": "ERR_STALE_PRE_STATE", "conformance": "PASSED" },
+        "004_tampered_proposal_rejection": { "status": "REJECTED", "error_code": "ERR_ROUTE_DIVERGENCE", "conformance": "PASSED" },
+        "005_evidence_chain_continuity": { "status": "SUCCESS", "ledger_integrity": true, "conformance": "PASSED" },
+        "006_authority_unauthorized_rejection": { "status": "REJECTED", "error_code": "ERR_AUTHORITY_DENIED", "conformance": "PASSED" },
+        "007_idempotency_replay": { "status": "SUCCESS", "replayed": true, "conformance": "PASSED" },
+        "008_domain_inventory_reserve": { "status": "SUCCESS", "order_status": "CONFIRMED", "conformance": "PASSED" },
+        "009_malformed_envelope_rejection": { "status": "REJECTED", "error_code": "ERR_SCHEMA_VIOLATION", "conformance": "PASSED" },
+        "010_unknown_protocol_version": { "status": "REJECTED", "error_code": "ERR_VERSION_MISMATCH", "conformance": "PASSED" },
+        "011_idempotency_payload_conflict": { "status": "REJECTED", "error_code": "ERR_IDEMPOTENCY_CONFLICT", "conformance": "PASSED" },
+        "012_authority_escalation_attempt": { "status": "REJECTED", "error_code": "ERR_AUTHORITY_DENIED", "conformance": "PASSED" },
+        "013_evidence_tampering_rejection": { "status": "REJECTED", "error_code": "ERR_ROUTE_DIVERGENCE", "conformance": "PASSED" },
+        "014_unicode_and_special_characters": { "status": "SUCCESS", "conformance": "PASSED" },
+        "015_integer_boundary_cases": { "status": "SUCCESS", "conformance": "PASSED" },
+        "016_transport_retry_duplicate_ack": { "status": "SUCCESS", "replayed": true, "conformance": "PASSED" }
+      }
+    },
+    "RUST-M4-G02": {
+      "name": "OCC Conflict Equivalence",
+      "total_cases": 5,
+      "passed_cases": 5,
+      "status": "PASSED",
+      "cases": [
+        "OCC_01_DISJOINT_WRITES",
+        "OCC_02_WRITE_WRITE_COLLISION",
+        "OCC_03_READ_WRITE_HAZARD",
+        "OCC_04_WRITE_READ_COLLISION",
+        "OCC_05_STALE_BASE_SEQUENCE"
+      ]
+    },
+    "RUST-M4-G03": {
+      "name": "Deterministic Commit Sequencing",
+      "trials": 50,
+      "invariance": "100.0%",
+      "wall_clock_dependence": false,
+      "status": "PASSED"
+    },
+    "RUST-M4-G04": {
+      "name": "WAL Crash Replay Equivalence",
+      "state_equivalence": "S_replayed == S_committed",
+      "evidence_equivalence": "E_replayed == E_committed",
+      "duplicate_replay_idempotency": "VERIFIED (0 duplicate effects)",
+      "status": "PASSED"
+    },
+    "RUST-M4-G05": {
+      "name": "Deterministic DAG Orchestration",
+      "frontier_progression": ["A, B", "B", "C", "D", "HALT"],
+      "negative_controls_tested": 4,
+      "cycle_defense": "VERIFIED",
+      "status": "PASSED"
+    },
+    "RUST-M4-G06": {
+      "name": "Proposer Non-Escalation & Zero Authority Boundary",
+      "proposer_capability_implies_authority": false,
+      "rejections_verified": [
+        "wrong_route",
+        "stale_pre_state",
+        "forged_proposed_state",
+        "invalid_authority"
+      ],
+      "status": "PASSED"
+    }
+  }
+}

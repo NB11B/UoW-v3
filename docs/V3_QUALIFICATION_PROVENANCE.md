@@ -11,7 +11,7 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
 | **`KRYONOS-ESP32-E4E`** | Physical Authority & Application Isolation | ESP32-S3 (Xtensa Dual-Core) + KryonOS | Physical Silicon Qualification | L1 Physical Hardware | **QUALIFIED** | v3.1-M1 |
 | **`ECON-ATOMIC-COST-M2`** | Atomic Economics ($C_H, C_M, C_E, C_R, C_K, C_D$) | Multi-host / Cloud | Schema & Protocol Verification | L2 Formal & Conformance | **QUALIFIED** | v3.1-M2 |
 | **`V31-CPP-16VEC`** | Full C++ Conformance (16/16 Vectors) | Native Host C++17 | Conformance Matrix Verification | L3 Cross-Language | **QUALIFIED** | v3.1-M3 |
-| *`V31-RUST-RUNTIME`* | Rust Native Runtime (OCC & Orchestration) | Rust Native (`runtimes/rust/`) | Independent Runtime Qualification | L3 Runtime Qualified | *STAGED* | v3.1-M4 |
+| **`V31-RUST-RUNTIME`** | Rust Native Runtime (OCC & Orchestration) | Rust Native (`runtimes/rust/`) | Independent Runtime Qualification | L3 Runtime Qualified | **QUALIFIED** | v3.1-M4 |
 | *`V31-PHYS-CONFIRM`* | Hardware Reflash & Reconfirmation | ESP32-S3 + Arduino UNO Q | Dual-Node Quorum Confirmation | L1 Physical Hardware | *STAGED* | v3.1-M5 |
 
 ---
@@ -70,4 +70,23 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
 - **Directory**: [`qualification/cpp/full_conformance/`](../qualification/cpp/full_conformance/)
 - **Claim**: **Native C++ semantic conformance: 16/16 canonical UoW v3 vectors.**
 - **Status**: **QUALIFIED** (17/17 tests passing in `tests/test_cpp_full_conformance.py`).
+
+---
+
+## 5. Campaign Detail: `V31-RUST-RUNTIME`
+
+### 5.1 Artifacts & Invariants
+- **Target Runtime**: `runtimes/rust/` (`uow-runtime` 3.1.0)
+- **Compiler**: `rustc 1.98.1 (48a229cea 2026-09-01)`
+- **Architectural Boundary**: $\boxed{\text{SDK} \neq \text{Runtime}}$
+  - `sdk/rust/` (`uow-core` 3.0.0): Protocol models, envelopes, serialization, C ABI validation.
+  - `runtimes/rust/` (`uow-runtime` 3.1.0): Independent execution authority, WorldState, OCC tracker, deterministic sequencer, WAL crash replay, and DAG scheduler.
+- **Coverage**: **16/16 Canonical Golden Vectors** passed without modifying the vectors.
+- **Transactional OCC**: 5/5 conflict patterns verified against typed transaction footprints.
+- **Crash Replay**: $S_{\text{replayed}} = S_{\text{committed}} \land E_{\text{replayed}} = E_{\text{committed}}$ across simulated process crashes; duplicate replay is strictly idempotent.
+- **Deterministic Orchestration**: Complete task eligibility frontier progression ($\{A, B\} \rightarrow \{B\} \rightarrow \{C\} \rightarrow \{D\} \rightarrow \text{HALT}$) with cycle defense.
+- **Authority Boundary**: $\boxed{\text{Rust Proposer Capability} \not\Rightarrow \text{Rust Commit Authority}}$ (adversarial proposals strictly rejected).
+- **Directory**: [`qualification/rust/native_runtime/`](../qualification/rust/native_runtime/)
+- **Claim**: **Rust is an independently executing UoW runtime qualified for canonical Level-0 semantics, transactional authority, crash replay, and deterministic DAG orchestration.**
+- **Status**: **QUALIFIED** (17/17 tests passing in `tests/test_rust_full_conformance.py`, 7/7 tests passing in `tests/test_rust_qualification_gates.py`, 8/8 cargo integration tests passing).
 

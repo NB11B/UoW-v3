@@ -18,7 +18,7 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 | **Perl** | Legacy client / conformance | Tested protocol adapter | Protocol Adapter | `sdk/legacy/perl/`, `adapters/perl/` | `feat/runtime-substrate-semantics` | L3 Tested Adapter | `sdk/legacy/perl/t/conformance.t` (62 checks) |
 | **COBOL** | Copybooks / batch interface | Wire/batch compatibility profile | Compatibility Surface | `sdk/legacy/cobol/` | `feat/runtime-substrate-semantics` | L3 Enterprise Qualified | 80-column card codec & copybooks |
 | **Pascal** | Type / interface example | Type/interface compatibility profile | Specification / Reference | `sdk/legacy/pascal/` | `feat/runtime-substrate-semantics` | L3 Type Qualified | Canonical record types |
-| **ESP32 / Arduino C++** | Physical authority | Embedded runtime | Embedded Firmware | `runtimes/embedded/esp32/`, `runtimes/embedded/arduino/` | `feat/s2-heterogeneous-physical-qualification` | L1 Physical Hardware | Physical serial execution & quorum (sealed in v2) |
+| **ESP32 / Arduino C++** | Physical authority | Embedded runtime | Embedded Firmware | `runtimes/embedded/esp32/`, `runtimes/embedded/arduino/` | `feat/s2-heterogeneous-physical-qualification` | L1 Physical Hardware | Physical serial execution & quorum (reconfirmed in v3.1-M5) |
 
 ---
 
@@ -78,6 +78,7 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
   - Historical physical qualification logs sealed in v2 (`feat/s2-heterogeneous-physical-qualification`).
   - Physical silicon qualification campaign Phase E4E (`qualification/kryonos/esp32_e4e/`), confirming 4/4 fencing quadrants and 10,000 operations of continuous endurance with zero unauthorized mutations.
   - Cumulative parity: E4E confirms ESP32 parity with the already-qualified host/native semantics; combined with the prior Arduino qualification, the cumulative evidence supports heterogeneous realization parity.
+  - Integrated physical reconfirmation campaign Milestone v3.1-M5 ([`qualification/physical/v31_confirmation/`](../qualification/physical/v31_confirmation/)), reconfirming pairwise agreement across 24 vectors, live 2-of-3 quorum certification, fail-closed partition resistance, replay/stale authority rejection, and recovery continuity across ESP32-S3, Arduino UNO Q, and Laptop host, with native Rust runtime serving as host realization witness.
 - **Profile Specification**: See [`docs/KRYONOS_REALIZATION_PROFILE.md`](KRYONOS_REALIZATION_PROFILE.md).
 
 ### 2.6 Legacy Compatibility Surfaces (COBOL, Pascal, Perl)

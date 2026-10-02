@@ -1,0 +1,84 @@
+{
+  "gate_id": "PHYS-M5-G03",
+  "name": "Live 2-of-3 Quorum Certification",
+  "description": "Verifies that any 2-of-3 authority pair forms a valid quorum and commits, while |Q| < 2 strictly prevents commitment.",
+  "quorum_policy": {
+    "total_authorities": 3,
+    "required_threshold": 2,
+    "members": [
+      { "id": "auth_a_esp32", "role": "ESP32-S3 KryonOS / Native C++" },
+      { "id": "auth_b_uno_q", "role": "Arduino UNO Q STM32" },
+      { "id": "auth_c_laptop", "role": "Laptop x86-64 Authority Service" }
+    ]
+  },
+  "test_cases": [
+    {
+      "case_id": "QC_PAIR_01_ESP32_ARDUINO",
+      "signers": ["auth_a_esp32", "auth_b_uno_q"],
+      "signer_count": 2,
+      "quorum_met": true,
+      "expected_outcome": "COMMIT",
+      "disposition": "SUCCESS"
+    },
+    {
+      "case_id": "QC_PAIR_02_ESP32_LAPTOP",
+      "signers": ["auth_a_esp32", "auth_c_laptop"],
+      "signer_count": 2,
+      "quorum_met": true,
+      "expected_outcome": "COMMIT",
+      "disposition": "SUCCESS"
+    },
+    {
+      "case_id": "QC_PAIR_03_ARDUINO_LAPTOP",
+      "signers": ["auth_b_uno_q", "auth_c_laptop"],
+      "signer_count": 2,
+      "quorum_met": true,
+      "expected_outcome": "COMMIT",
+      "disposition": "SUCCESS"
+    },
+    {
+      "case_id": "QC_ALL_THREE_FULL_CONSENSUS",
+      "signers": ["auth_a_esp32", "auth_b_uno_q", "auth_c_laptop"],
+      "signer_count": 3,
+      "quorum_met": true,
+      "expected_outcome": "COMMIT",
+      "disposition": "SUCCESS"
+    },
+    {
+      "case_id": "QC_SINGLETON_ESP32_ONLY",
+      "signers": ["auth_a_esp32"],
+      "signer_count": 1,
+      "quorum_met": false,
+      "expected_outcome": "NO_COMMIT",
+      "disposition": "REJECT",
+      "error_code": "ERR_QUORUM_DEFICIT"
+    },
+    {
+      "case_id": "QC_SINGLETON_ARDUINO_ONLY",
+      "signers": ["auth_b_uno_q"],
+      "signer_count": 1,
+      "quorum_met": false,
+      "expected_outcome": "NO_COMMIT",
+      "disposition": "REJECT",
+      "error_code": "ERR_QUORUM_DEFICIT"
+    },
+    {
+      "case_id": "QC_SINGLETON_LAPTOP_ONLY",
+      "signers": ["auth_c_laptop"],
+      "signer_count": 1,
+      "quorum_met": false,
+      "expected_outcome": "NO_COMMIT",
+      "disposition": "REJECT",
+      "error_code": "ERR_QUORUM_DEFICIT"
+    },
+    {
+      "case_id": "QC_ZERO_SIGNERS_EMPTY",
+      "signers": [],
+      "signer_count": 0,
+      "quorum_met": false,
+      "expected_outcome": "NO_COMMIT",
+      "disposition": "REJECT",
+      "error_code": "ERR_QUORUM_DEFICIT"
+    }
+  ]
+}

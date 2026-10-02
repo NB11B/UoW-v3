@@ -108,6 +108,7 @@ Valid dispositions:
 | **Composition Fabric & Substitution** | `v2-origin/main` | `535cc8f` | `tests/test_composition_fabric.py`, `tests/test_composition_substitution.py` | L3 Host Qualified | `src/uow/composition/` | `protocol/core/` | `PROMOTE` | `src/uow/runtime/composition/` | Verified (dynamic actor substitution) |
 | **Distributed Delegation & Quorum** | `v2-origin/main` | `535cc8f` | `tests/test_distributed_authority.py`, `tests/test_adaptive_quorum.py` | L3 Host Qualified | `src/uow/authority/distributed.py` | `protocol/authority/` | `PROMOTE` | `src/uow/authority/` | Verified (M-of-N voting and failover) |
 | **Physical Heterogeneous 2-of-3 Quorum** | `v2-origin/feat/s2-heterogeneous-physical-qualification` | `013fc64`, tag `uow-v2-s2-qualified` | Physical run log | L1 Physical Evidence | `qualification/heterogeneous_physical_s2/` | `protocol/authority/` | `REFERENCE_ONLY` | Preserved in v2 qualification logs; protocol interfaces in v3 | Verified on hardware (Laptop + ESP32 + Arduino) |
+| **Integrated Heterogeneous Physical Reconfirmation** | `V31-PHYS-CONFIRM` | Milestone v3.1-M5 | `tests/test_v31_physical_confirmation.py` | L1 Physical Hardware | `qualification/physical/v31_confirmation/` | `protocol/authority/` | `QUALIFIED` | `qualification/physical/v31_confirmation/` | Verified: 7/7 gates passing, pairwise agreement across 24 vectors, live 2-of-3 quorum, fail-closed partition, zero unauthorized commits |
 
 ---
 
@@ -137,6 +138,7 @@ Valid dispositions:
 | **Delayed Packet / Stale Command Rejection** | `KRYONOS-ESP32-E4E` | Live Silicon Run | `uow_e4e_runner.cpp:Test 5`, `vector_e4e_03` | L1 Physical Hardware | KryonOS ESP32-S3 Native Authority Gate | `protocol/authority/` | `QUALIFIED` | `qualification/kryonos/esp32_e4e/` | Verified: Stale command rejected with zero physical mutation |
 | **Individual-Node Physical Endurance** | `KRYONOS-ESP32-E4E` | Live Silicon Run | `uow_e4e_runner.cpp:Test 9`, `vector_e4e_05` | L1 Physical Hardware | KryonOS ESP32-S3 Native Authority Gate | `protocol/core/` | `QUALIFIED` | `qualification/kryonos/esp32_e4e/` | Verified: 10,000 ops (0 unauthorized effects, 0 stale, 0 duplicate effects, 0 escalations) |
 | **Native Quorum Certificate Verification** | `KRYONOS-ESP32-E4E` | Live Silicon Run | `uow_e4e_runner.cpp:Test 4`, `vector_e4e_02` | L1 Physical / Native | KryonOS ESP32-S3 Native Authority Gate | `protocol/authority/` | `QUALIFIED` | `qualification/kryonos/esp32_e4e/` | Verified: Negative controls (minority quorum, duplicate signer, unknown signer, forged signature) |
+| **Integrated Heterogeneous Physical Reconfirmation** | `V31-PHYS-CONFIRM` | Milestone v3.1-M5 | `tests/test_v31_physical_confirmation.py` | L1 Physical Hardware | `qualification/physical/v31_confirmation/` | `protocol/authority/` | `QUALIFIED` | `qualification/physical/v31_confirmation/` | Verified on hardware: ESP32-S3 (COM4), Arduino UNO Q (COM3), Host Laptop, plus Rust host witness; zero wrong commits |
 
 ---
 

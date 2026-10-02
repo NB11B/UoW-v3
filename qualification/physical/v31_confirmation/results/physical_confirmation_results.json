@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "campaign_id": "V31-PHYS-CONFIRM",
+  "campaign_name": "Unit-of-Work v3.1 Milestone 5: Integrated Heterogeneous Physical Reconfirmation",
+  "disposition": "QUALIFIED",
+  "wrong_authoritative_commits": 0,
+  "gates": {
+    "PHYS-M5-G01": {
+      "name": "Exact v3.1 Build Provenance",
+      "status": "PASSED",
+      "base_source_sha": "2132f0a7cb078d882829a10aa116a9f89542b79c",
+      "hardware_targets_attested": 3,
+      "toolchains_attested": 5
+    },
+    "PHYS-M5-G02": {
+      "name": "Pairwise Deterministic Agreement",
+      "status": "PASSED",
+      "cases_evaluated": 24,
+      "disposition_agreement_rate": "100.0%",
+      "state_divergences": 0
+    },
+    "PHYS-M5-G03": {
+      "name": "Live 2-of-3 Quorum Certification",
+      "status": "PASSED",
+      "tested_pairs": [
+        "ESP32 + Arduino (2/3) -> COMMIT",
+        "ESP32 + Laptop (2/3) -> COMMIT",
+        "Arduino + Laptop (2/3) -> COMMIT",
+        "All Three (3/3) -> COMMIT"
+      ],
+      "negative_controls": [
+        "ESP32 Singleton (1/3) -> NO COMMIT",
+        "Arduino Singleton (1/3) -> NO COMMIT",
+        "Laptop Singleton (1/3) -> NO COMMIT",
+        "Zero Signers (0/3) -> NO COMMIT"
+      ],
+      "invariant_verified": "|Q| < 2 => NOT COMMIT"
+    },
+    "PHYS-M5-G04": {
+      "name": "Partition and Fail-Closed Behavior",
+      "status": "PASSED",
+      "tested_scenarios": 5,
+      "fail_closed_verified": true,
+      "unauthorized_mutations": 0,
+      "invariant_verified": "Loss of communication != Gain of authority"
+    },
+    "PHYS-M5-G05": {
+      "name": "Replay and Stale Authority Rejection",
+      "status": "PASSED",
+      "stale_cases_tested": 5,
+      "rejections": 5,
+      "physical_effects_induced": 0
+    },
+    "PHYS-M5-G06": {
+      "name": "Cross-Realization v3.1 Confirmation",
+      "status": "PASSED",
+      "realizations_in_parity": [
+        "ESP32-S3 Native Gate",
+        "Arduino UNO Q STM32",
+        "Laptop Python Reference",
+        "Laptop Native C++",
+        "Laptop Native Rust Witness"
+      ],
+      "cumulative_parity": "R_ESP32(W) ~ R_Arduino(W) ~ R_Host(W) ~ R_Rust(W)"
+    },
+    "PHYS-M5-G07": {
+      "name": "Recovery and Evidence Continuity",
+      "status": "PASSED",
+      "recovery_state_matches_canonical": true,
+      "recovery_evidence_matches_canonical": true,
+      "forged_history_quarantined": true,
+      "invariants": "S_recovered == S_canonical AND E_recovered == E_canonical"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "gate_id": "PHYS-M5-G05",
+  "name": "Replay and Stale Authority Rejection",
+  "description": "Cross-topology validation of authority freshness, stale fence rejection, and zero physical side effects.",
+  "cases": [
+    {
+      "case_id": "STALE_01_OBSOLETE_EPOCH",
+      "threat_model": "Attacker replays valid command signed under epoch 1 when system is in epoch 2.",
+      "current_epoch": 2,
+      "submitted_epoch": 1,
+      "expected_disposition": "REJECT",
+      "error_code": "ERR_STALE_EPOCH",
+      "physical_actuator_mutation": 0
+    },
+    {
+      "case_id": "STALE_02_OBSOLETE_FENCING_GENERATION",
+      "threat_model": "Attacker presents valid epoch but outdated fencing generation token.",
+      "current_generation": 4,
+      "submitted_generation": 3,
+      "expected_disposition": "REJECT",
+      "error_code": "ERR_STALE_GENERATION",
+      "physical_actuator_mutation": 0
+    },
+    {
+      "case_id": "STALE_03_OLD_PROPOSAL_HASH",
+      "threat_model": "Command references previous state hash that has since advanced.",
+      "current_sequence": 12,
+      "submitted_base_sequence": 10,
+      "expected_disposition": "REJECT",
+      "error_code": "ERR_STALE_PRE_STATE",
+      "physical_actuator_mutation": 0
+    },
+    {
+      "case_id": "STALE_04_DELAYED_PACKET_DELIVERY",
+      "threat_model": "Delayed transport network packet arrives after authority lease transition.",
+      "network_delay_ms": 2500,
+      "lease_timeout_ms": 1000,
+      "expected_disposition": "REJECT",
+      "error_code": "ERR_LEASE_EXPIRED",
+      "physical_actuator_mutation": 0
+    },
+    {
+      "case_id": "STALE_05_EXPIRED_QUORUM_CERTIFICATE",
+      "threat_model": "Client submits valid QC from prior epoch to authorize current state change.",
+      "qc_epoch": 1,
+      "current_epoch": 2,
+      "expected_disposition": "REJECT",
+      "error_code": "ERR_STALE_QC",
+      "physical_actuator_mutation": 0
+    }
+  ]
+}

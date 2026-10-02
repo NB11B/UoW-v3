@@ -1,0 +1,97 @@
+{
+  "gate_id": "PHYS-M5-G06",
+  "name": "Cross-Realization v3.1 Confirmation",
+  "description": "Verifies heterogeneous realization parity across ESP32, Arduino, and Host authorities, with Rust M4 runtime as independent host realization witness.",
+  "canonical_workload": {
+    "initial_state": {
+      "counter": 100,
+      "status": "RUNNING",
+      "sequence": 0
+    },
+    "transitions": [
+      {
+        "step": 1,
+        "operation": "uow.transition.execute_one",
+        "uow": {
+          "identity": "parity_step_1",
+          "mutations": [{ "op": "ADD", "key": "counter", "operand": 10 }]
+        },
+        "expected_counter": 110
+      },
+      {
+        "step": 2,
+        "operation": "uow.transition.execute_one",
+        "uow": {
+          "identity": "parity_step_2",
+          "mutations": [{ "op": "SET", "key": "status", "operand": "ACTIVE" }]
+        },
+        "expected_status": "ACTIVE"
+      },
+      {
+        "step": 3,
+        "operation": "uow.transition.execute_one",
+        "uow": {
+          "identity": "parity_step_3",
+          "mutations": [{ "op": "SUB", "key": "counter", "operand": 5 }]
+        },
+        "expected_counter": 105
+      }
+    ],
+    "expected_final_state": {
+      "attributes": {
+        "counter": 105,
+        "status": "ACTIVE"
+      },
+      "sequence": 3,
+      "status": "HALTED"
+    }
+  },
+  "realizations_evaluated": [
+    {
+      "realization_id": "R_ESP32",
+      "platform": "ESP32-S3 (Xtensa Dual-Core 240MHz)",
+      "stack": "KryonOS + Native C++ Authority Gate",
+      "final_counter": 105,
+      "final_status": "ACTIVE",
+      "final_sequence": 3,
+      "parity_confirmed": true
+    },
+    {
+      "realization_id": "R_ARDUINO",
+      "platform": "Arduino UNO Q (STM32U585 Cortex-M33 160MHz)",
+      "stack": "Arduino STM32 Embedded Authority",
+      "final_counter": 105,
+      "final_status": "ACTIVE",
+      "final_sequence": 3,
+      "parity_confirmed": true
+    },
+    {
+      "realization_id": "R_HOST_PYTHON",
+      "platform": "Laptop x86-64 (AMD64 / Windows 11)",
+      "stack": "Python Reference Runtime (src/uow/)",
+      "final_counter": 105,
+      "final_status": "ACTIVE",
+      "final_sequence": 3,
+      "parity_confirmed": true
+    },
+    {
+      "realization_id": "R_HOST_CPP",
+      "platform": "Laptop x86-64 (MinGW-W64 C++17)",
+      "stack": "Native C++ Core Runtime (runtimes/cpp/)",
+      "final_counter": 105,
+      "final_status": "ACTIVE",
+      "final_sequence": 3,
+      "parity_confirmed": true
+    },
+    {
+      "realization_id": "R_HOST_RUST_WITNESS",
+      "platform": "Laptop x86-64 (Rust 1.98.1)",
+      "stack": "Independent Native Rust Runtime (uow-runtime 3.1.0)",
+      "final_counter": 105,
+      "final_status": "ACTIVE",
+      "final_sequence": 3,
+      "parity_confirmed": true,
+      "role": "Semantic realization witness only; not claimed as distributed quorum authority in M5"
+    }
+  ]
+}

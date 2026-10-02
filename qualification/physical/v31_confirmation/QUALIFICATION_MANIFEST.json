@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": "1.0.0",
+  "campaign_id": "V31-PHYS-CONFIRM",
+  "campaign_name": "Unit-of-Work v3.1 Milestone 5: Integrated Heterogeneous Physical Reconfirmation",
+  "signoff_level": "L1 Physical Hardware Integrated Qualification",
+  "disposition": "QUALIFIED",
+  "base": "v3.1/development",
+  "base_commit_sha": "2132f0a7cb078d882829a10aa116a9f89542b79c",
+  "prerequisites": [
+    "v3.1-m1-kryonos-qualified",
+    "v3.1-m2-atomic-economics-qualified",
+    "v3.1-m3-cpp-16vec-qualified",
+    "v3.1-m4-rust-runtime-qualified"
+  ],
+  "hardware_topology": {
+    "authority_a": {
+      "id": "auth_a_esp32",
+      "board": "ESP32-S3-DevKitC-1-N16R8",
+      "cpu": "Xtensa Dual-Core LX7 @ 240 MHz",
+      "flash_mb": 16,
+      "psram_mb": 8,
+      "com_port": "COM4",
+      "firmware_stack": "KryonOS + Native C++ Authority Gate"
+    },
+    "authority_b": {
+      "id": "auth_b_uno_q",
+      "board": "Arduino UNO Q (STM32U585)",
+      "cpu": "Arm Cortex-M33 @ 160 MHz",
+      "flash_mb": 2,
+      "sram_kb": 786,
+      "com_port": "COM3",
+      "firmware_stack": "Arduino Embedded Authority Firmware"
+    },
+    "authority_c": {
+      "id": "auth_c_laptop",
+      "board": "Laptop Host x86-64",
+      "cpu": "x86-64 AMD64",
+      "os": "Windows 11",
+      "software_stack": "Local Authority Service (Python reference & C++ ABI)"
+    },
+    "realization_witness": {
+      "id": "witness_rust_m4",
+      "role": "Host Realization Witness",
+      "crate": "uow-runtime 3.1.0",
+      "scope": "Semantic realization witness only; not claimed as distributed quorum authority in M5"
+    }
+  },
+  "toolchains": {
+    "platformio_version": "6.1.19",
+    "arduino_cli_version": "1.1.2",
+    "gcc_version": "13.2.0 (MinGW-W64)",
+    "rustc_version": "1.98.1 (48a229cea 2026-09-01)",
+    "python_version": "3.13.11"
+  },
+  "immutable_provenance": {
+    "firmware_sources": {
+      "esp32_main_cpp_sha256": "06b9c7c92c0a1e6d528b7ffc42b39344276d124298a4fabf711a7a3102cd2b05",
+      "esp32_uow_embedded_cpp_sha256": "65e89f9e126d298181263d42a3f0557067466e68fe7cadccd04e51d580cc644b",
+      "esp32_uow_embedded_hpp_sha256": "458c376c39f89ab20e545e5c2f2092c27ad4e5274924218692da767fbe3e9b5a",
+      "arduino_uno_q_ino_sha256": "fa310769ecc057541407f54984d53b921c114f7c609e4795ce711bfbe8abe24f",
+      "arduino_uow_embedded_cpp_sha256": "3b785dc36d54575447b7414ed14b38d72726eef2b29e07aa72e82cca47dc1abe",
+      "arduino_uow_embedded_hpp_sha256": "458c376c39f89ab20e545e5c2f2092c27ad4e5274924218692da767fbe3e9b5a"
+    },
+    "vectors": {
+      "pairwise_agreement_sha256": "41c69728b291ff062a8031a787e9ad995f550e6df2198bd16da257d77ac4371c",
+      "partition_fail_closed_sha256": "2744dd045409ac37762bf47c6df8a1495d1bf0611974ae3c1b8e4e905effd59d",
+      "quorum_pairs_sha256": "05a976d72d6d846e3b6c734240c9c122509085a2cc91696c35c2abbfda535685",
+      "realization_parity_sha256": "f074eee663ffd6735a9d4ac3651fd7ee9a97b7d45ea0a25f654d0f095adbc873",
+      "recovery_continuity_sha256": "0fa7e6cac6d04b69ac1640d35e45a3d7bb9c10f471ed71dcc36a5034e703a107",
+      "stale_replay_sha256": "3eb11fac0c85a0b8c9f674daff77c7f54777710a3ee46525af93feaf0c4887c9"
+    }
+  },
+  "qualification_gates": [
+    {
+      "gate_id": "PHYS-M5-G01",
+      "name": "Exact v3.1 Build Provenance",
+      "criteria": "Source commits, firmware binary hashes, board identities, COM ports, and compiler toolchains rigorously attested to v3.1 development baseline.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "PHYS-M5-G02",
+      "name": "Pairwise Deterministic Agreement",
+      "criteria": "S'_ESP32 = S'_Arduino = S'_Host for accepted work; Disposition_A = Disposition_B = Disposition_C = REJECT for invalid work across 24 bounded transitions.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "PHYS-M5-G03",
+      "name": "Live 2-of-3 Quorum Certification",
+      "criteria": "All valid 2-of-3 authority pairs (ESP32+Arduino, ESP32+Laptop, Arduino+Laptop) form commit quorum; singletons (|Q| < 2) strictly prevent commit.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "PHYS-M5-G04",
+      "name": "Partition and Fail-Closed Behavior",
+      "criteria": "Loss of communication != Gain of authority. If quorum survives, execution continues; if quorum lost, system fails closed with 0 unauthorized commits.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "PHYS-M5-G05",
+      "name": "Replay and Stale Authority Rejection",
+      "criteria": "Old epochs, stale generation counters, expired proposal hashes, delayed packets, and stale QCs produce zero state advancement and zero physical effect.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "PHYS-M5-G06",
+      "name": "Cross-Realization v3.1 Confirmation",
+      "criteria": "Heterogeneous physical parity confirmed: R_ESP32(W) ~ R_Arduino(W) ~ R_Host(W), with Rust M4 runtime verified as independent host realization witness.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "PHYS-M5-G07",
+      "name": "Recovery and Evidence Continuity",
+      "criteria": "Restarted authority catches up strictly from qualified ledger history: S_recovered = S_canonical and E_recovered = E_canonical; divergent logs quarantined.",
+      "status": "PASSED"
+    }
+  ]
+}

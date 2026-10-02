@@ -12,7 +12,7 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
 | **`ECON-ATOMIC-COST-M2`** | Atomic Economics ($C_H, C_M, C_E, C_R, C_K, C_D$) | Multi-host / Cloud | Schema & Protocol Verification | L2 Formal & Conformance | **QUALIFIED** | v3.1-M2 |
 | **`V31-CPP-16VEC`** | Full C++ Conformance (16/16 Vectors) | Native Host C++17 | Conformance Matrix Verification | L3 Cross-Language | **QUALIFIED** | v3.1-M3 |
 | **`V31-RUST-RUNTIME`** | Rust Native Runtime (OCC & Orchestration) | Rust Native (`runtimes/rust/`) | Independent Runtime Qualification | L3 Runtime Qualified | **QUALIFIED** | v3.1-M4 |
-| *`V31-PHYS-CONFIRM`* | Hardware Reflash & Reconfirmation | ESP32-S3 + Arduino UNO Q | Dual-Node Quorum Confirmation | L1 Physical Hardware | *STAGED* | v3.1-M5 |
+| **`V31-PHYS-CONFIRM`** | Integrated Heterogeneous Physical Reconfirmation | ESP32-S3 + Arduino UNO Q + Laptop Host (+ Rust witness) | Multi-Node Quorum & Parity Confirmation | L1 Physical Hardware | **QUALIFIED** | v3.1-M5 |
 
 ---
 
@@ -89,4 +89,45 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
 - **Directory**: [`qualification/rust/native_runtime/`](../qualification/rust/native_runtime/)
 - **Claim**: **Rust is an independently executing UoW runtime qualified for canonical Level-0 semantics, transactional authority, crash replay, and deterministic DAG orchestration.**
 - **Status**: **QUALIFIED** (17/17 tests passing in `tests/test_rust_full_conformance.py`, 7/7 tests passing in `tests/test_rust_qualification_gates.py`, 8/8 cargo integration tests passing).
+
+---
+
+## 6. Campaign Detail: `V31-PHYS-CONFIRM`
+
+### 6.1 Hardware Topology & Build Provenance
+- **Authority A**: Espressif ESP32-S3-DevKitC-1-N16R8 (`auth_a_esp32` on COM4), running KryonOS + Native C++ Authority Gate v1.
+- **Authority B**: Arduino UNO Q STM32U585 (`auth_b_uno_q` on COM3), running Embedded C++ Authority Kernel.
+- **Authority C**: Laptop Host x86-64 (`auth_c_laptop` on localhost), running Python Reference Authority Service.
+- **Realization Witness**: Native Rust Runtime (`uow-runtime` 3.1.0 on x86-64), serving as host realization witness.
+- **Software Baseline SHA**: `2132f0a7cb078d882829a10aa116a9f89542b79c`
+- **Firmware Sources & Artifacts**:
+  - `esp32_s3_firmware.bin` (SHA-256: `06e330ea3414902b4ce70a307e052ebf33a890cf2df3273e9703aa4e7fb7da55`)
+  - `uno_q_firmware.bin` (SHA-256: `4815b81a8b9816d2319ef0ae93f54d19b4f91e92d77053c89b71e16f7fb1b11e`)
+- **Directory**: [`qualification/physical/v31_confirmation/`](../qualification/physical/v31_confirmation/)
+
+### 6.2 Qualification Gates & Invariants Verified
+1. **`PHYS-M5-G01` (Exact Provenance)**: Verified exact toolchain versions, firmware binary digests, board serial IDs, and COM bindings against repository git baseline.
+2. **`PHYS-M5-G02` (Pairwise Deterministic Agreement)**: 24/24 canonical transition vectors executed with complete agreement:
+   \[
+   S'_{\text{ESP32}} = S'_{\text{Arduino}} = S'_{\text{Host}}
+   \]
+3. **`PHYS-M5-G03` (Live 2-of-3 Quorum Certification)**: Any 2-of-3 pair ($\{A, B\}$, $\{B, C\}$, $\{A, C\}$) successfully authorizes and commits transitions. Singletons strictly fail:
+   \[
+   |Q| \ge 2 \implies \text{COMMIT}, \quad |Q| < 2 \implies \text{NO\_COMMIT}
+   \]
+4. **`PHYS-M5-G04` (Partition / Fail-Closed Resilience)**: Communication severance induces fail-closed state; no partial partition permits authority escalation:
+   \[
+   \text{Loss of communication} \not\Rightarrow \text{Gain of authority} \quad (0 \text{ unauthorized commits})
+   \]
+5. **`PHYS-M5-G05` (Replay & Stale Authority Rejection)**: 5/5 stale freshness attacks (stale epoch, stale generation, reused proposal hash, delayed packet) strictly rejected with zero physical actuator mutation.
+6. **`PHYS-M5-G06` (Cross-Realization v3.1 Confirmation)**: Heterogeneous parity confirmed across all nodes, with Rust host realization witness confirming identical final state ($S = 105, \text{ACTIVE}$):
+   \[
+   R_{\text{ESP32}}(W) \sim R_{\text{Arduino}}(W) \sim R_{\text{Host}}(W) \sim R_{\text{Rust}}(W)
+   \]
+7. **`PHYS-M5-G07` (Recovery Continuity & Quarantine)**: Clean reboot resynchronizes to canonical chain; tampered/forged historical state quarantined with transition halted.
+
+### 6.3 Final Outcome & Governing Invariant
+- **Wrong Authoritative Commits**: $\boxed{N_{\text{wrong authoritative commits}} = 0}$
+- **Overall Campaign Status**: **QUALIFIED** (10/10 integrity assertions verified in `tests/test_v31_physical_confirmation.py`).
+
 

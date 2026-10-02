@@ -1,11 +1,11 @@
-# Unit-of-Work (UoW) v3.0
+# Unit-of-Work (UoW) v3.1
 
 [![CI Test Suite](https://github.com/NB11B/UoW-v3/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/NB11B/UoW-v3/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python: 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Rust: 1.80+](https://img.shields.io/badge/rust-1.80+-orange.svg)](https://www.rust-lang.org/)
 [![TypeScript: 5.0+](https://img.shields.io/badge/typescript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Inherited Physical Evidence](https://img.shields.io/badge/Inherited%20Physical%20Evidence-v2%20Qualified-success.svg)](docs/V2_TO_V3_PROVENANCE.md)
+[![v3.1 Physical Qualification](https://img.shields.io/badge/v3.1%20Physical%20Qualification-Qualified-success.svg)](docs/V3_QUALIFICATION_PROVENANCE.md)
 
 > **A typed, certifiable Unit-of-Work protocol and multi-language runtime architecture for deterministic authority over flexible computation across heterogeneous distributed hardware.**
 
@@ -98,12 +98,13 @@ UoW-v3/
 │
 ├── runtimes/
 │   ├── python/                # Python reference runtime pointer (packaged from src/uow/)
-│   ├── cpp/                   # Native C++ core runtime and wire serialization
+│   ├── cpp/                   # Native C++ core runtime (16/16 canonical vectors)
+│   ├── rust/                  # Rust native runtime (Levels 0–2, OCC, WAL replay, DAG scheduler)
 │   └── embedded/              # Microcontroller authority kernels (ESP32-S3, Arduino UNO Q)
 │
 ├── sdk/
 │   ├── typescript/            # Integration SDK + deterministic reference executor
-│   ├── rust/                  # Rust native SDK / runtime candidate crate
+│   ├── rust/                  # Rust native SDK crate (uow-core)
 │   └── legacy/                # Enterprise & legacy surfaces (COBOL, Pascal, Perl)
 │
 ├── adapters/                  # Hardware, model, and legacy compatibility adapters
@@ -116,20 +117,32 @@ UoW-v3/
 
 ## 3. Language Support Matrix
 
-| Language | V3 Role | Technical Surface | Primary Location | Test Coverage |
+UoW v3.1 Language Realizations:
+
+```text
+Python      Reference Runtime
+C++         Native Core Runtime — 16/16 canonical vectors
+Rust        Independent Native Runtime — Levels 0–2, 16/16 vectors
+TypeScript  Integration SDK + deterministic reference executor
+ESP32       KryonOS qualified physical realization
+Arduino     Embedded physical authority
+```
+
+| Language | V3.1 Role | Technical Surface | Primary Location | Qualification & Conformance |
 |---|---|---|---|---|
-| **Python** | Reference runtime | Full algebraic engine, OCC, DAG, Autonomy | `src/uow/` | 584 pytest tests |
-| **C++** | Native C++ core runtime | Core state machine & wire verification (golden vector subset) | `runtimes/cpp/` | Native g++ execution & rejection tests |
+| **Python** | Reference runtime | Full algebraic engine, OCC, DAG, Autonomy | `src/uow/` | Pytest test suite (all gates passing) |
+| **C++** | Native core runtime | 16/16 canonical vectors, modular state/evidence/idempotency | `runtimes/cpp/` | `conformance_runner.exe --all` (16/16 vectors) |
 | **C** | ABI + embedded profile | Portable C header (`uow.h`) | `abi/c/` | FFI / ABI bounds |
-| **Rust** | Rust native SDK / runtime candidate | Crate (`uow-core`) | `sdk/rust/` | `cargo test` |
+| **Rust** | Independent native runtime & SDK | Levels 0–2 runtime (`uow-runtime`) + protocol SDK (`uow-core`) | `runtimes/rust/`, `sdk/rust/` | 16/16 canonical vectors + cargo integration tests |
 | **TypeScript** | Integration SDK + deterministic reference executor | Client, envelope factory, and local executor | `sdk/typescript/` | `node --test` (16 golden vectors) |
 | **JavaScript** | SDK consumer | Client interoperability demo | `examples/javascript/` | Pure JS execution |
-| **Perl** | Tested protocol adapter | `UoW::Client` protocol adapter | `sdk/legacy/perl/` | `conformance.t` (62 checks) |
+| **Perl** | Tested protocol adapter | `UoW::Client` protocol adapter | `adapters/perl/`, `sdk/legacy/perl/` | `conformance.t` (62 checks) |
 | **COBOL** | Wire/batch compatibility profile | 80-column card copybooks (`UOWENVLP.cpy`) | `sdk/legacy/cobol/` | Batch card codec |
 | **Pascal** | Type/interface compatibility profile | Type specification (`UoWTypes.pas`) | `sdk/legacy/pascal/` | Type alignment |
-| **ESP32 / Arduino C++**| Embedded runtime | Dual-core FreeRTOS & microcontroller authority | `runtimes/embedded/` | Hardware qualification sealed in v2 |
+| **ESP32** | KryonOS qualified physical realization | KryonOS + Native C++ Authority Gate (2D fencing) | `runtimes/embedded/esp32/` | Physical silicon qualification (E4E + M5) |
+| **Arduino** | Embedded physical authority | Microcontroller authority kernel | `runtimes/embedded/arduino/` | Physical hardware qualification (M5) |
 
-See [**`docs/LANGUAGE_MATRIX.md`**](docs/LANGUAGE_MATRIX.md) for detailed surface profiles.
+Detailed surface profiles and evidence mappings are maintained in [**`docs/LANGUAGE_MATRIX.md`**](docs/LANGUAGE_MATRIX.md) and [**`docs/V3_QUALIFICATION_PROVENANCE.md`**](docs/V3_QUALIFICATION_PROVENANCE.md).
 
 ---
 
@@ -161,7 +174,7 @@ The core invariant across all implementations is:
 
 ## 5. Economics: Data, Not Policy
 
-In UoW v3, economics is treated as data, not policy:
+In UoW v3.1, economics is treated as data, not policy:
 
 \[
 \boxed{
@@ -172,11 +185,20 @@ In UoW v3, economics is treated as data, not policy:
 }
 \]
 
-The protocol carries compute cost, human cost, energy (Watts/Joules), resource cost, latency penalties, failure/recovery cost, market prices, and capacity/scarcity observations without dictating any specific pricing algorithm.
+The protocol carries compute cost, human cost, energy (Watts/Joules), resource cost, latency penalties, failure/recovery cost, market prices, and capacity/scarcity observations without dictating any specific pricing algorithm:
+
+\[
+C(u) = C_H + C_M + C_E + C_R + C_K + C_D
+\]
+
+- **Directly Measured Consumption**: Machine compute cycles ($C_M$), physical energy ($C_E$), and leased resource capacity ($C_R$) are directly measured from the execution substrate.
+- **Deterministic Given Declared Inputs**: Human review cost ($C_H$), expected recovery cost ($C_K$), and delay/opportunity cost ($C_D$) are deterministic given declared valuation models and expectation inputs.
 
 ---
 
 ## 6. Verification and Conformance
+
+A single reproducible release verification script is provided at `scripts/verify_v31_release.ps1`. Individual subsystem gates can also be verified directly:
 
 ### Python Test Suite
 ```powershell
@@ -185,28 +207,36 @@ python -m pytest -q
 
 ### Cross-Language Golden Vectors (TypeScript / JavaScript)
 ```powershell
-node --experimental-strip-types --test sdk/typescript/test/conformance.test.js
+npm test --prefix sdk/typescript
 ```
 
-### Rust SDK
+### Rust Protocol SDK
 ```powershell
 cargo test --manifest-path sdk/rust/Cargo.toml
 ```
 
-### Native C++ Core
+### Rust Native Runtime (Levels 0–2)
 ```powershell
-g++ -std=c++17 -I runtimes/embedded/esp32 runtimes/cpp/core_semantics.cpp runtimes/embedded/esp32/uow_embedded.cpp -o runtimes/cpp/core_semantics.exe
-./runtimes/cpp/core_semantics.exe transfer
+cargo test --manifest-path runtimes/rust/Cargo.toml
+```
+
+### Native C++ Core (16/16 Vectors)
+```powershell
+g++ -std=c++17 -I runtimes/cpp/include runtimes/cpp/native_state.cpp runtimes/cpp/native_evidence.cpp runtimes/cpp/native_idempotency.cpp runtimes/cpp/native_protocol.cpp runtimes/cpp/conformance_runner.cpp -o runtimes/cpp/conformance_runner.exe
+./runtimes/cpp/conformance_runner.exe --all conformance/vectors
 ```
 
 ### Perl Conformance
 ```powershell
-perl -I sdk/legacy/perl sdk/legacy/perl/t/conformance.t
+perl -I adapters/perl adapters/perl/t/conformance.t
 ```
 
 ---
 
-## 7. Provenance & Research Campaigns
+## 7. Provenance & Release Records
 
-All empirical proofs and mathematical campaign records (JEV operator closure, semigroup associativity, bilinearity, finite-size scaling, and physical qualification artifacts) are permanently sealed and immutable in UoW v2 history.
-See [**`docs/V2_TO_V3_PROVENANCE.md`**](docs/V2_TO_V3_PROVENANCE.md) and [**`docs/CAPABILITY_LEDGER.md`**](docs/CAPABILITY_LEDGER.md).
+- **v3.1 Release Gates**: [**`docs/V31_RELEASE_GATES.md`**](docs/V31_RELEASE_GATES.md)
+- **v3.1 Qualification Registry**: [**`docs/V3_QUALIFICATION_PROVENANCE.md`**](docs/V3_QUALIFICATION_PROVENANCE.md)
+- **Capability Ledger**: [**`docs/CAPABILITY_LEDGER.md`**](docs/CAPABILITY_LEDGER.md)
+- **Historical v3.0 Release Gates**: [**`docs/V3_RELEASE_GATES.md`**](docs/V3_RELEASE_GATES.md)
+- **Inherited v2 Research & Mathematical Proofs**: [**`docs/V2_TO_V3_PROVENANCE.md`**](docs/V2_TO_V3_PROVENANCE.md)

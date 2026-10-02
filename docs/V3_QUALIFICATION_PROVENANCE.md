@@ -55,6 +55,7 @@ While [`docs/V2_TO_V3_PROVENANCE.md`](V2_TO_V3_PROVENANCE.md) documents the seal
   - $\text{Cost Observation} \neq \text{Pricing Decision}$
   - $\text{Production Cost} \neq \text{Market Price} \neq \text{Consumer Value}$
   - $\text{Economic Optimizer Proposes} \rightarrow \text{Authority Gate Certifies} \rightarrow \text{State Changes}$
+  - **Measurement Determinism**: Compute cycles ($C_M$), energy ($C_E$), and resource reservation ($C_R$) are directly measured from the execution substrate; human valuation ($C_H$), expected recovery cost ($C_K$), and opportunity cost ($C_D$) are deterministic given declared valuation models and expectation inputs.
 - **Directory**: [`qualification/economics/atomic_cost/`](../qualification/economics/atomic_cost/)
 - **Status**: **QUALIFIED** (6/6 gates verified in `tests/test_atomic_economics_qualification.py`).
 

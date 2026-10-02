@@ -10,7 +10,7 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 | Language | Existing Role (v2) | V3 Role | Surface Type | Primary Target Location | Provenance Branch | Evidence Level | Conformance Vector Coverage |
 |---|---|---|---|---|---|---|---|
 | **Python** | Full canonical runtime | Reference runtime | Runtime (packaged from `src/uow/`) | `src/uow/` | `v2-origin/main` | L4 Formal & Host Qualified | 16/16 vectors |
-| **C++** | Native/embedded qualification | Native C++ core runtime | Native Core Runtime | `runtimes/cpp/` | `feat/s2-heterogeneous-physical-qualification` | L3 Cross-language Qualified | Vectors 001, 002, 003, 004, 006 (subset until full 16/16 conformance) |
+| **C++** | Native/embedded qualification | Native C++ core runtime | Native Core Runtime | `runtimes/cpp/` | `feat/s2-heterogeneous-physical-qualification` | L3 Cross-language Qualified | Canonical semantic conformance: 16/16 |
 | **C** | ABI / constrained interface | ABI + embedded profile | C ABI Header | `abi/c/`, `runtimes/cpp/abi/` | `feat/runtime-substrate-semantics` | L3 ABI Qualified | Header ABI bounds |
 | **Rust** | SDK + conformance work | Rust native SDK / runtime candidate | SDK / Runtime Candidate | `sdk/rust/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | Vectors 001, 002, 003, 007 |
 | **TypeScript** | SDK + executor + conformance | Integration SDK + deterministic reference executor | Integration SDK & Reference Executor | `sdk/typescript/` | `feat/runtime-substrate-semantics` | L3 SDK Qualified | 16/16 vectors (`test/conformance.test.js`) |
@@ -39,9 +39,12 @@ Per the consolidation rules: **finish the existing tested language surfaces firs
 - **Testing**: 584 unit, integration, and qualification tests in `tests/`.
 
 ### 2.2 C++ & C ABI (Native Core Runtime & Interface)
-- **Role**: High-performance native execution and portable FFI boundary for system integration. Covers subset of golden vectors until full 16/16 conformance.
-- **Header**: `abi/c/include/uow.h` defines `uow_envelope_t`, `uow_state_t`, `uow_proposal_t`, `uow_certificate_t`, `uow_result_t`.
-- **Wire & Conformance**: `runtimes/cpp/` implements SHA-256 state hashing and binary wire packing matching Python RFC-8785 canonical hashes.
+- **Role**: Native C++ core runtime
+- **Evidence**: L3 Cross-Language Qualified
+- **Canonical semantic conformance**: 16/16
+- **Architecture**: Modular host runtime in `runtimes/cpp/` (`uow_native_state.hpp`, `uow_native_evidence.hpp`, `uow_native_idempotency.hpp`, `uow_native_protocol.hpp`) executing Level 0 transition semantics, evidence chaining, and idempotency caching.
+- **Header**: `abi/c/include/uow.h` defines C ABI boundary.
+- **Testing**: `tests/test_cpp_full_conformance.py` and `runtimes/cpp/conformance_runner.exe --all conformance/vectors` (16/16 canonical vectors verified).
 
 ### 2.3 Rust (Native SDK & Runtime Candidate)
 - **Role**: Rust native SDK and runtime candidate with standalone serialization and kernel evaluation logic.

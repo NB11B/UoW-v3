@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": "1.0.0",
+  "campaign_id": "V31-CPP-16VEC",
+  "campaign_name": "Unit-of-Work v3.1 Milestone 3: Native C++ 16/16 Semantic Conformance Qualification",
+  "signoff_level": "L3 Cross-Language Conformance Qualified",
+  "disposition": "QUALIFIED",
+  "claim": "Native C++ semantic conformance: 16/16 canonical UoW v3 vectors.",
+  "scope_boundary": "Semantic conformance across the 16 canonical golden vectors. Does not assert full Python/C++ architectural equivalence across broader orchestration, autonomy, or semantic mediation layers.",
+  "compiler": {
+    "binary": "g++.exe",
+    "version": "13.2.0 (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r8)",
+    "standard": "C++17",
+    "flags": "-std=c++17 -I runtimes/cpp/include"
+  },
+  "immutable_provenance": {
+    "base_commit_sha": "ef335f0fcb7dd97c558c422c544d6db523c9ce05",
+    "runner_binary_sha256": "765b32610472a0c0f75e438ea15da70b33f005db14a883238ac40c7c7e3ead34",
+    "baseline": {
+      "core_semantics_cpp_sha256": "7e1897f8e955636b708c554fc6061f10515a897f853bd506b43273538ddf5d0e",
+      "uow_embedded_cpp_sha256": "38ba8f6d15f1225a1810d80de950216ccc03096cc828cbd4eb47409edb10c250",
+      "baseline_executable_sha256": "86e9f933c728c09486c921a3ac2db616364186009d82b644ba51e3261fdee28e"
+    },
+    "source_files": {
+      "conformance_runner_cpp_sha256": "d15359dfce6e166028c0a7a593e16ac459eeabb590db4746827d59cfc97df1b6",
+      "native_evidence_cpp_sha256": "6d0292da702380d7bcfd3fa92232d238dcc9f95fb5218305727b81a9327e3538",
+      "native_idempotency_cpp_sha256": "10d02bb8eeff8b6978f6286ceb0a383160a3b9bc2ed318646de5b46533ab61ef",
+      "native_protocol_cpp_sha256": "fa028252bdeaa36f48fffd6e0f18484fd91f7e168e2a6ce89e0671a81db244b1",
+      "native_state_cpp_sha256": "c5b58f5fe21baee1972bbe1061caf575c585857bf9e3448301490d52ac20f922",
+      "uow_native_evidence_hpp_sha256": "584d84b8e2205431931c41d7bae975d6391b4cd63e07a70d9c96c765e0a05b9a",
+      "uow_native_idempotency_hpp_sha256": "5ebba1c20b716da02e079ec9016a8b75cf8fd699c46dac997918743549b917f2",
+      "uow_native_protocol_hpp_sha256": "d9bdf30001d25c9b33b2a2e3523b65dab4912015c2802e262540e8f15f97837d",
+      "uow_native_state_hpp_sha256": "6a052c8cc223968b497d563a014bc49ca7b079ff75a08d1f0e60a8f4a6d1bf59",
+      "uow_native_types_hpp_sha256": "15d883eb3b8028369109107d013d72fa3c7ced61e1f7e921a45d9a516865ba6a"
+    },
+    "canonical_vectors": {
+      "001_execute_one_success": "f8d3bfcc8d7c0fd077be0c864aef9b58680bd715717302d963c760250a3e9215",
+      "002_guard_unsatisfied_rejection": "ad0f436993d838f71cb8006f73806586cc9595c5ecbda5014c9c2ea2e8cccc99",
+      "003_stale_pre_state_rejection": "913b0b373b6110fbeda8848fd6799de215072b533de617ccd4dea62f737ae1ab",
+      "004_tampered_proposal_rejection": "5e5d1464ccbe9422b17970f23f7abf7ba36cd3a6930e1c8acbb0e6814665c406",
+      "005_evidence_chain_continuity": "72053c1382e6763f61deb6e355c227d707745bd7975679523e900b19289af91a",
+      "006_authority_unauthorized_rejection": "7f93305051fe716f11f7b791b0d1e5ce352f59e03cf427f22bd04d9d80a2ce61",
+      "007_idempotency_replay": "723d183119b40811f6221253c9a7e06ff9bdfa7c1780db57d238b6e9b3e9bd11",
+      "008_domain_inventory_reserve": "370dbb0ba8b9910edefa91ee03b30dcee0488fd05553c130bfc239f1541d7c0d",
+      "009_malformed_envelope_rejection": "2c53a20bf612a08e5d95214ffd5d940e7df7d9a291010c27a94968ca50891421",
+      "010_unknown_protocol_version": "d3a22e0fc418d8256e32f39ac9ccd99b94d85a44a086c0a0db4062ffce7a0be5",
+      "011_idempotency_payload_conflict": "1e075351de1f4fd15d20d329e02e0655403795418d126b6cc7a67c33ddf75dc4",
+      "012_authority_escalation_attempt": "37282c156124daf53d9a5cae0cc6834d5f872ffc23162fbf87281bfc4009cb17",
+      "013_evidence_tampering_rejection": "f18e7202b9d6d44c8c3051d631bf7b52455a1b69f8e1fe3646055522ca276000",
+      "014_unicode_and_special_characters": "ca894bd657c6ca51220430840dde937fbb2d08255d6882b757b270b0c70157bf",
+      "015_integer_boundary_cases": "cdd2146ecc12ae2de046f706c9d5999b067722fef71280b19c561f53aa3d6890",
+      "016_transport_retry_duplicate_ack": "313f921b80978437b0c2c47e078a57b283af43e9e963498ab5b6251d73082161"
+    }
+  },
+  "qualification_gates": [
+    {
+      "gate_id": "CPP-M3-G01",
+      "name": "Transition Semantics Execution",
+      "vectors": ["001_execute_one_success", "002_guard_unsatisfied_rejection", "003_stale_pre_state_rejection", "004_tampered_proposal_rejection", "006_authority_unauthorized_rejection"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G02",
+      "name": "Evidence Ledger Hash Continuity",
+      "vectors": ["005_evidence_chain_continuity", "013_evidence_tampering_rejection"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G03",
+      "name": "Idempotency Store & Payload Binding",
+      "vectors": ["007_idempotency_replay", "011_idempotency_payload_conflict", "016_transport_retry_duplicate_ack"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G04",
+      "name": "Domain Operation Lowering",
+      "vectors": ["008_domain_inventory_reserve"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G05",
+      "name": "Envelope Schema & Version Defense",
+      "vectors": ["009_malformed_envelope_rejection", "010_unknown_protocol_version"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G06",
+      "name": "Authority Escalation Rejection",
+      "vectors": ["012_authority_escalation_attempt"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G07",
+      "name": "Multilingual UTF-8 State Preservation",
+      "vectors": ["014_unicode_and_special_characters"],
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "CPP-M3-G08",
+      "name": "64-Bit Signed Integer Boundaries",
+      "vectors": ["015_integer_boundary_cases"],
+      "status": "PASSED"
+    }
+  ]
+}

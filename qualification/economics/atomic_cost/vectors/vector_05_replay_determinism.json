@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-ECON-05",
+  "name": "Evidence-Bound Cost Replay Determinism Vector",
+  "description": "Demonstrates that cost measurements are cryptographically bound to execution evidence and replayable across logs, with instant tamper detection.",
+  "canonical_hasher": "SHA-256 over RFC-8785 canonical JSON of {uow_id, cost, realization_id, timestamp_epoch_ms, state_hash_pre, state_hash_post}",
+  "records": [
+    {
+      "observation_id": "obs-wal-1001",
+      "uow_id": "uow://wal/seq-1001",
+      "cost": {
+        "c_h": 0.0,
+        "c_m": 0.025,
+        "c_e": 0.005,
+        "c_r": 0.002,
+        "c_k": 0.0002,
+        "c_d": 0.001,
+        "currency": "USD"
+      },
+      "realization_id": "R_HOST_X86",
+      "timestamp_epoch_ms": 1790856000000,
+      "state_hash_pre": "state_pre_hash_aaa111",
+      "state_hash_post": "state_post_hash_bbb222",
+      "evidence_hash": "95fa8082849b1ebff1220c3d52660ee4e2909ceadefdf16b860a4464d8462689"
+    },
+    {
+      "observation_id": "obs-wal-1002",
+      "uow_id": "uow://wal/seq-1002",
+      "cost": {
+        "c_h": 0.5,
+        "c_m": 0.008,
+        "c_e": 0.001,
+        "c_r": 0.003,
+        "c_k": 0.0001,
+        "c_d": 0.05,
+        "currency": "USD"
+      },
+      "realization_id": "R_HOST_X86",
+      "timestamp_epoch_ms": 1790856001000,
+      "state_hash_pre": "state_pre_hash_bbb222",
+      "state_hash_post": "state_post_hash_ccc333",
+      "evidence_hash": "196ca66ba9c8fd716b80254671c55ea547193f64ce7003241ab99389c9d7041e"
+    }
+  ],
+  "adversarial_tamper_cases": [
+    {
+      "case_id": "TAMPER-01-REDUCE-COMPUTE-COST",
+      "target_observation_id": "obs-wal-1001",
+      "tampered_attribute": "c_m",
+      "original_value": 0.025,
+      "tampered_value": 0.01,
+      "expected_verification": "FAILED_EVIDENCE_MISMATCH"
+    },
+    {
+      "case_id": "TAMPER-02-FORGE-PRE-STATE-LINK",
+      "target_observation_id": "obs-wal-1002",
+      "tampered_attribute": "state_hash_pre",
+      "original_value": "state_pre_hash_bbb222",
+      "tampered_value": "forged_state_hash_xxx999",
+      "expected_verification": "FAILED_EVIDENCE_MISMATCH"
+    }
+  ],
+  "invariants": {
+    "evidence_hash_reproducibility": true,
+    "tamper_evidence_detected": true,
+    "immutable_ledger_continuity": true
+  }
+}

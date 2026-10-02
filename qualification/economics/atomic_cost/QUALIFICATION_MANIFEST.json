@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": "1.0.0",
+  "campaign_id": "ECON-ATOMIC-COST-M2",
+  "campaign_name": "Unit-of-Work v3.1 Milestone 2: Atomic Cost Representation & Measurement Semantics Qualification",
+  "signoff_level": "L2 Formal Model & Conformance Qualification",
+  "disposition": "QUALIFIED",
+  "governing_principles": [
+    "Cost Observation != Pricing Decision",
+    "Production Cost != Market Price != Consumer Value",
+    "Economic Optimizer Proposes -> UoW Authority Certifies -> State Changes",
+    "Cheapest Option != Automatic Authority",
+    "C(u) = C_H + C_M + C_E + C_R + C_K + C_D",
+    "C(U) = sum_i(C(U_i)) + C_composition",
+    "C_F = C_observed - C* >= 0"
+  ],
+  "target_model": {
+    "cost_representation": "Orthogonal 6-Dimension Atomic Cost Tuple C(u)",
+    "dimensions": {
+      "C_H": "Human work cost (review, manual approval, supervision)",
+      "C_M": "Machine compute cost (CPU/GPU instruction cycles)",
+      "C_E": "Energy cost (joules / kWh consumption)",
+      "C_R": "Resource/capital cost (RAM/storage lease & device depreciation)",
+      "C_K": "Failure/recovery expectation (p_fail * recovery cost)",
+      "C_D": "Delay/opportunity cost (latency penalty / queue wait)"
+    }
+  },
+  "immutable_provenance": {
+    "base_commit_sha": "071c2098d63c483a31c514805c56c2c8f0f08916",
+    "source_files": {
+      "atomic_cost_py_sha256": "712d7edb86bc7cf6443c938e8775201cb8a3a83e96a3fdc712edd3dd6009b449",
+      "boundary_py_sha256": "cfe5e1098f7a7831283387f20990973f0afb06dfe9793cd475fa73ba7ccf4db3",
+      "composition_py_sha256": "c37970a035a90edbd36e8aadcfcc5d41b241761cbe5be3a70df7f358594fcde6",
+      "friction_py_sha256": "14c43c7731155e190155facff3c889e33cc375dccc747e3f5a22701104f8f741",
+      "init_py_sha256": "6395d0a358d4c793dc5ec1ef09f4604988fde4fb252d7a4614ecb3ee8bbe238c"
+    },
+    "vectors": {
+      "vector_01_component_accounting_sha256": "de1450d2f3b579852f0727e93798c7f42868fc0362b5cd295f87abc34f706fca",
+      "vector_02_recursive_composition_sha256": "728d7dc49a06faec2b159b658d8ddf92d6dcfa77f1bacd1521e8bff9c91cbb43",
+      "vector_03_realization_equivalence_sha256": "d7987a31e2038126ac64064a7784ddcb8ea75350d2481e9f5eafde6b0ae78a80",
+      "vector_04_friction_separation_sha256": "7e226c6c6fa861e431789063f23ff7b289d764511904b8239a75956d92d24894",
+      "vector_05_replay_determinism_sha256": "c2b53564dda38c66ecdabb789df7031548a900e07b4c332d1ec6aa279bea0211",
+      "vector_06_policy_authority_boundary_sha256": "ae209d2d9ddb2efe6b992127eeb3bc7d401c4487883a2f5995e9dc2f5d9adb39"
+    }
+  },
+  "qualification_gates": [
+    {
+      "gate_id": "ECON-M2-G01",
+      "name": "Component-Wise Atomic Accounting",
+      "criteria": "Every atomic UoW carries a reproducible cost observation across the 6 orthogonal cost dimensions; total equals sum of components.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "ECON-M2-G02",
+      "name": "Recursive Composition Conservation",
+      "criteria": "Recursive composition preserves total cost: C(U) = sum_i(C(U_i)) + C_composition.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "ECON-M2-G03",
+      "name": "Heterogeneous Realization Equivalence",
+      "criteria": "Different valid realizations of identical semantic work are comparable without mutating the work contract or state delta.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "ECON-M2-G04",
+      "name": "Friction vs. Necessary Work Separation",
+      "criteria": "Friction cost is strictly isolated: C_F = C_observed - C* >= 0, and necessary work C* is invariant to operational friction.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "ECON-M2-G05",
+      "name": "Evidence-Bound Replay Determinism",
+      "criteria": "Cost observations are cryptographically linked to evidence logs; log/WAL replay yields identical observations, and tampering triggers immediate verification failure.",
+      "status": "PASSED"
+    },
+    {
+      "gate_id": "ECON-M2-G06",
+      "name": "Policy/Authority Non-Escalation Boundary",
+      "criteria": "Economic optimizers propose candidate allocations; authority gates independently certify validity; lowest cost never gains automatic transition authority.",
+      "status": "PASSED"
+    }
+  ]
+}

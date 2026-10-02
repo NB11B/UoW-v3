@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-ECON-03",
+  "name": "Heterogeneous Realization Cost Equivalence Vector",
+  "description": "Demonstrates that different valid realizations of identical semantic work produce distinct cost profiles without perturbing the work contract or post-transition state.",
+  "invariant": "Work Definition W and State Delta Delta S are invariant across heterogeneous realizations R_i",
+  "canonical_work": {
+    "uow_id": "uow://inference/feature-transformation-42",
+    "matrix_cell": "PROCESSES_TO_DATA",
+    "pre_state": {
+      "counter": 100,
+      "status": "PENDING"
+    },
+    "post_state": {
+      "counter": 101,
+      "status": "PROCESSED"
+    }
+  },
+  "realizations": [
+    {
+      "realization_id": "R_HOST_X86",
+      "platform": "AMD64 Linux / Windows Host",
+      "cost_observation": {
+        "c_h": 0.0,
+        "c_m": 0.005,
+        "c_e": 0.0012,
+        "c_r": 0.0008,
+        "c_k": 0.0001,
+        "c_d": 0.0002,
+        "total": 0.0073
+      },
+      "tradeoff_profile": "Lowest latency (C_D minimal), highest energy/compute"
+    },
+    {
+      "realization_id": "R_INTEL_NPU",
+      "platform": "Intel AI Boost NPU via OpenVINO",
+      "cost_observation": {
+        "c_h": 0.0,
+        "c_m": 0.0015,
+        "c_e": 0.0002,
+        "c_r": 0.0025,
+        "c_k": 0.0001,
+        "c_d": 0.0005,
+        "total": 0.0048
+      },
+      "tradeoff_profile": "Lowest total cost, ultra-low energy, higher hardware capital depreciation (C_R)"
+    },
+    {
+      "realization_id": "R_ESP32_EDGE",
+      "platform": "Espressif ESP32-S3 (KryonOS / Native Gate)",
+      "cost_observation": {
+        "c_h": 0.0,
+        "c_m": 0.0008,
+        "c_e": 0.00005,
+        "c_r": 0.0001,
+        "c_k": 0.0004,
+        "c_d": 0.004,
+        "total": 0.00535
+      },
+      "tradeoff_profile": "Lowest absolute energy draw (C_E), higher execution latency (C_D)"
+    }
+  ],
+  "invariants": {
+    "semantic_work_identity_preserved": true,
+    "state_transition_delta_identical": true,
+    "cost_profiles_differ_by_realization": true
+  }
+}

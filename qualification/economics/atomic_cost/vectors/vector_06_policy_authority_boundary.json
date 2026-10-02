@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-ECON-06",
+  "name": "Policy/Authority Non-Escalation Boundary Vector",
+  "description": "Proves that economic optimization and pricing policies operate exclusively in the proposal plane and cannot bypass or escalate through the UoW authority gate.",
+  "governing_principle": "Economic optimizer proposes -> UoW authority certifies -> State changes. Cheapest option != Automatic authority.",
+  "test_cases": [
+    {
+      "case_id": "CASE-01-OPTIMAL-VALID-PROPOSAL",
+      "description": "Optimizer selects lowest-cost valid realization; authority gate certifies and commits transition.",
+      "initial_state": {
+        "account_id": "acc-901",
+        "balance": 500,
+        "is_active": true,
+        "status": "READY"
+      },
+      "candidate_options": [
+        {
+          "realization_id": "R_CLOUD_API",
+          "projected_cost": {
+            "c_h": 0.0,
+            "c_m": 0.1,
+            "c_e": 0.015,
+            "c_r": 0.004,
+            "c_k": 0.001,
+            "c_d": 0.005,
+            "total": 0.125
+          }
+        },
+        {
+          "realization_id": "R_LOCAL_NPU",
+          "projected_cost": {
+            "c_h": 0.0,
+            "c_m": 0.012,
+            "c_e": 0.001,
+            "c_r": 0.005,
+            "c_k": 0.0005,
+            "c_d": 0.0015,
+            "total": 0.02
+          }
+        }
+      ],
+      "optimizer_selection": "R_LOCAL_NPU",
+      "authority_evaluation": {
+        "guard_satisfied": true,
+        "outcome": "CERTIFIED_AND_COMMITTED",
+        "expected_post_state": {
+          "account_id": "acc-901",
+          "balance": 480,
+          "is_active": true,
+          "status": "EXECUTED"
+        }
+      }
+    },
+    {
+      "case_id": "CASE-02-ADVERSARIAL-CHEAPEST-PROPOSAL",
+      "description": "Optimizer or adversary proposes zero-cost option that violates state security guard; authority gate fails closed.",
+      "initial_state": {
+        "account_id": "acc-902",
+        "balance": 10,
+        "is_active": false,
+        "status": "SUSPENDED"
+      },
+      "candidate_options": [
+        {
+          "realization_id": "R_ZERO_COST_UNAUTHORIZED",
+          "projected_cost": {
+            "c_h": 0.0,
+            "c_m": 0.0,
+            "c_e": 0.0,
+            "c_r": 0.0,
+            "c_k": 0.0,
+            "c_d": 0.0,
+            "total": 0.0
+          }
+        }
+      ],
+      "optimizer_selection": "R_ZERO_COST_UNAUTHORIZED",
+      "authority_evaluation": {
+        "guard_satisfied": false,
+        "rejection_reason": "State invariant failed: account is SUSPENDED and balance below required reserve",
+        "outcome": "REJECTED_BY_AUTHORITY",
+        "expected_post_state": {
+          "account_id": "acc-902",
+          "balance": 10,
+          "is_active": false,
+          "status": "SUSPENDED"
+        },
+        "state_mutated": false
+      }
+    },
+    {
+      "case_id": "CASE-03-DOWNSTREAM-PRICING-ISOLATION",
+      "description": "Downstream pricing policy quotes a markup price based on market scarcity without altering physical cost observation or authority certification.",
+      "initial_state": {
+        "resource_id": "gpu-slot-4",
+        "allocated": false
+      },
+      "physical_cost_observation": {
+        "c_h": 0.0,
+        "c_m": 0.04,
+        "c_e": 0.008,
+        "c_r": 0.0015,
+        "c_k": 0.0003,
+        "c_d": 0.0002,
+        "total": 0.05
+      },
+      "downstream_pricing_policy": {
+        "spot_demand_multiplier": 3.0,
+        "market_price_quote": 0.15,
+        "pricing_decision": "QUOTE_ISSUED"
+      },
+      "invariants": {
+        "cost_observation_unperturbed": true,
+        "pricing_does_not_mutate_cost_tuple": true,
+        "authority_gate_independent_of_price": true
+      }
+    }
+  ],
+  "invariants": {
+    "cheapest_does_not_confer_authority": true,
+    "unauthorized_proposal_fails_closed": true,
+    "pricing_distinct_from_cost_observation": true
+  }
+}

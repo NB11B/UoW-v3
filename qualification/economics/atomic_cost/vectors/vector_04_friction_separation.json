@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "vector_id": "VEC-ECON-04",
+  "name": "Friction vs. Necessary Work Separation Vector",
+  "description": "Demonstrates quantitative separation of coordination, contention, and retry friction from thermodynamic and computational necessary work: C_F = C_observed - C*.",
+  "formula": "C_F = C_{\\text{observed}} - C^* \\ge 0",
+  "test_cases": [
+    {
+      "case_id": "TC-01-IDEAL-DIRECT-EXECUTION",
+      "scenario": "Direct uncontended execution with zero retries or delays",
+      "necessary_cost": {
+        "c_h": 0.0,
+        "c_m": 0.01,
+        "c_e": 0.002,
+        "c_r": 0.001,
+        "c_k": 0.0001,
+        "c_d": 0.0005,
+        "total": 0.0136
+      },
+      "observed_cost": {
+        "c_h": 0.0,
+        "c_m": 0.01,
+        "c_e": 0.002,
+        "c_r": 0.001,
+        "c_k": 0.0001,
+        "c_d": 0.0005,
+        "total": 0.0136
+      },
+      "expected_friction": {
+        "c_h": 0.0,
+        "c_m": 0.0,
+        "c_e": 0.0,
+        "c_r": 0.0,
+        "c_k": 0.0,
+        "c_d": 0.0,
+        "total": 0.0
+      },
+      "expected_friction_ratio": 0.0,
+      "expected_efficiency": 1.0
+    },
+    {
+      "case_id": "TC-02-OCC-CONTENTION-AND-RETRIES",
+      "scenario": "Optimistic Concurrency Control collision with 2 abort/retry cycles and backoff",
+      "necessary_cost": {
+        "c_h": 0.0,
+        "c_m": 0.01,
+        "c_e": 0.002,
+        "c_r": 0.001,
+        "c_k": 0.0001,
+        "c_d": 0.0005,
+        "total": 0.0136
+      },
+      "observed_cost": {
+        "c_h": 0.0,
+        "c_m": 0.03,
+        "c_e": 0.006,
+        "c_r": 0.002,
+        "c_k": 0.0005,
+        "c_d": 0.008,
+        "total": 0.0465
+      },
+      "expected_friction": {
+        "c_h": 0.0,
+        "c_m": 0.02,
+        "c_e": 0.004,
+        "c_r": 0.001,
+        "c_k": 0.0004,
+        "c_d": 0.0075,
+        "total": 0.0329
+      },
+      "expected_friction_ratio": 0.707527,
+      "expected_efficiency": 0.292473
+    },
+    {
+      "case_id": "TC-03-DISTRIBUTED-NETWORK-PARTITION",
+      "scenario": "Network partition causing delayed quorum packet arrival and re-election latency",
+      "necessary_cost": {
+        "c_h": 0.0,
+        "c_m": 0.005,
+        "c_e": 0.001,
+        "c_r": 0.0005,
+        "c_k": 0.0001,
+        "c_d": 0.001,
+        "total": 0.0076
+      },
+      "observed_cost": {
+        "c_h": 0.0,
+        "c_m": 0.008,
+        "c_e": 0.0025,
+        "c_r": 0.0015,
+        "c_k": 0.0008,
+        "c_d": 0.012,
+        "total": 0.0248
+      },
+      "expected_friction": {
+        "c_h": 0.0,
+        "c_m": 0.003,
+        "c_e": 0.0015,
+        "c_r": 0.001,
+        "c_k": 0.0007,
+        "c_d": 0.011,
+        "total": 0.0172
+      },
+      "expected_friction_ratio": 0.693548,
+      "expected_efficiency": 0.306452
+    }
+  ],
+  "invariants": {
+    "friction_is_non_negative": true,
+    "necessary_cost_is_invariant_to_friction": true,
+    "efficiency_plus_friction_ratio_equals_unity": true
+  }
+}

@@ -20,6 +20,31 @@ def rows(seed, count, template):
         result.append((TEMPLATES[template].format(a=a,b=b),str(hi),str(lo)))
     return result
 
+def independent_splits(seed, sizes=(24, 48, 48)):
+    """Disjoint unordered numeric pairs, even across prompt-template shifts."""
+    rng = random.Random(seed)
+    universe = [(a, b) for a in range(10, 95) for b in range(a + 1, 95)]
+    if sum(sizes) > len(universe):
+        raise ValueError("Requested more distinct pairs than available")
+    rng.shuffle(universe)
+    out = []
+    offset = 0
+    for template, count in enumerate(sizes):
+        partition = []
+        for j, (lo, hi) in enumerate(universe[offset:offset + count]):
+            a, b = (hi, lo) if j % 2 == 0 else (lo, hi)
+            partition.append((TEMPLATES[template].format(a=a, b=b), str(hi), str(lo)))
+        out.append(partition)
+        offset += count
+    return tuple(out)
+
+
+def rank_p_value(effect, controls):
+    if not controls:
+        raise ValueError("At least one control is required")
+    return (1 + sum(value >= effect for value in controls)) / (1 + len(controls))
+
+
 def projections(model):
     return [(n,m) for n,m in model.named_modules() if n.endswith("mlp.down_proj") and hasattr(m,"in_features")]
 
@@ -71,9 +96,7 @@ def main():
     layers=projections(model)
     if not layers: raise ValueError("Model has no supported mlp.down_proj")
     name,layer=layers[-1]
-    selection=rows(args.seed,24,0)
-    holdout=rows(args.seed+10000,48,1)
-    shifted=rows(args.seed+20000,48,2)
+    selection, holdout, shifted = independent_splits(args.seed)
     rng=random.Random(args.seed+31337)
     candidate=sorted(rng.sample(range(layer.in_features),min(32,layer.in_features)))
     train_base=measure(model,tokenizer,selection,device)
@@ -85,13 +108,13 @@ def main():
     shift_intervention=measure(model,tokenizer,shifted,device,layer,selected)
     effect=abs(baseline["margin"]-intervention["margin"])
     controls=[abs(baseline["margin"]-measure(model,tokenizer,holdout,device,layer,i)["margin"]) for i in candidate if i!=selected]
-    p_value=(1+sum(v>=effect for v in controls))/(1+len(controls))
+    p_value=rank_p_value(effect,controls)
     report={"campaign":"UOW-NATIVE-1 Stage 2","model":args.model,"revision":args.revision,
         "seed":args.seed,"layer":name,"neuron":selected,"candidates":len(candidate),
         "selection_train_only":True,"baseline":baseline,"intervention":intervention,
         "shift_baseline":shift_base,"shift_intervention":shift_intervention,
         "holdout_margin_effect":effect,"random_control_margin_effects":controls,
-        "control_rank_p":p_value,"nominal_p_below_0_05":p_value<0.05,
+        "control_rank_p":p_value,"exploratory_control_rank_below_0_05":p_value<0.05,\n        "statistical_warning":"Selected and comparison neurons are not exchangeable; rank is descriptive, not a valid confirmatory p-value.",
         "limitations":"Neural intervention only; not UoW conformance or isolated capability."}
     result=json.dumps(report,indent=2,sort_keys=True)
     with open(args.output,"w",encoding="utf8") as file: file.write(result+"\n")

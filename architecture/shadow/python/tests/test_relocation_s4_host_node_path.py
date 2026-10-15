@@ -11,10 +11,10 @@ from uow.implementations.distributed import PhysicalHostNode as ImplHost
 
 
 def test_s4_host_node_import_paths_remain_identity_compatible():
-    assert DurableWAL is ImplWAL is ShimWAL is uow.DurableWAL
-    assert PhysicalHostNode is ImplHost is ShimHost is uow.PhysicalHostNode
-
-
+    assert DurableWAL is ImplWAL is ShimWAL
+    assert not hasattr(uow, "DurableWAL")
+    assert PhysicalHostNode is ImplHost is ShimHost
+    assert not hasattr(uow, "PhysicalHostNode")
 def test_s4_historical_host_node_module_is_only_shim():
     import uow.composition.host_node as shim
 

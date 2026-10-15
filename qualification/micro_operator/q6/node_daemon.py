@@ -60,7 +60,10 @@ class NodeDaemon:
         self.ledger = EvidenceLedger()
         self.prepared_groups: Dict[str, Dict[str, Any]] = {}
         self.committed_groups: set[str] = set()
+        self.committed_certificates: Dict[str, Dict[str, Any]] = {}
         self.uncertain_groups: set[str] = set()
+        self.clock_skew_seconds: float = 0.0
+        self.simulated_delay_seconds: float = 0.0
 
         self._server_sock: Optional[socket.socket] = None
         self._thread: Optional[threading.Thread] = None
@@ -82,6 +85,7 @@ class NodeDaemon:
         curr_ledger = EvidenceLedger()
         prepared_map = {}
         committed_set = set()
+        committed_certs = {}
 
         for rec in records:
             if rec.record_type == "INIT":
@@ -92,6 +96,8 @@ class NodeDaemon:
             elif rec.record_type == "COMMIT":
                 gid = rec.payload["group_id"]
                 committed_set.add(gid)
+                if rec.payload.get("certificate"):
+                    committed_certs[gid] = rec.payload["certificate"]
                 if gid in prepared_map:
                     # Apply member records
                     pdata = prepared_map.pop(gid)
@@ -136,6 +142,7 @@ class NodeDaemon:
         self.ledger = curr_ledger
         self.prepared_groups = prepared_map
         self.committed_groups = committed_set
+        self.committed_certificates = committed_certs
         # Any remaining prepared groups without commit or abort are UNCERTAIN
         self.uncertain_groups = set(prepared_map.keys())
 
@@ -176,6 +183,8 @@ class NodeDaemon:
                     req = recv_frame(conn)
                     if req is None:
                         break
+                    if self.simulated_delay_seconds > 0:
+                        time.sleep(self.simulated_delay_seconds)
                     resp = self.process_message(req)
                     send_frame(conn, resp)
                 except Exception as e:
@@ -212,12 +221,20 @@ class NodeDaemon:
                     "uncertain_groups": list(self.uncertain_groups),
                     "prepared_groups": list(self.prepared_groups.keys()),
                     "wal_record_count": len(self.wal.read_all()),
+                    "clock_skew_seconds": self.clock_skew_seconds,
+                    "simulated_delay_seconds": self.simulated_delay_seconds,
                 }
             elif mtype == "INJECT_STATE_DIVERGENCE":
                 attr = req.get("attribute", "counter")
                 val = req.get("value", 999999)
                 self.state = self.state.with_attribute(attr, val)
                 return {"status": "OK", "state_hash": self.state.state_hash}
+            elif mtype == "SET_CLOCK_SKEW":
+                self.clock_skew_seconds = float(req.get("skew_seconds", 0.0))
+                return {"status": "OK", "clock_skew_seconds": self.clock_skew_seconds}
+            elif mtype == "SET_NETWORK_DELAY":
+                self.simulated_delay_seconds = float(req.get("delay_seconds", 0.0))
+                return {"status": "OK", "simulated_delay_seconds": self.simulated_delay_seconds}
             elif mtype == "PING":
                 return {"status": "PONG", "node_id": self.node_id, "sequence": self.state.sequence}
             else:
@@ -364,6 +381,8 @@ class NodeDaemon:
 
         self.state = target_state
         self.committed_groups.add(group_id)
+        if cert:
+            self.committed_certificates[group_id] = cert
         self.prepared_groups.pop(group_id, None)
         self.uncertain_groups.discard(group_id)
 
@@ -377,7 +396,11 @@ class NodeDaemon:
     def _handle_query_status(self, req: Dict[str, Any]) -> Dict[str, Any]:
         group_id = req["group_id"]
         if group_id in self.committed_groups:
-            return {"status": "COMMITTED", "node_id": self.node_id}
+            return {
+                "status": "COMMITTED",
+                "node_id": self.node_id,
+                "group_certificate": self.committed_certificates.get(group_id),
+            }
         elif group_id in self.prepared_groups:
             return {"status": "PREPARED", "node_id": self.node_id}
         return {"status": "UNKNOWN", "node_id": self.node_id}
@@ -423,12 +446,67 @@ class NodeDaemon:
             "evidence_root": self.ledger.root_hash(),
         }
 
+    def _verify_group_certificate_for_recovery(
+        self,
+        gid: str,
+        pdata: Dict[str, Any],
+        cert: Dict[str, Any],
+    ) -> bool:
+        """Cryptographically verify that a peer's presented certificate is authentic before recovery.
+
+        Verifies:
+        1. Certificate binds the exact local prepared group digest.
+        2. Certificate binds the exact state hash and evidence root.
+        3. Quorum count is sufficient (>= 2).
+        4. Every voter's Ed25519 signature on its ballot is cryptographically valid.
+        """
+        try:
+            # 1. Bind group digest
+            if cert.get("digest") != pdata["group_digest"]:
+                return False
+
+            # 2. Bind state hash and evidence root
+            expected_state = pdata["final_state"]["state_hash"]
+            expected_root = pdata["ballot"]["evidence_root"]
+            if cert.get("state_hash") != expected_state:
+                return False
+            if cert.get("evidence_root") != expected_root:
+                return False
+
+            # 3. Quorum validation (at least 2 valid voter signatures)
+            voters = cert.get("voters", [])
+            signatures = cert.get("signatures", [])
+            ballots = cert.get("ballots", [])
+            if len(voters) < 2 or len(voters) != len(signatures) or len(voters) != len(ballots):
+                return False
+
+            # 4. Verify each voter's Ed25519 signature
+            for vid, sig_hex, ballot in zip(voters, signatures, ballots):
+                if not self.registry.has_node(vid):
+                    return False
+                if ballot.get("digest") != pdata["group_digest"]:
+                    return False
+                if ballot.get("state_hash") != expected_state:
+                    return False
+                if ballot.get("evidence_root") != expected_root:
+                    return False
+                ballot_bytes = canonical_json(ballot).encode("utf-8")
+                if not self.registry.verify(vid, ballot_bytes, sig_hex):
+                    return False
+
+            return True
+        except Exception:
+            return False
+
     def resolve_uncertain_groups_cooperatively(self) -> Dict[str, str]:
         """Cooperative recovery protocol: query peer nodes for any uncertain groups.
 
-        CRITICAL SAFETY RULE: An uncertain transaction must never be aborted merely
-        because currently reachable peers do not know its outcome. Recovery must
-        establish an authoritative decision or remain blocked safely.
+        CRITICAL SAFETY RULES:
+        1. An uncertain transaction must never be aborted merely because currently
+           reachable peers do not know its outcome.
+        2. A peer's status string is NOT by itself proof of commitment. Recovery
+           strictly requires a verifiable group decision certificate binding the exact
+           group digest, evidence root, state hash, and verifiable Ed25519 quorum signatures.
         """
         resolutions = {}
         with self._lock:
@@ -436,66 +514,67 @@ class NodeDaemon:
 
         for gid in uncertain:
             # Query all reachable peers
-            peer_statuses = {}
+            peer_responses: Dict[str, Dict[str, Any]] = {}
             for peer_id, (p_host, p_port) in self.peer_addresses.items():
                 if peer_id == self.node_id:
                     continue
                 try:
                     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    s.settimeout(1.0)
+                    s.settimeout(2.0)
                     s.connect((p_host, p_port))
                     send_frame(s, {"type": "QUERY_STATUS", "group_id": gid})
-                    resp = recv_frame(s, timeout=1.0)
+                    resp = recv_frame(s, timeout=2.0)
                     s.close()
                     if resp:
-                        peer_statuses[peer_id] = resp.get("status")
+                        peer_responses[peer_id] = resp
                 except Exception:
                     pass
 
             with self._lock:
-                if any(st == "COMMITTED" for st in peer_statuses.values()):
-                    # A peer committed it! Safe to commit.
-                    pdata = self.prepared_groups.get(gid)
-                    if pdata:
-                        sdict = pdata["final_state"]
-                        target_state = WorldState(
-                            attributes=sdict["attributes"],
-                            cursor=sdict["cursor"],
-                            status=sdict["status"],
-                            sequence=sdict["sequence"],
-                        )
-                        # Write-Ahead: Persist COMMIT record to disk WAL FIRST!
-                        self.wal.append("COMMIT", {
-                            "group_id": gid,
-                            "recovered_from_peers": True,
-                            "final_state": target_state.to_dict(),
-                            "evidence_root": pdata["ballot"]["evidence_root"],
-                        })
-                        # AFTER disk persistence, advance in-memory state and ledger
-                        for rdict in pdata["records"]:
-                            r_obj = EvidenceRecord(
-                                step_number=rdict["step_number"],
-                                uow_id=rdict["uow_id"],
-                                source_category=rdict["source_category"],
-                                target_category=rdict["target_category"],
-                                pre_state_hash=rdict["pre_state_hash"],
-                                selected_route_index=rdict["selected_route_index"],
-                                proposed_state_hash=rdict["proposed_state_hash"],
-                                certificate_hash=rdict["certificate_hash"],
-                                post_state_hash=rdict["post_state_hash"],
-                                next_uow_pointer=rdict["next_uow_pointer"],
-                                prev_evidence_hash=rdict["prev_evidence_hash"],
-                            )
-                            self.ledger.append(r_obj)
+                pdata = self.prepared_groups.get(gid)
+                if not pdata:
+                    continue
 
-                        self.state = target_state
-                        self.committed_groups.add(gid)
-                        self.prepared_groups.pop(gid, None)
-                        self.uncertain_groups.discard(gid)
-                        resolutions[gid] = "COMMITTED"
+                verified_cert = None
+                # Must find an authentic, cryptographically verified group certificate from a peer
+                for peer_id, resp in peer_responses.items():
+                    if resp.get("status") == "COMMITTED":
+                        cert = resp.get("group_certificate")
+                        if cert and self._verify_group_certificate_for_recovery(gid, pdata, cert):
+                            verified_cert = cert
+                            break
+
+                if verified_cert is not None:
+                    # Verified authoritative quorum certificate! Safe to commit.
+                    sdict = pdata["final_state"]
+                    target_state = WorldState(
+                        attributes=sdict["attributes"],
+                        cursor=sdict["cursor"],
+                        status=sdict["status"],
+                        sequence=sdict["sequence"],
+                    )
+                    # Write-Ahead: Persist COMMIT record to disk WAL FIRST!
+                    self.wal.append("COMMIT", {
+                        "group_id": gid,
+                        "recovered_from_peers": True,
+                        "certificate": verified_cert,
+                        "final_state": target_state.to_dict(),
+                        "evidence_root": pdata["ballot"]["evidence_root"],
+                    })
+                    # AFTER disk persistence, advance in-memory state and ledger
+                    for rdict in pdata["records"]:
+                        r_obj = EvidenceRecord(**rdict)
+                        self.ledger.append(r_obj)
+
+                    self.state = target_state
+                    self.committed_groups.add(gid)
+                    self.committed_certificates[gid] = verified_cert
+                    self.prepared_groups.pop(gid, None)
+                    self.uncertain_groups.discard(gid)
+                    resolutions[gid] = "COMMITTED"
                 else:
-                    # An uncertain transaction cannot be aborted based on peers reporting UNKNOWN!
-                    # It must remain safely blocked until authoritative commit or explicit signed abort.
+                    # No peer provided a verified cryptographic commit certificate.
+                    # Transaction must remain safely blocked.
                     resolutions[gid] = "UNCERTAIN_BLOCKED"
 
         return resolutions

@@ -1,15 +1,20 @@
-{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 1, "recovered": true, "resolution": "cooperative_peer_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_1"}
+{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 1, "recovered": true, "resolution": "certificate_authenticated_cooperative_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_1"}
 {"fault": "replica_process_kill_and_catchup", "gate": "G09", "group_size": 1, "recovered": true, "test_id": "q6_fault_g09_size_1"}
+{"fault": "extreme_clock_skew_and_asymmetric_scheduling_delay", "gate": "G10", "group_size": 1, "recovered": true, "resolution": "clock_invariant_cryptographic_consensus", "test_id": "q6_fault_g10_size_1"}
 {"fault": "abrupt_process_kill_and_wal_replay", "gate": "G11", "group_size": 1, "recovered": true, "test_id": "q6_fault_g11_size_1"}
-{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 4, "recovered": true, "resolution": "cooperative_peer_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_4"}
+{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 4, "recovered": true, "resolution": "certificate_authenticated_cooperative_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_4"}
 {"fault": "replica_process_kill_and_catchup", "gate": "G09", "group_size": 4, "recovered": true, "test_id": "q6_fault_g09_size_4"}
+{"fault": "extreme_clock_skew_and_asymmetric_scheduling_delay", "gate": "G10", "group_size": 4, "recovered": true, "resolution": "clock_invariant_cryptographic_consensus", "test_id": "q6_fault_g10_size_4"}
 {"fault": "abrupt_process_kill_and_wal_replay", "gate": "G11", "group_size": 4, "recovered": true, "test_id": "q6_fault_g11_size_4"}
-{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 16, "recovered": true, "resolution": "cooperative_peer_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_16"}
+{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 16, "recovered": true, "resolution": "certificate_authenticated_cooperative_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_16"}
 {"fault": "replica_process_kill_and_catchup", "gate": "G09", "group_size": 16, "recovered": true, "test_id": "q6_fault_g09_size_16"}
+{"fault": "extreme_clock_skew_and_asymmetric_scheduling_delay", "gate": "G10", "group_size": 16, "recovered": true, "resolution": "clock_invariant_cryptographic_consensus", "test_id": "q6_fault_g10_size_16"}
 {"fault": "abrupt_process_kill_and_wal_replay", "gate": "G11", "group_size": 16, "recovered": true, "test_id": "q6_fault_g11_size_16"}
-{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 64, "recovered": true, "resolution": "cooperative_peer_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_64"}
+{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 64, "recovered": true, "resolution": "certificate_authenticated_cooperative_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_64"}
 {"fault": "replica_process_kill_and_catchup", "gate": "G09", "group_size": 64, "recovered": true, "test_id": "q6_fault_g09_size_64"}
+{"fault": "extreme_clock_skew_and_asymmetric_scheduling_delay", "gate": "G10", "group_size": 64, "recovered": true, "resolution": "clock_invariant_cryptographic_consensus", "test_id": "q6_fault_g10_size_64"}
 {"fault": "abrupt_process_kill_and_wal_replay", "gate": "G11", "group_size": 64, "recovered": true, "test_id": "q6_fault_g11_size_64"}
-{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 256, "recovered": true, "resolution": "cooperative_peer_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_256"}
+{"fault": "coordinator_crash_mid_publication", "gate": "G08", "group_size": 256, "recovered": true, "resolution": "certificate_authenticated_cooperative_query_with_safe_uncertainty_blocking", "test_id": "q6_fault_g08_size_256"}
 {"fault": "replica_process_kill_and_catchup", "gate": "G09", "group_size": 256, "recovered": true, "test_id": "q6_fault_g09_size_256"}
+{"fault": "extreme_clock_skew_and_asymmetric_scheduling_delay", "gate": "G10", "group_size": 256, "recovered": true, "resolution": "clock_invariant_cryptographic_consensus", "test_id": "q6_fault_g10_size_256"}
 {"fault": "abrupt_process_kill_and_wal_replay", "gate": "G11", "group_size": 256, "recovered": true, "test_id": "q6_fault_g11_size_256"}

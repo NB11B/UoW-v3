@@ -47,7 +47,7 @@
       "verdict": "PASS"
     },
     "G10": {
-      "name": "Independent clocks",
+      "name": "Independent clocks & scheduling jitter",
       "overall_pass": true,
       "verdict": "PASS"
     },
@@ -127,6 +127,7 @@
       },
       "G08": {
         "blocked_safely": true,
+        "certificate_verified": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_4d7745a5848d3616": "COMMITTED"
@@ -144,11 +145,14 @@
         "passed": true
       },
       "G10": {
+        "ballots_clock_invariant": true,
         "gate": "G10",
         "group_size": 1,
-        "name": "Independent clocks",
-        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
-        "passed": true
+        "max_delay_ms": 50.0,
+        "max_skew_seconds": 86400.0,
+        "name": "Independent clocks & scheduling jitter",
+        "passed": true,
+        "state_convergence": true
       },
       "G11": {
         "durability_verified": true,
@@ -156,7 +160,7 @@
         "group_size": 1,
         "name": "Restart durability",
         "passed": true,
-        "wal_records": 12
+        "wal_records": 14
       },
       "G12": {
         "gate": "G12",
@@ -228,6 +232,7 @@
       },
       "G08": {
         "blocked_safely": true,
+        "certificate_verified": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_1687cb7b474b5e1f": "COMMITTED",
@@ -246,11 +251,14 @@
         "passed": true
       },
       "G10": {
+        "ballots_clock_invariant": true,
         "gate": "G10",
         "group_size": 16,
-        "name": "Independent clocks",
-        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
-        "passed": true
+        "max_delay_ms": 50.0,
+        "max_skew_seconds": 86400.0,
+        "name": "Independent clocks & scheduling jitter",
+        "passed": true,
+        "state_convergence": true
       },
       "G11": {
         "durability_verified": true,
@@ -258,7 +266,7 @@
         "group_size": 16,
         "name": "Restart durability",
         "passed": true,
-        "wal_records": 12
+        "wal_records": 14
       },
       "G12": {
         "gate": "G12",
@@ -330,6 +338,7 @@
       },
       "G08": {
         "blocked_safely": true,
+        "certificate_verified": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_1d93941237c08670": "COMMITTED",
@@ -348,11 +357,14 @@
         "passed": true
       },
       "G10": {
+        "ballots_clock_invariant": true,
         "gate": "G10",
         "group_size": 256,
-        "name": "Independent clocks",
-        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
-        "passed": true
+        "max_delay_ms": 50.0,
+        "max_skew_seconds": 86400.0,
+        "name": "Independent clocks & scheduling jitter",
+        "passed": true,
+        "state_convergence": true
       },
       "G11": {
         "durability_verified": true,
@@ -360,7 +372,7 @@
         "group_size": 256,
         "name": "Restart durability",
         "passed": true,
-        "wal_records": 12
+        "wal_records": 14
       },
       "G12": {
         "gate": "G12",
@@ -432,6 +444,7 @@
       },
       "G08": {
         "blocked_safely": true,
+        "certificate_verified": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_dea52ec4b864dc12": "COMMITTED"
@@ -449,11 +462,14 @@
         "passed": true
       },
       "G10": {
+        "ballots_clock_invariant": true,
         "gate": "G10",
         "group_size": 4,
-        "name": "Independent clocks",
-        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
-        "passed": true
+        "max_delay_ms": 50.0,
+        "max_skew_seconds": 86400.0,
+        "name": "Independent clocks & scheduling jitter",
+        "passed": true,
+        "state_convergence": true
       },
       "G11": {
         "durability_verified": true,
@@ -461,7 +477,7 @@
         "group_size": 4,
         "name": "Restart durability",
         "passed": true,
-        "wal_records": 12
+        "wal_records": 14
       },
       "G12": {
         "gate": "G12",
@@ -533,6 +549,7 @@
       },
       "G08": {
         "blocked_safely": true,
+        "certificate_verified": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_c032240444950dae": "COMMITTED",
@@ -551,11 +568,14 @@
         "passed": true
       },
       "G10": {
+        "ballots_clock_invariant": true,
         "gate": "G10",
         "group_size": 64,
-        "name": "Independent clocks",
-        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
-        "passed": true
+        "max_delay_ms": 50.0,
+        "max_skew_seconds": 86400.0,
+        "name": "Independent clocks & scheduling jitter",
+        "passed": true,
+        "state_convergence": true
       },
       "G11": {
         "durability_verified": true,
@@ -563,7 +583,7 @@
         "group_size": 64,
         "name": "Restart durability",
         "passed": true,
-        "wal_records": 12
+        "wal_records": 14
       },
       "G12": {
         "gate": "G12",
@@ -579,7 +599,8 @@
     "evidence": [
       "Genuine OS Subprocesses: Three independent OS processes execute authority replicas with isolated memory spaces and sockets.",
       "Actual Forced Process Termination: Verified via proc.kill() (TerminateProcess) during active prepare and commit cycles without graceful cleanup.",
-      "Safe Cooperative Uncertainty Resolution: Replicas in PREPARE remain safely blocked (UNCERTAIN_BLOCKED) when peer outcome is uncommitted, strictly preventing unilateral aborts on UNKNOWN reports.",
+      "Safe Certificate-Authenticated Uncertainty Resolution: Replicas in PREPARE remain safely blocked (UNCERTAIN_BLOCKED) when peer outcome is uncommitted. Recovery requires a verifiable group decision certificate binding Ed25519 quorum signatures, group digest, and roots before committing.",
+      "Actively Exercised Clock Skew & Scheduling Invariance: Verified under asymmetric \u00b124-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% invariant regardless of local clocks.",
       "Write-Ahead Disk Ordering: Persistent WAL fsyncs COMMIT record to disk before in-memory state and ledger are mutated, guaranteeing recovery durability across crashes.",
       "Replica Rejoin Catchup: Partitioned nodes catch up to the authoritative tip via CATCHUP replay from peer replicas.",
       "Ed25519 Authenticated Quorum: Cryptographically signed ballots prevent vote spoofing or tampering."

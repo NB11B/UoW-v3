@@ -34,7 +34,10 @@ def test_r7_public_api_surface_preserves_baseline_except_approved_post_a3_namesp
             assert observed != expected
             continue
         if rel == "src/uow/__init__.py":
-            assert observed == APPROVED_POST_A3_TOPLEVEL_BLOB
+            migration = (REPO / "architecture" / "CURRENT_PACKAGING_MIGRATION.yaml").read_text(encoding="utf-8")
+            approved = re.search(r"^current_root_blob: ([0-9a-f]{40})$", migration, re.MULTILINE)
+            assert approved is not None
+            assert observed == approved.group(1)
             assert observed != expected
             continue
         assert observed == expected, rel

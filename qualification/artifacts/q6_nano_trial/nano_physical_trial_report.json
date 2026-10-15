@@ -1,7 +1,7 @@
 {
   "trial_name": "Jetson Nano Physical Qualification Trial for Q6",
   "baseline_commit": "eee128cabe6aeb932c0eeb838348e73bd453ca96",
-  "timestamp_iso": "2026-10-15T21:27:48Z",
+  "timestamp_iso": "2026-10-15T21:43:59Z",
   "platform": {
     "system": "Linux",
     "kernel": "4.9.253-tegra",
@@ -14,95 +14,95 @@
   },
   "flash_storage_fsync": {
     "iterations": 100,
-    "min_ms": 1.953,
-    "p50_ms": 2.384,
-    "mean_ms": 3.092,
-    "p90_ms": 2.719,
-    "p95_ms": 3.16,
-    "p99_ms": 55.139,
-    "max_ms": 55.139
+    "min_ms": 1.986,
+    "p50_ms": 2.328,
+    "mean_ms": 2.526,
+    "p90_ms": 2.607,
+    "p95_ms": 2.775,
+    "p99_ms": 16.087,
+    "max_ms": 16.087
   },
   "tcp_traffic_metrics": {
     "1": {
       "group_size": 1,
-      "commit_wall_ms": 64.46,
+      "commit_wall_ms": 65.5,
       "loopback_tcp_bytes": 18255,
       "loopback_packets": 120,
       "analytical_prepare_frame_bytes": 312,
       "analytical_cert_frame_bytes": 2220,
       "bytes_per_member_item": 18255.0,
       "wal_bytes_on_disk": {
-        "A": 0,
-        "B": 0,
-        "C": 0
+        "A": 5149,
+        "B": 5149,
+        "C": 5149
       },
-      "total_wal_bytes_cluster": 0
+      "total_wal_bytes_cluster": 15447
     },
     "4": {
       "group_size": 4,
-      "commit_wall_ms": 83.82,
+      "commit_wall_ms": 81.84,
       "loopback_tcp_bytes": 21288,
       "loopback_packets": 120,
       "analytical_prepare_frame_bytes": 558,
       "analytical_cert_frame_bytes": 3024,
       "bytes_per_member_item": 5322.0,
       "wal_bytes_on_disk": {
-        "A": 0,
-        "B": 0,
-        "C": 0
+        "A": 12938,
+        "B": 12938,
+        "C": 12938
       },
-      "total_wal_bytes_cluster": 0
+      "total_wal_bytes_cluster": 38814
     },
     "16": {
       "group_size": 16,
-      "commit_wall_ms": 146.73,
+      "commit_wall_ms": 146.25,
       "loopback_tcp_bytes": 33420,
       "loopback_packets": 120,
       "analytical_prepare_frame_bytes": 1565,
       "analytical_cert_frame_bytes": 6240,
       "bytes_per_member_item": 2088.8,
       "wal_bytes_on_disk": {
-        "A": 0,
-        "B": 0,
-        "C": 0
+        "A": 33019,
+        "B": 33019,
+        "C": 33019
       },
-      "total_wal_bytes_cluster": 0
+      "total_wal_bytes_cluster": 99057
     },
     "64": {
       "group_size": 64,
-      "commit_wall_ms": 385.32,
+      "commit_wall_ms": 388.98,
       "loopback_tcp_bytes": 81960,
       "loopback_packets": 120,
       "analytical_prepare_frame_bytes": 5597,
       "analytical_cert_frame_bytes": 19104,
       "bytes_per_member_item": 1280.6,
       "wal_bytes_on_disk": {
-        "A": 0,
-        "B": 0,
-        "C": 0
+        "A": 102256,
+        "B": 102256,
+        "C": 102256
       },
-      "total_wal_bytes_cluster": 0
+      "total_wal_bytes_cluster": 306768
     },
     "256": {
       "group_size": 256,
-      "commit_wall_ms": 1395.77,
-      "loopback_tcp_bytes": 277008,
-      "loopback_packets": 138,
+      "commit_wall_ms": 1367.16,
+      "loopback_tcp_bytes": 276904,
+      "loopback_packets": 136,
       "analytical_prepare_frame_bytes": 22138,
       "analytical_cert_frame_bytes": 70560,
-      "bytes_per_member_item": 1082.1,
+      "bytes_per_member_item": 1081.7,
       "wal_bytes_on_disk": {
-        "A": 0,
-        "B": 0,
-        "C": 0
+        "A": 368349,
+        "B": 368349,
+        "C": 368349
       },
-      "total_wal_bytes_cluster": 0
+      "total_wal_bytes_cluster": 1105047
     }
   },
   "process_kill_recovery": {
     "forced_kill_signal": "SIGKILL (proc.kill)",
-    "kill_duration_ms": 57.76,
-    "cold_spawn_and_replay_ms": 905.62,
+    "kill_duration_ms": 57.89,
+    "cold_spawn_and_replay_ms": 906.09,
     "wal_records_replayed": 3,
     "state_hash_exact_match": true,
     "evidence_root_exact_match": true,
@@ -114,178 +114,178 @@
       "group_size": 1,
       "repetitions": 30,
       "latency_ms": {
-        "min": 59.33,
-        "p50": 62.14,
-        "mean": 63.76,
-        "p90": 73.15,
-        "p95": 74.55,
-        "p99": 75.13,
-        "max": 75.13
+        "min": 59.0,
+        "p50": 62.73,
+        "mean": 64.98,
+        "p90": 72.26,
+        "p95": 72.71,
+        "p99": 95.38,
+        "max": 95.38
       },
-      "throughput_items_sec": 16.09
+      "throughput_items_sec": 15.94
     },
     "4": {
       "group_size": 4,
       "repetitions": 30,
       "latency_ms": {
-        "min": 77.22,
-        "p50": 79.73,
-        "mean": 80.86,
-        "p90": 87.52,
-        "p95": 88.78,
-        "p99": 91.26,
-        "max": 91.26
+        "min": 75.43,
+        "p50": 79.62,
+        "mean": 80.47,
+        "p90": 88.42,
+        "p95": 89.25,
+        "p99": 89.71,
+        "max": 89.71
       },
-      "throughput_items_sec": 50.17
+      "throughput_items_sec": 50.24
     },
     "16": {
       "group_size": 16,
       "repetitions": 30,
       "latency_ms": {
-        "min": 138.84,
-        "p50": 143.03,
-        "mean": 144.73,
-        "p90": 154.18,
-        "p95": 154.85,
-        "p99": 156.7,
-        "max": 156.7
+        "min": 138.71,
+        "p50": 143.99,
+        "mean": 145.21,
+        "p90": 154.08,
+        "p95": 155.96,
+        "p99": 164.04,
+        "max": 164.04
       },
-      "throughput_items_sec": 111.87
+      "throughput_items_sec": 111.12
     },
     "64": {
       "group_size": 64,
       "repetitions": 30,
       "latency_ms": {
-        "min": 384.68,
-        "p50": 387.63,
-        "mean": 389.82,
-        "p90": 402.46,
-        "p95": 402.99,
-        "p99": 404.46,
-        "max": 404.46
+        "min": 383.3,
+        "p50": 386.66,
+        "mean": 387.72,
+        "p90": 395.64,
+        "p95": 397.52,
+        "p99": 402.31,
+        "max": 402.31
       },
-      "throughput_items_sec": 165.1
+      "throughput_items_sec": 165.52
     },
     "256": {
       "group_size": 256,
       "repetitions": 30,
       "latency_ms": {
-        "min": 1370.51,
-        "p50": 1384.49,
-        "mean": 1395.75,
-        "p90": 1438.07,
-        "p95": 1442.41,
-        "p99": 1535.57,
-        "max": 1535.57
+        "min": 1363.9,
+        "p50": 1374.62,
+        "mean": 1380.43,
+        "p90": 1391.21,
+        "p95": 1397.77,
+        "p99": 1508.56,
+        "max": 1508.56
       },
-      "throughput_items_sec": 184.91
+      "throughput_items_sec": 186.23
     }
   },
   "resource_utilization": {
     "1": {
       "group_size": 1,
       "cpu_stats": {
-        "num_samples": 93,
-        "avg_cpu_percent": 16.66,
+        "num_samples": 95,
+        "avg_cpu_percent": 17.53,
         "per_core_avg": [
-          18.37,
-          11.37,
-          18.54,
-          18.36
-        ],
-        "peak_core_percent": 75.0
-      },
-      "node_daemons_rss_mb": {
-        "A": 32.88,
-        "B": 33.04,
-        "C": 32.9
-      },
-      "coordinator_rss_mb": 37.74,
-      "total_cluster_rss_mb": 136.56
-    },
-    "4": {
-      "group_size": 4,
-      "cpu_stats": {
-        "num_samples": 118,
-        "avg_cpu_percent": 18.85,
-        "per_core_avg": [
-          26.34,
-          10.1,
-          19.06,
-          19.91
+          13.57,
+          21.47,
+          14.12,
+          20.96
         ],
         "peak_core_percent": 100.0
       },
       "node_daemons_rss_mb": {
-        "A": 33.38,
-        "B": 33.5,
-        "C": 33.39
+        "A": 32.88,
+        "B": 32.62,
+        "C": 32.97
       },
       "coordinator_rss_mb": 38.0,
-      "total_cluster_rss_mb": 138.27
+      "total_cluster_rss_mb": 136.47
+    },
+    "4": {
+      "group_size": 4,
+      "cpu_stats": {
+        "num_samples": 117,
+        "avg_cpu_percent": 19.41,
+        "per_core_avg": [
+          12.17,
+          23.01,
+          20.37,
+          22.07
+        ],
+        "peak_core_percent": 100.0
+      },
+      "node_daemons_rss_mb": {
+        "A": 33.34,
+        "B": 33.11,
+        "C": 33.46
+      },
+      "coordinator_rss_mb": 38.25,
+      "total_cluster_rss_mb": 138.16
     },
     "16": {
       "group_size": 16,
       "cpu_stats": {
         "num_samples": 211,
-        "avg_cpu_percent": 23.48,
+        "avg_cpu_percent": 21.63,
         "per_core_avg": [
-          34.99,
-          12.71,
-          24.84,
-          21.36
+          12.08,
+          32.3,
+          19.86,
+          22.27
         ],
         "peak_core_percent": 100.0
       },
       "node_daemons_rss_mb": {
-        "A": 34.57,
-        "B": 34.67,
-        "C": 34.57
+        "A": 34.5,
+        "B": 34.3,
+        "C": 34.66
       },
-      "coordinator_rss_mb": 38.54,
-      "total_cluster_rss_mb": 142.35
+      "coordinator_rss_mb": 38.79,
+      "total_cluster_rss_mb": 142.25
     },
     "64": {
       "group_size": 64,
       "cpu_stats": {
-        "num_samples": 567,
-        "avg_cpu_percent": 23.89,
+        "num_samples": 564,
+        "avg_cpu_percent": 24.2,
         "per_core_avg": [
-          32.85,
-          12.57,
-          26.59,
-          23.57
+          26.03,
+          22.9,
+          22.27,
+          25.62
         ],
         "peak_core_percent": 100.0
       },
       "node_daemons_rss_mb": {
-        "A": 38.11,
-        "B": 38.22,
-        "C": 38.12
+        "A": 38.05,
+        "B": 37.82,
+        "C": 38.2
       },
-      "coordinator_rss_mb": 39.83,
-      "total_cluster_rss_mb": 154.28
+      "coordinator_rss_mb": 40.09,
+      "total_cluster_rss_mb": 154.16
     },
     "256": {
       "group_size": 256,
       "cpu_stats": {
-        "num_samples": 2020,
-        "avg_cpu_percent": 26.61,
+        "num_samples": 2000,
+        "avg_cpu_percent": 24.82,
         "per_core_avg": [
-          36.23,
-          19.68,
-          19.22,
-          31.31
+          29.24,
+          12.23,
+          22.27,
+          35.54
         ],
         "peak_core_percent": 100.0
       },
       "node_daemons_rss_mb": {
-        "A": 50.82,
-        "B": 51.18,
-        "C": 51.06
+        "A": 50.75,
+        "B": 50.52,
+        "C": 50.9
       },
-      "coordinator_rss_mb": 44.23,
-      "total_cluster_rss_mb": 197.29
+      "coordinator_rss_mb": 44.49,
+      "total_cluster_rss_mb": 196.66
     }
   },
   "gate_matrix_passed": {

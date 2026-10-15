@@ -164,7 +164,7 @@ def measure_tcp_traffic_and_wal(group_sizes: List[int]) -> Dict[str, Any]:
             wal_sizes = {}
             total_wal_bytes = 0
             for nid in ("A", "B", "C"):
-                wal_path = harness.temp_dir / nid / "wal.log"
+                wal_path = harness.temp_dir / nid / f"{nid}.wal"
                 sz = wal_path.stat().st_size if wal_path.exists() else 0
                 wal_sizes[nid] = sz
                 total_wal_bytes += sz
@@ -459,31 +459,31 @@ def generate_nano_md_report(dest: Path, rep: Dict[str, Any]) -> None:
         f"| 95th Percentile (p95) | **{rep['flash_storage_fsync']['p95_ms']} ms** |",
         f"| Maximum | **{rep['flash_storage_fsync']['max_ms']} ms** |",
         "",
-        "> [!IMPORTANT]",
-        "> **Flash Amortization Finding**: Each physical flash sync requires ~2.44 ms. In per-item consensus (Q4), committing 256 items would require 512 individual `fsync` invocations (~1,250 ms purely in disk synchronization per replica). In Q6, grouped consensus executes exactly 2 `fsync` calls (one prepare, one commit) per replica, amortizing flash latency by **256×**.",
+        "> [!NOTE]",
+        "> **Analytical vs Directly Measured Flash Synchronization**: The stated 256× reduction in flash disk synchronization operations is an analytical comparison against hypothetical per-item durable commits (which would require 2 fsyncs per item × 256 items = 512 fsyncs ≈ 1,218 ms on flash), whereas Q6 executes exactly 2 fsyncs per replica per group (one on PREPARE, one on COMMIT).",
         "",
         "---",
         "",
-        "## 2. TCP Wire Serialization & Network Traffic",
+        "## 2. TCP Wire Serialization & Persistent WAL Growth",
         "",
-        "Network traffic was independently measured over loopback TCP sockets (`psutil.net_io_counters`) across the 3-node cluster.",
+        "Network traffic was independently measured over loopback TCP sockets (`psutil.net_io_counters`), and persistent WAL sizes were measured directly from disk (`{node_id}.wal`) across the 3-node cluster.",
         "",
-        "| Group Size | Loopback TCP Bytes | Packets | Frame Prepare Bytes | Frame Cert Bytes | Bytes / Member Item |",
+        "| Group Size | Loopback TCP Bytes | Packets | Bytes / Member Item | Replica WAL Size (avg) | Total Cluster WAL Bytes |",
         "| :---: | :---: | :---: | :---: | :---: | :---: |",
     ]
 
     for sz in GROUP_SIZES:
         m = rep["tcp_traffic_metrics"][str(sz)]
+        wal_avg = round(m['total_wal_bytes_cluster'] / 3, 1)
         lines.append(
             f"| {sz:3d} | {m['loopback_tcp_bytes']:,} B | {m['loopback_packets']} | "
-            f"{m['analytical_prepare_frame_bytes']:,} B | {m['analytical_cert_frame_bytes']:,} B | "
-            f"**{m['bytes_per_member_item']} B/item** |"
+            f"**{m['bytes_per_member_item']} B/item** | {wal_avg:,} B | {m['total_wal_bytes_cluster']:,} B |"
         )
 
     lines.extend([
         "",
         "> [!NOTE]",
-        "> As group size scales from 1 to 256, serialization overhead drops dramatically from thousands of bytes per item down to **sub-100 bytes per member item**, validating analytical network reductions in physical transit.",
+        "> As group size scales from 1 to 256, network serialization overhead drops from 18.2 KB per item to ~1.08 KB per item, while WAL logs on physical flash record full member evidence, group certificates, and cryptographic signatures.",
         "",
         "---",
         "",

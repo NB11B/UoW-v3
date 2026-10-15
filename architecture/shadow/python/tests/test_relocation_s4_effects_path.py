@@ -28,8 +28,8 @@ def _initial():
 def test_s4_effect_import_paths_remain_identity_compatible():
     assert EffectRunner is ImplEffectRunner
     assert MockExternalClient is ImplMockClient
-    assert uow.EffectRunner is ImplEffectRunner
-    assert uow.MockExternalClient is ImplMockClient
+    assert not hasattr(uow, "EffectRunner")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "MockExternalClient")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_effect_runner_is_only_shim():

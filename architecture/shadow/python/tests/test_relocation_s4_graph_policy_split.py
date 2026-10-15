@@ -13,7 +13,7 @@ from uow.realizations.adaptation.graph_policy import AdaptiveGraphProposer as Im
 
 def test_s4_graph_policy_split_preserves_public_identity():
     assert AdaptiveGraphProposer is ImplAdaptiveGraphProposer
-    assert uow.AdaptiveGraphProposer is ImplAdaptiveGraphProposer
+    assert not hasattr(uow, "AdaptiveGraphProposer")  # minimal-root API; namespace identity checked above
     assert CompositionRuntimeState is SemanticCompositionRuntimeState
     assert GraphAdaptationObservation is SemanticGraphAdaptationObservation
 

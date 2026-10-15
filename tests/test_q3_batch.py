@@ -26,3 +26,9 @@ def test_q3_batch_end_to_end():
     assert result["status"] == "PASS"
     assert result["same_state_evidence_certificates"]
     assert result["native_commits_per_arm"] == 16
+
+
+def test_q4_closed_campaign():
+    from qualification.micro_operator.q4_campaign import run
+    report = run()
+    assert report['passed'], report

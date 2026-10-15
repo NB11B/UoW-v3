@@ -32,3 +32,10 @@ def test_q4_closed_campaign():
     from qualification.micro_operator.q4_campaign import run
     report = run()
     assert report['passed'], report
+
+
+def test_q5_group_certificate_closed_campaign():
+    from qualification.micro_operator.q5_campaign import run
+    report = run()
+    assert report['passed'], report
+    assert len(report['gates']) == 8

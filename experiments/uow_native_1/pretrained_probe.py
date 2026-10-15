@@ -114,7 +114,8 @@ def main():
         "selection_train_only":True,"baseline":baseline,"intervention":intervention,
         "shift_baseline":shift_base,"shift_intervention":shift_intervention,
         "holdout_margin_effect":effect,"random_control_margin_effects":controls,
-        "control_rank_p":p_value,"exploratory_control_rank_below_0_05":p_value<0.05,\n        "statistical_warning":"Selected and comparison neurons are not exchangeable; rank is descriptive, not a valid confirmatory p-value.",
+        "control_rank_p":p_value,"exploratory_control_rank_below_0_05":p_value<0.05,
+        "statistical_warning":"Selected and comparison neurons are not exchangeable; rank is descriptive, not a valid confirmatory p-value.",
         "limitations":"Neural intervention only; not UoW conformance or isolated capability."}
     result=json.dumps(report,indent=2,sort_keys=True)
     with open(args.output,"w",encoding="utf8") as file: file.write(result+"\n")

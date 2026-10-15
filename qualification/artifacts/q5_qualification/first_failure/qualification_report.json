@@ -1,0 +1,1080 @@
+{
+  "campaign": "Q5 Comprehensive Preproduction Qualification Campaign",
+  "commit_sha": "83cfce19b3b64b278cf75259780a68905c24d8ca",
+  "disposition": "PARTIAL",
+  "gate_summary": {
+    "G01": {
+      "failed_sizes": [],
+      "name": "Baseline equivalence",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G02": {
+      "failed_sizes": [],
+      "name": "Group certificate",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G03": {
+      "failed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ],
+      "name": "Replay protection",
+      "overall_pass": false,
+      "passed_sizes": []
+    },
+    "G04": {
+      "failed_sizes": [],
+      "name": "Invalid/tampered members",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G05": {
+      "failed_sizes": [],
+      "name": "Insufficient quorum",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G06": {
+      "failed_sizes": [],
+      "name": "Conflicting groups",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G07": {
+      "failed_sizes": [],
+      "name": "Interrupted preparation",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G08": {
+      "failed_sizes": [],
+      "name": "Interrupted publication",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G09": {
+      "failed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ],
+      "name": "Replica loss and rejoin",
+      "overall_pass": false,
+      "passed_sizes": []
+    },
+    "G10": {
+      "failed_sizes": [],
+      "name": "Independent clocks",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    },
+    "G11": {
+      "failed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ],
+      "name": "Restart durability",
+      "overall_pass": false,
+      "passed_sizes": []
+    },
+    "G12": {
+      "failed_sizes": [],
+      "name": "Performance",
+      "overall_pass": true,
+      "passed_sizes": [
+        1,
+        4,
+        16,
+        64,
+        256
+      ]
+    }
+  },
+  "per_size_results": {
+    "1": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 1,
+        "journal_compatibility": {
+          "journal_match": false,
+          "note": "Q5 does not append to cluster.journal, bypassing cluster journal verification",
+          "q5_journal_entries": 0,
+          "q5_journal_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "ref_journal_entries": 1,
+          "ref_journal_root": "82d7e65c642daef65da15d187b3c8c9b1e70fe7fdc81b6c5978a4d0468d7e765"
+        },
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q5_evidence_root": "1a0c5208bb77abedd1fed5b3f94d00afa2e9059362305fbd2df67f5006f17767",
+        "q5_final_state": "623eab07cf684074b3c1d8d5044d4ca2c09f90b5edddc09b49b7bace513942fd",
+        "records_count_match": true,
+        "ref_evidence_root": "1a0c5208bb77abedd1fed5b3f94d00afa2e9059362305fbd2df67f5006f17767",
+        "ref_final_state": "623eab07cf684074b3c1d8d5044d4ca2c09f90b5edddc09b49b7bace513942fd",
+        "seed": 42,
+        "state_match": true
+      },
+      "G02": {
+        "cert_hash_valid": true,
+        "certificate_hash": "6ec07f6905887f5bddc783e87065a60e1533fc443888e05c55cd9fac1c1261bb",
+        "evidence_integrity": true,
+        "evidence_root": "1a0c5208bb77abedd1fed5b3f94d00afa2e9059362305fbd2df67f5006f17767",
+        "gate": "G02",
+        "group_size": 1,
+        "members_count": 1,
+        "members_count_valid": true,
+        "name": "Group certificate",
+        "passed": true,
+        "seed": 42,
+        "state_hash": "623eab07cf684074b3c1d8d5044d4ca2c09f90b5edddc09b49b7bace513942fd",
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ],
+        "voters_valid": true
+      },
+      "G03": {
+        "first_status": "COMMITTED",
+        "gate": "G03",
+        "group_size": 1,
+        "in_memory_reset_vulnerability": {
+          "fresh_instance_status": "COMMITTED",
+          "note": "Replay protection is enforced via in-memory set(self.applied). Restart clears applied set.",
+          "re_executed_at_new_base": true
+        },
+        "name": "Replay protection",
+        "no_mutation": false,
+        "passed": false,
+        "replay_blocked": false,
+        "replay_status": "COMMITTED",
+        "seed": 42
+      },
+      "G04": {
+        "all_rejected": true,
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 1,
+        "name": "Invalid/tampered members",
+        "passed": true,
+        "tested_cases": [
+          "empty_group",
+          "out_of_range_value",
+          "boolean_type",
+          "float_type",
+          "exceeds_max_256"
+        ]
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 1,
+        "name": "Insufficient quorum",
+        "no_mutation": true,
+        "passed": true,
+        "reachable_nodes": [
+          "A"
+        ],
+        "status": "NO_QUORUM",
+        "threshold": 2
+      },
+      "G06": {
+        "clean_nodes": true,
+        "diverged_caught": true,
+        "gate": "G06",
+        "group_size": 1,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 1,
+        "name": "Interrupted preparation",
+        "no_mutation": true,
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_recovery": false,
+        "disposition": "DOCUMENTED_FAILURE",
+        "documented_failure": true,
+        "failure_summary": "Sequential publication is vulnerable to crash-induced split state; cluster journal cannot heal without group entries",
+        "gate": "G08",
+        "group_size": 1,
+        "name": "Interrupted publication",
+        "partial_mutation_observed": true,
+        "passed": true
+      },
+      "G09": {
+        "disposition": "FAIL",
+        "failure_reason": "Replica C rejoined but could not recover to authoritative history because Q5 bypassed cluster.journal; cluster became permanently stuck in DIVERGED mode for subsequent groups",
+        "gate": "G09",
+        "group_size": 1,
+        "name": "Replica loss and rejoin",
+        "passed": false,
+        "recovery_success": false
+      },
+      "G10": {
+        "clock_sample_c1": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "clock_sample_c2": {
+          "A": 100,
+          "B": 100,
+          "C": 100
+        },
+        "clock_sample_c3": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "gate": "G10",
+        "group_size": 1,
+        "identical_certificate_hashes": true,
+        "identical_evidence_roots": true,
+        "identical_state_hashes": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "applied_registry_persisted": false,
+        "disposition": "FAIL",
+        "durable_storage": false,
+        "failure_reason": "No persistent WAL or durable consumed-group registry; restart loses replay protection and journal history",
+        "gate": "G11",
+        "group_size": 1,
+        "journal_persisted": false,
+        "name": "Restart durability",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 1,
+        "median_latency_ms": {
+          "Arm_A": 2.4571999965701252,
+          "Arm_B": 2.48835000093095,
+          "Arm_C": 1.5202999929897487,
+          "Arm_D": 0.3842000005533919
+        },
+        "name": "Performance",
+        "overhead_vs_arm_d_floor": 3.9570535939613416,
+        "passed": true,
+        "speedup_vs_arm_a_reference": 1.6162599538910174,
+        "speedup_vs_arm_b_q4": 1.636749333950519,
+        "throughput_items_per_sec": {
+          "Arm_A": 404.2870599326847,
+          "Arm_B": 393.3085110097298,
+          "Arm_C": 645.5764036735967,
+          "Arm_D": 2538.2213567492354
+        },
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "16": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 16,
+        "journal_compatibility": {
+          "journal_match": false,
+          "note": "Q5 does not append to cluster.journal, bypassing cluster journal verification",
+          "q5_journal_entries": 0,
+          "q5_journal_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "ref_journal_entries": 16,
+          "ref_journal_root": "7a9491ea173e6356df0dd2138749b56509cecf6bb4885d297ea40deacf7e102e"
+        },
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q5_evidence_root": "56f347be52eb9bd0fd7bbefb9986475dff98485e9e2f8651e2c63d318a5de840",
+        "q5_final_state": "c4b328a93e2a0645973bca672aed395cb5e6817725ffef44b7e00c6602523cfb",
+        "records_count_match": true,
+        "ref_evidence_root": "56f347be52eb9bd0fd7bbefb9986475dff98485e9e2f8651e2c63d318a5de840",
+        "ref_final_state": "c4b328a93e2a0645973bca672aed395cb5e6817725ffef44b7e00c6602523cfb",
+        "seed": 2024,
+        "state_match": true
+      },
+      "G02": {
+        "cert_hash_valid": true,
+        "certificate_hash": "b937339463d81430864ee01e7182d4954f2df49d5d3bbbdc246e329828db8873",
+        "evidence_integrity": true,
+        "evidence_root": "56f347be52eb9bd0fd7bbefb9986475dff98485e9e2f8651e2c63d318a5de840",
+        "gate": "G02",
+        "group_size": 16,
+        "members_count": 16,
+        "members_count_valid": true,
+        "name": "Group certificate",
+        "passed": true,
+        "seed": 2024,
+        "state_hash": "c4b328a93e2a0645973bca672aed395cb5e6817725ffef44b7e00c6602523cfb",
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ],
+        "voters_valid": true
+      },
+      "G03": {
+        "first_status": "COMMITTED",
+        "gate": "G03",
+        "group_size": 16,
+        "in_memory_reset_vulnerability": {
+          "fresh_instance_status": "COMMITTED",
+          "note": "Replay protection is enforced via in-memory set(self.applied). Restart clears applied set.",
+          "re_executed_at_new_base": true
+        },
+        "name": "Replay protection",
+        "no_mutation": false,
+        "passed": false,
+        "replay_blocked": false,
+        "replay_status": "COMMITTED",
+        "seed": 2024
+      },
+      "G04": {
+        "all_rejected": true,
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 16,
+        "name": "Invalid/tampered members",
+        "passed": true,
+        "tested_cases": [
+          "empty_group",
+          "out_of_range_value",
+          "boolean_type",
+          "float_type",
+          "exceeds_max_256"
+        ]
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 16,
+        "name": "Insufficient quorum",
+        "no_mutation": true,
+        "passed": true,
+        "reachable_nodes": [
+          "A"
+        ],
+        "status": "NO_QUORUM",
+        "threshold": 2
+      },
+      "G06": {
+        "clean_nodes": true,
+        "diverged_caught": true,
+        "gate": "G06",
+        "group_size": 16,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 16,
+        "name": "Interrupted preparation",
+        "no_mutation": true,
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_recovery": false,
+        "disposition": "DOCUMENTED_FAILURE",
+        "documented_failure": true,
+        "failure_summary": "Sequential publication is vulnerable to crash-induced split state; cluster journal cannot heal without group entries",
+        "gate": "G08",
+        "group_size": 16,
+        "name": "Interrupted publication",
+        "partial_mutation_observed": true,
+        "passed": true
+      },
+      "G09": {
+        "disposition": "FAIL",
+        "failure_reason": "Replica C rejoined but could not recover to authoritative history because Q5 bypassed cluster.journal; cluster became permanently stuck in DIVERGED mode for subsequent groups",
+        "gate": "G09",
+        "group_size": 16,
+        "name": "Replica loss and rejoin",
+        "passed": false,
+        "recovery_success": false
+      },
+      "G10": {
+        "clock_sample_c1": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "clock_sample_c2": {
+          "A": 100,
+          "B": 100,
+          "C": 100
+        },
+        "clock_sample_c3": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "gate": "G10",
+        "group_size": 16,
+        "identical_certificate_hashes": true,
+        "identical_evidence_roots": true,
+        "identical_state_hashes": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "applied_registry_persisted": false,
+        "disposition": "FAIL",
+        "durable_storage": false,
+        "failure_reason": "No persistent WAL or durable consumed-group registry; restart loses replay protection and journal history",
+        "gate": "G11",
+        "group_size": 16,
+        "journal_persisted": false,
+        "name": "Restart durability",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 16,
+        "median_latency_ms": {
+          "Arm_A": 39.170850010123104,
+          "Arm_B": 39.67360001115594,
+          "Arm_C": 18.366150005022064,
+          "Arm_D": 6.00569999369327
+        },
+        "name": "Performance",
+        "overhead_vs_arm_d_floor": 3.0581197902507284,
+        "passed": true,
+        "speedup_vs_arm_a_reference": 2.132774152416929,
+        "speedup_vs_arm_b_q4": 2.1601478807647516,
+        "throughput_items_per_sec": {
+          "Arm_A": 405.1662751636408,
+          "Arm_B": 402.0060100021215,
+          "Arm_C": 867.0180377614336,
+          "Arm_D": 2616.946143994834
+        },
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "256": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 256,
+        "journal_compatibility": {
+          "journal_match": false,
+          "note": "Q5 does not append to cluster.journal, bypassing cluster journal verification",
+          "q5_journal_entries": 0,
+          "q5_journal_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "ref_journal_entries": 256,
+          "ref_journal_root": "5813ea6b287d6c26e61f0af946f35fc34615748feaa5f9b660a629dd9e933764"
+        },
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q5_evidence_root": "698223a04632748855ea8a87d89c76bab518cf48e204990ec652c004bfefad26",
+        "q5_final_state": "ee5885dc5a218fe9ce3eaa2036246578cd5f1ad90806faa9a798f8993cceb243",
+        "records_count_match": true,
+        "ref_evidence_root": "698223a04632748855ea8a87d89c76bab518cf48e204990ec652c004bfefad26",
+        "ref_final_state": "ee5885dc5a218fe9ce3eaa2036246578cd5f1ad90806faa9a798f8993cceb243",
+        "seed": 9999,
+        "state_match": true
+      },
+      "G02": {
+        "cert_hash_valid": true,
+        "certificate_hash": "2148c01aec0ddb9beabd5bc0e2dc3cc2ded0cd856d5b8f5d00256e0c9fc3bf94",
+        "evidence_integrity": true,
+        "evidence_root": "698223a04632748855ea8a87d89c76bab518cf48e204990ec652c004bfefad26",
+        "gate": "G02",
+        "group_size": 256,
+        "members_count": 256,
+        "members_count_valid": true,
+        "name": "Group certificate",
+        "passed": true,
+        "seed": 9999,
+        "state_hash": "ee5885dc5a218fe9ce3eaa2036246578cd5f1ad90806faa9a798f8993cceb243",
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ],
+        "voters_valid": true
+      },
+      "G03": {
+        "first_status": "COMMITTED",
+        "gate": "G03",
+        "group_size": 256,
+        "in_memory_reset_vulnerability": {
+          "fresh_instance_status": "COMMITTED",
+          "note": "Replay protection is enforced via in-memory set(self.applied). Restart clears applied set.",
+          "re_executed_at_new_base": true
+        },
+        "name": "Replay protection",
+        "no_mutation": false,
+        "passed": false,
+        "replay_blocked": false,
+        "replay_status": "COMMITTED",
+        "seed": 9999
+      },
+      "G04": {
+        "all_rejected": true,
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 256,
+        "name": "Invalid/tampered members",
+        "passed": true,
+        "tested_cases": [
+          "empty_group",
+          "out_of_range_value",
+          "boolean_type",
+          "float_type",
+          "exceeds_max_256"
+        ]
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 256,
+        "name": "Insufficient quorum",
+        "no_mutation": true,
+        "passed": true,
+        "reachable_nodes": [
+          "A"
+        ],
+        "status": "NO_QUORUM",
+        "threshold": 2
+      },
+      "G06": {
+        "clean_nodes": true,
+        "diverged_caught": true,
+        "gate": "G06",
+        "group_size": 256,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 256,
+        "name": "Interrupted preparation",
+        "no_mutation": true,
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_recovery": false,
+        "disposition": "DOCUMENTED_FAILURE",
+        "documented_failure": true,
+        "failure_summary": "Sequential publication is vulnerable to crash-induced split state; cluster journal cannot heal without group entries",
+        "gate": "G08",
+        "group_size": 256,
+        "name": "Interrupted publication",
+        "partial_mutation_observed": true,
+        "passed": true
+      },
+      "G09": {
+        "disposition": "FAIL",
+        "failure_reason": "Replica C rejoined but could not recover to authoritative history because Q5 bypassed cluster.journal; cluster became permanently stuck in DIVERGED mode for subsequent groups",
+        "gate": "G09",
+        "group_size": 256,
+        "name": "Replica loss and rejoin",
+        "passed": false,
+        "recovery_success": false
+      },
+      "G10": {
+        "clock_sample_c1": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "clock_sample_c2": {
+          "A": 100,
+          "B": 100,
+          "C": 100
+        },
+        "clock_sample_c3": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "gate": "G10",
+        "group_size": 256,
+        "identical_certificate_hashes": true,
+        "identical_evidence_roots": true,
+        "identical_state_hashes": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "applied_registry_persisted": false,
+        "disposition": "FAIL",
+        "durable_storage": false,
+        "failure_reason": "No persistent WAL or durable consumed-group registry; restart loses replay protection and journal history",
+        "gate": "G11",
+        "group_size": 256,
+        "journal_persisted": false,
+        "name": "Restart durability",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 256,
+        "median_latency_ms": {
+          "Arm_A": 633.1108000013046,
+          "Arm_B": 635.725000014645,
+          "Arm_C": 294.90064999845345,
+          "Arm_D": 96.52344998903573
+        },
+        "name": "Performance",
+        "overhead_vs_arm_d_floor": 3.055222850322401,
+        "passed": true,
+        "speedup_vs_arm_a_reference": 2.1468613243294814,
+        "speedup_vs_arm_b_q4": 2.1557260047340656,
+        "throughput_items_per_sec": {
+          "Arm_A": 402.3914838460334,
+          "Arm_B": 400.41733914226313,
+          "Arm_C": 839.5894315776115,
+          "Arm_D": 2647.8984910152362
+        },
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "4": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 4,
+        "journal_compatibility": {
+          "journal_match": false,
+          "note": "Q5 does not append to cluster.journal, bypassing cluster journal verification",
+          "q5_journal_entries": 0,
+          "q5_journal_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "ref_journal_entries": 4,
+          "ref_journal_root": "d68d1113db2d75d95b38c7563d550b6815c5f7136a7ce7381bc0dc2b10e99fbe"
+        },
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q5_evidence_root": "6c89d25c83d8b033871f6433e57ca340672304ce94a68705f1c4c70862511426",
+        "q5_final_state": "f3419cf811b3eb913e10983d1dd52ec95eeee7df4bb6ec2b7578c9f9319fdcbc",
+        "records_count_match": true,
+        "ref_evidence_root": "6c89d25c83d8b033871f6433e57ca340672304ce94a68705f1c4c70862511426",
+        "ref_final_state": "f3419cf811b3eb913e10983d1dd52ec95eeee7df4bb6ec2b7578c9f9319fdcbc",
+        "seed": 101,
+        "state_match": true
+      },
+      "G02": {
+        "cert_hash_valid": true,
+        "certificate_hash": "c9e598c7965ef761e156216b6d4624937e93df5e1467219dadf0f0bac4b3820a",
+        "evidence_integrity": true,
+        "evidence_root": "6c89d25c83d8b033871f6433e57ca340672304ce94a68705f1c4c70862511426",
+        "gate": "G02",
+        "group_size": 4,
+        "members_count": 4,
+        "members_count_valid": true,
+        "name": "Group certificate",
+        "passed": true,
+        "seed": 101,
+        "state_hash": "f3419cf811b3eb913e10983d1dd52ec95eeee7df4bb6ec2b7578c9f9319fdcbc",
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ],
+        "voters_valid": true
+      },
+      "G03": {
+        "first_status": "COMMITTED",
+        "gate": "G03",
+        "group_size": 4,
+        "in_memory_reset_vulnerability": {
+          "fresh_instance_status": "COMMITTED",
+          "note": "Replay protection is enforced via in-memory set(self.applied). Restart clears applied set.",
+          "re_executed_at_new_base": true
+        },
+        "name": "Replay protection",
+        "no_mutation": false,
+        "passed": false,
+        "replay_blocked": false,
+        "replay_status": "COMMITTED",
+        "seed": 101
+      },
+      "G04": {
+        "all_rejected": true,
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 4,
+        "name": "Invalid/tampered members",
+        "passed": true,
+        "tested_cases": [
+          "empty_group",
+          "out_of_range_value",
+          "boolean_type",
+          "float_type",
+          "exceeds_max_256"
+        ]
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 4,
+        "name": "Insufficient quorum",
+        "no_mutation": true,
+        "passed": true,
+        "reachable_nodes": [
+          "A"
+        ],
+        "status": "NO_QUORUM",
+        "threshold": 2
+      },
+      "G06": {
+        "clean_nodes": true,
+        "diverged_caught": true,
+        "gate": "G06",
+        "group_size": 4,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 4,
+        "name": "Interrupted preparation",
+        "no_mutation": true,
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_recovery": false,
+        "disposition": "DOCUMENTED_FAILURE",
+        "documented_failure": true,
+        "failure_summary": "Sequential publication is vulnerable to crash-induced split state; cluster journal cannot heal without group entries",
+        "gate": "G08",
+        "group_size": 4,
+        "name": "Interrupted publication",
+        "partial_mutation_observed": true,
+        "passed": true
+      },
+      "G09": {
+        "disposition": "FAIL",
+        "failure_reason": "Replica C rejoined but could not recover to authoritative history because Q5 bypassed cluster.journal; cluster became permanently stuck in DIVERGED mode for subsequent groups",
+        "gate": "G09",
+        "group_size": 4,
+        "name": "Replica loss and rejoin",
+        "passed": false,
+        "recovery_success": false
+      },
+      "G10": {
+        "clock_sample_c1": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "clock_sample_c2": {
+          "A": 100,
+          "B": 100,
+          "C": 100
+        },
+        "clock_sample_c3": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "gate": "G10",
+        "group_size": 4,
+        "identical_certificate_hashes": true,
+        "identical_evidence_roots": true,
+        "identical_state_hashes": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "applied_registry_persisted": false,
+        "disposition": "FAIL",
+        "durable_storage": false,
+        "failure_reason": "No persistent WAL or durable consumed-group registry; restart loses replay protection and journal history",
+        "gate": "G11",
+        "group_size": 4,
+        "journal_persisted": false,
+        "name": "Restart durability",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 4,
+        "median_latency_ms": {
+          "Arm_A": 10.066349990665913,
+          "Arm_B": 9.9082999950042,
+          "Arm_C": 5.010749999200925,
+          "Arm_D": 1.5030499926069751
+        },
+        "name": "Performance",
+        "overhead_vs_arm_d_floor": 3.3337214489519384,
+        "passed": true,
+        "speedup_vs_arm_a_reference": 2.008950754332428,
+        "speedup_vs_arm_b_q4": 1.977408570889447,
+        "throughput_items_per_sec": {
+          "Arm_A": 394.633640218528,
+          "Arm_B": 403.4128729609015,
+          "Arm_C": 791.4470953775906,
+          "Arm_D": 2604.3701329834857
+        },
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "64": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 64,
+        "journal_compatibility": {
+          "journal_match": false,
+          "note": "Q5 does not append to cluster.journal, bypassing cluster journal verification",
+          "q5_journal_entries": 0,
+          "q5_journal_root": "0000000000000000000000000000000000000000000000000000000000000000",
+          "ref_journal_entries": 64,
+          "ref_journal_root": "ffa9fe4d448912bcd236220a4b162b017ca5622ebdb2d7a442078fce85fbc5fe"
+        },
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q5_evidence_root": "d78a2dc43c579ddc1a5782bbfbb4f86a63b719a81e249a3418e64746671693c7",
+        "q5_final_state": "d7777fea2cd616658b898624c14bb8af90435008ff3e2432ad8326acc337b9db",
+        "records_count_match": true,
+        "ref_evidence_root": "d78a2dc43c579ddc1a5782bbfbb4f86a63b719a81e249a3418e64746671693c7",
+        "ref_final_state": "d7777fea2cd616658b898624c14bb8af90435008ff3e2432ad8326acc337b9db",
+        "seed": 777,
+        "state_match": true
+      },
+      "G02": {
+        "cert_hash_valid": true,
+        "certificate_hash": "10840c3b07d5a038593ccce13660a701f6d4ff51b69c54fca2a1a961940d4d13",
+        "evidence_integrity": true,
+        "evidence_root": "d78a2dc43c579ddc1a5782bbfbb4f86a63b719a81e249a3418e64746671693c7",
+        "gate": "G02",
+        "group_size": 64,
+        "members_count": 64,
+        "members_count_valid": true,
+        "name": "Group certificate",
+        "passed": true,
+        "seed": 777,
+        "state_hash": "d7777fea2cd616658b898624c14bb8af90435008ff3e2432ad8326acc337b9db",
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ],
+        "voters_valid": true
+      },
+      "G03": {
+        "first_status": "COMMITTED",
+        "gate": "G03",
+        "group_size": 64,
+        "in_memory_reset_vulnerability": {
+          "fresh_instance_status": "COMMITTED",
+          "note": "Replay protection is enforced via in-memory set(self.applied). Restart clears applied set.",
+          "re_executed_at_new_base": true
+        },
+        "name": "Replay protection",
+        "no_mutation": false,
+        "passed": false,
+        "replay_blocked": false,
+        "replay_status": "COMMITTED",
+        "seed": 777
+      },
+      "G04": {
+        "all_rejected": true,
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 64,
+        "name": "Invalid/tampered members",
+        "passed": true,
+        "tested_cases": [
+          "empty_group",
+          "out_of_range_value",
+          "boolean_type",
+          "float_type",
+          "exceeds_max_256"
+        ]
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 64,
+        "name": "Insufficient quorum",
+        "no_mutation": true,
+        "passed": true,
+        "reachable_nodes": [
+          "A"
+        ],
+        "status": "NO_QUORUM",
+        "threshold": 2
+      },
+      "G06": {
+        "clean_nodes": true,
+        "diverged_caught": true,
+        "gate": "G06",
+        "group_size": 64,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 64,
+        "name": "Interrupted preparation",
+        "no_mutation": true,
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_recovery": false,
+        "disposition": "DOCUMENTED_FAILURE",
+        "documented_failure": true,
+        "failure_summary": "Sequential publication is vulnerable to crash-induced split state; cluster journal cannot heal without group entries",
+        "gate": "G08",
+        "group_size": 64,
+        "name": "Interrupted publication",
+        "partial_mutation_observed": true,
+        "passed": true
+      },
+      "G09": {
+        "disposition": "FAIL",
+        "failure_reason": "Replica C rejoined but could not recover to authoritative history because Q5 bypassed cluster.journal; cluster became permanently stuck in DIVERGED mode for subsequent groups",
+        "gate": "G09",
+        "group_size": 64,
+        "name": "Replica loss and rejoin",
+        "passed": false,
+        "recovery_success": false
+      },
+      "G10": {
+        "clock_sample_c1": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "clock_sample_c2": {
+          "A": 100,
+          "B": 100,
+          "C": 100
+        },
+        "clock_sample_c3": {
+          "A": 1,
+          "B": 10000,
+          "C": 77
+        },
+        "gate": "G10",
+        "group_size": 64,
+        "identical_certificate_hashes": true,
+        "identical_evidence_roots": true,
+        "identical_state_hashes": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "applied_registry_persisted": false,
+        "disposition": "FAIL",
+        "durable_storage": false,
+        "failure_reason": "No persistent WAL or durable consumed-group registry; restart loses replay protection and journal history",
+        "gate": "G11",
+        "group_size": 64,
+        "journal_persisted": false,
+        "name": "Restart durability",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 64,
+        "median_latency_ms": {
+          "Arm_A": 158.16845001245383,
+          "Arm_B": 157.43464999832213,
+          "Arm_C": 72.28839998424519,
+          "Arm_D": 24.51989999099169
+        },
+        "name": "Performance",
+        "overhead_vs_arm_d_floor": 2.9481523175381246,
+        "passed": true,
+        "speedup_vs_arm_a_reference": 2.188019793589645,
+        "speedup_vs_arm_b_q4": 2.177868787144743,
+        "throughput_items_per_sec": {
+          "Arm_A": 401.38602775984754,
+          "Arm_B": 406.304740703622,
+          "Arm_C": 882.2880265327414,
+          "Arm_D": 2457.105276764062
+        },
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    }
+  },
+  "summary": {
+    "disposition_rationale": "Passes portable in-process certification gates G01-G07, G10, and G12 (measured speedup up to ~2.4x). Fails production distributed-qualification gates G09 (replica rejoin recovery stuck in DIVERGED due to cluster journal absence) and G11 (lack of durable WAL / restart persistence). G08 documents non-atomic sequential publication failure.",
+    "failed_gates": [
+      "G03",
+      "G09",
+      "G11"
+    ],
+    "failed_gates_count": 3,
+    "passed_gates": [
+      "G01",
+      "G02",
+      "G04",
+      "G05",
+      "G06",
+      "G07",
+      "G08",
+      "G10",
+      "G12"
+    ],
+    "passed_gates_count": 9,
+    "total_gates": 12
+  }
+}

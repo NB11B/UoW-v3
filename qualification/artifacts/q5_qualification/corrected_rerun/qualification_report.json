@@ -1,0 +1,738 @@
+{
+  "campaign": "Q5 Corrected Rerun",
+  "commit_sha": "8fb918b9b2512aff9f8c579f561bcffa71fef961",
+  "fault_injections": [
+    {
+      "all_nodes_sequence_after": [
+        0,
+        0,
+        0
+      ],
+      "cluster_journal_entries": 0,
+      "fault_type": "interrupted_publication_crash",
+      "gate": "G08",
+      "group_size": 1,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Crash injected after replica 0 publication",
+      "observed_status": "ROLLBACK_INTERRUPTED",
+      "recovery_action": "TWO_PHASE_ATOMIC_ROLLBACK",
+      "recovery_success": true,
+      "test_id": "fault_inj_g08_corrected_size_1"
+    },
+    {
+      "c_state_matches_tip": true,
+      "commit_voters": [
+        "A",
+        "B"
+      ],
+      "fault_type": "replica_partition_and_rejoin",
+      "gate": "G09",
+      "group_size": 1,
+      "healing_action": "CAUGHT_UP",
+      "healing_success": true,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Network isolation of Node C during group commit",
+      "subsequent_group_commit_success": true,
+      "test_id": "fault_inj_g09_corrected_size_1"
+    },
+    {
+      "durable_storage_present": false,
+      "fault_type": "process_restart_volatility",
+      "gate": "G11",
+      "group_size": 1,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Coordinator process termination & restart",
+      "test_id": "fault_inj_g11_corrected_size_1",
+      "verdict": "DOCUMENTED_STORAGE_BOUNDARY"
+    },
+    {
+      "all_nodes_sequence_after": [
+        0,
+        0,
+        0
+      ],
+      "cluster_journal_entries": 0,
+      "fault_type": "interrupted_publication_crash",
+      "gate": "G08",
+      "group_size": 4,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Crash injected after replica 0 publication",
+      "observed_status": "ROLLBACK_INTERRUPTED",
+      "recovery_action": "TWO_PHASE_ATOMIC_ROLLBACK",
+      "recovery_success": true,
+      "test_id": "fault_inj_g08_corrected_size_4"
+    },
+    {
+      "c_state_matches_tip": true,
+      "commit_voters": [
+        "A",
+        "B"
+      ],
+      "fault_type": "replica_partition_and_rejoin",
+      "gate": "G09",
+      "group_size": 4,
+      "healing_action": "CAUGHT_UP",
+      "healing_success": true,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Network isolation of Node C during group commit",
+      "subsequent_group_commit_success": true,
+      "test_id": "fault_inj_g09_corrected_size_4"
+    },
+    {
+      "durable_storage_present": false,
+      "fault_type": "process_restart_volatility",
+      "gate": "G11",
+      "group_size": 4,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Coordinator process termination & restart",
+      "test_id": "fault_inj_g11_corrected_size_4",
+      "verdict": "DOCUMENTED_STORAGE_BOUNDARY"
+    },
+    {
+      "all_nodes_sequence_after": [
+        0,
+        0,
+        0
+      ],
+      "cluster_journal_entries": 0,
+      "fault_type": "interrupted_publication_crash",
+      "gate": "G08",
+      "group_size": 16,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Crash injected after replica 0 publication",
+      "observed_status": "ROLLBACK_INTERRUPTED",
+      "recovery_action": "TWO_PHASE_ATOMIC_ROLLBACK",
+      "recovery_success": true,
+      "test_id": "fault_inj_g08_corrected_size_16"
+    },
+    {
+      "c_state_matches_tip": true,
+      "commit_voters": [
+        "A",
+        "B"
+      ],
+      "fault_type": "replica_partition_and_rejoin",
+      "gate": "G09",
+      "group_size": 16,
+      "healing_action": "CAUGHT_UP",
+      "healing_success": true,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Network isolation of Node C during group commit",
+      "subsequent_group_commit_success": true,
+      "test_id": "fault_inj_g09_corrected_size_16"
+    },
+    {
+      "durable_storage_present": false,
+      "fault_type": "process_restart_volatility",
+      "gate": "G11",
+      "group_size": 16,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Coordinator process termination & restart",
+      "test_id": "fault_inj_g11_corrected_size_16",
+      "verdict": "DOCUMENTED_STORAGE_BOUNDARY"
+    },
+    {
+      "all_nodes_sequence_after": [
+        0,
+        0,
+        0
+      ],
+      "cluster_journal_entries": 0,
+      "fault_type": "interrupted_publication_crash",
+      "gate": "G08",
+      "group_size": 64,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Crash injected after replica 0 publication",
+      "observed_status": "ROLLBACK_INTERRUPTED",
+      "recovery_action": "TWO_PHASE_ATOMIC_ROLLBACK",
+      "recovery_success": true,
+      "test_id": "fault_inj_g08_corrected_size_64"
+    },
+    {
+      "c_state_matches_tip": true,
+      "commit_voters": [
+        "A",
+        "B"
+      ],
+      "fault_type": "replica_partition_and_rejoin",
+      "gate": "G09",
+      "group_size": 64,
+      "healing_action": "CAUGHT_UP",
+      "healing_success": true,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Network isolation of Node C during group commit",
+      "subsequent_group_commit_success": true,
+      "test_id": "fault_inj_g09_corrected_size_64"
+    },
+    {
+      "durable_storage_present": false,
+      "fault_type": "process_restart_volatility",
+      "gate": "G11",
+      "group_size": 64,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Coordinator process termination & restart",
+      "test_id": "fault_inj_g11_corrected_size_64",
+      "verdict": "DOCUMENTED_STORAGE_BOUNDARY"
+    },
+    {
+      "all_nodes_sequence_after": [
+        0,
+        0,
+        0
+      ],
+      "cluster_journal_entries": 0,
+      "fault_type": "interrupted_publication_crash",
+      "gate": "G08",
+      "group_size": 256,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Crash injected after replica 0 publication",
+      "observed_status": "ROLLBACK_INTERRUPTED",
+      "recovery_action": "TWO_PHASE_ATOMIC_ROLLBACK",
+      "recovery_success": true,
+      "test_id": "fault_inj_g08_corrected_size_256"
+    },
+    {
+      "c_state_matches_tip": true,
+      "commit_voters": [
+        "A",
+        "B"
+      ],
+      "fault_type": "replica_partition_and_rejoin",
+      "gate": "G09",
+      "group_size": 256,
+      "healing_action": "CAUGHT_UP",
+      "healing_success": true,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Network isolation of Node C during group commit",
+      "subsequent_group_commit_success": true,
+      "test_id": "fault_inj_g09_corrected_size_256"
+    },
+    {
+      "durable_storage_present": false,
+      "fault_type": "process_restart_volatility",
+      "gate": "G11",
+      "group_size": 256,
+      "implementation": "GroupAuthorityCorrected",
+      "injection_point": "Coordinator process termination & restart",
+      "test_id": "fault_inj_g11_corrected_size_256",
+      "verdict": "DOCUMENTED_STORAGE_BOUNDARY"
+    }
+  ],
+  "gate_results": {
+    "1": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 1,
+        "journal_entries": 1,
+        "journal_match": true,
+        "journal_verified": true,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "state_match": true
+      },
+      "G02": {
+        "certificate_hash": "cd655a8973a30db53681c6952c4ed074a144c8db2203dcc61cd1bd59ea08631c",
+        "gate": "G02",
+        "group_size": 1,
+        "members_count": 1,
+        "name": "Group certificate",
+        "passed": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 1,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 1,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 1,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "gate": "G06",
+        "group_size": 1,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 1,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_rollback_verified": true,
+        "gate": "G08",
+        "group_size": 1,
+        "name": "Interrupted publication",
+        "partial_mutation_prevented": true,
+        "passed": true,
+        "status": "ROLLBACK_INTERRUPTED"
+      },
+      "G09": {
+        "c_sequence_after_heal": 2,
+        "gate": "G09",
+        "group_size": 1,
+        "heal_action": "CAUGHT_UP",
+        "heal_success": true,
+        "name": "Replica loss and rejoin",
+        "passed": true,
+        "subsequent_commit_status": "COMMITTED"
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 1,
+        "identical_hash": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "disposition": "DOCUMENTED_STORAGE_BOUNDARY",
+        "gate": "G11",
+        "group_size": 1,
+        "name": "Restart durability",
+        "note": "Software layer verified; physical crash restart durability requires non-volatile WAL",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 1,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "EXPLICIT_NO_ADVANTAGE"
+      }
+    },
+    "16": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 16,
+        "journal_entries": 16,
+        "journal_match": true,
+        "journal_verified": true,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "state_match": true
+      },
+      "G02": {
+        "certificate_hash": "55f341be56c917bbb4843dece603171703e4ee370386cf33d81540a0b8e9f2d8",
+        "gate": "G02",
+        "group_size": 16,
+        "members_count": 16,
+        "name": "Group certificate",
+        "passed": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 16,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 16,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 16,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "gate": "G06",
+        "group_size": 16,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 16,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_rollback_verified": true,
+        "gate": "G08",
+        "group_size": 16,
+        "name": "Interrupted publication",
+        "partial_mutation_prevented": true,
+        "passed": true,
+        "status": "ROLLBACK_INTERRUPTED"
+      },
+      "G09": {
+        "c_sequence_after_heal": 20,
+        "gate": "G09",
+        "group_size": 16,
+        "heal_action": "CAUGHT_UP",
+        "heal_success": true,
+        "name": "Replica loss and rejoin",
+        "passed": true,
+        "subsequent_commit_status": "COMMITTED"
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 16,
+        "identical_hash": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "disposition": "DOCUMENTED_STORAGE_BOUNDARY",
+        "gate": "G11",
+        "group_size": 16,
+        "name": "Restart durability",
+        "note": "Software layer verified; physical crash restart durability requires non-volatile WAL",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 16,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "256": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 256,
+        "journal_entries": 256,
+        "journal_match": true,
+        "journal_verified": true,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "state_match": true
+      },
+      "G02": {
+        "certificate_hash": "ed2200783c529d3bf231cee000b94df72ddc5b4fecde61ec3470886b890449ca",
+        "gate": "G02",
+        "group_size": 256,
+        "members_count": 256,
+        "name": "Group certificate",
+        "passed": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 256,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 256,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 256,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "gate": "G06",
+        "group_size": 256,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 256,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_rollback_verified": true,
+        "gate": "G08",
+        "group_size": 256,
+        "name": "Interrupted publication",
+        "partial_mutation_prevented": true,
+        "passed": true,
+        "status": "ROLLBACK_INTERRUPTED"
+      },
+      "G09": {
+        "c_sequence_after_heal": 260,
+        "gate": "G09",
+        "group_size": 256,
+        "heal_action": "CAUGHT_UP",
+        "heal_success": true,
+        "name": "Replica loss and rejoin",
+        "passed": true,
+        "subsequent_commit_status": "COMMITTED"
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 256,
+        "identical_hash": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "disposition": "DOCUMENTED_STORAGE_BOUNDARY",
+        "gate": "G11",
+        "group_size": 256,
+        "name": "Restart durability",
+        "note": "Software layer verified; physical crash restart durability requires non-volatile WAL",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 256,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "4": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 4,
+        "journal_entries": 4,
+        "journal_match": true,
+        "journal_verified": true,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "state_match": true
+      },
+      "G02": {
+        "certificate_hash": "a2f1154b0499115fd803e232568d825b0a58691dd52ba7d49beb344f58b7daf7",
+        "gate": "G02",
+        "group_size": 4,
+        "members_count": 4,
+        "name": "Group certificate",
+        "passed": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 4,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 4,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 4,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "gate": "G06",
+        "group_size": 4,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 4,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_rollback_verified": true,
+        "gate": "G08",
+        "group_size": 4,
+        "name": "Interrupted publication",
+        "partial_mutation_prevented": true,
+        "passed": true,
+        "status": "ROLLBACK_INTERRUPTED"
+      },
+      "G09": {
+        "c_sequence_after_heal": 8,
+        "gate": "G09",
+        "group_size": 4,
+        "heal_action": "CAUGHT_UP",
+        "heal_success": true,
+        "name": "Replica loss and rejoin",
+        "passed": true,
+        "subsequent_commit_status": "COMMITTED"
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 4,
+        "identical_hash": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "disposition": "DOCUMENTED_STORAGE_BOUNDARY",
+        "gate": "G11",
+        "group_size": 4,
+        "name": "Restart durability",
+        "note": "Software layer verified; physical crash restart durability requires non-volatile WAL",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 4,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "64": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 64,
+        "journal_entries": 64,
+        "journal_match": true,
+        "journal_verified": true,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "state_match": true
+      },
+      "G02": {
+        "certificate_hash": "3075afec2b44aa8f48e844576cc307426f2682bded174526b584a8d4924e183c",
+        "gate": "G02",
+        "group_size": 64,
+        "members_count": 64,
+        "name": "Group certificate",
+        "passed": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 64,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_state": true,
+        "gate": "G04",
+        "group_size": 64,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 64,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "gate": "G06",
+        "group_size": 64,
+        "name": "Conflicting groups",
+        "passed": true,
+        "status": "DIVERGED"
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 64,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "atomic_rollback_verified": true,
+        "gate": "G08",
+        "group_size": 64,
+        "name": "Interrupted publication",
+        "partial_mutation_prevented": true,
+        "passed": true,
+        "status": "ROLLBACK_INTERRUPTED"
+      },
+      "G09": {
+        "c_sequence_after_heal": 68,
+        "gate": "G09",
+        "group_size": 64,
+        "heal_action": "CAUGHT_UP",
+        "heal_success": true,
+        "name": "Replica loss and rejoin",
+        "passed": true,
+        "subsequent_commit_status": "COMMITTED"
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 64,
+        "identical_hash": true,
+        "name": "Independent clocks",
+        "passed": true
+      },
+      "G11": {
+        "disposition": "DOCUMENTED_STORAGE_BOUNDARY",
+        "gate": "G11",
+        "group_size": 64,
+        "name": "Restart durability",
+        "note": "Software layer verified; physical crash restart durability requires non-volatile WAL",
+        "passed": false
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 64,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    }
+  }
+}

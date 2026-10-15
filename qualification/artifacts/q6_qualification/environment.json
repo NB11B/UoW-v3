@@ -1,0 +1,12 @@
+{
+  "branch": "experiment/q6-persistent-group-commitment",
+  "commit_sha": "HEAD",
+  "cores": 24,
+  "crypto_library": "cryptography (Ed25519)",
+  "durability": "Persistent WAL with os.fsync on prepare and commit",
+  "os": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+  "python": "3.13.11 (tags/v3.13.11:6278944, Dec  5 2025, 16:26:58) [MSC v.1944 64 bit (AMD64)]",
+  "timestamp_iso": "2026-10-15T18:08:18Z",
+  "transport": "Loopback TCP/IP stream sockets with length-prefixed framing"
+}

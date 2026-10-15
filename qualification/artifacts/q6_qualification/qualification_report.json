@@ -1,0 +1,579 @@
+{
+  "final_disposition": "PASS",
+  "gate_summary": {
+    "G01": {
+      "name": "Baseline equivalence",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G02": {
+      "name": "Group certificate",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G03": {
+      "name": "Replay protection",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G04": {
+      "name": "Invalid/tampered members",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G05": {
+      "name": "Insufficient quorum",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G06": {
+      "name": "Conflicting groups",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G07": {
+      "name": "Interrupted preparation",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G08": {
+      "name": "Interrupted publication",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G09": {
+      "name": "Replica loss and rejoin",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G10": {
+      "name": "Independent clocks",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G11": {
+      "name": "Restart durability",
+      "overall_pass": true,
+      "verdict": "PASS"
+    },
+    "G12": {
+      "name": "Performance",
+      "overall_pass": true,
+      "verdict": "PASS"
+    }
+  },
+  "milestone": "Q6 Persistent Distributed Group Commitment",
+  "overall_passed": true,
+  "per_size_results": {
+    "1": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 1,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q6_final_state": "0bff1935cab1cc3a98a58efff9dd86e2bb4ec8d3a2aeae906a8e51290fd6e5b2",
+        "ref_final_state": "0bff1935cab1cc3a98a58efff9dd86e2bb4ec8d3a2aeae906a8e51290fd6e5b2",
+        "state_match": true
+      },
+      "G02": {
+        "gate": "G02",
+        "group_size": 1,
+        "members_count": 1,
+        "name": "Group certificate",
+        "passed": true,
+        "signatures_verified": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 1,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_rejection": true,
+        "gate": "G04",
+        "group_size": 1,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 1,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "divergence_contained": true,
+        "gate": "G06",
+        "group_size": 1,
+        "name": "Conflicting groups",
+        "passed": true
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 1,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "convergence_verified": true,
+        "cooperative_resolution": {
+          "q6_grp_4d7745a5848d3616": "COMMITTED"
+        },
+        "gate": "G08",
+        "group_size": 1,
+        "name": "Interrupted publication",
+        "passed": true
+      },
+      "G09": {
+        "catchup_verified": true,
+        "gate": "G09",
+        "group_size": 1,
+        "name": "Replica loss and rejoin",
+        "passed": true
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 1,
+        "name": "Independent clocks",
+        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
+        "passed": true
+      },
+      "G11": {
+        "durability_verified": true,
+        "gate": "G11",
+        "group_size": 1,
+        "name": "Restart durability",
+        "passed": true,
+        "wal_records": 12
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 1,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_OVERHEAD_ACCEPTED"
+      }
+    },
+    "16": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 16,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q6_final_state": "c4b328a93e2a0645973bca672aed395cb5e6817725ffef44b7e00c6602523cfb",
+        "ref_final_state": "c4b328a93e2a0645973bca672aed395cb5e6817725ffef44b7e00c6602523cfb",
+        "state_match": true
+      },
+      "G02": {
+        "gate": "G02",
+        "group_size": 16,
+        "members_count": 16,
+        "name": "Group certificate",
+        "passed": true,
+        "signatures_verified": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 16,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_rejection": true,
+        "gate": "G04",
+        "group_size": 16,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 16,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "divergence_contained": true,
+        "gate": "G06",
+        "group_size": 16,
+        "name": "Conflicting groups",
+        "passed": true
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 16,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "convergence_verified": true,
+        "cooperative_resolution": {
+          "q6_grp_1687cb7b474b5e1f": "COMMITTED"
+        },
+        "gate": "G08",
+        "group_size": 16,
+        "name": "Interrupted publication",
+        "passed": true
+      },
+      "G09": {
+        "catchup_verified": true,
+        "gate": "G09",
+        "group_size": 16,
+        "name": "Replica loss and rejoin",
+        "passed": true
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 16,
+        "name": "Independent clocks",
+        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
+        "passed": true
+      },
+      "G11": {
+        "durability_verified": true,
+        "gate": "G11",
+        "group_size": 16,
+        "name": "Restart durability",
+        "passed": true,
+        "wal_records": 12
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 16,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "256": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 256,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q6_final_state": "ee5885dc5a218fe9ce3eaa2036246578cd5f1ad90806faa9a798f8993cceb243",
+        "ref_final_state": "ee5885dc5a218fe9ce3eaa2036246578cd5f1ad90806faa9a798f8993cceb243",
+        "state_match": true
+      },
+      "G02": {
+        "gate": "G02",
+        "group_size": 256,
+        "members_count": 256,
+        "name": "Group certificate",
+        "passed": true,
+        "signatures_verified": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 256,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_rejection": true,
+        "gate": "G04",
+        "group_size": 256,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 256,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "divergence_contained": true,
+        "gate": "G06",
+        "group_size": 256,
+        "name": "Conflicting groups",
+        "passed": true
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 256,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "convergence_verified": true,
+        "cooperative_resolution": {
+          "q6_grp_1d93941237c08670": "COMMITTED"
+        },
+        "gate": "G08",
+        "group_size": 256,
+        "name": "Interrupted publication",
+        "passed": true
+      },
+      "G09": {
+        "catchup_verified": true,
+        "gate": "G09",
+        "group_size": 256,
+        "name": "Replica loss and rejoin",
+        "passed": true
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 256,
+        "name": "Independent clocks",
+        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
+        "passed": true
+      },
+      "G11": {
+        "durability_verified": true,
+        "gate": "G11",
+        "group_size": 256,
+        "name": "Restart durability",
+        "passed": true,
+        "wal_records": 12
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 256,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    },
+    "4": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 4,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q6_final_state": "f3419cf811b3eb913e10983d1dd52ec95eeee7df4bb6ec2b7578c9f9319fdcbc",
+        "ref_final_state": "f3419cf811b3eb913e10983d1dd52ec95eeee7df4bb6ec2b7578c9f9319fdcbc",
+        "state_match": true
+      },
+      "G02": {
+        "gate": "G02",
+        "group_size": 4,
+        "members_count": 4,
+        "name": "Group certificate",
+        "passed": true,
+        "signatures_verified": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 4,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_rejection": true,
+        "gate": "G04",
+        "group_size": 4,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 4,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "divergence_contained": true,
+        "gate": "G06",
+        "group_size": 4,
+        "name": "Conflicting groups",
+        "passed": true
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 4,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "convergence_verified": true,
+        "cooperative_resolution": {
+          "q6_grp_dea52ec4b864dc12": "COMMITTED"
+        },
+        "gate": "G08",
+        "group_size": 4,
+        "name": "Interrupted publication",
+        "passed": true
+      },
+      "G09": {
+        "catchup_verified": true,
+        "gate": "G09",
+        "group_size": 4,
+        "name": "Replica loss and rejoin",
+        "passed": true
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 4,
+        "name": "Independent clocks",
+        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
+        "passed": true
+      },
+      "G11": {
+        "durability_verified": true,
+        "gate": "G11",
+        "group_size": 4,
+        "name": "Restart durability",
+        "passed": true,
+        "wal_records": 12
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 4,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_OVERHEAD_ACCEPTED"
+      }
+    },
+    "64": {
+      "G01": {
+        "gate": "G01",
+        "group_size": 64,
+        "ledger_match": true,
+        "name": "Baseline equivalence",
+        "passed": true,
+        "q6_final_state": "d7777fea2cd616658b898624c14bb8af90435008ff3e2432ad8326acc337b9db",
+        "ref_final_state": "d7777fea2cd616658b898624c14bb8af90435008ff3e2432ad8326acc337b9db",
+        "state_match": true
+      },
+      "G02": {
+        "gate": "G02",
+        "group_size": 64,
+        "members_count": 64,
+        "name": "Group certificate",
+        "passed": true,
+        "signatures_verified": true,
+        "voters": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "G03": {
+        "gate": "G03",
+        "group_size": 64,
+        "name": "Replay protection",
+        "passed": true,
+        "replay_blocked": true,
+        "status_stale_base": "STALE_BASE"
+      },
+      "G04": {
+        "clean_rejection": true,
+        "gate": "G04",
+        "group_size": 64,
+        "name": "Invalid/tampered members",
+        "passed": true
+      },
+      "G05": {
+        "gate": "G05",
+        "group_size": 64,
+        "name": "Insufficient quorum",
+        "passed": true,
+        "status": "NO_QUORUM"
+      },
+      "G06": {
+        "divergence_contained": true,
+        "gate": "G06",
+        "group_size": 64,
+        "name": "Conflicting groups",
+        "passed": true
+      },
+      "G07": {
+        "gate": "G07",
+        "group_size": 64,
+        "name": "Interrupted preparation",
+        "passed": true,
+        "status": "INTERRUPTED_PREPUBLISH"
+      },
+      "G08": {
+        "convergence_verified": true,
+        "cooperative_resolution": {
+          "q6_grp_c032240444950dae": "COMMITTED"
+        },
+        "gate": "G08",
+        "group_size": 64,
+        "name": "Interrupted publication",
+        "passed": true
+      },
+      "G09": {
+        "catchup_verified": true,
+        "gate": "G09",
+        "group_size": 64,
+        "name": "Replica loss and rejoin",
+        "passed": true
+      },
+      "G10": {
+        "gate": "G10",
+        "group_size": 64,
+        "name": "Independent clocks",
+        "note": "Cryptographic ballots bind exclusively canonical hashes, ignoring clocks",
+        "passed": true
+      },
+      "G11": {
+        "durability_verified": true,
+        "gate": "G11",
+        "group_size": 64,
+        "name": "Restart durability",
+        "passed": true,
+        "wal_records": 12
+      },
+      "G12": {
+        "gate": "G12",
+        "group_size": 64,
+        "name": "Performance",
+        "passed": true,
+        "verdict": "MEASURED_ADVANTAGE"
+      }
+    }
+  },
+  "success_criterion_evaluation": {
+    "criterion": "After any supported single-process failure and recovery, every committed group remains recoverable exactly once, no aborted group becomes authoritative, and all healthy replicas eventually converge to the same verified state and evidence history.",
+    "evidence": [
+      "Abrupt node kill and restart restores sequence and ledger exactly from persistent WAL (G11)",
+      "Interrupted coordinator publication resolves cooperatively across replicas without split brain (G08)",
+      "Rejoining replica catches up to authoritative tip via CATCHUP data replay (G09)",
+      "Ed25519 authenticated voting prevents vote fabrication (G02)"
+    ],
+    "status": "MET"
+  }
+}

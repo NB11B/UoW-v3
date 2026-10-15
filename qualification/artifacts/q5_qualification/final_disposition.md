@@ -20,14 +20,14 @@ The campaign evaluated all twelve fixed gates (**G01 to G12**) across group size
 ### Supported Claims (Qualified)
 1. **Deterministic State & Evidence Equivalence (G01, G02)**: Bitwise identical final state hashes and Merkle evidence roots between individual quorum certification and group-level certification.
 2. **Protocol Overhead Reduction & Speedup (G12)**: Measured throughput improvement of up to **2.39x** over individual quorum certificates (Arm A) and **2.21x** over grouped preparation (Arm B) for group sizes >= 16.
-3. **Wire Bandwidth Optimization**: Bandwidth reduction of **69.8%** and certificate overhead reduction from 1,037 bytes/member down to **70.9 bytes/member** at group size 256.
+3. **Wire Bandwidth Optimization (Accounting Estimate)**: Estimated serialized payload reduction scaling from **34.0%** at group size 1 up to **92.5%** at group size 256 (1,434,624 B down to 107,736 B), with certificate density dropping from 1,037 bytes/member to **69.2 bytes/member**. *(Note: Figures represent analytical serialization estimates, not physical network transport packet captures).*
 4. **Clock Independence (G10)**: Identical authority decisions and certificate hashes under arbitrary clock skews, strides, and freezing.
 5. **Fail-Closed Anomaly Containment (G04, G05, G06, G07)**: Strict rejection of malformed payloads, diverged replica states, and insufficient quorums without state corruption.
 
 ### Unsupported Claims (Disqualified for Production Promotion)
 1. **Distributed Atomic Commit & Crash Durability (G11)**: Q5 is an in-process coordinator model. It lacks persistent Write-Ahead Logging (WAL) and non-volatile registry storage; process crashes lose active memory state.
-2. **Candidate Publication Atomicity (G08 First Failure)**: The candidate build updates replicas sequentially; an interruption during publication leaves split state that cannot self-heal without the corrected two-phase rollback protocol.
-3. **Candidate Journal Compatibility (G09 First Failure)**: The candidate build omitted cluster journal appending, leaving rejoining replicas unable to catch up. (Resolved in corrected build SHA `8fb918b9`).
+2. **Crash Atomicity vs. In-Process Rollback (G08 Boundary)**: While the corrected build successfully executes in-memory exception rollback, it does **not** provide atomicity across abrupt process termination (e.g., SIGKILL, kernel panics, or power loss). If an authority process crashes mid-publication, memory-based exception handlers cannot recover state across peers without persistent disk records and a two-phase commit recovery protocol.
+3. **Candidate Journal Compatibility (G09 First Failure)**: The candidate baseline omitted cluster journal appending, leaving rejoining replicas unable to catch up. (Resolved in corrected build SHA `8fb918b9` via journal reconstruction).
 4. **Cryptographic Authority Signatures**: Authority ballots are in-memory SHA-256 digests rather than asymmetric digital signatures (Ed25519).
 5. **Model Provenance Attestation**: Group certificates attest to state transitions but do not cryptographically verify neural weight provenance.
 
@@ -105,6 +105,7 @@ Benchmarked on identical hardware with 5 warmups and 30 timed repetitions per gr
 ### 4.3 Publication Atomicity (G08)
 - **Failure in Candidate**: In-memory publication mutated replicas sequentially in a Python `for` loop. A crash mid-sequence left replica A at tip and replicas B/C at base, permanently splitting the cluster.
 - **Verification in Corrected Build**: Implements two-phase publication with atomic rollback. An interrupted publication restores pre-state snapshots across all nodes and rolls back the journal, leaving zero partial state.
+- **Critical Boundary Note**: While this satisfies the in-process exception gate, Python-level rollback does **not** protect against process termination (`SIGKILL`), host crashes, or power loss. In a distributed multi-process deployment, if a replica node or coordinator dies mid-publication, ordinary in-memory exception handling cannot coordinate or heal remote peers. Distributed atomic commit requires persistent Write-Ahead Logging (WAL) and an explicit crash recovery protocol with independent restart verification.
 
 ### 4.4 Restart Durability (G11)
 - **Remaining Physical Boundary**: In-process memory volatility means a coordinator reboot clears `self.applied` and cluster memory. This cannot be solved purely in-memory; it requires non-volatile Write-Ahead Logging (WAL) on disk.

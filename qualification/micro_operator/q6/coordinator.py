@@ -152,15 +152,22 @@ class Q6Coordinator:
         }
 
         ballots_collected = []
+        seen_nodes = set()
         for nid in reachable:
+            if nid in seen_nodes:
+                continue
             resp = self._send_to_node(nid, prepare_req, timeout=3.0)
             if resp and resp.get("status") == "PREPARED":
                 ballot = resp["ballot"]
                 sig = resp["signature"]
+                # Enforce ballot node_id matches voter identity
+                if ballot.get("node_id") != nid:
+                    continue
                 # Verify Ed25519 signature
                 ballot_bytes = canonical_json(ballot).encode("utf-8")
                 if self.registry.verify(nid, ballot_bytes, sig):
                     ballots_collected.append((nid, ballot, sig))
+                    seen_nodes.add(nid)
 
         if len(ballots_collected) < self.threshold:
             return "PREPARE_INSUFFICIENT_QUORUM", None
@@ -175,8 +182,10 @@ class Q6Coordinator:
                b[1]["evidence_root"] == first_ballot["evidence_root"]
         ]
 
-        if len(agreeing) < self.threshold:
-            return "NO_BALLOT_AGREEMENT", None
+        # Enforce distinct voter identities
+        distinct_voter_ids = set(b[0] for b in agreeing)
+        if len(distinct_voter_ids) < self.threshold or len(distinct_voter_ids) != len(agreeing):
+            return "PREPARE_INSUFFICIENT_QUORUM", None
 
         # Form Group Certificate
         voter_ids = tuple(sorted(b[0] for b in agreeing))

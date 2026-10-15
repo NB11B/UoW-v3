@@ -327,15 +327,23 @@ class NodeDaemon:
             }
 
         # Verify Group Certificate
-        voters = cert["voters"]
-        signatures = cert["signatures"]
-        ballots = cert["ballots"]
+        voters = cert.get("voters", [])
+        signatures = cert.get("signatures", [])
+        ballots = cert.get("ballots", [])
 
-        if len(voters) < 2 or len(voters) != len(signatures):
+        if len(voters) < 2 or len(voters) != len(signatures) or len(voters) != len(ballots):
             return {"status": "INVALID_CERTIFICATE_QUORUM"}
 
-        # Verify Ed25519 signatures
+        # Enforce distinct voter identities (prevent duplicate voter Sybil/quorum exploit)
+        if len(set(voters)) != len(voters):
+            return {"status": "DUPLICATE_VOTERS_REJECTED"}
+
+        # Verify Ed25519 signatures and voter-ballot identity binding
         for voter_id, sig_hex, ballot in zip(voters, signatures, ballots):
+            if ballot.get("node_id") != voter_id:
+                return {"status": "BALLOT_NODE_MISMATCH", "voter": voter_id}
+            if not self.registry.has_node(voter_id):
+                return {"status": "UNAUTHORIZED_VOTER", "voter": voter_id}
             ballot_bytes = canonical_json(ballot).encode("utf-8")
             if not self.registry.verify(voter_id, ballot_bytes, sig_hex):
                 return {"status": "INVALID_AUTHORITY_SIGNATURE", "voter": voter_id}
@@ -473,15 +481,21 @@ class NodeDaemon:
             if cert.get("evidence_root") != expected_root:
                 return False
 
-            # 3. Quorum validation (at least 2 valid voter signatures)
+            # 3. Quorum validation (at least 2 valid distinct voter signatures)
             voters = cert.get("voters", [])
             signatures = cert.get("signatures", [])
             ballots = cert.get("ballots", [])
             if len(voters) < 2 or len(voters) != len(signatures) or len(voters) != len(ballots):
                 return False
 
-            # 4. Verify each voter's Ed25519 signature
+            # Enforce distinct voter identities (prevent duplicate voter Sybil/quorum exploit)
+            if len(set(voters)) != len(voters):
+                return False
+
+            # 4. Verify each voter's Ed25519 signature and voter-ballot identity binding
             for vid, sig_hex, ballot in zip(voters, signatures, ballots):
+                if ballot.get("node_id") != vid:
+                    return False
                 if not self.registry.has_node(vid):
                     return False
                 if ballot.get("digest") != pdata["group_digest"]:

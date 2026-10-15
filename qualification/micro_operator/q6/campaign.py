@@ -311,21 +311,26 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
             "ref_final_state": c_ref.nodes["A"].state.state_hash,
         }
 
-        # G02: Group Certificate with Ed25519 Signatures
+        # G02: Group Certificate with Ed25519 Signatures and Distinct Voter Quorum
         sig_verifications = []
+        distinct_voters = len(set(cert_q6.voters)) == len(cert_q6.voters)
+        node_id_matches = all(b.get("node_id") == vid for vid, b in zip(cert_q6.voters, cert_q6.ballots))
         for vid, sig, ballot in zip(cert_q6.voters, cert_q6.signatures, cert_q6.ballots):
             bbytes = canonical_json(ballot).encode("utf-8")
             sig_verifications.append(harness.registry.verify(vid, bbytes, sig))
 
         g02_pass = (
             len(cert_q6.voters) >= 2 and
+            distinct_voters and
+            node_id_matches and
             len(cert_q6.members) == size and
             all(sig_verifications) and
             cert_q6.state_hash == harness.daemons["A"].state.state_hash
         )
         results["G02"] = {
             "gate": "G02", "name": "Group certificate", "group_size": size,
-            "passed": g02_pass, "voters": cert_q6.voters, "signatures_verified": all(sig_verifications),
+            "passed": g02_pass, "voters": cert_q6.voters, "distinct_voters": distinct_voters,
+            "signatures_verified": all(sig_verifications),
             "members_count": len(cert_q6.members),
         }
 
@@ -340,7 +345,7 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
             "passed": g03_pass, "status_stale_base": status_stale, "replay_blocked": True,
         }
 
-        # G04: Invalid/Tampered Members & Signatures
+        # G04: Invalid/Tampered Members, Signatures & Duplicate Voter Defense
         inv_passed = True
         for inv in ([], [2], [True], [0] * 257):
             try:
@@ -348,9 +353,47 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
                 inv_passed = False
             except ValueError:
                 pass
+
+        # Adversarial Security Check: Duplicate voter certificate rejected by replica
+        dup_voters = (cert_q6.voters[0], cert_q6.voters[0])
+        dup_sigs = (cert_q6.signatures[0], cert_q6.signatures[0])
+        dup_ballots = (cert_q6.ballots[0], cert_q6.ballots[0])
+        dup_cert = {
+            "digest": cert_q6.digest,
+            "voters": list(dup_voters),
+            "signatures": list(dup_sigs),
+            "ballots": list(dup_ballots),
+            "members": list(cert_q6.members),
+            "state_hash": cert_q6.state_hash,
+            "evidence_root": cert_q6.evidence_root,
+        }
+        resp_dup = harness.daemons["A"].send({
+            "type": "COMMIT_REQUEST",
+            "group_id": f"q6_forged_dup_{size}",
+            "group_certificate": dup_cert,
+        })
+        dup_rejected = (resp_dup.get("status") == "DUPLICATE_VOTERS_REJECTED")
+
+        # Adversarial Security Check: Ballot node_id mismatch rejected
+        mismatch_ballot = dict(cert_q6.ballots[0])
+        mismatch_ballot["node_id"] = "WRONG_NODE"
+        mismatch_cert = dict(dup_cert)
+        mismatch_cert["voters"] = [cert_q6.voters[0], cert_q6.voters[1]]
+        mismatch_cert["signatures"] = [cert_q6.signatures[0], cert_q6.signatures[1]]
+        mismatch_cert["ballots"] = [mismatch_ballot, cert_q6.ballots[1]]
+        resp_mismatch = harness.daemons["A"].send({
+            "type": "COMMIT_REQUEST",
+            "group_id": f"q6_forged_mismatch_{size}",
+            "group_certificate": mismatch_cert,
+        })
+        mismatch_rejected = (resp_mismatch.get("status") in ("BALLOT_NODE_MISMATCH", "INVALID_AUTHORITY_SIGNATURE"))
+
+        g04_pass = inv_passed and dup_rejected and mismatch_rejected
         results["G04"] = {
-            "gate": "G04", "name": "Invalid/tampered members", "group_size": size,
-            "passed": inv_passed, "clean_rejection": inv_passed,
+            "gate": "G04", "name": "Invalid/tampered members & duplicate voter defense", "group_size": size,
+            "passed": g04_pass, "clean_rejection": inv_passed,
+            "duplicate_voters_rejected": dup_rejected,
+            "ballot_mismatch_rejected": mismatch_rejected,
         }
 
         # G05: Insufficient Quorum (Only 1 node reachable)
@@ -704,6 +747,7 @@ def run_q6_campaign() -> None:
                 "Genuine OS Subprocesses: Three independent OS processes execute authority replicas with isolated memory spaces and sockets.",
                 "Actual Forced Process Termination: Verified via proc.kill() (TerminateProcess) during active prepare and commit cycles without graceful cleanup.",
                 "Safe Certificate-Authenticated Uncertainty Resolution: Replicas in PREPARE remain safely blocked (UNCERTAIN_BLOCKED) when peer outcome is uncommitted. Recovery requires a verifiable group decision certificate binding Ed25519 quorum signatures, group digest, and roots before committing.",
+                "Duplicate-Voter Quorum Defense: Explicitly verified that certificates require strict distinct voter identities (len(set(voters)) == len(voters)) and bound ballot node identities (ballot.node_id == voter_id). Replicas and coordinators reject duplicate voter signatures.",
                 "Actively Exercised Clock Skew & Scheduling Invariance: Verified under asymmetric ±24-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% invariant regardless of local clocks.",
                 "Write-Ahead Disk Ordering: Persistent WAL fsyncs COMMIT record to disk before in-memory state and ledger are mutated, guaranteeing recovery durability across crashes.",
                 "Replica Rejoin Catchup: Partitioned nodes catch up to the authoritative tip via CATCHUP replay from peer replicas.",
@@ -784,9 +828,10 @@ def generate_q6_disposition_md(dest: Path, report: Dict[str, Any], bench: Dict[s
         "2. **Actual Forced Process Termination**: Evaluated using genuine OS termination (`proc.kill()` / `TerminateProcess`), proving recovery without reliance on in-process exception handlers or graceful shutdown.",
         "3. **Crash-Safe Write-Ahead Disk Ordering**: Disk WAL `fsync` of the `COMMIT` record strictly precedes in-memory ledger and state mutation, ensuring non-volatile durability upon abrupt crash.",
         "4. **Certificate-Authenticated Cooperative Recovery**: Uncertain replicas never unilaterally abort upon receiving `UNKNOWN` peer reports. Recovery strictly verifies an authentic cryptographic group certificate—checking Ed25519 quorum signatures, group digest, and state/evidence roots before committing.",
-        "5. **Actively Exercised Clock Skew & Scheduling Invariance**: Verified under asymmetric ±24-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% identical regardless of local clocks.",
-        "6. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 private key. Group certificates cryptographically bind quorum ballots and state roots.",
-        "7. **Replica Rejoin Catchup**: Rejoining nodes catch up to the authoritative ledger tip by replaying committed evidence records from peer replicas.",
+        "5. **Duplicate-Voter Quorum Defense**: Certificates require strict distinct voter identities (`len(set(voters)) == len(voters)`) and enforce voter-ballot identity binding (`ballot.node_id == voter_id`). Replicas and coordinators reject duplicate voter signatures across all commit and recovery paths.",
+        "6. **Actively Exercised Clock Skew & Scheduling Invariance**: Verified under asymmetric ±24-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% identical regardless of local clocks.",
+        "7. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 private key. Group certificates cryptographically bind quorum ballots and state roots.",
+        "8. **Replica Rejoin Catchup**: Rejoining nodes catch up to the authoritative ledger tip by replaying committed evidence records from peer replicas.",
         "",
         "---",
         "",

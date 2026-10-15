@@ -17,7 +17,7 @@
       "verdict": "PASS"
     },
     "G04": {
-      "name": "Invalid/tampered members",
+      "name": "Invalid/tampered members & duplicate voter defense",
       "overall_pass": true,
       "verdict": "PASS"
     },
@@ -77,6 +77,7 @@
         "state_match": true
       },
       "G02": {
+        "distinct_voters": true,
         "gate": "G02",
         "group_size": 1,
         "members_count": 1,
@@ -98,10 +99,12 @@
         "status_stale_base": "STALE_BASE"
       },
       "G04": {
+        "ballot_mismatch_rejected": true,
         "clean_rejection": true,
+        "duplicate_voters_rejected": true,
         "gate": "G04",
         "group_size": 1,
-        "name": "Invalid/tampered members",
+        "name": "Invalid/tampered members & duplicate voter defense",
         "passed": true
       },
       "G05": {
@@ -182,6 +185,7 @@
         "state_match": true
       },
       "G02": {
+        "distinct_voters": true,
         "gate": "G02",
         "group_size": 16,
         "members_count": 16,
@@ -203,10 +207,12 @@
         "status_stale_base": "STALE_BASE"
       },
       "G04": {
+        "ballot_mismatch_rejected": true,
         "clean_rejection": true,
+        "duplicate_voters_rejected": true,
         "gate": "G04",
         "group_size": 16,
-        "name": "Invalid/tampered members",
+        "name": "Invalid/tampered members & duplicate voter defense",
         "passed": true
       },
       "G05": {
@@ -288,6 +294,7 @@
         "state_match": true
       },
       "G02": {
+        "distinct_voters": true,
         "gate": "G02",
         "group_size": 256,
         "members_count": 256,
@@ -309,10 +316,12 @@
         "status_stale_base": "STALE_BASE"
       },
       "G04": {
+        "ballot_mismatch_rejected": true,
         "clean_rejection": true,
+        "duplicate_voters_rejected": true,
         "gate": "G04",
         "group_size": 256,
-        "name": "Invalid/tampered members",
+        "name": "Invalid/tampered members & duplicate voter defense",
         "passed": true
       },
       "G05": {
@@ -394,6 +403,7 @@
         "state_match": true
       },
       "G02": {
+        "distinct_voters": true,
         "gate": "G02",
         "group_size": 4,
         "members_count": 4,
@@ -415,10 +425,12 @@
         "status_stale_base": "STALE_BASE"
       },
       "G04": {
+        "ballot_mismatch_rejected": true,
         "clean_rejection": true,
+        "duplicate_voters_rejected": true,
         "gate": "G04",
         "group_size": 4,
-        "name": "Invalid/tampered members",
+        "name": "Invalid/tampered members & duplicate voter defense",
         "passed": true
       },
       "G05": {
@@ -499,6 +511,7 @@
         "state_match": true
       },
       "G02": {
+        "distinct_voters": true,
         "gate": "G02",
         "group_size": 64,
         "members_count": 64,
@@ -520,10 +533,12 @@
         "status_stale_base": "STALE_BASE"
       },
       "G04": {
+        "ballot_mismatch_rejected": true,
         "clean_rejection": true,
+        "duplicate_voters_rejected": true,
         "gate": "G04",
         "group_size": 64,
-        "name": "Invalid/tampered members",
+        "name": "Invalid/tampered members & duplicate voter defense",
         "passed": true
       },
       "G05": {
@@ -600,6 +615,7 @@
       "Genuine OS Subprocesses: Three independent OS processes execute authority replicas with isolated memory spaces and sockets.",
       "Actual Forced Process Termination: Verified via proc.kill() (TerminateProcess) during active prepare and commit cycles without graceful cleanup.",
       "Safe Certificate-Authenticated Uncertainty Resolution: Replicas in PREPARE remain safely blocked (UNCERTAIN_BLOCKED) when peer outcome is uncommitted. Recovery requires a verifiable group decision certificate binding Ed25519 quorum signatures, group digest, and roots before committing.",
+      "Duplicate-Voter Quorum Defense: Explicitly verified that certificates require strict distinct voter identities (len(set(voters)) == len(voters)) and bound ballot node identities (ballot.node_id == voter_id). Replicas and coordinators reject duplicate voter signatures.",
       "Actively Exercised Clock Skew & Scheduling Invariance: Verified under asymmetric \u00b124-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% invariant regardless of local clocks.",
       "Write-Ahead Disk Ordering: Persistent WAL fsyncs COMMIT record to disk before in-memory state and ledger are mutated, guaranteeing recovery durability across crashes.",
       "Replica Rejoin Catchup: Partitioned nodes catch up to the authoritative tip via CATCHUP replay from peer replicas.",

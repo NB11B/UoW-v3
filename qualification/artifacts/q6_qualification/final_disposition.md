@@ -8,7 +8,7 @@
 **Durability Model**: Persistent WAL with os.fsync on prepare and commit  
 **Transport**: Loopback TCP/IP stream sockets with length-prefixed framing  
 **Authentication**: cryptography (Ed25519)  
-**Timestamp**: 2026-10-15T19:37:54Z  
+**Timestamp**: 2026-10-15T20:02:58Z  
 
 ---
 
@@ -23,9 +23,10 @@ Milestone Q6 completes the transition of the UoW grouped-certificate mechanism f
 2. **Actual Forced Process Termination**: Evaluated using genuine OS termination (`proc.kill()` / `TerminateProcess`), proving recovery without reliance on in-process exception handlers or graceful shutdown.
 3. **Crash-Safe Write-Ahead Disk Ordering**: Disk WAL `fsync` of the `COMMIT` record strictly precedes in-memory ledger and state mutation, ensuring non-volatile durability upon abrupt crash.
 4. **Certificate-Authenticated Cooperative Recovery**: Uncertain replicas never unilaterally abort upon receiving `UNKNOWN` peer reports. Recovery strictly verifies an authentic cryptographic group certificate—checking Ed25519 quorum signatures, group digest, and state/evidence roots before committing.
-5. **Actively Exercised Clock Skew & Scheduling Invariance**: Verified under asymmetric ±24-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% identical regardless of local clocks.
-6. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 private key. Group certificates cryptographically bind quorum ballots and state roots.
-7. **Replica Rejoin Catchup**: Rejoining nodes catch up to the authoritative ledger tip by replaying committed evidence records from peer replicas.
+5. **Duplicate-Voter Quorum Defense**: Certificates require strict distinct voter identities (`len(set(voters)) == len(voters)`) and enforce voter-ballot identity binding (`ballot.node_id == voter_id`). Replicas and coordinators reject duplicate voter signatures across all commit and recovery paths.
+6. **Actively Exercised Clock Skew & Scheduling Invariance**: Verified under asymmetric ±24-hour clock skews and variable network delays (up to 50ms) across replicas; consensus, state hashes, and evidence roots remain 100% identical regardless of local clocks.
+7. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 private key. Group certificates cryptographically bind quorum ballots and state roots.
+8. **Replica Rejoin Catchup**: Rejoining nodes catch up to the authoritative ledger tip by replaying committed evidence records from peer replicas.
 
 ---
 
@@ -36,7 +37,7 @@ Milestone Q6 completes the transition of the UoW grouped-certificate mechanism f
 | G01 | Baseline equivalence | Fixed Gate Condition | 5/5 sizes | **PASS** |
 | G02 | Group certificate | Fixed Gate Condition | 5/5 sizes | **PASS** |
 | G03 | Replay protection | Fixed Gate Condition | 5/5 sizes | **PASS** |
-| G04 | Invalid/tampered members | Fixed Gate Condition | 5/5 sizes | **PASS** |
+| G04 | Invalid/tampered members & duplicate voter defense | Fixed Gate Condition | 5/5 sizes | **PASS** |
 | G05 | Insufficient quorum | Fixed Gate Condition | 5/5 sizes | **PASS** |
 | G06 | Conflicting groups | Fixed Gate Condition | 5/5 sizes | **PASS** |
 | G07 | Interrupted preparation | Fixed Gate Condition | 5/5 sizes | **PASS** |
@@ -59,21 +60,21 @@ Workloads benchmarked across 30 timed repetitions per group size on identical ha
 
 | Group Size | Arm A (Q4 Ref) | Arm B (Q4 Grouped) | Arm C (Q5 In-Memory) | Arm E (Q6 Persistent Sockets + WAL) |
 | :---: | :---: | :---: | :---: | :---: |
-| 1 | 2.46 ms | 2.49 ms | 1.52 ms | **171.83 ms** |
-| 4 | 10.07 ms | 9.91 ms | 5.01 ms | **169.99 ms** |
-| 16 | 39.17 ms | 39.67 ms | 18.37 ms | **172.61 ms** |
-| 64 | 158.17 ms | 157.43 ms | 72.29 ms | **218.94 ms** |
-| 256 | 633.11 ms | 635.73 ms | 294.90 ms | **296.23 ms** |
+| 1 | 2.46 ms | 2.49 ms | 1.52 ms | **153.94 ms** |
+| 4 | 10.07 ms | 9.91 ms | 5.01 ms | **158.31 ms** |
+| 16 | 39.17 ms | 39.67 ms | 18.37 ms | **163.10 ms** |
+| 64 | 158.17 ms | 157.43 ms | 72.29 ms | **218.07 ms** |
+| 256 | 633.11 ms | 635.73 ms | 294.90 ms | **283.81 ms** |
 
 ### Throughput Comparison (Items / second)
 
 | Group Size | Arm A (Q4 Ref) | Arm C (Q5 In-Memory) | Arm E (Q6 Persistent Sockets + WAL) | Q6 Scaling Advantage vs Arm A |
 | :---: | :---: | :---: | :---: | :---: |
-| 1 | 404.3 | 645.6 | **6.0** | **-98.5%** |
-| 4 | 394.6 | 791.4 | **24.6** | **-93.8%** |
-| 16 | 405.2 | 867.0 | **93.8** | **-76.8%** |
-| 64 | 401.4 | 882.3 | **297.9** | **-25.8%** |
-| 256 | 402.4 | 839.6 | **855.5** | **+112.6%** |
+| 1 | 404.3 | 645.6 | **6.7** | **-98.3%** |
+| 4 | 394.6 | 791.4 | **24.8** | **-93.7%** |
+| 16 | 405.2 | 867.0 | **105.7** | **-73.9%** |
+| 64 | 401.4 | 882.3 | **323.7** | **-19.4%** |
+| 256 | 402.4 | 839.6 | **885.1** | **+120.0%** |
 
 ---
 

@@ -1,0 +1,7 @@
+schema_version: "1.0"
+status: CURRENT_PACKAGE_REALITY
+historical_baseline: architecture/PUBLIC_API_BASELINE.yaml
+reason: Current uow-v3 packaging metadata diverged from the R7 frozen snapshot before Q2.
+current_pyproject_blob: 6d3db1a82527ab5fd79ace7dbfddd17b4a4d27a3
+historical_pyproject_blob: f0eef6966867068e290386b8a5a5a8985ac50c05
+api_policy: keep minimal root; check relocated implementation identity via namespaced modules

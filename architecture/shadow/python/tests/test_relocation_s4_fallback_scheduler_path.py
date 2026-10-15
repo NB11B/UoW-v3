@@ -11,7 +11,7 @@ from uow.realizations.scheduling.fallback import (
 
 def test_s4_fallback_scheduler_imports_remain_identity_compatible():
     assert DeterministicFallbackScheduler is ImplDeterministicFallbackScheduler
-    assert uow.DeterministicFallbackScheduler is ImplDeterministicFallbackScheduler
+    assert not hasattr(uow, "DeterministicFallbackScheduler")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_fallback_scheduler_module_is_only_compatibility_shim():

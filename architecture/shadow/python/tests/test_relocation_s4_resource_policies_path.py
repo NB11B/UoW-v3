@@ -29,12 +29,12 @@ def test_s4_resource_policy_imports_remain_identity_compatible():
     assert PriorityDeadlineSchedulingPolicy is ImplPriorityDeadlineSchedulingPolicy
     assert filter_feasible_candidates is impl_filter_feasible_candidates
 
-    assert uow.BaseSchedulingPolicy is ImplBaseSchedulingPolicy
-    assert uow.CostEnergySchedulingPolicy is ImplCostEnergySchedulingPolicy
-    assert uow.FIFOSchedulingPolicy is ImplFIFOSchedulingPolicy
-    assert uow.GreedyCapacitySchedulingPolicy is ImplGreedyCapacitySchedulingPolicy
-    assert uow.PriorityDeadlineSchedulingPolicy is ImplPriorityDeadlineSchedulingPolicy
-    assert uow.filter_feasible_candidates is impl_filter_feasible_candidates
+    assert not hasattr(uow, "BaseSchedulingPolicy")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "CostEnergySchedulingPolicy")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "FIFOSchedulingPolicy")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "GreedyCapacitySchedulingPolicy")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "PriorityDeadlineSchedulingPolicy")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "filter_feasible_candidates")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_resource_policies_module_is_only_compatibility_shim():

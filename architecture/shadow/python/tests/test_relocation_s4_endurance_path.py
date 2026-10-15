@@ -7,9 +7,10 @@ from uow.implementations.composition.endurance import EnduranceAdaptiveRuntime a
 from uow.implementations.composition.endurance import RuntimeObjectiveFunction as ImplObjective
 
 def test_s4_endurance_import_paths_are_identity_compatible():
-    assert EnduranceAdaptiveRuntime is ShimRuntime is ImplRuntime is uow.EnduranceAdaptiveRuntime
-    assert RuntimeObjectiveFunction is ImplObjective is uow.RuntimeObjectiveFunction
-
+    assert EnduranceAdaptiveRuntime is ShimRuntime is ImplRuntime
+    assert not hasattr(uow, "EnduranceAdaptiveRuntime")
+    assert RuntimeObjectiveFunction is ImplObjective
+    assert not hasattr(uow, "RuntimeObjectiveFunction")
 def test_s4_historical_endurance_module_is_only_shim():
     import uow.composition.endurance as shim
     source = inspect.getsource(shim)

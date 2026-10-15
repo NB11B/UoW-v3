@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import socket
 import sys
@@ -119,6 +120,17 @@ class NodeDaemon:
             elif rec.record_type == "ABORT":
                 gid = rec.payload["group_id"]
                 prepared_map.pop(gid, None)
+            elif rec.record_type == "CATCHUP":
+                for rdict in rec.payload.get("records", []):
+                    r_obj = EvidenceRecord(**rdict)
+                    curr_ledger.append(r_obj)
+                sdict = rec.payload["final_state"]
+                curr_state = WorldState(
+                    attributes=sdict["attributes"],
+                    cursor=sdict["cursor"],
+                    status=sdict["status"],
+                    sequence=sdict["sequence"],
+                )
 
         self.state = curr_state
         self.ledger = curr_ledger
@@ -175,6 +187,8 @@ class NodeDaemon:
 
     def process_message(self, req: Dict[str, Any]) -> Dict[str, Any]:
         mtype = req.get("type")
+        if mtype == "RESOLVE_UNCERTAIN":
+            return {"status": "OK", "resolutions": self.resolve_uncertain_groups_cooperatively()}
         with self._lock:
             if mtype == "PREPARE_REQUEST":
                 return self._handle_prepare(req)
@@ -184,6 +198,26 @@ class NodeDaemon:
                 return self._handle_query_status(req)
             elif mtype == "CATCHUP_REQUEST":
                 return self._handle_catchup(req)
+            elif mtype == "APPLY_CATCHUP":
+                return self._handle_apply_catchup(req)
+            elif mtype == "INSPECT":
+                return {
+                    "status": "OK",
+                    "node_id": self.node_id,
+                    "sequence": self.state.sequence,
+                    "state_hash": self.state.state_hash,
+                    "evidence_root": self.ledger.root_hash(),
+                    "state": self.state.to_dict(),
+                    "committed_groups": list(self.committed_groups),
+                    "uncertain_groups": list(self.uncertain_groups),
+                    "prepared_groups": list(self.prepared_groups.keys()),
+                    "wal_record_count": len(self.wal.read_all()),
+                }
+            elif mtype == "INJECT_STATE_DIVERGENCE":
+                attr = req.get("attribute", "counter")
+                val = req.get("value", 999999)
+                self.state = self.state.with_attribute(attr, val)
+                return {"status": "OK", "state_hash": self.state.state_hash}
             elif mtype == "PING":
                 return {"status": "PONG", "node_id": self.node_id, "sequence": self.state.sequence}
             else:
@@ -295,7 +329,23 @@ class NodeDaemon:
             # Reconstruct transitions from certificate
             return {"status": "NEED_SYNC"}
 
-        # Advance state and append ledger
+        # Write-Ahead Logging Principle: Persist and fsync COMMIT to disk WAL FIRST!
+        sdict = pdata["final_state"]
+        target_state = WorldState(
+            attributes=sdict["attributes"],
+            cursor=sdict["cursor"],
+            status=sdict["status"],
+            sequence=sdict["sequence"],
+        )
+        commit_record = {
+            "group_id": group_id,
+            "certificate": cert,
+            "final_state": target_state.to_dict(),
+            "evidence_root": pdata["ballot"]["evidence_root"],
+        }
+        self.wal.append("COMMIT", commit_record)
+
+        # AFTER durable WAL persistence succeeds, advance in-memory state and ledger
         for rdict in pdata["records"]:
             r_obj = EvidenceRecord(
                 step_number=rdict["step_number"],
@@ -312,21 +362,7 @@ class NodeDaemon:
             )
             self.ledger.append(r_obj)
 
-        sdict = pdata["final_state"]
-        self.state = WorldState(
-            attributes=sdict["attributes"],
-            cursor=sdict["cursor"],
-            status=sdict["status"],
-            sequence=sdict["sequence"],
-        )
-
-        commit_record = {
-            "group_id": group_id,
-            "certificate": cert,
-            "final_state": self.state.to_dict(),
-            "evidence_root": self.ledger.root_hash(),
-        }
-        self.wal.append("COMMIT", commit_record)
+        self.state = target_state
         self.committed_groups.add(group_id)
         self.prepared_groups.pop(group_id, None)
         self.uncertain_groups.discard(group_id)
@@ -359,8 +395,41 @@ class NodeDaemon:
             "records": records_to_send,
         }
 
+    def _handle_apply_catchup(self, req: Dict[str, Any]) -> Dict[str, Any]:
+        sdict = req.get("state")
+        records = req.get("records", [])
+        if not sdict:
+            return {"status": "INVALID_STATE"}
+        target_state = WorldState(
+            attributes=sdict["attributes"],
+            cursor=sdict["cursor"],
+            status=sdict["status"],
+            sequence=sdict["sequence"],
+        )
+        self.wal.append("CATCHUP", {
+            "final_state": target_state.to_dict(),
+            "evidence_root": req.get("evidence_root", ""),
+            "records": records,
+        })
+        for rdict in records:
+            r_obj = EvidenceRecord(**rdict)
+            self.ledger.append(r_obj)
+        self.state = target_state
+        return {
+            "status": "CATCHUP_APPLIED",
+            "node_id": self.node_id,
+            "sequence": self.state.sequence,
+            "state_hash": self.state.state_hash,
+            "evidence_root": self.ledger.root_hash(),
+        }
+
     def resolve_uncertain_groups_cooperatively(self) -> Dict[str, str]:
-        """Cooperative recovery protocol: query peer nodes for any uncertain groups."""
+        """Cooperative recovery protocol: query peer nodes for any uncertain groups.
+
+        CRITICAL SAFETY RULE: An uncertain transaction must never be aborted merely
+        because currently reachable peers do not know its outcome. Recovery must
+        establish an authoritative decision or remain blocked safely.
+        """
         resolutions = {}
         with self._lock:
             uncertain = list(self.uncertain_groups)
@@ -386,9 +455,23 @@ class NodeDaemon:
             with self._lock:
                 if any(st == "COMMITTED" for st in peer_statuses.values()):
                     # A peer committed it! Safe to commit.
-                    # Find peer that committed and fetch certificate if needed
                     pdata = self.prepared_groups.get(gid)
                     if pdata:
+                        sdict = pdata["final_state"]
+                        target_state = WorldState(
+                            attributes=sdict["attributes"],
+                            cursor=sdict["cursor"],
+                            status=sdict["status"],
+                            sequence=sdict["sequence"],
+                        )
+                        # Write-Ahead: Persist COMMIT record to disk WAL FIRST!
+                        self.wal.append("COMMIT", {
+                            "group_id": gid,
+                            "recovered_from_peers": True,
+                            "final_state": target_state.to_dict(),
+                            "evidence_root": pdata["ballot"]["evidence_root"],
+                        })
+                        # AFTER disk persistence, advance in-memory state and ledger
                         for rdict in pdata["records"]:
                             r_obj = EvidenceRecord(
                                 step_number=rdict["step_number"],
@@ -404,22 +487,67 @@ class NodeDaemon:
                                 prev_evidence_hash=rdict["prev_evidence_hash"],
                             )
                             self.ledger.append(r_obj)
-                        sdict = pdata["final_state"]
-                        self.state = WorldState(
-                            attributes=sdict["attributes"],
-                            cursor=sdict["cursor"],
-                            status=sdict["status"],
-                            sequence=sdict["sequence"],
-                        )
-                        self.wal.append("COMMIT", {"group_id": gid, "recovered_from_peers": True, "final_state": self.state.to_dict()})
+
+                        self.state = target_state
                         self.committed_groups.add(gid)
                         self.prepared_groups.pop(gid, None)
                         self.uncertain_groups.discard(gid)
                         resolutions[gid] = "COMMITTED"
-                elif all(st == "UNKNOWN" for st in peer_statuses.values()) and len(peer_statuses) >= 1:
-                    # No peer prepared or coordinator aborted
-                    self.wal.append("ABORT", {"group_id": gid, "reason": "PEERS_DID_NOT_COMMIT"})
-                    self.prepared_groups.pop(gid, None)
-                    self.uncertain_groups.discard(gid)
-                    resolutions[gid] = "ABORTED"
+                else:
+                    # An uncertain transaction cannot be aborted based on peers reporting UNKNOWN!
+                    # It must remain safely blocked until authoritative commit or explicit signed abort.
+                    resolutions[gid] = "UNCERTAIN_BLOCKED"
+
         return resolutions
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Q6 Independent Authority Replica Daemon")
+    parser.add_argument("--node-id", required=True, help="Node ID (e.g. A, B, C)")
+    parser.add_argument("--host", default="127.0.0.1", help="Bind host")
+    parser.add_argument("--port", type=int, required=True, help="Bind port")
+    parser.add_argument("--data-dir", required=True, help="Persistent data directory")
+    parser.add_argument("--peers", required=True, help="JSON-encoded peer address map")
+    parser.add_argument("--registry", required=True, help="JSON-encoded public key registry (hex)")
+    parser.add_argument("--key-seed", required=True, help="Seed hex for node private key")
+    args = parser.parse_args()
+
+    node_id = args.node_id
+    host = args.host
+    port = args.port
+    data_dir = Path(args.data_dir)
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    peer_map = json.loads(args.peers)
+    peer_addresses = {nid: tuple(addr) for nid, addr in peer_map.items()}
+
+    reg_map = json.loads(args.registry)
+    pub_keys = {nid: bytes.fromhex(phex) for nid, phex in reg_map.items()}
+    registry = KeyRegistry(pub_keys)
+
+    key_seed = bytes.fromhex(args.key_seed)
+    keypair = AuthorityKeypair.from_seed(node_id, key_seed)
+
+    daemon = NodeDaemon(
+        node_id=node_id,
+        host=host,
+        port=port,
+        data_dir=data_dir,
+        keypair=keypair,
+        registry=registry,
+        peer_addresses=peer_addresses,
+    )
+    daemon.start()
+
+    # Write readiness marker
+    ready_file = data_dir / f"{node_id}.ready"
+    ready_file.write_text(f"READY pid={os.getpid()} port={port}\n", encoding="utf-8")
+
+    try:
+        while True:
+            time.sleep(1.0)
+    except (KeyboardInterrupt, SystemExit):
+        daemon.stop()
+
+if __name__ == "__main__":
+    main()
+

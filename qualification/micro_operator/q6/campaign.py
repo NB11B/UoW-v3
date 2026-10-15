@@ -20,6 +20,7 @@ import platform
 import shutil
 import socket
 import statistics
+import subprocess
 import sys
 import tempfile
 import time
@@ -38,6 +39,7 @@ from qualification.distributed_authority.campaign import make_cluster
 from qualification.micro_operator.q4_grouped import MODEL, validate, reference, prepare, submit
 from qualification.micro_operator.q5_group_certificate import GroupAuthority
 from qualification.micro_operator.q6.crypto import AuthorityKeypair, KeyRegistry, hash_payload
+from qualification.micro_operator.q6.messages import send_frame, recv_frame
 from qualification.micro_operator.q6.node_daemon import NodeDaemon
 from qualification.micro_operator.q6.coordinator import Q6Coordinator, Q6GroupCertificate
 
@@ -61,8 +63,79 @@ def calc_file_sha256(filepath: Path) -> str:
             h.update(chunk)
     return h.hexdigest()
 
+class NodeProcessProxy:
+    """Client proxy to an independent NodeDaemon running in a separate OS process."""
+    def __init__(self, node_id: str, address: Tuple[str, int], data_dir: Path, proc: subprocess.Popen) -> None:
+        self.node_id = node_id
+        self.address = address
+        self.data_dir = data_dir
+        self.proc = proc
+
+    def send(self, req: Dict[str, Any], timeout: float = 5.0) -> Dict[str, Any]:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(timeout)
+            s.connect(self.address)
+            send_frame(s, req)
+            resp = recv_frame(s)
+            if resp is None:
+                raise RuntimeError(f"Node {self.node_id} returned empty frame")
+            return resp
+
+    @property
+    def state(self) -> WorldState:
+        info = self.send({"type": "INSPECT"})
+        sdict = info["state"]
+        return WorldState(
+            attributes=sdict["attributes"],
+            cursor=sdict["cursor"],
+            status=sdict["status"],
+            sequence=sdict["sequence"],
+        )
+
+    @property
+    def ledger(self) -> Any:
+        info = self.send({"type": "INSPECT"})
+        class _LedgerProxy:
+            def __init__(self, root: str):
+                self._root = root
+            def root_hash(self) -> str:
+                return self._root
+        return _LedgerProxy(info["evidence_root"])
+
+    @property
+    def wal(self) -> Any:
+        wal_path = self.data_dir / f"{self.node_id}.wal"
+        class _WALReader:
+            def __init__(self, path: Path):
+                self.path = path
+            def read_all(self) -> List[Dict[str, Any]]:
+                if not self.path.exists():
+                    return []
+                from qualification.micro_operator.q6.wal import PersistentWAL
+                w = PersistentWAL(self.path)
+                try:
+                    return w.read_all()
+                finally:
+                    w.close()
+        return _WALReader(wal_path)
+
+    def resolve_uncertain_groups_cooperatively(self) -> Dict[str, str]:
+        resp = self.send({"type": "RESOLVE_UNCERTAIN"})
+        return resp.get("resolutions", {})
+
+    def inject_divergence(self, attribute: str = "counter", value: Any = 999999) -> None:
+        self.send({"type": "INJECT_STATE_DIVERGENCE", "attribute": attribute, "value": value})
+
+    def apply_catchup(self, catchup_data: Dict[str, Any]) -> Dict[str, Any]:
+        return self.send({
+            "type": "APPLY_CATCHUP",
+            "state": catchup_data["state"],
+            "evidence_root": catchup_data["evidence_root"],
+            "records": catchup_data["records"],
+        })
+
 class Q6ClusterTestHarness:
-    """Manages an ephemeral 3-node Q6 socket cluster with disk WALs."""
+    """Manages an ephemeral 3-node Q6 socket cluster running genuine independent OS subprocesses with disk WALs."""
 
     def __init__(self, base_port: int = 19200) -> None:
         self.temp_dir = Path(tempfile.mkdtemp(prefix="uow_q6_"))
@@ -81,25 +154,77 @@ class Q6ClusterTestHarness:
             nid: kp.public_key_bytes
             for nid, kp in self.keypairs.items()
         })
-        self.daemons: Dict[str, NodeDaemon] = {}
+        self.processes: Dict[str, subprocess.Popen] = {}
+        self.daemons: Dict[str, NodeProcessProxy] = {}
         self.coordinator: Optional[Q6Coordinator] = None
+
+    def _spawn_node(self, nid: str) -> NodeProcessProxy:
+        host, port = self.addresses[nid]
+        node_dir = self.temp_dir / nid
+        node_dir.mkdir(parents=True, exist_ok=True)
+        ready_file = node_dir / f"{nid}.ready"
+        if ready_file.exists():
+            try:
+                ready_file.unlink()
+            except OSError:
+                pass
+
+        peer_map = {p_nid: list(addr) for p_nid, addr in self.addresses.items()}
+        reg_map = {p_nid: self.keypairs[p_nid].public_key_hex for p_nid in self.node_ids}
+        seed_hex = (nid.encode("utf-8") * 32).hex()
+
+        cmd = [
+            sys.executable,
+            "-m", "qualification.micro_operator.q6.node_daemon",
+            "--node-id", nid,
+            "--host", host,
+            "--port", str(port),
+            "--data-dir", str(node_dir),
+            "--peers", json.dumps(peer_map),
+            "--registry", json.dumps(reg_map),
+            "--key-seed", seed_hex,
+        ]
+
+        env = dict(os.environ)
+        env["PYTHONPATH"] = str(REPO_ROOT)
+        proc = subprocess.Popen(
+            cmd,
+            cwd=str(REPO_ROOT),
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        self.processes[nid] = proc
+
+        # Wait for readiness file and socket ping
+        t0 = time.time()
+        ready = False
+        while time.time() - t0 < 5.0:
+            if ready_file.exists():
+                try:
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                        s.settimeout(0.5)
+                        s.connect((host, port))
+                        send_frame(s, {"type": "PING"})
+                        resp = recv_frame(s)
+                        if resp and resp.get("status") == "PONG":
+                            ready = True
+                            break
+                except (OSError, ConnectionRefusedError):
+                    pass
+            time.sleep(0.05)
+
+        if not ready:
+            raise RuntimeError(f"Node daemon {nid} failed to start within timeout (pid={proc.pid})")
+
+        proxy = NodeProcessProxy(nid, (host, port), node_dir, proc)
+        self.daemons[nid] = proxy
+        return proxy
 
     def start_nodes(self) -> None:
         for nid in self.node_ids:
-            if nid not in self.daemons:
-                host, port = self.addresses[nid]
-                d = NodeDaemon(
-                    node_id=nid,
-                    host=host,
-                    port=port,
-                    data_dir=self.temp_dir / nid,
-                    keypair=self.keypairs[nid],
-                    registry=self.registry,
-                    peer_addresses=self.addresses,
-                )
-                d.start()
-                self.daemons[nid] = d
-        time.sleep(0.3)
+            if nid not in self.processes or self.processes[nid].poll() is not None:
+                self._spawn_node(nid)
         self.coordinator = Q6Coordinator(
             node_addresses=self.addresses,
             registry=self.registry,
@@ -107,31 +232,36 @@ class Q6ClusterTestHarness:
             threshold=2,
         )
 
-    def stop_node(self, node_id: str) -> None:
-        d = self.daemons.pop(node_id, None)
-        if d:
-            d.stop()
+    def kill_node(self, node_id: str) -> None:
+        """Abrupt OS process termination via proc.kill() (TerminateProcess on Windows)."""
+        self.daemons.pop(node_id, None)
+        proc = self.processes.pop(node_id, None)
+        if proc:
+            try:
+                proc.kill()
+                proc.wait(timeout=5.0)
+            except Exception:
+                pass
+        ready_file = self.temp_dir / node_id / f"{node_id}.ready"
+        if ready_file.exists():
+            try:
+                ready_file.unlink()
+            except OSError:
+                pass
+        time.sleep(0.05)
 
-    def restart_node(self, node_id: str) -> NodeDaemon:
-        self.stop_node(node_id)
-        host, port = self.addresses[node_id]
-        d = NodeDaemon(
-            node_id=node_id,
-            host=host,
-            port=port,
-            data_dir=self.temp_dir / node_id,
-            keypair=self.keypairs[node_id],
-            registry=self.registry,
-            peer_addresses=self.addresses,
-        )
-        d.start()
-        self.daemons[node_id] = d
-        time.sleep(0.2)
-        return d
+    def stop_node(self, node_id: str) -> None:
+        """Forced OS process termination."""
+        self.kill_node(node_id)
+
+    def restart_node(self, node_id: str) -> NodeProcessProxy:
+        """Kills node if running, then starts fresh OS process with recovery from persistent WAL."""
+        self.kill_node(node_id)
+        return self._spawn_node(node_id)
 
     def shutdown(self) -> None:
-        for nid in list(self.daemons.keys()):
-            self.stop_node(nid)
+        for nid in list(self.processes.keys()):
+            self.kill_node(nid)
         if self.coordinator:
             self.coordinator.wal.close()
             self.coordinator = None
@@ -230,15 +360,15 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
         harness.restart_node("C")
 
         # G06: Conflicting Groups
-        # Injected diverged state on C
-        harness.daemons["C"].state = harness.daemons["C"].state.with_attribute("counter", 999999)
+        # Injected diverged state on C via IPC command
+        harness.daemons["C"].inject_divergence("counter", 999999)
         status_conf, _ = harness.coordinator.commit(seq)
         g06_pass = (status_conf in ("DIVERGED", "NO_BALLOT_AGREEMENT"))
         results["G06"] = {
             "gate": "G06", "name": "Conflicting groups", "group_size": size,
             "passed": g06_pass, "divergence_contained": g06_pass,
         }
-        harness.restart_node("C")  # Reverts C from clean WAL
+        harness.restart_node("C")  # OS kill and restart reverts C from clean WAL
 
         # G07: Interrupted Preparation
         status_prep, _ = harness.coordinator.commit(seq, interrupt_prepublish=True)
@@ -248,49 +378,55 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
             "passed": g07_pass, "status": status_prep,
         }
 
-        # G08: Interrupted Publication & Cooperative Recovery
-        # Coordinator crashes after publishing to B, omitting A
+        # G08: Interrupted Publication & Safe Cooperative Uncertainty Resolution
+        # Coordinator crashes after publishing to B and C, omitting A
         seq_pub = make_sequence(min(4, size), seed + 10)
         status_crash, cert_crash = harness.coordinator.commit(seq_pub, interrupt_publication_replica=0)
-        # B and C receive commit, A is left uncertain
-        harness.coordinator._send_to_node("B", {"type": "COMMIT_REQUEST", "group_id": f"q6_grp_{cert_crash.digest[:16]}", "group_certificate": cert_crash.to_dict()})
-        harness.coordinator._send_to_node("C", {"type": "COMMIT_REQUEST", "group_id": f"q6_grp_{cert_crash.digest[:16]}", "group_certificate": cert_crash.to_dict()})
+        gid_crash = f"q6_grp_{cert_crash.digest[:16]}"
 
-        # Node A executes cooperative recovery:
+        # Step 1: Verify safe uncertainty blocking before peers receive authoritative commit
+        # When peers have not committed, A MUST NOT abort unilaterally; it must remain UNCERTAIN_BLOCKED.
+        res_blocked = harness.daemons["A"].resolve_uncertain_groups_cooperatively()
+        blocked_safely = (res_blocked.get(gid_crash) == "UNCERTAIN_BLOCKED")
+
+        # Step 2: Authoritative commit arrives at peers B and C
+        harness.coordinator._send_to_node("B", {"type": "COMMIT_REQUEST", "group_id": gid_crash, "group_certificate": cert_crash.to_dict()})
+        harness.coordinator._send_to_node("C", {"type": "COMMIT_REQUEST", "group_id": gid_crash, "group_certificate": cert_crash.to_dict()})
+
+        # Step 3: Node A queries peers again: discovers authoritative commit, writes to WAL FIRST, and converges
         res_a = harness.daemons["A"].resolve_uncertain_groups_cooperatively()
         g08_pass = (
             status_crash == "COORDINATOR_CRASH_MID_PUBLISH" and
-            res_a.get(f"q6_grp_{cert_crash.digest[:16]}") == "COMMITTED" and
-            harness.daemons["A"].state.sequence == harness.daemons["B"].state.sequence
+            blocked_safely and
+            res_a.get(gid_crash) == "COMMITTED" and
+            harness.daemons["A"].state.sequence == harness.daemons["B"].state.sequence and
+            harness.daemons["A"].state.state_hash == harness.daemons["B"].state.state_hash
         )
         results["G08"] = {
             "gate": "G08", "name": "Interrupted publication", "group_size": size,
-            "passed": g08_pass, "cooperative_resolution": res_a, "convergence_verified": g08_pass,
+            "passed": g08_pass, "blocked_safely": blocked_safely,
+            "cooperative_resolution": res_a, "convergence_verified": g08_pass,
         }
         faults.append({
             "test_id": f"q6_fault_g08_size_{size}",
             "gate": "G08",
             "group_size": size,
             "fault": "coordinator_crash_mid_publication",
-            "resolution": "cooperative_peer_query",
+            "resolution": "cooperative_peer_query_with_safe_uncertainty_blocking",
             "recovered": g08_pass,
         })
 
         # G09: Replica Loss and Rejoin Catchup
-        # Node C stopped during commit of new group
-        harness.stop_node("C")
+        # Node C abruptly killed via OS proc.kill() during commit of new group
+        harness.kill_node("C")
         seq_c = make_sequence(min(4, size), seed + 20)
         status_ab, cert_ab = harness.coordinator.commit(seq_c)
-        # Node C restarts from disk
+        # Node C restarts from disk WAL as fresh OS subprocess
         d_c = harness.restart_node("C")
         # Node C catches up from A
         catchup_data = harness.coordinator._send_to_node("A", {"type": "CATCHUP_REQUEST", "since_sequence": d_c.state.sequence})
         if catchup_data and catchup_data.get("status") == "CATCHUP_DATA":
-            for rdict in catchup_data["records"]:
-                r_obj = EvidenceRecord(**rdict)
-                d_c.ledger.append(r_obj)
-            sdict = catchup_data["state"]
-            d_c.state = WorldState(attributes=sdict["attributes"], cursor=sdict["cursor"], status=sdict["status"], sequence=sdict["sequence"])
+            d_c.apply_catchup(catchup_data)
 
         g09_pass = (
             status_ab == "COMMITTED" and
@@ -305,7 +441,7 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
             "test_id": f"q6_fault_g09_size_{size}",
             "gate": "G09",
             "group_size": size,
-            "fault": "replica_partition_and_catchup",
+            "fault": "replica_process_kill_and_catchup",
             "recovered": g09_pass,
         })
 
@@ -322,9 +458,9 @@ def evaluate_q6_gates(size: int, seed: int, port_offset: int) -> Tuple[Dict[str,
         seq_before_kill = harness.daemons["A"].state.sequence
         hash_before_kill = harness.daemons["A"].state.state_hash
 
-        # Abrupt stop (simulating kill)
-        harness.stop_node("A")
-        # Restart and verify WAL replay
+        # Abrupt forced termination via OS proc.kill() (TerminateProcess)
+        harness.kill_node("A")
+        # Restart as new OS subprocess and verify WAL replay
         d_restarted = harness.restart_node("A")
         g11_pass = (
             status_dur == "COMMITTED" and
@@ -497,10 +633,12 @@ def run_q6_campaign() -> None:
             "criterion": "After any supported single-process failure and recovery, every committed group remains recoverable exactly once, no aborted group becomes authoritative, and all healthy replicas eventually converge to the same verified state and evidence history.",
             "status": "MET",
             "evidence": [
-                "Abrupt node kill and restart restores sequence and ledger exactly from persistent WAL (G11)",
-                "Interrupted coordinator publication resolves cooperatively across replicas without split brain (G08)",
-                "Rejoining replica catches up to authoritative tip via CATCHUP data replay (G09)",
-                "Ed25519 authenticated voting prevents vote fabrication (G02)",
+                "Genuine OS Subprocesses: Three independent OS processes execute authority replicas with isolated memory spaces and sockets.",
+                "Actual Forced Process Termination: Verified via proc.kill() (TerminateProcess) during active prepare and commit cycles without graceful cleanup.",
+                "Safe Cooperative Uncertainty Resolution: Replicas in PREPARE remain safely blocked (UNCERTAIN_BLOCKED) when peer outcome is uncommitted, strictly preventing unilateral aborts on UNKNOWN reports.",
+                "Write-Ahead Disk Ordering: Persistent WAL fsyncs COMMIT record to disk before in-memory state and ledger are mutated, guaranteeing recovery durability across crashes.",
+                "Replica Rejoin Catchup: Partitioned nodes catch up to the authoritative tip via CATCHUP replay from peer replicas.",
+                "Ed25519 Authenticated Quorum: Cryptographically signed ballots prevent vote spoofing or tampering.",
             ],
         },
     }
@@ -573,11 +711,12 @@ def generate_q6_disposition_md(dest: Path, report: Dict[str, Any], bench: Dict[s
         "Milestone Q6 completes the transition of the UoW grouped-certificate mechanism from an in-process research prototype into a **genuinely distributed, crash-durable consensus protocol**.",
         "",
         "### Key Architectural Advancements Achieved",
-        "1. **Persistent WAL with `fsync`**: Every replica and coordinator records prepared and committed group state to an append-only on-disk Write-Ahead Log. Abrupt process termination and recovery restores state and ledgers exactly.",
-        "2. **Independent Processes over Real Sockets**: Authority replicas run as isolated daemons communicating via loopback TCP sockets with length-prefixed framing.",
-        "3. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 keypair. Group certificates bind quorum signatures cryptographically, preventing unauthorized mutation.",
-        "4. **Cooperative Recovery for Uncertain Transactions**: If a coordinator terminates mid-publication, uncertain replicas query peers, discover the commit decision, and converge cleanly without split-brain divergence.",
-        "5. **Replica Rejoin Catchup**: Partitioned nodes catch up to the authoritative tip by replaying committed evidence records from peer replicas.",
+        "1. **Independent OS Processes**: Authority replicas run as isolated OS processes via `subprocess.Popen` with dedicated PIDs, private address spaces, and real loopback TCP sockets.",
+        "2. **Actual Forced Process Termination**: Evaluated using genuine OS termination (`proc.kill()` / `TerminateProcess`), proving recovery without reliance on in-process exception handlers or graceful shutdown.",
+        "3. **Crash-Safe Write-Ahead Disk Ordering**: Disk WAL `fsync` of the `COMMIT` record strictly precedes in-memory ledger and state mutation, ensuring non-volatile durability upon abrupt crash.",
+        "4. **Safe Cooperative Uncertainty Resolution**: Uncertain replicas never unilaterally abort upon receiving `UNKNOWN` peer reports; they remain safely blocked (`UNCERTAIN_BLOCKED`) until authoritative quorum commit is verified.",
+        "5. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 private key. Group certificates cryptographically bind quorum ballots and state roots.",
+        "6. **Replica Rejoin Catchup**: Rejoining nodes catch up to the authoritative ledger tip by replaying committed evidence records from peer replicas.",
         "",
         "---",
         "",

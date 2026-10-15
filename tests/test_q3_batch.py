@@ -39,3 +39,11 @@ def test_q5_group_certificate_closed_campaign():
     report = run()
     assert report['passed'], report
     assert len(report['gates']) == 8
+
+
+def test_q6_persistent_group_commitment():
+    from qualification.micro_operator.q6.campaign import evaluate_q6_gates
+    results, faults = evaluate_q6_gates(size=4, seed=1004, port_offset=19600)
+    for g, r in results.items():
+        assert r["passed"], f"Gate {g} failed: {r}"
+

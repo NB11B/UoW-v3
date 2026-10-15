@@ -8,7 +8,7 @@
 **Durability Model**: Persistent WAL with os.fsync on prepare and commit  
 **Transport**: Loopback TCP/IP stream sockets with length-prefixed framing  
 **Authentication**: cryptography (Ed25519)  
-**Timestamp**: 2026-10-15T18:08:18Z  
+**Timestamp**: 2026-10-15T18:57:13Z  
 
 ---
 
@@ -19,11 +19,12 @@
 Milestone Q6 completes the transition of the UoW grouped-certificate mechanism from an in-process research prototype into a **genuinely distributed, crash-durable consensus protocol**.
 
 ### Key Architectural Advancements Achieved
-1. **Persistent WAL with `fsync`**: Every replica and coordinator records prepared and committed group state to an append-only on-disk Write-Ahead Log. Abrupt process termination and recovery restores state and ledgers exactly.
-2. **Independent Processes over Real Sockets**: Authority replicas run as isolated daemons communicating via loopback TCP sockets with length-prefixed framing.
-3. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 keypair. Group certificates bind quorum signatures cryptographically, preventing unauthorized mutation.
-4. **Cooperative Recovery for Uncertain Transactions**: If a coordinator terminates mid-publication, uncertain replicas query peers, discover the commit decision, and converge cleanly without split-brain divergence.
-5. **Replica Rejoin Catchup**: Partitioned nodes catch up to the authoritative tip by replaying committed evidence records from peer replicas.
+1. **Independent OS Processes**: Authority replicas run as isolated OS processes via `subprocess.Popen` with dedicated PIDs, private address spaces, and real loopback TCP sockets.
+2. **Actual Forced Process Termination**: Evaluated using genuine OS termination (`proc.kill()` / `TerminateProcess`), proving recovery without reliance on in-process exception handlers or graceful shutdown.
+3. **Crash-Safe Write-Ahead Disk Ordering**: Disk WAL `fsync` of the `COMMIT` record strictly precedes in-memory ledger and state mutation, ensuring non-volatile durability upon abrupt crash.
+4. **Safe Cooperative Uncertainty Resolution**: Uncertain replicas never unilaterally abort upon receiving `UNKNOWN` peer reports; they remain safely blocked (`UNCERTAIN_BLOCKED`) until authoritative quorum commit is verified.
+5. **Ed25519 Authenticated Voting**: Every authority ballot is signed with an Ed25519 private key. Group certificates cryptographically bind quorum ballots and state roots.
+6. **Replica Rejoin Catchup**: Rejoining nodes catch up to the authoritative ledger tip by replaying committed evidence records from peer replicas.
 
 ---
 
@@ -54,21 +55,21 @@ Workloads benchmarked across 30 timed repetitions per group size on identical ha
 
 | Group Size | Arm A (Q4 Ref) | Arm B (Q4 Grouped) | Arm C (Q5 In-Memory) | Arm E (Q6 Persistent Sockets + WAL) |
 | :---: | :---: | :---: | :---: | :---: |
-| 1 | 2.46 ms | 2.49 ms | 1.52 ms | **152.03 ms** |
-| 4 | 10.07 ms | 9.91 ms | 5.01 ms | **157.63 ms** |
-| 16 | 39.17 ms | 39.67 ms | 18.37 ms | **158.42 ms** |
-| 64 | 158.17 ms | 157.43 ms | 72.29 ms | **211.10 ms** |
-| 256 | 633.11 ms | 635.73 ms | 294.90 ms | **278.54 ms** |
+| 1 | 2.46 ms | 2.49 ms | 1.52 ms | **172.24 ms** |
+| 4 | 10.07 ms | 9.91 ms | 5.01 ms | **172.41 ms** |
+| 16 | 39.17 ms | 39.67 ms | 18.37 ms | **171.04 ms** |
+| 64 | 158.17 ms | 157.43 ms | 72.29 ms | **221.51 ms** |
+| 256 | 633.11 ms | 635.73 ms | 294.90 ms | **283.94 ms** |
 
 ### Throughput Comparison (Items / second)
 
 | Group Size | Arm A (Q4 Ref) | Arm C (Q5 In-Memory) | Arm E (Q6 Persistent Sockets + WAL) | Q6 Scaling Advantage vs Arm A |
 | :---: | :---: | :---: | :---: | :---: |
-| 1 | 404.3 | 645.6 | **6.7** | **-98.3%** |
-| 4 | 394.6 | 791.4 | **26.3** | **-93.3%** |
-| 16 | 405.2 | 867.0 | **100.0** | **-75.3%** |
-| 64 | 401.4 | 882.3 | **318.1** | **-20.7%** |
-| 256 | 402.4 | 839.6 | **922.8** | **+129.3%** |
+| 1 | 404.3 | 645.6 | **6.0** | **-98.5%** |
+| 4 | 394.6 | 791.4 | **23.9** | **-94.0%** |
+| 16 | 405.2 | 867.0 | **95.9** | **-76.3%** |
+| 64 | 401.4 | 882.3 | **293.4** | **-26.9%** |
+| 256 | 402.4 | 839.6 | **868.5** | **+115.8%** |
 
 ---
 

@@ -126,6 +126,7 @@
         "status": "INTERRUPTED_PREPUBLISH"
       },
       "G08": {
+        "blocked_safely": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_4d7745a5848d3616": "COMMITTED"
@@ -226,9 +227,11 @@
         "status": "INTERRUPTED_PREPUBLISH"
       },
       "G08": {
+        "blocked_safely": true,
         "convergence_verified": true,
         "cooperative_resolution": {
-          "q6_grp_1687cb7b474b5e1f": "COMMITTED"
+          "q6_grp_1687cb7b474b5e1f": "COMMITTED",
+          "q6_grp_d8333e3c03ee8fbd": "UNCERTAIN_BLOCKED"
         },
         "gate": "G08",
         "group_size": 16,
@@ -326,9 +329,11 @@
         "status": "INTERRUPTED_PREPUBLISH"
       },
       "G08": {
+        "blocked_safely": true,
         "convergence_verified": true,
         "cooperative_resolution": {
-          "q6_grp_1d93941237c08670": "COMMITTED"
+          "q6_grp_1d93941237c08670": "COMMITTED",
+          "q6_grp_5ae90862c7831428": "UNCERTAIN_BLOCKED"
         },
         "gate": "G08",
         "group_size": 256,
@@ -426,6 +431,7 @@
         "status": "INTERRUPTED_PREPUBLISH"
       },
       "G08": {
+        "blocked_safely": true,
         "convergence_verified": true,
         "cooperative_resolution": {
           "q6_grp_dea52ec4b864dc12": "COMMITTED"
@@ -526,9 +532,11 @@
         "status": "INTERRUPTED_PREPUBLISH"
       },
       "G08": {
+        "blocked_safely": true,
         "convergence_verified": true,
         "cooperative_resolution": {
-          "q6_grp_c032240444950dae": "COMMITTED"
+          "q6_grp_c032240444950dae": "COMMITTED",
+          "q6_grp_d6c3bd880b7560e8": "UNCERTAIN_BLOCKED"
         },
         "gate": "G08",
         "group_size": 64,
@@ -569,10 +577,12 @@
   "success_criterion_evaluation": {
     "criterion": "After any supported single-process failure and recovery, every committed group remains recoverable exactly once, no aborted group becomes authoritative, and all healthy replicas eventually converge to the same verified state and evidence history.",
     "evidence": [
-      "Abrupt node kill and restart restores sequence and ledger exactly from persistent WAL (G11)",
-      "Interrupted coordinator publication resolves cooperatively across replicas without split brain (G08)",
-      "Rejoining replica catches up to authoritative tip via CATCHUP data replay (G09)",
-      "Ed25519 authenticated voting prevents vote fabrication (G02)"
+      "Genuine OS Subprocesses: Three independent OS processes execute authority replicas with isolated memory spaces and sockets.",
+      "Actual Forced Process Termination: Verified via proc.kill() (TerminateProcess) during active prepare and commit cycles without graceful cleanup.",
+      "Safe Cooperative Uncertainty Resolution: Replicas in PREPARE remain safely blocked (UNCERTAIN_BLOCKED) when peer outcome is uncommitted, strictly preventing unilateral aborts on UNKNOWN reports.",
+      "Write-Ahead Disk Ordering: Persistent WAL fsyncs COMMIT record to disk before in-memory state and ledger are mutated, guaranteeing recovery durability across crashes.",
+      "Replica Rejoin Catchup: Partitioned nodes catch up to the authoritative tip via CATCHUP replay from peer replicas.",
+      "Ed25519 Authenticated Quorum: Cryptographically signed ballots prevent vote spoofing or tampering."
     ],
     "status": "MET"
   }

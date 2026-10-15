@@ -20,9 +20,9 @@ def test_s4_orchestration_imports_remain_identity_compatible():
     assert execute_materialized is implementation_execute_materialized
     assert run_orchestration is implementation_run_orchestration
 
-    assert uow.execute_domain_task is implementation_execute_domain_task
-    assert uow.execute_materialized is implementation_execute_materialized
-    assert uow.run_orchestration is implementation_run_orchestration
+    assert not hasattr(uow, "execute_domain_task")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "execute_materialized")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "run_orchestration")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_orchestration_runtime_is_only_shim():

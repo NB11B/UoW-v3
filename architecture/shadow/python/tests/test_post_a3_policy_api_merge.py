@@ -14,8 +14,8 @@ def test_post_a3_policy_namespace_is_part_of_canonical_api():
 
 
 def test_policy_graph_semantics_remain_namespaced_not_flattened():
-    assert uow.RealizationGraph is not policy_api.RealizationGraph
-    assert "policy" in uow.__all__
+    assert not hasattr(uow, "RealizationGraph")  # minimal root; namespaced policy remains available
+    assert hasattr(uow, "policy")  # importable namespace, not mandatory wildcard root export
     assert "RealizationGraph" in policy_api.__all__
 
 

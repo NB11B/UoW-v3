@@ -14,11 +14,11 @@ from uow.realizations.commit import QuorumCommitSequencer as RealizationSequence
 def test_s4_quorum_import_paths_are_identity_compatible():
     assert ProposerSequencer is RealizationSequencer
     assert ShimSequencer is RealizationSequencer
-    assert uow.QuorumCommitSequencer is RealizationSequencer
+    assert not hasattr(uow, "QuorumCommitSequencer")  # minimal-root API; namespace identity checked above
 
     assert ProposerError is RealizationError
     assert ShimError is RealizationError
-    assert uow.QuorumCommitError is RealizationError
+    assert not hasattr(uow, "QuorumCommitError")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_quorum_module_is_only_a_compatibility_shim():

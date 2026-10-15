@@ -13,8 +13,8 @@ from uow.realizations.scheduling.heuristic import (
 def test_s4_heuristic_proposer_imports_remain_identity_compatible():
     assert HeuristicSchedulingProposer is ImplHeuristicSchedulingProposer
     assert ReferenceSchedulingProposer is ImplReferenceSchedulingProposer
-    assert uow.HeuristicSchedulingProposer is ImplHeuristicSchedulingProposer
-    assert uow.ReferenceSchedulingProposer is ImplReferenceSchedulingProposer
+    assert not hasattr(uow, "HeuristicSchedulingProposer")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "ReferenceSchedulingProposer")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_heuristic_proposer_module_is_only_compatibility_shim():

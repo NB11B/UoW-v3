@@ -17,12 +17,14 @@ from uow.implementations.distributed import MultiOrchestratorCluster as ClusterI
 
 
 def test_s4_convergence_semantics_and_cluster_imports_remain_compatible():
-    assert AuthoritativeHistory is HistoryImpl is uow.AuthoritativeHistory
-    assert HistoryEntry is EntryImpl is uow.HistoryEntry
-    assert HistoryEntryKind is KindImpl is uow.HistoryEntryKind
-    assert MultiOrchestratorCluster is ClusterImpl is uow.MultiOrchestratorCluster
-
-
+    assert AuthoritativeHistory is HistoryImpl
+    assert not hasattr(uow, "AuthoritativeHistory")
+    assert HistoryEntry is EntryImpl
+    assert not hasattr(uow, "HistoryEntry")
+    assert HistoryEntryKind is KindImpl
+    assert not hasattr(uow, "HistoryEntryKind")
+    assert MultiOrchestratorCluster is ClusterImpl
+    assert not hasattr(uow, "MultiOrchestratorCluster")
 def test_s4_historical_convergence_module_is_compatibility_surface():
     import uow.composition.convergence as shim
 

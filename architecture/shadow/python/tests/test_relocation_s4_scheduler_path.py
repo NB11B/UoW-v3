@@ -39,10 +39,10 @@ def test_s4_scheduler_imports_remain_identity_compatible():
     assert COMPLETION_PREFIX is impl_completion_prefix
     assert ORCH_TERMINATION_KEY is impl_termination_key
 
-    assert uow.SchedulerMaterializer is ImplSchedulerMaterializer
-    assert uow.CompletionMaterializer is ImplCompletionMaterializer
-    assert uow.make_domain_task is impl_make_domain_task
-    assert uow.evaluate_scheduler_step is impl_evaluate_scheduler_step
+    assert not hasattr(uow, "SchedulerMaterializer")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "CompletionMaterializer")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "make_domain_task")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "evaluate_scheduler_step")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_scheduler_module_is_only_compatibility_shim():

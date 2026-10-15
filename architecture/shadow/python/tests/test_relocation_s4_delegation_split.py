@@ -14,7 +14,7 @@ from uow.realizations.authority.delegation import DistributedDelegationNode as I
 
 def test_s4_delegation_split_preserves_public_identity():
     assert DistributedDelegationNode is ImplDistributedDelegationNode
-    assert uow.DistributedDelegationNode is ImplDistributedDelegationNode
+    assert not hasattr(uow, "DistributedDelegationNode")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_delegation_semantics_remain_canonical():

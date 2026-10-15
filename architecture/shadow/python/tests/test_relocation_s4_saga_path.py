@@ -29,8 +29,8 @@ def test_s4_saga_imports_remain_identity_compatible():
     assert SagaStep is ImplStep
     assert get_sagas_map is impl_get_sagas_map
 
-    assert uow.SagaCoordinator is ImplCoordinator
-    assert uow.SagaStatus is ImplStatus
+    assert not hasattr(uow, "SagaCoordinator")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "SagaStatus")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_saga_module_is_only_compatibility_shim():

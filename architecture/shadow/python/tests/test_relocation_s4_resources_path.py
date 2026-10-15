@@ -119,9 +119,9 @@ def test_s4_resource_import_paths_remain_identity_compatible():
     assert ResourceAwareCompletionMaterializer is ImplCompletion
     assert run_resource_orchestration is impl_run
 
-    assert uow.ResourceAwareSchedulerMaterializer is ImplScheduler
-    assert uow.ResourceAwareCompletionMaterializer is ImplCompletion
-    assert uow.run_resource_orchestration is impl_run
+    assert not hasattr(uow, "ResourceAwareSchedulerMaterializer")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "ResourceAwareCompletionMaterializer")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "run_resource_orchestration")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_resource_runtime_is_only_shim():

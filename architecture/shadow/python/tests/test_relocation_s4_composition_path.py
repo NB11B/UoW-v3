@@ -16,9 +16,9 @@ def test_s4_composition_runtime_imports_remain_identity_compatible():
     assert ExecutionRecord is ImplRecord
     assert NodeExecutionResult is ImplNodeResult
 
-    assert uow.AdaptiveCompositionRuntime is ImplRuntime
-    assert uow.ExecutionRecord is ImplRecord
-    assert uow.NodeExecutionResult is ImplNodeResult
+    assert not hasattr(uow, "AdaptiveCompositionRuntime")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "ExecutionRecord")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "NodeExecutionResult")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_composition_runtime_is_only_compatibility_shim():

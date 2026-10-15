@@ -83,8 +83,8 @@ class CrashingProposer:
 def test_s4_proposer_import_paths_remain_identity_compatible():
     assert ProposerOrchestrationEngine is ImplEngine
     assert run_proposer_orchestration is impl_run
-    assert uow.ProposerOrchestrationEngine is ImplEngine
-    assert uow.run_proposer_orchestration is impl_run
+    assert not hasattr(uow, "ProposerOrchestrationEngine")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "run_proposer_orchestration")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_proposer_engine_is_only_shim():

@@ -9,7 +9,7 @@ from uow.realizations.adaptation.portable import PortableAdaptiveProposer as Imp
 
 def test_s4_portable_adaptive_proposer_imports_remain_identity_compatible():
     assert PortableAdaptiveProposer is ImplPortableAdaptiveProposer
-    assert uow.PortableAdaptiveProposer is ImplPortableAdaptiveProposer
+    assert not hasattr(uow, "PortableAdaptiveProposer")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_portable_adaptive_module_is_only_compatibility_shim():

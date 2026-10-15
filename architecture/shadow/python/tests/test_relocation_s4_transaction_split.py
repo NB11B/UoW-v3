@@ -24,8 +24,8 @@ def test_s4_transaction_protocol_and_realization_imports_are_identity_compatible
     assert DeterministicSequencer is RealDeterministic
     assert WALSequencer is RealWAL
 
-    assert uow.DeterministicSequencer is RealDeterministic
-    assert uow.WALSequencer is RealWAL
+    assert not hasattr(uow, "DeterministicSequencer")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "WALSequencer")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_quorum_realization_depends_on_semantic_commit_protocol():

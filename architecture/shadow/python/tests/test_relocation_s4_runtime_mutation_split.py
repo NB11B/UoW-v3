@@ -18,7 +18,7 @@ from uow.realizations.authority.runtime_mutation import QuorumMutationCoordinato
 
 def test_s4_runtime_mutation_split_preserves_public_identity():
     assert QuorumMutationCoordinator is ImplQuorumMutationCoordinator
-    assert uow.QuorumMutationCoordinator is ImplQuorumMutationCoordinator
+    assert not hasattr(uow, "QuorumMutationCoordinator")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_runtime_mutation_authority_semantics_remain_canonical():

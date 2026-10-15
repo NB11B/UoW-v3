@@ -18,8 +18,8 @@ def test_s4_wire_imports_remain_identity_compatible():
     assert sign_envelope is impl_sign
     assert verify_envelope is impl_verify
 
-    assert uow.AdversarialChannel is ImplChannel
-    assert uow.WireEnvelope is ImplEnvelope
+    assert not hasattr(uow, "AdversarialChannel")  # minimal-root API; namespace identity checked above
+    assert not hasattr(uow, "WireEnvelope")  # minimal-root API; namespace identity checked above
 
 
 def test_s4_historical_wire_module_is_only_compatibility_shim():

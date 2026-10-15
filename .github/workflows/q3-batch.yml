@@ -1,0 +1,24 @@
+name: Q3 Batch Qualification
+on:
+  push:
+    branches:
+      - experiment/q3-cooperative-micro-operators
+  pull_request:
+    paths:
+      - 'qualification/micro_operator/q3_batch.py'
+      - 'tests/test_q3_batch.py'
+      - '.github/workflows/q3-batch.yml'
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e . pytest
+      - name: Verify exact semantics
+        run: python -m pytest -q tests/test_q3_batch.py
+      - name: Bench in-process UoW commit path
+        run: python -m qualification.micro_operator.q3_batch

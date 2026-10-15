@@ -30,9 +30,12 @@ def dataset(count, seed):
 
 def train(rows,channels):
     weights=[0.0]*(1+2*len(channels))
+    # Features are static across training epochs; avoid re-allocating them
+    # 25 times. Retain arithmetic order for reference parity.
+    samples=[(label,tuple([1.0]+[float(v)-0.5 for j in channels for v in views[j]]))
+             for label,views in rows]
     for _ in range(25):
-        for label,views in rows:
-            x=[1.0]+[float(v)-0.5 for j in channels for v in views[j]]
+        for label,x in samples:
             score=max(-30,min(30,sum(a*b for a,b in zip(weights,x))))
             p=1/(1+math.exp(-score))
             weights=[w+0.08*(label-p)*v for w,v in zip(weights,x)]
@@ -43,14 +46,18 @@ def predict(weights,views,channels):
     return int(sum(a*b for a,b in zip(weights,x))>=0)
 
 def run():
+    started=time.perf_counter()
     training=dataset(6000,SEED)
     heldout=dataset(3000,SEED+1)
     specialists=[train(training,(j,)) for j in range(3)]
     centralized=train(training,(0,1,2))
+    training_elapsed_s=time.perf_counter()-started
+    inference_started=time.perf_counter()
     labels=[y for y,_ in heldout]
     local=[[predict(specialists[j],v,(j,)) for _,v in heldout] for j in range(3)]
     fusion=[int(sum(local[j][i] for j in range(3))>=2) for i in range(len(heldout))]
     central=[predict(centralized,v,(0,1,2)) for _,v in heldout]
+    inference_elapsed_s=time.perf_counter()-inference_started
     acc=lambda output:sum(a==b for a,b in zip(labels,output))/len(labels)
     local_acc=[acc(o) for o in local]
     assert acc(fusion)>statistics.mean(local_acc)+0.04
@@ -59,13 +66,15 @@ def run():
     # Qualify one learned multi-specialist decision as a real native UoW commit.
     # The classifier/fusion has no signing authority or direct commit capability.
     cluster,healer=make_cluster()
+    # These are vote-to-contract encodings, NOT an attested inference model.
     model=FrozenMicroOperator((1,1,1),"q3-majority-frozen-v1")
+    work_by_vote={0:work_for(model,0,0),1:work_for(model,100,100)}
     votes=fusion[:12]
     certs=[]
     for v in votes:
         # Encode only the already validated fused decision as a bounded UoW
         # using Q2's existing native contract constructor.
-        work=work_for(model,100 if v else 0,100 if v else 0)
+        work=work_by_vote[v]
         proposal=propose(work,cluster.nodes["A"].state)
         result=cluster.submit(work,proposal)
         assert result.committed and result.quorum_certificate is not None
@@ -75,7 +84,7 @@ def run():
     assert len({n.ledger.root_hash() for n in cluster.nodes.values()})==1
 
     # Reject stale proposal without mutating history.
-    work=work_for(model,100,100)
+    work=work_by_vote[1]
     stale=propose(work,cluster.nodes["A"].state)
     assert cluster.submit(work,stale).committed
     before=len(cluster.journal)
@@ -95,12 +104,14 @@ def run():
     return {"status":"PASS","seed":SEED,"train":len(training),"heldout":len(heldout),
             "individual_accuracy":local_acc,"isolated_mean_accuracy":statistics.mean(local_acc),
             "fusion_accuracy":acc(fusion),"central_accuracy":acc(central),
+            "timing_observation_seconds":{"training_all_models":training_elapsed_s,"inference_all_models":inference_elapsed_s},
             "parameters":{"specialists_total":sum(map(len,specialists)),
                           "central":len(centralized)},
             "native_uow_commits":len(certs)+1,"journal_verified":True,
             "faults":fault,
             "limits":["synthetic only","in-process UoW authority","no physical transport",
-                      "no energy claim","no independently attested model weights"]}
+                      "no energy claim","no independently attested model weights",
+                      "native authority checks accept vote-encoded contracts, not independently model-attested predictions"]}
 
 if __name__=="__main__":
     print(json.dumps(run(),indent=2))

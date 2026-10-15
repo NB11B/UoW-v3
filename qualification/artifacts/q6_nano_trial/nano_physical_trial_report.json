@@ -1,0 +1,364 @@
+{
+  "trial_name": "Jetson Nano Physical Qualification Trial for Q6",
+  "baseline_commit": "eee128cabe6aeb932c0eeb838348e73bd453ca96",
+  "timestamp_iso": "2026-10-15T21:27:48Z",
+  "platform": {
+    "system": "Linux",
+    "kernel": "4.9.253-tegra",
+    "machine": "aarch64",
+    "processor": "aarch64",
+    "python_version": "3.11.17",
+    "cpu_cores": 4,
+    "memory_total_bytes": 2076119040,
+    "memory_total_mb": 1979.9
+  },
+  "flash_storage_fsync": {
+    "iterations": 100,
+    "min_ms": 1.953,
+    "p50_ms": 2.384,
+    "mean_ms": 3.092,
+    "p90_ms": 2.719,
+    "p95_ms": 3.16,
+    "p99_ms": 55.139,
+    "max_ms": 55.139
+  },
+  "tcp_traffic_metrics": {
+    "1": {
+      "group_size": 1,
+      "commit_wall_ms": 64.46,
+      "loopback_tcp_bytes": 18255,
+      "loopback_packets": 120,
+      "analytical_prepare_frame_bytes": 312,
+      "analytical_cert_frame_bytes": 2220,
+      "bytes_per_member_item": 18255.0,
+      "wal_bytes_on_disk": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "total_wal_bytes_cluster": 0
+    },
+    "4": {
+      "group_size": 4,
+      "commit_wall_ms": 83.82,
+      "loopback_tcp_bytes": 21288,
+      "loopback_packets": 120,
+      "analytical_prepare_frame_bytes": 558,
+      "analytical_cert_frame_bytes": 3024,
+      "bytes_per_member_item": 5322.0,
+      "wal_bytes_on_disk": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "total_wal_bytes_cluster": 0
+    },
+    "16": {
+      "group_size": 16,
+      "commit_wall_ms": 146.73,
+      "loopback_tcp_bytes": 33420,
+      "loopback_packets": 120,
+      "analytical_prepare_frame_bytes": 1565,
+      "analytical_cert_frame_bytes": 6240,
+      "bytes_per_member_item": 2088.8,
+      "wal_bytes_on_disk": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "total_wal_bytes_cluster": 0
+    },
+    "64": {
+      "group_size": 64,
+      "commit_wall_ms": 385.32,
+      "loopback_tcp_bytes": 81960,
+      "loopback_packets": 120,
+      "analytical_prepare_frame_bytes": 5597,
+      "analytical_cert_frame_bytes": 19104,
+      "bytes_per_member_item": 1280.6,
+      "wal_bytes_on_disk": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "total_wal_bytes_cluster": 0
+    },
+    "256": {
+      "group_size": 256,
+      "commit_wall_ms": 1395.77,
+      "loopback_tcp_bytes": 277008,
+      "loopback_packets": 138,
+      "analytical_prepare_frame_bytes": 22138,
+      "analytical_cert_frame_bytes": 70560,
+      "bytes_per_member_item": 1082.1,
+      "wal_bytes_on_disk": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "total_wal_bytes_cluster": 0
+    }
+  },
+  "process_kill_recovery": {
+    "forced_kill_signal": "SIGKILL (proc.kill)",
+    "kill_duration_ms": 57.76,
+    "cold_spawn_and_replay_ms": 905.62,
+    "wal_records_replayed": 3,
+    "state_hash_exact_match": true,
+    "evidence_root_exact_match": true,
+    "cluster_resumed_commit_pass": true,
+    "verdict": "PASS"
+  },
+  "sustained_performance": {
+    "1": {
+      "group_size": 1,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 59.33,
+        "p50": 62.14,
+        "mean": 63.76,
+        "p90": 73.15,
+        "p95": 74.55,
+        "p99": 75.13,
+        "max": 75.13
+      },
+      "throughput_items_sec": 16.09
+    },
+    "4": {
+      "group_size": 4,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 77.22,
+        "p50": 79.73,
+        "mean": 80.86,
+        "p90": 87.52,
+        "p95": 88.78,
+        "p99": 91.26,
+        "max": 91.26
+      },
+      "throughput_items_sec": 50.17
+    },
+    "16": {
+      "group_size": 16,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 138.84,
+        "p50": 143.03,
+        "mean": 144.73,
+        "p90": 154.18,
+        "p95": 154.85,
+        "p99": 156.7,
+        "max": 156.7
+      },
+      "throughput_items_sec": 111.87
+    },
+    "64": {
+      "group_size": 64,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 384.68,
+        "p50": 387.63,
+        "mean": 389.82,
+        "p90": 402.46,
+        "p95": 402.99,
+        "p99": 404.46,
+        "max": 404.46
+      },
+      "throughput_items_sec": 165.1
+    },
+    "256": {
+      "group_size": 256,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 1370.51,
+        "p50": 1384.49,
+        "mean": 1395.75,
+        "p90": 1438.07,
+        "p95": 1442.41,
+        "p99": 1535.57,
+        "max": 1535.57
+      },
+      "throughput_items_sec": 184.91
+    }
+  },
+  "resource_utilization": {
+    "1": {
+      "group_size": 1,
+      "cpu_stats": {
+        "num_samples": 93,
+        "avg_cpu_percent": 16.66,
+        "per_core_avg": [
+          18.37,
+          11.37,
+          18.54,
+          18.36
+        ],
+        "peak_core_percent": 75.0
+      },
+      "node_daemons_rss_mb": {
+        "A": 32.88,
+        "B": 33.04,
+        "C": 32.9
+      },
+      "coordinator_rss_mb": 37.74,
+      "total_cluster_rss_mb": 136.56
+    },
+    "4": {
+      "group_size": 4,
+      "cpu_stats": {
+        "num_samples": 118,
+        "avg_cpu_percent": 18.85,
+        "per_core_avg": [
+          26.34,
+          10.1,
+          19.06,
+          19.91
+        ],
+        "peak_core_percent": 100.0
+      },
+      "node_daemons_rss_mb": {
+        "A": 33.38,
+        "B": 33.5,
+        "C": 33.39
+      },
+      "coordinator_rss_mb": 38.0,
+      "total_cluster_rss_mb": 138.27
+    },
+    "16": {
+      "group_size": 16,
+      "cpu_stats": {
+        "num_samples": 211,
+        "avg_cpu_percent": 23.48,
+        "per_core_avg": [
+          34.99,
+          12.71,
+          24.84,
+          21.36
+        ],
+        "peak_core_percent": 100.0
+      },
+      "node_daemons_rss_mb": {
+        "A": 34.57,
+        "B": 34.67,
+        "C": 34.57
+      },
+      "coordinator_rss_mb": 38.54,
+      "total_cluster_rss_mb": 142.35
+    },
+    "64": {
+      "group_size": 64,
+      "cpu_stats": {
+        "num_samples": 567,
+        "avg_cpu_percent": 23.89,
+        "per_core_avg": [
+          32.85,
+          12.57,
+          26.59,
+          23.57
+        ],
+        "peak_core_percent": 100.0
+      },
+      "node_daemons_rss_mb": {
+        "A": 38.11,
+        "B": 38.22,
+        "C": 38.12
+      },
+      "coordinator_rss_mb": 39.83,
+      "total_cluster_rss_mb": 154.28
+    },
+    "256": {
+      "group_size": 256,
+      "cpu_stats": {
+        "num_samples": 2020,
+        "avg_cpu_percent": 26.61,
+        "per_core_avg": [
+          36.23,
+          19.68,
+          19.22,
+          31.31
+        ],
+        "peak_core_percent": 100.0
+      },
+      "node_daemons_rss_mb": {
+        "A": 50.82,
+        "B": 51.18,
+        "C": 51.06
+      },
+      "coordinator_rss_mb": 44.23,
+      "total_cluster_rss_mb": 197.29
+    }
+  },
+  "gate_matrix_passed": {
+    "1": {
+      "G01": true,
+      "G02": true,
+      "G03": true,
+      "G04": true,
+      "G05": true,
+      "G06": true,
+      "G07": true,
+      "G08": true,
+      "G09": true,
+      "G10": true,
+      "G11": true,
+      "G12": true
+    },
+    "4": {
+      "G01": true,
+      "G02": true,
+      "G03": true,
+      "G04": true,
+      "G05": true,
+      "G06": true,
+      "G07": true,
+      "G08": true,
+      "G09": true,
+      "G10": true,
+      "G11": true,
+      "G12": true
+    },
+    "16": {
+      "G01": true,
+      "G02": true,
+      "G03": true,
+      "G04": true,
+      "G05": true,
+      "G06": true,
+      "G07": true,
+      "G08": true,
+      "G09": true,
+      "G10": true,
+      "G11": true,
+      "G12": true
+    },
+    "64": {
+      "G01": true,
+      "G02": true,
+      "G03": true,
+      "G04": true,
+      "G05": true,
+      "G06": true,
+      "G07": true,
+      "G08": true,
+      "G09": true,
+      "G10": true,
+      "G11": true,
+      "G12": true
+    },
+    "256": {
+      "G01": true,
+      "G02": true,
+      "G03": true,
+      "G04": true,
+      "G05": true,
+      "G06": true,
+      "G07": true,
+      "G08": true,
+      "G09": true,
+      "G10": true,
+      "G11": true,
+      "G12": true
+    }
+  },
+  "overall_disposition": "PASS"
+}

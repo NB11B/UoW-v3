@@ -1,0 +1,52 @@
+{
+  "campaign": "UOW-GRAMMAR-1",
+  "status": "open",
+  "parent_reference_commit": "be79324",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "grammars": [
+    {
+      "name": "operational",
+      "schema": "uow.operational.v1",
+      "baseline_adapter": "../UoW-v2/checkpoints/uow_h3_native_smollm2_135m_arm_nb",
+      "sha256": "64d77db036472c86403a1d98490526fc5412d56e8c1640a47fd9eeed5f92ad6a"
+    },
+    {
+      "name": "temporal",
+      "schema": "uow.temporal.v1",
+      "target_adapter": "checkpoints/uow_temporal_smollm2_135m"
+    },
+    {
+      "name": "recovery",
+      "schema": "uow.recovery.v1",
+      "target_adapter": "checkpoints/uow_recovery_smollm2_135m"
+    }
+  ],
+  "gates": [
+    {
+      "id": "G0",
+      "title": "Baseline Reproduction & Regression Lock",
+      "condition": "Reproduce 20-case H3 operational benchmark (20/20 JSON, 16/20 Disp) and document rank-8 reconstruction control"
+    },
+    {
+      "id": "G1",
+      "title": "Independent Grammar Acquisition",
+      "condition": "Train temporal and recovery adapters; verify both exceed base model on unseen family-disjoint holdouts"
+    },
+    {
+      "id": "G2",
+      "title": "Cross-Grammar Specialization & Interference",
+      "condition": "Measure 3x3 evaluation matrix across all models and holdouts; calculate weight-space alignment matrix kappa(g, h)"
+    },
+    {
+      "id": "G3",
+      "title": "Deterministic UoW Multi-Grammar Composition",
+      "condition": "Compose typed proposals through UoW sequencer and saga coordinator; achieve valid execution trace with 0 unauthorized commits"
+    },
+    {
+      "id": "G4",
+      "title": "Architecture Comparison (Switchable vs Merged)",
+      "condition": "Compare Architecture A (resident switchable) vs Architecture C (linear combination) on accuracy, latency, and memory"
+    }
+  ]
+}

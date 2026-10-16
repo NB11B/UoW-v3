@@ -85,6 +85,6 @@
     "observed_mean_baseline_accuracy": 0.42013888888888884,
     "preregistered_causal_criterion_met": false,
     "directional_effect_consistency": "Inconsistent (Seed 42 signed: +0.00065, Seed 43 signed: -0.04297, Seed 44 signed: +0.00065)",
-    "scientific_interpretation": "The SmolLM2-135M model exhibits near-chance baseline accuracy (~41.7%) on relational number comparison prompts. Selecting the most responsive MLP down_proj neuron on training pairs does not generalize to held-out pairs: rank fractions were > 0.05 on 2 of 3 seeds (0.906, 0.938), and the single seed with rank < 0.05 showed an opposite (negative) signed effect. This contradicts the hypothesis that individual down_proj hidden neurons represent modular, reusable, or specialized relational operators."
+    "scientific_interpretation": "The SmolLM2-135M model exhibits near-chance baseline accuracy (42.01% mean across seeds) on relational number comparison prompts. Selecting the most responsive MLP down_proj neuron on training pairs does not generalize to held-out pairs: rank fractions were > 0.05 on 2 of 3 seeds (0.906, 0.938), and the single seed with rank < 0.05 showed an opposite (negative) signed effect. This contradicts the hypothesis that individual down_proj hidden neurons represent modular, reusable, or specialized relational operators."
   }
 }

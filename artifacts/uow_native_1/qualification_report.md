@@ -12,12 +12,14 @@
 
 ## 1. Executive Summary & Disposition
 
-### Final Disposition: **INCONCLUSIVE (Relational Circuit Hypothesis) / UNMET (Single-Neuron Criterion) / QUALIFIED (Deterministic Authority Boundary)**
-Overall campaign classification based on empirical evidence and audit review:
-> 1. **Measurement Implementation**: **VERIFIED** — Sequence-level teacher-forced answer scoring is mathematically sound, bounds-checked, and passes 18/18 regression tests.  
-> 2. **Single-Neuron Acceptance Criterion**: **NOT MET** — Zero-ablation of individual MLP hidden channels did not satisfy the prespecified causal effect criteria ($<0.05$ rank fraction) across all seeds.  
-> 3. **Underlying Relational-Circuit Hypothesis**: **INCONCLUSIVE** — The experiment rejects the tested single-neuron specialization criterion on this prompt format, but does not falsify relational computation in neural networks generally. The underlying model exhibited strong presentation-order primacy bias and near-chance baseline accuracy ($\approx 41.67\%$), meaning the target relational comparison behavior was not reliably demonstrated prior to intervention.  
-> 4. **Deterministic Authority Boundary**: **QUALIFIED (Within Local Scope)** — The production UoW v3 kernel (`src/uow/engine.py`) strictly bounds probabilistic outputs as unprivileged proposals. Zero unauthorized commits occur under false pre-state hashes, tampered states, or forged certificates.
+## 1. Executive Summary & Final Disposition
+
+### Recommended Final Disposition
+1. **Measurement implementation**: **Verified within tested scope** — Sequence-level teacher-forced scoring, prefix verification, and tie handling pass all 18 regression tests.
+2. **Single-neuron specialization criterion**: **Not met** — Control rank fraction $< 0.05$ was not consistently satisfied across seeds (Seed 42: $0.906$, Seed 43: $0.031$, Seed 44: $0.938$).
+3. **Broader relational-circuit hypothesis**: **Inconclusive** — The failure of the single-neuron criterion on this prompt format does not falsify relational mechanisms in neural networks generally. The underlying model exhibited strong presentation-order primacy bias and near-chance baseline accuracy ($42.01\%$ mean across seeds, with raw win rates averaging $40.97\%$), demonstrating that the model was not reliably performing the comparison task before intervention.
+4. **Deterministic UoW authority boundary**: **Passed local integration tests** — The production UoW v3 kernel (`src/uow/engine.py`) strictly bounds probabilistic outputs as unprivileged proposals. Zero unauthorized commits occur under false pre-state hashes, tampered states, or forged certificates.
+5. **Distributed transport and replication**: **Not evaluated** — Transport wire simulations and production replication qualification were explicitly excluded from this campaign scope.
 
 ---
 
@@ -119,9 +121,9 @@ Recorded in `artifacts/uow_native_1/regression_results.json`.
 | Seed | Selected Neuron | Baseline Holdout Acc | Baseline Margin | Intervened Holdout Acc | Intervened Margin | Signed Effect | Absolute Effect | Descriptive Control Rank | Shift Baseline Acc | Shift Interv Acc | Latency |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **42** | 525 | 39.58% | -0.2630 | 43.75% | -0.2637 | +0.00065 | 0.00065 | **0.9062** | 54.17% | 53.12% | 149.7 s |
-| **43** | 645 | 41.67% | -0.1439 | 44.79% | -0.1009 | -0.04297 | 0.04297 | **0.0312** | 54.17% | 54.17% | 143.0 s |
+| **43** | 645 | 42.71% | -0.1439 | 44.79% | -0.1009 | -0.04297 | 0.04297 | **0.0312** | 54.17% | 54.17% | 143.0 s |
 | **44** | 1501 | 43.75% | -0.1602 | 43.75% | -0.1595 | +0.00065 | 0.00065 | **0.9375** | 52.08% | 52.08% | 129.5 s |
-| **Mean**| — | **41.67%** | **-0.1890** | **44.10%** | **-0.1747** | **-0.01389** | **0.01476** | **0.6250** | **53.47%** | **53.12%** | **422.2 s** |
+| **Mean**| — | **42.01%** | **-0.1886** | **44.10%** | **-0.1747** | **-0.01389** | **0.01476** | **0.6250** | **53.47%** | **53.12%** | **422.2 s** |
 
 ---
 
@@ -140,12 +142,13 @@ In Seed 42, a question arose regarding the reconciliation of 18 correct choices 
 * **Exact Total Reconciliation:**
   $$\text{Accuracy} = \frac{\text{Wins} + 0.5 \times \text{Ties}}{48} = \frac{18 + 0.5 \times 2}{48} = \frac{19.0}{48} = 39.5833\%$$
   The recorded ties field (`ties: 2`) accounts exactly for the difference between $18/48 = 37.50\%$ and $39.58\%$.
+  Similarly, for Seed 43 ($20$ wins + $1$ tie $\times 0.5 = 20.5 / 48 = 42.7083\% \approx 42.71\%$), and Seed 44 ($21$ wins + $0$ ties $= 21 / 48 = 43.75\%$). Across all three seeds, the mean baseline holdout accuracy is $42.0139\% \approx 42.01\%$.
 
 ### B. Prompt Presentation-Order Primacy Bias
 The breakdown above reveals that SmolLM2-135M does not execute genuine numerical comparison on this prompt template:
 * When the larger number is presented first: it selects the larger number **18/24 times (75%)**.
 * When the larger number is presented second: it selects the larger number **0/24 times (0%)**.
-The model is primarily exhibiting an **echo / primacy bias** favoring the first number mentioned. Because `independent_splits` strictly counterbalances presentation order, the aggregate accuracy is near chance ($41.67\%$).
+The model is primarily exhibiting an **echo / primacy bias** favoring the first number mentioned. Because `independent_splits` strictly counterbalances presentation order, the aggregate accuracy is near chance ($42.01\%$).
 * **Scientific consequence:** The intervention failure does not establish that neural networks lack relational mechanisms; rather, **the underlying model did not reliably perform the relational behavior before intervention**.
 
 ### C. Intervention Scope Across Token Positions

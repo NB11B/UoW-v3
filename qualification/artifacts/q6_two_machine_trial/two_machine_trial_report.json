@@ -1,0 +1,185 @@
+{
+  "trial_name": "Two-Machine Physical Qualification Trial for Q6",
+  "baseline_commit": "829a050",
+  "timestamp_iso": "2026-10-16T02:16:23Z",
+  "topology": {
+    "machine_1_host": {
+      "system": "Windows",
+      "machine": "AMD64",
+      "ip": "192.168.55.100",
+      "roles": [
+        "Coordinator",
+        "Authority Node A",
+        "Authority Node B"
+      ]
+    },
+    "machine_2_jetson_nano": {
+      "system": "Linux 4.9 Tegra",
+      "machine": "aarch64 (Cortex-A57 4-core)",
+      "ip": "192.168.55.1",
+      "roles": [
+        "Authority Node C"
+      ],
+      "storage": "/dev/mmcblk0p1 flash"
+    },
+    "network_link": {
+      "physical_transport": "USB/RNDIS Virtual Ethernet (192.168.55.100 <-> 192.168.55.1)",
+      "ping_rtt_min_ms": 0.4,
+      "ping_rtt_avg_ms": 0.7,
+      "ping_rtt_max_ms": 1.1
+    }
+  },
+  "two_machine_size_metrics": {
+    "1": {
+      "group_size": 1,
+      "commit_latency_ms": 196.33,
+      "items_per_second": 5.1,
+      "state_hash_exact_match": true,
+      "nano_wal_size_bytes": 5149,
+      "voters_in_certificate": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "4": {
+      "group_size": 4,
+      "commit_latency_ms": 185.25,
+      "items_per_second": 21.6,
+      "state_hash_exact_match": true,
+      "nano_wal_size_bytes": 12938,
+      "voters_in_certificate": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "16": {
+      "group_size": 16,
+      "commit_latency_ms": 113.59,
+      "items_per_second": 140.9,
+      "state_hash_exact_match": true,
+      "nano_wal_size_bytes": 33019,
+      "voters_in_certificate": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "64": {
+      "group_size": 64,
+      "commit_latency_ms": 228.83,
+      "items_per_second": 279.7,
+      "state_hash_exact_match": true,
+      "nano_wal_size_bytes": 102256,
+      "voters_in_certificate": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "256": {
+      "group_size": 256,
+      "commit_latency_ms": 666.14,
+      "items_per_second": 384.3,
+      "state_hash_exact_match": true,
+      "nano_wal_size_bytes": 368349,
+      "voters_in_certificate": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "asymmetric_remote_failure": {
+    "kill_target": "Node C on Jetson Nano",
+    "host_quorum_succeeded_while_nano_dead": true,
+    "voters_during_failure": [
+      "A",
+      "B"
+    ],
+    "post_restart_catchup_verified": true
+  },
+  "cross_machine_quorum": {
+    "kill_target": "Node B on Host",
+    "cross_machine_quorum_succeeded": true,
+    "voters_formed": [
+      "A",
+      "C"
+    ],
+    "inter_device_quorum_proven": true
+  },
+  "sustained_performance_multi_machine": {
+    "1": {
+      "group_size": 1,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 111.26,
+        "p50": 188.25,
+        "mean": 182.53,
+        "p90": 217.33,
+        "p95": 221.06,
+        "p99": 241.93,
+        "max": 241.93
+      },
+      "throughput_items_sec": 5.31
+    },
+    "4": {
+      "group_size": 4,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 110.07,
+        "p50": 189.23,
+        "mean": 182.42,
+        "p90": 217.56,
+        "p95": 218.18,
+        "p99": 218.28,
+        "max": 218.28
+      },
+      "throughput_items_sec": 21.14
+    },
+    "16": {
+      "group_size": 16,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 116.04,
+        "p50": 218.86,
+        "mean": 210.56,
+        "p90": 235.44,
+        "p95": 247.14,
+        "p99": 248.35,
+        "max": 248.35
+      },
+      "throughput_items_sec": 73.11
+    },
+    "64": {
+      "group_size": 64,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 226.49,
+        "p50": 325.81,
+        "mean": 316.79,
+        "p90": 356.96,
+        "p95": 356.98,
+        "p99": 358.09,
+        "max": 358.09
+      },
+      "throughput_items_sec": 196.44
+    },
+    "256": {
+      "group_size": 256,
+      "repetitions": 30,
+      "latency_ms": {
+        "min": 613.58,
+        "p50": 684.42,
+        "mean": 683.89,
+        "p90": 719.17,
+        "p95": 721.58,
+        "p99": 744.76,
+        "max": 744.76
+      },
+      "throughput_items_sec": 374.04
+    }
+  },
+  "overall_disposition": "PASS"
+}

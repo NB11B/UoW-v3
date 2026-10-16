@@ -83,6 +83,8 @@ def main():
     p.add_argument("--model",default="HuggingFaceTB/SmolLM2-135M-Instruct")
     p.add_argument("--revision",required=True)
     p.add_argument("--seed",type=int,default=42)
+    p.add_argument("--sizes",type=int,nargs=3,default=(24,48,48))
+    p.add_argument("--candidates",type=int,default=32)
     p.add_argument("--output",default="pretrained_report.json")
     args=p.parse_args()
     if len(args.revision)<16: raise ValueError("Specify immutable model revision SHA")
@@ -96,9 +98,10 @@ def main():
     layers=projections(model)
     if not layers: raise ValueError("Model has no supported mlp.down_proj")
     name,layer=layers[-1]
-    selection, holdout, shifted = independent_splits(args.seed)
+    selection, holdout, shifted = independent_splits(args.seed,tuple(args.sizes))
     rng=random.Random(args.seed+31337)
-    candidate=sorted(rng.sample(range(layer.in_features),min(32,layer.in_features)))
+    candidate=sorted(rng.sample(range(layer.in_features),min(args.candidates,layer.in_features)))
+    if len(candidate)<2: raise ValueError("Need at least two sampled neurons")
     train_base=measure(model,tokenizer,selection,device)
     deltas=[(abs(train_base["margin"]-measure(model,tokenizer,selection,device,layer,i)["margin"]),i) for i in candidate]
     selected=max(deltas,key=lambda t:(t[0],-t[1]))[1]
@@ -110,7 +113,7 @@ def main():
     controls=[abs(baseline["margin"]-measure(model,tokenizer,holdout,device,layer,i)["margin"]) for i in candidate if i!=selected]
     p_value=rank_p_value(effect,controls)
     report={"campaign":"UOW-NATIVE-1 Stage 2","model":args.model,"revision":args.revision,
-        "seed":args.seed,"layer":name,"neuron":selected,"candidates":len(candidate),
+        "seed":args.seed,"sizes":args.sizes,"layer":name,"neuron":selected,"candidates":len(candidate),
         "selection_train_only":True,"baseline":baseline,"intervention":intervention,
         "shift_baseline":shift_base,"shift_intervention":shift_intervention,
         "holdout_margin_effect":effect,"random_control_margin_effects":controls,

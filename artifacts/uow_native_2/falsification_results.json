@@ -1,0 +1,11 @@
+{
+  "gate": "Gate B2: Causal Falsification",
+  "seed": 42,
+  "timestamp": "2026-10-16 02:41:40 UTC",
+  "b0_status": "FAILED",
+  "halt_rule_triggered": true,
+  "terminal_classification": "BEHAVIORAL_COMPETENCE_NOT_ESTABLISHED",
+  "evaluations": {},
+  "status": "HALTED",
+  "rationale": "Gate B0 Behavioral Qualification was not established. Under the preregistered methodological invariant, causal falsification is halted without running interventions."
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "campaign": "UOW-NATIVE-2",
+  "title": "Behavioral Competence and Coordinated Circuit Identification",
+  "repository": "NB11B/UoW-v3",
+  "branch": "research/uow-native-2-circuit-qualification",
+  "predecessor_baseline": {
+    "campaign": "UOW-NATIVE-1",
+    "commit": "0dc8d57824f15c7d168285ffbee1632c64df84aa",
+    "status": "SEALED_READ_ONLY"
+  },
+  "target_model": {
+    "model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+    "pinned_revision_sha": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "architecture": "LlamaForCausalLM",
+    "parameters": 135000000,
+    "weights_status": "FROZEN"
+  },
+  "methodological_invariants": {
+    "qualification_order": "Behavioral competence qualification (Gate B0) strictly precedes mechanistic circuit discovery (Gates B1/B2)",
+    "stop_rule": "If all task families fail Gate B0, mechanistic search is halted immediately and recorded as BEHAVIORAL_COMPETENCE_NOT_ESTABLISHED",
+    "authority_isolation": "Probabilistic model is strictly an unprivileged proposer; deterministic UoW kernel (src/uow/engine.py) maintains 100% authority",
+    "no_threshold_modification": "Preregistered thresholds cannot be shifted post-hoc upon observing holdout results"
+  },
+  "gates": {
+    "B0_behavioral_qualification": {
+      "task_families": [
+        "numerical_ordering",
+        "symbolic_equivalence",
+        "relational_classification"
+      ],
+      "split_sizes": {
+        "dev": 200,
+        "val": 200,
+        "holdout": 200,
+        "total_per_family": 600
+      },
+      "acceptance_criteria": {
+        "min_holdout_accuracy": 0.85,
+        "min_shifted_template_accuracy": 0.80,
+        "max_positional_accuracy_gap": 0.10
+      },
+      "scoring_methodology": "Teacher-forced sequence log-likelihood with strict prefix-boundary validation",
+      "tie_handling": "Half-credit (0.5) for exact ties, strictly monitored"
+    },
+    "B1_circuit_discovery": {
+      "data_split": "dev_only",
+      "search_space": {
+        "group_sizes": [4, 8, 16],
+        "target_modules": ["down_proj", "gate_proj", "up_proj"],
+        "token_positions": ["relation_token", "operand_tokens", "final_token"]
+      },
+      "selection_criterion": "Maximum causal margin degradation on dev split"
+    },
+    "B2_causal_falsification": {
+      "data_split": "holdout_only",
+      "matched_random_controls": 32,
+      "acceptance_criteria": {
+        "control_rank_p_threshold": 0.05,
+        "activation_restoration_recovery_rate": 0.95,
+        "negative_task_specificity_preserved": true
+      }
+    },
+    "B3_uow_authority_integration": {
+      "kernel_module": "src/uow/engine.py",
+      "security_vectors": [
+        "valid_probabilistic_proposal_certification",
+        "false_pre_state_hash_rejection",
+        "tampered_proposed_state_rejection",
+        "route_divergence_rejection",
+        "successor_divergence_rejection",
+        "halt_divergence_rejection",
+        "invalid_certificate_rejection_at_commit",
+        "forged_certificate_hash_rejection_at_commit",
+        "stale_pre_state_rejection_at_commit",
+        "evidence_ledger_hash_chain_verification",
+        "tampered_evidence_append_rejection"
+      ]
+    },
+    "B4_reproducibility_and_efficiency": {
+      "seeds": [42, 43, 44],
+      "metrics": [
+        "execution_latency_seconds",
+        "peak_gpu_memory_mb",
+        "reproducibility_across_seeds",
+        "evidence_ledger_integrity"
+      ]
+    }
+  }
+}

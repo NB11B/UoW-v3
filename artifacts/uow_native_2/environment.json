@@ -1,0 +1,10 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+  "python_version": "3.13.11",
+  "torch_version": "2.11.0.dev20260127+cu128",
+  "cuda_available": true,
+  "cuda_device_name": "NVIDIA GeForce RTX 5070 Laptop GPU",
+  "pinned_model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "pinned_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac"
+}

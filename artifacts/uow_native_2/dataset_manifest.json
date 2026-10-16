@@ -1,0 +1,105 @@
+{
+  "campaign": "UOW-NATIVE-2",
+  "description": "Cryptographic dataset manifest with partition checksums and counterbalancing verification",
+  "total_families": 3,
+  "families": {
+    "numerical_ordering": {
+      "splits": {
+        "dev": {
+          "count": 200,
+          "sha256": "cb0f68833401038c4ed5a3ed044283696d4001fb68ea900e84dc9ebddddd930c",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 0,
+          "no_count": 0,
+          "counterbalanced_ratio": 0.5
+        },
+        "val": {
+          "count": 200,
+          "sha256": "d9c118acda5254428bf33b03014e66fc8c210a95a82a7c16273f6ce82d486e41",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 0,
+          "no_count": 0,
+          "counterbalanced_ratio": 0.5
+        },
+        "holdout": {
+          "count": 200,
+          "sha256": "73523a4d52ad59fdb33b6a60dbdb76162462151c146ef8dda0a3877e3c42460e",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 0,
+          "no_count": 0,
+          "counterbalanced_ratio": 0.5
+        }
+      },
+      "total_examples": 600
+    },
+    "symbolic_equivalence": {
+      "splits": {
+        "dev": {
+          "count": 200,
+          "sha256": "d3bdf61dff0f8da2c950fb6d7bbc20c7323369fcb9df46ffa677d3e270a6b23d",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 100,
+          "no_count": 100,
+          "counterbalanced_ratio": 0.5
+        },
+        "val": {
+          "count": 200,
+          "sha256": "f6d5b6d1fc7f0eff31a980a085c2397c739c0b3c0e2279ca24dcee0f2aba43e5",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 100,
+          "no_count": 100,
+          "counterbalanced_ratio": 0.5
+        },
+        "holdout": {
+          "count": 200,
+          "sha256": "c7c0af15a36afe8e4416a88cab8a6144441ca9306d17a7ca3deeaee566258a8d",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 100,
+          "no_count": 100,
+          "counterbalanced_ratio": 0.5
+        }
+      },
+      "total_examples": 600
+    },
+    "relational_classification": {
+      "splits": {
+        "dev": {
+          "count": 200,
+          "sha256": "96aee599cf9dc2dab34759bb1f7f37933cd94d3aa580c9de78dab77f95cd17b4",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 100,
+          "no_count": 100,
+          "counterbalanced_ratio": 0.5
+        },
+        "val": {
+          "count": 200,
+          "sha256": "af628f6badc8d592b491b1c332a6d0644d88c6e206a7a291340a669c90f7e67b",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 100,
+          "no_count": 100,
+          "counterbalanced_ratio": 0.5
+        },
+        "holdout": {
+          "count": 200,
+          "sha256": "178b522059dd6819eadee1737041562bb5c4684c2a9ad77f227e95d52c6d412b",
+          "order_0_count": 100,
+          "order_1_count": 100,
+          "yes_count": 100,
+          "no_count": 100,
+          "counterbalanced_ratio": 0.5
+        }
+      },
+      "total_examples": 600
+    }
+  },
+  "total_examples": 1800,
+  "root_sha256": "3dc8306642473a98ddbd5515e63ad059e347cddde0d4e27c5365eb44d414e7fd"
+}

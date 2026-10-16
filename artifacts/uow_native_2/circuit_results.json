@@ -1,0 +1,12 @@
+{
+  "gate": "Gate B1: Circuit Discovery",
+  "family": "all_families",
+  "seed": 42,
+  "timestamp": "2026-10-16 02:41:40 UTC",
+  "b0_status": "FAILED",
+  "halt_rule_triggered": true,
+  "terminal_classification": "BEHAVIORAL_COMPETENCE_NOT_ESTABLISHED",
+  "discovered_circuits": {},
+  "status": "HALTED",
+  "rationale": "Gate B0 Behavioral Qualification was not established. Under the preregistered methodological invariant, mechanistic circuit discovery is halted to prevent searching for spurious circuits on tasks the model cannot reliably perform."
+}

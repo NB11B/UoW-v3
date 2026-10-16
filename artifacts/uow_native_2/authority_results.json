@@ -1,0 +1,22 @@
+{
+  "gate": "Gate B3: UoW Authority Integration",
+  "tests_run": 10,
+  "errors": 0,
+  "failures": 0,
+  "passed": true,
+  "security_vectors_verified": [
+    "Deterministic certification of valid probabilistic proposals",
+    "Rejection of false pre-state hash (PRE_STATE_HASH_MISMATCH)",
+    "Rejection of tampered proposed state (STATE_DIVERGENCE)",
+    "Rejection of route divergence (ROUTE_DIVERGENCE)",
+    "Rejection of successor divergence (SUCCESSOR_DIVERGENCE)",
+    "Rejection of halt divergence (HALT_DIVERGENCE)",
+    "Rejection of commit with invalid certificate (ValueError)",
+    "Rejection of commit with forged certificate hash (ValueError)",
+    "Rejection of commit with stale pre-state binding (ValueError)",
+    "Valid commitment extensions of EvidenceLedger",
+    "Verification of cryptographic SHA-256 evidence hash chain",
+    "Rejection of non-contiguous and tampered ledger extensions"
+  ],
+  "isolation_guarantee": "Probabilistic models act solely as unprivileged proposers. Authority certificates and ledger commitments remain strictly governed by the deterministic UoW kernel (src/uow/engine.py)."
+}

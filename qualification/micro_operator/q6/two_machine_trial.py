@@ -418,12 +418,14 @@ def run_two_machine_trial() -> None:
             state_b = harness.daemons["B"].state
             state_c = harness.daemons["C"].state
             root_a = harness.daemons["A"].ledger.root_hash()
+            root_b = harness.daemons["B"].ledger.root_hash()
             root_c = harness.daemons["C"].ledger.root_hash()
 
             state_converged = (
                 state_a.state_hash == state_b.state_hash == state_c.state_hash and
-                root_a == root_c
+                root_a == root_b == root_c
             )
+            assert state_converged, f"State divergence at size {sz}"
             wal_c = harness.daemons["C"].get_wal_size()
 
             size_metrics[str(sz)] = {
@@ -460,18 +462,20 @@ def run_two_machine_trial() -> None:
 
         # Re-sync tip: Nano C receives catchup from Host A over physical network
         catchup_data = harness.coordinator._send_to_node("A", {"type": "CATCHUP_REQUEST", "since_sequence": harness.daemons["C"].state.sequence})
-        if catchup_data and catchup_data.get("status") == "CATCHUP_DATA":
-            harness.daemons["C"].send({
-                "type": "APPLY_CATCHUP",
-                "state": catchup_data["state"],
-                "evidence_root": catchup_data["evidence_root"],
-                "records": catchup_data["records"],
-            })
+        assert catchup_data is not None and catchup_data.get("status") == "CATCHUP_DATA", f"Catchup request failed: {catchup_data}"
+        apply_resp = harness.daemons["C"].send({
+            "type": "APPLY_CATCHUP",
+            "state": catchup_data["state"],
+            "evidence_root": catchup_data["evidence_root"],
+            "records": catchup_data["records"],
+        })
+        assert apply_resp is not None and apply_resp.get("status") == "CATCHUP_APPLIED", f"Catchup apply failed: {apply_resp}"
 
         converged_after_catchup = (
             harness.daemons["C"].state.state_hash == harness.daemons["A"].state.state_hash and
             harness.daemons["C"].ledger.root_hash() == harness.daemons["A"].ledger.root_hash()
         )
+        assert converged_after_catchup, "State did not converge after catchup on Nano C"
         print(f"    Post-catchup bitwise state match across Host and Nano: {converged_after_catchup}")
 
         # Phase 4: Cross-Machine Quorum with Host Node Failure (Kill Host B)
@@ -491,13 +495,20 @@ def run_two_machine_trial() -> None:
         # Restart Host B and sync
         harness.restart_node("B")
         catchup_b = harness.coordinator._send_to_node("A", {"type": "CATCHUP_REQUEST", "since_sequence": harness.daemons["B"].state.sequence})
-        if catchup_b and catchup_b.get("status") == "CATCHUP_DATA":
-            harness.daemons["B"].send({
-                "type": "APPLY_CATCHUP",
-                "state": catchup_b["state"],
-                "evidence_root": catchup_b["evidence_root"],
-                "records": catchup_b["records"],
-            })
+        assert catchup_b is not None and catchup_b.get("status") == "CATCHUP_DATA", f"Catchup request failed for B: {catchup_b}"
+        apply_b = harness.daemons["B"].send({
+            "type": "APPLY_CATCHUP",
+            "state": catchup_b["state"],
+            "evidence_root": catchup_b["evidence_root"],
+            "records": catchup_b["records"],
+        })
+        assert apply_b is not None and apply_b.get("status") == "CATCHUP_APPLIED", f"Catchup apply failed for B: {apply_b}"
+
+        converged_b = (
+            harness.daemons["B"].state.state_hash == harness.daemons["A"].state.state_hash and
+            harness.daemons["B"].ledger.root_hash() == harness.daemons["A"].ledger.root_hash()
+        )
+        assert converged_b, "State did not converge after catchup on Host B"
 
         # Phase 5: Sustained Multi-Machine Benchmark (30 repetitions)
         print("\n[*] Phase 5: Sustained Multi-Machine Benchmark over Physical Network (30 reps)...")
@@ -512,12 +523,13 @@ def run_two_machine_trial() -> None:
                         if nid not in c.voters:
                             harness.coordinator._send_to_node(nid, c_req, timeout=3.0)
 
-            wall_samples = []
+            quorum_samples = []
+            full_samples = []
             for i in range(BENCHMARK_REPETITIONS):
                 seq_i = make_sequence(sz, seed=700 + i)
                 t0_wall = time.perf_counter()
                 st, c = harness.coordinator.commit(seq_i)
-                t1_wall = time.perf_counter()
+                t1_quorum = time.perf_counter()
                 if st != "COMMITTED":
                     raise RuntimeError(f"Multi-machine commit failed: {st}")
                 if c is not None:
@@ -525,40 +537,101 @@ def run_two_machine_trial() -> None:
                     for nid in ("A", "B", "C"):
                         if nid not in c.voters:
                             harness.coordinator._send_to_node(nid, c_req, timeout=3.0)
-                wall_samples.append((t1_wall - t0_wall) * 1000.0)
+                t2_full = time.perf_counter()
 
-            wall_sorted = sorted(wall_samples)
-            p50 = statistics.median(wall_sorted)
-            p90 = wall_sorted[int(len(wall_sorted) * 0.90)]
-            p95 = wall_sorted[int(len(wall_sorted) * 0.95)]
-            p99 = wall_sorted[int(len(wall_sorted) * 0.99)]
-            mean = statistics.mean(wall_sorted)
-            items_per_sec = (sz / (p50 / 1000.0)) if p50 > 0 else 0.0
+                quorum_samples.append((t1_quorum - t0_wall) * 1000.0)
+                full_samples.append((t2_full - t0_wall) * 1000.0)
+
+            # Strict convergence assertion after full benchmark sweep
+            state_a = harness.daemons["A"].state
+            state_b = harness.daemons["B"].state
+            state_c = harness.daemons["C"].state
+            assert (
+                state_a.state_hash == state_b.state_hash == state_c.state_hash and
+                harness.daemons["A"].ledger.root_hash() == harness.daemons["C"].ledger.root_hash()
+            ), f"State divergence after benchmark size {sz}"
+
+            q_sorted = sorted(quorum_samples)
+            q_p50 = statistics.median(q_sorted)
+            q_p90 = q_sorted[int(len(q_sorted) * 0.90)]
+            q_p95 = q_sorted[int(len(q_sorted) * 0.95)]
+            q_p99 = q_sorted[int(len(q_sorted) * 0.99)]
+            q_mean = statistics.mean(q_sorted)
+            q_items_per_sec = (sz / (q_p50 / 1000.0)) if q_p50 > 0 else 0.0
+
+            f_sorted = sorted(full_samples)
+            f_p50 = statistics.median(f_sorted)
+            f_p90 = f_sorted[int(len(f_sorted) * 0.90)]
+            f_p95 = f_sorted[int(len(f_sorted) * 0.95)]
+            f_p99 = f_sorted[int(len(f_sorted) * 0.99)]
+            f_mean = statistics.mean(f_sorted)
+            f_items_per_sec = (sz / (f_p50 / 1000.0)) if f_p50 > 0 else 0.0
 
             benchmarks[str(sz)] = {
                 "group_size": sz,
                 "repetitions": BENCHMARK_REPETITIONS,
-                "latency_ms": {
-                    "min": round(wall_sorted[0], 2),
-                    "p50": round(p50, 2),
-                    "mean": round(mean, 2),
-                    "p90": round(p90, 2),
-                    "p95": round(p95, 2),
-                    "p99": round(p99, 2),
-                    "max": round(wall_sorted[-1], 2),
+                "quorum_commit": {
+                    "latency_ms": {
+                        "min": round(q_sorted[0], 2),
+                        "p50": round(q_p50, 2),
+                        "mean": round(q_mean, 2),
+                        "p90": round(q_p90, 2),
+                        "p95": round(q_p95, 2),
+                        "p99": round(q_p99, 2),
+                        "max": round(q_sorted[-1], 2),
+                    },
+                    "throughput_items_sec": round(q_items_per_sec, 2),
                 },
-                "throughput_items_sec": round(items_per_sec, 2),
+                "full_convergence": {
+                    "latency_ms": {
+                        "min": round(f_sorted[0], 2),
+                        "p50": round(f_p50, 2),
+                        "mean": round(f_mean, 2),
+                        "p90": round(f_p90, 2),
+                        "p95": round(f_p95, 2),
+                        "p99": round(f_p99, 2),
+                        "max": round(f_sorted[-1], 2),
+                    },
+                    "throughput_items_sec": round(f_items_per_sec, 2),
+                },
+                "latency_ms": {
+                    "min": round(q_sorted[0], 2),
+                    "p50": round(q_p50, 2),
+                    "mean": round(q_mean, 2),
+                    "p90": round(q_p90, 2),
+                    "p95": round(q_p95, 2),
+                    "p99": round(q_p99, 2),
+                    "max": round(q_sorted[-1], 2),
+                },
+                "throughput_items_sec": round(q_items_per_sec, 2),
             }
-            print(f"    Size {sz:3d}: p50={p50:6.2f}ms | p95={p95:6.2f}ms | throughput={items_per_sec:6.1f} items/s")
+            print(f"    Size {sz:3d}: Quorum p50={q_p50:6.2f}ms ({q_items_per_sec:6.1f} items/s) | Full p50={f_p50:6.2f}ms ({f_items_per_sec:6.1f} items/s)")
 
     finally:
+        # Capture nano git commit before teardown
+        try:
+            _, o, _ = harness.ssh.exec_command("cd /home/uow/UoW-v3 && git rev-parse HEAD")
+            nano_commit = o.read().decode().strip()
+        except Exception:
+            nano_commit = "unknown"
         harness.shutdown()
 
     # Phase 6: Compile Two-Machine Artifacts
     print("\n[*] Phase 6: Compiling Two-Machine Physical Trial Artifacts...")
+    try:
+        host_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(REPO_ROOT), text=True).strip()
+    except Exception:
+        host_commit = "unknown"
+
     trial_report = {
         "trial_name": "Two-Machine Physical Qualification Trial for Q6",
-        "baseline_commit": "829a050",
+        "provenance": {
+            "core_protocol_baseline_commit": "eee128cabe6aeb932c0eeb838348e73bd453ca96",
+            "host_execution_commit": host_commit,
+            "jetson_nano_deployed_commit": nano_commit,
+            "commit_sync_verified": (host_commit == nano_commit and host_commit != "unknown"),
+        },
+        "baseline_commit": host_commit[:7] if host_commit != "unknown" else "eee128c",
         "timestamp_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "topology": {
             "machine_1_host": {
@@ -623,12 +696,16 @@ def run_two_machine_trial() -> None:
     print("=" * 76)
 
 def generate_two_machine_md_report(dest: Path, rep: Dict[str, Any]) -> None:
+    prov = rep.get("provenance", {})
     lines = [
         "# Two-Machine Physical Qualification Trial: Q6 Distributed Group Commitment",
         "",
         "## Executive Summary",
         "",
-        f"- **Repository Baseline**: `NB11B/UoW-v3` at commit `{rep['baseline_commit']}`",
+        f"- **Core Protocol Baseline Commit**: `{prov.get('core_protocol_baseline_commit', 'eee128cabe6aeb932c0eeb838348e73bd453ca96')}`",
+        f"- **Host Execution Commit**: `{prov.get('host_execution_commit', 'unknown')}`",
+        f"- **Jetson Nano Deployed Commit**: `{prov.get('jetson_nano_deployed_commit', 'unknown')}`",
+        f"- **Commit Synchronization Verified**: **{prov.get('commit_sync_verified', False)}**",
         f"- **Machine 1 (Host)**: Windows 11 x86_64 (`{rep['topology']['machine_1_host']['ip']}`) — Coordinator, Node A, Node B",
         f"- **Machine 2 (Target)**: NVIDIA Jetson Nano ARMv8 Cortex-A57 (`{rep['topology']['machine_2_jetson_nano']['ip']}`) — Node C",
         f"- **Physical Interconnect**: USB/RNDIS Virtual Ethernet link (`192.168.55.100` <-> `192.168.55.1`)",
@@ -681,20 +758,24 @@ def generate_two_machine_md_report(dest: Path, rep: Dict[str, Any]) -> None:
         "",
         "---",
         "",
-        "## 3. Sustained Multi-Machine Performance",
+        "## 3. Sustained Multi-Machine Performance (Dual-Timed Benchmark)",
         "",
         "Workloads benchmarked across 30 timed repetitions per group size over the physical USB/RNDIS network link.",
+        "Measurements report both **Quorum Commit Latency/Throughput** (time for 2-of-3 threshold commit) and **Full 3-Replica Convergence Latency/Throughput** (including certificate dissemination and flash WAL sync across all replicas).",
         "",
-        "| Group Size | Latency p50 | Latency p90 | Latency p95 | Latency p99 | Throughput (Items/s) | Nano WAL Growth |",
-        "| :---: | :---: | :---: | :---: | :---: | :---: | :---: |",
+        "| Group Size | Quorum Latency (p50 / p95) | Quorum Throughput | Full Conv Latency (p50 / p95) | Full Conv Throughput | Nano WAL Growth |",
+        "| :---: | :---: | :---: | :---: | :---: | :---: |",
     ]
 
     for sz in GROUP_SIZES:
         b = rep["sustained_performance_multi_machine"][str(sz)]
-        lat = b["latency_ms"]
+        q_lat = b["quorum_commit"]["latency_ms"]
+        q_tp = b["quorum_commit"]["throughput_items_sec"]
+        f_lat = b["full_convergence"]["latency_ms"]
+        f_tp = b["full_convergence"]["throughput_items_sec"]
         wal = rep["two_machine_size_metrics"][str(sz)]["nano_wal_size_bytes"]
         lines.append(
-            f"| {sz:3d} | {lat['p50']} ms | {lat['p90']} ms | {lat['p95']} ms | {lat['p99']} ms | **{b['throughput_items_sec']} items/s** | {wal:,} B |"
+            f"| {sz:3d} | {q_lat['p50']} ms / {q_lat['p95']} ms | **{q_tp} items/s** | {f_lat['p50']} ms / {f_lat['p95']} ms | **{f_tp} items/s** | {wal:,} B |"
         )
 
     lines.extend([

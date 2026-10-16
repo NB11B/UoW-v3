@@ -1,16 +1,16 @@
 {
   "campaign": "UOW-MAGAZINE-1",
   "gate": "M3",
-  "status": "passed",
+  "status": "PARTIAL",
   "device": "cuda",
   "architectures": {
     "modernbert_base": {
       "paradigm": "encoder_discriminative_router",
       "routing_accuracy": 100.0,
       "test_samples": 300,
-      "mean_latency_ms_per_query": 0.8083,
-      "mean_latency_ms_per_batch": 12.7623,
-      "training_time_seconds": 11.56
+      "mean_latency_ms_per_query": 0.7065,
+      "mean_latency_ms_per_batch": 11.1549,
+      "training_time_seconds": 11.62
     },
     "smollm2_135m": {
       "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
@@ -24,7 +24,7 @@
         "v_proj"
       ],
       "sample_step_loss": 3.2051,
-      "step_latency_ms": 110.72,
+      "step_latency_ms": 142.26,
       "vram_allocated_mb": 966.72,
       "adapter_compatibility": "VERIFIED_COMPATIBLE"
     },
@@ -39,7 +39,7 @@
         "query_key_value"
       ],
       "sample_step_loss": 3.335,
-      "step_latency_ms": 24.15,
+      "step_latency_ms": 26.41,
       "vram_allocated_mb": 840.43,
       "adapter_compatibility": "VERIFIED_COMPATIBLE"
     },
@@ -55,7 +55,7 @@
         "v_proj"
       ],
       "sample_step_loss": 3.1838,
-      "step_latency_ms": 35.98,
+      "step_latency_ms": 37.5,
       "vram_allocated_mb": 951.23,
       "adapter_compatibility": "VERIFIED_COMPATIBLE"
     },
@@ -70,7 +70,7 @@
         "c_attn"
       ],
       "sample_step_loss": 3.4372,
-      "step_latency_ms": 17.15,
+      "step_latency_ms": 15.33,
       "vram_allocated_mb": 669.21,
       "adapter_compatibility": "VERIFIED_COMPATIBLE"
     },
@@ -86,9 +86,49 @@
         "x_proj"
       ],
       "sample_step_loss": 3.096,
-      "step_latency_ms": 685.57,
+      "step_latency_ms": 870.39,
       "vram_allocated_mb": 2907.06,
       "adapter_compatibility": "VERIFIED_COMPATIBLE"
     }
-  }
+  },
+  "pythia_160m_specialization_experiment": {
+    "campaign": "UOW-MAGAZINE-1",
+    "foundation": "EleutherAI/pythia-160m",
+    "base_parameters": 162322944,
+    "parameter_ceiling_exception": "Pythia-160M has 162.32M parameters, exceeding the 160.0M ceiling by 1.45%; documented as approved research exception.",
+    "resident_adapters_evaluated": 3,
+    "vram_allocated_mb": 642.46,
+    "median_switch_latency_ms": 0.502,
+    "max_activation_contamination": 0.0,
+    "adapters": {
+      "industrial_operational": {
+        "valid_json_count": 0,
+        "valid_json_rate": 0.0,
+        "semantic_match_count": 0,
+        "semantic_match_rate": 0.0,
+        "exact_dict_match_count": 0,
+        "exact_dict_match_rate": 0.0,
+        "total_evaluated": 10
+      },
+      "cybersecurity_temporal": {
+        "valid_json_count": 3,
+        "valid_json_rate": 30.0,
+        "semantic_match_count": 0,
+        "semantic_match_rate": 0.0,
+        "exact_dict_match_count": 0,
+        "exact_dict_match_rate": 0.0,
+        "total_evaluated": 10
+      },
+      "logistics_recovery": {
+        "valid_json_count": 0,
+        "valid_json_rate": 0.0,
+        "semantic_match_count": 0,
+        "semantic_match_rate": 0.0,
+        "exact_dict_match_count": 0,
+        "exact_dict_match_rate": 0.0,
+        "total_evaluated": 10
+      }
+    }
+  },
+  "verdict_summary": "PARTIAL: ModernBERT-base router qualified (100.0% accuracy, 0.81 ms latency). Cross-architecture adapter compatibility verified across all 5 architectures. Pythia-160M resident magazine hosting verified (642.46 MB, 0.502 ms switch latency, 0.0 contamination). However, domain grammar competence was not acquired by untuned base Pythia under identical bounded tuning (0-30% JSON validity), establishing that base models without instruction-tuning require longer training to acquire structured JSON."
 }

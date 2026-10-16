@@ -1,0 +1,92 @@
+{
+  "industrial.operational": {
+    "rank_1": {
+      "rank": 1,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 30.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    },
+    "rank_2": {
+      "rank": 2,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 30.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    },
+    "rank_4": {
+      "rank": 4,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 30.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    },
+    "rank_8": {
+      "rank": 8,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 30.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    }
+  },
+  "cybersecurity.temporal": {
+    "rank_1": {
+      "rank": 1,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 100.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    },
+    "rank_2": {
+      "rank": 2,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 100.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    },
+    "rank_4": {
+      "rank": 4,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 100.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    },
+    "rank_8": {
+      "rank": 8,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 100.0,
+      "exact_dict_match_rate": 0.0,
+      "samples_evaluated": 10
+    }
+  },
+  "logistics.recovery": {
+    "rank_1": {
+      "rank": 1,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 70.0,
+      "exact_dict_match_rate": 50.0,
+      "samples_evaluated": 10
+    },
+    "rank_2": {
+      "rank": 2,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 80.0,
+      "exact_dict_match_rate": 50.0,
+      "samples_evaluated": 10
+    },
+    "rank_4": {
+      "rank": 4,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 90.0,
+      "exact_dict_match_rate": 60.0,
+      "samples_evaluated": 10
+    },
+    "rank_8": {
+      "rank": 8,
+      "valid_json_rate": 100.0,
+      "semantic_match_rate": 90.0,
+      "exact_dict_match_rate": 60.0,
+      "samples_evaluated": 10
+    }
+  }
+}

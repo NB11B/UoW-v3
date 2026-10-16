@@ -1,6 +1,6 @@
 {
   "campaign": "UOW-MAGAZINE-1",
-  "status": "completed_qualified",
+  "status": "reconciled_partial_qualification",
   "parent_reference_commit": "af1f4ee",
   "parameter_ceiling_millions": 160,
   "foundations": [
@@ -68,51 +68,51 @@
     {
       "id": "M0",
       "title": "Foundation Availability & Architectural Inspection",
-      "status": "passed",
+      "status": "qualified_with_exceptions",
       "condition": "Pin exact 40-character SHAs, verify forward inference, inspect targetable projections, record gated statuses.",
-      "outcome": "Passed: 6 accessible models verified with exact SHAs, forward passes, and PEFT targets; MobileLLM documented as gated."
+      "outcome": "Qualified with Documented Exceptions: 6 accessible candidates verified with exact SHAs, forward passes, and PEFT targets; MobileLLM formally documented as gated; Pythia-160M (162.32M) documented as envelope exception."
     },
     {
       "id": "M1",
       "title": "Domain-Grammar Weight Acquisition",
-      "status": "passed",
+      "status": "partial",
       "condition": "Train adapters across 9 domain-grammar combinations; verify >80% valid serialization and semantic routing on disjoint holdouts.",
-      "outcome": "Passed: 9/9 domain-grammar adapters achieved 100.0% valid JSON holdout rate (mean semantic match: 76.67%)."
+      "outcome": "Partial: 9/9 SmolLM2 adapters trained and achieved 100.0% valid JSON, but Operational semantic accuracy remains 30\u201360% (mean semantic match: 76.67%)."
     },
     {
       "id": "M2",
       "title": "Magazine Capacity, Switch Latency, and Memory Footprint",
-      "status": "passed",
+      "status": "partial",
       "condition": "Host up to 32 adapters in runtime magazine; demonstrate <5.0ms switch latency and <1GB peak VRAM footprint.",
-      "outcome": "Passed: 32 resident adapter slots hosted in 312.84 MB VRAM; 8.36 ms median switch latency; 0.0 contamination."
+      "outcome": "Partial: 32 slots demonstrated in VRAM (312.84 MB) and 9 distinct trained adapters verified with zero activation contamination (0.000e+00) and 3.03 ms distinct switch latency. However, 32-slot synthetic median switch latency (8.09 ms) missed the preregistered <5.0 ms threshold."
     },
     {
       "id": "M3",
       "title": "Cross-Architecture Portability and Expressivity",
-      "status": "passed",
+      "status": "partial",
       "condition": "Benchmark adapter acquisition and inference across distinct model families (Llama, GPT-NeoX, GPT-Neo, Cerebras, Mamba, ModernBERT).",
-      "outcome": "Passed: ModernBERT achieved 100.0% routing accuracy at 0.81ms; Llama, GPT-NeoX, GPT-Neo, Cerebras, Mamba verified compatible."
+      "outcome": "Partial: ModernBERT-base router qualified (100.0% accuracy, 0.71 ms latency). Cross-architecture adapter compatibility verified across all 5 architectures. Pythia-160M resident magazine hosting verified (642.46 MB, 0.502 ms switch latency, 0.0 contamination). However, domain grammar competence was not acquired by untuned base Pythia under identical bounded tuning (0-30% JSON validity)."
     },
     {
       "id": "M4",
       "title": "Mechanistic Interpretability Track",
-      "status": "passed",
+      "status": "qualified",
       "condition": "Analyze Pythia-160M intermediate checkpoints and singular value energy concentration of learned domain weights.",
-      "outcome": "Passed: Extreme singular value concentration verified (>82% energy in rank-1, >97.5% in rank-4 across all 9 adapters)."
+      "outcome": "Qualified: Extreme SVD singular-value concentration verified (>82% energy in rank-1, >97.5% in rank-4). Causal rank-truncation ablations confirm that rank-1 retains 100% JSON structural grammar across all domains, 100% operational disposition, 100% temporal grammar, and 77.8% recovery logic (rank-4 saturates 100%)."
     },
     {
       "id": "M5",
       "title": "Deterministic UoW Multi-Domain Composition & Ledger Closure",
-      "status": "passed",
+      "status": "qualified",
       "condition": "Execute end-to-end multi-domain composite pipeline under UoW sequencer and EvidenceLedger; achieve 0 unauthorized commits.",
-      "outcome": "Passed: 5-step composite transaction certified and committed to EvidenceLedger (root: 6f3d4eb10888031a...); 0 unauthorized commits."
+      "outcome": "Qualified in tested local scope: 5-step composite transaction certified and committed to EvidenceLedger (root: 6f3d4eb10888031a...); 0 unauthorized commits; adversarial replay and invalid transitions deterministically rejected."
     },
     {
       "id": "M6",
       "title": "Cross-Foundation Qualification Scorecard & Engineering Synthesis",
-      "status": "passed",
+      "status": "reconciled",
       "condition": "Compile all gate outcomes into verified qualification report and update artifact registry.",
-      "outcome": "Passed: Cross-foundation scorecard compiled and authoritative qualification report published."
+      "outcome": "Reconciled: All gate outcomes re-evaluated, discrepancies addressed with genuine multi-adapter and causal truncation benchmarks, and final qualification report updated."
     }
   ]
 }

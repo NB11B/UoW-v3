@@ -1,0 +1,39 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "foundation": "EleutherAI/pythia-160m",
+  "base_parameters": 162322944,
+  "parameter_ceiling_exception": "Pythia-160M has 162.32M parameters, exceeding the 160.0M ceiling by 1.45%; documented as approved research exception.",
+  "resident_adapters_evaluated": 3,
+  "vram_allocated_mb": 642.46,
+  "median_switch_latency_ms": 0.502,
+  "max_activation_contamination": 0.0,
+  "adapters": {
+    "industrial_operational": {
+      "valid_json_count": 0,
+      "valid_json_rate": 0.0,
+      "semantic_match_count": 0,
+      "semantic_match_rate": 0.0,
+      "exact_dict_match_count": 0,
+      "exact_dict_match_rate": 0.0,
+      "total_evaluated": 10
+    },
+    "cybersecurity_temporal": {
+      "valid_json_count": 3,
+      "valid_json_rate": 30.0,
+      "semantic_match_count": 0,
+      "semantic_match_rate": 0.0,
+      "exact_dict_match_count": 0,
+      "exact_dict_match_rate": 0.0,
+      "total_evaluated": 10
+    },
+    "logistics_recovery": {
+      "valid_json_count": 0,
+      "valid_json_rate": 0.0,
+      "semantic_match_count": 0,
+      "semantic_match_rate": 0.0,
+      "exact_dict_match_count": 0,
+      "exact_dict_match_rate": 0.0,
+      "total_evaluated": 10
+    }
+  }
+}

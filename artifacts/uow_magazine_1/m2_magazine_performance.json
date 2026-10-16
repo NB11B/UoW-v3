@@ -1,9 +1,10 @@
 {
   "campaign": "UOW-MAGAZINE-1",
   "gate": "M2",
-  "status": "passed",
+  "status": "PARTIAL",
   "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
   "device": "cuda",
+  "verdict_summary": "PARTIAL: 32 slots demonstrated in VRAM (312.84 MB, well below 1.0 GB ceiling) and 9 distinct trained adapters verified with zero activation contamination (0.000e+00). However, median switch latency across slots (8.36 ms) missed the preregistered <5.0 ms threshold.",
   "capacity_sweep": {
     "1": {
       "pool_size": 1,
@@ -19,9 +20,9 @@
     "2": {
       "pool_size": 2,
       "trials": 30,
-      "median_switch_latency_ms": 9.1046,
-      "mean_switch_latency_ms": 9.0893,
-      "p99_switch_latency_ms": 10.1316,
+      "median_switch_latency_ms": 8.2474,
+      "mean_switch_latency_ms": 8.3316,
+      "p99_switch_latency_ms": 9.3038,
       "vram_allocated_mb": 312.84,
       "vram_reserved_mb": 344.0,
       "latency_target_met (<5.0ms)": false,
@@ -30,9 +31,9 @@
     "4": {
       "pool_size": 4,
       "trials": 30,
-      "median_switch_latency_ms": 8.4459,
-      "mean_switch_latency_ms": 8.5424,
-      "p99_switch_latency_ms": 9.5173,
+      "median_switch_latency_ms": 8.2763,
+      "mean_switch_latency_ms": 8.5912,
+      "p99_switch_latency_ms": 12.1444,
       "vram_allocated_mb": 312.84,
       "vram_reserved_mb": 344.0,
       "latency_target_met (<5.0ms)": false,
@@ -41,9 +42,9 @@
     "8": {
       "pool_size": 8,
       "trials": 30,
-      "median_switch_latency_ms": 8.668,
-      "mean_switch_latency_ms": 8.8117,
-      "p99_switch_latency_ms": 10.6357,
+      "median_switch_latency_ms": 8.0297,
+      "mean_switch_latency_ms": 8.1648,
+      "p99_switch_latency_ms": 9.8595,
       "vram_allocated_mb": 312.84,
       "vram_reserved_mb": 344.0,
       "latency_target_met (<5.0ms)": false,
@@ -52,9 +53,9 @@
     "16": {
       "pool_size": 16,
       "trials": 30,
-      "median_switch_latency_ms": 8.3609,
-      "mean_switch_latency_ms": 8.4117,
-      "p99_switch_latency_ms": 9.2093,
+      "median_switch_latency_ms": 8.2394,
+      "mean_switch_latency_ms": 8.4856,
+      "p99_switch_latency_ms": 12.8649,
       "vram_allocated_mb": 312.84,
       "vram_reserved_mb": 344.0,
       "latency_target_met (<5.0ms)": false,
@@ -63,9 +64,9 @@
     "24": {
       "pool_size": 24,
       "trials": 30,
-      "median_switch_latency_ms": 8.437,
-      "mean_switch_latency_ms": 8.5621,
-      "p99_switch_latency_ms": 9.3788,
+      "median_switch_latency_ms": 8.0961,
+      "mean_switch_latency_ms": 8.2397,
+      "p99_switch_latency_ms": 10.0126,
       "vram_allocated_mb": 312.84,
       "vram_reserved_mb": 344.0,
       "latency_target_met (<5.0ms)": false,
@@ -74,17 +75,60 @@
     "32": {
       "pool_size": 32,
       "trials": 30,
-      "median_switch_latency_ms": 8.3683,
-      "mean_switch_latency_ms": 8.4363,
-      "p99_switch_latency_ms": 9.3027,
+      "median_switch_latency_ms": 8.0951,
+      "mean_switch_latency_ms": 8.3242,
+      "p99_switch_latency_ms": 9.8252,
       "vram_allocated_mb": 312.84,
       "vram_reserved_mb": 344.0,
       "latency_target_met (<5.0ms)": false,
       "vram_target_met (<1.0GB)": true
     }
   },
-  "activation_contamination_test": {
-    "max_abs_difference": 0.0,
-    "contamination_free": true
+  "genuine_nine_adapters_benchmark": {
+    "distinct_adapters_tested": 9,
+    "vram_allocated_mb": 272.41,
+    "median_switch_latency_ms": 3.0295,
+    "mean_switch_latency_ms": 3.2498,
+    "max_overall_logit_difference": 0.0,
+    "isolation_verified": true,
+    "cross_adapter_weight_divergence": 18.375,
+    "per_adapter_results": {
+      "industrial_operational": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "industrial_temporal": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "industrial_recovery": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "cybersecurity_operational": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "cybersecurity_temporal": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "cybersecurity_recovery": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "logistics_operational": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "logistics_temporal": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      },
+      "logistics_recovery": {
+        "max_abs_logit_difference": 0.0,
+        "isolation_intact": true
+      }
+    }
   }
 }

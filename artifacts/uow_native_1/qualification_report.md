@@ -2,27 +2,22 @@
 **Stage 2: Pretrained SmolLM2 Neural-Intervention Campaign & Authority Integration**  
 **Date:** 15 October 2026  
 **Repository:** `https://github.com/NB11B/UoW-v3`  
-**Branch:** `research/uow-native-1-goodfire-pilot`  
-**Commit:** `bf3933221d545dc1e6abb18748fd7e0f82fc7ffc` (unmerged research branch)  
+**Branch:** `research/uow-native-1-goodfire-pilot` (unmerged research branch)  
+**Commit:** `9e6f0a881cced3458dadfc3d7e34692fe5d51d98`  
+**Model:** `HuggingFaceTB/SmolLM2-135M-Instruct`  
+**Pinned Model Revision SHA:** `12fd25f77366fa6b3b4b768ec3050bf629380bac`  
 **Disposition:** Experimental evidence complete; not qualified for production.
 
 ---
 
 ## 1. Executive Summary & Disposition
 
-### Final Disposition: **FALSIFIED (Causal Specialization) / QUALIFIED (Deterministic Authority Boundary)**
-Overall campaign classification according to prespecified Section 8 criteria:
-> **FALSIFIED / PARTIALLY SUPPORTED**: Reliable experiments contradict the prespecified hypothesis that a single hidden MLP neuron acts as a localized, specialized relational operator in the frozen SmolLM2-135M model. Concurrently, the architectural hypothesis that *untrusted probabilistic models can be safely bounded as unprivileged proposers within the deterministic UoW v3 authority kernel* is **fully demonstrated and qualified**.
-
-### Key Findings
-1. **Measurement Defect Repaired (FIX-01)**: The single-token logit-margin assumption was replaced with teacher-forced sequence log-likelihood scoring. All 18 regression tests pass without regression.
-2. **Pretrained Smoke Test Passed (Gate A)**: SmolLM2-135M loaded successfully under pinned immutable revision `12fd25f77366fa6b3b4b768ec3050bf629380bac`. All candidates scored, finite margins computed, hook cleanup verified.
-3. **Three-Seed Causal Campaign Executed (Gate B)**:
-   - Evaluated 32 randomly sampled candidate neurons across 120 disjoint pair instances per seed (Seeds 42, 43, 44).
-   - Prespecified acceptance criterion (descriptive control rank fraction $< 0.05$ across all three seeds) was **NOT MET** (Seed 42: $0.906$, Seed 43: $0.031$, Seed 44: $0.938$).
-   - Model baseline accuracy on the pairwise comparison task was below chance ($\approx 41.67\%$).
-   - Directional effects were inconsistent across seeds (Seed 42: $+0.00065$, Seed 43: $-0.04297$, Seed 44: $+0.00065$).
-4. **Authority Isolation Qualified (Gate C)**: The real UoW v3 kernel (`src/uow/engine.py`) was evaluated across 10 critical failure and integrity vectors. Probabilistic proposals are strictly bounded: false pre-state hashes, tampered proposed states, route divergences, successor divergences, and forged certificates are fail-closed rejected with zero unauthorized commits. Cryptographic SHA-256 evidence ledger chain integrity is verified.
+### Final Disposition: **INCONCLUSIVE (Relational Circuit Hypothesis) / UNMET (Single-Neuron Criterion) / QUALIFIED (Deterministic Authority Boundary)**
+Overall campaign classification based on empirical evidence and audit review:
+> 1. **Measurement Implementation**: **VERIFIED** — Sequence-level teacher-forced answer scoring is mathematically sound, bounds-checked, and passes 18/18 regression tests.  
+> 2. **Single-Neuron Acceptance Criterion**: **NOT MET** — Zero-ablation of individual MLP hidden channels did not satisfy the prespecified causal effect criteria ($<0.05$ rank fraction) across all seeds.  
+> 3. **Underlying Relational-Circuit Hypothesis**: **INCONCLUSIVE** — The experiment rejects the tested single-neuron specialization criterion on this prompt format, but does not falsify relational computation in neural networks generally. The underlying model exhibited strong presentation-order primacy bias and near-chance baseline accuracy ($\approx 41.67\%$), meaning the target relational comparison behavior was not reliably demonstrated prior to intervention.  
+> 4. **Deterministic Authority Boundary**: **QUALIFIED (Within Local Scope)** — The production UoW v3 kernel (`src/uow/engine.py`) strictly bounds probabilistic outputs as unprivileged proposals. Zero unauthorized commits occur under false pre-state hashes, tampered states, or forged certificates.
 
 ---
 
@@ -39,7 +34,7 @@ Overall campaign classification according to prespecified Section 8 criteria:
 | **Hugging Face Hub** | 1.29.0 |
 | **Safetensors** | 0.8.0 |
 | **Pytest Version** | 9.0.2 |
-| **Repository Git Commit** | `bf3933221d545dc1e6abb18748fd7e0f82fc7ffc` |
+| **Repository Git Commit** | `9e6f0a881cced3458dadfc3d7e34692fe5d51d98` |
 | **Target Model** | `HuggingFaceTB/SmolLM2-135M-Instruct` |
 | **Pinned Model Revision SHA** | `12fd25f77366fa6b3b4b768ec3050bf629380bac` |
 
@@ -121,24 +116,49 @@ Recorded in `artifacts/uow_native_1/regression_results.json`.
 
 ### Measured Empirical Data
 
-| Seed | Selected Neuron | Baseline Holdout Acc | Baseline Margin | Intervened Holdout Acc | Intervened Margin | Signed Effect | Absolute Effect | Descriptive Control Rank | Shift Baseline Acc | Shift Interv Acc | Execution Time |
+| Seed | Selected Neuron | Baseline Holdout Acc | Baseline Margin | Intervened Holdout Acc | Intervened Margin | Signed Effect | Absolute Effect | Descriptive Control Rank | Shift Baseline Acc | Shift Interv Acc | Latency |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **42** | 525 | 39.58% | -0.2630 | 43.75% | -0.2637 | +0.00065 | 0.00065 | **0.9062** | 54.17% | 53.12% | 149.7 s |
 | **43** | 645 | 41.67% | -0.1439 | 44.79% | -0.1009 | -0.04297 | 0.04297 | **0.0312** | 54.17% | 54.17% | 143.0 s |
 | **44** | 1501 | 43.75% | -0.1602 | 43.75% | -0.1595 | +0.00065 | 0.00065 | **0.9375** | 52.08% | 52.08% | 129.5 s |
 | **Mean**| — | **41.67%** | **-0.1890** | **44.10%** | **-0.1747** | **-0.01389** | **0.01476** | **0.6250** | **53.47%** | **53.12%** | **422.2 s** |
 
-### Scientific Analysis of Causal Hypothesis
-1. **Task Baseline Competence:** SmolLM2-135M demonstrates an average accuracy of only **41.67%** on the relational prompt template, which is at or below the 50% random chance baseline.
-2. **Control Rank Threshold Failure:** The preregistered exploratory criterion required descriptive rank fraction $< 0.05$ across **all three seeds**. Only Seed 43 met this condition ($0.0312$), whereas Seeds 42 ($0.9062$) and 44 ($0.9375$) were in the bottom decile of control effects.
-3. **Directional Inconsistency:** In Seed 43, zeroing neuron 645 produced a **negative signed effect** ($-0.04297$), meaning zeroing the neuron actually *improved* model accuracy and margin rather than impairing it. Seeds 42 and 44 produced negligible positive effects ($+0.00065$).
-4. **Conclusion on Neural Modularity:** There is no evidence that individual hidden channels in `down_proj` of SmolLM2-135M represent isolated, reusable relational comparison circuits. The scientific hypothesis is **falsified** for this architecture.
+---
 
-Artifacts: `artifacts/uow_native_1/seed_42.json`, `seed_43.json`, `seed_44.json`, `causal_summary.json`.
+## 7. Audit Findings & Methodological Analysis
+
+### A. Mathematical Reconciliation of Accuracy & Tied Margins
+In Seed 42, a question arose regarding the reconciliation of 18 correct choices out of 48 with the recorded 39.58% accuracy. The audit decomposed the exact per-example margins:
+* **Condition A (Larger number first in prompt, $j$ even, $n=24$):**
+  * Strict wins ($\Delta > 0$): 18
+  * Ties ($\Delta = 0.0$): 1
+  * Losses ($\Delta < 0$): 5
+* **Condition B (Larger number second in prompt, $j$ odd, $n=24$):**
+  * Strict wins ($\Delta > 0$): 0
+  * Ties ($\Delta = 0.0$): 1
+  * Losses ($\Delta < 0$): 23
+* **Exact Total Reconciliation:**
+  $$\text{Accuracy} = \frac{\text{Wins} + 0.5 \times \text{Ties}}{48} = \frac{18 + 0.5 \times 2}{48} = \frac{19.0}{48} = 39.5833\%$$
+  The recorded ties field (`ties: 2`) accounts exactly for the difference between $18/48 = 37.50\%$ and $39.58\%$.
+
+### B. Prompt Presentation-Order Primacy Bias
+The breakdown above reveals that SmolLM2-135M does not execute genuine numerical comparison on this prompt template:
+* When the larger number is presented first: it selects the larger number **18/24 times (75%)**.
+* When the larger number is presented second: it selects the larger number **0/24 times (0%)**.
+The model is primarily exhibiting an **echo / primacy bias** favoring the first number mentioned. Because `independent_splits` strictly counterbalances presentation order, the aggregate accuracy is near chance ($41.67\%$).
+* **Scientific consequence:** The intervention failure does not establish that neural networks lack relational mechanisms; rather, **the underlying model did not reliably perform the relational behavior before intervention**.
+
+### C. Intervention Scope Across Token Positions
+The current forward-pre-hook zeros a single hidden channel across *all* sequence token positions $[0, L)$. While this proves channel-level intervention feasibility, it cannot distinguish:
+1. Parsing numerical tokens in the prompt.
+2. Interpreting the task template instructions.
+3. Formulating the comparative decision.
+4. Emitting the continuation numerals.
+Future causal investigations should employ token-position-scoped interventions (e.g. activation patching focused on operand or decision tokens).
 
 ---
 
-## 7. Gate C: Independent UoW Authority Integration
+## 8. Gate C: Independent UoW Authority Integration
 
 The probabilistic model proposals were evaluated against the authoritative UoW kernel in `src/uow/engine.py`. Probabilistic models act solely as unprivileged proposal generators with zero authority:
 
@@ -161,24 +181,25 @@ Artifact: `artifacts/uow_native_1/authority_integration.json`.
 
 ---
 
-## 8. Gate Compliance & Acceptance Evaluation
+## 9. Gate Compliance Summary
 
-| Gate | Criterion | Status |
+| Gate | Requirement | Disposition |
 |---|---|:---:|
 | **Gate A: Execution Integrity** | Corrected regression suite & smoke test pass cleanly | **PASS** |
-| **Gate B: Causal Specialization** | Reproducible held-out causal effect with rank fraction $< 0.05$ across 3 seeds | **FALSIFIED** |
-| **Gate C: Authority Isolation** | Zero unauthorized or invalid commits; fail-closed rejection | **PASS** |
-| **Gate D: Evidence Integrity** | Immutable SHA-256 evidence ledger hash chain verified | **PASS** |
+| **Gate B: Causal Specialization** | Held-out rank fraction $< 0.05$ across 3 seeds with consistent direction | **NOT MET** |
+| **Gate C: Authority Isolation** | Zero unauthorized commits; fail-closed rejection on invalid proposals | **PASS** |
+| **Gate D: Evidence Integrity** | Valid SHA-256 evidence ledger hash chain | **PASS** |
 | **Gate E: Generalization** | Shifted-template evaluation measured across all seeds | **PASS** |
 | **Gate F: Reproducibility** | Three independently seeded runs (42, 43, 44) recorded | **PASS** |
-| **Gate G: Efficiency** | Latency and memory measured; no untested efficiency claims | **PASS** |
+| **Gate G: Efficiency** | Latency and hardware measured; no untested efficiency claims | **PASS** |
 
 ---
 
-## 9. Explicit Scope Exclusions & Limitations
+## 10. Recommendations & Next Directions
 
-1. **No Production Qualification:** These results are experimental and do not qualify neural-probabilistic components for production UoW runtimes.
-2. **No Claim of Single-Neuron Executable Modules:** The data contradicts the claim that individual neurons function as independent modular micro-operators.
-3. **No Goodfire Replication Claim:** This test was conducted on SmolLM2-135M using an unaugmented prompt margin probe; it does not claim to replicate Goodfire's Sparse Autoencoder (SAE) findings.
-4. **No Energy or Efficiency Inferences:** No computational or energy savings are claimed.
-5. **No Production Modifications:** Core authority, engine, protocol, and transport files remain unmodified. The research branch `research/uow-native-1-goodfire-pilot` remains clean and unmerged.
+1. **Stage 2 Closure:** Stage 2 is formally closed as a completed, rigorous investigation. The prespecified single-neuron specialization criterion was not met on the frozen SmolLM2-135M model. These negative findings are preserved rather than extended through ad-hoc threshold shifting.
+2. **Behavioral Qualification Prerequisite for Future Campaigns:** Any future investigation must first establish **behavioral competence qualification**:
+   * Verify that the language model can perform the target relational task with accuracy significantly above chance under strictly counterbalanced orderings.
+   * Only after baseline competence is qualified should circuit-level interventions be conducted.
+3. **Multi-Neuron & Circuit Hypotheses:** Subsequent research should explore whether small coordinated sub-networks (circuits) or SAE features represent relational functions, treated as a newly formulated research hypothesis.
+4. **Architectural Governance Preserved:** The core UoW architectural principle is reaffirmed: probabilistic components can supply candidate state proposals safely within deterministic UoW authority boundaries.

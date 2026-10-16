@@ -31,7 +31,7 @@ class ModelBackend(ABC):
         pass
 
     @abstractmethod
-    def generate(self, prompt: str, max_tokens: int = 140) -> str:
+    def generate(self, prompt: str, max_tokens: int = 200) -> str:
         """Executes autoregressive generation on the active adapter."""
         pass
 
@@ -109,7 +109,7 @@ class PyTorchPeftBackend(ModelBackend):
             except Exception:
                 pass
 
-    def generate(self, prompt: str, max_tokens: int = 140) -> str:
+    def generate(self, prompt: str, max_tokens: int = 200) -> str:
         import torch
 
         if self.peft_model is None or self.tokenizer is None:
@@ -121,6 +121,7 @@ class PyTorchPeftBackend(ModelBackend):
                 **inputs,
                 max_new_tokens=max_tokens,
                 do_sample=False,
+                use_cache=False,
                 pad_token_id=self.tokenizer.pad_token_id,
                 eos_token_id=self.tokenizer.eos_token_id,
             )

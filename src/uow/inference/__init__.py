@@ -20,6 +20,7 @@ from src.uow.inference.routing import (
     RoutingResolutionError,
 )
 from src.uow.inference.gateway import InferenceGateway
+from src.uow.inference.authority_bridge import AuthorityBridge, AuthorityEvaluation
 
 __all__ = [
     "InferenceRequest",
@@ -35,4 +36,6 @@ __all__ = [
     "CapabilityRouter",
     "RoutingResolutionError",
     "InferenceGateway",
+    "AuthorityBridge",
+    "AuthorityEvaluation",
 ]

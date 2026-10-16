@@ -79,15 +79,29 @@ class CapabilityRegistry:
         return self._quarantine_reasons.get(adapter_id)
 
     def resolve_capability(self, domain: str, grammar: str) -> Optional[str]:
-        """Resolves verified adapter_id matching the requested domain and grammar."""
+        """Resolves verified adapter_id matching the requested domain and grammar.
+        
+        Priority:
+        1. Exact match on (domain, grammar).
+        2. Shared grammar adapter with domain in ("shared", "*", "any").
+        """
+        exact_match = None
+        shared_match = None
         for aid, manifest in self._manifests.items():
-            if (
-                manifest.domain.lower() == domain.lower()
-                and manifest.grammar.lower() == grammar.lower()
-                and self._lifecycle_states.get(aid) in (AdapterLifecycleState.VERIFIED, AdapterLifecycleState.LOADED, AdapterLifecycleState.ACTIVE)
+            if self._lifecycle_states.get(aid) not in (
+                AdapterLifecycleState.VERIFIED,
+                AdapterLifecycleState.LOADED,
+                AdapterLifecycleState.ACTIVE,
             ):
-                return aid
-        return None
+                continue
+            if manifest.grammar.lower() == grammar.lower():
+                if manifest.domain.lower() == domain.lower():
+                    exact_match = aid
+                    break
+                elif manifest.domain.lower() in ("shared", "*", "any"):
+                    shared_match = aid
+
+        return exact_match or shared_match
 
     def list_adapters(self) -> list[dict[str, Any]]:
         """Returns catalog of all registered adapters with current states."""
@@ -103,3 +117,35 @@ class CapabilityRegistry:
             }
             for aid, m in self._manifests.items()
         ]
+
+    def save_catalog(self, path: Path) -> None:
+        """Persists catalog metadata to disk for crash consistency and restart."""
+        path.parent.mkdir(parents=True, exist_ok=True)
+        data = {
+            "version": "uow.magazine.catalog.v1",
+            "entries": [
+                {
+                    "manifest": m.to_dict(),
+                    "adapter_path": str(self._adapter_paths[aid]),
+                    "lifecycle_state": self._lifecycle_states[aid].value,
+                    "quarantine_reason": self._quarantine_reasons.get(aid),
+                }
+                for aid, m in self._manifests.items()
+            ],
+        }
+        temp_path = path.with_suffix(".tmp")
+        temp_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        temp_path.replace(path)
+
+    def load_catalog(self, path: Path, auto_verify_on_reload: bool = True) -> int:
+        """Loads and restores catalog from disk, verifying integrity against files."""
+        if not path.exists():
+            return 0
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        count = 0
+        for entry in raw.get("entries", []):
+            m = CapabilityManifest.from_dict(entry["manifest"])
+            adapter_path = Path(entry["adapter_path"])
+            self.register(m, adapter_path, auto_verify=auto_verify_on_reload)
+            count += 1
+        return count

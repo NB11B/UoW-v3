@@ -67,19 +67,26 @@ class ProposalOutputValidator:
                 return False, parsed, f"Invalid disposition value: '{parsed.get('disposition')}'"
 
         elif expected_grammar == "temporal":
-            required_keys = {"domain", "target_action", "relation", "time_window", "deadline_ms", "dependencies"}
-            missing = required_keys - set(parsed.keys())
+            core_keys = {"domain", "target_action", "relation"}
+            missing = core_keys - set(parsed.keys())
             if missing:
                 return False, parsed, f"Missing temporal schema keys: {sorted(missing)}"
-            if parsed.get("relation") not in ("BEFORE", "AFTER", "CONCURRENT", "WITHIN"):
+            valid_relations = {"BEFORE", "AFTER", "CONCURRENT", "WITHIN", "IMMEDIATE", "BETWEEN"}
+            if parsed.get("relation") not in valid_relations:
                 return False, parsed, f"Invalid temporal relation: '{parsed.get('relation')}'"
 
         elif expected_grammar == "recovery":
-            required_keys = {"domain", "failed_action", "failure_class", "strategy", "fallback_parameters", "max_retries"}
-            missing = required_keys - set(parsed.keys())
+            core_keys = {"domain", "strategy"}
+            missing = core_keys - set(parsed.keys())
             if missing:
                 return False, parsed, f"Missing recovery schema keys: {sorted(missing)}"
-            if parsed.get("strategy") not in ("RETRY", "ROLLBACK_COMPENSATE", "FAILOVER", "ESCALATE_HUMAN"):
+            if not any(k in parsed for k in ("failure_mode", "failed_action", "failure_class")):
+                return False, parsed, "Missing failure identifier key ('failure_mode', 'failed_action', or 'failure_class')"
+            valid_strategies = {
+                "RETRY", "ROLLBACK_COMPENSATE", "FAILOVER", "ESCALATE_HUMAN",
+                "IMMEDIATE_RETRY", "CIRCUIT_BREAK", "EXPONENTIAL_BACKOFF", "ESCALATE_OPERATOR"
+            }
+            if parsed.get("strategy") not in valid_strategies:
                 return False, parsed, f"Invalid recovery strategy: '{parsed.get('strategy')}'"
 
         return True, parsed, None

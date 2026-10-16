@@ -14,7 +14,13 @@ class RoutingResolutionError(Exception):
 class CapabilityRouter:
     """Routes work requests to specific domain-grammar adapters using deterministic-first policy."""
 
-    def __init__(self, registered_capabilities: Optional[dict[str, tuple[str, str]]] = None) -> None:
+    SUPPORTED_GRAMMARS = {"operational", "temporal", "recovery"}
+
+    def __init__(
+        self,
+        registered_capabilities: Optional[dict[str, tuple[str, str]]] = None,
+        allow_dynamic_domains: bool = True,
+    ) -> None:
         # Map of explicit capability keys -> (domain, grammar)
         self.registered_capabilities = registered_capabilities or {
             "industrial.operational": ("industrial", "operational"),
@@ -27,6 +33,12 @@ class CapabilityRouter:
             "logistics.temporal": ("logistics", "temporal"),
             "logistics.recovery": ("logistics", "recovery"),
         }
+        self.allow_dynamic_domains = allow_dynamic_domains
+
+    def register_capability(self, domain: str, grammar: str) -> None:
+        """Dynamically registers a domain-grammar capability pair."""
+        key = f"{domain.lower()}.{grammar.lower()}"
+        self.registered_capabilities[key] = (domain.lower(), grammar.lower())
 
     def route_request(self, request: InferenceRequest) -> tuple[str, str]:
         """Resolves target (domain, grammar) fail-closed.
@@ -43,6 +55,8 @@ class CapabilityRouter:
             key = f"{dom}.{gram}"
             if key in self.registered_capabilities:
                 return dom, gram
+            if self.allow_dynamic_domains and gram in self.SUPPORTED_GRAMMARS:
+                return dom, gram
             raise RoutingResolutionError(f"Requested capability '{key}' is not registered in capability magazine")
 
         # 2. Deterministic rule classification based on input data
@@ -56,6 +70,8 @@ class CapabilityRouter:
             detected_domain = "cybersecurity"
         elif any(w in text for w in ["shipment", "transit", "warehouse", "freight", "customs", "delivery", "container", "dock"]):
             detected_domain = "logistics"
+        elif any(w in text for w in ["biomedical", "patient", "clinical", "infusion", "hemodialysis", "dosage"]):
+            detected_domain = "biomedical"
 
         detected_grammar = None
         if any(w in text for w in ["timeout", "timed out", "retry", "failure", "compensate", "abort", "fallback"]):

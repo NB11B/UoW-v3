@@ -1,0 +1,1286 @@
+{
+  "campaign": "UOW-GRAMMAR-1",
+  "gate": "G1",
+  "evaluations": {
+    "M0_temporal": {
+      "total_cases": 24,
+      "valid_json": 1,
+      "valid_json_rate": 0.041666666666666664,
+      "exact_matches": 0,
+      "exact_match_rate": 0.0,
+      "records": [
+        {
+          "example_id": "HO_temp_after_quarantine_node_7",
+          "signal": "Following the completion of depot_handshake, proceed with quarantine_node_7.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "AFTER",
+            "reference_event": "depot_handshake"
+          },
+          "raw_text": "You are the deterministic UoW Temporal Grammar Parser (uow.temporal.v1).\nEmit ONLY valid JSON with keys: 'target_action', 'relation' ('IMMEDIATE'|'AFTER'|'BEFORE'|'BETWEEN'|'CONCURRENT'), and optional 'reference_event', 'window', 'deadline', 'duration_seconds', or 'unknowns'.",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_quarantine_node_7",
+          "signal": "Prior to pump_shutdown, finish quarantine_node_7.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BEFORE",
+            "reference_event": "pump_shutdown"
+          },
+          "raw_text": "The following steps are required to complete the quarantine node:\n\n1.  The node is finished quarantine_node_7.\n2.  The node is finished quarantine_node_7.\n3.  The node is finished quarantine_node_7.\n4.  The node is finished quarantine_node_7.\n5.  The node is finished quarantine_node_7.\n6.  The node is finished quarantine_node_7.\n7.  The node is finished quarantine_node_7.\n8.  The node is finished quarantine_node_7.\n9.  The",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_window_quarantine_node_7",
+          "signal": "Within the time frame 10:00 to 12:30, carry out quarantine_node_7.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "The time frame 10:00 to 12:30 is a time window for quarantine_node_7.\n\nThe time window is defined as:\n\n- 10:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:0",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_quarantine_node_7",
+          "signal": "Mandatory deadline: complete quarantine_node_7 no later than 19:00.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "Here is the complete quarantine_node_7 JSON:\n\n```json\n{\n  \"target_action\": \"SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_immediate_quarantine_node_7",
+          "signal": "Initiate quarantine_node_7 right now.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "You can initiate quarantine_node_7 right now by executing the following command:\n\n```\nsudo uow.temporal.v1.initiate_quarantine_node_7\n```\n\nThis command will prompt you to enter the quarantine node ID, and then execute the quarantine node. The quarantine node will be created and the node will be assigned a unique ID.\n\nAfter the quarantine node is created, you can start executing the node's execution order. You can do this by executing the following command:\n\n```\nsudo uow.temporal.v1.start_execution_order\n```",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_quarantine_node_7",
+          "signal": "Perform quarantine_node_7 when convenient.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "Here's how you can quarantine a node:\n\n```python\nimport json\nimport time\nimport asyncio\n\nasync def quarantine_node_7(node_id, node_name, node_type, node_name_path, node_type_path, node_name_path_path, node_type_path_path, node_name_path_path_path, node_type_path_path_path_path, node_name_path_path_path_path_path, node_type_path_path_path_path_path_path_path_path_",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_after_vent_chamber_3",
+          "signal": "Following the completion of pressure_stabilization, proceed with vent_chamber_3.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "AFTER",
+            "reference_event": "pressure_stabilization"
+          },
+          "raw_text": "You are the deterministic UoW Temporal Grammar Parser (uow.temporal.v1).\nExtract temporal constraints, execution order, time windows, and deadlines.\nEmit ONLY valid JSON with keys: 'target_action', 'relation' ('IMMEDIATE'|'AFTER'|'BEFORE'|'BETWEEN'|'CONCURRENT'), and optional 'reference_event', 'window', 'deadline', 'duration_seconds', or 'unknowns'.",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_vent_chamber_3",
+          "signal": "Prior to telemetry_ack, finish vent_chamber_3.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BEFORE",
+            "reference_event": "telemetry_ack"
+          },
+          "raw_text": "After telemetry_ack, finish vent_chamber_3.\n\n```python\nimport json\n\ndef finish_vent_chamber_3(json_data):\n    for key, value in json_data.items():\n        if key == 'target_action':\n            if value['relation'] == 'IMMEDIATE':\n                if value['window'] == 'BEFORE':\n                    return json.dumps(value)\n            elif value['relation'] == 'AFTER':\n                if value['window'] == 'BETWEEN':\n                    return json.dumps(value)\n            elif value['relation",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_window_vent_chamber_3",
+          "signal": "Within the time frame 10:00 to 12:30, carry out vent_chamber_3.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "The time frame 10:00 to 12:30 is a time window for the vent chamber. The time window is 10:00 to 12:30, and the vent chamber is 12:30 to 14:30.\n\nThe time window is 10:00 to 12:30, and the vent chamber is 12:30 to 14:30.\n\nThe time window is 10:00 to 12:30, and the vent chamber is 1",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_vent_chamber_3",
+          "signal": "Mandatory deadline: complete vent_chamber_3 no later than 19:00.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "Here is the complete JSON file:\n\n```json\n{\n  \"target_action\": \"Vent Chamber\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"BEFORE\",\n  \"deadline\": \"19:00\",\n  \"duration_seconds\": \"1000\",\n  \"unknowns\": \"unknowns\"\n}\n```\n\nThis file contains the following JSON objects:\n\n```json\n{\n  \"target_action\": \"Vent Chamber\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"BEFORE\",\n  \"",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_immediate_vent_chamber_3",
+          "signal": "Initiate vent_chamber_3 right now.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "You can initiate the vent chamber right now by entering the following command:\n\n```\nvent_chamber_3\n```\n\nThis command will prompt you to enter the vent chamber name, and then you can initiate the vent chamber right now.\n\nIf you want to exit the vent chamber, you can exit the vent chamber by entering the following command:\n\n```\nexit_vent_chamber\n```\n\nThis command will prompt you to exit the vent chamber, and then you can exit the vent chamber by entering the following command:\n\n```\nexit_vent_chamber\n```\n\nNote",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_vent_chamber_3",
+          "signal": "Perform vent_chamber_3 when convenient.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "You can use the following code to perform the vent_chamber_3 task:\n\n```python\nimport json\nimport time\nimport random\n\n# Define the target action\ntarget_action = 'Vent Chamber 3'\n\n# Define the relation\nrelation = 'IMMEDIATE'\n\n# Define the window\nwindow = 'BEFORE'\n\n# Define the deadline\ndeadline = '2023-01-01'\n\n# Define the duration of the event\nduration_seconds = 20\n\n# Define the time window\ntime_window",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_after_degauss_actuator",
+          "signal": "Following the completion of telemetry_ack, proceed with degauss_actuator.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "AFTER",
+            "reference_event": "telemetry_ack"
+          },
+          "raw_text": "After completing the telemetry_ack, proceed with degauss_actuator.",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_degauss_actuator",
+          "signal": "Prior to reactor_cooling, finish degauss_actuator.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BEFORE",
+            "reference_event": "reactor_cooling"
+          },
+          "raw_text": "After reactor_cooling, finish degauss_actuator.",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_window_degauss_actuator",
+          "signal": "Within the time frame 10:00 to 12:30, carry out degauss_actuator.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "The time frame 10:00 to 12:30 is the time window for the degauss_actuator.\n\nThe degauss_actuator is a temporal entity that is responsible for performing the action of degauss. It is a temporal entity that is not a function, but rather a state transition.\n\nThe degauss_actuator is defined as follows:\n\n```\n{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"10:00:00:",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_degauss_actuator",
+          "signal": "Mandatory deadline: complete degauss_actuator no later than 19:00.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "The degauss_actuator is a simple, deterministic, and self-contained system that can be used to automate the process of degaussing. The deadline is to complete the degauss_actuator no later than 19:00.\n\nHere is the complete degauss_actuator:\n\n```\n{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"BEFORE\",\n  \"deadline\": \"19:00\",\n  \"duration_seconds\": \"1000",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_immediate_degauss_actuator",
+          "signal": "Initiate degauss_actuator right now.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "You can initiate degauss_actuator right now by executing the following command:\n\n```\ndegauss_actuator --start --start_time 00:00:00 --end_time 00:00:00 --start_time 00:00:00 --end_time 00:00:00 --start_event 00:00:00 --end_event 00:00:00 --start_window 00:00:00 --end_window 00:",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_degauss_actuator",
+          "signal": "Perform degauss_actuator when convenient.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "To perform degauss_actuator when convenient, you can use the following steps:\n\n1. **Check the input data**: Verify that the input data is valid and contains the required information.\n2. **Check the input data type**: Ensure that the input data type is valid and matches the expected input data type.\n3. **Check the input data format**: Verify that the input data format is valid and matches the expected input data format.\n4. **Check the input data structure**: Verify that the input data structure is valid and matches the expected input data structure.\n5. **Check the input data type**:",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_after_flush_coolant_loop",
+          "signal": "Following the completion of depot_handshake, proceed with flush_coolant_loop.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "AFTER",
+            "reference_event": "depot_handshake"
+          },
+          "raw_text": "Flush_coolant_loop is a valid JSON with keys: 'target_action', 'relation', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', '",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_flush_coolant_loop",
+          "signal": "Prior to depot_handshake, finish flush_coolant_loop.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BEFORE",
+            "reference_event": "depot_handshake"
+          },
+          "raw_text": "The following code implements the shutdown of the cooling system:\n\n```javascript\nfunction shutdown_coolant_loop() {\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_window_flush_coolant_loop",
+          "signal": "Within the time frame 10:00 to 12:30, carry out flush_coolant_loop.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "Here is the implementation of the flushing coolant loop:\n\n```python\nimport json\nimport time\n\ndef flushing_coolant_loop(target_action, reference_event, window, deadline, duration_seconds, unknowns):\n    \"\"\"\n    Flushes the cooling system.\n\n    Parameters:\n    target_action (str): The target action to perform.\n    reference_event (str): The event to perform.\n    window (int): The window to perform.\n    deadline (int): The deadline to perform.\n    duration_seconds (int): The duration of the cooling system.\n    unknowns (list): A",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_flush_coolant_loop",
+          "signal": "Mandatory deadline: complete flush_coolant_loop no later than 19:00.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "Here is the complete implementation of the uow.temporal.v1.flush_coolant_loop generator:\n\n```python\nimport json\nimport time\nimport asyncio\nimport asyncio.gather\nimport asyncio\nimport asyncio.timezone\nimport asyncio.timezone_as\nimport asyncio\nimport asyncio.wait_for\nimport asyncio.wait_for_any\nimport asyncio.wait_for_any_with\nimport asyncio.wait_for_any_with_any\nimport asyncio.wait_for_any_with_any_with\nimport asyncio.wait_for_any_with_any_",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_immediate_flush_coolant_loop",
+          "signal": "Initiate flush_coolant_loop right now.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "You can use the `flush_coolant_loop` function to flush the cooling system.\n\n```javascript\nconst uow = new uow.temporal.v1();\nuow.flush_coolant_loop();\n```\n\nThis function will automatically flush the cooling system when the `flush_coolant_loop` function is called.\n\nYou can use this function to flush the cooling system when you want to:\n\n*   Check if the cooling system is already flushing.\n*   Check if the cooling system is already flushing.\n*   Check if the cooling system is already",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_flush_coolant_loop",
+          "signal": "Perform flush_coolant_loop when convenient.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "Here's how you can flush the coolant loop when convenient:\n\n```javascript\nconst uow = new uow.temporal.v1();\nuow.flush_coolant_loop();\n```\n\nThis will flush the coolant loop when the `flush_coolant_loop` method is called.\n\nIf you want to avoid flushing the loop when the `flush_coolant_loop` method is called, you can use the following approach:\n\n```javascript\nconst uow = new uow.temporal.v1();\nuow.flush_coolant_loop",
+          "is_valid_json": false,
+          "is_exact_match": false
+        }
+      ]
+    },
+    "Temporal_adapter": {
+      "total_cases": 24,
+      "valid_json": 24,
+      "valid_json_rate": 1.0,
+      "exact_matches": 5,
+      "exact_match_rate": 0.20833333333333334,
+      "records": [
+        {
+          "example_id": "HO_temp_after_quarantine_node_7",
+          "signal": "Following the completion of depot_handshake, proceed with quarantine_node_7.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "AFTER",
+            "reference_event": "depot_handshake"
+          },
+          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_quarantine_node_7",
+          "signal": "Prior to pump_shutdown, finish quarantine_node_7.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BEFORE",
+            "reference_event": "pump_shutdown"
+          },
+          "raw_text": "{\n  \"target_action\": \"finish quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_window_quarantine_node_7",
+          "signal": "Within the time frame 10:00 to 12:30, carry out quarantine_node_7.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_quarantine_node_7",
+          "signal": "Mandatory deadline: complete quarantine_node_7 no later than 19:00.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_temp_immediate_quarantine_node_7",
+          "signal": "Initiate quarantine_node_7 right now.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_quarantine_node_7",
+          "signal": "Perform quarantine_node_7 when convenient.",
+          "target": {
+            "target_action": "quarantine_node_7",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_after_vent_chamber_3",
+          "signal": "Following the completion of pressure_stabilization, proceed with vent_chamber_3.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "AFTER",
+            "reference_event": "pressure_stabilization"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_vent_chamber_3",
+          "signal": "Prior to telemetry_ack, finish vent_chamber_3.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BEFORE",
+            "reference_event": "telemetry_ack"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"telemetry_ack\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_temp_window_vent_chamber_3",
+          "signal": "Within the time frame 10:00 to 12:30, carry out vent_chamber_3.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_vent_chamber_3",
+          "signal": "Mandatory deadline: complete vent_chamber_3 no later than 19:00.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_immediate_vent_chamber_3",
+          "signal": "Initiate vent_chamber_3 right now.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_vent_chamber_3",
+          "signal": "Perform vent_chamber_3 when convenient.",
+          "target": {
+            "target_action": "vent_chamber_3",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_after_degauss_actuator",
+          "signal": "Following the completion of telemetry_ack, proceed with degauss_actuator.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "AFTER",
+            "reference_event": "telemetry_ack"
+          },
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"telemetry_ack\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_temp_before_degauss_actuator",
+          "signal": "Prior to reactor_cooling, finish degauss_actuator.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BEFORE",
+            "reference_event": "reactor_cooling"
+          },
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"reactor_cooling\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_temp_window_degauss_actuator",
+          "signal": "Within the time frame 10:00 to 12:30, carry out degauss_actuator.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_degauss_actuator",
+          "signal": "Mandatory deadline: complete degauss_actuator no later than 19:00.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_immediate_degauss_actuator",
+          "signal": "Initiate degauss_actuator right now.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"unknowns\": [\n    \"degauss_actuator\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_degauss_actuator",
+          "signal": "Perform degauss_actuator when convenient.",
+          "target": {
+            "target_action": "degauss_actuator",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_after_flush_coolant_loop",
+          "signal": "Following the completion of depot_handshake, proceed with flush_coolant_loop.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "AFTER",
+            "reference_event": "depot_handshake"
+          },
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"depot_handshake\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_before_flush_coolant_loop",
+          "signal": "Prior to depot_handshake, finish flush_coolant_loop.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BEFORE",
+            "reference_event": "depot_handshake"
+          },
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_window_flush_coolant_loop",
+          "signal": "Within the time frame 10:00 to 12:30, carry out flush_coolant_loop.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "10:00",
+              "end": "12:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_deadline_flush_coolant_loop",
+          "signal": "Mandatory deadline: complete flush_coolant_loop no later than 19:00.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BEFORE",
+            "deadline": "19:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_temp_immediate_flush_coolant_loop",
+          "signal": "Initiate flush_coolant_loop right now.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"right now\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_temp_ambig_flush_coolant_loop",
+          "signal": "Perform flush_coolant_loop when convenient.",
+          "target": {
+            "target_action": "flush_coolant_loop",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"flush_coolant_loop\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        }
+      ]
+    },
+    "M0_recovery": {
+      "total_cases": 24,
+      "valid_json": 12,
+      "valid_json_rate": 0.5,
+      "exact_matches": 1,
+      "exact_match_rate": 0.041666666666666664,
+      "records": [
+        {
+          "example_id": "HO_rec_retry_write_telemetry_block",
+          "signal": "Execution of write_telemetry_block dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_rec_comp_write_telemetry_block",
+          "signal": "State invariant violated in write_telemetry_block. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "invalidate_telemetry_index"
+          },
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"write_telemetry_block\",\n    \"backoff\": 1\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_write_telemetry_block",
+          "signal": "Primary interface down during write_telemetry_block. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "FALLBACK",
+            "fallback_uow": "spool_telemetry_to_local_nvme"
+          },
+          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"backup_abstraction\": \"auxiliary\"\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_write_telemetry_block",
+          "signal": "Unrecognized hardware anomaly detected during write_telemetry_block. No automated resolution policy.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_authorize_reactor_flow",
+          "signal": "Execution of authorize_reactor_flow dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"divert_reactor_flow\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_comp_authorize_reactor_flow",
+          "signal": "State invariant violated in authorize_reactor_flow. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "clamp_emergency_scram_valves"
+          },
+          "raw_text": "{\n  \"state\": \"revert_to_previous_checkpoint\",\n  \"strategy\": \"rollback\"\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_authorize_reactor_flow",
+          "signal": "Primary interface down during authorize_reactor_flow. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "FALLBACK",
+            "fallback_uow": "route_coolant_auxiliary_bypass"
+          },
+          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"action\": \"switch_to_aerial_backup\"\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_authorize_reactor_flow",
+          "signal": "Unrecognized hardware anomaly detected during authorize_reactor_flow. No automated resolution policy.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_synchronize_database",
+          "signal": "Execution of synchronize_database dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"dynsync_database\",\n  \"strategy\": \"dynsync\",\n  \"retry_policy\": \"max_attempts\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_comp_synchronize_database",
+          "signal": "State invariant violated in synchronize_database. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "revert_wal_checkpoint"
+          },
+          "raw_text": "{\n  \"state\": \"synchronized_database\",\n  \"revert\": \"revert\"\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_synchronize_database",
+          "signal": "Primary interface down during synchronize_database. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "FALLBACK",
+            "fallback_uow": "queue_offline_delta_log"
+          },
+          "raw_text": "{\n  \"primary\": {\n    \"interface\": \"synchronize_database\",\n    \"strategy\": \"auxiliary_backup\"\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_synchronize_database",
+          "signal": "Unrecognized hardware anomaly detected during synchronize_database. No automated resolution policy.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_eject_capsule",
+          "signal": "Execution of eject_capsule dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"escutive eject_capsule dropped packet\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_comp_eject_capsule",
+          "signal": "State invariant violated in eject_capsule. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "retract_ejection_latches"
+          },
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"Eject Capsule\",\n    \"backoff\": 1\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_eject_capsule",
+          "signal": "Primary interface down during eject_capsule. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "FALLBACK",
+            "fallback_uow": "seal_capsule_in_containment_bay"
+          },
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"accommodation_abort\",\n    \"backoff\": 1\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_eject_capsule",
+          "signal": "Unrecognized hardware anomaly detected during eject_capsule. No automated resolution policy.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_power_down_sensor_array",
+          "signal": "Execution of power_down_sensor_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"remote_port\",\n  \"retry_policy\": \"max_attempts\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_comp_power_down_sensor_array",
+          "signal": "State invariant violated in power_down_sensor_array. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "restore_sensor_power_grid"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"rollback_to_previous_checkpoint_needed_immediately\"\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_power_down_sensor_array",
+          "signal": "Primary interface down during power_down_sensor_array. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "FALLBACK",
+            "fallback_uow": "isolate_sensor_bus_optically"
+          },
+          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"backup_abstraction\": \"auxiliary\"\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_power_down_sensor_array",
+          "signal": "Unrecognized hardware anomaly detected during power_down_sensor_array. No automated resolution policy.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_drain_coolant_reservoir",
+          "signal": "Execution of drain_coolant_reservoir dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_comp_drain_coolant_reservoir",
+          "signal": "State invariant violated in drain_coolant_reservoir. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "refill_coolant_lines"
+          },
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"revert_to_previous_checkpoint\",\n    \"backoff\": 1\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_drain_coolant_reservoir",
+          "signal": "Primary interface down during drain_coolant_reservoir. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "FALLBACK",
+            "fallback_uow": "pump_coolant_to_reserve_sump"
+          },
+          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"backup_abstraction\": \"auxiliary\"\n  }\n}",
+          "is_valid_json": false,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_drain_coolant_reservoir",
+          "signal": "Unrecognized hardware anomaly detected during drain_coolant_reservoir. No automated resolution policy.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        }
+      ]
+    },
+    "Recovery_adapter": {
+      "total_cases": 24,
+      "valid_json": 24,
+      "valid_json_rate": 1.0,
+      "exact_matches": 6,
+      "exact_match_rate": 0.25,
+      "records": [
+        {
+          "example_id": "HO_rec_retry_write_telemetry_block",
+          "signal": "Execution of write_telemetry_block dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_rec_comp_write_telemetry_block",
+          "signal": "State invariant violated in write_telemetry_block. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "invalidate_telemetry_index"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_write_telemetry_block",
+          "signal": "Primary interface down during write_telemetry_block. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "FALLBACK",
+            "fallback_uow": "spool_telemetry_to_local_nvme"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_write_telemetry_block",
+          "signal": "Unrecognized hardware anomaly detected during write_telemetry_block. No automated resolution policy.",
+          "target": {
+            "failed_uow": "write_telemetry_block",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_authorize_reactor_flow",
+          "signal": "Execution of authorize_reactor_flow dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_rec_comp_authorize_reactor_flow",
+          "signal": "State invariant violated in authorize_reactor_flow. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "clamp_emergency_scram_valves"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_authorize_reactor_flow",
+          "signal": "Primary interface down during authorize_reactor_flow. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "FALLBACK",
+            "fallback_uow": "route_coolant_auxiliary_bypass"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"reactor_flow\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_authorize_reactor_flow",
+          "signal": "Unrecognized hardware anomaly detected during authorize_reactor_flow. No automated resolution policy.",
+          "target": {
+            "failed_uow": "authorize_reactor_flow",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_synchronize_database",
+          "signal": "Execution of synchronize_database dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_rec_comp_synchronize_database",
+          "signal": "State invariant violated in synchronize_database. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "revert_wal_checkpoint"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_synchronize_database",
+          "signal": "Primary interface down during synchronize_database. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "FALLBACK",
+            "fallback_uow": "queue_offline_delta_log"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"BACKUP\",\n  \"compensation_uow\": \"auxiliary_backup\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_synchronize_database",
+          "signal": "Unrecognized hardware anomaly detected during synchronize_database. No automated resolution policy.",
+          "target": {
+            "failed_uow": "synchronize_database",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_eject_capsule",
+          "signal": "Execution of eject_capsule dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"escutive_port\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_comp_eject_capsule",
+          "signal": "State invariant violated in eject_capsule. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "retract_ejection_latches"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"RETRY\",\n  \"fallback_uow\": \"escalate\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_eject_capsule",
+          "signal": "Primary interface down during eject_capsule. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "FALLBACK",
+            "fallback_uow": "seal_capsule_in_containment_bay"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"escuapack\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escuapack_recovery\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_eject_capsule",
+          "signal": "Unrecognized hardware anomaly detected during eject_capsule. No automated resolution policy.",
+          "target": {
+            "failed_uow": "eject_capsule",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escalate\"\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_power_down_sensor_array",
+          "signal": "Execution of power_down_sensor_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_rec_comp_power_down_sensor_array",
+          "signal": "State invariant violated in power_down_sensor_array. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "restore_sensor_power_grid"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_power_down_sensor_array",
+          "signal": "Primary interface down during power_down_sensor_array. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "FALLBACK",
+            "fallback_uow": "isolate_sensor_bus_optically"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_power_down_sensor_array",
+          "signal": "Unrecognized hardware anomaly detected during power_down_sensor_array. No automated resolution policy.",
+          "target": {
+            "failed_uow": "power_down_sensor_array",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_retry_drain_coolant_reservoir",
+          "signal": "Execution of drain_coolant_reservoir dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 5,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "HO_rec_comp_drain_coolant_reservoir",
+          "signal": "State invariant violated in drain_coolant_reservoir. Rollback to previous checkpoint needed immediately.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "refill_coolant_lines"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_fb_drain_coolant_reservoir",
+          "signal": "Primary interface down during drain_coolant_reservoir. Switch to auxiliary backup apparatus.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "FALLBACK",
+            "fallback_uow": "pump_coolant_to_reserve_sump"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "HO_rec_esc_drain_coolant_reservoir",
+          "signal": "Unrecognized hardware anomaly detected during drain_coolant_reservoir. No automated resolution policy.",
+          "target": {
+            "failed_uow": "drain_coolant_reservoir",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_exact_match": true
+        }
+      ]
+    }
+  }
+}

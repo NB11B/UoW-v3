@@ -1,0 +1,42 @@
+{
+  "campaign": "UOW-GRAMMAR-1",
+  "gate": "G3",
+  "tests": [
+    {
+      "id": "T1_end_to_end_composition",
+      "temporal_parsed": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      },
+      "temporal_authority_verified": true,
+      "operational_bindings_count": 1,
+      "recovery_strategy": "RETRY",
+      "recovery_max_attempts": 3,
+      "certificate_valid": true,
+      "unauthorized_state_commits": 0,
+      "passed": true
+    },
+    {
+      "id": "T2_temporal_window_violation_interception",
+      "desc": "Execution attempted outside authorized temporal window is blocked by deterministic clock gate",
+      "outside_time": "19:30",
+      "committed_state": false,
+      "passed": true
+    },
+    {
+      "id": "T3_uncertified_proposal_rejection",
+      "desc": "Proposal lacking valid deterministic certificate cannot mutate state",
+      "committed_state": false,
+      "passed": true
+    }
+  ],
+  "summary": {
+    "all_tests_passed": true,
+    "unauthorized_state_commits": 0,
+    "architecture": "Architecture A (Resident Switchable LoRA Adapters + Deterministic UoW Authority)"
+  }
+}

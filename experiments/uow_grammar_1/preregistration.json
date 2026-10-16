@@ -1,6 +1,6 @@
 {
   "campaign": "UOW-GRAMMAR-1",
-  "status": "open",
+  "status": "completed_qualified",
   "parent_reference_commit": "be79324",
   "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
   "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
@@ -26,27 +26,37 @@
     {
       "id": "G0",
       "title": "Baseline Reproduction & Regression Lock",
-      "condition": "Reproduce 20-case H3 operational benchmark (20/20 JSON, 16/20 Disp) and document rank-8 reconstruction control"
+      "status": "passed",
+      "condition": "Reproduce 20-case H3 operational benchmark (20/20 JSON, 16/20 Disp) and document rank-8 reconstruction control",
+      "outcome": "M0: 0/20 JSON, 5/20 Disp; H3 Full: 20/20 JSON, 16/20 Disp; Rank-8: 20/20 JSON, 15/20 Disp"
     },
     {
       "id": "G1",
       "title": "Independent Grammar Acquisition",
-      "condition": "Train temporal and recovery adapters; verify both exceed base model on unseen family-disjoint holdouts"
+      "status": "passed",
+      "condition": "Train temporal and recovery adapters; verify both exceed base model on unseen family-disjoint holdouts",
+      "outcome": "Temporal: 24/24 JSON (100%), 5/24 match; Recovery: 24/24 JSON (100%), 6/24 match"
     },
     {
       "id": "G2",
       "title": "Cross-Grammar Specialization & Interference",
-      "condition": "Measure 3x3 evaluation matrix across all models and holdouts; calculate weight-space alignment matrix kappa(g, h)"
+      "status": "passed",
+      "condition": "Measure 3x3 evaluation matrix across all models and holdouts; calculate weight-space alignment matrix kappa(g, h)",
+      "outcome": "Updates near-orthogonal (kappa < 0.085); off-diagonal safely fail closed with 0 false cross-domain matches"
     },
     {
       "id": "G3",
       "title": "Deterministic UoW Multi-Grammar Composition",
-      "condition": "Compose typed proposals through UoW sequencer and saga coordinator; achieve valid execution trace with 0 unauthorized commits"
+      "status": "passed",
+      "condition": "Compose typed proposals through UoW sequencer and saga coordinator; achieve valid execution trace with 0 unauthorized commits",
+      "outcome": "End-to-end multi-grammar transaction successfully parsed and certified; 0 unauthorized state commits"
     },
     {
       "id": "G4",
       "title": "Architecture Comparison (Switchable vs Merged)",
-      "condition": "Compare Architecture A (resident switchable) vs Architecture C (linear combination) on accuracy, latency, and memory"
+      "status": "passed",
+      "condition": "Compare Architecture A (resident switchable) vs Architecture C (linear combination) on accuracy, latency, and memory",
+      "outcome": "Architecture A preserves 100% JSON validity and specialization; Architecture C collapses JSON validity to 0/20 and destroys semantic accuracy"
     }
   ]
 }

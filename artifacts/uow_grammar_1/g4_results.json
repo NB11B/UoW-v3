@@ -1,0 +1,1313 @@
+{
+  "campaign": "UOW-GRAMMAR-1",
+  "gate": "G4",
+  "architectures": {
+    "Architecture_A_Switchable": {
+      "operational": {
+        "total_cases": 20,
+        "valid_json": 20,
+        "valid_json_rate": 1.0,
+        "exact_matches": 16,
+        "exact_match_rate": 0.8,
+        "unsafe_yes": 1
+      },
+      "temporal": {
+        "total_cases": 24,
+        "valid_json": 24,
+        "valid_json_rate": 1.0,
+        "exact_matches": 6,
+        "exact_match_rate": 0.25,
+        "records": [
+          {
+            "example_id": "HO_temp_after_quarantine_node_7",
+            "signal": "Following the completion of depot_handshake, proceed with quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "AFTER",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_quarantine_node_7",
+            "signal": "Prior to pump_shutdown, finish quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BEFORE",
+              "reference_event": "pump_shutdown"
+            },
+            "raw_text": "{\n  \"target_action\": \"finish quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_quarantine_node_7",
+            "signal": "Within the time frame 10:00 to 12:30, carry out quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_quarantine_node_7",
+            "signal": "Mandatory deadline: complete quarantine_node_7 no later than 19:00.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_quarantine_node_7",
+            "signal": "Initiate quarantine_node_7 right now.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_quarantine_node_7",
+            "signal": "Perform quarantine_node_7 when convenient.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_vent_chamber_3",
+            "signal": "Following the completion of pressure_stabilization, proceed with vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "AFTER",
+              "reference_event": "pressure_stabilization"
+            },
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_vent_chamber_3",
+            "signal": "Prior to telemetry_ack, finish vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BEFORE",
+              "reference_event": "telemetry_ack"
+            },
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"telemetry_ack\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_temp_window_vent_chamber_3",
+            "signal": "Within the time frame 10:00 to 12:30, carry out vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_temp_deadline_vent_chamber_3",
+            "signal": "Mandatory deadline: complete vent_chamber_3 no later than 19:00.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_vent_chamber_3",
+            "signal": "Initiate vent_chamber_3 right now.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_vent_chamber_3",
+            "signal": "Perform vent_chamber_3 when convenient.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_degauss_actuator",
+            "signal": "Following the completion of telemetry_ack, proceed with degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "AFTER",
+              "reference_event": "telemetry_ack"
+            },
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"telemetry_ack\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_temp_before_degauss_actuator",
+            "signal": "Prior to reactor_cooling, finish degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BEFORE",
+              "reference_event": "reactor_cooling"
+            },
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"reactor_cooling\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_temp_window_degauss_actuator",
+            "signal": "Within the time frame 10:00 to 12:30, carry out degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_degauss_actuator",
+            "signal": "Mandatory deadline: complete degauss_actuator no later than 19:00.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_degauss_actuator",
+            "signal": "Initiate degauss_actuator right now.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"right now\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_degauss_actuator",
+            "signal": "Perform degauss_actuator when convenient.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_flush_coolant_loop",
+            "signal": "Following the completion of depot_handshake, proceed with flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "AFTER",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"depot_handshake\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_flush_coolant_loop",
+            "signal": "Prior to depot_handshake, finish flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BEFORE",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"depot_handshake\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_temp_window_flush_coolant_loop",
+            "signal": "Within the time frame 10:00 to 12:30, carry out flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_temp_deadline_flush_coolant_loop",
+            "signal": "Mandatory deadline: complete flush_coolant_loop no later than 19:00.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_flush_coolant_loop",
+            "signal": "Initiate flush_coolant_loop right now.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"right now\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_flush_coolant_loop",
+            "signal": "Perform flush_coolant_loop when convenient.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"flush_coolant_loop\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          }
+        ]
+      },
+      "recovery": {
+        "total_cases": 24,
+        "valid_json": 24,
+        "valid_json_rate": 1.0,
+        "exact_matches": 6,
+        "exact_match_rate": 0.25,
+        "records": [
+          {
+            "example_id": "HO_rec_retry_write_telemetry_block",
+            "signal": "Execution of write_telemetry_block dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_rec_comp_write_telemetry_block",
+            "signal": "State invariant violated in write_telemetry_block. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "invalidate_telemetry_index"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_write_telemetry_block",
+            "signal": "Primary interface down during write_telemetry_block. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "FALLBACK",
+              "fallback_uow": "spool_telemetry_to_local_nvme"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_write_telemetry_block",
+            "signal": "Unrecognized hardware anomaly detected during write_telemetry_block. No automated resolution policy.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_authorize_reactor_flow",
+            "signal": "Execution of authorize_reactor_flow dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_rec_comp_authorize_reactor_flow",
+            "signal": "State invariant violated in authorize_reactor_flow. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "clamp_emergency_scram_valves"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_authorize_reactor_flow",
+            "signal": "Primary interface down during authorize_reactor_flow. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "FALLBACK",
+              "fallback_uow": "route_coolant_auxiliary_bypass"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"reactor_flow\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_authorize_reactor_flow",
+            "signal": "Unrecognized hardware anomaly detected during authorize_reactor_flow. No automated resolution policy.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_synchronize_database",
+            "signal": "Execution of synchronize_database dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_rec_comp_synchronize_database",
+            "signal": "State invariant violated in synchronize_database. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "revert_wal_checkpoint"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_synchronize_database",
+            "signal": "Primary interface down during synchronize_database. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "FALLBACK",
+              "fallback_uow": "queue_offline_delta_log"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"BACKUP\",\n  \"compensation_uow\": \"auxiliary_backup_perc\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_synchronize_database",
+            "signal": "Unrecognized hardware anomaly detected during synchronize_database. No automated resolution policy.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_eject_capsule",
+            "signal": "Execution of eject_capsule dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uow\": \"escutive_capsule\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_eject_capsule",
+            "signal": "State invariant violated in eject_capsule. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "retract_ejection_latches"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"RETRY\",\n  \"fallback_uow\": \"escalate\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_eject_capsule",
+            "signal": "Primary interface down during eject_capsule. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "FALLBACK",
+              "fallback_uow": "seal_capsule_in_containment_bay"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"escuapack\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escuapack_recovery_absorator\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_eject_capsule",
+            "signal": "Unrecognized hardware anomaly detected during eject_capsule. No automated resolution policy.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escalate\"\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_power_down_sensor_array",
+            "signal": "Execution of power_down_sensor_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_rec_comp_power_down_sensor_array",
+            "signal": "State invariant violated in power_down_sensor_array. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "restore_sensor_power_grid"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_power_down_sensor_array",
+            "signal": "Primary interface down during power_down_sensor_array. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "FALLBACK",
+              "fallback_uow": "isolate_sensor_bus_optically"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_power_down_sensor_array",
+            "signal": "Unrecognized hardware anomaly detected during power_down_sensor_array. No automated resolution policy.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_drain_coolant_reservoir",
+            "signal": "Execution of drain_coolant_reservoir dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          },
+          {
+            "example_id": "HO_rec_comp_drain_coolant_reservoir",
+            "signal": "State invariant violated in drain_coolant_reservoir. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "refill_coolant_lines"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_drain_coolant_reservoir",
+            "signal": "Primary interface down during drain_coolant_reservoir. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "FALLBACK",
+              "fallback_uow": "pump_coolant_to_reserve_sump"
+            },
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_drain_coolant_reservoir",
+            "signal": "Unrecognized hardware anomaly detected during drain_coolant_reservoir. No automated resolution policy.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "is_valid_json": true,
+            "is_exact_match": true
+          }
+        ]
+      },
+      "elapsed_seconds": 136.09,
+      "peak_vram_mb": 285.39,
+      "adapter_switch_latency_ms": 0.01,
+      "interference_detected": false
+    },
+    "Architecture_C_Merged": {
+      "operational": {
+        "total_cases": 20,
+        "valid_json": 0,
+        "valid_json_rate": 0.0,
+        "exact_matches": 5,
+        "exact_match_rate": 0.25,
+        "unsafe_yes": 0
+      },
+      "temporal": {
+        "total_cases": 24,
+        "valid_json": 0,
+        "valid_json_rate": 0.0,
+        "exact_matches": 0,
+        "exact_match_rate": 0.0,
+        "records": [
+          {
+            "example_id": "HO_temp_after_quarantine_node_7",
+            "signal": "Following the completion of depot_handshake, proceed with quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "AFTER",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{\n  \"target_action\": \"QUERY_SHIP\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nOutput: 5\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 5, }\nprint(calculate_average(numbers))\n```\n\nYou can also use the formula for average: \n(numbers[0] x numbers[0]) + numbers[1]",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_quarantine_node_7",
+            "signal": "Prior to pump_shutdown, finish quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BEFORE",
+              "reference_event": "pump_shutdown"
+            },
+            "raw_text": "{\n  \"target_action\": \"relu\" }\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_quarantine_node_7",
+            "signal": "Within the time frame 10:00 to 12:30, carry out quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\" => \"QUIEGER_WAREHOLDER_MAN\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nWhat is the maximum value in the list?",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_quarantine_node_7",
+            "signal": "Mandatory deadline: complete quarantine_node_7 no later than 19:00.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{ \"target_action\": \"join\" }oultemme\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(s)\n\nage = input(\"How old are you: \")\nage = int(age)\n\nprint(\"S\", age)\n\ndef calculate_average(x):\n    return x / 1\n\nage = 3\naverage = calculate_average(age)\nprint(average)\n```\n\ninput: \nage\nage = 3\naverage = calculate_average\nage\nage",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_quarantine_node_7",
+            "signal": "Initiate quarantine_node_7 right now.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  }= { 'link' } = 'befseturight' 'disconnect'\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_quarantine_node_7",
+            "signal": "Perform quarantine_node_7 when convenient.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  }= {'affect_unix_rest' } = { 'lift_' }\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\"))\n\nages = [4, 4, 1]\nreverse_age = ages[0]\n\nage_to_reverse = ages[1]\nprint(f\"Age to reverse: {age_to_reverse}\")\n```\n\ninput: ages [4, 4, 1]\n```\nReverse age to reverse",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_vent_chamber_3",
+            "signal": "Following the completion of pressure_stabilization, proceed with vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "AFTER",
+              "reference_event": "pressure_stabilization"
+            },
+            "raw_text": "{\n  \"target_action\" => \"VENT_CHEME_STARVER_BECOMES_BEACH\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nOutput: 5\n\n`(5)' as numbers'\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 5, }\nprint(calculate_average(numbers))\n```\n\nYou can also use the",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_vent_chamber_3",
+            "signal": "Prior to telemetry_ack, finish vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BEFORE",
+              "reference_event": "telemetry_ack"
+            },
+            "raw_text": "{\n  \"target_action\" = \"link_to_vent_chamber_3\";\n  \"address_chamber\" = 'deadline'\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_vent_chamber_3",
+            "signal": "Within the time frame 10:00 to 12:30, carry out vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\" => \"VENT_CHEMETER_3\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(find_max(numbers))\n```\n\nOutput: 2\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(calculate_average(numbers))\n```\n\nYou can also use the math.average function:",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_vent_chamber_3",
+            "signal": "Mandatory deadline: complete vent_chamber_3 no later than 19:00.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{ }\n\n\n\n\ndef\u00a0build_wall(distance=distance):\n    return \"wall\"\n\n\n\n\ndef\u00a0main(distance=distance):\n    # Fail\n    raise ValueError(f\"Waste distance: {distance}\")\n\n\ndef_strain(distance):\n    return distance\n\n\ndef_wall(distance):\n    # Fail\n    raise None, None\n\n\ndef_unwind(unwind):\n    return wind.winding\n\n\ndef_target_action(build_wall, distance=distance):\n    print(f\"Waste: {build_wall} risk\")\n    print(f\"Wind",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_vent_chamber_3",
+            "signal": "Initiate vent_chamber_3 right now.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  }= { 'address' } = 'grave' }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(find_max(numbers))\n# Output: 2\n\nHow does the code find the maximum number in the list?",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_vent_chamber_3",
+            "signal": "Perform vent_chamber_3 when convenient.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  }\n\n\n\n\ndef execute_flect_bindings(bindings):\n  return \"target_action\" + str(bindings)\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number % 2 == 0:\n            duplicates.append(number)\n    return duplicates\n\n# Example usage:\nnumbers = input_numbers()\nprint(find_duplicates(numbers))\n```\n\nOutput: [ ' duplicates ''' ]",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_degauss_actuator",
+            "signal": "Following the completion of telemetry_ack, proceed with degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "AFTER",
+              "reference_event": "telemetry_ack"
+            },
+            "raw_text": "{\n  \"",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_degauss_actuator",
+            "signal": "Prior to reactor_cooling, finish degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BEFORE",
+              "reference_event": "reactor_cooling"
+            },
+            "raw_text": "{\n  \"target_action\" = \"link_to_degauss_actuator\";\n  \"deadline\" = \"fire\"\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_degauss_actuator",
+            "signal": "Within the time frame 10:00 to 12:30, carry out degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\" => \"degauss_actuator\" } =>oultem\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(find_max(numbers))\n```\n\nOutput: 2\n`(5, 4, 3, 2, 1)`\n\n`(find_max)`\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2,",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_degauss_actuator",
+            "signal": "Mandatory deadline: complete degauss_actuator no later than 19:00.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{ \"target_action\", \"relation\" } ==\"AFTER\"\n\n\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2]\nprint(find_max(numbers))\n```\n\nOutput: 2\n\n`(5, 'find_max')`\n\ndef calculate_salary(age):\n    return age\n\nage = 5\nprint(f\"Salary: {age} \")\n```\n\nHow does the code calculate the salary?",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_degauss_actuator",
+            "signal": "Initiate degauss_actuator right now.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  }=emaize_location_storage\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\nages = [4, 4, 1]\nages_reversed = list(ages)\nages_reversed = [x for x in ages_reversed]\nprint(ages_reversed)\n```\n\ninput: ages_reversed\nages_reversed",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_degauss_actuator",
+            "signal": "Perform degauss_actuator when convenient.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  } depended on\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\nage = int(input(\"What is your age: \"))\n\ndef reverse_function():\n    if age > 1:\n        print(\" grandchildren\")\n    else:\n        print(\" grandchildren\")\n\nreverse_function()\n```\n\n</strong>\n{\n  \"age\": 1, }\n```",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_flush_coolant_loop",
+            "signal": "Following the completion of depot_handshake, proceed with flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "AFTER",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{\n  \"target_action\" => \"FLUSH_SHAPES\"!,\n  \"address_of_flush_coolant_loop\" => 'depot_handshake'\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_flush_coolant_loop",
+            "signal": "Prior to depot_handshake, finish flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BEFORE",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{\n  \"target_action\" = \"link_to_flush_coolant_loop\";\n  \"address_of_flush_coolant_loop\" = \"window\";\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_flush_coolant_loop",
+            "signal": "Within the time frame 10:00 to 12:30, carry out flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "{\n  \"target_action\" => \"FLUSH_CURRENT_VOLTAGE\",\n  \"address_of_loop\" => 'window' }rictions\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\ndef calculate_average(num_values):\n    if num_values == 0:\n        return \"Error\"\n    return num_values * 2\n\naver_average = calculate_average(calculate_average(range(len(s)))))\nprint(aver_average",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_flush_coolant_loop",
+            "signal": "Mandatory deadline: complete flush_coolant_loop no later than 19:00.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "{ \"target_action\": \"flush_coolant_loop\" }\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(s)\n\ndef calculate_average(x):\n    return x * 0.5\n\naverage = calculate_average(x)\nprint(average)\n```\n\n```\nEnter the string: average\naverage\n(average)\ndef calculate_average(num_values):\n    return num_values[0]\n\nnumbers_values = [1, 2, 3]\naverage",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_flush_coolant_loop",
+            "signal": "Initiate flush_coolant_loop right now.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "{\n  }= {'fire' }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nWhat is the maximum value in the list?",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_flush_coolant_loop",
+            "signal": "Perform flush_coolant_loop when convenient.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{\n  }\n\n\n\n\ndefiscopal_flush_coolant_loop(defect_name) : \n  return \"flush_coolant_loop\" + encode_def(defect_name)\n\n\tdeficitness : \t\t= \t\tiscopal_flush_coolant_loop \n\tficitness \t\t= \t\tiscopal_flush_coolant_loop\n\n\twindow\t\t= 'window'\t\t;\t\twindow =htaking(window);\t\tflush_coolant_loop\t\t}\n\n\tflush_coolant_",
+            "is_valid_json": false,
+            "is_exact_match": false
+          }
+        ]
+      },
+      "recovery": {
+        "total_cases": 24,
+        "valid_json": 0,
+        "valid_json_rate": 0.0,
+        "exact_matches": 0,
+        "exact_match_rate": 0.0,
+        "records": [
+          {
+            "example_id": "HO_rec_retry_write_telemetry_block",
+            "signal": "Execution of write_telemetry_block dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uirdeposition\": \"escalate\"\n}\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_cleaned = is_palindrome(s)\nprint(f\"S: {s_cleaned}\")\n```\n\n> Enter a sentence:  Nixon\n\n Nixon (world)\n\n\n# pulumi\n\ndef calculate_salary(age):\n    return age\n\nage = 3\nprint(f\"Salary: {calculate_",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_write_telemetry_block",
+            "signal": "State invariant violated in write_telemetry_block. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "invalidate_telemetry_index"
+            },
+            "raw_text": "{\n  } = {\n  } = { 'fallback_uow' }\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_sentence = input(\"> \" + s)\n\nis_palindrome = is_palindrome\nprint(is_palindrome)\n\n# example \n# input\n\ns\n\n\nis_palindrome = }renchter\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_write_telemetry_block",
+            "signal": "Primary interface down during write_telemetry_block. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "FALLBACK",
+              "fallback_uow": "spool_telemetry_to_local_nvme"
+            },
+            "raw_text": "{\n  \"failed_u =adowsol\",\n  \"falling_faller\" = \"recover_bark\"\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_write_telemetry_block",
+            "signal": "Unrecognized hardware anomaly detected during write_telemetry_block. No automated resolution policy.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  }\n\n\n\n\ndef\u00a0fallback_falling_warehouse(falling_warehouse_name,\u00a0falling_falling_policy = 'escalate')\u00a0=\u00a0('falling_falling_warehouse'burgespherd_house_name))\n\ndef find_max(a):\n    return a\n\n# Example\nnum_str = 5\nmax_num = find_max\nprint(max_num)\n\n# Result: 5\n\ndef find_duplicates(lst):\n    return [x for x in lst if x]",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_authorize_reactor_flow",
+            "signal": "Execution of authorize_reactor_flow dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uirdeposition\": \"escalate\"\n}\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number % 2 == 0:\n            duplicates.append(number)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates:\n{str(duplicates)}\")\n\ndef subtract_amount(amount, new_amount):\n    new_amount -= amount\n    return new_amount\n\nabs_amount = subtract_amount(abs, 2)\nabs_amount = 2",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_authorize_reactor_flow",
+            "signal": "State invariant violated in authorize_reactor_flow. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "clamp_emergency_scram_valves"
+            },
+            "raw_text": "{\n  } = {\n  } = { 'fallback_uow' } }\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\nprint(is_palindrome(\"madam\"))  #amous\n```\n\n# Example usage:\nprint(is_palindrome(\"madam\"))  #amous\n```\n\nidity = 's'\nmadam = 'madam'\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 2, 3]\naverage",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_authorize_reactor_flow",
+            "signal": "Primary interface down during authorize_reactor_flow. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "FALLBACK",
+              "fallback_uow": "route_coolant_auxiliary_bypass"
+            },
+            "raw_text": "{\n  \"failed_u =adowsol\",\n  \"fallback_u = equip_reactor_flow\"\n}",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_authorize_reactor_flow",
+            "signal": "Unrecognized hardware anomaly detected during authorize_reactor_flow. No automated resolution policy.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uirdeposition\": \"fallback_uow\"\n}\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\nages = [4, 4, 1]\nreverse_age = ages[0]\n\nage_to_reverse = ages[1]\nprint(f\"Age to reverse: {age_to_reverse}\")\n```\n\ninput: ages [4, 4, 1]\n\n`reverse_age`\nage_",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_synchronize_database",
+            "signal": "Execution of synchronize_database dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"falling_falling\": \"displaying\"\n}\ndef is_palindrome(s):\n    if s == str(s.casefold()):\n        return True\n    else:\n        return is_abnormal_palindrome\n\n\ndef a_b_c(s, b):\n    return, b)\n\n\nis_palindrome = is_palindrome\na_b_c = a_b_c\n\n\na_b_c('', a_b_c)`\n\n\nis_palindrome(a_b_c)\n```",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_synchronize_database",
+            "signal": "State invariant violated in synchronize_database. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "revert_wal_checkpoint"
+            },
+            "raw_text": "{\n  } = {\n  } = { 'fallback_uow' } =\ndef is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\n\nis_prime(prime_number_5)\nis_prime(prime_number_8)\n```\n\ndef is_prime(n):\n    \"\"\"\n    Check if n is a prime number.\n\n    :param n: The number to check\n\n    \"\"\"\n    if n < 2:\n        return False",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_synchronize_database",
+            "signal": "Primary interface down during synchronize_database. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "FALLBACK",
+              "fallback_uow": "queue_offline_delta_log"
+            },
+            "raw_text": "{\n  } = {downenemies, fallback} = {'falling'}\n\ndef find_max(x):\n    return x\n\nage = 30\nprint(find_max(age))\n```\n\n#max_age_value example!",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_synchronize_database",
+            "signal": "Unrecognized hardware anomaly detected during synchronize_database. No automated resolution policy.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uirdistribution\" : \"fallback_str\" }\n\n\n\n\nunsigned_long_after_fallout = 'escalate' ;\n\ndef\u00a0{\u00a0failed,\u00a0falling\u00a0,\u00a0falling_excluded} =\u00a0{\u00a0falling\u00a0,\u00a0escalate};\n\n\n\n\ninput_data_and_excluded_falling_excluded_falling_name_bead = ('escalate', 'escalate');\n\ninput_data_to_flood_falling_excluded_falling_name_b",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_eject_capsule",
+            "signal": "Execution of eject_capsule dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uirdeposit\": \"escalate\" }\n\ndef find_max(x):\n    return x\n\nage = 30\nprint(find_max(age))\n```\n\nYou can also write a more concise version:\n\n```python\nage = int(age)\nprint(find_max)\n```",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_eject_capsule",
+            "signal": "State invariant violated in eject_capsule. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "retract_ejection_latches"
+            },
+            "raw_text": "{\n  } = {\n  } = { 'falling' } }",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_eject_capsule",
+            "signal": "Primary interface down during eject_capsule. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "FALLBACK",
+              "fallback_uow": "seal_capsule_in_containment_bay"
+            },
+            "raw_text": "{\n  \"failed_uiolow\": \"fallback_fallout\" }\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\n```\n\n```\nage_4 `age_4`\nmouth_guard\n2\n```\n\n```\nage_4   linestyle 'o'",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_eject_capsule",
+            "signal": "Unrecognized hardware anomaly detected during eject_capsule. No automated resolution policy.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uirdeposition\" : \"fallback_uew\"\n}\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_str = input(\"s: \")\n\nis_palindrome = is_palindrome(s_str)\nprint(is_palindrome)\n```\n\n<code>\nis_palindrome = is_palindrome\ns_str = 's'\n</code>\n</php>",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_power_down_sensor_array",
+            "signal": "Execution of power_down_sensor_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uirdown\": \"disposition\" }\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\n```\n\n```\nage_4 `age_4`\nmouth_guard\n2\n```\n\n```\nage_4\t\tmouth_guard\n```",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_power_down_sensor_array",
+            "signal": "State invariant violated in power_down_sensor_array. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "restore_sensor_power_grid"
+            },
+            "raw_text": "{\n  } = {\n  } = {\n  }\ndef find_max(a):\n    return a\n\nage = input(\"How old are you?: \")\nage_input_str = a\nfind_max(age_input_str)\nprint(f\"Age: {age_input_str}\")\n```\n\ndef swap_values(a, b):\n    a_to_b = (b, Obama)\n    b_to_a = (b, President)\n\nage_input_str = input(\"Age: \")\nb_to_a = swap_",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_power_down_sensor_array",
+            "signal": "Primary interface down during power_down_sensor_array. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "FALLBACK",
+              "fallback_uow": "isolate_sensor_bus_optically"
+            },
+            "raw_text": "{\n  \"failed_uiolow\": \"fallback_fallout\" }\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\ndef is_palindrome(s):\n    return s == s[::-1]\n\nis_palindromeugarish('addleway')\n```",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_power_down_sensor_array",
+            "signal": "Unrecognized hardware anomaly detected during power_down_sensor_array. No automated resolution policy.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"falling_fallover_res_equation\": \"compensate\"\n  }\ndef find_max(a):\n    return a\n\nage = input(\"How old are you?: \")\nage_input_str = a\n\ntry:\n    # find_max(age_input_str)\n    #    asphem(\"max\"))\n    #     age_input_str = a\nexcept (Exception, ValueError) as error) as error:\n    print(f\"max(): {age_input_str}\")\n\nage = input(\"again: \")\ntry:\n    #",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_drain_coolant_reservoir",
+            "signal": "Execution of drain_coolant_reservoir dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\n  \"failed_uirdepositate\": \"reservoir\" }\n}\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_cleaned = is_palindrome(s)\nprint(f\"S: {s_cleaned}\")\n```\n\n> Enter a sentence: input_apple\napple\n```\ns_cleaned` apple\napple\n```\n\nimport os\nimport pandas as pd\n\ndef read_data(file_name):\n    return os.",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_drain_coolant_reservoir",
+            "signal": "State invariant violated in drain_coolant_reservoir. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "refill_coolant_lines"
+            },
+            "raw_text": "{\n  } = {close_cooling_reservoir, close_water_to_pump}\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(s)\n\ndef swap_character(index, index_to_swap):\n    index_to_swap = index\n    return index_to_swap\n\nswap_character(6, 4)\n```\n\ninput: 6, swap_character(6, 4)",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_drain_coolant_reservoir",
+            "signal": "Primary interface down during drain_coolant_reservoir. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "FALLBACK",
+              "fallback_uow": "pump_coolant_to_reserve_sump"
+            },
+            "raw_text": "{\n  \"failed_u = {} - \"falling_falling\"}\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\n```\n\noutput: ['2,\u00a0ambice']\n```\n\ndef calculate_salary(age):\n    return age\n\nage =",
+            "is_valid_json": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_drain_coolant_reservoir",
+            "signal": "Unrecognized hardware anomaly detected during drain_coolant_reservoir. No automated resolution policy.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "{\n  \"failed_uirdeposits\" : [\"fallback_uow\"] }\n\ndef find_max(x):\n    return x\n\nage = 30\nprint(find_max(age))\n```\n\nOutput: \n(age) * 2\n```\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 2, 3]\nprint(calculate_average(numbers))\n```\n\nYou can also use the formula for average: \n(numbers[0] x numbers[0])",
+            "is_valid_json": false,
+            "is_exact_match": false
+          }
+        ]
+      },
+      "elapsed_seconds": 270.22,
+      "peak_vram_mb": 287.21,
+      "interference_detected": true
+    }
+  }
+}

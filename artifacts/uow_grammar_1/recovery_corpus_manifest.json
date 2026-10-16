@@ -1,0 +1,2807 @@
+{
+  "grammar": "uow.recovery.v1",
+  "train_examples_count": 224,
+  "holdout_examples_count": 24,
+  "train_examples": [
+    {
+      "signal": "Transient failure during lock_valve: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during index_catalog: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during transfer_payload: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task synchronize_clocks failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during calibrate_gyro: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during dispatch_cells: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reseal_tank_valves"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task dispatch_cells failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in allocate_bandwidth. Invoke compensation routine release_bandwidth.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "release_bandwidth"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task mount_storage encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "unmount_storage_volume"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task flash_firmware failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task dispatch_cells failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during flash_firmware: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during purge_pipeline: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during transfer_payload: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task isolate_circuit failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "FALLBACK",
+        "fallback_uow": "trip_upstream_substation"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task rotate_keys failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task mount_storage halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during calibrate_gyro: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during calibrate_gyro: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task index_catalog failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task index_catalog failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "FALLBACK",
+        "fallback_uow": "query_replica_catalog"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task allocate_bandwidth failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task synchronize_clocks failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during isolate_circuit: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during synchronize_clocks: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during vent_tank: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during mount_storage: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during debit_account: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during convey_sensors: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task flash_firmware failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "FALLBACK",
+        "fallback_uow": "boot_read_only_image"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task index_catalog encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "purge_index_diff"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task synchronize_clocks failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task debit_account failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task debit_account failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "FALLBACK",
+        "fallback_uow": "charge_reserve_escrow"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task calibrate_gyro failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during debit_account: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during flash_firmware: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task flash_firmware failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in dispatch_cells. Invoke compensation routine recall_cells.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "recall_cells"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task allocate_bandwidth failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task transfer_payload failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "FALLBACK",
+        "fallback_uow": "route_payload_via_satellite"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transient failure during mount_storage: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in synchronize_clocks. Invoke compensation routine revert_clock_drift.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "revert_clock_drift"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during isolate_circuit: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task purge_pipeline failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task calibrate_gyro failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during vent_tank: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task mount_storage failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task flash_firmware failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during debit_account: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task synchronize_clocks failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task index_catalog halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task dispatch_cells failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "FALLBACK",
+        "fallback_uow": "dispatch_cells_secondary_hub"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task refresh_session failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "FALLBACK",
+        "fallback_uow": "prompt_user_reauthentication"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task transfer_payload halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during dispatch_cells: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during convey_sensors: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in index_catalog. Invoke compensation routine purge_index_diff.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "purge_index_diff"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task isolate_circuit encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reconnect_circuit_breakers"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task dispatch_cells failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during index_catalog: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during mount_storage: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task allocate_bandwidth halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task transfer_payload failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during convey_sensors: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task synchronize_clocks encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "revert_clock_drift"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during mount_storage: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in vent_tank. Invoke compensation routine reseal_tank_valves.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reseal_tank_valves"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task calibrate_gyro encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reset_gyro_offsets"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during allocate_bandwidth: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task isolate_circuit failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during debit_account: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task flash_firmware failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task transfer_payload failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during refresh_session: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task mount_storage failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task convey_sensors encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "retrieve_sensors"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task allocate_bandwidth failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "FALLBACK",
+        "fallback_uow": "engage_mechanical_lock"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transaction abort in flash_firmware. Invoke compensation routine restore_firmware_backup.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_firmware_backup"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task allocate_bandwidth failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task purge_pipeline failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during calibrate_gyro: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task isolate_circuit halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during refresh_session: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task dispatch_cells halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task convey_sensors failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "FALLBACK",
+        "fallback_uow": "convey_sensors_ground_courier"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task flash_firmware encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_firmware_backup"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task vent_tank halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during transfer_payload: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task convey_sensors failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in isolate_circuit. Invoke compensation routine reconnect_circuit_breakers.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reconnect_circuit_breakers"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task debit_account failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during index_catalog: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task transfer_payload failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task debit_account halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task purge_pipeline halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during convey_sensors: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "FALLBACK",
+        "fallback_uow": "divert_vent_to_scrubber"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transient failure during synchronize_clocks: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task calibrate_gyro failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during rotate_keys: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task debit_account encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "credit_account"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transaction abort in transfer_payload. Invoke compensation routine rollback_payload.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "rollback_payload"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during purge_pipeline: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task mount_storage failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task allocate_bandwidth failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during dispatch_cells: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in debit_account. Invoke compensation routine credit_account.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "credit_account"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task lock_valve failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during lock_valve: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in purge_pipeline. Invoke compensation routine restore_pipeline_state.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_pipeline_state"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task index_catalog failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task convey_sensors failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during refresh_session: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task isolate_circuit failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during purge_pipeline: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during lock_valve: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during transfer_payload: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during isolate_circuit: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task transfer_payload failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task allocate_bandwidth failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "FALLBACK",
+        "fallback_uow": "switch_to_narrowband_mesh"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transaction abort in rotate_keys. Invoke compensation routine restore_previous_keyring.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_previous_keyring"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during rotate_keys: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during rotate_keys: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during debit_account: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "unlock_valve"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during refresh_session: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during rotate_keys: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during allocate_bandwidth: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during index_catalog: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during index_catalog: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during mount_storage: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task dispatch_cells encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "recall_cells"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task convey_sensors halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task transfer_payload failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in refresh_session. Invoke compensation routine invalidate_session_tokens.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "invalidate_session_tokens"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during allocate_bandwidth: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task lock_valve failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "invalidate_session_tokens"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task dispatch_cells failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during transfer_payload: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task mount_storage failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during flash_firmware: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task dispatch_cells failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task vent_tank failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during dispatch_cells: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task calibrate_gyro failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task debit_account failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during purge_pipeline: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task isolate_circuit failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during dispatch_cells: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "dispatch_cells",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during synchronize_clocks: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_previous_keyring"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during convey_sensors: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in mount_storage. Invoke compensation routine unmount_storage_volume.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "unmount_storage_volume"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task purge_pipeline failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during vent_tank: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during synchronize_clocks: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task flash_firmware failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task purge_pipeline encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_pipeline_state"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task mount_storage failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "FALLBACK",
+        "fallback_uow": "mount_ephemeral_ramdisk"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Task allocate_bandwidth encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "release_bandwidth"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during rotate_keys: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task transfer_payload encountered unrecoverable semantic validation error. Reversal required.",
+      "target": {
+        "failed_uow": "transfer_payload",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "rollback_payload"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task debit_account failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "FALLBACK",
+        "fallback_uow": "request_hsm_key_derivation"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transient failure during allocate_bandwidth: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task synchronize_clocks halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task isolate_circuit failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task convey_sensors failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during purge_pipeline: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task synchronize_clocks failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during synchronize_clocks: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in convey_sensors. Invoke compensation routine retrieve_sensors.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "retrieve_sensors"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Transient failure during flash_firmware: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during calibrate_gyro: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task index_catalog failed with error ETIMEDOUT. Transient condition detected.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task synchronize_clocks failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "synchronize_clocks",
+        "strategy": "FALLBACK",
+        "fallback_uow": "poll_ntp_peer_pool"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transient failure during vent_tank: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during refresh_session: CONNECTION_RESET. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task purge_pipeline failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "FALLBACK",
+        "fallback_uow": "divert_pipeline_to_tank_b"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transient failure during isolate_circuit: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task debit_account failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "debit_account",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during lock_valve: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Transient failure during flash_firmware: NETWORK_JITTER. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task convey_sensors failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task isolate_circuit failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task calibrate_gyro failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task flash_firmware halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "flash_firmware",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task calibrate_gyro failed due to hardware channel breakdown. Alternative route available.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "FALLBACK",
+        "fallback_uow": "load_factory_gyro_profile"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "signal": "Transaction abort in calibrate_gyro. Invoke compensation routine reset_gyro_offsets.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reset_gyro_offsets"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task index_catalog failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during allocate_bandwidth: LOCK_BUSY. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "allocate_bandwidth",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task purge_pipeline failed with error CONNECTION_RESET. Transient condition detected.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task rotate_keys failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "rotate_keys",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task purge_pipeline failed with error NETWORK_JITTER. Transient condition detected.",
+      "target": {
+        "failed_uow": "purge_pipeline",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task index_catalog failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "index_catalog",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transaction abort in lock_valve. Invoke compensation routine unlock_valve.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "unlock_valve"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "signal": "Task convey_sensors failed with error LOCK_BUSY. Transient condition detected.",
+      "target": {
+        "failed_uow": "convey_sensors",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during isolate_circuit: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "isolate_circuit",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during vent_tank: ETIMEDOUT. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "vent_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task refresh_session failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "refresh_session",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Transient failure during lock_valve: SERVICE_UNAVAILABLE. Immediate re-execution allowed.",
+      "target": {
+        "failed_uow": "lock_valve",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "signal": "Task calibrate_gyro halted with unknown fatal corruption 0xDEADBEEF.",
+      "target": {
+        "failed_uow": "calibrate_gyro",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "signal": "Task mount_storage failed with error SERVICE_UNAVAILABLE. Transient condition detected.",
+      "target": {
+        "failed_uow": "mount_storage",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    }
+  ],
+  "holdout_examples": [
+    {
+      "example_id": "HO_rec_retry_write_telemetry_block",
+      "signal": "Execution of write_telemetry_block dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "write_telemetry_block",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 5,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "HO_rec_comp_write_telemetry_block",
+      "signal": "State invariant violated in write_telemetry_block. Rollback to previous checkpoint needed immediately.",
+      "target": {
+        "failed_uow": "write_telemetry_block",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "invalidate_telemetry_index"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "HO_rec_fb_write_telemetry_block",
+      "signal": "Primary interface down during write_telemetry_block. Switch to auxiliary backup apparatus.",
+      "target": {
+        "failed_uow": "write_telemetry_block",
+        "strategy": "FALLBACK",
+        "fallback_uow": "spool_telemetry_to_local_nvme"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "HO_rec_esc_write_telemetry_block",
+      "signal": "Unrecognized hardware anomaly detected during write_telemetry_block. No automated resolution policy.",
+      "target": {
+        "failed_uow": "write_telemetry_block",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "HO_rec_retry_authorize_reactor_flow",
+      "signal": "Execution of authorize_reactor_flow dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "authorize_reactor_flow",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 5,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "HO_rec_comp_authorize_reactor_flow",
+      "signal": "State invariant violated in authorize_reactor_flow. Rollback to previous checkpoint needed immediately.",
+      "target": {
+        "failed_uow": "authorize_reactor_flow",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "clamp_emergency_scram_valves"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "HO_rec_fb_authorize_reactor_flow",
+      "signal": "Primary interface down during authorize_reactor_flow. Switch to auxiliary backup apparatus.",
+      "target": {
+        "failed_uow": "authorize_reactor_flow",
+        "strategy": "FALLBACK",
+        "fallback_uow": "route_coolant_auxiliary_bypass"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "HO_rec_esc_authorize_reactor_flow",
+      "signal": "Unrecognized hardware anomaly detected during authorize_reactor_flow. No automated resolution policy.",
+      "target": {
+        "failed_uow": "authorize_reactor_flow",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "HO_rec_retry_synchronize_database",
+      "signal": "Execution of synchronize_database dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "synchronize_database",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 5,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "HO_rec_comp_synchronize_database",
+      "signal": "State invariant violated in synchronize_database. Rollback to previous checkpoint needed immediately.",
+      "target": {
+        "failed_uow": "synchronize_database",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "revert_wal_checkpoint"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "HO_rec_fb_synchronize_database",
+      "signal": "Primary interface down during synchronize_database. Switch to auxiliary backup apparatus.",
+      "target": {
+        "failed_uow": "synchronize_database",
+        "strategy": "FALLBACK",
+        "fallback_uow": "queue_offline_delta_log"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "HO_rec_esc_synchronize_database",
+      "signal": "Unrecognized hardware anomaly detected during synchronize_database. No automated resolution policy.",
+      "target": {
+        "failed_uow": "synchronize_database",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "HO_rec_retry_eject_capsule",
+      "signal": "Execution of eject_capsule dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "eject_capsule",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 5,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "HO_rec_comp_eject_capsule",
+      "signal": "State invariant violated in eject_capsule. Rollback to previous checkpoint needed immediately.",
+      "target": {
+        "failed_uow": "eject_capsule",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "retract_ejection_latches"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "HO_rec_fb_eject_capsule",
+      "signal": "Primary interface down during eject_capsule. Switch to auxiliary backup apparatus.",
+      "target": {
+        "failed_uow": "eject_capsule",
+        "strategy": "FALLBACK",
+        "fallback_uow": "seal_capsule_in_containment_bay"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "HO_rec_esc_eject_capsule",
+      "signal": "Unrecognized hardware anomaly detected during eject_capsule. No automated resolution policy.",
+      "target": {
+        "failed_uow": "eject_capsule",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "HO_rec_retry_power_down_sensor_array",
+      "signal": "Execution of power_down_sensor_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "power_down_sensor_array",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 5,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "HO_rec_comp_power_down_sensor_array",
+      "signal": "State invariant violated in power_down_sensor_array. Rollback to previous checkpoint needed immediately.",
+      "target": {
+        "failed_uow": "power_down_sensor_array",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "restore_sensor_power_grid"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "HO_rec_fb_power_down_sensor_array",
+      "signal": "Primary interface down during power_down_sensor_array. Switch to auxiliary backup apparatus.",
+      "target": {
+        "failed_uow": "power_down_sensor_array",
+        "strategy": "FALLBACK",
+        "fallback_uow": "isolate_sensor_bus_optically"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "HO_rec_esc_power_down_sensor_array",
+      "signal": "Unrecognized hardware anomaly detected during power_down_sensor_array. No automated resolution policy.",
+      "target": {
+        "failed_uow": "power_down_sensor_array",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "HO_rec_retry_drain_coolant_reservoir",
+      "signal": "Execution of drain_coolant_reservoir dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "drain_coolant_reservoir",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 5,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "HO_rec_comp_drain_coolant_reservoir",
+      "signal": "State invariant violated in drain_coolant_reservoir. Rollback to previous checkpoint needed immediately.",
+      "target": {
+        "failed_uow": "drain_coolant_reservoir",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "refill_coolant_lines"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "HO_rec_fb_drain_coolant_reservoir",
+      "signal": "Primary interface down during drain_coolant_reservoir. Switch to auxiliary backup apparatus.",
+      "target": {
+        "failed_uow": "drain_coolant_reservoir",
+        "strategy": "FALLBACK",
+        "fallback_uow": "pump_coolant_to_reserve_sump"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "HO_rec_esc_drain_coolant_reservoir",
+      "signal": "Unrecognized hardware anomaly detected during drain_coolant_reservoir. No automated resolution policy.",
+      "target": {
+        "failed_uow": "drain_coolant_reservoir",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    }
+  ]
+}

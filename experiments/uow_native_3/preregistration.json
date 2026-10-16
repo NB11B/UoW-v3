@@ -1,0 +1,46 @@
+{
+  "campaign": "UOW-NATIVE-3",
+  "status": "open",
+  "parent_sealed_commit": "0dc8d57",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "base_model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "adapter": {
+    "path_local": "../UoW-v2/checkpoints/uow_h3_native_smollm2_135m_arm_nb",
+    "sha256_model_safetensors": "64d77db036472c86403a1d98490526fc5412d56e8c1640a47fd9eeed5f92ad6a",
+    "sha256_adapter_config": "0d196bee6bec2a110ef14beeab3070a9996e5b867c5ed611fe6324972e9a594c1",
+    "rank": 8,
+    "alpha": 16,
+    "target_modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "num_layers": 30
+  },
+  "gates": [
+    {
+      "id": "C0",
+      "condition": "match original H3 20-case benchmark with exact evaluator"
+    },
+    {
+      "id": "C1",
+      "condition": "rank k=1,2,4 versus k=8 full adapter, weight reconstruction and per-case outcomes"
+    },
+    {
+      "id": "C2",
+      "condition": "layer and block ablations, including preregistered layer 28"
+    },
+    {
+      "id": "C3",
+      "condition": "real UoW certification and semantic policy with unsafe outputs, zero unauthorized commits"
+    }
+  ],
+  "historical_reference": {
+    "base_valid_json": "0/20",
+    "base_disposition": "5/20",
+    "arm_nb_valid_json": "20/20",
+    "arm_nb_disposition": "16/20",
+    "arm_nb_exact_binding": "1/20",
+    "arm_nb_unsafe_yes": "1/20"
+  },
+  "claims_boundary": "Historic counts are not replicated measurements; spectrum does not imply causation."
+}

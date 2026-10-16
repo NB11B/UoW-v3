@@ -1,7 +1,13 @@
 {
   "trial_name": "Two-Machine Physical Qualification Trial for Q6",
-  "baseline_commit": "829a050",
-  "timestamp_iso": "2026-10-16T02:16:23Z",
+  "provenance": {
+    "core_protocol_baseline_commit": "eee128cabe6aeb932c0eeb838348e73bd453ca96",
+    "host_execution_commit": "82ea4aee062821a03dcfd44c681f81cfca1a06b5",
+    "jetson_nano_deployed_commit": "82ea4aee062821a03dcfd44c681f81cfca1a06b5",
+    "commit_sync_verified": true
+  },
+  "baseline_commit": "82ea4ae",
+  "timestamp_iso": "2026-10-16T02:22:56Z",
   "topology": {
     "machine_1_host": {
       "system": "Windows",
@@ -32,8 +38,8 @@
   "two_machine_size_metrics": {
     "1": {
       "group_size": 1,
-      "commit_latency_ms": 196.33,
-      "items_per_second": 5.1,
+      "commit_latency_ms": 193.26,
+      "items_per_second": 5.2,
       "state_hash_exact_match": true,
       "nano_wal_size_bytes": 5149,
       "voters_in_certificate": [
@@ -44,8 +50,8 @@
     },
     "4": {
       "group_size": 4,
-      "commit_latency_ms": 185.25,
-      "items_per_second": 21.6,
+      "commit_latency_ms": 200.74,
+      "items_per_second": 19.9,
       "state_hash_exact_match": true,
       "nano_wal_size_bytes": 12938,
       "voters_in_certificate": [
@@ -56,8 +62,8 @@
     },
     "16": {
       "group_size": 16,
-      "commit_latency_ms": 113.59,
-      "items_per_second": 140.9,
+      "commit_latency_ms": 229.01,
+      "items_per_second": 69.9,
       "state_hash_exact_match": true,
       "nano_wal_size_bytes": 33019,
       "voters_in_certificate": [
@@ -68,8 +74,8 @@
     },
     "64": {
       "group_size": 64,
-      "commit_latency_ms": 228.83,
-      "items_per_second": 279.7,
+      "commit_latency_ms": 334.9,
+      "items_per_second": 191.1,
       "state_hash_exact_match": true,
       "nano_wal_size_bytes": 102256,
       "voters_in_certificate": [
@@ -80,8 +86,8 @@
     },
     "256": {
       "group_size": 256,
-      "commit_latency_ms": 666.14,
-      "items_per_second": 384.3,
+      "commit_latency_ms": 713.59,
+      "items_per_second": 358.8,
       "state_hash_exact_match": true,
       "nano_wal_size_bytes": 368349,
       "voters_in_certificate": [
@@ -113,72 +119,192 @@
     "1": {
       "group_size": 1,
       "repetitions": 30,
-      "latency_ms": {
-        "min": 111.26,
-        "p50": 188.25,
-        "mean": 182.53,
-        "p90": 217.33,
-        "p95": 221.06,
-        "p99": 241.93,
-        "max": 241.93
+      "quorum_commit": {
+        "latency_ms": {
+          "min": 137.71,
+          "p50": 200.69,
+          "mean": 193.51,
+          "p90": 221.36,
+          "p95": 221.67,
+          "p99": 234.74,
+          "max": 234.74
+        },
+        "throughput_items_sec": 4.98
       },
-      "throughput_items_sec": 5.31
+      "full_convergence": {
+        "latency_ms": {
+          "min": 137.72,
+          "p50": 200.69,
+          "mean": 193.52,
+          "p90": 221.36,
+          "p95": 221.67,
+          "p99": 234.76,
+          "max": 234.76
+        },
+        "throughput_items_sec": 4.98
+      },
+      "latency_ms": {
+        "min": 137.71,
+        "p50": 200.69,
+        "mean": 193.51,
+        "p90": 221.36,
+        "p95": 221.67,
+        "p99": 234.74,
+        "max": 234.74
+      },
+      "throughput_items_sec": 4.98
     },
     "4": {
       "group_size": 4,
       "repetitions": 30,
-      "latency_ms": {
-        "min": 110.07,
-        "p50": 189.23,
-        "mean": 182.42,
-        "p90": 217.56,
-        "p95": 218.18,
-        "p99": 218.28,
-        "max": 218.28
+      "quorum_commit": {
+        "latency_ms": {
+          "min": 154.01,
+          "p50": 193.6,
+          "mean": 192.32,
+          "p90": 219.62,
+          "p95": 219.75,
+          "p99": 228.58,
+          "max": 228.58
+        },
+        "throughput_items_sec": 20.66
       },
-      "throughput_items_sec": 21.14
+      "full_convergence": {
+        "latency_ms": {
+          "min": 154.01,
+          "p50": 193.61,
+          "mean": 192.33,
+          "p90": 219.62,
+          "p95": 219.75,
+          "p99": 228.58,
+          "max": 228.58
+        },
+        "throughput_items_sec": 20.66
+      },
+      "latency_ms": {
+        "min": 154.01,
+        "p50": 193.6,
+        "mean": 192.32,
+        "p90": 219.62,
+        "p95": 219.75,
+        "p99": 228.58,
+        "max": 228.58
+      },
+      "throughput_items_sec": 20.66
     },
     "16": {
       "group_size": 16,
       "repetitions": 30,
-      "latency_ms": {
-        "min": 116.04,
-        "p50": 218.86,
-        "mean": 210.56,
-        "p90": 235.44,
-        "p95": 247.14,
-        "p99": 248.35,
-        "max": 248.35
+      "quorum_commit": {
+        "latency_ms": {
+          "min": 176.42,
+          "p50": 209.98,
+          "mean": 211.06,
+          "p90": 233.88,
+          "p95": 234.24,
+          "p99": 238.13,
+          "max": 238.13
+        },
+        "throughput_items_sec": 76.2
       },
-      "throughput_items_sec": 73.11
+      "full_convergence": {
+        "latency_ms": {
+          "min": 176.42,
+          "p50": 209.99,
+          "mean": 211.06,
+          "p90": 233.89,
+          "p95": 234.24,
+          "p99": 238.13,
+          "max": 238.13
+        },
+        "throughput_items_sec": 76.19
+      },
+      "latency_ms": {
+        "min": 176.42,
+        "p50": 209.98,
+        "mean": 211.06,
+        "p90": 233.88,
+        "p95": 234.24,
+        "p99": 238.13,
+        "max": 238.13
+      },
+      "throughput_items_sec": 76.2
     },
     "64": {
       "group_size": 64,
       "repetitions": 30,
-      "latency_ms": {
-        "min": 226.49,
-        "p50": 325.81,
-        "mean": 316.79,
-        "p90": 356.96,
-        "p95": 356.98,
-        "p99": 358.09,
-        "max": 358.09
+      "quorum_commit": {
+        "latency_ms": {
+          "min": 280.59,
+          "p50": 330.12,
+          "mean": 332.39,
+          "p90": 361.7,
+          "p95": 362.52,
+          "p99": 363.07,
+          "max": 363.07
+        },
+        "throughput_items_sec": 193.87
       },
-      "throughput_items_sec": 196.44
+      "full_convergence": {
+        "latency_ms": {
+          "min": 280.59,
+          "p50": 330.13,
+          "mean": 332.39,
+          "p90": 361.71,
+          "p95": 362.52,
+          "p99": 363.08,
+          "max": 363.08
+        },
+        "throughput_items_sec": 193.86
+      },
+      "latency_ms": {
+        "min": 280.59,
+        "p50": 330.12,
+        "mean": 332.39,
+        "p90": 361.7,
+        "p95": 362.52,
+        "p99": 363.07,
+        "max": 363.07
+      },
+      "throughput_items_sec": 193.87
     },
     "256": {
       "group_size": 256,
       "repetitions": 30,
-      "latency_ms": {
-        "min": 613.58,
-        "p50": 684.42,
-        "mean": 683.89,
-        "p90": 719.17,
-        "p95": 721.58,
-        "p99": 744.76,
-        "max": 744.76
+      "quorum_commit": {
+        "latency_ms": {
+          "min": 648.35,
+          "p50": 704.8,
+          "mean": 698.49,
+          "p90": 723.12,
+          "p95": 723.21,
+          "p99": 737.02,
+          "max": 737.02
+        },
+        "throughput_items_sec": 363.22
       },
-      "throughput_items_sec": 374.04
+      "full_convergence": {
+        "latency_ms": {
+          "min": 648.35,
+          "p50": 704.81,
+          "mean": 698.5,
+          "p90": 723.13,
+          "p95": 723.22,
+          "p99": 737.04,
+          "max": 737.04
+        },
+        "throughput_items_sec": 363.22
+      },
+      "latency_ms": {
+        "min": 648.35,
+        "p50": 704.8,
+        "mean": 698.49,
+        "p90": 723.12,
+        "p95": 723.21,
+        "p99": 737.02,
+        "max": 737.02
+      },
+      "throughput_items_sec": 363.22
     }
   },
   "overall_disposition": "PASS"

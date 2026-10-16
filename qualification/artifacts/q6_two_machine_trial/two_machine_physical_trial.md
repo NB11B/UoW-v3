@@ -2,12 +2,15 @@
 
 ## Executive Summary
 
-- **Repository Baseline**: `NB11B/UoW-v3` at commit `829a050`
+- **Core Protocol Baseline Commit**: `eee128cabe6aeb932c0eeb838348e73bd453ca96`
+- **Host Execution Commit**: `82ea4aee062821a03dcfd44c681f81cfca1a06b5`
+- **Jetson Nano Deployed Commit**: `82ea4aee062821a03dcfd44c681f81cfca1a06b5`
+- **Commit Synchronization Verified**: **True**
 - **Machine 1 (Host)**: Windows 11 x86_64 (`192.168.55.100`) — Coordinator, Node A, Node B
 - **Machine 2 (Target)**: NVIDIA Jetson Nano ARMv8 Cortex-A57 (`192.168.55.1`) — Node C
 - **Physical Interconnect**: USB/RNDIS Virtual Ethernet link (`192.168.55.100` <-> `192.168.55.1`)
 - **Link Latency (RTT)**: Min **0.4 ms** | Avg **0.7 ms** | Max **1.1 ms**
-- **Timestamp**: 2026-10-16T02:16:23Z
+- **Timestamp**: 2026-10-16T02:22:56Z
 - **Final Verdict**: **`PASS`**
 
 ---
@@ -55,17 +58,18 @@
 
 ---
 
-## 3. Sustained Multi-Machine Performance
+## 3. Sustained Multi-Machine Performance (Dual-Timed Benchmark)
 
 Workloads benchmarked across 30 timed repetitions per group size over the physical USB/RNDIS network link.
+Measurements report both **Quorum Commit Latency/Throughput** (time for 2-of-3 threshold commit) and **Full 3-Replica Convergence Latency/Throughput** (including certificate dissemination and flash WAL sync across all replicas).
 
-| Group Size | Latency p50 | Latency p90 | Latency p95 | Latency p99 | Throughput (Items/s) | Nano WAL Growth |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-|   1 | 188.25 ms | 217.33 ms | 221.06 ms | 241.93 ms | **5.31 items/s** | 5,149 B |
-|   4 | 189.23 ms | 217.56 ms | 218.18 ms | 218.28 ms | **21.14 items/s** | 12,938 B |
-|  16 | 218.86 ms | 235.44 ms | 247.14 ms | 248.35 ms | **73.11 items/s** | 33,019 B |
-|  64 | 325.81 ms | 356.96 ms | 356.98 ms | 358.09 ms | **196.44 items/s** | 102,256 B |
-| 256 | 684.42 ms | 719.17 ms | 721.58 ms | 744.76 ms | **374.04 items/s** | 368,349 B |
+| Group Size | Quorum Latency (p50 / p95) | Quorum Throughput | Full Conv Latency (p50 / p95) | Full Conv Throughput | Nano WAL Growth |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+|   1 | 200.69 ms / 221.67 ms | **4.98 items/s** | 200.69 ms / 221.67 ms | **4.98 items/s** | 5,149 B |
+|   4 | 193.6 ms / 219.75 ms | **20.66 items/s** | 193.61 ms / 219.75 ms | **20.66 items/s** | 12,938 B |
+|  16 | 209.98 ms / 234.24 ms | **76.2 items/s** | 209.99 ms / 234.24 ms | **76.19 items/s** | 33,019 B |
+|  64 | 330.12 ms / 362.52 ms | **193.87 items/s** | 330.13 ms / 362.52 ms | **193.86 items/s** | 102,256 B |
+| 256 | 704.8 ms / 723.21 ms | **363.22 items/s** | 704.81 ms / 723.22 ms | **363.22 items/s** | 368,349 B |
 
 ---
 

@@ -1021,8 +1021,8 @@
     },
     "M0_recovery": {
       "total_cases": 24,
-      "valid_json": 12,
-      "valid_json_rate": 0.5,
+      "valid_json": 0,
+      "valid_json_rate": 0.0,
       "strategy_matches": 0,
       "strategy_match_rate": 0.0,
       "exact_matches": 0,
@@ -1039,8 +1039,8 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"retry_out-of-range\",\n  \"ETIMEDOUT\": \"unfortunately\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1052,7 +1052,7 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "invalidate_telemetry_index"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"RETRY\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "The state invariant violated in write_telemetry_block is:\n\n```\n{\n  \"state\": \"failed_uow\",\n  \"error_code\": \"1\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": \"max_attempts\",\n  \"compensation_uow\": \"COMPENSATE\",\n  \"fallback_uow\": \"COMPENSATE\",\n  \"strategy\": \"RETRY\",\n  \"strategy_type\": \"RETRY\",\n  \"strategy_name\": \"RETRY\",\n  \"strategy_type_name\": \"RETRY",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1065,7 +1065,7 @@
             "strategy": "FALLBACK",
             "fallback_uow": "spool_telemetry_to_local_nvme"
           },
-          "raw_text": "{\n  \"interface\": \"backup\",\n  \"strategy\": \"recovery\",\n  \"backoff\": \"max_attempts\"\n}",
+          "raw_text": "The primary interface for the backup apparatus is the backup apparatus. The backup apparatus is responsible for performing the backup of the telemetry data.\n\nThe backup apparatus is a device that is used to perform the backup of telemetry data. It is a device that is used to perform the backup of telemetry data.\n\nThe backup apparatus is a device that is used to perform the backup of telemetry data. It is a device that is used to perform the backup of telemetry data.\n\nThe backup apparatus is a device that is used to perform the backup of telemetry data. It is a device that is used to perform",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1080,8 +1080,8 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The unrecognized hardware anomaly detected during write_telemetry_block is a potential cause for the failure. To investigate this anomaly, we can use the following steps:\n\n1. **Analyze the write_telemetry_block**: Use the `write_telemetry_block` function to analyze the write operation. This function will return a JSON object containing the write operation, the number of bytes written, and the error code.\n\n2. **Analyze the write_telemetry_block**: Use the `write_telemetry_block` function to analyze the write operation. This function will return a JSON object containing the write",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1096,8 +1096,8 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"reactivate_port\",\n  \"strategy\": \"reactivate\",\n  \"retry_policy\": \"max_attempts\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The remote port momentarily unresponsive is a common issue that can occur when a remote server is not responding to a request. In this case, the remote port is momentarily unresponsive, and the server is not responding to the request.\n\nTo fix this issue, you can try the following steps:\n\n1. Check the server's status: Verify that the server is still responding to the request. If it is not, try to reconnect to the server.\n2. Check the server's status: Verify that the server is still responding to the request. If it is not, try to reconnect to the server.\n3. Check",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1109,7 +1109,7 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "clamp_emergency_scram_valves"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"reactivate\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "The state invariant violated in the authorize_reactor_flow.\n\nThe state invariant is:\n\n```\n{\n  \"status\": \"failed\",\n  \"error\": \"failed\",\n  \"state\": \"failed\",\n  \"state_id\": \"failed\",\n  \"state_type\": \"failed\",\n  \"state_value\": \"failed\",\n  \"state_value_type\": \"failed\",\n  \"state_value_type_id\": \"failed\",\n  \"state_value_type_type\": \"failed\",\n  \"state_value_type_type_id\": \"failed\",",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1122,7 +1122,7 @@
             "strategy": "FALLBACK",
             "fallback_uow": "route_coolant_auxiliary_bypass"
           },
-          "raw_text": "{\n  \"interface\": \"backup_abstraction\",\n  \"strategy\": \"revert_to_authorized_reactor_flow\",\n  \"backoff\": \"max_attempts\"\n}",
+          "raw_text": "The primary interface for the UoW Recovery Grammar Parser (uow.recovery.v1) is the auxiliary backup apparatus. This apparatus is responsible for handling the backup flow and ensuring that the recovery strategy is implemented correctly.\n\nThe auxiliary backup apparatus is a separate entity that is responsible for handling the backup flow. It is responsible for:\n\n1. Re-establishing the backup flow: The auxiliary backup apparatus is responsible for re-establishing the backup flow from the previous backup flow.\n2. Re-establishing the backup flow: The auxiliary backup apparatus is responsible for re-establishing the backup flow from",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1137,8 +1137,8 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unknowns\",\n  \"strategy\": \"no_automated_resolution\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The detected hardware anomaly is a hardware-related issue that has not been resolved by the system. The system is currently unable to perform the authorization process due to the hardware issue.\n\nThe system is currently unable to perform the authorization process due to the hardware issue.\n\nThe system is currently unable to perform the authorization process due to the hardware issue.",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1153,8 +1153,8 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"sync_database\",\n  \"strategy\": \"backoff\",\n  \"ETIMEDOUT\": \"unfortunately\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1166,7 +1166,7 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "revert_wal_checkpoint"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"synchronize_database\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "The state invariant violated in synchronize_database is:\n\n```\n{\n  \"state\": \"failed_uow\",\n  \"state_id\": \"failed_uow\",\n  \"state_name\": \"failed_uow\",\n  \"state_type\": \"failed_uow\",\n  \"state_value\": \"failed_uow\",\n  \"state_value_type\": \"failed_uow\",\n  \"state_value_type_type\": \"failed_uow\",\n  \"state_value_type_type_type\": \"failed_uow\",\n  \"state_value",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1179,7 +1179,7 @@
             "strategy": "FALLBACK",
             "fallback_uow": "queue_offline_delta_log"
           },
-          "raw_text": "{\n  \"primary\": \"backup_abstraction\",\n  \"strategy\": \"accommodation_backup\"\n}",
+          "raw_text": "The primary interface for synchronizing the database is down. The auxiliary backup apparatus is now up.\n\nThe auxiliary backup apparatus is a separate unit that is responsible for synchronizing the database. It is a separate unit from the main database and is designed to handle the backup process.\n\nThe auxiliary backup apparatus is a separate unit that is responsible for synchronizing the database. It is a separate unit from the main database and is designed to handle the backup process.\n\nThe auxiliary backup apparatus is a separate unit that is responsible for synchronizing the database. It is a separate unit from the main database and is designed to handle the backup",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1194,8 +1194,8 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"hardware_anomaly\",\n  \"strategy\": \"no_automated_resolution\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The detected hardware anomaly is a hardware-related issue that has not been resolved by the system. The system is currently unable to synchronize the database with the external data source.\n\nThe system is currently unable to synchronize the database with the external data source due to the following reasons:\n\n1. **Hardware issue**: The system is experiencing a hardware-related issue that prevents it from synchronizing the database with the external data source.\n2. **External data source issue**: The external data source is not available, and the system is unable to synchronize the database with the external data source.\n3. **System failure",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1210,7 +1210,7 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"error_code\": \"RETRY\",\n    \"retry_policy\": \"max_attempts\"\n  }\n}",
+          "raw_text": "The remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1223,7 +1223,7 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "retract_ejection_latches"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"reject_capsule\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "The rollback to previous checkpoint needed immediately is violated in the eject_capsule.\n\nThe rollback to previous checkpoint needed immediately is violated in the eject_capsule.\n\nThe rollback to previous checkpoint needed immediately is violated in the eject_capsule.\n\nThe rollback to previous checkpoint needed immediately is violated in the eject_capsule.\n\nThe rollback to previous checkpoint needed immediately is violated in the eject_capsule.\n\nThe rollback to previous checkpoint needed immediately is violated in the eject_capsule.\n\nThe rollback to previous checkpoint needed immediately is violated in the eject_",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1236,7 +1236,7 @@
             "strategy": "FALLBACK",
             "fallback_uow": "seal_capsule_in_containment_bay"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"aibu\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "The primary interface for ejecting the capsule is now down. The auxiliary backup apparatus is now in place.\n\nThe auxiliary backup apparatus is a self-contained unit that can be used to recover the capsule. It is designed to be self-contained and can be used to recover the capsule in various scenarios.\n\nThe auxiliary backup apparatus is a self-contained unit that can be used to recover the capsule in various scenarios. It is designed to be self-contained and can be used to recover the capsule in various scenarios.\n\nThe auxiliary backup apparatus is a self-contained unit that can be used to recover the capsule in various",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1251,8 +1251,8 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"hardware_anomaly\",\n  \"strategy\": \"no_automated_resolution\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The detected hardware anomaly is a hardware failure that has not been reported to the recovery team. This means that the recovery team is unable to identify the cause of the anomaly.\n\nThe recovery team should investigate the hardware failure to determine the cause of the anomaly and to report the findings to the team.",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1267,8 +1267,8 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"remote_port\",\n  \"strategy\": \"ETIMEDOUT\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1280,8 +1280,8 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "restore_sensor_power_grid"
           },
-          "raw_text": "{\n  \"failed_uow\": \"revert_to_previous_checkpoint\",\n  \"strategy\": \"power_down_sensor_array\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The power_down_sensor_array state invariant violated in the power_down_sensor_array.rollback_to_previous_checkpoint_needed_immediately() function.\n\nThe function should rollback to the previous checkpoint needed immediately.\n\n```python\nimport json\nimport time\n\ndef power_down_sensor_array_rollback_to_previous_checkpoint_needed_immediately():\n    # Rollback to previous checkpoint needed immediately\n    return json.dumps({'state': 'recovery', 'rollback_to_previous_checkpoint_needed_immediately': True})\n```",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1293,7 +1293,7 @@
             "strategy": "FALLBACK",
             "fallback_uow": "isolate_sensor_bus_optically"
           },
-          "raw_text": "{\n  \"interface\": \"backup_uow\",\n  \"strategy\": \"switch_to_backup\",\n  \"backoff\": \"max_attempts\"\n}",
+          "raw_text": "The primary interface for the primary interface to the auxiliary backup apparatus is the following:\n\n```\n{\n  \"action\": \"primary_interface\",\n  \"status\": \"active\",\n  \"state\": \"active\",\n  \"state_code\": \"active\",\n  \"state_code_code\": \"active\",\n  \"state_code_code\": \"active\",\n  \"state_code_code_code\": \"active\",\n  \"state_code_code_code_code\": \"active\",\n  \"state_code_code_code_code_code\": \"active\",\n  \"state_code_code_",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1308,8 +1308,8 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"no_automated_resolution_policy\",\n  \"strategy\": \"no_automated_resolution_policy\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The detected hardware anomaly is a hardware-related issue that has not been resolved by the system. The system is currently unable to recover from this anomaly, and the user is unable to perform any actions to resolve the issue.\n\nThe system is currently unable to recover from this hardware anomaly, and the user is unable to perform any actions to resolve the issue.\n\nThe system is currently unable to recover from this hardware anomaly, and the user is unable to perform any actions to resolve the issue.",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1324,8 +1324,8 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote port momentarily unresponsive.\n\nThe remote",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         },
@@ -1337,7 +1337,7 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "refill_coolant_lines"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"reboot_coolant_reservoir\",\n    \"back_off\": \"max_attempts\"\n  }\n}",
+          "raw_text": "The state invariant violated in drain_coolant_reservoir.\n\nThe state invariant is:\n\n```\n{\n  \"state\": \"failed_uow\",\n  \"state_id\": \"failed_uow\",\n  \"state_type\": \"failed_uow\",\n  \"state_value\": \"failed_uow\",\n  \"state_value_type\": \"failed_uow\",\n  \"state_value_type_type\": \"failed_uow\",\n  \"state_value_type_type_type\": \"failed_uow\",\n  \"state_value_type",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1350,7 +1350,7 @@
             "strategy": "FALLBACK",
             "fallback_uow": "pump_coolant_to_reserve_sump"
           },
-          "raw_text": "{\n  \"key\": \"backup_abstraction\",\n  \"strategy\": \"rescue\",\n  \"retry_policy\": \"max_attempts\"\n}",
+          "raw_text": "The primary interface for the drain_coolant_reservoir is now down. The auxiliary backup apparatus is now in place.\n\nThe auxiliary backup apparatus is a self-contained unit that can be used to recover the failed UOW. It is designed to be self-contained and can be used to recover the failed UOW in a variety of scenarios.\n\nThe auxiliary backup apparatus is a self-contained unit that can be used to recover the failed UOW in a variety of scenarios. It is designed to be self-contained and can be used to recover the failed UOW in a variety of scenarios.\n\nThe auxiliary",
           "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
@@ -1365,8 +1365,8 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
-          "is_valid_json": true,
+          "raw_text": "The detected hardware anomaly is a hardware-related issue that is not related to the recovery strategy. The issue is not related to the recovery strategy, and it is not a failure symptom, error code, or operational state.\n\nThe issue is not related to the recovery strategy, and it is not a failure symptom, error code, or operational state.\n\nThe issue is not related to the recovery strategy, and it is not a failure symptom, error code, or operational state.\n\nThe issue is not related to the recovery strategy, and it is not a failure symptom, error code, or operational state.\n\nThe",
+          "is_valid_json": false,
           "is_strategy_match": false,
           "is_exact_match": false
         }

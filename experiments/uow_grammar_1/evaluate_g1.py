@@ -179,15 +179,17 @@ def run(argv=None):
 
     # 1. Base Model on Temporal Holdout
     print("\n--- Evaluating Base Model M0 on Temporal Holdout ---")
-    base = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False).to(args.device).eval()
-    results["evaluations"]["M0_temporal"] = evaluate_temporal(base, tokenizer, t_data, args.device)
+    base_m0_t = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False).to(args.device).eval()
+    results["evaluations"]["M0_temporal"] = evaluate_temporal(base_m0_t, tokenizer, t_data, args.device)
     print(f"M0 Temporal Holdout: Valid JSON={results['evaluations']['M0_temporal']['valid_json']}/24, "
           f"Relation Matches={results['evaluations']['M0_temporal']['relation_matches']}/24, "
           f"Exact Matches={results['evaluations']['M0_temporal']['exact_matches']}/24")
+    del base_m0_t
 
     # 2. Temporal Adapter on Temporal Holdout
     print(f"\n--- Evaluating Temporal Adapter on Temporal Holdout ({args.temporal_adapter}) ---")
-    temp_model = PeftModel.from_pretrained(base, args.temporal_adapter, is_trainable=False).to(args.device).eval()
+    base_t = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False).to(args.device).eval()
+    temp_model = PeftModel.from_pretrained(base_t, args.temporal_adapter, is_trainable=False).to(args.device).eval()
     results["evaluations"]["Temporal_adapter"] = evaluate_temporal(temp_model, tokenizer, t_data, args.device)
     print(f"Temporal Adapter Holdout: Valid JSON={results['evaluations']['Temporal_adapter']['valid_json']}/24, "
           f"Relation Matches={results['evaluations']['Temporal_adapter']['relation_matches']}/24, "
@@ -201,17 +203,21 @@ def run(argv=None):
               f"Relation Matches={results['evaluations']['Temporal_adapter_unseen_test']['relation_matches']}/{len(t_unseen)}, "
               f"Exact Matches={results['evaluations']['Temporal_adapter_unseen_test']['exact_matches']}/{len(t_unseen)}")
     del temp_model
+    del base_t
 
     # 3. Base Model on Recovery Holdout
     print("\n--- Evaluating Base Model M0 on Recovery Holdout ---")
-    results["evaluations"]["M0_recovery"] = evaluate_recovery(base, tokenizer, r_data, args.device)
+    base_m0_r = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False).to(args.device).eval()
+    results["evaluations"]["M0_recovery"] = evaluate_recovery(base_m0_r, tokenizer, r_data, args.device)
     print(f"M0 Recovery Holdout: Valid JSON={results['evaluations']['M0_recovery']['valid_json']}/24, "
           f"Strategy Matches={results['evaluations']['M0_recovery']['strategy_matches']}/24, "
           f"Exact Matches={results['evaluations']['M0_recovery']['exact_matches']}/24")
+    del base_m0_r
 
     # 4. Recovery Adapter on Recovery Holdout
     print(f"\n--- Evaluating Recovery Adapter on Recovery Holdout ({args.recovery_adapter}) ---")
-    rec_model = PeftModel.from_pretrained(base, args.recovery_adapter, is_trainable=False).to(args.device).eval()
+    base_r = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False).to(args.device).eval()
+    rec_model = PeftModel.from_pretrained(base_r, args.recovery_adapter, is_trainable=False).to(args.device).eval()
     results["evaluations"]["Recovery_adapter"] = evaluate_recovery(rec_model, tokenizer, r_data, args.device)
     print(f"Recovery Adapter Holdout: Valid JSON={results['evaluations']['Recovery_adapter']['valid_json']}/24, "
           f"Strategy Matches={results['evaluations']['Recovery_adapter']['strategy_matches']}/24, "
@@ -225,7 +231,7 @@ def run(argv=None):
               f"Strategy Matches={results['evaluations']['Recovery_adapter_unseen_test']['strategy_matches']}/{len(r_unseen)}, "
               f"Exact Matches={results['evaluations']['Recovery_adapter_unseen_test']['exact_matches']}/{len(r_unseen)}")
     del rec_model
-    del base
+    del base_r
 
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)

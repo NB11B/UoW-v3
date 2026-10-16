@@ -1,0 +1,50 @@
+name: UOW-NATIVE-1 pretrained smoke
+
+on:
+  push:
+    branches:
+      - "research/uow-native-1-goodfire-pilot"
+    paths:
+      - "experiments/uow_native_1/pretrained_probe.py"
+      - ".github/workflows/uow-native-pretrained-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  pretrained-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install inference dependencies
+        run: |
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install "transformers>=4.45,<5" "huggingface_hub>=0.27,<1" safetensors
+      - name: Pin immutable model revision
+        id: pin
+        run: |
+          python - <<'PY'
+          from huggingface_hub import HfApi
+          import os
+          sha=HfApi().model_info("HuggingFaceTB/SmolLM2-135M-Instruct").sha
+          assert len(sha)==40 and all(c in "0123456789abcdef" for c in sha)
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("sha="+sha+"\n")
+          print("Pinned model revision:", sha)
+          PY
+      - name: Small real-model intervention test
+        working-directory: experiments/uow_native_1
+        env:
+          HF_HUB_DISABLE_TELEMETRY: "1"
+          TOKENIZERS_PARALLELISM: "false"
+          OMP_NUM_THREADS: "2"
+        run: |
+          python pretrained_probe.py --revision ${{ steps.pin.outputs.sha }} --seed 42 --sizes 4 4 4 --candidates 3 --output pretrained_smoke_report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: uow-native-pretrained-smoke
+          path: experiments/uow_native_1/pretrained_smoke_report.json
+          if-no-files-found: warn

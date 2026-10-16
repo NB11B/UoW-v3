@@ -1,0 +1,48 @@
+{
+  "campaign": "UOW-NATIVE-1",
+  "scope": "synthetic trained toy MLP; no LLM circuit claim",
+  "results": [
+    {
+      "seed": 0,
+      "baseline_accuracy": 0.9975000023841858,
+      "shifted_accuracy": 1,
+      "selected_unit": 1,
+      "selected_unit_ablation_drop": 0.007499992847442627,
+      "median_control_drop": 0,
+      "prediction_change_rate": 0.012500000186264515,
+      "denial_violations": 0,
+      "approved_correct_commits": 199,
+      "approved_total": 200
+    },
+    {
+      "seed": 1,
+      "baseline_accuracy": 1,
+      "shifted_accuracy": 0.9975000023841858,
+      "selected_unit": 2,
+      "selected_unit_ablation_drop": 0.002499997615814209,
+      "median_control_drop": 0,
+      "prediction_change_rate": 0.0024999999441206455,
+      "denial_violations": 0,
+      "approved_correct_commits": 194,
+      "approved_total": 194
+    },
+    {
+      "seed": 2,
+      "baseline_accuracy": 1,
+      "shifted_accuracy": 0.9975000023841858,
+      "selected_unit": 3,
+      "selected_unit_ablation_drop": 0.007499992847442627,
+      "median_control_drop": 0.004999995231628418,
+      "prediction_change_rate": 0.007499999832361937,
+      "denial_violations": 0,
+      "approved_correct_commits": 205,
+      "approved_total": 205
+    }
+  ],
+  "summary": {
+    "all_denied_violations_zero": true,
+    "mean_baseline_accuracy": 0.9991666674613953,
+    "mean_shifted_accuracy": 0.9983333349227905,
+    "causal_ablation_exceeds_median_control": 3
+  }
+}

@@ -170,6 +170,7 @@ def evaluate_split(
             "margin": margin,
             "norm_margin": norm_margin,
             "order": ex.order,
+            "ground_truth_label": ex.ground_truth_label,
             "counterpart_id": ex.counterpart_id,
         }
 
@@ -195,6 +196,24 @@ def evaluate_split(
     acc_order_1 = float(np.mean(order_1_correct)) if order_1_correct else 0.0
     positional_gap = abs(acc_order_0 - acc_order_1)
 
+    # Affirmative bias evaluation for binary Yes/No tasks
+    yes_correct = [example_results[ex.id]["correct"] for ex in examples if ex.ground_truth_label == "Yes"]
+    no_correct = [example_results[ex.id]["correct"] for ex in examples if ex.ground_truth_label == "No"]
+    acc_yes = float(np.mean(yes_correct)) if yes_correct else None
+    acc_no = float(np.mean(no_correct)) if no_correct else None
+    affirmative_bias_gap = abs(acc_yes - acc_no) if (acc_yes is not None and acc_no is not None) else None
+
+    # Fraction of times candidate 'Yes' was chosen (margin > 0 when Yes is positive, margin < 0 when Yes is negative)
+    yes_chosen_count = 0
+    binary_total = 0
+    for ex in examples:
+        if ex.ground_truth_label in ("Yes", "No"):
+            binary_total += 1
+            m = example_results[ex.id]["margin"]
+            if (ex.ground_truth_label == "Yes" and m > 0) or (ex.ground_truth_label == "No" and m < 0):
+                yes_chosen_count += 1
+    affirmative_response_rate = (yes_chosen_count / binary_total) if binary_total > 0 else None
+
     result = {
         "count": len(examples),
         "accuracy": acc,
@@ -206,6 +225,10 @@ def evaluate_split(
         "order_1_accuracy": acc_order_1,
         "positional_gap": positional_gap,
         "paired_consistency_rate": paired_consistency_rate,
+        "yes_accuracy": acc_yes,
+        "no_accuracy": acc_no,
+        "affirmative_bias_gap": affirmative_bias_gap,
+        "affirmative_response_rate": affirmative_response_rate,
         "normalized_accuracy": float(np.mean(norm_correct_list)),
         "normalized_mean_margin": float(np.mean(norm_margins)),
     }
@@ -246,6 +269,7 @@ def run_behavioral_qualification(
     revision: str = "12fd25f77366fa6b3b4b768ec3050bf629380bac",
     device: Optional[str] = None,
     seed: int = 42,
+    dataset_root_sha256: Optional[str] = None,
     output_path: Optional[str] = "artifacts/uow_native_2/behavioral_results.json",
 ) -> Dict[str, Any]:
     """Execute complete Gate B0 Behavioral Qualification across 3 task families."""
@@ -267,6 +291,7 @@ def run_behavioral_qualification(
         "revision": rev,
         "device": device,
         "seed": seed,
+        "dataset_root_sha256": dataset_root_sha256,
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
         "criteria": {
             "min_holdout_accuracy": 0.85,

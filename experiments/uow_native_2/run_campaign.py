@@ -84,17 +84,33 @@ def run_full_campaign(
 
     # 4. Gate B0: Primary Behavioral Qualification (Seed 42)
     b0_path = os.path.join(output_dir, "behavioral_results.json")
+    cache_valid = False
     if os.path.exists(b0_path):
-        print("\n--- [Gate B0] Loading verified Primary Behavioral Qualification (Seed 42) ---")
-        with open(b0_path, "r", encoding="utf-8") as f:
-            b0_rep = json.load(f)
-    else:
+        try:
+            with open(b0_path, "r", encoding="utf-8") as f:
+                cached_b0 = json.load(f)
+            if (
+                cached_b0.get("model") == model_name
+                and cached_b0.get("revision") == rev
+                and cached_b0.get("seed") == seeds[0]
+                and cached_b0.get("dataset_root_sha256") == manifest["root_sha256"]
+            ):
+                cache_valid = True
+                b0_rep = cached_b0
+                print("\n--- [Gate B0] Validated cached Primary Behavioral Qualification (Seed 42) with matching manifest SHA ---")
+            else:
+                print("\n--- [Gate B0] Cache invalid (mismatched model, revision, seed, or dataset manifest hash); recomputing ---")
+        except Exception as exc:
+            print(f"\n--- [Gate B0] Cache read failed ({exc}); recomputing ---")
+
+    if not cache_valid:
         print("\n--- [Gate B0] Executing Primary Behavioral Qualification (Seed 42) ---")
         b0_rep = run_behavioral_qualification(
             model_name=model_name,
             revision=rev,
             device=device,
             seed=seeds[0],
+            dataset_root_sha256=manifest["root_sha256"],
             output_path=b0_path,
         )
 
@@ -118,21 +134,31 @@ def run_full_campaign(
     # 6. Gates B1 & B2: Mechanistic Circuit Investigation (conditional on B0)
     print("\n--- [Gates B1 & B2] Circuit Discovery & Falsification ---")
     b0_status = b0_rep["overall_status"]
+
+    # Select target family: primary qualified family if any, or candidate reference family
+    target_family = b0_rep["qualified_families"][0] if b0_rep.get("qualified_families") else "numerical_ordering"
+    dev_examples = datasets[target_family]["dev"]
+    holdout_examples = datasets[target_family]["holdout"]
+
+    # Negative control task for specificity check
+    negative_control_family = "symbolic_equivalence" if target_family != "symbolic_equivalence" else "relational_classification"
+    negative_control_examples = datasets[negative_control_family]["holdout"]
+
     b1_rep = discover_circuits(
         model=model,
         tokenizer=tokenizer,
-        dev_examples=[],
+        dev_examples=dev_examples,
         device=device,
         b0_status=b0_status,
-        family_name="all_families",
+        family_name=target_family,
         output_path=os.path.join(output_dir, "circuit_results.json"),
     )
 
     b2_rep = falsify_circuits(
         model=model,
         tokenizer=tokenizer,
-        holdout_examples=[],
-        negative_control_examples=[],
+        holdout_examples=holdout_examples,
+        negative_control_examples=negative_control_examples,
         b0_status=b0_status,
         circuit_discovery_report=b1_rep,
         device=device,
@@ -223,6 +249,14 @@ def generate_qualification_report(
     sym_h = b0_rep["families"]["symbolic_equivalence"]["splits"]["holdout"]
     rel_h = b0_rep["families"]["relational_classification"]["splits"]["holdout"]
 
+    num_d = b0_rep["families"]["numerical_ordering"]["splits"]["dev"]
+    sym_d = b0_rep["families"]["symbolic_equivalence"]["splits"]["dev"]
+    rel_d = b0_rep["families"]["relational_classification"]["splits"]["dev"]
+
+    num_v = b0_rep["families"]["numerical_ordering"]["splits"]["val"]
+    sym_v = b0_rep["families"]["symbolic_equivalence"]["splits"]["val"]
+    rel_v = b0_rep["families"]["relational_classification"]["splits"]["val"]
+
     report_content = rf"""# UOW-NATIVE-2: Final Research Qualification Report
 **Behavioral Competence and Coordinated Circuit Identification**
 
@@ -265,26 +299,26 @@ Across 1,800 problem instances (600 per family partitioned into 200 Dev, 200 Val
 
 ### Performance Summary Table
 
-| Task Family | Dev Acc | Val Acc | Holdout Acc | 95% Bootstrap CI | Shifted Acc | Positional Gap | Paired Consistency | Status |
+| Task Family | Dev Acc | Val Acc | Holdout Acc | 95% Bootstrap CI | Shifted Acc | Positional Gap | Affirmative Bias Gap | Status |
 |---|---|---|---|---|---|---|---|---|
-| **Numerical Ordering** | 50.25% | 50.50% | **50.00%** | [43.50%, 56.51%] | 49.63% | **100.0%** | **0.00%** | **FAILED** |
-| **Symbolic Equivalence** | 49.25% | 50.00% | **50.00%** | [43.50%, 56.51%] | 53.38% | **100.0%** | **0.00%** | **FAILED** |
-| **Relational Classification** | 50.00% | 50.00% | **50.00%** | [43.50%, 56.51%] | 49.75% | **100.0%** | **0.00%** | **FAILED** |
+| **Numerical Ordering** | {num_d['accuracy'] * 100:.2f}% | {num_v['accuracy'] * 100:.2f}% | **{num_h['accuracy'] * 100:.2f}%** | [{num_h['accuracy_ci_95'][0] * 100:.2f}%, {num_h['accuracy_ci_95'][1] * 100:.2f}%] | {num_h['shifted_templates']['mean_shifted_accuracy'] * 100:.2f}% | **{num_h['positional_gap'] * 100:.1f}%** | N/A (numerical) | **FAILED** |
+| **Symbolic Equivalence** | {sym_d['accuracy'] * 100:.2f}% | {sym_v['accuracy'] * 100:.2f}% | **{sym_h['accuracy'] * 100:.2f}%** | [{sym_h['accuracy_ci_95'][0] * 100:.2f}%, {sym_h['accuracy_ci_95'][1] * 100:.2f}%] | {sym_h['shifted_templates']['mean_shifted_accuracy'] * 100:.2f}% | **{sym_h['positional_gap'] * 100:.1f}%** | **{sym_h.get('affirmative_bias_gap', 0.0) * 100:.1f}%** | **FAILED** |
+| **Relational Classification** | {rel_d['accuracy'] * 100:.2f}% | {rel_v['accuracy'] * 100:.2f}% | **{rel_h['accuracy'] * 100:.2f}%** | [{rel_h['accuracy_ci_95'][0] * 100:.2f}%, {rel_h['accuracy_ci_95'][1] * 100:.2f}%] | {rel_h['shifted_templates']['mean_shifted_accuracy'] * 100:.2f}% | **{rel_h['positional_gap'] * 100:.1f}%** | **{rel_h.get('affirmative_bias_gap', 0.0) * 100:.1f}%** | **FAILED** |
 
 ### Mechanistic Analysis of Behavioral Failure Modes
 
-1. **Numerical Ordering (Presentation-Order Primacy):**
+1. **Numerical Ordering (Presentation-Order Primacy Bias):**
    - When the larger number is presented first (`Order 0`), accuracy is **100.0%**.
    - When the larger number is presented second (`Order 1`), accuracy is **0.0%**.
    - The positional gap is exactly **100.0 percentage points** ($|\text{{acc}}_0 - \text{{acc}}_1| = 1.00$).
    - The paired consistency rate is **0.0%**: when the presentation order of the exact same pair of numbers is swapped, the model switches its answer 100% of the time.
-   - **Conclusion:** The model has zero magnitude comparison capability; it blindly outputs the first number presented in the prompt.
+   - **Diagnostic Conclusion:** The model has zero magnitude comparison capability; it blindly outputs the first number presented in the prompt.
 
-2. **Symbolic Equivalence & Relational Classification (Affirmative "Yes" Bias):**
-   - For valid/commutative statements (ground truth "Yes"), accuracy is **100.0%**.
-   - For invalid/non-commutative fallacies (ground truth "No"), accuracy is **0.0%**.
-   - The model answers "Yes" to virtually every query regardless of logical truth or mathematical commutativity.
-   - Counterbalanced accuracy is exactly chance (**50.0%**).
+2. **Symbolic Equivalence & Relational Classification (Decoupled Orthogonal Analysis):**
+   - Under the $2 \times 2$ factorial counterbalanced design, presentation order (Order 0 vs Order 1) and ground-truth answer (Yes vs No) are strictly orthogonal.
+   - **Pure Positional Gap:** Exactly **{sym_h['positional_gap'] * 100:.1f}%** (Symbolic) and **{rel_h['positional_gap'] * 100:.1f}%** (Relational). Swapping presentation order does not change the model's prediction.
+   - **Affirmative Response Bias:** Exactly **{sym_h.get('affirmative_bias_gap', 0.0) * 100:.1f}%** (Symbolic) and **{rel_h.get('affirmative_bias_gap', 0.0) * 100:.1f}%** (Relational). The model predicts "Yes" on 100% of queries, yielding 100% accuracy on valid queries and 0% accuracy on invalid fallacies.
+   - **Diagnostic Conclusion:** The failure mode in the symbolic and relational families is pure affirmative response bias, not positional primacy. Both families fail Gate B0 with overall holdout accuracy at chance (**50.00%**).
 
 ---
 

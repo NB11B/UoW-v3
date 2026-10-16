@@ -65,6 +65,7 @@ def discover_circuits(
         "halt_rule_triggered": False,
         "terminal_classification": None,
         "discovered_circuits": {},
+        "dev_examples_count": len(dev_examples) if dev_examples else 0,
     }
 
     if b0_status != "PASSED":

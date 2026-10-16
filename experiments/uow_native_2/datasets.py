@@ -10,9 +10,11 @@ Each family contains 600 examples partitioned into:
   - 200 Validation (val)
   - 200 Holdout (holdout)
 
-Enforces strict counterbalancing:
-  - Exactly 50% presentation order 0 vs order 1
+Enforces strict counterbalancing and orthogonal factorial design:
+  - Exactly 50% presentation order 0 vs order 1 across all families
   - Exactly 50% target positive label vs negative label
+  - Zero confounding between order and label: Order (0/1) and Ground-Truth Label (Yes/No)
+    are strictly orthogonal 2x2 factorials (50 Order 0 Yes, 50 Order 0 No, 50 Order 1 Yes, 50 Order 1 No).
   - Disjoint entity pools across dev, val, and holdout splits
   - Shifted prompt templates for out-of-distribution syntax testing
   - Deterministic generation with fixed random seeds
@@ -63,14 +65,9 @@ SYMBOLIC_TEMPLATES = [
     "Does {expr1} evaluate to the same value as {expr2}? Answer Yes or No.",
 ]
 
-RELATIONAL_TEMPLATES = [
-    # Canonical (index 0)
-    "Statement 1: {A} is heavier than {B}. Statement 2: {B} is heavier than {C}. Question: Is {first} heavier than {second}? Answer Yes or No.",
-    # Shifted 1
-    "Given that {A} > {B} and {B} > {C}, does it follow that {first} > {second}? Reply Yes or No.",
-    # Shifted 2
-    "Premise: {A} precedes {B}, and {B} precedes {C}. Deduction: Does {first} precede {second}? Answer Yes or No.",
-]
+RELATIONAL_TEMPLATES_CANONICAL = "Statement 1: {s1}. Statement 2: {s2}. Question: Is {first} heavier than {second}? Answer Yes or No."
+RELATIONAL_TEMPLATES_SHIFTED_1 = "Given that {s1} and {s2}, does it follow that {first} > {second}? Reply Yes or No."
+RELATIONAL_TEMPLATES_SHIFTED_2 = "Premise: {s1}, and {s2}. Deduction: Does {first} precede {second}? Answer Yes or No."
 
 
 def generate_numerical_ordering(seed: int = 42) -> Dict[str, List[Example]]:
@@ -88,7 +85,6 @@ def generate_numerical_ordering(seed: int = 42) -> Dict[str, List[Example]]:
     all_pairs = [(lo, hi) for lo in range(10, 100) for hi in range(lo + 1, 100)]
     rng.shuffle(all_pairs)
 
-    # 3 splits * 100 pairs = 300 pairs (600 examples)
     dev_pairs = all_pairs[0:100]
     val_pairs = all_pairs[100:200]
     holdout_pairs = all_pairs[200:300]
@@ -157,18 +153,16 @@ def generate_numerical_ordering(seed: int = 42) -> Dict[str, List[Example]]:
 def generate_symbolic_equivalence(seed: int = 43) -> Dict[str, List[Example]]:
     """Generate 600 symbolic equivalence examples: 200 dev, 200 val, 200 holdout.
 
-    Evaluates commutativity vs non-commutativity:
-      - Commutative (+, *): x + y == y + x, x * y == y * x (Valid equivalence -> "Yes")
-      - Non-commutative (-, /): x - y != y - x, x / y != y / x (Invalid equivalence -> "No")
+    2x2 Factorial Design:
+      - 50 Equivalent, Order 0 (prompt expr_a and expr_b -> Yes)
+      - 50 Equivalent, Order 1 (prompt expr_b and expr_a -> Yes)
+      - 50 Non-equivalent, Order 0 (prompt expr_c and expr_d -> No)
+      - 50 Non-equivalent, Order 1 (prompt expr_d and expr_c -> No)
 
-    In each split of 200 examples:
-      - Exactly 100 equivalent ("Yes" positive)
-      - Exactly 100 non-equivalent ("No" positive)
-      - Disjoint variable name pool across dev, val, holdout.
+    Order and Ground-Truth Label are strictly orthogonal.
     """
     rng = random.Random(seed)
 
-    # Disjoint variable name pools
     var_pools = {
         "dev": [("m", "n"), ("p", "q"), ("u", "v"), ("r", "s"), ("j", "k")],
         "val": [("w", "z"), ("c", "d"), ("f", "g"), ("x", "y"), ("a", "b")],
@@ -178,69 +172,108 @@ def generate_symbolic_equivalence(seed: int = 43) -> Dict[str, List[Example]]:
     result = {}
     for split_name, pool in var_pools.items():
         split_examples = []
-        for i in range(100):
-            # Pick a variable pair
+        for i in range(50):
             v1, v2 = pool[i % len(pool)]
-            # Salt with coefficient or index for distinctness
             coeff = (i // len(pool)) + 1
             var1 = f"{coeff}{v1}" if coeff > 1 else v1
             var2 = f"{coeff}{v2}" if coeff > 1 else v2
 
-            # Equivalent pair (commutative)
+            # Commutative pair (+ or *)
             op_comm = "+" if (i % 2 == 0) else "*"
-            expr1_eq = f"{var1} {op_comm} {var2}"
-            expr2_eq = f"{var2} {op_comm} {var1}"
+            expr1_comm = f"{var1} {op_comm} {var2}"
+            expr2_comm = f"{var2} {op_comm} {var1}"
 
-            # Non-equivalent pair (non-commutative)
+            # Non-commutative pair (- or /)
             op_noncomm = "-" if (i % 2 == 0) else "/"
-            expr1_neq = f"{var1} {op_noncomm} {var2}"
-            expr2_neq = f"{var2} {op_noncomm} {var1}"
+            expr1_noncomm = f"{var1} {op_noncomm} {var2}"
+            expr2_noncomm = f"{var2} {op_noncomm} {var1}"
 
-            id_eq = f"sym_{split_name}_{i * 2:04d}_equiv"
-            id_neq = f"sym_{split_name}_{i * 2 + 1:04d}_nonequiv"
+            id_eq_0 = f"sym_{split_name}_{i * 4 + 0:04d}_eq_ord0"
+            id_eq_1 = f"sym_{split_name}_{i * 4 + 1:04d}_eq_ord1"
+            id_neq_0 = f"sym_{split_name}_{i * 4 + 2:04d}_neq_ord0"
+            id_neq_1 = f"sym_{split_name}_{i * 4 + 3:04d}_neq_ord1"
 
-            # Equivalent instance: correct answer is "Yes", incorrect is "No"
-            prompt_eq = SYMBOLIC_TEMPLATES[0].format(expr1=expr1_eq, expr2=expr2_eq)
-            shifted_eq = [
-                SYMBOLIC_TEMPLATES[1].format(expr1=expr1_eq, expr2=expr2_eq),
-                SYMBOLIC_TEMPLATES[2].format(expr1=expr1_eq, expr2=expr2_eq),
+            # 1. Equivalent, Order 0 (expr1, expr2) -> Yes
+            prompt_eq_0 = SYMBOLIC_TEMPLATES[0].format(expr1=expr1_comm, expr2=expr2_comm)
+            shifted_eq_0 = [
+                SYMBOLIC_TEMPLATES[1].format(expr1=expr1_comm, expr2=expr2_comm),
+                SYMBOLIC_TEMPLATES[2].format(expr1=expr1_comm, expr2=expr2_comm),
             ]
-            ex_eq = Example(
-                id=id_eq,
+            ex_eq_0 = Example(
+                id=id_eq_0,
                 family="symbolic_equivalence",
                 split=split_name,
-                prompt=prompt_eq,
+                prompt=prompt_eq_0,
                 positive="Yes",
                 negative="No",
-                order=0,  # equivalent condition
+                order=0,
                 ground_truth_label="Yes",
-                shifted_prompts=shifted_eq,
-                counterpart_id=id_neq,
-                metadata={"op": op_comm, "expr1": expr1_eq, "expr2": expr2_eq, "equivalent": True},
+                shifted_prompts=shifted_eq_0,
+                counterpart_id=id_eq_1,
+                metadata={"op": op_comm, "equivalent": True, "order": 0, "config_idx": i},
             )
 
-            # Non-equivalent instance: correct answer is "No", incorrect is "Yes"
-            prompt_neq = SYMBOLIC_TEMPLATES[0].format(expr1=expr1_neq, expr2=expr2_neq)
-            shifted_neq = [
-                SYMBOLIC_TEMPLATES[1].format(expr1=expr1_neq, expr2=expr2_neq),
-                SYMBOLIC_TEMPLATES[2].format(expr1=expr1_neq, expr2=expr2_neq),
+            # 2. Equivalent, Order 1 (expr2, expr1) -> Yes
+            prompt_eq_1 = SYMBOLIC_TEMPLATES[0].format(expr1=expr2_comm, expr2=expr1_comm)
+            shifted_eq_1 = [
+                SYMBOLIC_TEMPLATES[1].format(expr1=expr2_comm, expr2=expr1_comm),
+                SYMBOLIC_TEMPLATES[2].format(expr1=expr2_comm, expr2=expr1_comm),
             ]
-            ex_neq = Example(
-                id=id_neq,
+            ex_eq_1 = Example(
+                id=id_eq_1,
                 family="symbolic_equivalence",
                 split=split_name,
-                prompt=prompt_neq,
-                positive="No",
-                negative="Yes",
-                order=1,  # non-equivalent condition
-                ground_truth_label="No",
-                shifted_prompts=shifted_neq,
-                counterpart_id=id_eq,
-                metadata={"op": op_noncomm, "expr1": expr1_neq, "expr2": expr2_neq, "equivalent": False},
+                prompt=prompt_eq_1,
+                positive="Yes",
+                negative="No",
+                order=1,
+                ground_truth_label="Yes",
+                shifted_prompts=shifted_eq_1,
+                counterpart_id=id_eq_0,
+                metadata={"op": op_comm, "equivalent": True, "order": 1, "config_idx": i},
             )
 
-            split_examples.append(ex_eq)
-            split_examples.append(ex_neq)
+            # 3. Non-equivalent, Order 0 (expr1, expr2) -> No
+            prompt_neq_0 = SYMBOLIC_TEMPLATES[0].format(expr1=expr1_noncomm, expr2=expr2_noncomm)
+            shifted_neq_0 = [
+                SYMBOLIC_TEMPLATES[1].format(expr1=expr1_noncomm, expr2=expr2_noncomm),
+                SYMBOLIC_TEMPLATES[2].format(expr1=expr1_noncomm, expr2=expr2_noncomm),
+            ]
+            ex_neq_0 = Example(
+                id=id_neq_0,
+                family="symbolic_equivalence",
+                split=split_name,
+                prompt=prompt_neq_0,
+                positive="No",
+                negative="Yes",
+                order=0,
+                ground_truth_label="No",
+                shifted_prompts=shifted_neq_0,
+                counterpart_id=id_neq_1,
+                metadata={"op": op_noncomm, "equivalent": False, "order": 0, "config_idx": i},
+            )
+
+            # 4. Non-equivalent, Order 1 (expr2, expr1) -> No
+            prompt_neq_1 = SYMBOLIC_TEMPLATES[0].format(expr1=expr2_noncomm, expr2=expr1_noncomm)
+            shifted_neq_1 = [
+                SYMBOLIC_TEMPLATES[1].format(expr1=expr2_noncomm, expr2=expr1_noncomm),
+                SYMBOLIC_TEMPLATES[2].format(expr1=expr2_noncomm, expr2=expr1_noncomm),
+            ]
+            ex_neq_1 = Example(
+                id=id_neq_1,
+                family="symbolic_equivalence",
+                split=split_name,
+                prompt=prompt_neq_1,
+                positive="No",
+                negative="Yes",
+                order=1,
+                ground_truth_label="No",
+                shifted_prompts=shifted_neq_1,
+                counterpart_id=id_neq_0,
+                metadata={"op": op_noncomm, "equivalent": False, "order": 1, "config_idx": i},
+            )
+
+            split_examples.extend([ex_eq_0, ex_eq_1, ex_neq_0, ex_neq_1])
 
         result[split_name] = split_examples
 
@@ -250,20 +283,16 @@ def generate_symbolic_equivalence(seed: int = 43) -> Dict[str, List[Example]]:
 def generate_relational_classification(seed: int = 44) -> Dict[str, List[Example]]:
     """Generate 600 relational classification examples: 200 dev, 200 val, 200 holdout.
 
-    Tests transitive relation reasoning:
-      Premise 1: A > B
-      Premise 2: B > C
-      Valid deduction: Is A > C? -> Ground truth "Yes" (order 0)
-      Invalid fallacy: Is C > A? -> Ground truth "No"  (order 1)
+    2x2 Factorial Design:
+      - 50 Valid deduction, Premise Order 0 (A>B, B>C -> Is A>C? -> Yes)
+      - 50 Valid deduction, Premise Order 1 (B>C, A>B -> Is A>C? -> Yes)
+      - 50 Invalid fallacy, Premise Order 0 (A>B, B>C -> Is C>A? -> No)
+      - 50 Invalid fallacy, Premise Order 1 (B>C, A>B -> Is C>A? -> No)
 
-    In each split of 200 examples:
-      - Exactly 100 valid transitive deductions (ground truth "Yes")
-      - Exactly 100 invalid fallacies (ground truth "No")
-      - Disjoint named entity pools across splits.
+    Order and Ground-Truth Label are strictly orthogonal.
     """
     rng = random.Random(seed)
 
-    # Disjoint entity pools
     entity_pools = {
         "dev": [
             ("Alice", "Bob", "Charlie"),
@@ -291,58 +320,110 @@ def generate_relational_classification(seed: int = 44) -> Dict[str, List[Example
     result = {}
     for split_name, pool in entity_pools.items():
         split_examples = []
-        for i in range(100):
+        for i in range(50):
             base_tuple = pool[i % len(pool)]
             suffix = f"_{i // len(pool)}" if (i // len(pool)) > 0 else ""
             A = base_tuple[0] + suffix
             B = base_tuple[1] + suffix
             C = base_tuple[2] + suffix
 
-            id_valid = f"rel_{split_name}_{i * 2:04d}_valid"
-            id_invalid = f"rel_{split_name}_{i * 2 + 1:04d}_invalid"
+            # Premise descriptions:
+            # Canonical: "A is heavier than B", "B is heavier than C"
+            p_AB_canon = f"{A} is heavier than {B}"
+            p_BC_canon = f"{B} is heavier than {C}"
+            # Shifted 1: "A > B", "B > C"
+            p_AB_s1 = f"{A} > {B}"
+            p_BC_s1 = f"{B} > {C}"
+            # Shifted 2: "A precedes B", "B precedes C"
+            p_AB_s2 = f"{A} precedes {B}"
+            p_BC_s2 = f"{B} precedes {C}"
 
-            # Valid deduction: Is A > C? -> Yes
-            prompt_valid = RELATIONAL_TEMPLATES[0].format(A=A, B=B, C=C, first=A, second=C)
-            shifted_valid = [
-                RELATIONAL_TEMPLATES[1].format(A=A, B=B, C=C, first=A, second=C),
-                RELATIONAL_TEMPLATES[2].format(A=A, B=B, C=C, first=A, second=C),
+            id_val_0 = f"rel_{split_name}_{i * 4 + 0:04d}_val_ord0"
+            id_val_1 = f"rel_{split_name}_{i * 4 + 1:04d}_val_ord1"
+            id_inval_0 = f"rel_{split_name}_{i * 4 + 2:04d}_inval_ord0"
+            id_inval_1 = f"rel_{split_name}_{i * 4 + 3:04d}_inval_ord1"
+
+            # 1. Valid, Order 0 (AB then BC) -> Yes
+            prompt_val_0 = RELATIONAL_TEMPLATES_CANONICAL.format(s1=p_AB_canon, s2=p_BC_canon, first=A, second=C)
+            shifted_val_0 = [
+                RELATIONAL_TEMPLATES_SHIFTED_1.format(s1=p_AB_s1, s2=p_BC_s1, first=A, second=C),
+                RELATIONAL_TEMPLATES_SHIFTED_2.format(s1=p_AB_s2, s2=p_BC_s2, first=A, second=C),
             ]
-            ex_valid = Example(
-                id=id_valid,
+            ex_val_0 = Example(
+                id=id_val_0,
                 family="relational_classification",
                 split=split_name,
-                prompt=prompt_valid,
+                prompt=prompt_val_0,
                 positive="Yes",
                 negative="No",
-                order=0,  # valid deduction
+                order=0,
                 ground_truth_label="Yes",
-                shifted_prompts=shifted_valid,
-                counterpart_id=id_invalid,
-                metadata={"A": A, "B": B, "C": C, "first": A, "second": C, "valid": True},
+                shifted_prompts=shifted_val_0,
+                counterpart_id=id_val_1,
+                metadata={"A": A, "B": B, "C": C, "first": A, "second": C, "valid": True, "order": 0, "config_idx": i},
             )
 
-            # Invalid deduction: Is C > A? -> No
-            prompt_invalid = RELATIONAL_TEMPLATES[0].format(A=A, B=B, C=C, first=C, second=A)
-            shifted_invalid = [
-                RELATIONAL_TEMPLATES[1].format(A=A, B=B, C=C, first=C, second=A),
-                RELATIONAL_TEMPLATES[2].format(A=A, B=B, C=C, first=C, second=A),
+            # 2. Valid, Order 1 (BC then AB) -> Yes
+            prompt_val_1 = RELATIONAL_TEMPLATES_CANONICAL.format(s1=p_BC_canon, s2=p_AB_canon, first=A, second=C)
+            shifted_val_1 = [
+                RELATIONAL_TEMPLATES_SHIFTED_1.format(s1=p_BC_s1, s2=p_AB_s1, first=A, second=C),
+                RELATIONAL_TEMPLATES_SHIFTED_2.format(s1=p_BC_s2, s2=p_AB_s2, first=A, second=C),
             ]
-            ex_invalid = Example(
-                id=id_invalid,
+            ex_val_1 = Example(
+                id=id_val_1,
                 family="relational_classification",
                 split=split_name,
-                prompt=prompt_invalid,
-                positive="No",
-                negative="Yes",
-                order=1,  # invalid fallacy
-                ground_truth_label="No",
-                shifted_prompts=shifted_invalid,
-                counterpart_id=id_valid,
-                metadata={"A": A, "B": B, "C": C, "first": C, "second": A, "valid": False},
+                prompt=prompt_val_1,
+                positive="Yes",
+                negative="No",
+                order=1,
+                ground_truth_label="Yes",
+                shifted_prompts=shifted_val_1,
+                counterpart_id=id_val_0,
+                metadata={"A": A, "B": B, "C": C, "first": A, "second": C, "valid": True, "order": 1, "config_idx": i},
             )
 
-            split_examples.append(ex_valid)
-            split_examples.append(ex_invalid)
+            # 3. Invalid, Order 0 (AB then BC) -> No (Is C > A?)
+            prompt_inval_0 = RELATIONAL_TEMPLATES_CANONICAL.format(s1=p_AB_canon, s2=p_BC_canon, first=C, second=A)
+            shifted_inval_0 = [
+                RELATIONAL_TEMPLATES_SHIFTED_1.format(s1=p_AB_s1, s2=p_BC_s1, first=C, second=A),
+                RELATIONAL_TEMPLATES_SHIFTED_2.format(s1=p_AB_s2, s2=p_BC_s2, first=C, second=A),
+            ]
+            ex_inval_0 = Example(
+                id=id_inval_0,
+                family="relational_classification",
+                split=split_name,
+                prompt=prompt_inval_0,
+                positive="No",
+                negative="Yes",
+                order=0,
+                ground_truth_label="No",
+                shifted_prompts=shifted_inval_0,
+                counterpart_id=id_inval_1,
+                metadata={"A": A, "B": B, "C": C, "first": C, "second": A, "valid": False, "order": 0, "config_idx": i},
+            )
+
+            # 4. Invalid, Order 1 (BC then AB) -> No (Is C > A?)
+            prompt_inval_1 = RELATIONAL_TEMPLATES_CANONICAL.format(s1=p_BC_canon, s2=p_AB_canon, first=C, second=A)
+            shifted_inval_1 = [
+                RELATIONAL_TEMPLATES_SHIFTED_1.format(s1=p_BC_s1, s2=p_AB_s1, first=C, second=A),
+                RELATIONAL_TEMPLATES_SHIFTED_2.format(s1=p_BC_s2, s2=p_AB_s2, first=C, second=A),
+            ]
+            ex_inval_1 = Example(
+                id=id_inval_1,
+                family="relational_classification",
+                split=split_name,
+                prompt=prompt_inval_1,
+                positive="No",
+                negative="Yes",
+                order=1,
+                ground_truth_label="No",
+                shifted_prompts=shifted_inval_1,
+                counterpart_id=id_inval_0,
+                metadata={"A": A, "B": B, "C": C, "first": C, "second": A, "valid": False, "order": 1, "config_idx": i},
+            )
+
+            split_examples.extend([ex_val_0, ex_val_1, ex_inval_0, ex_inval_1])
 
         result[split_name] = split_examples
 
@@ -393,6 +474,12 @@ def generate_dataset_manifest(
             yes_count = sum(1 for e in examples if e.ground_truth_label == "Yes")
             no_count = sum(1 for e in examples if e.ground_truth_label == "No")
 
+            # 2x2 Factorial cell counts
+            order_0_yes = sum(1 for e in examples if e.order == 0 and e.ground_truth_label == "Yes")
+            order_0_no = sum(1 for e in examples if e.order == 0 and e.ground_truth_label == "No")
+            order_1_yes = sum(1 for e in examples if e.order == 1 and e.ground_truth_label == "Yes")
+            order_1_no = sum(1 for e in examples if e.order == 1 and e.ground_truth_label == "No")
+
             ex_dicts = [e.to_dict() for e in examples]
             split_hash = compute_sha256(ex_dicts)
             fam_dict[split_name] = ex_dicts
@@ -404,7 +491,13 @@ def generate_dataset_manifest(
                 "order_1_count": order_1_count,
                 "yes_count": yes_count,
                 "no_count": no_count,
-                "counterbalanced_ratio": round(order_0_count / count, 4) if count > 0 else 0.0,
+                "counterbalanced_order_ratio": round(order_0_count / count, 4) if count > 0 else 0.0,
+                "factorial_cells": {
+                    "order_0_yes": order_0_yes,
+                    "order_0_no": order_0_no,
+                    "order_1_yes": order_1_yes,
+                    "order_1_no": order_1_no,
+                },
             }
 
         all_serialized[fam_name] = fam_dict

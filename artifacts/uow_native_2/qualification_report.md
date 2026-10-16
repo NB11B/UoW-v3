@@ -8,7 +8,7 @@
 - **Target Model:** `HuggingFaceTB/SmolLM2-135M-Instruct`
 - **Pinned Model Revision:** `12fd25f77366fa6b3b4b768ec3050bf629380bac`
 - **Hardware Platform:** `Windows-11-10.0.26200-SP0` (NVIDIA GeForce RTX 5070 Laptop GPU)
-- **Evaluation Date:** 2026-10-16 02:41:40 UTC
+- **Evaluation Date:** 2026-10-16 05:39:45 UTC
 - **Campaign Disposition:** **EXPERIMENTAL — BEHAVIORAL COMPETENCE NOT ESTABLISHED**
 
 ---
@@ -40,26 +40,26 @@ Across 1,800 problem instances (600 per family partitioned into 200 Dev, 200 Val
 
 ### Performance Summary Table
 
-| Task Family | Dev Acc | Val Acc | Holdout Acc | 95% Bootstrap CI | Shifted Acc | Positional Gap | Paired Consistency | Status |
+| Task Family | Dev Acc | Val Acc | Holdout Acc | 95% Bootstrap CI | Shifted Acc | Positional Gap | Affirmative Bias Gap | Status |
 |---|---|---|---|---|---|---|---|---|
-| **Numerical Ordering** | 50.25% | 50.50% | **50.00%** | [43.50%, 56.51%] | 49.63% | **100.0%** | **0.00%** | **FAILED** |
-| **Symbolic Equivalence** | 49.25% | 50.00% | **50.00%** | [43.50%, 56.51%] | 53.38% | **100.0%** | **0.00%** | **FAILED** |
-| **Relational Classification** | 50.00% | 50.00% | **50.00%** | [43.50%, 56.51%] | 49.75% | **100.0%** | **0.00%** | **FAILED** |
+| **Numerical Ordering** | 50.25% | 50.50% | **50.00%** | [43.50%, 56.51%] | 49.62% | **100.0%** | N/A (numerical) | **FAILED** |
+| **Symbolic Equivalence** | 48.25% | 49.75% | **49.25%** | [42.50%, 56.25%] | 52.50% | **1.5%** | **98.5%** | **FAILED** |
+| **Relational Classification** | 50.00% | 50.00% | **50.00%** | [43.50%, 57.00%] | 49.62% | **0.0%** | **100.0%** | **FAILED** |
 
 ### Mechanistic Analysis of Behavioral Failure Modes
 
-1. **Numerical Ordering (Presentation-Order Primacy):**
+1. **Numerical Ordering (Presentation-Order Primacy Bias):**
    - When the larger number is presented first (`Order 0`), accuracy is **100.0%**.
    - When the larger number is presented second (`Order 1`), accuracy is **0.0%**.
    - The positional gap is exactly **100.0 percentage points** ($|\text{acc}_0 - \text{acc}_1| = 1.00$).
    - The paired consistency rate is **0.0%**: when the presentation order of the exact same pair of numbers is swapped, the model switches its answer 100% of the time.
-   - **Conclusion:** The model has zero magnitude comparison capability; it blindly outputs the first number presented in the prompt.
+   - **Diagnostic Conclusion:** The model has zero magnitude comparison capability; it blindly outputs the first number presented in the prompt.
 
-2. **Symbolic Equivalence & Relational Classification (Affirmative "Yes" Bias):**
-   - For valid/commutative statements (ground truth "Yes"), accuracy is **100.0%**.
-   - For invalid/non-commutative fallacies (ground truth "No"), accuracy is **0.0%**.
-   - The model answers "Yes" to virtually every query regardless of logical truth or mathematical commutativity.
-   - Counterbalanced accuracy is exactly chance (**50.0%**).
+2. **Symbolic Equivalence & Relational Classification (Decoupled Orthogonal Analysis):**
+   - Under the $2 \times 2$ factorial counterbalanced design, presentation order (Order 0 vs Order 1) and ground-truth answer (Yes vs No) are strictly orthogonal.
+   - **Pure Positional Gap:** Exactly **1.5%** (Symbolic) and **0.0%** (Relational). Swapping presentation order does not change the model's prediction.
+   - **Affirmative Response Bias:** Exactly **98.5%** (Symbolic) and **100.0%** (Relational). The model predicts "Yes" on 100% of queries, yielding 100% accuracy on valid queries and 0% accuracy on invalid fallacies.
+   - **Diagnostic Conclusion:** The failure mode in the symbolic and relational families is pure affirmative response bias, not positional primacy. Both families fail Gate B0 with overall holdout accuracy at chance (**50.00%**).
 
 ---
 
@@ -70,7 +70,7 @@ The evaluation was repeated across 3 independent random partition seeds (42, 43,
 | Task Family | Seed 42 Holdout | Seed 43 Holdout | Seed 44 Holdout | Three-Seed Mean | Preregistered Threshold |
 |---|---|---|---|---|---|
 | Numerical Ordering | 50.00% | 49.75% | 49.25% | **49.67%** | $\ge 85.00\%$ |
-| Symbolic Equivalence | 50.00% | 50.00% | 50.00% | **50.00%** | $\ge 85.00\%$ |
+| Symbolic Equivalence | 49.25% | 49.25% | 49.25% | **49.25%** | $\ge 85.00\%$ |
 | Relational Classification | 50.00% | 50.00% | 50.00% | **50.00%** | $\ge 85.00\%$ |
 
 The findings are 100% reproducible across all three random seeds: the model uniformly performs at chance (50.0%) across all splits.
@@ -110,8 +110,8 @@ While the probabilistic model failed behavioral qualification, the deterministic
 
 ## 6. Performance & Computational Efficiency
 
-- **Total Campaign Duration:** 74.98 seconds
-- **Peak GPU Memory Allocated:** 271.08 MB (RTX 5070 Laptop GPU)
+- **Total Campaign Duration:** 255.54 seconds
+- **Peak GPU Memory Allocated:** 270.61 MB (RTX 5070 Laptop GPU)
 - **Model Ingestion & Evaluation Throughput:** ~33 examples/sec
 - **Cryptographic Evidence Manifest:** `artifacts/uow_native_2/dataset_manifest.json` verified with SHA-256 root hash.
 

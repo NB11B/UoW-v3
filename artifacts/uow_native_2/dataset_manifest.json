@@ -12,7 +12,13 @@
           "order_1_count": 100,
           "yes_count": 0,
           "no_count": 0,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 0,
+            "order_0_no": 0,
+            "order_1_yes": 0,
+            "order_1_no": 0
+          }
         },
         "val": {
           "count": 200,
@@ -21,7 +27,13 @@
           "order_1_count": 100,
           "yes_count": 0,
           "no_count": 0,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 0,
+            "order_0_no": 0,
+            "order_1_yes": 0,
+            "order_1_no": 0
+          }
         },
         "holdout": {
           "count": 200,
@@ -30,7 +42,13 @@
           "order_1_count": 100,
           "yes_count": 0,
           "no_count": 0,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 0,
+            "order_0_no": 0,
+            "order_1_yes": 0,
+            "order_1_no": 0
+          }
         }
       },
       "total_examples": 600
@@ -39,30 +57,48 @@
       "splits": {
         "dev": {
           "count": 200,
-          "sha256": "d3bdf61dff0f8da2c950fb6d7bbc20c7323369fcb9df46ffa677d3e270a6b23d",
+          "sha256": "fec25096166e8b7720abcad08dba07fc77b2b4514d1cfd0dd9141e3a11d50678",
           "order_0_count": 100,
           "order_1_count": 100,
           "yes_count": 100,
           "no_count": 100,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 50,
+            "order_0_no": 50,
+            "order_1_yes": 50,
+            "order_1_no": 50
+          }
         },
         "val": {
           "count": 200,
-          "sha256": "f6d5b6d1fc7f0eff31a980a085c2397c739c0b3c0e2279ca24dcee0f2aba43e5",
+          "sha256": "33426c84a088d4f2cff778ad0aa6062ba8bcecee755a03b9370769f098eecae1",
           "order_0_count": 100,
           "order_1_count": 100,
           "yes_count": 100,
           "no_count": 100,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 50,
+            "order_0_no": 50,
+            "order_1_yes": 50,
+            "order_1_no": 50
+          }
         },
         "holdout": {
           "count": 200,
-          "sha256": "c7c0af15a36afe8e4416a88cab8a6144441ca9306d17a7ca3deeaee566258a8d",
+          "sha256": "dab2ab26cef18267263a707a966627fc02cc47a6ec50460dad6860f63b4e7f00",
           "order_0_count": 100,
           "order_1_count": 100,
           "yes_count": 100,
           "no_count": 100,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 50,
+            "order_0_no": 50,
+            "order_1_yes": 50,
+            "order_1_no": 50
+          }
         }
       },
       "total_examples": 600
@@ -71,35 +107,53 @@
       "splits": {
         "dev": {
           "count": 200,
-          "sha256": "96aee599cf9dc2dab34759bb1f7f37933cd94d3aa580c9de78dab77f95cd17b4",
+          "sha256": "e3abdc05580ce81189dbd8b00e53905a615d2d7272885005683e03188048a9d9",
           "order_0_count": 100,
           "order_1_count": 100,
           "yes_count": 100,
           "no_count": 100,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 50,
+            "order_0_no": 50,
+            "order_1_yes": 50,
+            "order_1_no": 50
+          }
         },
         "val": {
           "count": 200,
-          "sha256": "af628f6badc8d592b491b1c332a6d0644d88c6e206a7a291340a669c90f7e67b",
+          "sha256": "e6f6f45862834a806a197104866f12b661edfbd536e502d0a0eefdcbd67a13d3",
           "order_0_count": 100,
           "order_1_count": 100,
           "yes_count": 100,
           "no_count": 100,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 50,
+            "order_0_no": 50,
+            "order_1_yes": 50,
+            "order_1_no": 50
+          }
         },
         "holdout": {
           "count": 200,
-          "sha256": "178b522059dd6819eadee1737041562bb5c4684c2a9ad77f227e95d52c6d412b",
+          "sha256": "8e4f8d8395e8d99fc3c889f5ddfc8a8a127e8bb395ff4f5dcf31c9b7805dfb93",
           "order_0_count": 100,
           "order_1_count": 100,
           "yes_count": 100,
           "no_count": 100,
-          "counterbalanced_ratio": 0.5
+          "counterbalanced_order_ratio": 0.5,
+          "factorial_cells": {
+            "order_0_yes": 50,
+            "order_0_no": 50,
+            "order_1_yes": 50,
+            "order_1_no": 50
+          }
         }
       },
       "total_examples": 600
     }
   },
   "total_examples": 1800,
-  "root_sha256": "3dc8306642473a98ddbd5515e63ad059e347cddde0d4e27c5365eb44d414e7fd"
+  "root_sha256": "2050e29af25230cd6f8bfda21a72928d5581d1900be77200a1cf712d903eb187"
 }

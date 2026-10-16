@@ -47,7 +47,7 @@ class TestDatasets(unittest.TestCase):
         self.assertTrue(dev_pairs.isdisjoint(holdout_pairs), "Dev and Holdout pairs must be disjoint")
         self.assertTrue(val_pairs.isdisjoint(holdout_pairs), "Val and Holdout pairs must be disjoint")
 
-    def test_symbolic_equivalence_counts_and_balance(self):
+    def test_symbolic_equivalence_orthogonal_factorial_design(self):
         splits = generate_symbolic_equivalence(seed=43)
         self.assertEqual(set(splits.keys()), {"dev", "val", "holdout"})
 
@@ -55,8 +55,24 @@ class TestDatasets(unittest.TestCase):
             self.assertEqual(len(examples), 200, f"Split {split_name} should have 200 examples")
             yes_count = sum(1 for e in examples if e.ground_truth_label == "Yes")
             no_count = sum(1 for e in examples if e.ground_truth_label == "No")
+            order_0 = sum(1 for e in examples if e.order == 0)
+            order_1 = sum(1 for e in examples if e.order == 1)
+
             self.assertEqual(yes_count, 100, f"Split {split_name} Yes count must be 100")
             self.assertEqual(no_count, 100, f"Split {split_name} No count must be 100")
+            self.assertEqual(order_0, 100, f"Split {split_name} order 0 must be 100")
+            self.assertEqual(order_1, 100, f"Split {split_name} order 1 must be 100")
+
+            # Check exact 2x2 orthogonality: 50 in each cell
+            ord0_yes = sum(1 for e in examples if e.order == 0 and e.ground_truth_label == "Yes")
+            ord0_no = sum(1 for e in examples if e.order == 0 and e.ground_truth_label == "No")
+            ord1_yes = sum(1 for e in examples if e.order == 1 and e.ground_truth_label == "Yes")
+            ord1_no = sum(1 for e in examples if e.order == 1 and e.ground_truth_label == "No")
+
+            self.assertEqual(ord0_yes, 50)
+            self.assertEqual(ord0_no, 50)
+            self.assertEqual(ord1_yes, 50)
+            self.assertEqual(ord1_no, 50)
 
             # Check counterpart reciprocity
             by_id = {e.id: e for e in examples}
@@ -65,8 +81,10 @@ class TestDatasets(unittest.TestCase):
                 self.assertIn(e.counterpart_id, by_id)
                 counter = by_id[e.counterpart_id]
                 self.assertEqual(counter.counterpart_id, e.id)
+                self.assertEqual(e.order + counter.order, 1)
+                self.assertEqual(e.ground_truth_label, counter.ground_truth_label)
 
-    def test_relational_classification_counts_and_balance(self):
+    def test_relational_classification_orthogonal_factorial_design(self):
         splits = generate_relational_classification(seed=44)
         self.assertEqual(set(splits.keys()), {"dev", "val", "holdout"})
 
@@ -74,8 +92,34 @@ class TestDatasets(unittest.TestCase):
             self.assertEqual(len(examples), 200, f"Split {split_name} should have 200 examples")
             yes_count = sum(1 for e in examples if e.ground_truth_label == "Yes")
             no_count = sum(1 for e in examples if e.ground_truth_label == "No")
+            order_0 = sum(1 for e in examples if e.order == 0)
+            order_1 = sum(1 for e in examples if e.order == 1)
+
             self.assertEqual(yes_count, 100, f"Split {split_name} Yes count must be 100")
             self.assertEqual(no_count, 100, f"Split {split_name} No count must be 100")
+            self.assertEqual(order_0, 100, f"Split {split_name} order 0 must be 100")
+            self.assertEqual(order_1, 100, f"Split {split_name} order 1 must be 100")
+
+            # Check exact 2x2 orthogonality: 50 in each cell
+            ord0_yes = sum(1 for e in examples if e.order == 0 and e.ground_truth_label == "Yes")
+            ord0_no = sum(1 for e in examples if e.order == 0 and e.ground_truth_label == "No")
+            ord1_yes = sum(1 for e in examples if e.order == 1 and e.ground_truth_label == "Yes")
+            ord1_no = sum(1 for e in examples if e.order == 1 and e.ground_truth_label == "No")
+
+            self.assertEqual(ord0_yes, 50)
+            self.assertEqual(ord0_no, 50)
+            self.assertEqual(ord1_yes, 50)
+            self.assertEqual(ord1_no, 50)
+
+            # Check counterpart reciprocity
+            by_id = {e.id: e for e in examples}
+            for e in examples:
+                self.assertIsNotNone(e.counterpart_id)
+                self.assertIn(e.counterpart_id, by_id)
+                counter = by_id[e.counterpart_id]
+                self.assertEqual(counter.counterpart_id, e.id)
+                self.assertEqual(e.order + counter.order, 1)
+                self.assertEqual(e.ground_truth_label, counter.ground_truth_label)
 
     def test_determinism_and_hash_integrity(self):
         d1 = load_all_datasets(seed=42)
@@ -99,7 +143,8 @@ class TestDatasets(unittest.TestCase):
             self.assertEqual(fam_info["total_examples"], 600)
             for split_info in fam_info["splits"].values():
                 self.assertEqual(split_info["count"], 200)
-                self.assertEqual(split_info["counterbalanced_ratio"], 0.5)
+                self.assertEqual(split_info["counterbalanced_order_ratio"], 0.5)
+                self.assertEqual(split_info["factorial_cells"]["order_0_yes"] + split_info["factorial_cells"]["order_1_yes"], split_info["yes_count"])
 
 
 if __name__ == "__main__":

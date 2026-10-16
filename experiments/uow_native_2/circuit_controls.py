@@ -45,6 +45,8 @@ def falsify_circuits(
         "halt_rule_triggered": False,
         "terminal_classification": None,
         "evaluations": {},
+        "holdout_examples_count": len(holdout_examples) if holdout_examples else 0,
+        "negative_control_examples_count": len(negative_control_examples) if negative_control_examples else 0,
     }
 
     if b0_status != "PASSED" or circuit_discovery_report.get("halt_rule_triggered", True):

@@ -2,8 +2,8 @@
   "campaign": "UOW-NATIVE-2",
   "device": "cuda",
   "cuda_device_name": "NVIDIA GeForce RTX 5070 Laptop GPU",
-  "total_campaign_seconds": 74.98,
-  "peak_gpu_memory_allocated_mb": 271.08,
+  "total_campaign_seconds": 255.54,
+  "peak_gpu_memory_allocated_mb": 270.61,
   "multi_seed_summary": {
     "seeds": [
       42,
@@ -12,22 +12,22 @@
     ],
     "seed_42_holdout_accuracies": {
       "numerical_ordering": 0.5,
-      "symbolic_equivalence": 0.5,
+      "symbolic_equivalence": 0.4925,
       "relational_classification": 0.5
     },
     "seed_43_holdout_accuracies": {
       "numerical_ordering": 0.4975,
-      "symbolic_equivalence": 0.5,
+      "symbolic_equivalence": 0.4925,
       "relational_classification": 0.5
     },
     "seed_44_holdout_accuracies": {
       "numerical_ordering": 0.4925,
-      "symbolic_equivalence": 0.5,
+      "symbolic_equivalence": 0.4925,
       "relational_classification": 0.5
     },
     "mean_holdout_accuracy": {
       "numerical_ordering": 0.4967,
-      "symbolic_equivalence": 0.5,
+      "symbolic_equivalence": 0.4925,
       "relational_classification": 0.5
     }
   },

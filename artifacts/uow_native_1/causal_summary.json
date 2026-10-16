@@ -1,0 +1,90 @@
+{
+  "campaign": "UOW-NATIVE-1 Stage 2",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "hardware": {
+    "cuda_device_name": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "device": "cuda",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "candidate_neurons_per_seed": 32,
+  "sample_sizes": {
+    "selection_train_examples": 24,
+    "holdout_test_examples": 48,
+    "shifted_template_examples": 48
+  },
+  "per_seed_results": [
+    {
+      "seed": 42,
+      "layer": "model.layers.29.mlp.down_proj",
+      "selected_neuron": 525,
+      "baseline_holdout_accuracy": 0.3958333333333333,
+      "baseline_holdout_margin": -0.2630208333333333,
+      "intervention_holdout_accuracy": 0.4375,
+      "intervention_holdout_margin": -0.263671875,
+      "signed_effect": 0.0006510416666666852,
+      "absolute_effect": 0.0006510416666666852,
+      "descriptive_control_rank_fraction": 0.90625,
+      "exploratory_control_rank_below_0_05": false,
+      "shift_baseline_accuracy": 0.5416666666666666,
+      "shift_baseline_margin": -0.16015625,
+      "shift_intervention_accuracy": 0.53125,
+      "shift_intervention_margin": -0.11393229166666667,
+      "elapsed_seconds": 149.69
+    },
+    {
+      "seed": 43,
+      "layer": "model.layers.29.mlp.down_proj",
+      "selected_neuron": 645,
+      "baseline_holdout_accuracy": 0.4270833333333333,
+      "baseline_holdout_margin": -0.14388020833333334,
+      "intervention_holdout_accuracy": 0.4479166666666667,
+      "intervention_holdout_margin": -0.10091145833333333,
+      "signed_effect": -0.042968750000000014,
+      "absolute_effect": 0.042968750000000014,
+      "descriptive_control_rank_fraction": 0.03125,
+      "exploratory_control_rank_below_0_05": true,
+      "shift_baseline_accuracy": 0.5416666666666666,
+      "shift_baseline_margin": -0.007161458333333333,
+      "shift_intervention_accuracy": 0.5416666666666666,
+      "shift_intervention_margin": 0.029296875,
+      "elapsed_seconds": 143.0
+    },
+    {
+      "seed": 44,
+      "layer": "model.layers.29.mlp.down_proj",
+      "selected_neuron": 1501,
+      "baseline_holdout_accuracy": 0.4375,
+      "baseline_holdout_margin": -0.15885416666666666,
+      "intervention_holdout_accuracy": 0.4375,
+      "intervention_holdout_margin": -0.15950520833333334,
+      "signed_effect": 0.0006510416666666852,
+      "absolute_effect": 0.0006510416666666852,
+      "descriptive_control_rank_fraction": 0.9375,
+      "exploratory_control_rank_below_0_05": false,
+      "shift_baseline_accuracy": 0.5208333333333334,
+      "shift_baseline_margin": -0.08984375,
+      "shift_intervention_accuracy": 0.5208333333333334,
+      "shift_intervention_margin": -0.07942708333333333,
+      "elapsed_seconds": 129.52
+    }
+  ],
+  "aggregate_statistics": {
+    "mean_baseline_holdout_accuracy": 0.42013888888888884,
+    "mean_intervention_holdout_accuracy": 0.44097222222222227,
+    "mean_baseline_holdout_margin": -0.18858506944444442,
+    "mean_intervention_holdout_margin": -0.17469618055555555,
+    "mean_absolute_effect": 0.014756944444444461,
+    "all_seeds_control_rank_below_0_05": false,
+    "seeds_with_control_rank_below_0_05_count": 1,
+    "total_execution_time_seconds": 422.21000000000004
+  },
+  "evaluation": {
+    "task_baseline_above_chance": false,
+    "chance_accuracy": 0.5,
+    "observed_mean_baseline_accuracy": 0.42013888888888884,
+    "preregistered_causal_criterion_met": false,
+    "directional_effect_consistency": "Inconsistent (Seed 42 signed: +0.00065, Seed 43 signed: -0.04297, Seed 44 signed: +0.00065)",
+    "scientific_interpretation": "The SmolLM2-135M model exhibits near-chance baseline accuracy (~41.7%) on relational number comparison prompts. Selecting the most responsive MLP down_proj neuron on training pairs does not generalize to held-out pairs: rank fractions were > 0.05 on 2 of 3 seeds (0.906, 0.938), and the single seed with rank < 0.05 showed an opposite (negative) signed effect. This contradicts the hypothesis that individual down_proj hidden neurons represent modular, reusable, or specialized relational operators."
+  }
+}

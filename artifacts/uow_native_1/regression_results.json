@@ -1,0 +1,20 @@
+{
+  "total_tests": 18,
+  "passed": true,
+  "failures": 0,
+  "errors": 0,
+  "test_cases": [
+    "Single-token numerical answer: Correct likelihood calculation",
+    "Multi-token numerical answer: Correct likelihood calculation",
+    "Two candidates of different token lengths: Valid comparison",
+    "Prefix-boundary mismatch: Explicit rejection",
+    "Empty continuation: Explicit rejection",
+    "Equal candidate scores: Correct tie handling",
+    "Ablation changes the intended activation: Demonstrated",
+    "Ablation cleanup after exception: No leaked hooks",
+    "Distinct selection/holdout pairs: Zero overlap",
+    "Repeat with identical seed: Reproducible result",
+    "Missing or invalid model revision: Fail closed",
+    "Nonfinite likelihood or margin: Explicit rejection"
+  ]
+}

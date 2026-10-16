@@ -1,0 +1,10 @@
+{
+  "incident": "Pretrained-model measurement defect failure",
+  "github_action_run_url": "https://github.com/NB11B/UoW-v3/actions/runs/38832972182",
+  "model": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "pinned_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "error_type": "ValueError",
+  "error_message": "Requires single-token numeric answers",
+  "failure_analysis": "The model weights loaded successfully, but the measurement function assumed numerical candidate answers would each tokenize to exactly one token. In SmolLM2-135M, numeric tokens (e.g. '82', ' 82') tokenize to 2 or 3 tokens, triggering an immediate exception in the single-token assert.",
+  "status": "Preserved original defect record; resolved by FIX-01 sequence-level teacher-forced scoring."
+}

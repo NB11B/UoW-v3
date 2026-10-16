@@ -43,10 +43,12 @@ def evaluate_temporal(model, tokenizer, holdout_examples, device):
 
         parsed = parser.parse(raw_text)
         is_valid = parsed is not None
+        is_relation_match = False
         if is_valid:
             valid_json += 1
             # Check match against target
             actual = parsed.to_dict()
+            is_relation_match = (actual.get("relation") == target.get("relation"))
             is_match = (
                 actual.get("target_action") == target.get("target_action") and
                 actual.get("relation") == target.get("relation") and
@@ -65,13 +67,17 @@ def evaluate_temporal(model, tokenizer, holdout_examples, device):
             "target": target,
             "raw_text": raw_text,
             "is_valid_json": is_valid,
+            "is_relation_match": is_relation_match,
             "is_exact_match": is_match
         })
 
+    relation_matches = sum(1 for r in records if r["is_relation_match"])
     return {
         "total_cases": total,
         "valid_json": valid_json,
         "valid_json_rate": valid_json / total,
+        "relation_matches": relation_matches,
+        "relation_match_rate": relation_matches / total,
         "exact_matches": exact_matches,
         "exact_match_rate": exact_matches / total,
         "records": records
@@ -105,9 +111,11 @@ def evaluate_recovery(model, tokenizer, holdout_examples, device):
 
         parsed = parser.parse(raw_text)
         is_valid = parsed is not None
+        is_strategy_match = False
         if is_valid:
             valid_json += 1
             actual = parsed.to_dict()
+            is_strategy_match = (actual.get("strategy") == target.get("strategy"))
             is_match = (
                 actual.get("failed_uow") == target.get("failed_uow") and
                 actual.get("strategy") == target.get("strategy") and
@@ -125,13 +133,17 @@ def evaluate_recovery(model, tokenizer, holdout_examples, device):
             "target": target,
             "raw_text": raw_text,
             "is_valid_json": is_valid,
+            "is_strategy_match": is_strategy_match,
             "is_exact_match": is_match
         })
 
+    strategy_matches = sum(1 for r in records if r["is_strategy_match"])
     return {
         "total_cases": total,
         "valid_json": valid_json,
         "valid_json_rate": valid_json / total,
+        "strategy_matches": strategy_matches,
+        "strategy_match_rate": strategy_matches / total,
         "exact_matches": exact_matches,
         "exact_match_rate": exact_matches / total,
         "records": records
@@ -142,6 +154,8 @@ def run(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument("--temporal-manifest", default="artifacts/uow_grammar_1/temporal_corpus_manifest.json")
     p.add_argument("--recovery-manifest", default="artifacts/uow_grammar_1/recovery_corpus_manifest.json")
+    p.add_argument("--temporal-unseen", default="artifacts/uow_grammar_1/temporal_unseen_manifest.json")
+    p.add_argument("--recovery-unseen", default="artifacts/uow_grammar_1/recovery_unseen_manifest.json")
     p.add_argument("--temporal-adapter", default="checkpoints/uow_temporal_smollm2_135m")
     p.add_argument("--recovery-adapter", default="checkpoints/uow_recovery_smollm2_135m")
     p.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
@@ -150,6 +164,8 @@ def run(argv=None):
 
     t_data = json.loads(Path(args.temporal_manifest).read_text(encoding="utf-8"))["holdout_examples"]
     r_data = json.loads(Path(args.recovery_manifest).read_text(encoding="utf-8"))["holdout_examples"]
+    t_unseen = json.loads(Path(args.temporal_unseen).read_text(encoding="utf-8"))["test_examples"] if Path(args.temporal_unseen).exists() else []
+    r_unseen = json.loads(Path(args.recovery_unseen).read_text(encoding="utf-8"))["test_examples"] if Path(args.recovery_unseen).exists() else []
 
     tokenizer = AutoTokenizer.from_pretrained(BASE, revision=REV, trust_remote_code=False)
     if tokenizer.pad_token_id is None:
@@ -161,33 +177,53 @@ def run(argv=None):
         "evaluations": {}
     }
 
-    # 1. Base Model on Temporal
+    # 1. Base Model on Temporal Holdout
     print("\n--- Evaluating Base Model M0 on Temporal Holdout ---")
     base = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False).to(args.device).eval()
     results["evaluations"]["M0_temporal"] = evaluate_temporal(base, tokenizer, t_data, args.device)
-    print(f"M0 Temporal: Valid JSON={results['evaluations']['M0_temporal']['valid_json']}/24, "
+    print(f"M0 Temporal Holdout: Valid JSON={results['evaluations']['M0_temporal']['valid_json']}/24, "
+          f"Relation Matches={results['evaluations']['M0_temporal']['relation_matches']}/24, "
           f"Exact Matches={results['evaluations']['M0_temporal']['exact_matches']}/24")
 
-    # 2. Temporal Adapter on Temporal
+    # 2. Temporal Adapter on Temporal Holdout
     print(f"\n--- Evaluating Temporal Adapter on Temporal Holdout ({args.temporal_adapter}) ---")
     temp_model = PeftModel.from_pretrained(base, args.temporal_adapter, is_trainable=False).to(args.device).eval()
     results["evaluations"]["Temporal_adapter"] = evaluate_temporal(temp_model, tokenizer, t_data, args.device)
-    print(f"Temporal Adapter: Valid JSON={results['evaluations']['Temporal_adapter']['valid_json']}/24, "
+    print(f"Temporal Adapter Holdout: Valid JSON={results['evaluations']['Temporal_adapter']['valid_json']}/24, "
+          f"Relation Matches={results['evaluations']['Temporal_adapter']['relation_matches']}/24, "
           f"Exact Matches={results['evaluations']['Temporal_adapter']['exact_matches']}/24")
+
+    # 2b. Temporal Adapter on New Unseen Test Suite
+    if t_unseen:
+        print(f"\n--- Evaluating Temporal Adapter on New Unseen Test Suite (N={len(t_unseen)}) ---")
+        results["evaluations"]["Temporal_adapter_unseen_test"] = evaluate_temporal(temp_model, tokenizer, t_unseen, args.device)
+        print(f"Temporal Adapter Unseen Test: Valid JSON={results['evaluations']['Temporal_adapter_unseen_test']['valid_json']}/{len(t_unseen)}, "
+              f"Relation Matches={results['evaluations']['Temporal_adapter_unseen_test']['relation_matches']}/{len(t_unseen)}, "
+              f"Exact Matches={results['evaluations']['Temporal_adapter_unseen_test']['exact_matches']}/{len(t_unseen)}")
     del temp_model
 
-    # 3. Base Model on Recovery
+    # 3. Base Model on Recovery Holdout
     print("\n--- Evaluating Base Model M0 on Recovery Holdout ---")
     results["evaluations"]["M0_recovery"] = evaluate_recovery(base, tokenizer, r_data, args.device)
-    print(f"M0 Recovery: Valid JSON={results['evaluations']['M0_recovery']['valid_json']}/24, "
+    print(f"M0 Recovery Holdout: Valid JSON={results['evaluations']['M0_recovery']['valid_json']}/24, "
+          f"Strategy Matches={results['evaluations']['M0_recovery']['strategy_matches']}/24, "
           f"Exact Matches={results['evaluations']['M0_recovery']['exact_matches']}/24")
 
-    # 4. Recovery Adapter on Recovery
+    # 4. Recovery Adapter on Recovery Holdout
     print(f"\n--- Evaluating Recovery Adapter on Recovery Holdout ({args.recovery_adapter}) ---")
     rec_model = PeftModel.from_pretrained(base, args.recovery_adapter, is_trainable=False).to(args.device).eval()
     results["evaluations"]["Recovery_adapter"] = evaluate_recovery(rec_model, tokenizer, r_data, args.device)
-    print(f"Recovery Adapter: Valid JSON={results['evaluations']['Recovery_adapter']['valid_json']}/24, "
+    print(f"Recovery Adapter Holdout: Valid JSON={results['evaluations']['Recovery_adapter']['valid_json']}/24, "
+          f"Strategy Matches={results['evaluations']['Recovery_adapter']['strategy_matches']}/24, "
           f"Exact Matches={results['evaluations']['Recovery_adapter']['exact_matches']}/24")
+
+    # 4b. Recovery Adapter on New Unseen Test Suite
+    if r_unseen:
+        print(f"\n--- Evaluating Recovery Adapter on New Unseen Test Suite (N={len(r_unseen)}) ---")
+        results["evaluations"]["Recovery_adapter_unseen_test"] = evaluate_recovery(rec_model, tokenizer, r_unseen, args.device)
+        print(f"Recovery Adapter Unseen Test: Valid JSON={results['evaluations']['Recovery_adapter_unseen_test']['valid_json']}/{len(r_unseen)}, "
+              f"Strategy Matches={results['evaluations']['Recovery_adapter_unseen_test']['strategy_matches']}/{len(r_unseen)}, "
+              f"Exact Matches={results['evaluations']['Recovery_adapter_unseen_test']['exact_matches']}/{len(r_unseen)}")
     del rec_model
     del base
 

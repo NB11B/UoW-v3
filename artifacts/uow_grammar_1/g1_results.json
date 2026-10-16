@@ -6,6 +6,8 @@
       "total_cases": 24,
       "valid_json": 1,
       "valid_json_rate": 0.041666666666666664,
+      "relation_matches": 0,
+      "relation_match_rate": 0.0,
       "exact_matches": 0,
       "exact_match_rate": 0.0,
       "records": [
@@ -19,6 +21,7 @@
           },
           "raw_text": "You are the deterministic UoW Temporal Grammar Parser (uow.temporal.v1).\nEmit ONLY valid JSON with keys: 'target_action', 'relation' ('IMMEDIATE'|'AFTER'|'BEFORE'|'BETWEEN'|'CONCURRENT'), and optional 'reference_event', 'window', 'deadline', 'duration_seconds', or 'unknowns'.",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -31,6 +34,7 @@
           },
           "raw_text": "The following steps are required to complete the quarantine node:\n\n1.  The node is finished quarantine_node_7.\n2.  The node is finished quarantine_node_7.\n3.  The node is finished quarantine_node_7.\n4.  The node is finished quarantine_node_7.\n5.  The node is finished quarantine_node_7.\n6.  The node is finished quarantine_node_7.\n7.  The node is finished quarantine_node_7.\n8.  The node is finished quarantine_node_7.\n9.  The",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -46,6 +50,7 @@
           },
           "raw_text": "The time frame 10:00 to 12:30 is a time window for quarantine_node_7.\n\nThe time window is defined as:\n\n- 10:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:0",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -58,6 +63,7 @@
           },
           "raw_text": "Here is the complete quarantine_node_7 JSON:\n\n```json\n{\n  \"target_action\": \"SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_SUPER_",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -69,6 +75,7 @@
           },
           "raw_text": "You can initiate quarantine_node_7 right now by executing the following command:\n\n```\nsudo uow.temporal.v1.initiate_quarantine_node_7\n```\n\nThis command will prompt you to enter the quarantine node ID, and then execute the quarantine node. The quarantine node will be created and the node will be assigned a unique ID.\n\nAfter the quarantine node is created, you can start executing the node's execution order. You can do this by executing the following command:\n\n```\nsudo uow.temporal.v1.start_execution_order\n```",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -83,6 +90,7 @@
           },
           "raw_text": "Here's how you can quarantine a node:\n\n```python\nimport json\nimport time\nimport asyncio\n\nasync def quarantine_node_7(node_id, node_name, node_type, node_name_path, node_type_path, node_name_path_path, node_type_path_path, node_name_path_path_path, node_type_path_path_path_path, node_name_path_path_path_path_path, node_type_path_path_path_path_path_path_path_path_",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -95,6 +103,7 @@
           },
           "raw_text": "You are the deterministic UoW Temporal Grammar Parser (uow.temporal.v1).\nExtract temporal constraints, execution order, time windows, and deadlines.\nEmit ONLY valid JSON with keys: 'target_action', 'relation' ('IMMEDIATE'|'AFTER'|'BEFORE'|'BETWEEN'|'CONCURRENT'), and optional 'reference_event', 'window', 'deadline', 'duration_seconds', or 'unknowns'.",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -107,6 +116,7 @@
           },
           "raw_text": "After telemetry_ack, finish vent_chamber_3.\n\n```python\nimport json\n\ndef finish_vent_chamber_3(json_data):\n    for key, value in json_data.items():\n        if key == 'target_action':\n            if value['relation'] == 'IMMEDIATE':\n                if value['window'] == 'BEFORE':\n                    return json.dumps(value)\n            elif value['relation'] == 'AFTER':\n                if value['window'] == 'BETWEEN':\n                    return json.dumps(value)\n            elif value['relation",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -122,6 +132,7 @@
           },
           "raw_text": "The time frame 10:00 to 12:30 is a time window for the vent chamber. The time window is 10:00 to 12:30, and the vent chamber is 12:30 to 14:30.\n\nThe time window is 10:00 to 12:30, and the vent chamber is 12:30 to 14:30.\n\nThe time window is 10:00 to 12:30, and the vent chamber is 1",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -134,6 +145,7 @@
           },
           "raw_text": "Here is the complete JSON file:\n\n```json\n{\n  \"target_action\": \"Vent Chamber\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"BEFORE\",\n  \"deadline\": \"19:00\",\n  \"duration_seconds\": \"1000\",\n  \"unknowns\": \"unknowns\"\n}\n```\n\nThis file contains the following JSON objects:\n\n```json\n{\n  \"target_action\": \"Vent Chamber\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"BEFORE\",\n  \"",
           "is_valid_json": true,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -145,6 +157,7 @@
           },
           "raw_text": "You can initiate the vent chamber right now by entering the following command:\n\n```\nvent_chamber_3\n```\n\nThis command will prompt you to enter the vent chamber name, and then you can initiate the vent chamber right now.\n\nIf you want to exit the vent chamber, you can exit the vent chamber by entering the following command:\n\n```\nexit_vent_chamber\n```\n\nThis command will prompt you to exit the vent chamber, and then you can exit the vent chamber by entering the following command:\n\n```\nexit_vent_chamber\n```\n\nNote",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -159,6 +172,7 @@
           },
           "raw_text": "You can use the following code to perform the vent_chamber_3 task:\n\n```python\nimport json\nimport time\nimport random\n\n# Define the target action\ntarget_action = 'Vent Chamber 3'\n\n# Define the relation\nrelation = 'IMMEDIATE'\n\n# Define the window\nwindow = 'BEFORE'\n\n# Define the deadline\ndeadline = '2023-01-01'\n\n# Define the duration of the event\nduration_seconds = 20\n\n# Define the time window\ntime_window",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -171,6 +185,7 @@
           },
           "raw_text": "After completing the telemetry_ack, proceed with degauss_actuator.",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -183,6 +198,7 @@
           },
           "raw_text": "After reactor_cooling, finish degauss_actuator.",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -198,6 +214,7 @@
           },
           "raw_text": "The time frame 10:00 to 12:30 is the time window for the degauss_actuator.\n\nThe degauss_actuator is a temporal entity that is responsible for performing the action of degauss. It is a temporal entity that is not a function, but rather a state transition.\n\nThe degauss_actuator is defined as follows:\n\n```\n{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"10:00:00:",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -210,6 +227,7 @@
           },
           "raw_text": "The degauss_actuator is a simple, deterministic, and self-contained system that can be used to automate the process of degaussing. The deadline is to complete the degauss_actuator no later than 19:00.\n\nHere is the complete degauss_actuator:\n\n```\n{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": \"BEFORE\",\n  \"deadline\": \"19:00\",\n  \"duration_seconds\": \"1000",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -221,6 +239,7 @@
           },
           "raw_text": "You can initiate degauss_actuator right now by executing the following command:\n\n```\ndegauss_actuator --start --start_time 00:00:00 --end_time 00:00:00 --start_time 00:00:00 --end_time 00:00:00 --start_event 00:00:00 --end_event 00:00:00 --start_window 00:00:00 --end_window 00:",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -235,6 +254,7 @@
           },
           "raw_text": "To perform degauss_actuator when convenient, you can use the following steps:\n\n1. **Check the input data**: Verify that the input data is valid and contains the required information.\n2. **Check the input data type**: Ensure that the input data type is valid and matches the expected input data type.\n3. **Check the input data format**: Verify that the input data format is valid and matches the expected input data format.\n4. **Check the input data structure**: Verify that the input data structure is valid and matches the expected input data structure.\n5. **Check the input data type**:",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -247,6 +267,7 @@
           },
           "raw_text": "Flush_coolant_loop is a valid JSON with keys: 'target_action', 'relation', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', 'window', 'deadline', 'duration_seconds', 'unknowns', 'reference_event', '",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -259,6 +280,7 @@
           },
           "raw_text": "The following code implements the shutdown of the cooling system:\n\n```javascript\nfunction shutdown_coolant_loop() {\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant_loop) {\n    return;\n  }\n\n  // Shutdown the cooling system\n  if (!coolant",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -274,6 +296,7 @@
           },
           "raw_text": "Here is the implementation of the flushing coolant loop:\n\n```python\nimport json\nimport time\n\ndef flushing_coolant_loop(target_action, reference_event, window, deadline, duration_seconds, unknowns):\n    \"\"\"\n    Flushes the cooling system.\n\n    Parameters:\n    target_action (str): The target action to perform.\n    reference_event (str): The event to perform.\n    window (int): The window to perform.\n    deadline (int): The deadline to perform.\n    duration_seconds (int): The duration of the cooling system.\n    unknowns (list): A",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -286,6 +309,7 @@
           },
           "raw_text": "Here is the complete implementation of the uow.temporal.v1.flush_coolant_loop generator:\n\n```python\nimport json\nimport time\nimport asyncio\nimport asyncio.gather\nimport asyncio\nimport asyncio.timezone\nimport asyncio.timezone_as\nimport asyncio\nimport asyncio.wait_for\nimport asyncio.wait_for_any\nimport asyncio.wait_for_any_with\nimport asyncio.wait_for_any_with_any\nimport asyncio.wait_for_any_with_any_with\nimport asyncio.wait_for_any_with_any_",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -297,6 +321,7 @@
           },
           "raw_text": "You can use the `flush_coolant_loop` function to flush the cooling system.\n\n```javascript\nconst uow = new uow.temporal.v1();\nuow.flush_coolant_loop();\n```\n\nThis function will automatically flush the cooling system when the `flush_coolant_loop` function is called.\n\nYou can use this function to flush the cooling system when you want to:\n\n*   Check if the cooling system is already flushing.\n*   Check if the cooling system is already flushing.\n*   Check if the cooling system is already",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         },
         {
@@ -311,6 +336,7 @@
           },
           "raw_text": "Here's how you can flush the coolant loop when convenient:\n\n```javascript\nconst uow = new uow.temporal.v1();\nuow.flush_coolant_loop();\n```\n\nThis will flush the coolant loop when the `flush_coolant_loop` method is called.\n\nIf you want to avoid flushing the loop when the `flush_coolant_loop` method is called, you can use the following approach:\n\n```javascript\nconst uow = new uow.temporal.v1();\nuow.flush_coolant_loop",
           "is_valid_json": false,
+          "is_relation_match": false,
           "is_exact_match": false
         }
       ]
@@ -319,8 +345,10 @@
       "total_cases": 24,
       "valid_json": 24,
       "valid_json_rate": 1.0,
-      "exact_matches": 5,
-      "exact_match_rate": 0.20833333333333334,
+      "relation_matches": 23,
+      "relation_match_rate": 0.9583333333333334,
+      "exact_matches": 20,
+      "exact_match_rate": 0.8333333333333334,
       "records": [
         {
           "example_id": "HO_temp_after_quarantine_node_7",
@@ -330,9 +358,10 @@
             "relation": "AFTER",
             "reference_event": "depot_handshake"
           },
-          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"depot_handshake\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_before_quarantine_node_7",
@@ -342,9 +371,10 @@
             "relation": "BEFORE",
             "reference_event": "pump_shutdown"
           },
-          "raw_text": "{\n  \"target_action\": \"finish quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"pump_shutdown\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_window_quarantine_node_7",
@@ -357,8 +387,9 @@
               "end": "12:30"
             }
           },
-          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
           "is_valid_json": true,
+          "is_relation_match": true,
           "is_exact_match": false
         },
         {
@@ -369,9 +400,10 @@
             "relation": "BEFORE",
             "deadline": "19:00"
           },
-          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
+          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
           "is_valid_json": true,
-          "is_exact_match": true
+          "is_relation_match": true,
+          "is_exact_match": false
         },
         {
           "example_id": "HO_temp_immediate_quarantine_node_7",
@@ -380,8 +412,9 @@
             "target_action": "quarantine_node_7",
             "relation": "IMMEDIATE"
           },
-          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\"\n}",
           "is_valid_json": true,
+          "is_relation_match": true,
           "is_exact_match": false
         },
         {
@@ -394,9 +427,10 @@
               "window"
             ]
           },
-          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+          "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_after_vent_chamber_3",
@@ -406,9 +440,10 @@
             "relation": "AFTER",
             "reference_event": "pressure_stabilization"
           },
-          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"pressure_stabilization\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_before_vent_chamber_3",
@@ -420,6 +455,7 @@
           },
           "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"telemetry_ack\"\n}",
           "is_valid_json": true,
+          "is_relation_match": true,
           "is_exact_match": true
         },
         {
@@ -433,9 +469,10 @@
               "end": "12:30"
             }
           },
-          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_deadline_vent_chamber_3",
@@ -445,9 +482,10 @@
             "relation": "BEFORE",
             "deadline": "19:00"
           },
-          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_immediate_vent_chamber_3",
@@ -456,9 +494,10 @@
             "target_action": "vent_chamber_3",
             "relation": "IMMEDIATE"
           },
-          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"IMMEDIATE\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_ambig_vent_chamber_3",
@@ -470,9 +509,10 @@
               "window"
             ]
           },
-          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+          "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_after_degauss_actuator",
@@ -484,6 +524,7 @@
           },
           "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"telemetry_ack\"\n}",
           "is_valid_json": true,
+          "is_relation_match": true,
           "is_exact_match": true
         },
         {
@@ -496,6 +537,7 @@
           },
           "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"reactor_cooling\"\n}",
           "is_valid_json": true,
+          "is_relation_match": true,
           "is_exact_match": true
         },
         {
@@ -509,9 +551,10 @@
               "end": "12:30"
             }
           },
-          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_deadline_degauss_actuator",
@@ -521,9 +564,10 @@
             "relation": "BEFORE",
             "deadline": "19:00"
           },
-          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_immediate_degauss_actuator",
@@ -532,9 +576,10 @@
             "target_action": "degauss_actuator",
             "relation": "IMMEDIATE"
           },
-          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"unknowns\": [\n    \"degauss_actuator\"\n  ]\n}",
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"IMMEDIATE\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_ambig_degauss_actuator",
@@ -546,9 +591,10 @@
               "window"
             ]
           },
-          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+          "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_after_flush_coolant_loop",
@@ -558,9 +604,10 @@
             "relation": "AFTER",
             "reference_event": "depot_handshake"
           },
-          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"depot_handshake\"\n}",
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"depot_handshake\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_before_flush_coolant_loop",
@@ -570,9 +617,10 @@
             "relation": "BEFORE",
             "reference_event": "depot_handshake"
           },
-          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"depot_handshake\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_window_flush_coolant_loop",
@@ -585,9 +633,10 @@
               "end": "12:30"
             }
           },
-          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_deadline_flush_coolant_loop",
@@ -599,6 +648,7 @@
           },
           "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
           "is_valid_json": true,
+          "is_relation_match": true,
           "is_exact_match": true
         },
         {
@@ -608,9 +658,10 @@
             "target_action": "flush_coolant_loop",
             "relation": "IMMEDIATE"
           },
-          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"right now\"\n}",
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"IMMEDIATE\"\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_relation_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_temp_ambig_flush_coolant_loop",
@@ -622,9 +673,349 @@
               "window"
             ]
           },
-          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"flush_coolant_loop\"\n}",
+          "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
           "is_valid_json": true,
+          "is_relation_match": false,
           "is_exact_match": false
+        }
+      ]
+    },
+    "Temporal_adapter_unseen_test": {
+      "total_cases": 24,
+      "valid_json": 24,
+      "valid_json_rate": 1.0,
+      "relation_matches": 24,
+      "relation_match_rate": 1.0,
+      "exact_matches": 23,
+      "exact_match_rate": 0.9583333333333334,
+      "records": [
+        {
+          "example_id": "TEST_temp_after_vent_silo_9",
+          "signal": "Subsequent to docking_seal, initiate vent_silo_9.",
+          "target": {
+            "target_action": "vent_silo_9",
+            "relation": "AFTER",
+            "reference_event": "docking_seal"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_silo_9\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"dock_seal\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "TEST_temp_before_vent_silo_9",
+          "signal": "Finish vent_silo_9 ahead of thermal_lock.",
+          "target": {
+            "target_action": "vent_silo_9",
+            "relation": "BEFORE",
+            "reference_event": "thermal_lock"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_silo_9\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"thermal_lock\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_window_vent_silo_9",
+          "signal": "Between 14:00 and 16:30, initiate vent_silo_9.",
+          "target": {
+            "target_action": "vent_silo_9",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "14:00",
+              "end": "16:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_silo_9\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"14:00\",\n    \"end\": \"16:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_deadline_vent_silo_9",
+          "signal": "Complete vent_silo_9 no later than 21:00.",
+          "target": {
+            "target_action": "vent_silo_9",
+            "relation": "BEFORE",
+            "deadline": "21:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_silo_9\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"21:00\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_immediate_vent_silo_9",
+          "signal": "Trigger vent_silo_9 immediately.",
+          "target": {
+            "target_action": "vent_silo_9",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_silo_9\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_ambig_vent_silo_9",
+          "signal": "Queue vent_silo_9 with unspecified timing.",
+          "target": {
+            "target_action": "vent_silo_9",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"vent_silo_9\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_after_purge_reaction_chamber",
+          "signal": "Subsequent to thermal_lock, initiate purge_reaction_chamber.",
+          "target": {
+            "target_action": "purge_reaction_chamber",
+            "relation": "AFTER",
+            "reference_event": "thermal_lock"
+          },
+          "raw_text": "{\n  \"target_action\": \"purge_reaction_chamber\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"thermal_lock\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_before_purge_reaction_chamber",
+          "signal": "Finish purge_reaction_chamber ahead of sensor_sweep.",
+          "target": {
+            "target_action": "purge_reaction_chamber",
+            "relation": "BEFORE",
+            "reference_event": "sensor_sweep"
+          },
+          "raw_text": "{\n  \"target_action\": \"purge_reaction_chamber\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"sensor_sweep\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_window_purge_reaction_chamber",
+          "signal": "Between 14:00 and 16:30, initiate purge_reaction_chamber.",
+          "target": {
+            "target_action": "purge_reaction_chamber",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "14:00",
+              "end": "16:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"purge_reaction_chamber\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"14:00\",\n    \"end\": \"16:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_deadline_purge_reaction_chamber",
+          "signal": "Complete purge_reaction_chamber no later than 21:00.",
+          "target": {
+            "target_action": "purge_reaction_chamber",
+            "relation": "BEFORE",
+            "deadline": "21:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"purge_reaction_chamber\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"21:00\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_immediate_purge_reaction_chamber",
+          "signal": "Trigger purge_reaction_chamber immediately.",
+          "target": {
+            "target_action": "purge_reaction_chamber",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"purge_reaction_chamber\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_ambig_purge_reaction_chamber",
+          "signal": "Queue purge_reaction_chamber with unspecified timing.",
+          "target": {
+            "target_action": "purge_reaction_chamber",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"purge_reaction_chamber\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_after_isolate_subgrid_alpha",
+          "signal": "Subsequent to sensor_sweep, initiate isolate_subgrid_alpha.",
+          "target": {
+            "target_action": "isolate_subgrid_alpha",
+            "relation": "AFTER",
+            "reference_event": "sensor_sweep"
+          },
+          "raw_text": "{\n  \"target_action\": \"isolate_subgrid_alpha\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"sensor_sweep\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_before_isolate_subgrid_alpha",
+          "signal": "Finish isolate_subgrid_alpha ahead of sensor_sweep.",
+          "target": {
+            "target_action": "isolate_subgrid_alpha",
+            "relation": "BEFORE",
+            "reference_event": "sensor_sweep"
+          },
+          "raw_text": "{\n  \"target_action\": \"isolate_subgrid_alpha\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"sensor_sweep\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_window_isolate_subgrid_alpha",
+          "signal": "Between 14:00 and 16:30, initiate isolate_subgrid_alpha.",
+          "target": {
+            "target_action": "isolate_subgrid_alpha",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "14:00",
+              "end": "16:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"isolate_subgrid_alpha\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"14:00\",\n    \"end\": \"16:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_deadline_isolate_subgrid_alpha",
+          "signal": "Complete isolate_subgrid_alpha no later than 21:00.",
+          "target": {
+            "target_action": "isolate_subgrid_alpha",
+            "relation": "BEFORE",
+            "deadline": "21:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"isolate_subgrid_alpha\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"21:00\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_immediate_isolate_subgrid_alpha",
+          "signal": "Trigger isolate_subgrid_alpha immediately.",
+          "target": {
+            "target_action": "isolate_subgrid_alpha",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"isolate_subgrid_alpha\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_ambig_isolate_subgrid_alpha",
+          "signal": "Queue isolate_subgrid_alpha with unspecified timing.",
+          "target": {
+            "target_action": "isolate_subgrid_alpha",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"isolate_subgrid_alpha\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_after_sync_telemetry_beacon",
+          "signal": "Subsequent to core_drain, initiate sync_telemetry_beacon.",
+          "target": {
+            "target_action": "sync_telemetry_beacon",
+            "relation": "AFTER",
+            "reference_event": "core_drain"
+          },
+          "raw_text": "{\n  \"target_action\": \"sync_telemetry_beacon\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"core_drain\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_before_sync_telemetry_beacon",
+          "signal": "Finish sync_telemetry_beacon ahead of thermal_lock.",
+          "target": {
+            "target_action": "sync_telemetry_beacon",
+            "relation": "BEFORE",
+            "reference_event": "thermal_lock"
+          },
+          "raw_text": "{\n  \"target_action\": \"sync_telemetry_beacon\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"thermal_lock\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_window_sync_telemetry_beacon",
+          "signal": "Between 14:00 and 16:30, initiate sync_telemetry_beacon.",
+          "target": {
+            "target_action": "sync_telemetry_beacon",
+            "relation": "BETWEEN",
+            "window": {
+              "start": "14:00",
+              "end": "16:30"
+            }
+          },
+          "raw_text": "{\n  \"target_action\": \"sync_telemetry_beacon\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"14:00\",\n    \"end\": \"16:30\"\n  }\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_deadline_sync_telemetry_beacon",
+          "signal": "Complete sync_telemetry_beacon no later than 21:00.",
+          "target": {
+            "target_action": "sync_telemetry_beacon",
+            "relation": "BEFORE",
+            "deadline": "21:00"
+          },
+          "raw_text": "{\n  \"target_action\": \"sync_telemetry_beacon\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"21:00\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_immediate_sync_telemetry_beacon",
+          "signal": "Trigger sync_telemetry_beacon immediately.",
+          "target": {
+            "target_action": "sync_telemetry_beacon",
+            "relation": "IMMEDIATE"
+          },
+          "raw_text": "{\n  \"target_action\": \"sync_telemetry_beacon\",\n  \"relation\": \"IMMEDIATE\"\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_temp_ambig_sync_telemetry_beacon",
+          "signal": "Queue sync_telemetry_beacon with unspecified timing.",
+          "target": {
+            "target_action": "sync_telemetry_beacon",
+            "relation": "BETWEEN",
+            "unknowns": [
+              "window"
+            ]
+          },
+          "raw_text": "{\n  \"target_action\": \"sync_telemetry_beacon\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_relation_match": true,
+          "is_exact_match": true
         }
       ]
     },
@@ -632,8 +1023,10 @@
       "total_cases": 24,
       "valid_json": 12,
       "valid_json_rate": 0.5,
-      "exact_matches": 1,
-      "exact_match_rate": 0.041666666666666664,
+      "strategy_matches": 0,
+      "strategy_match_rate": 0.0,
+      "exact_matches": 0,
+      "exact_match_rate": 0.0,
       "records": [
         {
           "example_id": "HO_rec_retry_write_telemetry_block",
@@ -646,9 +1039,10 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"retry_out-of-range\",\n  \"ETIMEDOUT\": \"unfortunately\"\n}",
           "is_valid_json": true,
-          "is_exact_match": true
+          "is_strategy_match": false,
+          "is_exact_match": false
         },
         {
           "example_id": "HO_rec_comp_write_telemetry_block",
@@ -658,8 +1052,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "invalidate_telemetry_index"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"write_telemetry_block\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"RETRY\",\n    \"backoff\": 1\n  }\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -670,8 +1065,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "spool_telemetry_to_local_nvme"
           },
-          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"backup_abstraction\": \"auxiliary\"\n  }\n}",
+          "raw_text": "{\n  \"interface\": \"backup\",\n  \"strategy\": \"recovery\",\n  \"backoff\": \"max_attempts\"\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -686,6 +1082,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -699,8 +1096,9 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"divert_reactor_flow\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"reactivate_port\",\n  \"strategy\": \"reactivate\",\n  \"retry_policy\": \"max_attempts\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -711,8 +1109,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "clamp_emergency_scram_valves"
           },
-          "raw_text": "{\n  \"state\": \"revert_to_previous_checkpoint\",\n  \"strategy\": \"rollback\"\n}",
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"reactivate\",\n    \"backoff\": 1\n  }\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -723,8 +1122,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "route_coolant_auxiliary_bypass"
           },
-          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"action\": \"switch_to_aerial_backup\"\n  }\n}",
+          "raw_text": "{\n  \"interface\": \"backup_abstraction\",\n  \"strategy\": \"revert_to_authorized_reactor_flow\",\n  \"backoff\": \"max_attempts\"\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -737,8 +1137,9 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"unknowns\",\n  \"strategy\": \"no_automated_resolution\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -752,8 +1153,9 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"dynsync_database\",\n  \"strategy\": \"dynsync\",\n  \"retry_policy\": \"max_attempts\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"sync_database\",\n  \"strategy\": \"backoff\",\n  \"ETIMEDOUT\": \"unfortunately\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -764,8 +1166,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "revert_wal_checkpoint"
           },
-          "raw_text": "{\n  \"state\": \"synchronized_database\",\n  \"revert\": \"revert\"\n}",
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"synchronize_database\",\n    \"backoff\": 1\n  }\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -776,8 +1179,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "queue_offline_delta_log"
           },
-          "raw_text": "{\n  \"primary\": {\n    \"interface\": \"synchronize_database\",\n    \"strategy\": \"auxiliary_backup\"\n  }\n}",
+          "raw_text": "{\n  \"primary\": \"backup_abstraction\",\n  \"strategy\": \"accommodation_backup\"\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -790,8 +1194,9 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"hardware_anomaly\",\n  \"strategy\": \"no_automated_resolution\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -805,8 +1210,9 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"escutive eject_capsule dropped packet\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
-          "is_valid_json": true,
+          "raw_text": "{\n  \"failed_uow\": {\n    \"error_code\": \"RETRY\",\n    \"retry_policy\": \"max_attempts\"\n  }\n}",
+          "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -817,8 +1223,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "retract_ejection_latches"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"Eject Capsule\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"reject_capsule\",\n    \"backoff\": 1\n  }\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -829,8 +1236,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "seal_capsule_in_containment_bay"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"accommodation_abort\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"aibu\",\n    \"backoff\": 1\n  }\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -843,8 +1251,9 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"hardware_anomaly\",\n  \"strategy\": \"no_automated_resolution\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -858,8 +1267,9 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"remote_port\",\n  \"retry_policy\": \"max_attempts\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"remote_port\",\n  \"strategy\": \"ETIMEDOUT\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -870,8 +1280,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "restore_sensor_power_grid"
           },
-          "raw_text": "{\n  \"failed_uow\": \"rollback_to_previous_checkpoint_needed_immediately\"\n}",
-          "is_valid_json": false,
+          "raw_text": "{\n  \"failed_uow\": \"revert_to_previous_checkpoint\",\n  \"strategy\": \"power_down_sensor_array\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -882,8 +1293,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "isolate_sensor_bus_optically"
           },
-          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"backup_abstraction\": \"auxiliary\"\n  }\n}",
+          "raw_text": "{\n  \"interface\": \"backup_uow\",\n  \"strategy\": \"switch_to_backup\",\n  \"backoff\": \"max_attempts\"\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -896,8 +1308,9 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"no_automated_resolution_policy\",\n  \"strategy\": \"no_automated_resolution_policy\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -913,6 +1326,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"remote_port_unresponsive\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -923,8 +1337,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "refill_coolant_lines"
           },
-          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"revert_to_previous_checkpoint\",\n    \"backoff\": 1\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": {\n    \"strategy\": \"reboot_coolant_reservoir\",\n    \"back_off\": \"max_attempts\"\n  }\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -935,8 +1350,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "pump_coolant_to_reserve_sump"
           },
-          "raw_text": "{\n  \"primary\": {\n    \"status\": \"down\",\n    \"backup_abstraction\": \"auxiliary\"\n  }\n}",
+          "raw_text": "{\n  \"key\": \"backup_abstraction\",\n  \"strategy\": \"rescue\",\n  \"retry_policy\": \"max_attempts\"\n}",
           "is_valid_json": false,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -951,6 +1367,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"unrecognized hardware anomaly\",\n  \"strategy\": \"no automated resolution policy\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         }
       ]
@@ -959,8 +1376,10 @@
       "total_cases": 24,
       "valid_json": 24,
       "valid_json_rate": 1.0,
-      "exact_matches": 6,
-      "exact_match_rate": 0.25,
+      "strategy_matches": 21,
+      "strategy_match_rate": 0.875,
+      "exact_matches": 10,
+      "exact_match_rate": 0.4166666666666667,
       "records": [
         {
           "example_id": "HO_rec_retry_write_telemetry_block",
@@ -975,6 +1394,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": true
         },
         {
@@ -987,6 +1407,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -997,8 +1418,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "spool_telemetry_to_local_nvme"
           },
-          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"read_telemetry_block\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1011,9 +1433,10 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_strategy_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_rec_retry_authorize_reactor_flow",
@@ -1028,6 +1451,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": true
         },
         {
@@ -1038,8 +1462,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "clamp_emergency_scram_valves"
           },
-          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"rollback_to_checkpoint\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1050,8 +1475,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "route_coolant_auxiliary_bypass"
           },
-          "raw_text": "{\n  \"failed_uow\": \"reactor_flow\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"reactor_flow_reactor_shutdown\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1064,9 +1490,10 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_strategy_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_rec_retry_synchronize_database",
@@ -1081,6 +1508,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": true
         },
         {
@@ -1091,8 +1519,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "revert_wal_checkpoint"
           },
-          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"restore_database_to_state\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1103,8 +1532,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "queue_offline_delta_log"
           },
-          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"BACKUP\",\n  \"compensation_uow\": \"auxiliary_backup\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"backup_database_overview\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1117,9 +1547,10 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_strategy_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_rec_retry_eject_capsule",
@@ -1132,8 +1563,9 @@
               "backoff": "EXPONENTIAL"
             }
           },
-          "raw_text": "{\n  \"failed_uow\": \"escutive_port\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"escutive\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1144,8 +1576,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "retract_ejection_latches"
           },
-          "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"RETRY\",\n  \"fallback_uow\": \"escalate\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"escaping_capsule\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -1156,8 +1589,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "seal_capsule_in_containment_bay"
           },
-          "raw_text": "{\n  \"failed_uow\": \"escuapack\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escuapack_recovery\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"escaping_capsule\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
+          "is_strategy_match": false,
           "is_exact_match": false
         },
         {
@@ -1170,8 +1604,9 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escalate\"\n}",
+          "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1187,6 +1622,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": true
         },
         {
@@ -1197,8 +1633,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "restore_sensor_power_grid"
           },
-          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"reboot_array_temp_sensor\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1209,8 +1646,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "isolate_sensor_bus_optically"
           },
-          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"switch_to_auxiliary_backup_ apparatus\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1223,9 +1661,10 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
-          "is_exact_match": false
+          "is_strategy_match": true,
+          "is_exact_match": true
         },
         {
           "example_id": "HO_rec_retry_drain_coolant_reservoir",
@@ -1240,6 +1679,7 @@
           },
           "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": true
         },
         {
@@ -1250,8 +1690,9 @@
             "strategy": "COMPENSATE",
             "compensation_uow": "refill_coolant_lines"
           },
-          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"reroute_coolant_system\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1262,8 +1703,9 @@
             "strategy": "FALLBACK",
             "fallback_uow": "pump_coolant_to_reserve_sump"
           },
-          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"evaporate_condensate_into_water\"\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": false
         },
         {
@@ -1276,8 +1718,362 @@
               "recovery_path"
             ]
           },
-          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
           "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        }
+      ]
+    },
+    "Recovery_adapter_unseen_test": {
+      "total_cases": 24,
+      "valid_json": 24,
+      "valid_json_rate": 1.0,
+      "strategy_matches": 24,
+      "strategy_match_rate": 1.0,
+      "exact_matches": 20,
+      "exact_match_rate": 0.8333333333333334,
+      "records": [
+        {
+          "example_id": "TEST_rec_retry_ignite_thruster_array",
+          "signal": "Execution of ignite_thruster_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "ignite_thruster_array",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 3,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"ignite_thruster_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_comp_ignite_thruster_array",
+          "signal": "Transaction abort in ignite_thruster_array. Invoke compensation routine cutoff_fuel_valves.",
+          "target": {
+            "failed_uow": "ignite_thruster_array",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "cutoff_fuel_valves"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"ignite_thruster_array\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"cycle_fuel_valves\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "TEST_rec_fb_ignite_thruster_array",
+          "signal": "Hardware channel lost in ignite_thruster_array. Divert execution to fallback routine fire_cold_gas_thrusters.",
+          "target": {
+            "failed_uow": "ignite_thruster_array",
+            "strategy": "FALLBACK",
+            "fallback_uow": "fire_cold_gas_thrusters"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"ignite_thruster_array\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"fire_cold_gas_thrusters\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_esc_ignite_thruster_array",
+          "signal": "Critical unclassified failure in ignite_thruster_array. Escalate to system supervisor.",
+          "target": {
+            "failed_uow": "ignite_thruster_array",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"ignite_thruster_array\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_retry_recalibrate_star_tracker",
+          "signal": "Execution of recalibrate_star_tracker dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "recalibrate_star_tracker",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 3,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recalibrate_star_tracker\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_comp_recalibrate_star_tracker",
+          "signal": "Transaction abort in recalibrate_star_tracker. Invoke compensation routine load_inertial_gyro_frame.",
+          "target": {
+            "failed_uow": "recalibrate_star_tracker",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "load_inertial_gyro_frame"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recalibrate_star_tracker\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"load_inertial_gyro_frame\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_fb_recalibrate_star_tracker",
+          "signal": "Hardware channel lost in recalibrate_star_tracker. Divert execution to fallback routine align_optical_horizon_sensor.",
+          "target": {
+            "failed_uow": "recalibrate_star_tracker",
+            "strategy": "FALLBACK",
+            "fallback_uow": "align_optical_horizon_sensor"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"calibrate_star_tracker\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"align_optical_horizon_sensor\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "TEST_rec_esc_recalibrate_star_tracker",
+          "signal": "Critical unclassified failure in recalibrate_star_tracker. Escalate to system supervisor.",
+          "target": {
+            "failed_uow": "recalibrate_star_tracker",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recalibrate_star_tracker\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_retry_pressurize_fuel_cell",
+          "signal": "Execution of pressurize_fuel_cell dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "pressurize_fuel_cell",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 3,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"pressurize_fuel_cell\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_comp_pressurize_fuel_cell",
+          "signal": "Transaction abort in pressurize_fuel_cell. Invoke compensation routine vent_overpressure_manifold.",
+          "target": {
+            "failed_uow": "pressurize_fuel_cell",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "vent_overpressure_manifold"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"pressurize_fuel_cell\",\n  \"strategy\": \"compensate\",\n  \"compensation_uow\": \"vent_overpressure_manifold\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_fb_pressurize_fuel_cell",
+          "signal": "Hardware channel lost in pressurize_fuel_cell. Divert execution to fallback routine draw_from_auxiliary_battery.",
+          "target": {
+            "failed_uow": "pressurize_fuel_cell",
+            "strategy": "FALLBACK",
+            "fallback_uow": "draw_from_auxiliary_battery"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"pressurize_fuel_cell\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"draw_from_auxiliary_battery\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_esc_pressurize_fuel_cell",
+          "signal": "Critical unclassified failure in pressurize_fuel_cell. Escalate to system supervisor.",
+          "target": {
+            "failed_uow": "pressurize_fuel_cell",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"pressurize_fuel_cell\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_retry_recharge_ion_battery",
+          "signal": "Execution of recharge_ion_battery dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "recharge_ion_battery",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 3,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recharge_ion_battery\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_comp_recharge_ion_battery",
+          "signal": "Transaction abort in recharge_ion_battery. Invoke compensation routine disconnect_solar_array.",
+          "target": {
+            "failed_uow": "recharge_ion_battery",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "disconnect_solar_array"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recharge_ion_battery\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"disconnect_solar_array\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_fb_recharge_ion_battery",
+          "signal": "Hardware channel lost in recharge_ion_battery. Divert execution to fallback routine switch_to_fuel_cell_bus.",
+          "target": {
+            "failed_uow": "recharge_ion_battery",
+            "strategy": "FALLBACK",
+            "fallback_uow": "switch_to_fuel_cell_bus"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recharge_ion_battery\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"switch_to_fuel_cell_bus\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_esc_recharge_ion_battery",
+          "signal": "Critical unclassified failure in recharge_ion_battery. Escalate to system supervisor.",
+          "target": {
+            "failed_uow": "recharge_ion_battery",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"recharge_ion_battery\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_retry_purge_nitrogen_tank",
+          "signal": "Execution of purge_nitrogen_tank dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "purge_nitrogen_tank",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 3,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"purge_nitrogen_tank\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_comp_purge_nitrogen_tank",
+          "signal": "Transaction abort in purge_nitrogen_tank. Invoke compensation routine reseal_nitrogen_valves.",
+          "target": {
+            "failed_uow": "purge_nitrogen_tank",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "reseal_nitrogen_valves"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"purge_nitrogen_tank\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"seal_nitrogen_valves\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "TEST_rec_fb_purge_nitrogen_tank",
+          "signal": "Hardware channel lost in purge_nitrogen_tank. Divert execution to fallback routine divert_to_auxiliary_scrubber.",
+          "target": {
+            "failed_uow": "purge_nitrogen_tank",
+            "strategy": "FALLBACK",
+            "fallback_uow": "divert_to_auxiliary_scrubber"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"purge_nitrogen_tank\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"divert_to_auxiliary_scrubber\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_esc_purge_nitrogen_tank",
+          "signal": "Critical unclassified failure in purge_nitrogen_tank. Escalate to system supervisor.",
+          "target": {
+            "failed_uow": "purge_nitrogen_tank",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"purge_nitrogen_tank\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_retry_deploy_solar_mast",
+          "signal": "Execution of deploy_solar_mast dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+          "target": {
+            "failed_uow": "deploy_solar_mast",
+            "strategy": "RETRY",
+            "retry_policy": {
+              "max_attempts": 3,
+              "backoff": "EXPONENTIAL"
+            }
+          },
+          "raw_text": "{\n  \"failed_uow\": \"deploy_solar_mast\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_comp_deploy_solar_mast",
+          "signal": "Transaction abort in deploy_solar_mast. Invoke compensation routine retract_mast_gimbal.",
+          "target": {
+            "failed_uow": "deploy_solar_mast",
+            "strategy": "COMPENSATE",
+            "compensation_uow": "retract_mast_gimbal"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"deploy_solar_mast\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_mast_gimbal\": {\n    \"reactivate_gimbal_tilt\": \"FALLBACK\"\n  }\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": false
+        },
+        {
+          "example_id": "TEST_rec_fb_deploy_solar_mast",
+          "signal": "Hardware channel lost in deploy_solar_mast. Divert execution to fallback routine lock_mast_at_partial_angle.",
+          "target": {
+            "failed_uow": "deploy_solar_mast",
+            "strategy": "FALLBACK",
+            "fallback_uow": "lock_mast_at_partial_angle"
+          },
+          "raw_text": "{\n  \"failed_uow\": \"deploy_solar_mast\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"lock_mast_at_partial_angle\"\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
+          "is_exact_match": true
+        },
+        {
+          "example_id": "TEST_rec_esc_deploy_solar_mast",
+          "signal": "Critical unclassified failure in deploy_solar_mast. Escalate to system supervisor.",
+          "target": {
+            "failed_uow": "deploy_solar_mast",
+            "strategy": "ESCALATE",
+            "unknowns": [
+              "recovery_path"
+            ]
+          },
+          "raw_text": "{\n  \"failed_uow\": \"deploy_solar_mast\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
+          "is_valid_json": true,
+          "is_strategy_match": true,
           "is_exact_match": true
         }
       ]

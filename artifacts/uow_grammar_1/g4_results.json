@@ -15,8 +15,10 @@
         "total_cases": 24,
         "valid_json": 24,
         "valid_json_rate": 1.0,
-        "exact_matches": 6,
-        "exact_match_rate": 0.25,
+        "relation_matches": 24,
+        "relation_match_rate": 1.0,
+        "exact_matches": 21,
+        "exact_match_rate": 0.875,
         "records": [
           {
             "example_id": "HO_temp_after_quarantine_node_7",
@@ -26,9 +28,10 @@
               "relation": "AFTER",
               "reference_event": "depot_handshake"
             },
-            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"depot_handshake\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_before_quarantine_node_7",
@@ -38,9 +41,10 @@
               "relation": "BEFORE",
               "reference_event": "pump_shutdown"
             },
-            "raw_text": "{\n  \"target_action\": \"finish quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\"\n}",
+            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"pump_shutdown\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_window_quarantine_node_7",
@@ -53,8 +57,9 @@
                 "end": "12:30"
               }
             },
-            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": false
           },
           {
@@ -65,8 +70,9 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": false
           },
           {
@@ -76,8 +82,9 @@
               "target_action": "quarantine_node_7",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "raw_text": "{\n  \"target_action\": \" quarantine_node_7\",\n  \"relation\": \"IMMEDIATE\"\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": false
           },
           {
@@ -90,9 +97,10 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "raw_text": "{\n  \"target_action\": \"quarantine_node_7\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_after_vent_chamber_3",
@@ -102,9 +110,10 @@
               "relation": "AFTER",
               "reference_event": "pressure_stabilization"
             },
-            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"2023-01-01\"\n}",
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"pressure_stabilization\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_before_vent_chamber_3",
@@ -116,6 +125,7 @@
             },
             "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"telemetry_ack\"\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": true
           },
           {
@@ -131,6 +141,7 @@
             },
             "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": true
           },
           {
@@ -141,9 +152,10 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_immediate_vent_chamber_3",
@@ -152,9 +164,10 @@
               "target_action": "vent_chamber_3",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"IMMEDIATE\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_ambig_vent_chamber_3",
@@ -166,9 +179,10 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "raw_text": "{\n  \"target_action\": \"vent_chamber_3\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_after_degauss_actuator",
@@ -180,6 +194,7 @@
             },
             "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"telemetry_ack\"\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": true
           },
           {
@@ -192,6 +207,7 @@
             },
             "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"reactor_cooling\"\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": true
           },
           {
@@ -205,9 +221,10 @@
                 "end": "12:30"
               }
             },
-            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_deadline_degauss_actuator",
@@ -217,9 +234,10 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_immediate_degauss_actuator",
@@ -228,9 +246,10 @@
               "target_action": "degauss_actuator",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"right now\"\n}",
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"IMMEDIATE\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_ambig_degauss_actuator",
@@ -242,9 +261,10 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"window\"\n}",
+            "raw_text": "{\n  \"target_action\": \"degauss_actuator\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_after_flush_coolant_loop",
@@ -254,9 +274,10 @@
               "relation": "AFTER",
               "reference_event": "depot_handshake"
             },
-            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"depot_handshake\"\n}",
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"AFTER\",\n  \"reference_event\": \"depot_handshake\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_before_flush_coolant_loop",
@@ -268,6 +289,7 @@
             },
             "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"depot_handshake\"\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": true
           },
           {
@@ -283,6 +305,7 @@
             },
             "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BETWEEN\",\n  \"window\": {\n    \"start\": \"10:00\",\n    \"end\": \"12:30\"\n  }\n}",
             "is_valid_json": true,
+            "is_relation_match": true,
             "is_exact_match": true
           },
           {
@@ -293,9 +316,10 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"window\": {\n    \"start\": \"19:00\"\n  }\n}",
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"deadline\": \"19:00\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_immediate_flush_coolant_loop",
@@ -304,9 +328,10 @@
               "target_action": "flush_coolant_loop",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"right now\"\n}",
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"IMMEDIATE\"\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_temp_ambig_flush_coolant_loop",
@@ -318,9 +343,10 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BEFORE\",\n  \"reference_event\": \"flush_coolant_loop\"\n}",
+            "raw_text": "{\n  \"target_action\": \"flush_coolant_loop\",\n  \"relation\": \"BETWEEN\",\n  \"unknowns\": [\n    \"window\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_relation_match": true,
+            "is_exact_match": true
           }
         ]
       },
@@ -328,8 +354,10 @@
         "total_cases": 24,
         "valid_json": 24,
         "valid_json_rate": 1.0,
-        "exact_matches": 6,
-        "exact_match_rate": 0.25,
+        "strategy_matches": 21,
+        "strategy_match_rate": 0.875,
+        "exact_matches": 10,
+        "exact_match_rate": 0.4166666666666667,
         "records": [
           {
             "example_id": "HO_rec_retry_write_telemetry_block",
@@ -344,6 +372,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": true
           },
           {
@@ -356,6 +385,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -366,8 +396,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "spool_telemetry_to_local_nvme"
             },
-            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"read_telemetry_block\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -380,9 +411,10 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"write_telemetry_block\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_strategy_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_rec_retry_authorize_reactor_flow",
@@ -397,6 +429,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": true
           },
           {
@@ -407,8 +440,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "clamp_emergency_scram_valves"
             },
-            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"rollback_to_checkpoint\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -419,8 +453,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "route_coolant_auxiliary_bypass"
             },
-            "raw_text": "{\n  \"failed_uow\": \"reactor_flow\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"reroute_to_main_service\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -433,9 +468,10 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"authorize_reactor_flow\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_strategy_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_rec_retry_synchronize_database",
@@ -450,6 +486,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": true
           },
           {
@@ -460,8 +497,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "revert_wal_checkpoint"
             },
-            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"restore_database_state\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -472,8 +510,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "queue_offline_delta_log"
             },
-            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"BACKUP\",\n  \"compensation_uow\": \"auxiliary_backup_perc\"\n}",
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"backup_database_overview\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -486,9 +525,10 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"synchronize_database\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_strategy_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_rec_retry_eject_capsule",
@@ -503,6 +543,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"escutive_capsule\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -513,8 +554,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "retract_ejection_latches"
             },
-            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"RETRY\",\n  \"fallback_uow\": \"escalate\"\n}",
+            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -525,8 +567,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "seal_capsule_in_containment_bay"
             },
-            "raw_text": "{\n  \"failed_uow\": \"escuapack\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escuapack_recovery_absorator\"\n}",
+            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -539,8 +582,9 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"fallback_uow\": \"escalate\"\n}",
+            "raw_text": "{\n  \"failed_uow\": \"escalate\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -556,6 +600,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": true
           },
           {
@@ -566,8 +611,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "restore_sensor_power_grid"
             },
-            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"reboot_array_temp_sensor\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -578,8 +624,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "isolate_sensor_bus_optically"
             },
-            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"switch_to_auxiliary_backup_ apparatus\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -592,9 +639,10 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"power_down_sensor_array\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
-            "is_exact_match": false
+            "is_strategy_match": true,
+            "is_exact_match": true
           },
           {
             "example_id": "HO_rec_retry_drain_coolant_reservoir",
@@ -609,6 +657,7 @@
             },
             "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": true
           },
           {
@@ -619,8 +668,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "refill_coolant_lines"
             },
-            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"RETRY\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"COMPENSATE\",\n  \"compensation_uow\": \"reroute_coolant_system\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -631,8 +681,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "pump_coolant_to_reserve_sump"
             },
-            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"FALLBACK\",\n  \"fallback_uow\": \"evaporate_condensate_into_water\"\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": false
           },
           {
@@ -645,18 +696,28 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"retry_policy\": {\n    \"max_attempts\": 3,\n    \"backoff\": \"EXPONENTIAL\"\n  }\n}",
+            "raw_text": "{\n  \"failed_uow\": \"drain_coolant_reservoir\",\n  \"strategy\": \"ESCALATE\",\n  \"unknowns\": [\n    \"recovery_path\"\n  ]\n}",
             "is_valid_json": true,
+            "is_strategy_match": true,
             "is_exact_match": true
           }
         ]
       },
-      "elapsed_seconds": 136.09,
+      "elapsed_seconds": 118.16,
       "peak_vram_mb": 285.39,
-      "adapter_switch_latency_ms": 0.01,
+      "adapter_switch_latency": {
+        "iterations": 1000,
+        "mean_ms": 1.6537,
+        "median_ms": 1.5913,
+        "min_ms": 1.4558,
+        "max_ms": 3.0871,
+        "stdev_ms": 0.1825,
+        "hardware_measured": true,
+        "timer": "torch.cuda.Event(synchronized)"
+      },
       "interference_detected": false
     },
-    "Architecture_C_Merged": {
+    "Architecture_C1_PEFT_Linear": {
       "operational": {
         "total_cases": 20,
         "valid_json": 0,
@@ -669,6 +730,8 @@
         "total_cases": 24,
         "valid_json": 0,
         "valid_json_rate": 0.0,
+        "relation_matches": 0,
+        "relation_match_rate": 0.0,
         "exact_matches": 0,
         "exact_match_rate": 0.0,
         "records": [
@@ -680,8 +743,9 @@
               "relation": "AFTER",
               "reference_event": "depot_handshake"
             },
-            "raw_text": "{\n  \"target_action\": \"QUERY_SHIP\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nOutput: 5\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 5, }\nprint(calculate_average(numbers))\n```\n\nYou can also use the formula for average: \n(numbers[0] x numbers[0]) + numbers[1]",
+            "raw_text": "{\n  \"\u00a0target_value\u00a0\"\u00a0=>\u00a0' quarantine_node_7 }\n\n{\n  \"window\" => ' 4 }\n\nimport os\nimport shutil\n\ndef process_dir(path):\n    for dirname, _,_ in merge:\n        if dirname == arcgetanate(path):\n            print(f\"  {dirname}  \")\n\nif __name__ == \"ivan\":\n    process_dir(\"dirns/ivan\")\nelse:\n```\n\nimport os\nimport pandas as pd\n\ndef read_data(file_",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -692,8 +756,9 @@
               "relation": "BEFORE",
               "reference_event": "pump_shutdown"
             },
-            "raw_text": "{\n  \"target_action\": \"relu\" }\n}",
+            "raw_text": "{\n  \"\u00a0target_action\u00a0=apiens;}\n\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter any numbers: \")\nsum_even_numbers( numbers )\n```\n\nYour code should take input from the user, and then it returns the sum of the even numbers.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -707,8 +772,9 @@
                 "end": "12:30"
               }
             },
-            "raw_text": "{\n  \"target_action\" => \"QUIEGER_WAREHOLDER_MAN\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nWhat is the maximum value in the list?",
+            "raw_text": "{\n  \"\u00a0 \t\t}\n\nimport os\nimport shutil\n\ndef move_files(directory, path):\n    for file in os.listdir(directory):\n        if file == path:\n            move_item(directory, path)\n\ndef move_item(directory, path):\n    for file in os.walk(directory):\n        for item in [f for f in file if 'pathurses']:\n            move(path, item)\n\nif __name__ == \"ivan\":\n    move_files(\"files\", \"pathurses\")\nivan(f\"move_files\")",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -719,8 +785,9 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{ \"target_action\": \"join\" }oultemme\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(s)\n\nage = input(\"How old are you: \")\nage = int(age)\n\nprint(\"S\", age)\n\ndef calculate_average(x):\n    return x / 1\n\nage = 3\naverage = calculate_average(age)\nprint(average)\n```\n\ninput: \nage\nage = 3\naverage = calculate_average\nage\nage",
+            "raw_text": "{\n  \"target_action\"   = 'ship'\n}\nimport os\nimport glob\n\ndef get_files_with_subdirectory(subdirectory):\n    return [f for f in glob.glob(f\"{subdirectory}ethoven\") if not os.path.isdir]\n\ndef main():\n   ethoven = \"opus\"\n    print(get_files_with_subdirectory(ethoven))\n\n# main\n Beethoven = {\n    \"opus\": \"exhibit\"\n}\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndef calculate_average(",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -730,8 +797,9 @@
               "target_action": "quarantine_node_7",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  }= { 'link' } = 'befseturight' 'disconnect'\n}",
+            "raw_text": "(warehousing node 7)\n  , \ndef is_prime(n):\n    if n < 2:\n        return false\n    for _ in range(2; n = n + 1)\n    return true\n\n\ndef main() -> void;\n\ndef main_func(is_prime):\n    print(f\"Is {is_prime}: {is_prime}')\n\nif is_prime(2)\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Read the CSV file\nwith open('data.csv', 'r') as file:",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -744,8 +812,9 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  }= {'affect_unix_rest' } = { 'lift_' }\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\"))\n\nages = [4, 4, 1]\nreverse_age = ages[0]\n\nage_to_reverse = ages[1]\nprint(f\"Age to reverse: {age_to_reverse}\")\n```\n\ninput: ages [4, 4, 1]\n```\nReverse age to reverse",
+            "raw_text": "(target_conditionagne(node_7))\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter any numbers: \")\nsum_even_numbers( numbers )\n```\n\nYour code should also return the sum of the even numbers.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -756,8 +825,9 @@
               "relation": "AFTER",
               "reference_event": "pressure_stabilization"
             },
-            "raw_text": "{\n  \"target_action\" => \"VENT_CHEME_STARVER_BECOMES_BEACH\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nOutput: 5\n\n`(5)' as numbers'\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 5, }\nprint(calculate_average(numbers))\n```\n\nYou can also use the",
+            "raw_text": "also present\n\nWhat is a good title for this article?\n blight\n blight (n)\n  ...\n\nBELLOSA.\n\n blight\n\nblight\n\nis a good title for this article.\n\nBELLOSA.\n\nis a common disease that affects many plants, and can also have a negative impact on human health.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -768,8 +838,9 @@
               "relation": "BEFORE",
               "reference_event": "telemetry_ack"
             },
-            "raw_text": "{\n  \"target_action\" = \"link_to_vent_chamber_3\";\n  \"address_chamber\" = 'deadline'\n}",
+            "raw_text": "{\n  \"\u00a0{\u00a0\n  \"target_name\"\t\t=\t'vent_chamber_3'\t}\n}\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Read the data\ndata = [\n    (\"name\", \" Ale\"),\n    ( 'a_name', )\n]\n\n# Print the list of names\nprint(data)\n\n# Create a function that cleans the names\ndef clean_names(name):\n    # Your code here\n    pass\n\n# Example\n# clean_names(name)\n# Ale\n\n# Another function that",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -783,8 +854,9 @@
                 "end": "12:30"
               }
             },
-            "raw_text": "{\n  \"target_action\" => \"VENT_CHEMETER_3\" }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(find_max(numbers))\n```\n\nOutput: 2\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(calculate_average(numbers))\n```\n\nYou can also use the math.average function:",
+            "raw_text": "{\n  \"\u00a0 \t \t\t\"target_action\t\t=\t';_aismuption'\t;\u00a0\u00a0\u00a0{}uristic \t}\n yours\n=\ndef sum_even_numbers(numbers):\n    return sum(num for num in numbers if num % 2 == 2)\n\nnumbers = input(\"Enter some numbers: \")\nsum_even_numbers(numbers)\n\ndef is_even(num):\n    return num % 2\n\nprint(is_even(num))\n```\n\nOutput: 2\n\n`(\n  'ish'",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -795,8 +867,9 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{ }\n\n\n\n\ndef\u00a0build_wall(distance=distance):\n    return \"wall\"\n\n\n\n\ndef\u00a0main(distance=distance):\n    # Fail\n    raise ValueError(f\"Waste distance: {distance}\")\n\n\ndef_strain(distance):\n    return distance\n\n\ndef_wall(distance):\n    # Fail\n    raise None, None\n\n\ndef_unwind(unwind):\n    return wind.winding\n\n\ndef_target_action(build_wall, distance=distance):\n    print(f\"Waste: {build_wall} risk\")\n    print(f\"Wind",
+            "raw_text": "(vent_chamber)\n\n{ }\n\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter some numbers: \")\nsum_even_numbers( numbers )\n```\n\nOutput: \n(sum_even_numbers) \n(2)",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -806,8 +879,9 @@
               "target_action": "vent_chamber_3",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  }= { 'address' } = 'grave' }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(find_max(numbers))\n# Output: 2\n\nHow does the code find the maximum number in the list?",
+            "raw_text": "(window)\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\n# Example\nnumbers = input(\"Enter some numbers: \")\neven_numbers =\n        SUM_EFFECT\n\n#         {\n\t\t\"2\": {\n\t\t }\n\t}\n\ndef add_even_numbers(even_numbers):\n    sum_even_numbers(even_numbers)\n\nadd_even_numbers(list(even_numbers))",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -820,8 +894,9 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  }\n\n\n\n\ndef execute_flect_bindings(bindings):\n  return \"target_action\" + str(bindings)\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number % 2 == 0:\n            duplicates.append(number)\n    return duplicates\n\n# Example usage:\nnumbers = input_numbers()\nprint(find_duplicates(numbers))\n```\n\nOutput: [ ' duplicates ''' ]",
+            "raw_text": "{\n  \"\u00a0:target_action\u00a0;\u00a0: depend }\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter numbers: \")\nsum_even_numbers( numbers )\n```\n\nYour code should also return the sum of the even numbers.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -832,8 +907,9 @@
               "relation": "AFTER",
               "reference_event": "telemetry_ack"
             },
-            "raw_text": "{\n  \"",
+            "raw_text": "{\n  \"\u00a0  }\n}\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter some numbers: \")\nsum_even_numbers( numbers )\n```\n\noutput: 4\n\n also add 2 to the list",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -844,8 +920,9 @@
               "relation": "BEFORE",
               "reference_event": "reactor_cooling"
             },
-            "raw_text": "{\n  \"target_action\" = \"link_to_degauss_actuator\";\n  \"deadline\" = \"fire\"\n}",
+            "raw_text": "{\n  \"\u00a0target_action\u00a0} =\u00a0degauss;\n}\n\nimport numpy as np\nimport matplotlib.pyplot\n\ndef calculate_average(numbers):\n    return numbers[0]\n\ndef main():\n    numbers = [1, 2, 3]\n    average = calculate_average(numbers)\n    print(f\"Average number: {average}\")\n\n# main\n\n# main\n\nnumbers = [1, 2, 3]\naverage = calculate_average\n\nprint(average)\n\n# main\n\n# main\n\naverage = []",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -859,8 +936,9 @@
                 "end": "12:30"
               }
             },
-            "raw_text": "{\n  \"target_action\" => \"degauss_actuator\" } =>oultem\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2, 1]\nprint(find_max(numbers))\n```\n\nOutput: 2\n`(5, 4, 3, 2, 1)`\n\n`(find_max)`\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2,",
+            "raw_text": "{\n  \"\u00a0 \t \temaison\";\n}\n\nimport random\n\ndef generate_random_number(length):\n    return length + random(length - length + 1)\n\n# Example\nrandom_number = generate_random_number(length)\nprint(random_number)\n```\n\n or\n\n```\nrandom_number\n```",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -871,8 +949,9 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{ \"target_action\", \"relation\" } ==\"AFTER\"\n\n\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 3, 2]\nprint(find_max(numbers))\n```\n\nOutput: 2\n\n`(5, 'find_max')`\n\ndef calculate_salary(age):\n    return age\n\nage = 5\nprint(f\"Salary: {age} \")\n```\n\nHow does the code calculate the salary?",
+            "raw_text": "{\n  \"target_action\"   = 'galaeft.'\n}\n\npython_arriveater =  liquid_fridge\npython_arrive\nimport os\nimport argparse\nimport pandas as pd\n\ndef read_data(path):\n    try:\n        with open(path, 'r') as file:\n            data = file.read()\n            return data\n    except (FileNotFoundError, entirote) as error:\n        print(f\"Error reading data: {error}\")\n\ndef clean_data(data):\n    words = data.split()\n    cleaned_words = [",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -882,8 +961,9 @@
               "target_action": "degauss_actuator",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  }=emaize_location_storage\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\nages = [4, 4, 1]\nages_reversed = list(ages)\nages_reversed = [x for x in ages_reversed]\nprint(ages_reversed)\n```\n\ninput: ages_reversed\nages_reversed",
+            "raw_text": "{\n  \"\u00a0target_action\u00a0\"\u00a0= \"advocate\";}\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter any numbers: \")\nsum_even_numbers(numbers)\n\ndef calculate_average(number):\n    if number % 2 == 0:\n        return number\n\ncalculate_averageeers()\n```\n\nOutput:\naverage_even_numbers\n\n(b)\n\n(a)\n\n`average_even_numbers`",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -896,8 +976,9 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  } depended on\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\nage = int(input(\"What is your age: \"))\n\ndef reverse_function():\n    if age > 1:\n        print(\" grandchildren\")\n    else:\n        print(\" grandchildren\")\n\nreverse_function()\n```\n\n</strong>\n{\n  \"age\": 1, }\n```",
+            "raw_text": "{\n  \"\u00a0:\u00a0';\n}\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter any numbers: \")\nsum_even_numbers( numbers )\n```\n\nYour code should take input from the user, and then it should return the sum of the even numbers.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -908,8 +989,9 @@
               "relation": "AFTER",
               "reference_event": "depot_handshake"
             },
-            "raw_text": "{\n  \"target_action\" => \"FLUSH_SHAPES\"!,\n  \"address_of_flush_coolant_loop\" => 'depot_handshake'\n}",
+            "raw_text": "{\n  \"\u00a0{\n  \"target_name\"\t=\t'flush_cooling'\n  }\n}\n\n orioles = around_cooling\n\nimport os\nimport shutil\n\ndef remove_empty_files(files_path):\n    for file in os.listdir(files_path):\n        if file == 'isms' :\n            remove_alternative_forms(file)\n\ndef remove_alternative_forms(input_form):\n    if input_form == 'isms':\n        # remove specific types ofisms\n        for word in ['musism', 'ism']\n\nif __",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -920,8 +1002,9 @@
               "relation": "BEFORE",
               "reference_event": "depot_handshake"
             },
-            "raw_text": "{\n  \"target_action\" = \"link_to_flush_coolant_loop\";\n  \"address_of_flush_coolant_loop\" = \"window\";\n}",
+            "raw_text": "{\n  \"\u00a0target_amp_friction\"\u00a0=>\u00a0! fluid }\n\n# Introduction\n\n/**\n * Converts a string representing a date into a string representing a date in the\n\n       format 'D'\n\n       if not\n\n\nyour_response\n\n\n# instruction\n\n-   fuel\n\n\nyour_response\n\nimport os\nimport pandas as pd\n\ndef read_data(path):\n    # TODO: implement\n\nif __name__ == 'ync' :\n    path = \"data\"\nelse:\n    pass\n\n#   \n\nimport",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -935,8 +1018,9 @@
                 "end": "12:30"
               }
             },
-            "raw_text": "{\n  \"target_action\" => \"FLUSH_CURRENT_VOLTAGE\",\n  \"address_of_loop\" => 'window' }rictions\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\ndef calculate_average(num_values):\n    if num_values == 0:\n        return \"Error\"\n    return num_values * 2\n\naver_average = calculate_average(calculate_average(range(len(s)))))\nprint(aver_average",
+            "raw_text": "{\n  \"\u00a0 \t \t\t\"target_action\t  \t\t=\t';\n}\nimport { Component, Field }\n\nclass Student extends Field {\n  // your implementation here\n}\n\n// point to this file\nconst student = student\n// Given a list of words\n//     word1\n//     word2\n//\n// Your code here\n\n// Example 1\n// \n// word1\n// word2\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -947,8 +1031,9 @@
               "relation": "BEFORE",
               "deadline": "19:00"
             },
-            "raw_text": "{ \"target_action\": \"flush_coolant_loop\" }\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(s)\n\ndef calculate_average(x):\n    return x * 0.5\n\naverage = calculate_average(x)\nprint(average)\n```\n\n```\nEnter the string: average\naverage\n(average)\ndef calculate_average(num_values):\n    return num_values[0]\n\nnumbers_values = [1, 2, 3]\naverage",
+            "raw_text": "{\n  \"target_action\"   = 'lift'\n\nimport os\nimport glob\n\ndef get_files_with_extension(filename):\n    return [os.path.join(os.path, filename)]\n\ndef process_files(files_path):\n    for filename in files_path:\n        print(filename)\n\nif __name__:\n    get_files_with_extension(\"files/filename\");\n```\n\nYour code is here:\n\n```\nprint\n```\n\n{\n  \"filename\": \"files/filename\"\n}\n```",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -958,8 +1043,9 @@
               "target_action": "flush_coolant_loop",
               "relation": "IMMEDIATE"
             },
-            "raw_text": "{\n  }= {'fire' }\ndef find_max(numbers):\n    return numbers[0]\n\nnumbers = [5, 4, 5]\nprint(find_max(numbers))\n```\n\nWhat is the maximum value in the list?",
+            "raw_text": "{\n  \"\u00a0target_state\u00a0\"\u00a0,\u00a0 \"define\"\u00a0}\ndef sum_even_numbers(numbers):\n    return sum(numbers)\n\nnumbers = [4, 2]\nprint(f\"Sum of even numbers: {sum_even_numbers(numbers)}\")\n\ndef sum_odd_numbers(numbers):\n    return sum(numbers if not numbers else [])\n\nnumbers = [1, 2]\nprint(f\"Sum of odd numbers: {sum_odd_numbers(numbers)}\")\n```\n\nYour code should be in Python.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           },
           {
@@ -972,8 +1058,9 @@
                 "window"
               ]
             },
-            "raw_text": "{\n  }\n\n\n\n\ndefiscopal_flush_coolant_loop(defect_name) : \n  return \"flush_coolant_loop\" + encode_def(defect_name)\n\n\tdeficitness : \t\t= \t\tiscopal_flush_coolant_loop \n\tficitness \t\t= \t\tiscopal_flush_coolant_loop\n\n\twindow\t\t= 'window'\t\t;\t\twindow =htaking(window);\t\tflush_coolant_loop\t\t}\n\n\tflush_coolant_",
+            "raw_text": "{\n  \"\u00a0:away\u00a0\";\n}\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter numbers: \")\nsum_even_numbers( numbers )\n```\n\nYour code should also return the sum of the even numbers.",
             "is_valid_json": false,
+            "is_relation_match": false,
             "is_exact_match": false
           }
         ]
@@ -982,6 +1069,8 @@
         "total_cases": 24,
         "valid_json": 0,
         "valid_json_rate": 0.0,
+        "strategy_matches": 0,
+        "strategy_match_rate": 0.0,
         "exact_matches": 0,
         "exact_match_rate": 0.0,
         "records": [
@@ -996,8 +1085,9 @@
                 "backoff": "EXPONENTIAL"
               }
             },
-            "raw_text": "{\n  \"failed_uirdeposition\": \"escalate\"\n}\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_cleaned = is_palindrome(s)\nprint(f\"S: {s_cleaned}\")\n```\n\n> Enter a sentence:  Nixon\n\n Nixon (world)\n\n\n# pulumi\n\ndef calculate_salary(age):\n    return age\n\nage = 3\nprint(f\"Salary: {calculate_",
+            "raw_text": "{\n  \"\u00a0error_outcome\u00a0=>\u00a0(!)}\n\nimport os\nimport glob\n\ndef find_files(directory, file_path):\n    for file in glob.finder(directory, 'files'):\n        if file['status'] == 'OK']\n\nif __name__:\n    find_files(directory='~/my_files')\n```\n\nimport os\nimport pandas as pd\n\ndef read_data(file_name):\n    try:\n        with open(file_name, 'r') as file:\n            data = file_name.split",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1008,8 +1098,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "invalidate_telemetry_index"
             },
-            "raw_text": "{\n  } = {\n  } = { 'fallback_uow' }\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_sentence = input(\"> \" + s)\n\nis_palindrome = is_palindrome\nprint(is_palindrome)\n\n# example \n# input\n\ns\n\n\nis_palindrome = }renchter\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:",
+            "raw_text": "{\n  \"\u00a0;\u00a0\n                }\n\ndef sum_even_numbers(numbers):\n    return numbers\n\nnumbers = input(\"Enter numbers: \")\nsum_even_numbers(numbers)\n\ndef subtract_even_numbers(numbers, even_number):\n    if even_number == 2:\n        numbers = list(even_number)\n    else:\n        numbers = list(filter(lambda x: x[0] == even_number, even_number))\n\nnumbers = [4, 2]\nsubtract_even_numbers(numbers)\n\ndef multiply_even_",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1020,8 +1111,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "spool_telemetry_to_local_nvme"
             },
-            "raw_text": "{\n  \"failed_u =adowsol\",\n  \"falling_faller\" = \"recover_bark\"\n}",
+            "raw_text": "{\n    \"\u00a0failed\u00a0\"\u00a0e\u00a0+\u00a0washup\n  }\n\nvarfoundland;\n   agoons;\noplasty = good;\ndef sum_even_numbers(numbers):\n    return numbers\n\nnumbers = [4, 2, 1]\nprint(sum_even_numbers)\n\nimport pandas as pd\nimport numpy as np\n\n# Your code here\ndef calculate_average(numbers):\n    return numbers[ 1 ]\n\n# Your example\naverage_number = calculate_average\nprint(average_number)\n\n# Your remaining code\n\ndef",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1034,8 +1126,9 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  }\n\n\n\n\ndef\u00a0fallback_falling_warehouse(falling_warehouse_name,\u00a0falling_falling_policy = 'escalate')\u00a0=\u00a0('falling_falling_warehouse'burgespherd_house_name))\n\ndef find_max(a):\n    return a\n\n# Example\nnum_str = 5\nmax_num = find_max\nprint(max_num)\n\n# Result: 5\n\ndef find_duplicates(lst):\n    return [x for x in lst if x]",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1049,8 +1142,9 @@
                 "backoff": "EXPONENTIAL"
               }
             },
-            "raw_text": "{\n  \"failed_uirdeposition\": \"escalate\"\n}\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number % 2 == 0:\n            duplicates.append(number)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates:\n{str(duplicates)}\")\n\ndef subtract_amount(amount, new_amount):\n    new_amount -= amount\n    return new_amount\n\nabs_amount = subtract_amount(abs, 2)\nabs_amount = 2",
+            "raw_text": "{\n  \"\u00a0{\u00a0\u02c8raise\u00a0(e)\u00a0,\u00a0\u00a0(un end)\u00a0)\u00a0}\n hers.\nfalling\n\n# Introduction\n\n// name\na\n\n\n// Promise\nasync function print() {\n  // some effects\n  }\n\n\nprint()\n\n\n\n\n// close\n{\n}\n\n}\n\nuddenly\nimport {\n  getters,\n  promisestrings\n} \n// your function\nfunction addNumbers(num1, num2) {\n  return num1 + num2;\n}\n\n// yourPromisestrings",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1061,8 +1155,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "clamp_emergency_scram_valves"
             },
-            "raw_text": "{\n  } = {\n  } = { 'fallback_uow' } }\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\nprint(is_palindrome(\"madam\"))  #amous\n```\n\n# Example usage:\nprint(is_palindrome(\"madam\"))  #amous\n```\n\nidity = 's'\nmadam = 'madam'\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 2, 3]\naverage",
+            "raw_text": "{\n  \"\u00a0  async distinctiolesysis\n\t\t\t  await \t\tressionines\n\t\t\t  }\n\nimport os\nimport shutil\n\ndef remove_empty_files(directory):\n    for file in os.listdir(directory):\n        if file == 'empty'ndonstogether':\n            print(f\"  {file} \")\n\nremove_empty_files(directory)\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n# Read the data\ndata = {\n    \"city\": \" Boston\",\n    \"city_state\"\n  }\n\n# Print the data\nprint",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1073,8 +1168,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "route_coolant_auxiliary_bypass"
             },
-            "raw_text": "{\n  \"failed_u =adowsol\",\n  \"fallback_u = equip_reactor_flow\"\n}",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1087,8 +1183,9 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uirdeposition\": \"fallback_uow\"\n}\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(f\"Reverse {s}\")\n\nages = [4, 4, 1]\nreverse_age = ages[0]\n\nage_to_reverse = ages[1]\nprint(f\"Age to reverse: {age_to_reverse}\")\n```\n\ninput: ages [4, 4, 1]\n\n`reverse_age`\nage_",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1102,8 +1199,9 @@
                 "backoff": "EXPONENTIAL"
               }
             },
-            "raw_text": "{\n  \"falling_falling\": \"displaying\"\n}\ndef is_palindrome(s):\n    if s == str(s.casefold()):\n        return True\n    else:\n        return is_abnormal_palindrome\n\n\ndef a_b_c(s, b):\n    return, b)\n\n\nis_palindrome = is_palindrome\na_b_c = a_b_c\n\n\na_b_c('', a_b_c)`\n\n\nis_palindrome(a_b_c)\n```",
+            "raw_text": "{\n  \"\u00a0error_out\u00a0\\n\\n\\n\"\n}\n\n{\n \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0(err, ) => { } ==> {\u00a0; }\n};\n\nstr = \u00a0{\n  async try_healing(em) {\n    # heal\n    erorm = sin(wingsong);\n    erorm(amp) { }\n  }\n}\nimport {\n  getters, actions\n} \nconst INIT_VALUES = {\n  name = ' john',\n  age\n}\n\nconst handleMessage = (event) => {",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1114,8 +1212,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "revert_wal_checkpoint"
             },
-            "raw_text": "{\n  } = {\n  } = { 'fallback_uow' } =\ndef is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, n):\n        if n % i == 0:\n            return False\n    return True\n\n\nis_prime(prime_number_5)\nis_prime(prime_number_8)\n```\n\ndef is_prime(n):\n    \"\"\"\n    Check if n is a prime number.\n\n    :param n: The number to check\n\n    \"\"\"\n    if n < 2:\n        return False",
+            "raw_text": "{\n  \"\u00a0  async distinctophylling\n\t\t\t  => \r\n                value_1\n\t\t  }\n\n{\n  \" distinctophyll\";\n}\n\narrowing\ndef is_palindrome(s):\n    if len(s) == 2:\n        return s == \nif is_palindrome('Lisp'):\n    # \u8fd4\u529b\nif is_palindrome(ansom):\n    # \u8fd4\u529b\n```",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1126,8 +1225,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "queue_offline_delta_log"
             },
-            "raw_text": "{\n  } = {downenemies, fallback} = {'falling'}\n\ndef find_max(x):\n    return x\n\nage = 30\nprint(find_max(age))\n```\n\n#max_age_value example!",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1140,8 +1240,9 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uirdistribution\" : \"fallback_str\" }\n\n\n\n\nunsigned_long_after_fallout = 'escalate' ;\n\ndef\u00a0{\u00a0failed,\u00a0falling\u00a0,\u00a0falling_excluded} =\u00a0{\u00a0falling\u00a0,\u00a0escalate};\n\n\n\n\ninput_data_and_excluded_falling_excluded_falling_name_bead = ('escalate', 'escalate');\n\ninput_data_to_flood_falling_excluded_falling_name_b",
+            "raw_text": "{\n  \"\u00a0failed\u00a0\"\u00a0,\u00a0\u00a0!end\n\nWhat is a sentence for I love reading books?\n\n\nWhat is a sentence for I love reading books?\n\n\nWhat is a few more sentences?\n\n\nWhat is a few more sentences?\n\nWhat are some ways to celebrate Valentine's Day?\n\n1. Send a romantic message: \"Love, Love, Love!\"\n2. Buy a gift for your partner: e.g., a necklace, a pair of shoes.\n3. Exchange gifts:LIEDSTAYED.com",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1155,8 +1256,9 @@
                 "backoff": "EXPONENTIAL"
               }
             },
-            "raw_text": "{\n  \"failed_uirdeposit\": \"escalate\" }\n\ndef find_max(x):\n    return x\n\nage = 30\nprint(find_max(age))\n```\n\nYou can also write a more concise version:\n\n```python\nage = int(age)\nprint(find_max)\n```",
+            "raw_text": "{\n  \"errormeasurement\"   = \"resolve\"\n}\n\n{\n  }\n\nvarranship\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter some numbers: \")\nsum_even_numbers(numbers)\n\ndef calculate_average(numbers):\n    if numbers[ 0 ]:\n        return numbers[ 0 ]\n    else:\n        return None\n\ncalculate_averageeers\naverage_numbers = 3\naverage_numberseers \ndef summarize_numbers(numbers):\n    if numbers[ 0 ]",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1167,8 +1269,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "retract_ejection_latches"
             },
-            "raw_text": "{\n  } = {\n  } = { 'falling' } }",
+            "raw_text": "{\n  \"\u00a0err\": \"falling\",\n  \"\u00a0vol1\"\n\nWhat is the first step in writing a story?\n*write*\n\n5th step in writing a story.\n\nWhat would be a good reason to keep this step in mind?",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1179,8 +1282,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "seal_capsule_in_containment_bay"
             },
-            "raw_text": "{\n  \"failed_uiolow\": \"fallback_fallout\" }\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\n```\n\n```\nage_4 `age_4`\nmouth_guard\n2\n```\n\n```\nage_4   linestyle 'o'",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1193,8 +1297,9 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uirdeposition\" : \"fallback_uew\"\n}\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_str = input(\"s: \")\n\nis_palindrome = is_palindrome(s_str)\nprint(is_palindrome)\n```\n\n<code>\nis_palindrome = is_palindrome\ns_str = 's'\n</code>\n</php>",
+            "raw_text": "{\n  \"\u00a0failed\u00a0\"\u00a0,\u00a0\u00a0!end\n\nWhat are the three main ingredients in a classic cheesy sandwich? Your response should contain at least 3 sentences.\n\n#\n\nWhat are the three main ingredients in a classic cheesy sandwich?",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1208,8 +1313,9 @@
                 "backoff": "EXPONENTIAL"
               }
             },
-            "raw_text": "{\n  \"failed_uirdown\": \"disposition\" }\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\n```\n\n```\nage_4 `age_4`\nmouth_guard\n2\n```\n\n```\nage_4\t\tmouth_guard\n```",
+            "raw_text": "{\n  \"\u00a0error \"rils/ping\"resses/ array => 1\n  }\n\n=> {\n  \"avalue\";\n  new_string\n}\n\nfalling_forsetrapy\nimport os\nimport shutil\n\ndef move_files(directory, file_name):\n    for file in os.listdir(directory):\n        if file == file_name:\n            move_item(directory, file_name)\n\ndef move_item(directory, item_name):\n    os.path.join(directory, item_name)\n\nif __name__ == \"ivan\":",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1220,8 +1326,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "restore_sensor_power_grid"
             },
-            "raw_text": "{\n  } = {\n  } = {\n  }\ndef find_max(a):\n    return a\n\nage = input(\"How old are you?: \")\nage_input_str = a\nfind_max(age_input_str)\nprint(f\"Age: {age_input_str}\")\n```\n\ndef swap_values(a, b):\n    a_to_b = (b, Obama)\n    b_to_a = (b, President)\n\nage_input_str = input(\"Age: \")\nb_to_a = swap_",
+            "raw_text": "{\n  \"\u00a0  async distinctophyll\";\n \u00a0  -\u00a0\u00a0\u00a0\u00a0=\u00a0eseggueophyll\n }\ndef is_prime(n):\n    if n < 2:\n        return false\n    for _ in range(2 <= n - 1):\n        if n % 2 == 0 ==> n\n\n\nis_prime(1)\nprint(1)\n\nimport pandas as pd\n\ndef calculate_average(numbers):\n    return numbers[ 1 ]\n\ndef main():\n    numbers = [1, 2, 3, 4, 5]",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1232,8 +1339,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "isolate_sensor_bus_optically"
             },
-            "raw_text": "{\n  \"failed_uiolow\": \"fallback_fallout\" }\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\ndef is_palindrome(s):\n    return s == s[::-1]\n\nis_palindromeugarish('addleway')\n```",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1246,8 +1354,9 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"falling_fallover_res_equation\": \"compensate\"\n  }\ndef find_max(a):\n    return a\n\nage = input(\"How old are you?: \")\nage_input_str = a\n\ntry:\n    # find_max(age_input_str)\n    #    asphem(\"max\"))\n    #     age_input_str = a\nexcept (Exception, ValueError) as error) as error:\n    print(f\"max(): {age_input_str}\")\n\nage = input(\"again: \")\ntry:\n    #",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1261,8 +1370,9 @@
                 "backoff": "EXPONENTIAL"
               }
             },
-            "raw_text": "{\n  \"failed_uirdepositate\": \"reservoir\" }\n}\ndef is_palindrome(s):\n    return s == s[::-1]\n\n# Example usage\ns = input(\"Enter a sentence: \")\ns_cleaned = is_palindrome(s)\nprint(f\"S: {s_cleaned}\")\n```\n\n> Enter a sentence: input_apple\napple\n```\ns_cleaned` apple\napple\n```\n\nimport os\nimport pandas as pd\n\ndef read_data(file_name):\n    return os.",
+            "raw_text": "{\n  \"err\": {\n    } = training => {verbs => } + fluid\n}\n\n{\n  break\n  }\n yours recover\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter some numbers: \")\nsum_even_numbers( numbers )\n\ndef subtract_even_numbers(numbers_after):\n    numbers_after = [ 2 ]\n    if subtract_even_numbers:\n        subtract_even_numbers( numbers_after )\n\nsubtract_even_numbers \n# subtracts 2 from the even numbers",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1273,8 +1383,9 @@
               "strategy": "COMPENSATE",
               "compensation_uow": "refill_coolant_lines"
             },
-            "raw_text": "{\n  } = {close_cooling_reservoir, close_water_to_pump}\ndef reverse_string(s):\n    return s\n\ns = input(\"Enter the string: \")\nprint(s)\n\ndef swap_character(index, index_to_swap):\n    index_to_swap = index\n    return index_to_swap\n\nswap_character(6, 4)\n```\n\ninput: 6, swap_character(6, 4)",
+            "raw_text": "{\n  \"\u00a0  }\n}\n\nstrategy = \" drain_coolant_res_ervoir\"\n\nimport os\nimport glob\n\ndef get_files_with_extension(filename):\n    return [os.path.join(os.path, filename)]\n\ndef process_files(files_path):\n    for filename in files_path:\n        print(filename)\n\nif __name__:\n    get_files_with_extension(\"files/filename.txt\")\n```\n\n# \n```\n{\n  \"filename\": \"files/\">{ } }\n```",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1285,8 +1396,9 @@
               "strategy": "FALLBACK",
               "fallback_uow": "pump_coolant_to_reserve_sump"
             },
-            "raw_text": "{\n  \"failed_u = {} - \"falling_falling\"}\n\ndef find_duplicates(numbers):\n    duplicates = []\n    for number in numbers:\n        if number + 1 in numbers:\n            duplicates.append(number + 1)\n    return duplicates\n\nnumbers = 4, 2\nprint(f\"Duplicates: {', '.join(str(x) for x in duplicates)}')\")\n\n```\n\noutput: ['2,\u00a0ambice']\n```\n\ndef calculate_salary(age):\n    return age\n\nage =",
+            "raw_text": "{\n  \"",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           },
           {
@@ -1299,14 +1411,720 @@
                 "recovery_path"
               ]
             },
-            "raw_text": "{\n  \"failed_uirdeposits\" : [\"fallback_uow\"] }\n\ndef find_max(x):\n    return x\n\nage = 30\nprint(find_max(age))\n```\n\nOutput: \n(age) * 2\n```\n\ndef calculate_average(numbers):\n    return numbers[0]\n\nnumbers = [1, 2, 3]\nprint(calculate_average(numbers))\n```\n\nYou can also use the formula for average: \n(numbers[0] x numbers[0])",
+            "raw_text": "{\n  \"\u00a0failed\u00a0\"\u00a0,\u00a0!-\u00a0(await)%,\u00a0endganews.\n}\n\n#iol\n\ndef sum_even_numbers(numbers):\n    return numbers[ 2 ]\n\nnumbers = input(\"Enter some numbers: \")\nsum_even_numbers(numbers)\n\ndef is_even(num):\n    return num % 2 == 0\n\ndef main():\n    # enter some numbers\n    numbers = [1, 2, is_even]\n\n    # check if numbers are even\n    if sum_even_numbers(numbers) !=",
             "is_valid_json": false,
+            "is_strategy_match": false,
             "is_exact_match": false
           }
         ]
       },
-      "elapsed_seconds": 270.22,
+      "elapsed_seconds": 277.74,
       "peak_vram_mb": 287.21,
+      "interference_detected": true
+    },
+    "Architecture_C2_Explicit_Sum": {
+      "operational": {
+        "total_cases": 20,
+        "valid_json": 0,
+        "valid_json_rate": 0.0,
+        "exact_matches": 5,
+        "exact_match_rate": 0.25,
+        "unsafe_yes": 0
+      },
+      "temporal": {
+        "total_cases": 24,
+        "valid_json": 0,
+        "valid_json_rate": 0.0,
+        "relation_matches": 0,
+        "relation_match_rate": 0.0,
+        "exact_matches": 0,
+        "exact_match_rate": 0.0,
+        "records": [
+          {
+            "example_id": "HO_temp_after_quarantine_node_7",
+            "signal": "Following the completion of depot_handshake, proceed with quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "AFTER",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{ }\n\ndef find_max(values):\n    if values[0] in walls:\n        return values\n\n\ndef walls(caps):\n    if caps:\n       \t\tcaps[ 1 ]\n\n\n# also, find the max value of the 'caps' parameter\ndef find_duplicates(numbers):\n    # TODO: implement\n\ndef main():\n    numbers = (5, 2)\n\ndef find_max(values):\n    # {x: 2}\n\ndef main():\n\ndef calculate_salary(age, title):\n    if age ==",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_quarantine_node_7",
+            "signal": "Prior to pump_shutdown, finish quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BEFORE",
+              "reference_event": "pump_shutdown"
+            },
+            "raw_text": "(\n\t Apostle {}\ndef find_duplicates(numbers):\n    # TODO: print(numbers)\n\n# \tconnect_map( ' numbers' )",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_quarantine_node_7",
+            "signal": "Within the time frame 10:00 to 12:30, carry out quarantine_node_7.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "(ampaired)\ndef reverse_string(s):\n    return str(s)\n\n# Example\nprint(address) # output: reversed_string\n\ndef find_max(lst):\n    return lst[ 1 ]\n\n#omansation\nprint(find_max)\u000b\t \u000b\ndef find_duplicate(lst):\n    # find the duplicate\n    #\n\n# main\n\ndef calculate_salary(age):\n    if age > 1:\n        return 'M'\n    else:\n        return 'R'\ndef main_course():\n    print(\"",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_quarantine_node_7",
+            "signal": "Mandatory deadline: complete quarantine_node_7 no later than 19:00.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "(fischer)\ndef reverse_string(name):\n    return name\n\n# Example\nprint(address()) # \t \n# \nr_string_def()\n#resses\n\t\ndef find_duplicate(numbers):\n    # your code\nif find_duplicate:\n    # your code\nelse:\n    # your code\n```\n\ndef calculate_salary(age, salary):\n    if age > 2:\n        return salary\nage_instruct = ' Children'\n\ndef find_max(lst):\n    return lst[ 1 ]",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_quarantine_node_7",
+            "signal": "Initiate quarantine_node_7 right now.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "(fect())\n(soever)\ndef find_duplicates(numbers):\n    #\n\n# test\nprint(find_duplicates)\n\ndef find_max(lst):\n    return lst\n\n\n# test\ndef calculate_salary(age):\n    return 2\n\n\nage = 2\nprint(f\"    {str(age)}emonthropaster\")\n\ndef find_largest_value(list_):\n    return list_\n\n# } medical_ler\ndef calculate_speaker(name):\n    return name\n\ndef main_course(name",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_quarantine_node_7",
+            "signal": "Perform quarantine_node_7 when convenient.",
+            "target": {
+              "target_action": "quarantine_node_7",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "(fectment)\n{ }\n\t}\ndef find_max(numbers):\n    if numbers[0] > 90:\n        return numbers[0]\n    else:\n        return None\n#   input(numbers)\nage = 4\nfind_max()\ndef find_duplicates(numbers):\n    # find the duplicate duplicate\r\n    for num in numbers:\n        if num == 2\n\nfind_duplicates\ndef find_max_value(numbers):\n    return numbers[ 1 ]\n#omansion\n# maximum_value\ndef\ndef find_max",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_vent_chamber_3",
+            "signal": "Following the completion of pressure_stabilization, proceed with vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "AFTER",
+              "reference_event": "pressure_stabilization"
+            },
+            "raw_text": "(ampassed)\n\ndef find_duplicates(numbers):\n    # TODO: solve\n\nage = 3\nprint(duplicates)\n```\ndef calculate_salary(product_name):\n    return product_name\n\ndef calculate_price_difference(product_name):\n \u000b \t\tsoever\u000b \t \t \ndef find_max(lst):\n    return lst[ 1 ]\n\n# \nage_str = \"growth\"\n# \nage =  grow_to_inf\n\ndef find_duplicate(lst):",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_vent_chamber_3",
+            "signal": "Prior to telemetry_ack, finish vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BEFORE",
+              "reference_event": "telemetry_ack"
+            },
+            "raw_text": "(a_ to)\nvolitione = \n{-a,\u00a0_\u0651}\ndef find_max(lst):\n    return lst[ 1 ]\n\n# }\n\n# }\n\n# max_num\n\ndef find_duplicates(lst):\n    # print(str(dups))\n\n# sample_input\nprint(find_duplicates())\n\ndef find_max(lst):\n    return lst\n\n\n# sample_input\ndef calculate_average(values):\n    #acia avere la temperatura\n \nage = 3\naverage",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_vent_chamber_3",
+            "signal": "Within the time frame 10:00 to 12:30, carry out vent_chamber_3.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "(ampressed_chamber_3)\ndef find_duplicates(numbers):\n    # print(numbers)\n\n# )\n\ndef swap_var(name):\n    # print(name)\nortunately: \n    if swap_var(var_referer):\n        print(\"var_referer\")\n\nwaste =rapyffestyle('var_referer')",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_vent_chamber_3",
+            "signal": "Mandatory deadline: complete vent_chamber_3 no later than 19:00.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "(volimize)\ndef reverse_string(name):\n    return name\n\nage = 4\nprint(age)\n\ndef find_max(lst):\n    return lst[ 1 ]\n\nage_str = ' patients'\n# }oralagestr,iscopal_function\ndef find_duplicate(lst):\n    for key, value in \t\t{\t\tif  value == 2 } }",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_vent_chamber_3",
+            "signal": "Initiate vent_chamber_3 right now.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "(fect())\ncastle\ndef find_duplicates(numbers):\n    # TODO: print(duplicates)\n\nage = 3\nnumbers = \ndef find_duplicates( ) \ndef }",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_vent_chamber_3",
+            "signal": "Perform vent_chamber_3 when convenient.",
+            "target": {
+              "target_action": "vent_chamber_3",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{err, } = {ransal}\ndef find_max(lst):\n    return lst\n\n\nage = 4\nprint(f\" \t  {age}\t\t) )\n\ndef find_duplicates(lst):\n    # print(str(duplicate)))\n\nage_smith = 2\nage_smith\n\n\nage_smith()\n# 2\n\ndef find_max(lst):\n    return lst\n\n\nage_smith = 3\ndef find_max(lst):\n    return lst\n\n\nage_smith = 9\nage_",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_degauss_actuator",
+            "signal": "Following the completion of telemetry_ack, proceed with degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "AFTER",
+              "reference_event": "telemetry_ack"
+            },
+            "raw_text": "Apostle {-a,\u00a0\u00a0\u00a0} =\ndef calculate_salary(age):\n    if age <= 3:\n        return 'salary'\n    else:\n        return None\n\n\n#   )\n\ndef find_duplicate(word):\n    for _ in range(len(word))\n\n\nfind_duplicate(word=' word')\n#\n\n# }\n\ndef find_max(lst):\n    return lst[ 1 ]\n\n# } also convert to str()\ndef find_max_value(lst):\n    return lst[ 1 ]\n#",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_degauss_actuator",
+            "signal": "Prior to reactor_cooling, finish degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BEFORE",
+              "reference_event": "reactor_cooling"
+            },
+            "raw_text": "(gesticulate 'degate')\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates\ndef find_max_value(values):\n    # transform into a function\n    if values:\n        raise ValueError\n\n\ndef find_max_value(values):\n    # transform into a function\n    if find_max_value:\n        raise \"Value to find\"\n\ndef calculate_average(x):\n    return x * 2\ndef multiply_by_one(self, num_2):\n    print(num_2)\n#  \nage_",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_degauss_actuator",
+            "signal": "Within the time frame 10:00 to 12:30, carry out degauss_actuator.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "(gull)\n\ndef find_duplicates(numbers):\n    # print(numbers)\n\n#  Example\nnumbers = 4\n\ndef find_max(lst):\n    return lst[ 1 ]\n\n#omansation\nprint(find_max)\u000b{embrance: 'max'}}\n\ndef add_value(str, int):\n    # present other than max and int\r\n\ndef find_dub(word):\n    if len(set(word))):\n        return word\n#    # Example\n\n# \n# \nage_str, command",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_degauss_actuator",
+            "signal": "Mandatory deadline: complete degauss_actuator no later than 19:00.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "(g)\n\ndef find_max(numbers):\n    if numbers[0]:\n        return numbers[0]\n\n# Example\nprint(address)\n#  numbers = \n# also, what is the maximum value?",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_degauss_actuator",
+            "signal": "Initiate degauss_actuator right now.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "@fectimify(a_fectison)\t= lanes(1) ) = ema( 'act')\ndef find_duplicates(numbers):\n    # TODO: implement\n\nnumbers = 2\n\ndef find_max(lst):\n    return lst[ 1 ]\n\n#omansion\nprint(find_max)\u000b\t \ndef find_max_value(list_):\n    return list_\n\n#omansion\nprint(find_max_value())\u000b \ndef find_dub_point(name,onging):\n    # find thedu",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_degauss_actuator",
+            "signal": "Perform degauss_actuator when convenient.",
+            "target": {
+              "target_action": "degauss_actuator",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{err, } = {greeting} }\ndef find_max(lst):\n    return lst\n\n\nage_resting = 5\nprint(f\" \t\t{str(age_resting) }}`)\n\ndef find_duplicate(word):\n    # find the duplicate\n    if any:\n        for word in set(word)\n\n\nfind_duplicate(word)\n\ndef find_max_value(lst):\n    return lst[ 1 ]\n\n# }oralization\ndef calculate_average(lst):\n    # sampling\n    returnimony",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_after_flush_coolant_loop",
+            "signal": "Following the completion of depot_handshake, proceed with flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "AFTER",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "{ }\n\ndef find_max(values):\n    if values[0] in doors:\n        return doors[0]\n\n# \t    {\n\t\t \t  doors: }\n\tclose_caller =rapy_command\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates(numbers)\n\ndef find_max(values):\n    # transform(values)\n\ndef present_max(values):\n\ndef find_sum(x):\n    return x\n\n# also, modify the function to find the maximum value",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_before_flush_coolant_loop",
+            "signal": "Prior to depot_handshake, finish flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BEFORE",
+              "reference_event": "depot_handshake"
+            },
+            "raw_text": "(fish_cooling_oil, continue)\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates\ndef find_max_value(values):\n    # transform into a function\n    if values:\n        raise ValueError\n\n\ndef calculate_average(values):\n    #acia l'ospe control\n    if values:\n        returnapiens(f, 'average')\ndefapiens(str_value):\n    #ampage(str_value)\n\ndef find_dub(word):\n    # find thedubword\n\t\t# also, make",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_window_flush_coolant_loop",
+            "signal": "Within the time frame 10:00 to 12:30, carry out flush_coolant_loop.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BETWEEN",
+              "window": {
+                "start": "10:00",
+                "end": "12:30"
+              }
+            },
+            "raw_text": "(fuelled by_flush_cooling_gust())\ndef find_duplicates(numbers):\n    duplicates = [x, x, 2)\n\n# }peutic_a  = 'duplicate'\ndef find_max_value(lst):\n    return lst[ 1 ]\n\n#omansation: \n# \n#\n\ndef find_max_value(list_):\n    # return\n\ndef main() :\n    # \n\ndef find_max_value(list_):\n    # {x: max}\n\nfind_max_",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_deadline_flush_coolant_loop",
+            "signal": "Mandatory deadline: complete flush_coolant_loop no later than 19:00.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BEFORE",
+              "deadline": "19:00"
+            },
+            "raw_text": "(folls) a\u00a0{-soever}\ndef calculate_salary(age):\n    if age <= 3:\n        return 'salary'\n    else:\n        return None\n\n\n#    \n\nage_instructor = ills_salary\n\n\nills_salary = 9\n\ndef find_duplicate(word):\n    # find_duplicate\n    if any:\n        for word in word\n       \ndef find_max_value(lst):\n    return lst[ 1 ]\n#\n\n#\n\n#\n\nage = 3\nmax_value",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_immediate_flush_coolant_loop",
+            "signal": "Initiate flush_coolant_loop right now.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "IMMEDIATE"
+            },
+            "raw_text": "fect(\n            }duate{\ndef reverse_string(name):\n    return name\n\n# Example\nprint(address()) # \t  {str, } }\n\ndef find_duplicates(numbers):\n    # your code\nif find_duplicates:\n    # \t\tnumbers = [2, 5]\n\telse:\n\t\t# \t\t\tnumbers = [2, 5]\n\t#    \t\tprint(numbers)\n\nfind_duplicates()\n# \t\t{ }\n\n# \n#\n\ndef find_max(",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_temp_ambig_flush_coolant_loop",
+            "signal": "Perform flush_coolant_loop when convenient.",
+            "target": {
+              "target_action": "flush_coolant_loop",
+              "relation": "BETWEEN",
+              "unknowns": [
+                "window"
+              ]
+            },
+            "raw_text": "{ }\ndef remove_duplicates(word):\n    #, word\n\n# }\ndef find_max(lst):\n    return lst[ 1 ]\n\n# } )\n\n# find_max()\n# input\n# find_max\n\n\ndef find_max(lst):\n\ndef find_dub(x):\n    if x == 'x':\n        return\n\n# }oralizationstraterbysingle\ndef remove_duplicates(word):\n    # Example: \n#    \n# }oralization\ndef remove_duplicate(word",
+            "is_valid_json": false,
+            "is_relation_match": false,
+            "is_exact_match": false
+          }
+        ]
+      },
+      "recovery": {
+        "total_cases": 24,
+        "valid_json": 0,
+        "valid_json_rate": 0.0,
+        "strategy_matches": 0,
+        "strategy_match_rate": 0.0,
+        "exact_matches": 0,
+        "exact_match_rate": 0.0,
+        "records": [
+          {
+            "example_id": "HO_rec_retry_write_telemetry_block",
+            "signal": "Execution of write_telemetry_block dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "def_fect(str, extract):\n \t\tex Norfolk;\t\t= extract;\n\t\tclose;\n\tcularive\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates(numbers)\n\ndef find_max(lst):\n    return lst\n\n\n# Example\nprint(max(lst))\n\ndef calculate_salary(age):\n    if age > 1:\n        return 1\n\nage = 1\nprint(f'Salary')\n\ndef find_largest_value(list_):\n    return list_",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_write_telemetry_block",
+            "signal": "State invariant violated in write_telemetry_block. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "invalidate_telemetry_index"
+            },
+            "raw_text": "{\n  }=\ndef find_duplicates(numbers):\n    # print(dups)\n\nnumbers = 2, 3\n\ndef find_max(lst):\n    return lst\n\n\n# also, add a check to return the max if no numbers present in the list\n# also, if(lst)\ndef find_max_value(students):\n    # find the maximum value\n    if students:\n        raise ValueError(\" students to \")\n\n\ndef main():\n    students = (str, max_ )\n\ndef find_duplicates(values):\n    #acia find_",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_write_telemetry_block",
+            "signal": "Primary interface down during write_telemetry_block. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "FALLBACK",
+              "fallback_uow": "spool_telemetry_to_local_nvme"
+            },
+            "raw_text": "'_err'\ndef reverse_string(name):\n    return name\n\n# Example\nprint(reverse_string)\n\ndef find_duplicates(numbers):\n    # your code\nif find_duplicates:\n    #oudsestdupes\n\nage = 3\n \ndef find_max(lst):\n    return lst[ 1 ]\n\nage = 4\nprint(age)\n\ndef find_max_value(list_):\n    return list_\n\nage_str = \"command\"\nage_str = \"max\"\n\ndef",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_write_telemetry_block",
+            "signal": "Unrecognized hardware anomaly detected during write_telemetry_block. No automated resolution policy.",
+            "target": {
+              "failed_uow": "write_telemetry_block",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "(gensis{'errembrance'}='')\n{error_cast,_iosis}\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates\ndef find_max_value(lst):\n    return lst[ 1 ]\n\n# Example\n#\n#\n\ndef find_max_value(lst):\n    #acia find_max_value\n peutic = 'max'\n\n\n#  also necessary\nelse:\n    # no_affect\n\ndef find_dub(word):\n    # find the duplicate\n    if word:\n        return",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_authorize_reactor_flow",
+            "signal": "Execution of authorize_reactor_flow dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\t}\t\t{\t\tembrance\t\t}\ndef find_max(lst):\n    return lst\n\n\nage = 4\nprint(f\" \t  {age} \t  )```\n\ndef find_duplicates(strs):\n    # Do action\n \n    if not strs:\n        return\n\n\ndef main():\n    # your code remaining\n \nmain()\n\ndef find_max(lst):\n    return lst[ 1 ]\n\ndef find_largest(list_):\n    return list_\n\n# also, add a method to return",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_authorize_reactor_flow",
+            "signal": "State invariant violated in authorize_reactor_flow. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "clamp_emergency_scram_valves"
+            },
+            "raw_text": "(isolated)\nransation_fell\u00a0(rest)\ndef find_duplicates(numbers):\n    # TODO: implementation\n\nfind_duplicates(numbers)\n\ndef find_max_value(values):\n    #acia find_max_value\n peutic = 'max'\n\n\n#acia\ndef present_values(keyner):\n peutic, \n     }\n     } \n peutic = 'max' } \npresent_calling\ndef find_dub(name):\n    print(f\"{name}\")\n\n# }oralafy`",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_authorize_reactor_flow",
+            "signal": "Primary interface down during authorize_reactor_flow. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "FALLBACK",
+              "fallback_uow": "route_coolant_auxiliary_bypass"
+            },
+            "raw_text": "volatile Barber {'failed_a_close''}\n\n\ndef_gain_volembrance(vol_vania):\n  Barber_fecto = {\n    \t  'fly'\t\t:Intf\n\n\n  }\n\n\n\t# ies: geries:g,gz\n\tage = order = 1\n\tgia = ' lose'\n\n\n\n yoursillist = \r\n\tcular = 'fly'\n\ndef find_duplicates(numbers):\n    # find the duplicate duplicate\r\n    if any:\n        for num in numbers\n    \t\tprint(num)\n\nnumbers = 2, 4",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_authorize_reactor_flow",
+            "signal": "Unrecognized hardware anomaly detected during authorize_reactor_flow. No automated resolution policy.",
+            "target": {
+              "failed_uow": "authorize_reactor_flow",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "(isolate)\ng_fectimission\n\ndef find_duplicates(numbers):\n    # TODO: implementation\n\ndef main(numbers):\n\ndef find_max(lst):\n    return lst\n\n\nnumbers = 5\n\ndef calculate_area(shape):\n    if shape == 'circle':\n        # your_cretion\n        print(f'  circle')\n    elif \t\tshape == 'square':\n        # your_cretion\n    return\n\n\ndef calculate_volume(shape):\n    # your_cretion\ndef find_max(list_):\n    # find the max",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_synchronize_database",
+            "signal": "Execution of synchronize_database dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "(sync_database => 'err')\n\n\n\n\ndef_gossage(e):\n \t\ttry:\n\t\t# to\t\t*iscopalian\n\t\t Aires =\u00a0{}\n\n\t Aires.iscopalize\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates\ndef remove_duplicates(numbers):\n    # Example\n    if not numbers:\n        print\n\n\n\nnumbers = (1, )\n\ndef find_max(lst):\n    return lst[ 1 ]\n\n# } \ndef remove_duers(numbers):\n    return numbers [",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_synchronize_database",
+            "signal": "State invariant violated in synchronize_database. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "revert_wal_checkpoint"
+            },
+            "raw_text": "{\n  }=\n# Import\ndef find_number_one():\n  return\n\n\n# )\n\ndef find_duplicate(numbers):\n    for key, value in numbers if not (key, value)\n\n#     }\n\n#    \ndef remove_dupe(data):\n    print(data)\n\ndata =rapyop{remove_dupe}}\ndef calculate_average(x):\n    return x\n\n# }oralization\ndef calculate_speaker(name):\n    return name\n\n#Import\ndef speak(name):\n  #",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_synchronize_database",
+            "signal": "Primary interface down during synchronize_database. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "FALLBACK",
+              "fallback_uow": "queue_offline_delta_log"
+            },
+            "raw_text": "dispatched_fectime(\n            ) = {foplasty}\ndef find_max(lst):\n    return lst\n\n\nage = 4\nprint(f\" \t\t{str(age) }}`)\n\ndef find_duplicates(lst):\n    # print(str(duplicate))\n\nage_smith = 2\nage_smith\n\n\n\n\nage_smith()\n# 2\n\ndef find_max(lst):\n    return lst\n\n\nage_smith = inf\n\n\nage_smith() # duate\ndef find_largest(list_",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_synchronize_database",
+            "signal": "Unrecognized hardware anomaly detected during synchronize_database. No automated resolution policy.",
+            "target": {
+              "failed_uow": "synchronize_database",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "(isolate)\n{strrapf, approximate }\n\n\n\ndef find_duplicates(numbers):\n    # TODO:\n\nnumbers = 2\n\ndef find_max(lst):\n    return lst\n\n\n# Example\nprint(max(lst))\n\ndef find_dub(x):\n    return x\n\n\n#omansion\ndef find_dub(x):\n\ndef calculate_salary(age):\n    if age > 1:\n        return 1\n\nage = 1\nprint(f'Salary')\n\ndef find_",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_eject_capsule",
+            "signal": "Execution of eject_capsule dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "efections Abbeyhipemembrance_EFFICIENT_CAMP_UTHING_EESCitality => {-1}\n\ndef calculate_salary(age):\n    if age <= 3:\n        return 'salary'\n    else:\n        return None\n\n\n#    \n\nage_to_salary = 3\ndef present_salary():\n    # fleshler\n   \ndef find_duplicate(arr):\n    for key, value in arr \ud83d\udc69\ud83c\udffe(str, int))\n\n# find_duplicate(arr)\n#\n\ndef",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_eject_capsule",
+            "signal": "State invariant violated in eject_capsule. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "retract_ejection_latches"
+            },
+            "raw_text": "{\n  }\ndef find_duplicates(numbers):\n    # print(duplicate)\n\nnumbers = 2, 3\n\ndef find_max(lst):\n    return lst\n\n\n#  Example\nif find_max(lst):\n    # \u00a0(str)\u00a0)\n\ndef find_max_value(values):\n    #acia find_max_value\n peutic = 'max'\n\n\n#  also\nif_restore_ampton(find_max_value)\n```\ndef calculate_average(values):\n    #acia calculate_average\n    if",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_eject_capsule",
+            "signal": "Primary interface down during eject_capsule. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "FALLBACK",
+              "fallback_uow": "seal_capsule_in_containment_bay"
+            },
+            "raw_text": "efecting_capsule_fell\n\nWhat is the most efficient way to store a list of words?",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_eject_capsule",
+            "signal": "Unrecognized hardware anomaly detected during eject_capsule. No automated resolution policy.",
+            "target": {
+              "failed_uow": "eject_capsule",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "embrancegiver = {-a, 'f' }\ndef find_max(lst):\n    return lst\n\n\n#   called 'find_max'\n\ndef find_dub(word):\n    # your code\n \nif find_dub(word):\n    # your code\n\ndef calculate_salary(age):\n    return age * 2\nages_to_salary = [ 9, 8]\nage_to_salary = \ndef print_out_difference(a):\n    if a  : \n        print(\"  \")\n\nage_",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_power_down_sensor_array",
+            "signal": "Execution of power_down_sensor_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "(power_up, esp);\n\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates(numbers)\n\ndef find_max_value(lst):\n    return lst[ 1 ]\n\n# Example\n#\n#\n\ndef find_max_value(list_):\n    # return\n\ndef main() :\n    # find_max_value\n\ndef remove_duplicates(word_list):\n    # transform to list\n    word_list = list(set())\n\n    # also, update the list if needed\n    if not blood_",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_power_down_sensor_array",
+            "signal": "State invariant violated in power_down_sensor_array. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "restore_sensor_power_grid"
+            },
+            "raw_text": "(isolated)\nransation_final_php = {\n  }\ndef find_duplicates(numbers):\n    # TODO: print(duplicates)\n\nnumbers = 2, 3\n\ndef find_max(lst):\n    return lst\n\n\n#  example\nif find_max(numbers):\n    # \u00a0(str)\u00a0)\n\ndef find_max_value(values):\n    #acia find_max_value(values)\n\nvalues = (5, )\n\ndef find_largest_value(list_):\n    #acia find_largest",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_power_down_sensor_array",
+            "signal": "Primary interface down during power_down_sensor_array. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "FALLBACK",
+              "fallback_uow": "isolate_sensor_bus_optically"
+            },
+            "raw_text": "{\n  }\ndef find_duplicates(numbers):\n    # TODO:\n\nfind_duplicates\ndef find_max_value(values):\n    # {x: max} }\n\nage_str = ' Love'\nfind_max_value\ndef find_max_value(values):\n    # {x: }\n\nage_str\n\n\nage_str = 4\ninput_values\ndef find_max_value(list_values):\n    # find the max_value\n    if max_value:\n        return max_value\n\n    # else:",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_power_down_sensor_array",
+            "signal": "Unrecognized hardware anomaly detected during power_down_sensor_array. No automated resolution policy.",
+            "target": {
+              "failed_uow": "power_down_sensor_array",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "(isolate)\n{error, }\nransation=!'_span'\ndef find_duplicates(numbers):\n    # TODO:\n\nage = 4\nprint(duplicates)\n\ndef find_max(lst):\n    return lst[ 1 ]\nage = 3\nprint(age)\u000b\u000b3\u000b\u000b\u000b\n# also, if you can't find the max, what would the following be?",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_retry_drain_coolant_reservoir",
+            "signal": "Execution of drain_coolant_reservoir dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "RETRY",
+              "retry_policy": {
+                "max_attempts": 5,
+                "backoff": "EXPONENTIAL"
+              }
+            },
+            "raw_text": "{\t}\t\t{\t\tembrance\t\t=\r\n           \t\tcularification\t\t= dev;\n\n\t}\ndef find_max(lst):\n    return lst\n\n\nage_resting = 5\nprint(f\" \t  {str(age_resting)}} \")\n\ndef subtract_amount(amount):\n    # same_ effect as original\n    @amount\n\n\nsubtract_amount_now = 1\ndef find_duplicates(numbers):\n    # find the duplicates\n    if any:\n        for num in numbers\n    \t\t# also add any_th",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_comp_drain_coolant_reservoir",
+            "signal": "State invariant violated in drain_coolant_reservoir. Rollback to previous checkpoint needed immediately.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "COMPENSATE",
+              "compensation_uow": "refill_coolant_lines"
+            },
+            "raw_text": "(isolated)\nransation_final_fell\n\n\n\n\ndef_falling_cooling_gothesis:\r\n  {\r\n  }\ndef find_duplicates(numbers):\n    # TODO:\n\nage_str = \" marriage\"\nfind_duplicates(age_str)\n\ndef find_max(lst):\n    return lst\n\n\nage_str = ' command'\n# \nage_str =  command\n# \nage_str  #\n\nage_str \n#\n\nage_str \ndef subtract_value(max_value, Nagasaki",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_fb_drain_coolant_reservoir",
+            "signal": "Primary interface down during drain_coolant_reservoir. Switch to auxiliary backup apparatus.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "FALLBACK",
+              "fallback_uow": "pump_coolant_to_reserve_sump"
+            },
+            "raw_text": "gulfic_close => {\n  }\ndef find_duplicates(numbers):\n    # find the duplicates\n    if any:\n        for num in numbers\n    \t\t# your code\n\telse:\n\t\t# your_replacement\n\t{str: str} \n \ndef find_max(x):\n    return x\n\n# also, add a method to return the value of the max_item\ndef showcause(max_item):\u000b\u000b\t\t// const max_item = 'max_item'\u000b\t\t# example\n\tembranced_incision\ndef find",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          },
+          {
+            "example_id": "HO_rec_esc_drain_coolant_reservoir",
+            "signal": "Unrecognized hardware anomaly detected during drain_coolant_reservoir. No automated resolution policy.",
+            "target": {
+              "failed_uow": "drain_coolant_reservoir",
+              "strategy": "ESCALATE",
+              "unknowns": [
+                "recovery_path"
+              ]
+            },
+            "raw_text": "(isolate)\n{error, }\nransation =\ndef find_duplicates(numbers):\n    # TODO:\n\ndef main():\n    # }\ndef find_max(lst):\n    return lst\n\n\n# Example\nprint(f'max')\ndef calculate_salary(age):\n    if age > 1:\n        return  Ibrahim_A\ndef find_largest(set_values):\n    #acia set_values\n    if set_values:\n        return Ibrahim_A\n\n\ndef main() :\n\t\ttry:",
+            "is_valid_json": false,
+            "is_strategy_match": false,
+            "is_exact_match": false
+          }
+        ]
+      },
+      "elapsed_seconds": 290.11,
+      "peak_vram_mb": 285.45,
       "interference_detected": true
     }
   }

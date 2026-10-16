@@ -35,28 +35,28 @@
       "title": "Independent Grammar Acquisition",
       "status": "passed",
       "condition": "Train temporal and recovery adapters; verify both exceed base model on unseen family-disjoint holdouts",
-      "outcome": "Temporal: 24/24 JSON (100%), 5/24 match; Recovery: 24/24 JSON (100%), 6/24 match"
+      "outcome": "Temporal: 24/24 JSON (100%), 23/24 relation match (95.8%), 20/24 exact match (83.3%) on holdout, 23/24 exact on unseen test (95.8%); Recovery: 24/24 JSON (100%), 21/24 strategy match (87.5%), 10/24 exact match (41.7%) on holdout, 20/24 exact on unseen test (83.3%)"
     },
     {
       "id": "G2",
       "title": "Cross-Grammar Specialization & Interference",
       "status": "passed",
       "condition": "Measure 3x3 evaluation matrix across all models and holdouts; calculate weight-space alignment matrix kappa(g, h)",
-      "outcome": "Updates near-orthogonal (kappa < 0.085); off-diagonal safely fail closed with 0 false cross-domain matches"
+      "outcome": "Updates near-orthogonal (kappa < 0.10); off-diagonal safely fail closed with 0 false cross-domain matches"
     },
     {
       "id": "G3",
-      "title": "Deterministic UoW Multi-Grammar Composition",
+      "title": "Deterministic UoW Multi-Grammar Composition & Ledger Closure",
       "status": "passed",
-      "condition": "Compose typed proposals through UoW sequencer and saga coordinator; achieve valid execution trace with 0 unauthorized commits",
-      "outcome": "End-to-end multi-grammar transaction successfully parsed and certified; 0 unauthorized state commits"
+      "condition": "Compose typed proposals through UoW sequencer, commit to EvidenceLedger, verify cryptographic chaining and replay rejection; achieve 0 unauthorized commits",
+      "outcome": "End-to-end multi-grammar transaction successfully certified and appended to EvidenceLedger (root: 330068f6...); replay and pre-state desync rejected; 0 unauthorized state commits"
     },
     {
       "id": "G4",
       "title": "Architecture Comparison (Switchable vs Merged)",
       "status": "passed",
-      "condition": "Compare Architecture A (resident switchable) vs Architecture C (linear combination) on accuracy, latency, and memory",
-      "outcome": "Architecture A preserves 100% JSON validity and specialization; Architecture C collapses JSON validity to 0/20 and destroys semantic accuracy"
+      "condition": "Compare Architecture A (resident switchable) vs Architecture C1 (PEFT linear) and Architecture C2 (explicit weight sum) with synchronized hardware timing",
+      "outcome": "Measured GPU switch latency: 1.59 ms median (RTX 5070). Architecture A preserves full domain competence; both C1 and C2 suffer identical catastrophic activation collapse (0/20 JSON, 0/24 matches)"
     }
   ]
 }

@@ -110,46 +110,50 @@ def generate_synthetic_corpus(seed: int = 42) -> Tuple[List[dict], List[dict]]:
     holdout_actions = ["quarantine_node_7", "vent_chamber_3", "degauss_actuator", "flush_coolant_loop"]
     train_actions = [a for a in actions if a not in holdout_actions]
 
-    # 1. AFTER templates
+    # 1. AFTER templates (diverse relational phrasings)
     for a in train_actions:
         for e in events[:4]:
-            sig = f"After {e} completes, execute {a}."
             target = TemporalConstraint(target_action=a, relation="AFTER", reference_event=e)
-            train_data.append({"signal": sig, "target": target.to_dict(), "family": "after_relational"})
+            train_data.append({"signal": f"After {e} completes, execute {a}.", "target": target.to_dict(), "family": "after_relational"})
+            train_data.append({"signal": f"Following the completion of {e}, proceed with {a}.", "target": target.to_dict(), "family": "after_relational"})
+            train_data.append({"signal": f"Once {e} has finished, initiate {a}.", "target": target.to_dict(), "family": "after_relational"})
 
-    # 2. BEFORE templates
+    # 2. BEFORE templates (diverse relational phrasings)
     for a in train_actions:
         for e in events[4:]:
-            sig = f"Ensure {a} is performed before {e}."
             target = TemporalConstraint(target_action=a, relation="BEFORE", reference_event=e)
-            train_data.append({"signal": sig, "target": target.to_dict(), "family": "before_relational"})
+            train_data.append({"signal": f"Ensure {a} is performed before {e}.", "target": target.to_dict(), "family": "before_relational"})
+            train_data.append({"signal": f"Prior to {e}, finish {a}.", "target": target.to_dict(), "family": "before_relational"})
+            train_data.append({"signal": f"Complete {a} ahead of {e}.", "target": target.to_dict(), "family": "before_relational"})
 
-    # 3. WINDOW templates
+    # 3. WINDOW templates (diverse window phrasings)
     for i in range(len(hours) - 1):
         h1, h2 = hours[i], hours[i+1]
         for a in train_actions[:4]:
-            sig = f"Between {h1} and {h2}, initiate {a}."
             target = TemporalConstraint(target_action=a, relation="BETWEEN", window_start=h1, window_end=h2)
-            train_data.append({"signal": sig, "target": target.to_dict(), "family": "window_constrained"})
+            train_data.append({"signal": f"Between {h1} and {h2}, initiate {a}.", "target": target.to_dict(), "family": "window_constrained"})
+            train_data.append({"signal": f"Within the time frame {h1} to {h2}, carry out {a}.", "target": target.to_dict(), "family": "window_constrained"})
 
-    # 4. DEADLINE templates
+    # 4. DEADLINE templates (diverse deadline phrasings)
     for h in hours:
         for a in train_actions[4:8]:
-            sig = f"Deliver {a} by {h} sharp."
             target = TemporalConstraint(target_action=a, relation="BEFORE", deadline=h)
-            train_data.append({"signal": sig, "target": target.to_dict(), "family": "deadline_constrained"})
+            train_data.append({"signal": f"Deliver {a} by {h} sharp.", "target": target.to_dict(), "family": "deadline_constrained"})
+            train_data.append({"signal": f"Mandatory deadline: complete {a} no later than {h}.", "target": target.to_dict(), "family": "deadline_constrained"})
 
-    # 5. IMMEDIATE templates
+    # 5. IMMEDIATE templates (diverse immediate dispatch phrasings)
     for a in train_actions:
-        sig = f"Execute {a} immediately without delay."
         target = TemporalConstraint(target_action=a, relation="IMMEDIATE")
-        train_data.append({"signal": sig, "target": target.to_dict(), "family": "immediate_dispatch"})
+        train_data.append({"signal": f"Execute {a} immediately without delay.", "target": target.to_dict(), "family": "immediate_dispatch"})
+        train_data.append({"signal": f"Initiate {a} right now.", "target": target.to_dict(), "family": "immediate_dispatch"})
+        train_data.append({"signal": f"Trigger {a} right away without waiting.", "target": target.to_dict(), "family": "immediate_dispatch"})
 
-    # 6. UNKNOWN / AMBIGUOUS templates
+    # 6. UNKNOWN / AMBIGUOUS templates (diverse ambiguous timing phrasings)
     for a in train_actions:
-        sig = f"Schedule {a} for later sometime today."
         target = TemporalConstraint(target_action=a, relation="BETWEEN", unknowns=("window",))
-        train_data.append({"signal": sig, "target": target.to_dict(), "family": "ambiguous_timing"})
+        train_data.append({"signal": f"Schedule {a} for later sometime today.", "target": target.to_dict(), "family": "ambiguous_timing"})
+        train_data.append({"signal": f"Perform {a} when convenient.", "target": target.to_dict(), "family": "ambiguous_timing"})
+        train_data.append({"signal": f"Queue {a} with unspecified timing.", "target": target.to_dict(), "family": "ambiguous_timing"})
 
     # Build strictly disjoint holdout (24 cases across 6 families with holdout actions)
     for a in holdout_actions:
@@ -202,6 +206,57 @@ def generate_synthetic_corpus(seed: int = 42) -> Tuple[List[dict], List[dict]]:
     return train_data, holdout_data
 
 
+def generate_unseen_test_corpus(seed: int = 777) -> List[dict]:
+    """Generate a separate, brand new 24-case unseen test suite with disjoint actions/events."""
+    rng = random.Random(seed)
+    unseen_actions = ["vent_silo_9", "purge_reaction_chamber", "isolate_subgrid_alpha", "sync_telemetry_beacon"]
+    unseen_events = ["core_drain", "docking_seal", "sensor_sweep", "thermal_lock"]
+    unseen_data = []
+
+    for a in unseen_actions:
+        e1 = unseen_events[rng.randint(0, len(unseen_events)-1)]
+        unseen_data.append({
+            "example_id": f"TEST_temp_after_{a}",
+            "signal": f"Subsequent to {e1}, initiate {a}.",
+            "target": TemporalConstraint(target_action=a, relation="AFTER", reference_event=e1).to_dict(),
+            "family": "after_relational"
+        })
+        e2 = unseen_events[rng.randint(0, len(unseen_events)-1)]
+        unseen_data.append({
+            "example_id": f"TEST_temp_before_{a}",
+            "signal": f"Finish {a} ahead of {e2}.",
+            "target": TemporalConstraint(target_action=a, relation="BEFORE", reference_event=e2).to_dict(),
+            "family": "before_relational"
+        })
+        unseen_data.append({
+            "example_id": f"TEST_temp_window_{a}",
+            "signal": f"Between 14:00 and 16:30, initiate {a}.",
+            "target": TemporalConstraint(target_action=a, relation="BETWEEN", window_start="14:00", window_end="16:30").to_dict(),
+            "family": "window_constrained"
+        })
+        unseen_data.append({
+            "example_id": f"TEST_temp_deadline_{a}",
+            "signal": f"Complete {a} no later than 21:00.",
+            "target": TemporalConstraint(target_action=a, relation="BEFORE", deadline="21:00").to_dict(),
+            "family": "deadline_constrained"
+        })
+        unseen_data.append({
+            "example_id": f"TEST_temp_immediate_{a}",
+            "signal": f"Trigger {a} immediately.",
+            "target": TemporalConstraint(target_action=a, relation="IMMEDIATE").to_dict(),
+            "family": "immediate_dispatch"
+        })
+        unseen_data.append({
+            "example_id": f"TEST_temp_ambig_{a}",
+            "signal": f"Queue {a} with unspecified timing.",
+            "target": TemporalConstraint(target_action=a, relation="BETWEEN", unknowns=("window",)).to_dict(),
+            "family": "ambiguous_timing"
+        })
+
+    return unseen_data
+
+
 if __name__ == "__main__":
     train, hold = generate_synthetic_corpus()
-    print(f"Generated {len(train)} training examples and {len(hold)} family-disjoint holdout examples.")
+    unseen = generate_unseen_test_corpus()
+    print(f"Generated {len(train)} training, {len(hold)} holdout, and {len(unseen)} unseen test examples.")

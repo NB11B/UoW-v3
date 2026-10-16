@@ -84,6 +84,51 @@ class TestDeterministicComposition(unittest.TestCase):
             commit(uow, base_state, invalid_prop, cert, prev_evidence_hash=ledger.root_hash(), step_number=1)
         self.assertEqual(len(ledger.records), 0)
 
+    def test_ledger_append_integrity_and_replay_rejection(self):
+        base_state = WorldState(attributes={"balance": 100})
+        uow = make_uow("task_a", [Route(guard=Guard(GuardOp.ALWAYS), mutations=(Mutation(MutationOp.SET, "balance", 50),), successor=Successor.halt())])
+        prop = propose(uow, base_state)
+        cert = certify(uow, base_state, prop)
+        self.assertTrue(cert.is_valid)
+
+        ledger = EvidenceLedger()
+        initial_root = ledger.root_hash()
+        self.assertEqual(initial_root, "0" * 64)
+
+        # Successful commit & append
+        committed_state, ev = commit(
+            uow, base_state, prop, cert,
+            prev_evidence_hash=initial_root,
+            step_number=1
+        )
+        ledger.append(ev)
+
+        self.assertEqual(len(ledger.records), 1)
+        self.assertTrue(ledger.verify_integrity())
+        self.assertEqual(ledger.root_hash(), ev.record_hash)
+        self.assertNotEqual(ledger.root_hash(), initial_root)
+        self.assertEqual(committed_state.state_hash, ev.post_state_hash)
+        self.assertEqual(committed_state.attributes["balance"], 50)
+        self.assertEqual(committed_state.sequence, base_state.sequence + 1)
+
+        # Replay rejection (attempting to append evidence with stale prev_evidence_hash)
+        _, replay_ev = commit(
+            uow, base_state, prop, cert,
+            prev_evidence_hash=initial_root,
+            step_number=1
+        )
+        with self.assertRaises(ValueError):
+            ledger.append(replay_ev)
+
+        # Pre-state desync rejection (cert for base_state cannot execute on committed_state)
+        with self.assertRaises(ValueError):
+            commit(
+                uow, committed_state, prop, cert,
+                prev_evidence_hash=ledger.root_hash(),
+                step_number=2
+            )
+
+
 
 if __name__ == "__main__":
     unittest.main()

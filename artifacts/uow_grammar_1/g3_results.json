@@ -17,6 +17,12 @@
       "recovery_strategy": "RETRY",
       "recovery_max_attempts": 3,
       "certificate_valid": true,
+      "evidence_record_appended": true,
+      "ledger_record_count": 1,
+      "ledger_root_hash": "330068f6890a5ebfb20bd6aa0f7985a323ca2deedd6a06ad535666926cedf510",
+      "ledger_integrity_verified": true,
+      "state_advanced": true,
+      "post_state_sequence": 1,
       "unauthorized_state_commits": 0,
       "passed": true
     },
@@ -32,11 +38,22 @@
       "desc": "Proposal lacking valid deterministic certificate cannot mutate state",
       "committed_state": false,
       "passed": true
+    },
+    {
+      "id": "T4_replay_and_chaining_rejection",
+      "desc": "Replay with stale root hash or stale pre-state certificate is strictly rejected",
+      "replay_rejected": true,
+      "state_desync_rejected": true,
+      "ledger_records_maintained": true,
+      "passed": true
     }
   ],
   "summary": {
     "all_tests_passed": true,
     "unauthorized_state_commits": 0,
+    "ledger_verified": true,
+    "total_ledger_records": 1,
+    "ledger_root_hash": "330068f6890a5ebfb20bd6aa0f7985a323ca2deedd6a06ad535666926cedf510",
     "architecture": "Architecture A (Resident Switchable LoRA Adapters + Deterministic UoW Authority)"
   }
 }

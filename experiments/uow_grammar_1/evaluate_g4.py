@@ -72,13 +72,47 @@ def run(argv=None):
 
     mem_a = torch.cuda.max_memory_allocated() / (1024 * 1024) if args.device == "cuda" else 0.0
 
+    # Measured synchronized GPU adapter switch latency
+    if args.device == "cuda":
+        print("Benchmarking synchronized CUDA adapter-switch latency (N=1000)...")
+        for _ in range(50):
+            model_a.set_adapter("temporal")
+            model_a.set_adapter("recovery")
+            model_a.set_adapter("operational")
+        torch.cuda.synchronize()
+
+        starter = torch.cuda.Event(enable_timing=True)
+        ender = torch.cuda.Event(enable_timing=True)
+        latencies = []
+        cycle = ["temporal", "recovery", "operational"]
+        for i in range(1000):
+            starter.record()
+            model_a.set_adapter(cycle[i % 3])
+            ender.record()
+            torch.cuda.synchronize()
+            latencies.append(starter.elapsed_time(ender))
+
+        import statistics
+        switch_latency_stats = {
+            "iterations": len(latencies),
+            "mean_ms": round(statistics.mean(latencies), 4),
+            "median_ms": round(statistics.median(latencies), 4),
+            "min_ms": round(min(latencies), 4),
+            "max_ms": round(max(latencies), 4),
+            "stdev_ms": round(statistics.stdev(latencies), 4),
+            "hardware_measured": True,
+            "timer": "torch.cuda.Event(synchronized)"
+        }
+    else:
+        switch_latency_stats = {"mean_ms": 0.0, "hardware_measured": False}
+
     results["architectures"]["Architecture_A_Switchable"] = {
         "operational": res_a_op,
         "temporal": res_a_temp,
         "recovery": res_a_rec,
         "elapsed_seconds": round(time_a, 2),
         "peak_vram_mb": round(mem_a, 2),
-        "adapter_switch_latency_ms": 0.01,
+        "adapter_switch_latency": switch_latency_stats,
         "interference_detected": False
     }
 
@@ -89,56 +123,106 @@ def run(argv=None):
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
 
-    # 2. Architecture C: Linear Weight Combination (Merged Adapter)
-    print("\n--- Evaluating Architecture C: Linearly Merged Adapter (W0 + sum lambda_g dW_g) ---")
-    base_c = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False)
-    model_c = PeftModel.from_pretrained(base_c, args.op_adapter, adapter_name="operational", is_trainable=False)
-    model_c.load_adapter(args.temp_adapter, adapter_name="temporal")
-    model_c.load_adapter(args.rec_adapter, adapter_name="recovery")
+    # 2. Architecture C1: PEFT Linear Combination (add_weighted_adapter)
+    print("\n--- Evaluating Architecture C1: PEFT Linearly Merged Adapter (combination_type='linear') ---")
+    base_c1 = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False)
+    model_c1 = PeftModel.from_pretrained(base_c1, args.op_adapter, adapter_name="operational", is_trainable=False)
+    model_c1.load_adapter(args.temp_adapter, adapter_name="temporal")
+    model_c1.load_adapter(args.rec_adapter, adapter_name="recovery")
     
-    # PEFT add_weighted_adapter computes linear combination of LoRA weights
     try:
-        model_c.add_weighted_adapter(
+        model_c1.add_weighted_adapter(
             adapters=["operational", "temporal", "recovery"],
             weights=[1.0, 1.0, 1.0],
-            adapter_name="merged_composite",
+            adapter_name="peft_merged_composite",
             combination_type="linear"
         )
-        model_c.set_adapter("merged_composite")
+        model_c1.set_adapter("peft_merged_composite")
     except Exception as exc:
-        print(f"PEFT add_weighted_adapter warning: {exc}, using manual combination fallback")
+        print(f"PEFT add_weighted_adapter warning: {exc}")
 
-    model_c.to(args.device).eval()
+    model_c1.to(args.device).eval()
 
-    t0_c = time.time()
-    res_c_op = evaluate_operational(model_c, tokenizer, holdout_op, args.device, root)
-    res_c_temp = evaluate_temporal(model_c, tokenizer, holdout_temp, args.device)
-    res_c_rec = evaluate_recovery(model_c, tokenizer, holdout_rec, args.device)
-    time_c = time.time() - t0_c
+    t0_c1 = time.time()
+    res_c1_op = evaluate_operational(model_c1, tokenizer, holdout_op, args.device, root)
+    res_c1_temp = evaluate_temporal(model_c1, tokenizer, holdout_temp, args.device)
+    res_c1_rec = evaluate_recovery(model_c1, tokenizer, holdout_rec, args.device)
+    time_c1 = time.time() - t0_c1
 
-    mem_c = torch.cuda.max_memory_allocated() / (1024 * 1024) if args.device == "cuda" else 0.0
+    mem_c1 = torch.cuda.max_memory_allocated() / (1024 * 1024) if args.device == "cuda" else 0.0
 
-    results["architectures"]["Architecture_C_Merged"] = {
-        "operational": res_c_op,
-        "temporal": res_c_temp,
-        "recovery": res_c_rec,
-        "elapsed_seconds": round(time_c, 2),
-        "peak_vram_mb": round(mem_c, 2),
-        "interference_detected": (res_c_op["exact_matches"] < res_a_op["exact_matches"] or
-                                  res_c_temp["exact_matches"] < res_a_temp["exact_matches"] or
-                                  res_c_rec["exact_matches"] < res_a_rec["exact_matches"])
+    results["architectures"]["Architecture_C1_PEFT_Linear"] = {
+        "operational": res_c1_op,
+        "temporal": res_c1_temp,
+        "recovery": res_c1_rec,
+        "elapsed_seconds": round(time_c1, 2),
+        "peak_vram_mb": round(mem_c1, 2),
+        "interference_detected": (res_c1_op["exact_matches"] < res_a_op["exact_matches"] or
+                                  res_c1_temp["exact_matches"] < res_a_temp["exact_matches"] or
+                                  res_c1_rec["exact_matches"] < res_a_rec["exact_matches"])
     }
 
-    del model_c
-    del base_c
+    del model_c1
+    del base_c1
+    gc.collect()
+    if args.device == "cuda":
+        torch.cuda.empty_cache()
+        torch.cuda.reset_peak_memory_stats()
+
+    # 3. Architecture C2: True Explicit Weight Sum (W0 + sum alpha/r * B @ A)
+    print("\n--- Evaluating Architecture C2: True Explicit Weight Sum (W0 + sum dW_g) ---")
+    base_explicit = AutoModelForCausalLM.from_pretrained(BASE, revision=REV, trust_remote_code=False)
+    temp_peft = PeftModel.from_pretrained(base_explicit, args.op_adapter, adapter_name="operational", is_trainable=False)
+    temp_peft.load_adapter(args.temp_adapter, adapter_name="temporal")
+    temp_peft.load_adapter(args.rec_adapter, adapter_name="recovery")
+    
+    # Accumulate explicit matrix product updates directly into base weights
+    base_dict = dict(base_explicit.named_modules())
+    for name, module in temp_peft.named_modules():
+        if hasattr(module, "lora_A") and hasattr(module, "lora_B"):
+            target_name = name.replace("base_model.model.", "")
+            base_mod = base_dict[target_name]
+            total_delta = torch.zeros_like(base_mod.weight.data)
+            for ad in ("operational", "temporal", "recovery"):
+                if ad in module.lora_A and ad in module.lora_B:
+                    A = module.lora_A[ad].weight.data.float()
+                    B = module.lora_B[ad].weight.data.float()
+                    scale = module.scaling[ad]
+                    total_delta += (scale * (B @ A)).to(total_delta.device, dtype=total_delta.dtype)
+            base_mod.weight.data += total_delta
+
+    del temp_peft
+    gc.collect()
+
+    base_explicit.to(args.device).eval()
+    t0_c2 = time.time()
+    res_c2_op = evaluate_operational(base_explicit, tokenizer, holdout_op, args.device, root)
+    res_c2_temp = evaluate_temporal(base_explicit, tokenizer, holdout_temp, args.device)
+    res_c2_rec = evaluate_recovery(base_explicit, tokenizer, holdout_rec, args.device)
+    time_c2 = time.time() - t0_c2
+    mem_c2 = torch.cuda.max_memory_allocated() / (1024 * 1024) if args.device == "cuda" else 0.0
+
+    results["architectures"]["Architecture_C2_Explicit_Sum"] = {
+        "operational": res_c2_op,
+        "temporal": res_c2_temp,
+        "recovery": res_c2_rec,
+        "elapsed_seconds": round(time_c2, 2),
+        "peak_vram_mb": round(mem_c2, 2),
+        "interference_detected": (res_c2_op["exact_matches"] < res_a_op["exact_matches"] or
+                                  res_c2_temp["exact_matches"] < res_a_temp["exact_matches"] or
+                                  res_c2_rec["exact_matches"] < res_a_rec["exact_matches"])
+    }
+
+    del base_explicit
     gc.collect()
     if args.device == "cuda":
         torch.cuda.empty_cache()
 
     # Comparison Summary
     print("\n--- Architecture Comparison Summary ---")
-    print(f"Arch A (Switchable) - Op Disp: {res_a_op['exact_matches']}/20, Temp Matches: {res_a_temp['exact_matches']}/24, Rec Matches: {res_a_rec['exact_matches']}/24")
-    print(f"Arch C (Merged)     - Op Disp: {res_c_op['exact_matches']}/20, Temp Matches: {res_c_temp['exact_matches']}/24, Rec Matches: {res_c_rec['exact_matches']}/24")
+    print(f"Arch A (Switchable)   - Op: {res_a_op['exact_matches']}/20, Temp: {res_a_temp['exact_matches']}/24, Rec: {res_a_rec['exact_matches']}/24 | Switch: {switch_latency_stats['median_ms']} ms")
+    print(f"Arch C1 (PEFT Merged) - Op: {res_c1_op['exact_matches']}/20, Temp: {res_c1_temp['exact_matches']}/24, Rec: {res_c1_rec['exact_matches']}/24")
+    print(f"Arch C2 (Explicit Sum)- Op: {res_c2_op['exact_matches']}/20, Temp: {res_c2_temp['exact_matches']}/24, Rec: {res_c2_rec['exact_matches']}/24")
 
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)

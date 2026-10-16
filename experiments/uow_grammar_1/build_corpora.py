@@ -3,8 +3,14 @@ import hashlib
 import json
 from pathlib import Path
 
-from experiments.uow_grammar_1.grammars.temporal import generate_synthetic_corpus as gen_temporal
-from experiments.uow_grammar_1.grammars.recovery import generate_synthetic_corpus as gen_recovery
+from experiments.uow_grammar_1.grammars.temporal import (
+    generate_synthetic_corpus as gen_temporal,
+    generate_unseen_test_corpus as gen_unseen_temporal
+)
+from experiments.uow_grammar_1.grammars.recovery import (
+    generate_synthetic_corpus as gen_recovery,
+    generate_unseen_test_corpus as gen_unseen_recovery
+)
 
 
 def sha256_bytes(b: bytes) -> str:
@@ -29,6 +35,13 @@ def main():
     t_path.write_bytes(t_bytes)
     print(f"Exported Temporal Corpus: {len(t_train)} train, {len(t_hold)} holdout -> {t_path} (SHA: {sha256_bytes(t_bytes)[:12]}...)")
 
+    # 1b. Temporal Unseen Test Suite
+    t_unseen = gen_unseen_temporal(seed=777)
+    t_unseen_path = art_dir / "temporal_unseen_manifest.json"
+    t_unseen_bytes = (json.dumps({"grammar": "uow.temporal.v1", "test_examples_count": len(t_unseen), "test_examples": t_unseen}, indent=2) + "\n").encode("utf-8")
+    t_unseen_path.write_bytes(t_unseen_bytes)
+    print(f"Exported Temporal Unseen Test Suite: {len(t_unseen)} test cases -> {t_unseen_path}")
+
     # 2. Recovery Corpus
     r_train, r_hold = gen_recovery(seed=101)
     r_manifest = {
@@ -42,6 +55,13 @@ def main():
     r_bytes = (json.dumps(r_manifest, indent=2) + "\n").encode("utf-8")
     r_path.write_bytes(r_bytes)
     print(f"Exported Recovery Corpus: {len(r_train)} train, {len(r_hold)} holdout -> {r_path} (SHA: {sha256_bytes(r_bytes)[:12]}...)")
+
+    # 2b. Recovery Unseen Test Suite
+    r_unseen = gen_unseen_recovery(seed=888)
+    r_unseen_path = art_dir / "recovery_unseen_manifest.json"
+    r_unseen_bytes = (json.dumps({"grammar": "uow.recovery.v1", "test_examples_count": len(r_unseen), "test_examples": r_unseen}, indent=2) + "\n").encode("utf-8")
+    r_unseen_path.write_bytes(r_unseen_bytes)
+    print(f"Exported Recovery Unseen Test Suite: {len(r_unseen)} test cases -> {r_unseen_path}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,276 @@
+{
+  "grammar": "uow.recovery.v1",
+  "test_examples_count": 24,
+  "test_examples": [
+    {
+      "example_id": "TEST_rec_retry_ignite_thruster_array",
+      "signal": "Execution of ignite_thruster_array dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "ignite_thruster_array",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "TEST_rec_comp_ignite_thruster_array",
+      "signal": "Transaction abort in ignite_thruster_array. Invoke compensation routine cutoff_fuel_valves.",
+      "target": {
+        "failed_uow": "ignite_thruster_array",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "cutoff_fuel_valves"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "TEST_rec_fb_ignite_thruster_array",
+      "signal": "Hardware channel lost in ignite_thruster_array. Divert execution to fallback routine fire_cold_gas_thrusters.",
+      "target": {
+        "failed_uow": "ignite_thruster_array",
+        "strategy": "FALLBACK",
+        "fallback_uow": "fire_cold_gas_thrusters"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "TEST_rec_esc_ignite_thruster_array",
+      "signal": "Critical unclassified failure in ignite_thruster_array. Escalate to system supervisor.",
+      "target": {
+        "failed_uow": "ignite_thruster_array",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "TEST_rec_retry_recalibrate_star_tracker",
+      "signal": "Execution of recalibrate_star_tracker dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "recalibrate_star_tracker",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "TEST_rec_comp_recalibrate_star_tracker",
+      "signal": "Transaction abort in recalibrate_star_tracker. Invoke compensation routine load_inertial_gyro_frame.",
+      "target": {
+        "failed_uow": "recalibrate_star_tracker",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "load_inertial_gyro_frame"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "TEST_rec_fb_recalibrate_star_tracker",
+      "signal": "Hardware channel lost in recalibrate_star_tracker. Divert execution to fallback routine align_optical_horizon_sensor.",
+      "target": {
+        "failed_uow": "recalibrate_star_tracker",
+        "strategy": "FALLBACK",
+        "fallback_uow": "align_optical_horizon_sensor"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "TEST_rec_esc_recalibrate_star_tracker",
+      "signal": "Critical unclassified failure in recalibrate_star_tracker. Escalate to system supervisor.",
+      "target": {
+        "failed_uow": "recalibrate_star_tracker",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "TEST_rec_retry_pressurize_fuel_cell",
+      "signal": "Execution of pressurize_fuel_cell dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "pressurize_fuel_cell",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "TEST_rec_comp_pressurize_fuel_cell",
+      "signal": "Transaction abort in pressurize_fuel_cell. Invoke compensation routine vent_overpressure_manifold.",
+      "target": {
+        "failed_uow": "pressurize_fuel_cell",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "vent_overpressure_manifold"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "TEST_rec_fb_pressurize_fuel_cell",
+      "signal": "Hardware channel lost in pressurize_fuel_cell. Divert execution to fallback routine draw_from_auxiliary_battery.",
+      "target": {
+        "failed_uow": "pressurize_fuel_cell",
+        "strategy": "FALLBACK",
+        "fallback_uow": "draw_from_auxiliary_battery"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "TEST_rec_esc_pressurize_fuel_cell",
+      "signal": "Critical unclassified failure in pressurize_fuel_cell. Escalate to system supervisor.",
+      "target": {
+        "failed_uow": "pressurize_fuel_cell",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "TEST_rec_retry_recharge_ion_battery",
+      "signal": "Execution of recharge_ion_battery dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "recharge_ion_battery",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "TEST_rec_comp_recharge_ion_battery",
+      "signal": "Transaction abort in recharge_ion_battery. Invoke compensation routine disconnect_solar_array.",
+      "target": {
+        "failed_uow": "recharge_ion_battery",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "disconnect_solar_array"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "TEST_rec_fb_recharge_ion_battery",
+      "signal": "Hardware channel lost in recharge_ion_battery. Divert execution to fallback routine switch_to_fuel_cell_bus.",
+      "target": {
+        "failed_uow": "recharge_ion_battery",
+        "strategy": "FALLBACK",
+        "fallback_uow": "switch_to_fuel_cell_bus"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "TEST_rec_esc_recharge_ion_battery",
+      "signal": "Critical unclassified failure in recharge_ion_battery. Escalate to system supervisor.",
+      "target": {
+        "failed_uow": "recharge_ion_battery",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "TEST_rec_retry_purge_nitrogen_tank",
+      "signal": "Execution of purge_nitrogen_tank dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "purge_nitrogen_tank",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "TEST_rec_comp_purge_nitrogen_tank",
+      "signal": "Transaction abort in purge_nitrogen_tank. Invoke compensation routine reseal_nitrogen_valves.",
+      "target": {
+        "failed_uow": "purge_nitrogen_tank",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "reseal_nitrogen_valves"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "TEST_rec_fb_purge_nitrogen_tank",
+      "signal": "Hardware channel lost in purge_nitrogen_tank. Divert execution to fallback routine divert_to_auxiliary_scrubber.",
+      "target": {
+        "failed_uow": "purge_nitrogen_tank",
+        "strategy": "FALLBACK",
+        "fallback_uow": "divert_to_auxiliary_scrubber"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "TEST_rec_esc_purge_nitrogen_tank",
+      "signal": "Critical unclassified failure in purge_nitrogen_tank. Escalate to system supervisor.",
+      "target": {
+        "failed_uow": "purge_nitrogen_tank",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    },
+    {
+      "example_id": "TEST_rec_retry_deploy_solar_mast",
+      "signal": "Execution of deploy_solar_mast dropped packet with ETIMEDOUT. Remote port momentarily unresponsive.",
+      "target": {
+        "failed_uow": "deploy_solar_mast",
+        "strategy": "RETRY",
+        "retry_policy": {
+          "max_attempts": 3,
+          "backoff": "EXPONENTIAL"
+        }
+      },
+      "family": "retry_transient"
+    },
+    {
+      "example_id": "TEST_rec_comp_deploy_solar_mast",
+      "signal": "Transaction abort in deploy_solar_mast. Invoke compensation routine retract_mast_gimbal.",
+      "target": {
+        "failed_uow": "deploy_solar_mast",
+        "strategy": "COMPENSATE",
+        "compensation_uow": "retract_mast_gimbal"
+      },
+      "family": "compensate_semantic"
+    },
+    {
+      "example_id": "TEST_rec_fb_deploy_solar_mast",
+      "signal": "Hardware channel lost in deploy_solar_mast. Divert execution to fallback routine lock_mast_at_partial_angle.",
+      "target": {
+        "failed_uow": "deploy_solar_mast",
+        "strategy": "FALLBACK",
+        "fallback_uow": "lock_mast_at_partial_angle"
+      },
+      "family": "fallback_routing"
+    },
+    {
+      "example_id": "TEST_rec_esc_deploy_solar_mast",
+      "signal": "Critical unclassified failure in deploy_solar_mast. Escalate to system supervisor.",
+      "target": {
+        "failed_uow": "deploy_solar_mast",
+        "strategy": "ESCALATE",
+        "unknowns": [
+          "recovery_path"
+        ]
+      },
+      "family": "escalate_ambiguous"
+    }
+  ]
+}

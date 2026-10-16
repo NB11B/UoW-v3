@@ -1,0 +1,262 @@
+{
+  "grammar": "uow.temporal.v1",
+  "test_examples_count": 24,
+  "test_examples": [
+    {
+      "example_id": "TEST_temp_after_vent_silo_9",
+      "signal": "Subsequent to docking_seal, initiate vent_silo_9.",
+      "target": {
+        "target_action": "vent_silo_9",
+        "relation": "AFTER",
+        "reference_event": "docking_seal"
+      },
+      "family": "after_relational"
+    },
+    {
+      "example_id": "TEST_temp_before_vent_silo_9",
+      "signal": "Finish vent_silo_9 ahead of thermal_lock.",
+      "target": {
+        "target_action": "vent_silo_9",
+        "relation": "BEFORE",
+        "reference_event": "thermal_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "example_id": "TEST_temp_window_vent_silo_9",
+      "signal": "Between 14:00 and 16:30, initiate vent_silo_9.",
+      "target": {
+        "target_action": "vent_silo_9",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "16:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "example_id": "TEST_temp_deadline_vent_silo_9",
+      "signal": "Complete vent_silo_9 no later than 21:00.",
+      "target": {
+        "target_action": "vent_silo_9",
+        "relation": "BEFORE",
+        "deadline": "21:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "example_id": "TEST_temp_immediate_vent_silo_9",
+      "signal": "Trigger vent_silo_9 immediately.",
+      "target": {
+        "target_action": "vent_silo_9",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "example_id": "TEST_temp_ambig_vent_silo_9",
+      "signal": "Queue vent_silo_9 with unspecified timing.",
+      "target": {
+        "target_action": "vent_silo_9",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "example_id": "TEST_temp_after_purge_reaction_chamber",
+      "signal": "Subsequent to thermal_lock, initiate purge_reaction_chamber.",
+      "target": {
+        "target_action": "purge_reaction_chamber",
+        "relation": "AFTER",
+        "reference_event": "thermal_lock"
+      },
+      "family": "after_relational"
+    },
+    {
+      "example_id": "TEST_temp_before_purge_reaction_chamber",
+      "signal": "Finish purge_reaction_chamber ahead of sensor_sweep.",
+      "target": {
+        "target_action": "purge_reaction_chamber",
+        "relation": "BEFORE",
+        "reference_event": "sensor_sweep"
+      },
+      "family": "before_relational"
+    },
+    {
+      "example_id": "TEST_temp_window_purge_reaction_chamber",
+      "signal": "Between 14:00 and 16:30, initiate purge_reaction_chamber.",
+      "target": {
+        "target_action": "purge_reaction_chamber",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "16:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "example_id": "TEST_temp_deadline_purge_reaction_chamber",
+      "signal": "Complete purge_reaction_chamber no later than 21:00.",
+      "target": {
+        "target_action": "purge_reaction_chamber",
+        "relation": "BEFORE",
+        "deadline": "21:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "example_id": "TEST_temp_immediate_purge_reaction_chamber",
+      "signal": "Trigger purge_reaction_chamber immediately.",
+      "target": {
+        "target_action": "purge_reaction_chamber",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "example_id": "TEST_temp_ambig_purge_reaction_chamber",
+      "signal": "Queue purge_reaction_chamber with unspecified timing.",
+      "target": {
+        "target_action": "purge_reaction_chamber",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "example_id": "TEST_temp_after_isolate_subgrid_alpha",
+      "signal": "Subsequent to sensor_sweep, initiate isolate_subgrid_alpha.",
+      "target": {
+        "target_action": "isolate_subgrid_alpha",
+        "relation": "AFTER",
+        "reference_event": "sensor_sweep"
+      },
+      "family": "after_relational"
+    },
+    {
+      "example_id": "TEST_temp_before_isolate_subgrid_alpha",
+      "signal": "Finish isolate_subgrid_alpha ahead of sensor_sweep.",
+      "target": {
+        "target_action": "isolate_subgrid_alpha",
+        "relation": "BEFORE",
+        "reference_event": "sensor_sweep"
+      },
+      "family": "before_relational"
+    },
+    {
+      "example_id": "TEST_temp_window_isolate_subgrid_alpha",
+      "signal": "Between 14:00 and 16:30, initiate isolate_subgrid_alpha.",
+      "target": {
+        "target_action": "isolate_subgrid_alpha",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "16:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "example_id": "TEST_temp_deadline_isolate_subgrid_alpha",
+      "signal": "Complete isolate_subgrid_alpha no later than 21:00.",
+      "target": {
+        "target_action": "isolate_subgrid_alpha",
+        "relation": "BEFORE",
+        "deadline": "21:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "example_id": "TEST_temp_immediate_isolate_subgrid_alpha",
+      "signal": "Trigger isolate_subgrid_alpha immediately.",
+      "target": {
+        "target_action": "isolate_subgrid_alpha",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "example_id": "TEST_temp_ambig_isolate_subgrid_alpha",
+      "signal": "Queue isolate_subgrid_alpha with unspecified timing.",
+      "target": {
+        "target_action": "isolate_subgrid_alpha",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "example_id": "TEST_temp_after_sync_telemetry_beacon",
+      "signal": "Subsequent to core_drain, initiate sync_telemetry_beacon.",
+      "target": {
+        "target_action": "sync_telemetry_beacon",
+        "relation": "AFTER",
+        "reference_event": "core_drain"
+      },
+      "family": "after_relational"
+    },
+    {
+      "example_id": "TEST_temp_before_sync_telemetry_beacon",
+      "signal": "Finish sync_telemetry_beacon ahead of thermal_lock.",
+      "target": {
+        "target_action": "sync_telemetry_beacon",
+        "relation": "BEFORE",
+        "reference_event": "thermal_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "example_id": "TEST_temp_window_sync_telemetry_beacon",
+      "signal": "Between 14:00 and 16:30, initiate sync_telemetry_beacon.",
+      "target": {
+        "target_action": "sync_telemetry_beacon",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "16:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "example_id": "TEST_temp_deadline_sync_telemetry_beacon",
+      "signal": "Complete sync_telemetry_beacon no later than 21:00.",
+      "target": {
+        "target_action": "sync_telemetry_beacon",
+        "relation": "BEFORE",
+        "deadline": "21:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "example_id": "TEST_temp_immediate_sync_telemetry_beacon",
+      "signal": "Trigger sync_telemetry_beacon immediately.",
+      "target": {
+        "target_action": "sync_telemetry_beacon",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "example_id": "TEST_temp_ambig_sync_telemetry_beacon",
+      "signal": "Queue sync_telemetry_beacon with unspecified timing.",
+      "target": {
+        "target_action": "sync_telemetry_beacon",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    }
+  ]
+}

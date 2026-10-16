@@ -1,383 +1,25 @@
 {
   "grammar": "uow.temporal.v1",
-  "train_examples_count": 196,
+  "train_examples_count": 512,
   "holdout_examples_count": 24,
   "train_examples": [
     {
-      "signal": "After depot_handshake completes, execute transfer_power_bus.",
-      "target": {
-        "target_action": "transfer_power_bus",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure synchronize_clocks is performed before backup_completion.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 09:30 and 11:00, initiate convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "09:30",
-          "end": "11:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure transfer_power_bus is performed before network_rescan.",
-      "target": {
-        "target_action": "transfer_power_bus",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute synchronize_clocks.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "AFTER",
-        "reference_event": "reactor_cooling"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 18:00 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "deadline": "18:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure calibrate_manifold is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "After telemetry_ack completes, execute archive_telemetry_logs.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
-        "relation": "AFTER",
-        "reference_event": "telemetry_ack"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 20:00 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "20:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure archive_telemetry_logs is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "After telemetry_ack completes, execute convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "AFTER",
-        "reference_event": "telemetry_ack"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Between 11:00 and 13:15, initiate convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "11:00",
-          "end": "13:15"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute reboot_auxiliary_core.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
-        "relation": "AFTER",
-        "reference_event": "reactor_cooling"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "After depot_handshake completes, execute open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure open_valve is performed before network_rescan.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure isolate_bay_4 is performed before network_rescan.",
+      "signal": "Prior to door_lock, finish isolate_bay_4.",
       "target": {
         "target_action": "isolate_bay_4",
         "relation": "BEFORE",
-        "reference_event": "network_rescan"
+        "reference_event": "door_lock"
       },
       "family": "before_relational"
     },
     {
-      "signal": "After depot_handshake completes, execute purge_buffer_cache.",
+      "signal": "Following the completion of reactor_cooling, proceed with dispatch_cells.",
       "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "After depot_handshake completes, execute synchronize_clocks.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 17:30 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "deadline": "17:30"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "After pump_shutdown completes, execute transfer_power_bus.",
-      "target": {
-        "target_action": "transfer_power_bus",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Between 13:15 and 14:00, initiate open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "13:15",
-          "end": "14:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 11:00 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "11:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 15:45 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "15:45"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "After telemetry_ack completes, execute open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "AFTER",
-        "reference_event": "telemetry_ack"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "After depot_handshake completes, execute inspect_couplers.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Execute reboot_auxiliary_core immediately without delay.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
-        "relation": "IMMEDIATE"
-      },
-      "family": "immediate_dispatch"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
+        "target_action": "dispatch_cells",
         "relation": "AFTER",
         "reference_event": "reactor_cooling"
       },
       "family": "after_relational"
-    },
-    {
-      "signal": "Schedule calibrate_manifold for later sometime today.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BETWEEN",
-        "unknowns": [
-          "window"
-        ]
-      },
-      "family": "ambiguous_timing"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute verify_telemetry.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "AFTER",
-        "reference_event": "reactor_cooling"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Deliver synchronize_clocks by 20:00 sharp.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "deadline": "20:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "After pump_shutdown completes, execute inspect_couplers.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "After telemetry_ack completes, execute inspect_couplers.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "AFTER",
-        "reference_event": "telemetry_ack"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Between 17:30 and 18:00, initiate convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "17:30",
-          "end": "18:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Execute synchronize_clocks immediately without delay.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "IMMEDIATE"
-      },
-      "family": "immediate_dispatch"
-    },
-    {
-      "signal": "Ensure synchronize_clocks is performed before network_rescan.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Execute calibrate_manifold immediately without delay.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "IMMEDIATE"
-      },
-      "family": "immediate_dispatch"
-    },
-    {
-      "signal": "Schedule inspect_couplers for later sometime today.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "BETWEEN",
-        "unknowns": [
-          "window"
-        ]
-      },
-      "family": "ambiguous_timing"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 17:30 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "17:30"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure reboot_auxiliary_core is performed before network_rescan.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 16:00 and 17:30, initiate open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "16:00",
-          "end": "17:30"
-        }
-      },
-      "family": "window_constrained"
     },
     {
       "signal": "Ensure open_valve is performed before pressure_stabilization.",
@@ -389,38 +31,74 @@
       "family": "before_relational"
     },
     {
-      "signal": "Deliver synchronize_clocks by 18:00 sharp.",
+      "signal": "Once reactor_cooling has finished, initiate synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete synchronize_clocks ahead of backup_completion.",
       "target": {
         "target_action": "synchronize_clocks",
         "relation": "BEFORE",
-        "deadline": "18:00"
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 20:00.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "20:00"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "After depot_handshake completes, execute dispatch_cells.",
+      "signal": "Following the completion of reactor_cooling, proceed with inspect_couplers.",
       "target": {
-        "target_action": "dispatch_cells",
+        "target_action": "inspect_couplers",
         "relation": "AFTER",
-        "reference_event": "depot_handshake"
+        "reference_event": "reactor_cooling"
       },
       "family": "after_relational"
     },
     {
-      "signal": "After pump_shutdown completes, execute open_valve.",
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 13:15.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to backup_completion, finish dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate open_valve.",
       "target": {
         "target_action": "open_valve",
         "relation": "AFTER",
-        "reference_event": "pump_shutdown"
+        "reference_event": "reactor_cooling"
       },
       "family": "after_relational"
     },
     {
-      "signal": "After reactor_cooling completes, execute transfer_power_bus.",
+      "signal": "After telemetry_ack completes, execute archive_telemetry_logs.",
       "target": {
-        "target_action": "transfer_power_bus",
+        "target_action": "archive_telemetry_logs",
         "relation": "AFTER",
-        "reference_event": "reactor_cooling"
+        "reference_event": "telemetry_ack"
       },
       "family": "after_relational"
     },
@@ -434,280 +112,25 @@
       "family": "deadline_constrained"
     },
     {
-      "signal": "Ensure purge_buffer_cache is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure verify_telemetry is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 09:30 and 11:00, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "09:30",
-          "end": "11:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure verify_telemetry is performed before backup_completion.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Deliver synchronize_clocks by 08:00 sharp.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "deadline": "08:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure verify_telemetry is performed before door_lock.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "reference_event": "door_lock"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 13:15 and 14:00, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "13:15",
-          "end": "14:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver isolate_bay_4 by 08:00 sharp.",
-      "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "BEFORE",
-        "deadline": "08:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "After pump_shutdown completes, execute calibrate_manifold.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure dispatch_cells is performed before network_rescan.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Execute isolate_bay_4 immediately without delay.",
-      "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "IMMEDIATE"
-      },
-      "family": "immediate_dispatch"
-    },
-    {
-      "signal": "Ensure transfer_power_bus is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "transfer_power_bus",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "After pump_shutdown completes, execute convey_sensors.",
+      "signal": "Execute convey_sensors immediately without delay.",
       "target": {
         "target_action": "convey_sensors",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Between 14:00 and 15:45, initiate purge_buffer_cache.",
-      "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "14:00",
-          "end": "15:45"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "AFTER",
-        "reference_event": "reactor_cooling"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Between 09:30 and 11:00, initiate purge_buffer_cache.",
-      "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "09:30",
-          "end": "11:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure inspect_couplers is performed before door_lock.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "BEFORE",
-        "reference_event": "door_lock"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure calibrate_manifold is performed before backup_completion.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 18:00 and 20:00, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "18:00",
-          "end": "20:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver synchronize_clocks by 16:00 sharp.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "deadline": "16:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure verify_telemetry is performed before network_rescan.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Execute dispatch_cells immediately without delay.",
-      "target": {
-        "target_action": "dispatch_cells",
         "relation": "IMMEDIATE"
       },
       "family": "immediate_dispatch"
     },
     {
-      "signal": "After pump_shutdown completes, execute archive_telemetry_logs.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 16:00 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "deadline": "16:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Deliver isolate_bay_4 by 11:00 sharp.",
-      "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "BEFORE",
-        "deadline": "11:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Between 17:30 and 18:00, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "17:30",
-          "end": "18:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 14:00 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "14:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Between 11:00 and 13:15, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "11:00",
-          "end": "13:15"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Between 15:45 and 16:00, initiate open_valve.",
+      "signal": "Initiate open_valve right now.",
       "target": {
         "target_action": "open_valve",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Within the time frame 15:45 to 16:00, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
         "relation": "BETWEEN",
         "window": {
           "start": "15:45",
@@ -717,68 +140,52 @@
       "family": "window_constrained"
     },
     {
-      "signal": "Schedule purge_buffer_cache for later sometime today.",
+      "signal": "Complete isolate_bay_4 ahead of pressure_stabilization.",
       "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BETWEEN",
-        "unknowns": [
-          "window"
-        ]
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
       },
-      "family": "ambiguous_timing"
+      "family": "before_relational"
     },
     {
-      "signal": "After telemetry_ack completes, execute calibrate_manifold.",
+      "signal": "Following the completion of telemetry_ack, proceed with archive_telemetry_logs.",
       "target": {
-        "target_action": "calibrate_manifold",
+        "target_action": "archive_telemetry_logs",
         "relation": "AFTER",
         "reference_event": "telemetry_ack"
       },
       "family": "after_relational"
     },
     {
-      "signal": "After reactor_cooling completes, execute open_valve.",
+      "signal": "Once pump_shutdown has finished, initiate isolate_bay_4.",
       "target": {
-        "target_action": "open_valve",
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
         "relation": "AFTER",
         "reference_event": "reactor_cooling"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Schedule dispatch_cells for later sometime today.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "unknowns": [
-          "window"
-        ]
-      },
-      "family": "ambiguous_timing"
-    },
-    {
-      "signal": "Deliver isolate_bay_4 by 13:15 sharp.",
-      "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "BEFORE",
-        "deadline": "13:15"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Between 14:00 and 15:45, initiate open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "14:00",
-          "end": "15:45"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure calibrate_manifold is performed before network_rescan.",
+      "signal": "Prior to network_rescan, finish calibrate_manifold.",
       "target": {
         "target_action": "calibrate_manifold",
         "relation": "BEFORE",
@@ -787,164 +194,81 @@
       "family": "before_relational"
     },
     {
-      "signal": "Deliver calibrate_manifold by 16:00 sharp.",
+      "signal": "Once telemetry_ack has finished, initiate reboot_auxiliary_core.",
       "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "16:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Between 16:00 and 17:30, initiate convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "16:00",
-          "end": "17:30"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute inspect_couplers.",
-      "target": {
-        "target_action": "inspect_couplers",
+        "target_action": "reboot_auxiliary_core",
         "relation": "AFTER",
-        "reference_event": "reactor_cooling"
+        "reference_event": "telemetry_ack"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Execute convey_sensors immediately without delay.",
+      "signal": "Following the completion of pump_shutdown, proceed with open_valve.",
       "target": {
-        "target_action": "convey_sensors",
-        "relation": "IMMEDIATE"
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
       },
-      "family": "immediate_dispatch"
+      "family": "after_relational"
     },
     {
-      "signal": "Between 16:00 and 17:30, initiate dispatch_cells.",
+      "signal": "Complete reboot_auxiliary_core ahead of network_rescan.",
       "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "16:00",
-          "end": "17:30"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure purge_buffer_cache is performed before backup_completion.",
-      "target": {
-        "target_action": "purge_buffer_cache",
+        "target_action": "reboot_auxiliary_core",
         "relation": "BEFORE",
-        "reference_event": "backup_completion"
+        "reference_event": "network_rescan"
       },
       "family": "before_relational"
     },
     {
-      "signal": "Deliver calibrate_manifold by 13:15 sharp.",
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 15:45.",
       "target": {
         "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "13:15"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 08:00 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "deadline": "08:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 08:00 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "08:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Between 16:00 and 17:30, initiate purge_buffer_cache.",
-      "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "16:00",
-          "end": "17:30"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 15:45 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
         "relation": "BEFORE",
         "deadline": "15:45"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "Deliver synchronize_clocks by 14:00 sharp.",
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 15:45.",
       "target": {
-        "target_action": "synchronize_clocks",
+        "target_action": "isolate_bay_4",
         "relation": "BEFORE",
-        "deadline": "14:00"
+        "deadline": "15:45"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "After depot_handshake completes, execute archive_telemetry_logs.",
+      "signal": "Following the completion of reactor_cooling, proceed with convey_sensors.",
       "target": {
-        "target_action": "archive_telemetry_logs",
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After telemetry_ack completes, execute inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
         "relation": "AFTER",
         "reference_event": "depot_handshake"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Between 18:00 and 20:00, initiate open_valve.",
+      "signal": "Queue purge_buffer_cache with unspecified timing.",
       "target": {
-        "target_action": "open_valve",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "18:00",
-          "end": "20:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver synchronize_clocks by 13:15 sharp.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "deadline": "13:15"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure archive_telemetry_logs is performed before backup_completion.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Schedule convey_sensors for later sometime today.",
-      "target": {
-        "target_action": "convey_sensors",
+        "target_action": "purge_buffer_cache",
         "relation": "BETWEEN",
         "unknowns": [
           "window"
@@ -953,37 +277,16 @@
       "family": "ambiguous_timing"
     },
     {
-      "signal": "Ensure open_valve is performed before door_lock.",
+      "signal": "Once telemetry_ack has finished, initiate calibrate_manifold.",
       "target": {
-        "target_action": "open_valve",
-        "relation": "BEFORE",
-        "reference_event": "door_lock"
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
       },
-      "family": "before_relational"
+      "family": "after_relational"
     },
     {
-      "signal": "Ensure archive_telemetry_logs is performed before door_lock.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
-        "relation": "BEFORE",
-        "reference_event": "door_lock"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 14:00 and 15:45, initiate convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "14:00",
-          "end": "15:45"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Between 13:15 and 14:00, initiate purge_buffer_cache.",
+      "signal": "Within the time frame 13:15 to 14:00, carry out purge_buffer_cache.",
       "target": {
         "target_action": "purge_buffer_cache",
         "relation": "BETWEEN",
@@ -995,118 +298,72 @@
       "family": "window_constrained"
     },
     {
-      "signal": "Deliver isolate_bay_4 by 17:30 sharp.",
+      "signal": "Complete open_valve ahead of pressure_stabilization.",
       "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "BEFORE",
-        "deadline": "17:30"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure isolate_bay_4 is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "open_valve",
         "relation": "BEFORE",
         "reference_event": "pressure_stabilization"
       },
       "family": "before_relational"
     },
     {
-      "signal": "After telemetry_ack completes, execute isolate_bay_4.",
+      "signal": "Ensure convey_sensors is performed before network_rescan.",
       "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
         "relation": "AFTER",
         "reference_event": "telemetry_ack"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Schedule transfer_power_bus for later sometime today.",
+      "signal": "Deliver synchronize_clocks by 09:30 sharp.",
       "target": {
-        "target_action": "transfer_power_bus",
-        "relation": "BETWEEN",
-        "unknowns": [
-          "window"
-        ]
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "09:30"
       },
-      "family": "ambiguous_timing"
+      "family": "deadline_constrained"
     },
     {
-      "signal": "Between 17:30 and 18:00, initiate purge_buffer_cache.",
+      "signal": "Ensure calibrate_manifold is performed before door_lock.",
       "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "17:30",
-          "end": "18:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure convey_sensors is performed before door_lock.",
-      "target": {
-        "target_action": "convey_sensors",
+        "target_action": "calibrate_manifold",
         "relation": "BEFORE",
         "reference_event": "door_lock"
       },
       "family": "before_relational"
     },
     {
-      "signal": "Execute purge_buffer_cache immediately without delay.",
+      "signal": "Once pump_shutdown has finished, initiate calibrate_manifold.",
       "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "IMMEDIATE"
-      },
-      "family": "immediate_dispatch"
-    },
-    {
-      "signal": "Between 09:30 and 11:00, initiate open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "09:30",
-          "end": "11:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "After pump_shutdown completes, execute purge_buffer_cache.",
-      "target": {
-        "target_action": "purge_buffer_cache",
+        "target_action": "calibrate_manifold",
         "relation": "AFTER",
         "reference_event": "pump_shutdown"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Between 11:00 and 13:15, initiate purge_buffer_cache.",
+      "signal": "Schedule isolate_bay_4 for later sometime today.",
       "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "11:00",
-          "end": "13:15"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "After depot_handshake completes, execute verify_telemetry.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Schedule archive_telemetry_logs for later sometime today.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
+        "target_action": "isolate_bay_4",
         "relation": "BETWEEN",
         "unknowns": [
           "window"
@@ -1127,9 +384,91 @@
       "family": "window_constrained"
     },
     {
-      "signal": "Between 08:00 and 09:30, initiate dispatch_cells.",
+      "signal": "After telemetry_ack completes, execute open_valve.",
       "target": {
-        "target_action": "dispatch_cells",
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After telemetry_ack completes, execute purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Trigger calibrate_manifold right away without waiting.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Ensure convey_sensors is performed before door_lock.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure purge_buffer_cache is performed before backup_completion.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Queue open_valve with unspecified timing.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Prior to door_lock, finish open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 08:00 to 09:30, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
         "relation": "BETWEEN",
         "window": {
           "start": "08:00",
@@ -1137,6 +476,109 @@
         }
       },
       "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 14:00 to 15:45, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 16:00 and 17:30, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After telemetry_ack completes, execute verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure archive_telemetry_logs is performed before backup_completion.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 13:15 and 14:00, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "13:15",
+          "end": "14:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Queue calibrate_manifold with unspecified timing.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Perform purge_buffer_cache when convenient.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
     },
     {
       "signal": "Execute transfer_power_bus immediately without delay.",
@@ -1147,37 +589,28 @@
       "family": "immediate_dispatch"
     },
     {
-      "signal": "Between 18:00 and 20:00, initiate convey_sensors.",
+      "signal": "Within the time frame 13:15 to 14:00, carry out open_valve.",
       "target": {
-        "target_action": "convey_sensors",
+        "target_action": "open_valve",
         "relation": "BETWEEN",
         "window": {
-          "start": "18:00",
-          "end": "20:00"
+          "start": "13:15",
+          "end": "14:00"
         }
       },
       "family": "window_constrained"
     },
     {
-      "signal": "Deliver verify_telemetry by 20:00 sharp.",
+      "signal": "Prior to door_lock, finish convey_sensors.",
       "target": {
-        "target_action": "verify_telemetry",
+        "target_action": "convey_sensors",
         "relation": "BEFORE",
-        "deadline": "20:00"
+        "reference_event": "door_lock"
       },
-      "family": "deadline_constrained"
+      "family": "before_relational"
     },
     {
-      "signal": "After pump_shutdown completes, execute verify_telemetry.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Execute archive_telemetry_logs immediately without delay.",
+      "signal": "Initiate archive_telemetry_logs right now.",
       "target": {
         "target_action": "archive_telemetry_logs",
         "relation": "IMMEDIATE"
@@ -1185,27 +618,56 @@
       "family": "immediate_dispatch"
     },
     {
-      "signal": "Deliver synchronize_clocks by 17:30 sharp.",
+      "signal": "Prior to pressure_stabilization, finish isolate_bay_4.",
       "target": {
-        "target_action": "synchronize_clocks",
+        "target_action": "isolate_bay_4",
         "relation": "BEFORE",
-        "deadline": "17:30"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure archive_telemetry_logs is performed before network_rescan.",
-      "target": {
-        "target_action": "archive_telemetry_logs",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
+        "reference_event": "pressure_stabilization"
       },
       "family": "before_relational"
     },
     {
-      "signal": "Between 17:30 and 18:00, initiate open_valve.",
+      "signal": "Following the completion of depot_handshake, proceed with verify_telemetry.",
       "target": {
-        "target_action": "open_valve",
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Queue inspect_couplers with unspecified timing.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Ensure isolate_bay_4 is performed before door_lock.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 17:30 and 18:00, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
         "relation": "BETWEEN",
         "window": {
           "start": "17:30",
@@ -1215,168 +677,57 @@
       "family": "window_constrained"
     },
     {
-      "signal": "After reactor_cooling completes, execute archive_telemetry_logs.",
+      "signal": "Prior to door_lock, finish inspect_couplers.",
       "target": {
-        "target_action": "archive_telemetry_logs",
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
         "relation": "AFTER",
-        "reference_event": "reactor_cooling"
+        "reference_event": "depot_handshake"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Ensure convey_sensors is performed before pressure_stabilization.",
+      "signal": "After telemetry_ack completes, execute synchronize_clocks.",
       "target": {
-        "target_action": "convey_sensors",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 15:45 and 16:00, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "15:45",
-          "end": "16:00"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver calibrate_manifold by 09:30 sharp.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "09:30"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Ensure open_valve is performed before backup_completion.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "After telemetry_ack completes, execute reboot_auxiliary_core.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
+        "target_action": "synchronize_clocks",
         "relation": "AFTER",
         "reference_event": "telemetry_ack"
       },
       "family": "after_relational"
     },
     {
-      "signal": "After reactor_cooling completes, execute calibrate_manifold.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "AFTER",
-        "reference_event": "reactor_cooling"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure synchronize_clocks is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure purge_buffer_cache is performed before network_rescan.",
-      "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure reboot_auxiliary_core is performed before backup_completion.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure inspect_couplers is performed before backup_completion.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "After depot_handshake completes, execute reboot_auxiliary_core.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure inspect_couplers is performed before network_rescan.",
-      "target": {
-        "target_action": "inspect_couplers",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 15:45 and 16:00, initiate convey_sensors.",
+      "signal": "Between 09:30 and 11:00, initiate convey_sensors.",
       "target": {
         "target_action": "convey_sensors",
         "relation": "BETWEEN",
         "window": {
-          "start": "15:45",
-          "end": "16:00"
+          "start": "09:30",
+          "end": "11:00"
         }
       },
       "family": "window_constrained"
     },
     {
-      "signal": "Deliver isolate_bay_4 by 20:00 sharp.",
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 15:45.",
       "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "verify_telemetry",
         "relation": "BEFORE",
-        "deadline": "20:00"
+        "deadline": "15:45"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "Deliver calibrate_manifold by 18:00 sharp.",
+      "signal": "Perform reboot_auxiliary_core when convenient.",
       "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "BEFORE",
-        "deadline": "18:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "After depot_handshake completes, execute isolate_bay_4.",
-      "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Schedule synchronize_clocks for later sometime today.",
-      "target": {
-        "target_action": "synchronize_clocks",
+        "target_action": "reboot_auxiliary_core",
         "relation": "BETWEEN",
         "unknowns": [
           "window"
@@ -1385,83 +736,76 @@
       "family": "ambiguous_timing"
     },
     {
-      "signal": "Deliver synchronize_clocks by 15:45 sharp.",
+      "signal": "Perform transfer_power_bus when convenient.",
       "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "deadline": "15:45"
+        "target_action": "transfer_power_bus",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
       },
-      "family": "deadline_constrained"
+      "family": "ambiguous_timing"
     },
     {
-      "signal": "Ensure isolate_bay_4 is performed before backup_completion.",
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 13:15.",
       "target": {
         "target_action": "isolate_bay_4",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Ensure dispatch_cells is performed before backup_completion.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BEFORE",
-        "reference_event": "backup_completion"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Deliver isolate_bay_4 by 16:00 sharp.",
-      "target": {
-        "target_action": "isolate_bay_4",
-        "relation": "BEFORE",
-        "deadline": "16:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "After depot_handshake completes, execute calibrate_manifold.",
-      "target": {
-        "target_action": "calibrate_manifold",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure convey_sensors is performed before network_rescan.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "BEFORE",
-        "reference_event": "network_rescan"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 13:15 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
         "relation": "BEFORE",
         "deadline": "13:15"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "Ensure inspect_couplers is performed before pressure_stabilization.",
+      "signal": "After reactor_cooling completes, execute verify_telemetry.",
       "target": {
-        "target_action": "inspect_couplers",
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
         "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
+        "reference_event": "backup_completion"
       },
       "family": "before_relational"
     },
     {
-      "signal": "Ensure isolate_bay_4 is performed before door_lock.",
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 09:30.",
       "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "calibrate_manifold",
         "relation": "BEFORE",
-        "reference_event": "door_lock"
+        "deadline": "09:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to network_rescan, finish purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure synchronize_clocks is performed before network_rescan.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete transfer_power_bus ahead of network_rescan.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
       },
       "family": "before_relational"
     },
@@ -1475,11 +819,226 @@
       "family": "deadline_constrained"
     },
     {
-      "signal": "After pump_shutdown completes, execute synchronize_clocks.",
+      "signal": "Between 08:00 and 09:30, initiate dispatch_cells.",
       "target": {
-        "target_action": "synchronize_clocks",
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "08:00",
+          "end": "09:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Ensure verify_telemetry is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 18:00 and 20:00, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Ensure verify_telemetry is performed before door_lock.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Trigger open_valve right away without waiting.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 11:00.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
         "relation": "AFTER",
         "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 11:00 to 13:15, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Prior to door_lock, finish verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Schedule archive_telemetry_logs for later sometime today.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 17:30.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Initiate verify_telemetry right now.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 18:00.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Initiate dispatch_cells right now.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 16:00.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete verify_telemetry ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete verify_telemetry ahead of network_rescan.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
       },
       "family": "after_relational"
     },
@@ -1496,7 +1055,198 @@
       "family": "window_constrained"
     },
     {
-      "signal": "After telemetry_ack completes, execute verify_telemetry.",
+      "signal": "Initiate reboot_auxiliary_core right now.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Ensure calibrate_manifold is performed before backup_completion.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure purge_buffer_cache is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete dispatch_cells ahead of door_lock.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Schedule transfer_power_bus for later sometime today.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Within the time frame 09:30 to 11:00, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 09:30 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "09:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Complete isolate_bay_4 ahead of door_lock.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 16:00 to 17:30, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 17:30 to 18:00, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 17:30.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Ensure dispatch_cells is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 17:30 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Schedule purge_buffer_cache for later sometime today.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Trigger isolate_bay_4 right away without waiting.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Ensure dispatch_cells is performed before door_lock.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with verify_telemetry.",
       "target": {
         "target_action": "verify_telemetry",
         "relation": "AFTER",
@@ -1505,11 +1255,167 @@
       "family": "after_relational"
     },
     {
-      "signal": "Deliver synchronize_clocks by 09:30 sharp.",
+      "signal": "Once pump_shutdown has finished, initiate synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete dispatch_cells ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete purge_buffer_cache ahead of backup_completion.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 17:30 to 18:00, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "After telemetry_ack completes, execute reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish synchronize_clocks.",
       "target": {
         "target_action": "synchronize_clocks",
         "relation": "BEFORE",
-        "deadline": "09:30"
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 16:00 to 17:30, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 13:15 to 14:00, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "13:15",
+          "end": "14:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 08:00 to 09:30, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "08:00",
+          "end": "09:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete convey_sensors ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete inspect_couplers ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 14:00.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "14:00"
       },
       "family": "deadline_constrained"
     },
@@ -1526,7 +1432,1214 @@
       "family": "window_constrained"
     },
     {
-      "signal": "After telemetry_ack completes, execute dispatch_cells.",
+      "signal": "Complete archive_telemetry_logs ahead of network_rescan.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 13:15 to 14:00, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "13:15",
+          "end": "14:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete convey_sensors ahead of door_lock.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Perform convey_sensors when convenient.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to network_rescan, finish open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure convey_sensors is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Queue verify_telemetry with unspecified timing.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 18:00 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Within the time frame 17:30 to 18:00, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete purge_buffer_cache ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 16:00.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Ensure dispatch_cells is performed before network_rescan.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 08:00.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Between 16:00 and 17:30, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Schedule verify_telemetry for later sometime today.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Queue synchronize_clocks with unspecified timing.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Queue transfer_power_bus with unspecified timing.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Complete transfer_power_bus ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 15:45 and 16:00, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "15:45",
+          "end": "16:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Schedule convey_sensors for later sometime today.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 16:00.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Between 13:15 and 14:00, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "13:15",
+          "end": "14:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Between 09:30 and 11:00, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Between 18:00 and 20:00, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Initiate synchronize_clocks right now.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Complete convey_sensors ahead of network_rescan.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 08:00 to 09:30, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "08:00",
+          "end": "09:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete open_valve ahead of backup_completion.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 18:00.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Complete synchronize_clocks ahead of network_rescan.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete isolate_bay_4 ahead of network_rescan.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Initiate purge_buffer_cache right now.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure archive_telemetry_logs is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure synchronize_clocks is performed before door_lock.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Execute inspect_couplers immediately without delay.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 11:00 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 17:30 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to backup_completion, finish open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to door_lock, finish dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 17:30 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Schedule calibrate_manifold for later sometime today.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Execute dispatch_cells immediately without delay.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Complete calibrate_manifold ahead of door_lock.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete calibrate_manifold ahead of backup_completion.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to network_rescan, finish reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 14:00 and 15:45, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 17:30 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Complete synchronize_clocks ahead of door_lock.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure archive_telemetry_logs is performed before door_lock.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 09:30 to 11:00, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Between 16:00 and 17:30, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Between 13:15 and 14:00, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "13:15",
+          "end": "14:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete reboot_auxiliary_core ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure calibrate_manifold is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Trigger dispatch_cells right away without waiting.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Between 11:00 and 13:15, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Queue isolate_bay_4 with unspecified timing.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Schedule synchronize_clocks for later sometime today.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 16:00 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 14:00 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "14:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 11:00.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to network_rescan, finish archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete synchronize_clocks ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 13:15 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 09:30.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "09:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 11:00 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Execute reboot_auxiliary_core immediately without delay.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 15:45 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "15:45"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to door_lock, finish transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure transfer_power_bus is performed before door_lock.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Trigger verify_telemetry right away without waiting.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 14:00 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "14:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 17:30.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Execute calibrate_manifold immediately without delay.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 20:00 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "20:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Schedule inspect_couplers for later sometime today.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 14:00 and 15:45, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete archive_telemetry_logs ahead of door_lock.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete purge_buffer_cache ahead of door_lock.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Queue convey_sensors with unspecified timing.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "After depot_handshake completes, execute dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 18:00 and 20:00, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Ensure synchronize_clocks is performed before backup_completion.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 09:30 and 11:00, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 18:00.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to network_rescan, finish isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Initiate inspect_couplers right now.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to network_rescan, finish synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure reboot_auxiliary_core is performed before network_rescan.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete archive_telemetry_logs ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 11:00 and 13:15, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 20:00 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "20:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete transfer_power_bus ahead of door_lock.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to network_rescan, finish inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 15:45.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "15:45"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with dispatch_cells.",
       "target": {
         "target_action": "dispatch_cells",
         "relation": "AFTER",
@@ -1535,13 +2648,221 @@
       "family": "after_relational"
     },
     {
-      "signal": "Ensure calibrate_manifold is performed before door_lock.",
+      "signal": "Complete inspect_couplers ahead of backup_completion.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Execute isolate_bay_4 immediately without delay.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Perform calibrate_manifold when convenient.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 09:30.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "09:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 15:45 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "15:45"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Within the time frame 18:00 to 20:00, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete dispatch_cells ahead of network_rescan.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 08:00 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 13:15.",
       "target": {
         "target_action": "calibrate_manifold",
         "relation": "BEFORE",
-        "reference_event": "door_lock"
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure verify_telemetry is performed before network_rescan.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
       },
       "family": "before_relational"
+    },
+    {
+      "signal": "Ensure reboot_auxiliary_core is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete isolate_bay_4 ahead of backup_completion.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 18:00 to 20:00, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 11:00.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Ensure purge_buffer_cache is performed before network_rescan.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 14:00 and 15:45, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 14:00 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "14:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 08:00 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
     },
     {
       "signal": "Schedule open_valve for later sometime today.",
@@ -1555,16 +2876,754 @@
       "family": "ambiguous_timing"
     },
     {
-      "signal": "Ensure reboot_auxiliary_core is performed before pressure_stabilization.",
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 13:15.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete inspect_couplers ahead of network_rescan.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure archive_telemetry_logs is performed before network_rescan.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete reboot_auxiliary_core ahead of backup_completion.",
       "target": {
         "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Execute open_valve immediately without delay.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Complete archive_telemetry_logs ahead of backup_completion.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Execute purge_buffer_cache immediately without delay.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 15:45 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "15:45"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After depot_handshake completes, execute reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
         "relation": "BEFORE",
         "reference_event": "pressure_stabilization"
       },
       "family": "before_relational"
     },
     {
-      "signal": "Ensure reboot_auxiliary_core is performed before door_lock.",
+      "signal": "Deliver calibrate_manifold by 11:00 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Between 17:30 and 18:00, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "After telemetry_ack completes, execute convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to door_lock, finish archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure purge_buffer_cache is performed before door_lock.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 11:00 and 13:15, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure inspect_couplers is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete open_valve ahead of door_lock.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 09:30 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "09:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Perform archive_telemetry_logs when convenient.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 17:30.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "17:30"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Within the time frame 16:00 to 17:30, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Initiate transfer_power_bus right now.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Complete convey_sensors ahead of backup_completion.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 14:00 and 15:45, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to network_rescan, finish transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 13:15 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Trigger convey_sensors right away without waiting.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure isolate_bay_4 is performed before backup_completion.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Initiate isolate_bay_4 right now.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "After telemetry_ack completes, execute calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Perform dispatch_cells when convenient.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Between 15:45 and 16:00, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "15:45",
+          "end": "16:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 18:00 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Execute archive_telemetry_logs immediately without delay.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 18:00 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 08:00.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure reboot_auxiliary_core is performed before backup_completion.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete verify_telemetry ahead of door_lock.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 08:00.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Ensure calibrate_manifold is performed before network_rescan.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete calibrate_manifold ahead of network_rescan.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 11:00 to 13:15, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Queue dispatch_cells with unspecified timing.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Between 17:30 and 18:00, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Perform open_valve when convenient.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Trigger synchronize_clocks right away without waiting.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once reactor_cooling has finished, initiate calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure transfer_power_bus is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Complete transfer_power_bus ahead of backup_completion.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 16:00 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Execute synchronize_clocks immediately without delay.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Ensure synchronize_clocks is performed before pressure_stabilization.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 09:30 and 11:00, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Ensure isolate_bay_4 is performed before network_rescan.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 09:30 to 11:00, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete reboot_auxiliary_core ahead of door_lock.",
       "target": {
         "target_action": "reboot_auxiliary_core",
         "relation": "BEFORE",
@@ -1573,13 +3632,137 @@
       "family": "before_relational"
     },
     {
-      "signal": "After pump_shutdown completes, execute isolate_bay_4.",
+      "signal": "Queue archive_telemetry_logs with unspecified timing.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 11:00.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "11:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Trigger transfer_power_bus right away without waiting.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with isolate_bay_4.",
       "target": {
         "target_action": "isolate_bay_4",
         "relation": "AFTER",
         "reference_event": "pump_shutdown"
       },
       "family": "after_relational"
+    },
+    {
+      "signal": "Ensure verify_telemetry is performed before backup_completion.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 15:45 to 16:00, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "15:45",
+          "end": "16:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Prior to door_lock, finish calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure transfer_power_bus is performed before network_rescan.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Within the time frame 15:45 to 16:00, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "15:45",
+          "end": "16:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 14:00 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "14:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Deliver synchronize_clocks by 15:45 sharp.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "15:45"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 08:00.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
     },
     {
       "signal": "Between 08:00 and 09:30, initiate purge_buffer_cache.",
@@ -1594,38 +3777,54 @@
       "family": "window_constrained"
     },
     {
-      "signal": "Schedule verify_telemetry for later sometime today.",
+      "signal": "After pump_shutdown completes, execute transfer_power_bus.",
       "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BETWEEN",
-        "unknowns": [
-          "window"
-        ]
-      },
-      "family": "ambiguous_timing"
-    },
-    {
-      "signal": "After reactor_cooling completes, execute isolate_bay_4.",
-      "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "transfer_power_bus",
         "relation": "AFTER",
-        "reference_event": "reactor_cooling"
+        "reference_event": "pump_shutdown"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Ensure transfer_power_bus is performed before backup_completion.",
+      "signal": "After telemetry_ack completes, execute dispatch_cells.",
       "target": {
-        "target_action": "transfer_power_bus",
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
         "relation": "BEFORE",
-        "reference_event": "backup_completion"
+        "reference_event": "pressure_stabilization"
       },
       "family": "before_relational"
     },
     {
-      "signal": "Schedule isolate_bay_4 for later sometime today.",
+      "signal": "Complete purge_buffer_cache ahead of network_rescan.",
       "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Perform inspect_couplers when convenient.",
+      "target": {
+        "target_action": "inspect_couplers",
         "relation": "BETWEEN",
         "unknowns": [
           "window"
@@ -1643,21 +3842,355 @@
       "family": "after_relational"
     },
     {
-      "signal": "Execute open_valve immediately without delay.",
+      "signal": "Following the completion of depot_handshake, proceed with dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 14:00.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "14:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 14:00.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "14:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Prior to door_lock, finish purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 17:30 and 18:00, initiate open_valve.",
       "target": {
         "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Perform isolate_bay_4 when convenient.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Ensure inspect_couplers is performed before door_lock.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Between 18:00 and 20:00, initiate convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 14:00 to 15:45, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "After reactor_cooling completes, execute inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete verify_telemetry no later than 20:00.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "20:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Complete verify_telemetry ahead of backup_completion.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Trigger reboot_auxiliary_core right away without waiting.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
         "relation": "IMMEDIATE"
       },
       "family": "immediate_dispatch"
     },
     {
-      "signal": "Ensure transfer_power_bus is performed before door_lock.",
+      "signal": "Once depot_handshake has finished, initiate reboot_auxiliary_core.",
       "target": {
-        "target_action": "transfer_power_bus",
+        "target_action": "reboot_auxiliary_core",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Trigger archive_telemetry_logs right away without waiting.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Ensure reboot_auxiliary_core is performed before door_lock.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
         "relation": "BEFORE",
         "reference_event": "door_lock"
       },
       "family": "before_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 20:00 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "20:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Within the time frame 11:00 to 13:15, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "After pump_shutdown completes, execute open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 15:45 to 16:00, carry out purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "15:45",
+          "end": "16:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 17:30 to 18:00, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "17:30",
+          "end": "18:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Perform verify_telemetry when convenient.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 16:00 to 17:30, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure open_valve is performed before door_lock.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Ensure open_valve is performed before backup_completion.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 18:00.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Within the time frame 14:00 to 15:45, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Prior to network_rescan, finish verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Schedule dispatch_cells for later sometime today.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Trigger inspect_couplers right away without waiting.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "After depot_handshake completes, execute calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
     },
     {
       "signal": "Schedule reboot_auxiliary_core for later sometime today.",
@@ -1671,80 +4204,11 @@
       "family": "ambiguous_timing"
     },
     {
-      "signal": "After pump_shutdown completes, execute reboot_auxiliary_core.",
-      "target": {
-        "target_action": "reboot_auxiliary_core",
-        "relation": "AFTER",
-        "reference_event": "pump_shutdown"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "After depot_handshake completes, execute convey_sensors.",
-      "target": {
-        "target_action": "convey_sensors",
-        "relation": "AFTER",
-        "reference_event": "depot_handshake"
-      },
-      "family": "after_relational"
-    },
-    {
-      "signal": "Ensure synchronize_clocks is performed before door_lock.",
-      "target": {
-        "target_action": "synchronize_clocks",
-        "relation": "BEFORE",
-        "reference_event": "door_lock"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Deliver isolate_bay_4 by 14:00 sharp.",
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 20:00.",
       "target": {
         "target_action": "isolate_bay_4",
         "relation": "BEFORE",
-        "deadline": "14:00"
-      },
-      "family": "deadline_constrained"
-    },
-    {
-      "signal": "Between 14:00 and 15:45, initiate dispatch_cells.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "14:00",
-          "end": "15:45"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Ensure dispatch_cells is performed before pressure_stabilization.",
-      "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BEFORE",
-        "reference_event": "pressure_stabilization"
-      },
-      "family": "before_relational"
-    },
-    {
-      "signal": "Between 11:00 and 13:15, initiate open_valve.",
-      "target": {
-        "target_action": "open_valve",
-        "relation": "BETWEEN",
-        "window": {
-          "start": "11:00",
-          "end": "13:15"
-        }
-      },
-      "family": "window_constrained"
-    },
-    {
-      "signal": "Deliver verify_telemetry by 09:30 sharp.",
-      "target": {
-        "target_action": "verify_telemetry",
-        "relation": "BEFORE",
-        "deadline": "09:30"
+        "deadline": "20:00"
       },
       "family": "deadline_constrained"
     },
@@ -1757,21 +4221,149 @@
       "family": "immediate_dispatch"
     },
     {
-      "signal": "Deliver isolate_bay_4 by 18:00 sharp.",
+      "signal": "Prior to network_rescan, finish convey_sensors.",
       "target": {
-        "target_action": "isolate_bay_4",
+        "target_action": "convey_sensors",
         "relation": "BEFORE",
-        "deadline": "18:00"
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete synchronize_clocks no later than 14:00.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BEFORE",
+        "deadline": "14:00"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "Execute inspect_couplers immediately without delay.",
+      "signal": "Once reactor_cooling has finished, initiate transfer_power_bus.",
       "target": {
-        "target_action": "inspect_couplers",
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "reactor_cooling"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Between 16:00 and 17:30, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "16:00",
+          "end": "17:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 08:00 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 08:00 to 09:30, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "08:00",
+          "end": "09:30"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete open_valve ahead of network_rescan.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Initiate convey_sensors right now.",
+      "target": {
+        "target_action": "convey_sensors",
         "relation": "IMMEDIATE"
       },
       "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Initiate calibrate_manifold right now.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Between 13:15 and 14:00, initiate dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "13:15",
+          "end": "14:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Within the time frame 14:00 to 15:45, carry out convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "14:00",
+          "end": "15:45"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 18:00 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "18:00"
+      },
+      "family": "deadline_constrained"
     },
     {
       "signal": "Ensure convey_sensors is performed before backup_completion.",
@@ -1783,36 +4375,241 @@
       "family": "before_relational"
     },
     {
-      "signal": "Deliver verify_telemetry by 11:00 sharp.",
+      "signal": "Ensure inspect_couplers is performed before backup_completion.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute synchronize_clocks.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to door_lock, finish reboot_auxiliary_core.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Prior to backup_completion, finish verify_telemetry.",
       "target": {
         "target_action": "verify_telemetry",
         "relation": "BEFORE",
-        "deadline": "11:00"
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 09:30.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "09:30"
       },
       "family": "deadline_constrained"
     },
     {
-      "signal": "After reactor_cooling completes, execute purge_buffer_cache.",
+      "signal": "Following the completion of telemetry_ack, proceed with purge_buffer_cache.",
       "target": {
         "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete isolate_bay_4 no later than 16:00.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After depot_handshake completes, execute inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 11:00 to 13:15, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "11:00",
+          "end": "13:15"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Complete dispatch_cells ahead of backup_completion.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Mandatory deadline: complete calibrate_manifold no later than 20:00.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "20:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Ensure open_valve is performed before network_rescan.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete calibrate_manifold ahead of pressure_stabilization.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Queue reboot_auxiliary_core with unspecified timing.",
+      "target": {
+        "target_action": "reboot_auxiliary_core",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with calibrate_manifold.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to network_rescan, finish dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 13:15 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Once pump_shutdown has finished, initiate transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "pump_shutdown"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of reactor_cooling, proceed with isolate_bay_4.",
+      "target": {
+        "target_action": "isolate_bay_4",
         "relation": "AFTER",
         "reference_event": "reactor_cooling"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Deliver isolate_bay_4 by 15:45 sharp.",
+      "signal": "Perform synchronize_clocks when convenient.",
+      "target": {
+        "target_action": "synchronize_clocks",
+        "relation": "BETWEEN",
+        "unknowns": [
+          "window"
+        ]
+      },
+      "family": "ambiguous_timing"
+    },
+    {
+      "signal": "Ensure dispatch_cells is performed before backup_completion.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BEFORE",
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Ensure isolate_bay_4 is performed before pressure_stabilization.",
       "target": {
         "target_action": "isolate_bay_4",
         "relation": "BEFORE",
-        "deadline": "15:45"
+        "reference_event": "pressure_stabilization"
       },
-      "family": "deadline_constrained"
+      "family": "before_relational"
     },
     {
-      "signal": "Between 18:00 and 20:00, initiate purge_buffer_cache.",
+      "signal": "Within the time frame 18:00 to 20:00, carry out dispatch_cells.",
       "target": {
-        "target_action": "purge_buffer_cache",
+        "target_action": "dispatch_cells",
         "relation": "BETWEEN",
         "window": {
           "start": "18:00",
@@ -1822,68 +4619,247 @@
       "family": "window_constrained"
     },
     {
-      "signal": "Ensure dispatch_cells is performed before door_lock.",
+      "signal": "After telemetry_ack completes, execute isolate_bay_4.",
       "target": {
-        "target_action": "dispatch_cells",
-        "relation": "BEFORE",
-        "reference_event": "door_lock"
+        "target_action": "isolate_bay_4",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
       },
-      "family": "before_relational"
+      "family": "after_relational"
     },
     {
-      "signal": "Ensure purge_buffer_cache is performed before door_lock.",
+      "signal": "Deliver isolate_bay_4 by 16:00 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Deliver isolate_bay_4 by 13:15 sharp.",
+      "target": {
+        "target_action": "isolate_bay_4",
+        "relation": "BEFORE",
+        "deadline": "13:15"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "After depot_handshake completes, execute convey_sensors.",
+      "target": {
+        "target_action": "convey_sensors",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Trigger purge_buffer_cache right away without waiting.",
       "target": {
         "target_action": "purge_buffer_cache",
+        "relation": "IMMEDIATE"
+      },
+      "family": "immediate_dispatch"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 16:00 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
         "relation": "BEFORE",
-        "reference_event": "door_lock"
+        "deadline": "16:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Following the completion of telemetry_ack, proceed with inspect_couplers.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Within the time frame 09:30 to 11:00, carry out dispatch_cells.",
+      "target": {
+        "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "09:30",
+          "end": "11:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Prior to pressure_stabilization, finish verify_telemetry.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "reference_event": "pressure_stabilization"
       },
       "family": "before_relational"
     },
     {
-      "signal": "After telemetry_ack completes, execute synchronize_clocks.",
+      "signal": "Following the completion of depot_handshake, proceed with transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Prior to door_lock, finish synchronize_clocks.",
       "target": {
         "target_action": "synchronize_clocks",
-        "relation": "AFTER",
-        "reference_event": "telemetry_ack"
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
       },
-      "family": "after_relational"
+      "family": "before_relational"
     },
     {
-      "signal": "After telemetry_ack completes, execute purge_buffer_cache.",
+      "signal": "Ensure inspect_couplers is performed before network_rescan.",
       "target": {
-        "target_action": "purge_buffer_cache",
-        "relation": "AFTER",
-        "reference_event": "telemetry_ack"
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "network_rescan"
       },
-      "family": "after_relational"
+      "family": "before_relational"
     },
     {
-      "signal": "After pump_shutdown completes, execute dispatch_cells.",
+      "signal": "Within the time frame 18:00 to 20:00, carry out open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "18:00",
+          "end": "20:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Between 15:45 and 16:00, initiate dispatch_cells.",
       "target": {
         "target_action": "dispatch_cells",
+        "relation": "BETWEEN",
+        "window": {
+          "start": "15:45",
+          "end": "16:00"
+        }
+      },
+      "family": "window_constrained"
+    },
+    {
+      "signal": "Deliver verify_telemetry by 08:00 sharp.",
+      "target": {
+        "target_action": "verify_telemetry",
+        "relation": "BEFORE",
+        "deadline": "08:00"
+      },
+      "family": "deadline_constrained"
+    },
+    {
+      "signal": "Once depot_handshake has finished, initiate archive_telemetry_logs.",
+      "target": {
+        "target_action": "archive_telemetry_logs",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Complete inspect_couplers ahead of door_lock.",
+      "target": {
+        "target_action": "inspect_couplers",
+        "relation": "BEFORE",
+        "reference_event": "door_lock"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Following the completion of pump_shutdown, proceed with purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
         "relation": "AFTER",
         "reference_event": "pump_shutdown"
       },
       "family": "after_relational"
     },
     {
-      "signal": "Between 13:15 and 14:00, initiate convey_sensors.",
+      "signal": "Between 11:00 and 13:15, initiate dispatch_cells.",
       "target": {
-        "target_action": "convey_sensors",
+        "target_action": "dispatch_cells",
         "relation": "BETWEEN",
         "window": {
-          "start": "13:15",
-          "end": "14:00"
+          "start": "11:00",
+          "end": "13:15"
         }
       },
       "family": "window_constrained"
     },
     {
-      "signal": "Deliver verify_telemetry by 14:00 sharp.",
+      "signal": "Ensure transfer_power_bus is performed before backup_completion.",
       "target": {
-        "target_action": "verify_telemetry",
+        "target_action": "transfer_power_bus",
         "relation": "BEFORE",
-        "deadline": "14:00"
+        "reference_event": "backup_completion"
+      },
+      "family": "before_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute transfer_power_bus.",
+      "target": {
+        "target_action": "transfer_power_bus",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Once telemetry_ack has finished, initiate open_valve.",
+      "target": {
+        "target_action": "open_valve",
+        "relation": "AFTER",
+        "reference_event": "telemetry_ack"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "After depot_handshake completes, execute purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Following the completion of depot_handshake, proceed with purge_buffer_cache.",
+      "target": {
+        "target_action": "purge_buffer_cache",
+        "relation": "AFTER",
+        "reference_event": "depot_handshake"
+      },
+      "family": "after_relational"
+    },
+    {
+      "signal": "Deliver calibrate_manifold by 20:00 sharp.",
+      "target": {
+        "target_action": "calibrate_manifold",
+        "relation": "BEFORE",
+        "deadline": "20:00"
       },
       "family": "deadline_constrained"
     }

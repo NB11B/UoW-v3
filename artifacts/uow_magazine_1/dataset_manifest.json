@@ -1,0 +1,222 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "spec_version": "uow.magazine.v1",
+  "domains": [
+    "industrial",
+    "cybersecurity",
+    "logistics"
+  ],
+  "grammars": [
+    "operational",
+    "temporal",
+    "recovery"
+  ],
+  "partitions_per_combination": {
+    "train": 1200,
+    "dev": 200,
+    "val": 200,
+    "holdout": 300
+  },
+  "combinations": {
+    "industrial.operational": {
+      "train": {
+        "count": 1200,
+        "sha256": "88c88dc801458c0a7e8b2a51e00afaa3ddd8b85ce4be81e90eb12cfe45ca81d5",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.operational/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "c09ece976cb91487aacf3fb60bd9bd5bfadcb78f1b4d7644f759d108384a47c4",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.operational/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "c1949777e0ed777b2d57b1230f5bc8952e7c000e2a46060173791737fbc164a5",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.operational/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "0d05571691382ecd191f454eb0cbd205fe30dca040014ab8d3dd708e776c1b37",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.operational/holdout.json"
+      }
+    },
+    "industrial.temporal": {
+      "train": {
+        "count": 1200,
+        "sha256": "a12b149ac98907f7aa9c5f738bece5c12d0d80b5e0e8e5caf97bbfa2e106a7cd",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.temporal/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "8b27d30a861a09eacaffeb7c85a0527954d073fe19d5a9527e91e9fc545deca0",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.temporal/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "8096f04022e02c22c0fc8c169dec55fdb949ad4a8152a6f8b2fe09085848f28e",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.temporal/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "5a31f20ea1bdd9a3f422f5fe6f9bcc78f24847c6159d29d0852e4fff44338b33",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.temporal/holdout.json"
+      }
+    },
+    "industrial.recovery": {
+      "train": {
+        "count": 1200,
+        "sha256": "9e2b0d3467845ceefb5b2a7f621c1fa5fb3516c50b40c2fd7406cdc671b82aa7",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.recovery/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "1324e6b0f5c31ec9ed6b095d4e274b191a6fae4d989bb551d1d044a25595a9de",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.recovery/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "7f0b2924f59a44f7c6f8dbc459fc7d8233da28b5b5920313248fa7950132aa82",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.recovery/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "b81c780200cab7d2b2451e6ebe7d5bcc9823ef9976ea63f9bd5ca33e1139895d",
+        "file": "artifacts/uow_magazine_1/corpora/industrial.recovery/holdout.json"
+      }
+    },
+    "cybersecurity.operational": {
+      "train": {
+        "count": 1200,
+        "sha256": "823fef901a0f31817b9bc53e5f8f9688c68d908e3a8b0725923aaae7c36c20cd",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.operational/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "07bcc3900ffc8418e4701efbf1d7b269beba012aede336dda8e6af493c2d7b6c",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.operational/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "75c9cf9da481d8d12a2619793c9ef751b7ba9ea27e563ae7b0f295b05cf87c3b",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.operational/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "c794324c00eb34bf374d035b6ea430300434a2c8acb60d363771f2da119ac234",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.operational/holdout.json"
+      }
+    },
+    "cybersecurity.temporal": {
+      "train": {
+        "count": 1200,
+        "sha256": "6f780f6ee9d8d6d3d6cc752c80820a39f0aa9eebecde51f44ce457585ffd4a27",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.temporal/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "ba3a9248f77b99d57cd50f08221e80e7689fd5e1965d25ebc64a186873338a11",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.temporal/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "b30eb796dacd00badf683fb82991a883c1b02a6a4c7740cd1ae8ac728e0ff955",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.temporal/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "44bb466ccf09602b67dc0bc20c85f84f6c4324ecd7e738ffc676e62ed3d4a43e",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.temporal/holdout.json"
+      }
+    },
+    "cybersecurity.recovery": {
+      "train": {
+        "count": 1200,
+        "sha256": "9117b598c5868bc9cc00e72d260515afe433acb33c8a730c8d35050b3c1c6d18",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.recovery/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "998e4a509b99b83d38f9d803c8e6ff9541605b6f4cd52d5033c3a5170bce02f1",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.recovery/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "a209687b20ff9f2ff949a421cc24bdcc694eb72e03cae6b22cfdd78062cbaa5d",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.recovery/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "ff2bc74db45177d381054028f358e217fb5264697e8865452d53f4b322babd86",
+        "file": "artifacts/uow_magazine_1/corpora/cybersecurity.recovery/holdout.json"
+      }
+    },
+    "logistics.operational": {
+      "train": {
+        "count": 1200,
+        "sha256": "70ca5088617f473c68a1d022ee519f9265f9e4566fe432a684ca3ea4d65ca30b",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.operational/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "0da23130d6a51fdb786c230e09b4e31d81fc6b4aed5b77ba818c12e5d09befa2",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.operational/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "e6e548d2b1e9c9b106801bcd1a4cd50a8fe8030b2cfc94a909be3b315fc7a036",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.operational/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "f96204e79cb728095c89b640bcf88aeaba530d8894ca939de5dc2969b0ca3171",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.operational/holdout.json"
+      }
+    },
+    "logistics.temporal": {
+      "train": {
+        "count": 1200,
+        "sha256": "eab5365f4480e1000d1e8dbe760b0473fb6d54ad64676f18416352dc50620cd6",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.temporal/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "e5446227dfb0dae770fd1bdbd3228979ecfbeeed7e9ed870ddc9a131391123ae",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.temporal/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "0b8912e77d934dbe22a1f174be81cf194495709eb9c24cfab458958c80d9189b",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.temporal/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "9b0a8a3587c6b08ee2b02d9417725105a31b139762ca6c9da859dfaa20ab2a2e",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.temporal/holdout.json"
+      }
+    },
+    "logistics.recovery": {
+      "train": {
+        "count": 1200,
+        "sha256": "078158d68721c4f43f8490dc128c7a7d15294e0af5d80714ec0794c2cf53f5b3",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.recovery/train.json"
+      },
+      "dev": {
+        "count": 200,
+        "sha256": "ab4e1e284fc8a91295888b8157f9976a9bf83d558a7d7566dfdbf7d647bba4ff",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.recovery/dev.json"
+      },
+      "val": {
+        "count": 200,
+        "sha256": "54d2bf8e52a2dca56b920a476b9281fc40e1b8afc9f0428932fe6bf3bf12ef63",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.recovery/val.json"
+      },
+      "holdout": {
+        "count": 300,
+        "sha256": "c046f9b7a6ceffb00455ea8ab1b2b23d1143725002ecb2960e8319c1d6a43270",
+        "file": "artifacts/uow_magazine_1/corpora/logistics.recovery/holdout.json"
+      }
+    }
+  },
+  "hashes": {},
+  "total_examples": 17100
+}

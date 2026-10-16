@@ -1,0 +1,82 @@
+{
+  "foundations": {
+    "smollm2_135m": {
+      "model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+      "architecture_family": "llama",
+      "auto_model_class": "AutoModelForCausalLM",
+      "target_modules": ["q_proj", "v_proj", "k_proj", "o_proj"],
+      "params": "135M",
+      "license": "Apache-2.0",
+      "context_window": 8192,
+      "vocab_size": 49152,
+      "role": "established_reference"
+    },
+    "pythia_160m": {
+      "model_id": "EleutherAI/pythia-160m",
+      "architecture_family": "gpt_neox",
+      "auto_model_class": "AutoModelForCausalLM",
+      "target_modules": ["query_key_value", "dense"],
+      "params": "160M",
+      "license": "Apache-2.0",
+      "context_window": 2048,
+      "vocab_size": 50254,
+      "role": "interpretability_comparison"
+    },
+    "gpt_neo_125m": {
+      "model_id": "EleutherAI/gpt-neo-125m",
+      "architecture_family": "gpt_neo",
+      "auto_model_class": "AutoModelForCausalLM",
+      "target_modules": ["q_proj", "v_proj"],
+      "params": "125M",
+      "license": "MIT",
+      "context_window": 2048,
+      "vocab_size": 50257,
+      "role": "architecture_cross_check"
+    },
+    "cerebras_111m": {
+      "model_id": "cerebras-archive/Cerebras-GPT-111M",
+      "architecture_family": "gpt2",
+      "auto_model_class": "AutoModelForCausalLM",
+      "target_modules": ["c_attn"],
+      "params": "111M",
+      "license": "Apache-2.0",
+      "context_window": 2048,
+      "vocab_size": 50257,
+      "role": "architecture_cross_check"
+    },
+    "mobilellm_125m": {
+      "model_id": "facebook/MobileLLM-125M",
+      "architecture_family": "mobilellm",
+      "auto_model_class": "AutoModelForCausalLM",
+      "target_modules": ["q_proj", "v_proj"],
+      "params": "125M",
+      "license": "FAIR Noncommercial Research",
+      "context_window": 2048,
+      "vocab_size": 32000,
+      "role": "edge_optimized_gated",
+      "gated": true
+    },
+    "mamba_130m": {
+      "model_id": "state-spaces/mamba-130m-hf",
+      "architecture_family": "mamba",
+      "auto_model_class": "AutoModelForCausalLM",
+      "target_modules": ["in_proj", "out_proj", "x_proj"],
+      "params": "130M",
+      "license": "Apache-2.0",
+      "context_window": 2048,
+      "vocab_size": 50254,
+      "role": "non_attention_ssm_reference"
+    },
+    "modernbert_base": {
+      "model_id": "answerdotai/ModernBERT-base",
+      "architecture_family": "modernbert",
+      "auto_model_class": "AutoModelForSequenceClassification",
+      "target_modules": ["Wqkv", "Wo"],
+      "params": "149M",
+      "license": "Apache-2.0",
+      "context_window": 8192,
+      "vocab_size": 50280,
+      "role": "encoder_routing_reference"
+    }
+  }
+}

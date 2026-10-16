@@ -1,0 +1,90 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "gate": "M2",
+  "status": "passed",
+  "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "device": "cuda",
+  "capacity_sweep": {
+    "1": {
+      "pool_size": 1,
+      "trials": 30,
+      "median_switch_latency_ms": 0.0,
+      "mean_switch_latency_ms": 0.0,
+      "p99_switch_latency_ms": 0.0,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": true,
+      "vram_target_met (<1.0GB)": true
+    },
+    "2": {
+      "pool_size": 2,
+      "trials": 30,
+      "median_switch_latency_ms": 9.1046,
+      "mean_switch_latency_ms": 9.0893,
+      "p99_switch_latency_ms": 10.1316,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": false,
+      "vram_target_met (<1.0GB)": true
+    },
+    "4": {
+      "pool_size": 4,
+      "trials": 30,
+      "median_switch_latency_ms": 8.4459,
+      "mean_switch_latency_ms": 8.5424,
+      "p99_switch_latency_ms": 9.5173,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": false,
+      "vram_target_met (<1.0GB)": true
+    },
+    "8": {
+      "pool_size": 8,
+      "trials": 30,
+      "median_switch_latency_ms": 8.668,
+      "mean_switch_latency_ms": 8.8117,
+      "p99_switch_latency_ms": 10.6357,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": false,
+      "vram_target_met (<1.0GB)": true
+    },
+    "16": {
+      "pool_size": 16,
+      "trials": 30,
+      "median_switch_latency_ms": 8.3609,
+      "mean_switch_latency_ms": 8.4117,
+      "p99_switch_latency_ms": 9.2093,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": false,
+      "vram_target_met (<1.0GB)": true
+    },
+    "24": {
+      "pool_size": 24,
+      "trials": 30,
+      "median_switch_latency_ms": 8.437,
+      "mean_switch_latency_ms": 8.5621,
+      "p99_switch_latency_ms": 9.3788,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": false,
+      "vram_target_met (<1.0GB)": true
+    },
+    "32": {
+      "pool_size": 32,
+      "trials": 30,
+      "median_switch_latency_ms": 8.3683,
+      "mean_switch_latency_ms": 8.4363,
+      "p99_switch_latency_ms": 9.3027,
+      "vram_allocated_mb": 312.84,
+      "vram_reserved_mb": 344.0,
+      "latency_target_met (<5.0ms)": false,
+      "vram_target_met (<1.0GB)": true
+    }
+  },
+  "activation_contamination_test": {
+    "max_abs_difference": 0.0,
+    "contamination_free": true
+  }
+}

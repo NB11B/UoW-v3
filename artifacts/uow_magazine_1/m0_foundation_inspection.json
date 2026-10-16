@@ -1,0 +1,119 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "gate": "M0",
+  "status": "passed",
+  "device": "cuda",
+  "models": {
+    "smollm2_135m": {
+      "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+      "status": "QUALIFIED_AVAILABLE",
+      "exact_commit_sha": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+      "total_parameters": 134515008,
+      "total_parameters_millions": 134.52,
+      "architecture_family": "llama",
+      "model_class": "LlamaForCausalLM",
+      "vocab_size": 49152,
+      "context_window": 8192,
+      "license": "Apache-2.0",
+      "target_peft_modules": [
+        "q_proj",
+        "v_proj",
+        "k_proj",
+        "o_proj"
+      ],
+      "forward_pass_verified": true
+    },
+    "pythia_160m": {
+      "name": "EleutherAI/pythia-160m",
+      "status": "QUALIFIED_AVAILABLE",
+      "exact_commit_sha": "50f5173d932e8e61f858120bcb800b97af589f46",
+      "total_parameters": 162322944,
+      "total_parameters_millions": 162.32,
+      "architecture_family": "gpt_neox",
+      "model_class": "GPTNeoXForCausalLM",
+      "vocab_size": 50254,
+      "context_window": 2048,
+      "license": "Apache-2.0",
+      "target_peft_modules": [
+        "query_key_value",
+        "dense"
+      ],
+      "forward_pass_verified": true
+    },
+    "gpt_neo_125m": {
+      "name": "EleutherAI/gpt-neo-125m",
+      "status": "QUALIFIED_AVAILABLE",
+      "exact_commit_sha": "21def0189f5705e2521767faed922f1f15e7d7db",
+      "total_parameters": 125198592,
+      "total_parameters_millions": 125.2,
+      "architecture_family": "gpt_neo",
+      "model_class": "GPTNeoForCausalLM",
+      "vocab_size": 50257,
+      "context_window": 2048,
+      "license": "MIT",
+      "target_peft_modules": [
+        "q_proj",
+        "v_proj"
+      ],
+      "forward_pass_verified": true
+    },
+    "cerebras_111m": {
+      "name": "cerebras-archive/Cerebras-GPT-111M",
+      "status": "QUALIFIED_AVAILABLE",
+      "exact_commit_sha": "b927d75e65bd5a26bb1e448386acdc5589fc502e",
+      "total_parameters": 111050496,
+      "total_parameters_millions": 111.05,
+      "architecture_family": "gpt2",
+      "model_class": "GPT2LMHeadModel",
+      "vocab_size": 50257,
+      "context_window": 2048,
+      "license": "Apache-2.0",
+      "target_peft_modules": [
+        "c_attn"
+      ],
+      "forward_pass_verified": true
+    },
+    "mobilellm_125m": {
+      "name": "facebook/MobileLLM-125M",
+      "status": "GATED_ACCESS_RESTRICTED",
+      "notes": "Requires upstream organization repository approval on HuggingFace Hub (FAIR Noncommercial Research license).",
+      "license": "FAIR Noncommercial Research",
+      "gated": true
+    },
+    "mamba_130m": {
+      "name": "state-spaces/mamba-130m-hf",
+      "status": "QUALIFIED_AVAILABLE",
+      "exact_commit_sha": "1e76775f628fbf1350fbe4dbb3d971ba64af25a1",
+      "total_parameters": 129135360,
+      "total_parameters_millions": 129.14,
+      "architecture_family": "mamba",
+      "model_class": "MambaForCausalLM",
+      "vocab_size": 50254,
+      "context_window": null,
+      "license": "Apache-2.0",
+      "target_peft_modules": [
+        "in_proj",
+        "out_proj",
+        "x_proj"
+      ],
+      "forward_pass_verified": true
+    },
+    "modernbert_base": {
+      "name": "answerdotai/ModernBERT-base",
+      "status": "QUALIFIED_AVAILABLE",
+      "exact_commit_sha": "8949b909ec900327062f0ebf497f51aef5e6f0c8",
+      "total_parameters": 149607171,
+      "total_parameters_millions": 149.61,
+      "architecture_family": "modernbert",
+      "model_class": "ModernBertForSequenceClassification",
+      "vocab_size": 50280,
+      "context_window": 8192,
+      "license": "Apache-2.0",
+      "target_peft_modules": [
+        "Wqkv",
+        "Wo"
+      ],
+      "forward_pass_verified": true
+    }
+  }
+}

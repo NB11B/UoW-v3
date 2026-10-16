@@ -1,0 +1,94 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "gate": "M3",
+  "status": "passed",
+  "device": "cuda",
+  "architectures": {
+    "modernbert_base": {
+      "paradigm": "encoder_discriminative_router",
+      "routing_accuracy": 100.0,
+      "test_samples": 300,
+      "mean_latency_ms_per_query": 0.8083,
+      "mean_latency_ms_per_batch": 12.7623,
+      "training_time_seconds": 11.56
+    },
+    "smollm2_135m": {
+      "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+      "family": "llama",
+      "paradigm": "causal_transformer",
+      "base_parameters": 134515008,
+      "trainable_adapter_parameters": 460800,
+      "parameter_overhead_pct": 0.3426,
+      "adapter_target_modules": [
+        "q_proj",
+        "v_proj"
+      ],
+      "sample_step_loss": 3.2051,
+      "step_latency_ms": 110.72,
+      "vram_allocated_mb": 966.72,
+      "adapter_compatibility": "VERIFIED_COMPATIBLE"
+    },
+    "pythia_160m": {
+      "name": "EleutherAI/pythia-160m",
+      "family": "gpt_neox",
+      "paradigm": "causal_transformer",
+      "base_parameters": 162322944,
+      "trainable_adapter_parameters": 294912,
+      "parameter_overhead_pct": 0.1817,
+      "adapter_target_modules": [
+        "query_key_value"
+      ],
+      "sample_step_loss": 3.335,
+      "step_latency_ms": 24.15,
+      "vram_allocated_mb": 840.43,
+      "adapter_compatibility": "VERIFIED_COMPATIBLE"
+    },
+    "gpt_neo_125m": {
+      "name": "EleutherAI/gpt-neo-125m",
+      "family": "gpt_neo",
+      "paradigm": "causal_transformer",
+      "base_parameters": 125198592,
+      "trainable_adapter_parameters": 294912,
+      "parameter_overhead_pct": 0.2356,
+      "adapter_target_modules": [
+        "q_proj",
+        "v_proj"
+      ],
+      "sample_step_loss": 3.1838,
+      "step_latency_ms": 35.98,
+      "vram_allocated_mb": 951.23,
+      "adapter_compatibility": "VERIFIED_COMPATIBLE"
+    },
+    "cerebras_111m": {
+      "name": "cerebras-archive/Cerebras-GPT-111M",
+      "family": "gpt2",
+      "paradigm": "causal_transformer",
+      "base_parameters": 111050496,
+      "trainable_adapter_parameters": 245760,
+      "parameter_overhead_pct": 0.2213,
+      "adapter_target_modules": [
+        "c_attn"
+      ],
+      "sample_step_loss": 3.4372,
+      "step_latency_ms": 17.15,
+      "vram_allocated_mb": 669.21,
+      "adapter_compatibility": "VERIFIED_COMPATIBLE"
+    },
+    "mamba_130m": {
+      "name": "state-spaces/mamba-130m-hf",
+      "family": "mamba",
+      "paradigm": "selective_ssm",
+      "base_parameters": 129135360,
+      "trainable_adapter_parameters": 1047552,
+      "parameter_overhead_pct": 0.8112,
+      "adapter_target_modules": [
+        "in_proj",
+        "x_proj"
+      ],
+      "sample_step_loss": 3.096,
+      "step_latency_ms": 685.57,
+      "vram_allocated_mb": 2907.06,
+      "adapter_compatibility": "VERIFIED_COMPATIBLE"
+    }
+  }
+}

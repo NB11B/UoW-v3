@@ -11,9 +11,14 @@ node_modules/
 scratch/
 storage_authority_c/
 qualification/distributed_authority/storage_authority_c/
-/artifacts/
+/artifacts/*
+!/artifacts/uow_grammar_1/
+!/artifacts/uow_magazine_1/
+artifacts/uow_magazine_1/corpora/
 .artifacts/
 *.onnx
 *.safetensors
+*.bin
+checkpoints/
 checkpoints/*_arm_*
 .venv/

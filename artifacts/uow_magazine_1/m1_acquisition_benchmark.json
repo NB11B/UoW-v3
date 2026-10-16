@@ -1,0 +1,230 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "gate": "M1",
+  "status": "passed",
+  "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "device": "cuda",
+  "adapters": {
+    "industrial.operational": {
+      "training": {
+        "domain": "industrial",
+        "grammar": "operational",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.3176253029704094,
+        "training_time_seconds": 31.47,
+        "weight_file": "checkpoints\\uow_magazine_1\\industrial.operational\\adapter_model.safetensors",
+        "sha256": "bd37a0e8a38da041a00a757dd0696c425b4d555c80615f0198df260f75240e2c",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 3,
+        "semantic_match_rate": 30.0,
+        "mean_latency_ms": 3924.66
+      }
+    },
+    "industrial.temporal": {
+      "training": {
+        "domain": "industrial",
+        "grammar": "temporal",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.2568274804204702,
+        "training_time_seconds": 29.0,
+        "weight_file": "checkpoints\\uow_magazine_1\\industrial.temporal\\adapter_model.safetensors",
+        "sha256": "de808f71a138acfc5ea0d2c0cdeb6b4689d7762bb7e3ca30535a883bd665db6f",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 10,
+        "semantic_match_rate": 100.0,
+        "mean_latency_ms": 2573.35
+      }
+    },
+    "industrial.recovery": {
+      "training": {
+        "domain": "industrial",
+        "grammar": "recovery",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.23766460075353582,
+        "training_time_seconds": 28.3,
+        "weight_file": "checkpoints\\uow_magazine_1\\industrial.recovery\\adapter_model.safetensors",
+        "sha256": "a62a4057cc13b1c3749595b425d63222bab5a78f323dcc1ebdc0212647f05161",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 10,
+        "semantic_match_rate": 100.0,
+        "mean_latency_ms": 2441.21
+      }
+    },
+    "cybersecurity.operational": {
+      "training": {
+        "domain": "cybersecurity",
+        "grammar": "operational",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.2625413784881433,
+        "training_time_seconds": 33.17,
+        "weight_file": "checkpoints\\uow_magazine_1\\cybersecurity.operational\\adapter_model.safetensors",
+        "sha256": "7fc43bd9268092882bda1af2343854ff87953db9854299307437bcfa2f649bc9",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 3,
+        "semantic_match_rate": 30.0,
+        "mean_latency_ms": 3679.3
+      }
+    },
+    "cybersecurity.temporal": {
+      "training": {
+        "domain": "cybersecurity",
+        "grammar": "temporal",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.24100641650458177,
+        "training_time_seconds": 29.63,
+        "weight_file": "checkpoints\\uow_magazine_1\\cybersecurity.temporal\\adapter_model.safetensors",
+        "sha256": "a6ae1b5dd969ff5b87d11f2eeaf444c9dd517a8b042d940576a34f80b0c6f623",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 10,
+        "semantic_match_rate": 100.0,
+        "mean_latency_ms": 2641.11
+      }
+    },
+    "cybersecurity.recovery": {
+      "training": {
+        "domain": "cybersecurity",
+        "grammar": "recovery",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.19746378218134245,
+        "training_time_seconds": 29.82,
+        "weight_file": "checkpoints\\uow_magazine_1\\cybersecurity.recovery\\adapter_model.safetensors",
+        "sha256": "06d034ed93dc0381b57c095d1264ad8b78baf690ecc585c21350a642c50830f8",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 8,
+        "semantic_match_rate": 80.0,
+        "mean_latency_ms": 2889.71
+      }
+    },
+    "logistics.operational": {
+      "training": {
+        "domain": "logistics",
+        "grammar": "operational",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.277375644693772,
+        "training_time_seconds": 31.3,
+        "weight_file": "checkpoints\\uow_magazine_1\\logistics.operational\\adapter_model.safetensors",
+        "sha256": "2c5330f18f6120b9992d6d681e785e945e5ac6113108d261be6b039c18910249",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 6,
+        "semantic_match_rate": 60.0,
+        "mean_latency_ms": 3780.14
+      }
+    },
+    "logistics.temporal": {
+      "training": {
+        "domain": "logistics",
+        "grammar": "temporal",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.24124072377880415,
+        "training_time_seconds": 29.49,
+        "weight_file": "checkpoints\\uow_magazine_1\\logistics.temporal\\adapter_model.safetensors",
+        "sha256": "4d36944b9ae114c010b92f8a692b4b6f3bff922a9aa8ab2a5dd436e09e0379d0",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 10,
+        "semantic_match_rate": 100.0,
+        "mean_latency_ms": 2961.35
+      }
+    },
+    "logistics.recovery": {
+      "training": {
+        "domain": "logistics",
+        "grammar": "recovery",
+        "foundation": "HuggingFaceTB/SmolLM2-135M-Instruct",
+        "epochs": 1,
+        "final_loss": 0.21640315375601252,
+        "training_time_seconds": 29.68,
+        "weight_file": "checkpoints\\uow_magazine_1\\logistics.recovery\\adapter_model.safetensors",
+        "sha256": "b86d8b6c3e1b35719bec217beec682893063ec27aec763aedb2f3af216192556",
+        "size_bytes": 1858776
+      },
+      "holdout_evaluation": {
+        "evaluated_cases": 10,
+        "valid_json_count": 10,
+        "valid_json_rate": 100.0,
+        "semantic_match_count": 9,
+        "semantic_match_rate": 90.0,
+        "mean_latency_ms": 2907.81
+      }
+    }
+  },
+  "summary": {
+    "total_adapters_trained": 9,
+    "mean_valid_json_rate": 100.0,
+    "mean_semantic_match_rate": 76.67,
+    "acceptance_criterion_met": true
+  },
+  "base_m0_baseline": {
+    "industrial.operational": {
+      "evaluated_cases": 20,
+      "valid_json_count": 8,
+      "valid_json_rate": 40.0,
+      "semantic_match_count": 0,
+      "semantic_match_rate": 0.0,
+      "mean_latency_ms": 3822.4
+    },
+    "cybersecurity.operational": {
+      "evaluated_cases": 20,
+      "valid_json_count": 0,
+      "valid_json_rate": 0.0,
+      "semantic_match_count": 0,
+      "semantic_match_rate": 0.0,
+      "mean_latency_ms": 3949.62
+    },
+    "logistics.operational": {
+      "evaluated_cases": 20,
+      "valid_json_count": 10,
+      "valid_json_rate": 50.0,
+      "semantic_match_count": 0,
+      "semantic_match_rate": 0.0,
+      "mean_latency_ms": 3685.98
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "gate": "M5",
+  "status": "passed",
+  "workflow_steps": [
+    {
+      "step": 1,
+      "domain": "industrial",
+      "action": "EMERGENCY_DEPRESSURIZE",
+      "certified": true,
+      "post_sequence": 1,
+      "post_state_hash": "e16bde453ea267f7733cb525ea272ee81a8bfc90887ca5161cc7c4bb4eecce4f"
+    },
+    {
+      "step": 2,
+      "domain": "temporal",
+      "action": "ACQUIRE_LEASE_WINDOW",
+      "certified": true,
+      "post_sequence": 2,
+      "post_state_hash": "ff13e2152d22a530bd5e66a1f8fd1397a6b77d501fc902567b744fcd8f3468f2"
+    },
+    {
+      "step": 3,
+      "domain": "cybersecurity",
+      "action": "QUARANTINE_ENDPOINT",
+      "certified": true,
+      "post_sequence": 3,
+      "post_state_hash": "1241a1d4562e6f9ddc3952903355c629e3b7a542ab17e7769cf54300a2348215"
+    },
+    {
+      "step": 4,
+      "domain": "logistics",
+      "action": "REROUTE_TRANSIT_LANE",
+      "certified": true,
+      "post_sequence": 4,
+      "post_state_hash": "a890068098e98093e32ce1afed97e86dfa8aedf170090bfb1f3af331cb316b3f"
+    },
+    {
+      "step": 5,
+      "domain": "recovery",
+      "action": "ROLLBACK_COMPENSATE",
+      "certified": true,
+      "post_sequence": 5,
+      "post_state_hash": "70efdbcf5db759a131a680b44eafb924f786b5f300ac038699319a56a70bf437"
+    }
+  ],
+  "adversarial_tests": [
+    {
+      "test": "replay_attack",
+      "rejected": true,
+      "reason": "Pre-state sequence and attribute mismatch"
+    },
+    {
+      "test": "guard_failure",
+      "rejected": true,
+      "reason": "Guard predicate evaluated to False (no applicable route)"
+    }
+  ],
+  "ledger_summary": {
+    "total_certified_steps": 5,
+    "ledger_root_hash": "6f3d4eb10888031af850fb12af7643eeb655ec8c1197af6897fb7d63102e5005",
+    "ledger_integrity_verified": true,
+    "final_state_sequence": 5,
+    "unauthorized_commits": 0,
+    "zero_unauthorized_commits_guarantee": true
+  }
+}

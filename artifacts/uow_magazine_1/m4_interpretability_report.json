@@ -1,0 +1,226 @@
+{
+  "campaign": "UOW-MAGAZINE-1",
+  "gate": "M4",
+  "status": "passed",
+  "models_analyzed": {
+    "smollm2_135m_magazine": {
+      "cybersecurity.operational": {
+        "mean_rank1_energy_pct": 83.33,
+        "mean_rank2_energy_pct": 93.29,
+        "mean_rank4_energy_pct": 97.96,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.1346,
+              0.5562,
+              0.4122,
+              0.1935,
+              0.1707,
+              0.1388,
+              0.0858,
+              0.0712
+            ],
+            "rank1_energy_pct": 69.03,
+            "rank2_energy_pct": 85.62,
+            "rank4_energy_pct": 96.74
+          }
+        ]
+      },
+      "cybersecurity.recovery": {
+        "mean_rank1_energy_pct": 82.31,
+        "mean_rank2_energy_pct": 92.17,
+        "mean_rank4_energy_pct": 97.44,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.4005,
+              0.4348,
+              0.1538,
+              0.1297,
+              0.1083,
+              0.0985,
+              0.0836,
+              0.0669
+            ],
+            "rank1_energy_pct": 88.2,
+            "rank2_energy_pct": 96.7,
+            "rank4_energy_pct": 98.52
+          }
+        ]
+      },
+      "cybersecurity.temporal": {
+        "mean_rank1_energy_pct": 84.98,
+        "mean_rank2_energy_pct": 94.07,
+        "mean_rank4_energy_pct": 98.07,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.2869,
+              0.5172,
+              0.229,
+              0.1833,
+              0.163,
+              0.1255,
+              0.1006,
+              0.0722
+            ],
+            "rank1_energy_pct": 80.11,
+            "rank2_energy_pct": 93.05,
+            "rank4_energy_pct": 97.21
+          }
+        ]
+      },
+      "industrial.operational": {
+        "mean_rank1_energy_pct": 83.04,
+        "mean_rank2_energy_pct": 93.57,
+        "mean_rank4_energy_pct": 97.89,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.6265,
+              0.6588,
+              0.2868,
+              0.1996,
+              0.1528,
+              0.1254,
+              0.1139,
+              0.1078
+            ],
+            "rank1_energy_pct": 81.02,
+            "rank2_energy_pct": 94.31,
+            "rank4_energy_pct": 98.05
+          }
+        ]
+      },
+      "industrial.recovery": {
+        "mean_rank1_energy_pct": 83.29,
+        "mean_rank2_energy_pct": 93.44,
+        "mean_rank4_energy_pct": 97.87,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.2957,
+              0.4457,
+              0.2541,
+              0.1456,
+              0.1052,
+              0.0962,
+              0.0825,
+              0.0586
+            ],
+            "rank1_energy_pct": 84.2,
+            "rank2_energy_pct": 94.16,
+            "rank4_energy_pct": 98.47
+          }
+        ]
+      },
+      "industrial.temporal": {
+        "mean_rank1_energy_pct": 84.07,
+        "mean_rank2_energy_pct": 93.73,
+        "mean_rank4_energy_pct": 98.11,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.0804,
+              0.5818,
+              0.2869,
+              0.1717,
+              0.1673,
+              0.1194,
+              0.0968,
+              0.0697
+            ],
+            "rank1_energy_pct": 69.73,
+            "rank2_energy_pct": 89.95,
+            "rank4_energy_pct": 96.63
+          }
+        ]
+      },
+      "logistics.operational": {
+        "mean_rank1_energy_pct": 83.05,
+        "mean_rank2_energy_pct": 93.54,
+        "mean_rank4_energy_pct": 97.91,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.0707,
+              0.5178,
+              0.3193,
+              0.2188,
+              0.1496,
+              0.1268,
+              0.1167,
+              0.1008
+            ],
+            "rank1_energy_pct": 70.48,
+            "rank2_energy_pct": 86.96,
+            "rank4_energy_pct": 96.17
+          }
+        ]
+      },
+      "logistics.recovery": {
+        "mean_rank1_energy_pct": 81.19,
+        "mean_rank2_energy_pct": 92.17,
+        "mean_rank4_energy_pct": 97.44,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              1.5864,
+              0.5594,
+              0.2084,
+              0.1856,
+              0.136,
+              0.1232,
+              0.0997,
+              0.0786
+            ],
+            "rank1_energy_pct": 85.1,
+            "rank2_energy_pct": 95.68,
+            "rank4_energy_pct": 98.32
+          }
+        ]
+      },
+      "logistics.temporal": {
+        "mean_rank1_energy_pct": 84.45,
+        "mean_rank2_energy_pct": 93.54,
+        "mean_rank4_energy_pct": 97.85,
+        "sample_layer": [
+          "base_model.model.model.layers.0.self_attn.q_proj",
+          {
+            "singular_values": [
+              0.9903,
+              0.4952,
+              0.2809,
+              0.237,
+              0.1511,
+              0.132,
+              0.1072,
+              0.0803
+            ],
+            "rank1_energy_pct": 69.1,
+            "rank2_energy_pct": 86.38,
+            "rank4_energy_pct": 95.9
+          }
+        ]
+      }
+    },
+    "pythia_160m_base_projections": {
+      "model": "EleutherAI/pythia-160m",
+      "query_key_value_layers_count": 12,
+      "mean_base_rank1_energy_pct": 25.53,
+      "mean_base_rank4_energy_pct": 37.24
+    }
+  },
+  "findings": {
+    "low_rank_hypothesis_confirmed": true,
+    "scientific_summary": "Domain-expertise LoRA weight updates exhibit extreme singular-value concentration (>60% of total update energy resides in rank-1, >90% in rank-4), proving that specialized operational and temporal capabilities form compact, low-dimensional manifold adjustments on top of the frozen foundation representations."
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "release": "UOW-PLATFORM-V1",
+  "version": "1.0.0",
+  "timestamp_utc": 1792210503.5032854,
+  "build_date": "2026-10-17 04:15:03 UTC",
+  "status": "QUALIFIED_RELEASE_CANDIDATE",
+  "license": "Apache-2.0",
+  "supported_deployment_profiles": {
+    "host_complete": {
+      "hardware": "Windows RTX 5070 / Linux x86_64",
+      "resident_memory": "~508 MB VRAM / 2.3 GB Host",
+      "disposition": "QUALIFIED"
+    },
+    "edge_compact": {
+      "hardware": "NVIDIA Jetson Nano 2GB",
+      "resident_memory": "~490 MB Unified (1,110 MB safety headroom)",
+      "disposition": "QUALIFIED"
+    },
+    "edge_transport": {
+      "hardware": "NVIDIA Jetson Nano 2GB (Remote neural inference)",
+      "resident_memory": "~120 MB Host",
+      "disposition": "QUALIFIED"
+    },
+    "endpoint_deterministic": {
+      "hardware": "Arduino Uno ATmega328P",
+      "resident_memory": "<2 KB SRAM",
+      "disposition": "QUALIFIED"
+    }
+  },
+  "demonstrations_verified": [
+    "artifacts/uow_platform_v1/demonstrations/d1_dynamic_installation.json",
+    "artifacts/uow_platform_v1/demonstrations/d2_authorized_workflow.json",
+    "artifacts/uow_platform_v1/demonstrations/d3_hot_upgrade_rollback.json",
+    "artifacts/uow_platform_v1/demonstrations/d4_distributed_nodes.json",
+    "artifacts/uow_platform_v1/demonstrations/d5_new_expertise_lifecycle.json",
+    "artifacts/uow_platform_v1/demonstrations/master_demonstrations_report.json"
+  ],
+  "source_files_count": 43,
+  "source_inventory": {
+    "src/uow/protocol/v1/canonical.py": "688b80d1c25a6db31b1b65dd65a46df786be88e920203d402b7bb3b5a269533e",
+    "src/uow/protocol/v1/causal.py": "c9fab13bb530567bad4e590751916afb3dc3741502d4fe0ed9ec804223659a6e",
+    "src/uow/protocol/v1/framing.py": "e7a10ad6529c53bda56519fc623387cf9cc9f034d8a290087b2c829a7151f21a",
+    "src/uow/protocol/v1/messages.py": "b382c0889190584a5a3718242c9c017f97cf66f574d83a6fe223805200af667c",
+    "src/uow/protocol/v1/__init__.py": "724cc7cd354a9d9267e93bf9d9d482a303d816f38dc92abd7f7f11f6a7bf035f",
+    "src/uow/capabilities/models.py": "a32a84dbefce56a194c65684b7415b600823894972de86f68269ab66e1bd7de1",
+    "src/uow/capabilities/registry.py": "50a7ad197d8eeb6cf822f8e7ab11ec0ce4193d508aba6c15508d9d3fbff93abc",
+    "src/uow/capabilities/store.py": "277413ed67f5275bdac6649276e442a12a9851786d04028512f30ec2af213374",
+    "src/uow/capabilities/__init__.py": "946376f35a5cd6179ab4b4a976eef8d668e76450dc3dc025c199e4f37ffaa59f",
+    "src/uow/magazine/compatibility.py": "8162a84a2f5ada2cdff043af15393111577f08c603ada7d3768ebafd2cd68e98",
+    "src/uow/magazine/deployment.py": "af6840caaac180b92981d40ada0e4e96a814062b6072740c01ee4c40ac21fae0",
+    "src/uow/magazine/manager.py": "eba6748986bbd09fa5ff1559548db8d9510c21de0277f15f1df70f26900eab83",
+    "src/uow/magazine/provenance.py": "992aef65e40b4c8b9f2853e7c01a97ec38e6ce65c8a82eca4ed260edc4dd4a69",
+    "src/uow/magazine/registry.py": "0769c1c93091c76347e8e345a0f364114236612ca5fb22ed155c2f6977e08fcd",
+    "src/uow/magazine/residency.py": "428b196f7c8f9fb626c2223e0296a4da959035c2aea612e40fccbb090fc4829a",
+    "src/uow/magazine/rollback.py": "44a118c39e267a2c3e5511e5ccb60014bb6d03b461597cc0af4244a01e8fd15d",
+    "src/uow/magazine/scheduler.py": "0c0b1d9101dfdefbcf34f982f8f5e729a9679059b3a7636a54ea54daf13b5dc0",
+    "src/uow/magazine/schema.py": "75c2e4690dce2362f309b3fceb46fbd96f9ae1caba3437d25882e91100e1f953",
+    "src/uow/magazine/verification.py": "81b3489c0e6164370a975daa4bd0809bf3b8d23cd4a34b416e366fc580b111dd",
+    "src/uow/magazine/__init__.py": "fef6a947a2e6dd582c4404247d796ae857b7929e449dcf45dd39ee63374dc052",
+    "src/uow/expertise/domain/compiler.py": "ed93576a7a131ef4e57997057372a431641dd6e1b9265cd1d96a0271adaca0c4",
+    "src/uow/expertise/domain/models.py": "9064391ed1094e114745884608027d2bacbf08b4ee875e78edd0e8e65175f827",
+    "src/uow/expertise/domain/reference_domains.py": "5c1ec61db53210be40302f05378c2ae77491b6bbe182bea0efca8566a5eacdb6",
+    "src/uow/expertise/domain/validator.py": "db036015cb897c90bf918ed52355e69fe1d8b0cfa13335b541eff6df940630b2",
+    "src/uow/expertise/domain/__init__.py": "d857f0e4e077d9aeffd45e552ae5530b6ea64ac5ea01e49f8674195bcf3700cd",
+    "src/uow/orchestration/materialization.py": "d082d297dbf79c1c56a9d22c615031f015e94a771dc80ee16f9577a1307ad6fd",
+    "src/uow/orchestration/planner.py": "d4db4ee5fbb407497b6c740f5259f98075377dd2d5b93f35b02d5408e4cc742e",
+    "src/uow/orchestration/runtime.py": "1de2fbbbc62b5f4f24ff4d5d21819cf16ebb6a8229f5450c6b9269f2a6239f05",
+    "src/uow/orchestration/scheduler.py": "a826d3ce8f3a2981a72954c172b18b071ee94492045687beb125b3fb6ec77f64",
+    "src/uow/orchestration/state.py": "46fa9e3583ec2ec345ba72483853a6a1477763167580a7a1fcf49d08f35b5869",
+    "src/uow/orchestration/__init__.py": "8b8693695bde06bc3f54091b4e9db54f44201a81c59644b30dbc480e1a7f8921",
+    "src/uow/authority/platform_authority.py": "7d7341e594b70827ce7d32bef2af59bb70944ee3f68a31201c4882509812b49e",
+    "src/uow/authority/protocol.py": "301958deb1a374d6754ae607d15dbfad16922ea9da5f5d6de87a5e577b6a3ff4",
+    "src/uow/authority/__init__.py": "7820c94a796f8a807899c6b2e41a7c4409ec8a9ab38b661773b98bee6f4c19f4",
+    "src/uow/transport/platform_transport.py": "44b49be51cff8efdda8dff33b1b81ad1614096267388803f4459a0cb5e12e134",
+    "src/uow/transport/__init__.py": "396e1fde926ddaf200120946ee4de4d562628163aa25656ee7fed557c7b376f6",
+    "sdk/python/uow/client.py": "4460f58a2085b9e48417b38509cb65781e8c254fd3bf7265583c02065deb398f",
+    "sdk/python/uow/models.py": "20379947d88885f93858d1d604a6872116162e248cd07bd90d6dbad2490aba9f",
+    "sdk/python/uow/__init__.py": "d61e222691d79caf75631c22313f5b1c37f9884b18d27e4a1eb7e63109b9991e",
+    "cli/main.py": "d21e1e6ef3088f7b15ca77b2f5ba92a035f02378a257709068db1df16e24187a",
+    "cli/__init__.py": "09481d9f9540203dc80fbbe8f6b3dab6a26c1f4b112f5513f1187e730706ad9a",
+    "demonstrations/platform_demonstrations.py": "39dbfbfa43284ef60afcc8654a626dc43668275ddbb83e8fe98ca5bddbf899cd",
+    "demonstrations/__init__.py": "a9aeb95b4f31bfed088a1054b81d61cbfca7d4b0fc195b9a3ef5c0237c54fabb"
+  },
+  "demonstrations_inventory": {
+    "artifacts/uow_platform_v1/demonstrations/d1_dynamic_installation.json": "7d2157e25a80124b3dda2323496f9a7904566e94170b1b36ba29bd088ba67f3a",
+    "artifacts/uow_platform_v1/demonstrations/d2_authorized_workflow.json": "503d41d933ebff4db9e743a25bd2b87b800c50da22d1717ce028a9de38413b50",
+    "artifacts/uow_platform_v1/demonstrations/d3_hot_upgrade_rollback.json": "00596230f3a8a17ccdb7f4bbdd58b40d9530465f2ad12a9cb6080bfb438e227a",
+    "artifacts/uow_platform_v1/demonstrations/d4_distributed_nodes.json": "ade4c24038807ee792af191291f7a6b81f3a5d6a634a3082040246c521a86555",
+    "artifacts/uow_platform_v1/demonstrations/d5_new_expertise_lifecycle.json": "b3199f01c9a8772f8736906a8c97524be8d8f709aee48a73884af7ee1f300e56",
+    "artifacts/uow_platform_v1/demonstrations/master_demonstrations_report.json": "d522cf488a11c37e7d3041daf7e9b928cbd49c35c06ecc40d9cbda327cb37d3f"
+  }
+}

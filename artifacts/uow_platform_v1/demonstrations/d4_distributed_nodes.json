@@ -1,0 +1,13 @@
+{
+  "demonstration": "D4",
+  "name": "Distributed Multi-Node Execution & Recovery",
+  "uno_telemetry_received": {
+    "pressure": 175.4
+  },
+  "nano_forward_received": {
+    "pressure": 175.4
+  },
+  "partition_handled": true,
+  "replay_blocked": true,
+  "success": true
+}

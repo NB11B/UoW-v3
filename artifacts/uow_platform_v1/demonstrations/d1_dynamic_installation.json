@@ -1,0 +1,37 @@
+{
+  "demonstration": "D1",
+  "name": "Dynamic Capability Installation",
+  "success": true,
+  "disposition": "COMMITTED",
+  "action": "trip_feeder",
+  "bindings": {
+    "feeder_id": "FEEDER_4",
+    "substation_id": "SUBSTATION_NORTH"
+  },
+  "audit_trail": [
+    {
+      "step_name": "Route Selection",
+      "decision": "DETERMINISTIC_DIRECT",
+      "rationale": "Requested capability is intrinsically deterministic; zero neural compute needed.",
+      "latency_ms": 0.0019073486328125,
+      "cost_tokens": 0,
+      "artifacts": {}
+    },
+    {
+      "step_name": "Domain Grounding",
+      "decision": "GROUNDING_VERIFIED",
+      "rationale": "All action parameters and entity identifiers grounded in authoritative register.",
+      "latency_ms": 0.00858306884765625,
+      "cost_tokens": 0,
+      "artifacts": {}
+    },
+    {
+      "step_name": "UoW Certification",
+      "decision": "CERTIFIED",
+      "rationale": "Proposal satisfied route guards and pre-state invariants.",
+      "latency_ms": 0.09822845458984375,
+      "cost_tokens": 0,
+      "artifacts": {}
+    }
+  ]
+}

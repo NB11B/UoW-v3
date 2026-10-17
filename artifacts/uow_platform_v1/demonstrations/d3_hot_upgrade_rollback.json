@@ -1,0 +1,18 @@
+{
+  "demonstration": "D3",
+  "name": "Hot-Upgrade, Quarantine, and Rollback",
+  "v1_output": {
+    "action": "optimize",
+    "ratio": 1.05
+  },
+  "v1_1_output": {
+    "action": "optimize",
+    "ratio": 1.12
+  },
+  "rollback_version": "1.1.0",
+  "post_rollback_output": {
+    "action": "optimize",
+    "ratio": 1.12
+  },
+  "success": true
+}

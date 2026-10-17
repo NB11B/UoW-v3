@@ -1,0 +1,91 @@
+{
+  "timestamp": 1792210461.9895937,
+  "D1": {
+    "demonstration": "D1",
+    "name": "Dynamic Capability Installation",
+    "success": true,
+    "disposition": "COMMITTED",
+    "action": "trip_feeder",
+    "bindings": {
+      "feeder_id": "FEEDER_4",
+      "substation_id": "SUBSTATION_NORTH"
+    },
+    "audit_trail": [
+      {
+        "step_name": "Route Selection",
+        "decision": "DETERMINISTIC_DIRECT",
+        "rationale": "Requested capability is intrinsically deterministic; zero neural compute needed.",
+        "latency_ms": 0.0019073486328125,
+        "cost_tokens": 0,
+        "artifacts": {}
+      },
+      {
+        "step_name": "Domain Grounding",
+        "decision": "GROUNDING_VERIFIED",
+        "rationale": "All action parameters and entity identifiers grounded in authoritative register.",
+        "latency_ms": 0.00858306884765625,
+        "cost_tokens": 0,
+        "artifacts": {}
+      },
+      {
+        "step_name": "UoW Certification",
+        "decision": "CERTIFIED",
+        "rationale": "Proposal satisfied route guards and pre-state invariants.",
+        "latency_ms": 0.09822845458984375,
+        "cost_tokens": 0,
+        "artifacts": {}
+      }
+    ]
+  },
+  "D2": {
+    "demonstration": "D2",
+    "name": "Complete Authorized Mixed Workflow",
+    "success": true,
+    "disposition": "COMMITTED",
+    "resulting_state_hash": "a4db2cd9fa168b06e23cfb8260bea1e820395120ab6c90d972fffd68356041b6",
+    "ledger_height": 1,
+    "ledger_integrity": true,
+    "explanation": "=== Execution Audit Trail for Work d2-work-alarm-99 ===\nDisposition: COMMITTED | Success: True\nSteps:\n  [1] Route Selection: NEURAL_SPECIALIST (0.00ms) - No exact deterministic provider available; invoking learned specialist 'industrial.emergency_isolate'.\n  [2] Context Compilation: CONTEXT_INJECTED (0.02ms) - Authoritative ontology from 'domain.industrial.v1' injected into prompt.\n  [3] Domain Grounding: GROUNDING_VERIFIED (0.01ms) - All action parameters and entity identifiers grounded in authoritative register.\n  [4] UoW Certification: CERTIFIED (0.05ms) - Proposal satisfied route guards and pre-state invariants."
+  },
+  "D3": {
+    "demonstration": "D3",
+    "name": "Hot-Upgrade, Quarantine, and Rollback",
+    "v1_output": {
+      "action": "optimize",
+      "ratio": 1.05
+    },
+    "v1_1_output": {
+      "action": "optimize",
+      "ratio": 1.12
+    },
+    "rollback_version": "1.1.0",
+    "post_rollback_output": {
+      "action": "optimize",
+      "ratio": 1.12
+    },
+    "success": true
+  },
+  "D4": {
+    "demonstration": "D4",
+    "name": "Distributed Multi-Node Execution & Recovery",
+    "uno_telemetry_received": {
+      "pressure": 175.4
+    },
+    "nano_forward_received": {
+      "pressure": 175.4
+    },
+    "partition_handled": true,
+    "replay_blocked": true,
+    "success": true
+  },
+  "D5": {
+    "demonstration": "D5",
+    "name": "New Expertise Lifecycle",
+    "domain_id": "domain.robotics.v1",
+    "grounding_valid": true,
+    "hallucination_intercepted": true,
+    "qualification_recommendation": "DEPLOY WITH AUTHORITATIVE CONTEXT (context-only)",
+    "success": true
+  },
+  "all_demonstrations_passed": true
+}

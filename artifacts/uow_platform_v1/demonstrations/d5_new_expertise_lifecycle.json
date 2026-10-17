@@ -1,0 +1,9 @@
+{
+  "demonstration": "D5",
+  "name": "New Expertise Lifecycle",
+  "domain_id": "domain.robotics.v1",
+  "grounding_valid": true,
+  "hallucination_intercepted": true,
+  "qualification_recommendation": "DEPLOY WITH AUTHORITATIVE CONTEXT (context-only)",
+  "success": true
+}

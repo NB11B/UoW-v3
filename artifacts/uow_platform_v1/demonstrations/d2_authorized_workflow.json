@@ -1,0 +1,10 @@
+{
+  "demonstration": "D2",
+  "name": "Complete Authorized Mixed Workflow",
+  "success": true,
+  "disposition": "COMMITTED",
+  "resulting_state_hash": "a4db2cd9fa168b06e23cfb8260bea1e820395120ab6c90d972fffd68356041b6",
+  "ledger_height": 1,
+  "ledger_integrity": true,
+  "explanation": "=== Execution Audit Trail for Work d2-work-alarm-99 ===\nDisposition: COMMITTED | Success: True\nSteps:\n  [1] Route Selection: NEURAL_SPECIALIST (0.00ms) - No exact deterministic provider available; invoking learned specialist 'industrial.emergency_isolate'.\n  [2] Context Compilation: CONTEXT_INJECTED (0.02ms) - Authoritative ontology from 'domain.industrial.v1' injected into prompt.\n  [3] Domain Grounding: GROUNDING_VERIFIED (0.01ms) - All action parameters and entity identifiers grounded in authoritative register.\n  [4] UoW Certification: CERTIFIED (0.05ms) - Proposal satisfied route guards and pre-state invariants."
+}

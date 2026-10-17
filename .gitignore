@@ -17,6 +17,7 @@ qualification/distributed_authority/storage_authority_c/
 artifacts/uow_magazine_1/corpora/
 !/artifacts/uow_magazine_p2/
 artifacts/uow_magazine_p2/corpora/
+!/artifacts/uow_magazine_p3/
 .artifacts/
 *.onnx
 *.safetensors

@@ -3,7 +3,8 @@
 Complete Engineering Acceptance Specification · Milestone v1.0  
 **Repository**: `NB11B/UoW-v3`  
 **Integration Branch**: `feature/uow-platform-v1`  
-**Date**: October 2026  
+**Published Release Revision**: [`424b668`](https://github.com/NB11B/UoW-v3/commit/424b668)  
+**Date**: October 17, 2026  
 
 ---
 
@@ -64,10 +65,11 @@ Qualification is awarded only when an independent evaluator can execute all veri
 
 | Deployment Profile | Target Platform | Neural Capability | Resident Memory Envelope | Final Disposition |
 | :--- | :--- | :--- | :--- | :--- |
-| **Host Complete** | Windows RTX 5070 / Linux x86_64 | Resident Magazine (Cerebras-111M / SmolLM2-135M) | ~508 MB VRAM / 2.3 GB Host RAM | **QUALIFIED** |
-| **Edge Compact** | NVIDIA Jetson Nano 2GB | Resident Cerebras-111M (3 Strategy B adapters) | ~490 MB Resident (1,110 MB safety headroom) | **QUALIFIED** |
-| **Edge Transport** | NVIDIA Jetson Nano 2GB | Remote Neural Capability via Framed Transport | ~120 MB RAM | **QUALIFIED** |
-| **Endpoint Deterministic** | Arduino Uno (ATmega328P) | None (CRC32 Framed Serial Packets & I/O) | <2 KB SRAM | **QUALIFIED** |
+| **Host Complete** | Windows RTX 5070 / Linux x86_64 | Resident Magazine (Cerebras-111M / SmolLM2-135M) | ~508 MB VRAM / 2.3 GB Host RAM | **RELEASE QUALIFIED** |
+| **Edge Transport** | NVIDIA Jetson Nano 2GB | Remote Neural Capability via Framed Transport | ~120 MB RAM | **RELEASE QUALIFIED** |
+| **Edge Compact** | NVIDIA Jetson Nano 2GB | Resident Cerebras-111M (3 Strategy B adapters) | ~490 MB Resident (1,110 MB safety headroom) | **QUALIFIED WITH LIMITATIONS** (Requires on-device physical thermal/load qualification) |
+| **Endpoint Deterministic** | Arduino Uno (ATmega328P) | None (CRC32 Framed Serial Packets & I/O) | <2 KB SRAM | **RELEASE QUALIFIED** |
+| **General Autonomous Remediation** | All Platforms | Unguarded, autonomous model actuation without pre-state certification | N/A | **FORMALLY DISQUALIFIED** (All ungrounded proposals fail closed) |
 
 ---
 

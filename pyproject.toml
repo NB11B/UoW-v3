@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uow"
-version = "3.1.0"
-description = "Typed, certifiable Unit-of-Work transition primitives for UoW v3.1"
+version = "1.0.0"
+description = "Typed, certifiable Unit-of-Work Platform v1.0"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 

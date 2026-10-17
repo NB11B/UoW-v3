@@ -1,30 +1,40 @@
 {
   "release": "UOW-PLATFORM-V1",
   "version": "1.0.0",
-  "timestamp_utc": 1792279501.4535322,
-  "build_date": "2026-10-17 23:25:01 UTC",
+  "published_release_revision": "424b668",
+  "timestamp_utc": 1792279691.134944,
+  "build_date": "2026-10-17 23:28:11 UTC",
   "status": "QUALIFIED_RELEASE_CANDIDATE",
   "license": "Apache-2.0",
   "supported_deployment_profiles": {
     "host_complete": {
       "hardware": "Windows RTX 5070 / Linux x86_64",
       "resident_memory": "~508 MB VRAM / 2.3 GB Host",
-      "disposition": "QUALIFIED"
-    },
-    "edge_compact": {
-      "hardware": "NVIDIA Jetson Nano 2GB",
-      "resident_memory": "~490 MB Unified (1,110 MB safety headroom)",
-      "disposition": "QUALIFIED"
+      "disposition": "RELEASE_QUALIFIED",
+      "operational_envelope": "Unrestricted deployment on supported workstation hosts for deterministic and grounded advisory workflows."
     },
     "edge_transport": {
       "hardware": "NVIDIA Jetson Nano 2GB (Remote neural inference)",
       "resident_memory": "~120 MB Host",
-      "disposition": "QUALIFIED"
+      "disposition": "RELEASE_QUALIFIED",
+      "operational_envelope": "Unrestricted deployment on Jetson Nano; neural execution delegated to authenticated host peer."
+    },
+    "edge_compact": {
+      "hardware": "NVIDIA Jetson Nano 2GB (Standalone neural inference)",
+      "resident_memory": "~490 MB Unified (1,110 MB safety headroom)",
+      "disposition": "QUALIFIED_WITH_LIMITATIONS",
+      "operational_envelope": "Memory budget verified. Requires on-device physical thermal/load qualification before unattended field deployment."
     },
     "endpoint_deterministic": {
       "hardware": "Arduino Uno ATmega328P",
       "resident_memory": "<2 KB SRAM",
-      "disposition": "QUALIFIED"
+      "disposition": "RELEASE_QUALIFIED",
+      "operational_envelope": "Qualified for serial link framing, fault interception, and deterministic actuation (<2 KB SRAM)."
+    },
+    "general_autonomous_remediation": {
+      "hardware": "All Platforms",
+      "disposition": "FORMALLY_DISQUALIFIED",
+      "operational_envelope": "Prohibited by protocol invariants. All ungrounded or divergent proposals fail closed (0 unexpected commits)."
     }
   },
   "demonstrations_verified": [

@@ -17,6 +17,8 @@ Backward compatibility:
 """
 from __future__ import annotations
 
+__version__ = "1.0.0"
+
 # Canonical Minimal Root API
 from .contracts import UoW
 from .state import WorldState

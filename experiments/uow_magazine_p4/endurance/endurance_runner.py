@@ -9,9 +9,9 @@ from typing import Any, Dict, List, Optional
 
 import psutil
 
-from src.uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger, EvidenceRecord, certify, Proposal
+from uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
+from uow.state import WorldState
+from uow.engine import EvidenceLedger, EvidenceRecord, certify, Proposal
 
 
 def run_e1_workstation_profile(
@@ -64,7 +64,7 @@ def run_e1_workstation_profile(
             else:
                 unexpected_commits += 1
         else:
-            from src.uow.engine import propose
+            from uow.engine import propose
             valid_prop = propose(uow, state)
             cert = certify(uow, state, valid_prop)
             if cert.is_valid:
@@ -193,7 +193,7 @@ def run_e3_distributed_profile(
             else:
                 unexpected_commits += 1
         else:
-            from src.uow.engine import propose
+            from uow.engine import propose
             valid_prop = propose(uow, state)
             cert = certify(uow, state, valid_prop)
             if cert.is_valid:

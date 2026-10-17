@@ -9,13 +9,13 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 import time
 
-from src.uow.magazine.schema import CapabilityManifest, AdapterLifecycleState
-from src.uow.magazine.registry import CapabilityRegistry
-from src.uow.magazine.compatibility import CompatibilityChecker
-from src.uow.magazine.residency import ResidencyPool
-from src.uow.magazine.scheduler import SerializedWorkerQueue
-from src.uow.magazine.rollback import AdapterTransactionGuard, RollbackError
-from src.uow.magazine.provenance import ProposalProvenance
+from uow.magazine.schema import CapabilityManifest, AdapterLifecycleState
+from uow.magazine.registry import CapabilityRegistry
+from uow.magazine.compatibility import CompatibilityChecker
+from uow.magazine.residency import ResidencyPool
+from uow.magazine.scheduler import SerializedWorkerQueue
+from uow.magazine.rollback import AdapterTransactionGuard, RollbackError
+from uow.magazine.provenance import ProposalProvenance
 
 
 class MagazineRuntimeError(Exception):

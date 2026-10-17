@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 from typing import Any, Dict, List, Optional
 
-from src.uow.protocol.v1 import canonical_json
+from uow.protocol.v1 import canonical_json
 from .models import DomainPackage
 
 

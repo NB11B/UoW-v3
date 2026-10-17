@@ -10,10 +10,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
 
-from src.uow.contracts import UoW, Route, SuccessorKind
-from src.uow.state import WorldState
-from src.uow.engine import Proposal, CertificateResult, EvidenceRecord, certify, EvidenceLedger
-from src.uow.inference.request_context import InferenceResponse, TypedProposal
+from uow.contracts import UoW, Route, SuccessorKind
+from uow.state import WorldState
+from uow.engine import Proposal, CertificateResult, EvidenceRecord, certify, EvidenceLedger
+from uow.inference.request_context import InferenceResponse, TypedProposal
 
 
 @dataclass(frozen=True)

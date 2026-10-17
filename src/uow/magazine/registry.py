@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import json
 
-from src.uow.magazine.schema import CapabilityManifest, AdapterLifecycleState
-from src.uow.magazine.verification import ManifestVerifier
+from uow.magazine.schema import CapabilityManifest, AdapterLifecycleState
+from uow.magazine.verification import ManifestVerifier
 
 
 class CapabilityRegistry:

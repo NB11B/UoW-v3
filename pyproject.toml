@@ -9,9 +9,14 @@ description = "Typed, certifiable Unit-of-Work transition primitives for UoW v3.
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 
+[project.scripts]
+uow = "uow.cli.main:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["uow*"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "."]
 testpaths = ["tests"]
+

@@ -11,11 +11,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, Tuple
 
-from src.uow.contracts import UoW
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger, EvidenceRecord
-from src.uow.inference.authority_bridge import AuthorityBridge, AuthorityEvaluation
-from src.uow.inference.request_context import InferenceResponse, TypedProposal
+from uow.contracts import UoW
+from uow.state import WorldState
+from uow.engine import EvidenceLedger, EvidenceRecord
+from uow.inference.authority_bridge import AuthorityBridge, AuthorityEvaluation
+from uow.inference.request_context import InferenceResponse, TypedProposal
 
 
 @dataclass

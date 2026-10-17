@@ -14,12 +14,12 @@ from pathlib import Path
 import time
 from typing import Any, Callable, Dict, List, Optional
 
-from src.uow.capabilities import (
+from uow.capabilities import (
     CapabilityLifecycleState,
     CapabilityRecord,
     UniversalCapabilityRegistry,
 )
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     AuthorityLevel,
     CapabilityDescriptor,
     CapabilityKind,

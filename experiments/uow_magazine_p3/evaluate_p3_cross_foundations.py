@@ -9,15 +9,15 @@ from typing import Any, Dict, List, Optional
 
 import torch
 
-from src.uow.inference.gateway import InferenceGateway
-from src.uow.inference.model_backend import PyTorchPeftBackend
-from src.uow.inference.request_context import CapabilityTarget, InferenceRequest, StateReference, TypedProposal
-from src.uow.inference.authority_bridge import AuthorityBridge
-from src.uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger
-from src.uow.magazine.manager import MagazineManager
-from src.uow.magazine.schema import CapabilityManifest
+from uow.inference.gateway import InferenceGateway
+from uow.inference.model_backend import PyTorchPeftBackend
+from uow.inference.request_context import CapabilityTarget, InferenceRequest, StateReference, TypedProposal
+from uow.inference.authority_bridge import AuthorityBridge
+from uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
+from uow.state import WorldState
+from uow.engine import EvidenceLedger
+from uow.magazine.manager import MagazineManager
+from uow.magazine.schema import CapabilityManifest
 from experiments.uow_magazine_p3.foundations import FOUNDATION_ROSTER, FoundationSpec
 
 DOMAINS = ["industrial", "cybersecurity", "logistics"]

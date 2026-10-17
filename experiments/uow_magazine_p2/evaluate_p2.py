@@ -25,15 +25,15 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from src.uow.magazine.schema import CapabilityManifest
-from src.uow.magazine.manager import MagazineManager
-from src.uow.inference.request_context import InferenceRequest, TypedProposal, CapabilityTarget
-from src.uow.inference.gateway import InferenceGateway
-from src.uow.inference.model_backend import PyTorchPeftBackend
-from src.uow.inference.authority_bridge import AuthorityBridge
-from src.uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger
+from uow.magazine.schema import CapabilityManifest
+from uow.magazine.manager import MagazineManager
+from uow.inference.request_context import InferenceRequest, TypedProposal, CapabilityTarget
+from uow.inference.gateway import InferenceGateway
+from uow.inference.model_backend import PyTorchPeftBackend
+from uow.inference.authority_bridge import AuthorityBridge
+from uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
+from uow.state import WorldState
+from uow.engine import EvidenceLedger
 
 FOUNDATION = "HuggingFaceTB/SmolLM2-135M-Instruct"
 DOMAINS = ["industrial", "cybersecurity", "logistics"]

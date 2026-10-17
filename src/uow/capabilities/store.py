@@ -8,7 +8,7 @@ from pathlib import Path
 import shutil
 from typing import Any, Dict, List, Optional, Tuple
 
-from src.uow.protocol.v1 import CapabilityPackageManifest, canonical_json
+from uow.protocol.v1 import CapabilityPackageManifest, canonical_json
 
 
 class PackageVerificationError(Exception):

@@ -8,15 +8,15 @@ from typing import Any, Dict, List, Optional
 
 import torch
 
-from src.uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger
-from src.uow.inference.authority_bridge import AuthorityBridge
-from src.uow.inference.gateway import InferenceGateway
-from src.uow.inference.model_backend import PyTorchPeftBackend, MockModelBackend
-from src.uow.inference.request_context import CapabilityTarget, InferenceRequest, StateReference
-from src.uow.magazine.manager import MagazineManager
-from src.uow.magazine.schema import CapabilityManifest
+from uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
+from uow.state import WorldState
+from uow.engine import EvidenceLedger
+from uow.inference.authority_bridge import AuthorityBridge
+from uow.inference.gateway import InferenceGateway
+from uow.inference.model_backend import PyTorchPeftBackend, MockModelBackend
+from uow.inference.request_context import CapabilityTarget, InferenceRequest, StateReference
+from uow.magazine.manager import MagazineManager
+from uow.magazine.schema import CapabilityManifest
 
 
 class UnoSensorEmulator:
@@ -120,7 +120,7 @@ def run_deterministic_d0(batch: list[dict[str, Any]], ledger: EvidenceLedger) ->
                 ]
             )
             # Commit directly via authority
-            from src.uow.engine import certify, Proposal
+            from uow.engine import certify, Proposal
             mutated = uow.Gamma.routes[0].apply_mutations(pre_state)
             prop = Proposal(
                 uow_id=uow.H.identity,
@@ -132,7 +132,7 @@ def run_deterministic_d0(batch: list[dict[str, Any]], ledger: EvidenceLedger) ->
             )
             cert = certify(uow, pre_state, prop)
             if cert.is_valid:
-                from src.uow.engine import EvidenceRecord
+                from uow.engine import EvidenceRecord
                 ev = EvidenceRecord(
                     index=len(ledger.records) + 1,
                     uow_id=uow.H.identity,

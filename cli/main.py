@@ -9,20 +9,20 @@ import sys
 import time
 from typing import Any, Dict, List, Optional
 
-from src.uow.capabilities import UniversalCapabilityRegistry
-from src.uow.expertise.domain import (
+from uow.capabilities import UniversalCapabilityRegistry
+from uow.expertise.domain import (
     REFERENCE_DOMAIN_CATALOG,
     DomainContextCompiler,
     DomainGroundingValidator,
     DomainPackage,
 )
-from src.uow.magazine.deployment import MagazineDeploymentEngine
-from src.uow.orchestration.planner import ExecutionPlanner
-from src.uow.authority.platform_authority import (
+from uow.magazine.deployment import MagazineDeploymentEngine
+from uow.orchestration.planner import ExecutionPlanner
+from uow.authority.platform_authority import (
     PlatformAuthorityKernel,
     PlatformEvidenceLedger,
 )
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     CapabilityDescriptor,
     CapabilityKind,
     QualificationStatus,
@@ -30,7 +30,7 @@ from src.uow.protocol.v1 import (
     canonical_json,
     compute_digest,
 )
-from sdk.python.uow import ClientWorkRequest, UoWClient
+from uow.sdk import ClientWorkRequest, UoWClient
 
 
 def build_default_runtime():

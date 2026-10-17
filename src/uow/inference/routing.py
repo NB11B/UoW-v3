@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Tuple
 
-from src.uow.inference.request_context import CapabilityTarget, InferenceRequest
+from uow.inference.request_context import CapabilityTarget, InferenceRequest
 
 
 class RoutingResolutionError(Exception):

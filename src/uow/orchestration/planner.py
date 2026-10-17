@@ -12,19 +12,19 @@ from dataclasses import dataclass, field
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from src.uow.capabilities import (
+from uow.capabilities import (
     CapabilityLifecycleState,
     CapabilityRecord,
     UniversalCapabilityRegistry,
 )
-from src.uow.expertise.domain import (
+from uow.expertise.domain import (
     DomainContextCompiler,
     DomainGroundingValidator,
     DomainPackage,
     GroundingValidationResult,
 )
-from src.uow.magazine.deployment import DeploymentMode, MagazineDeploymentEngine
-from src.uow.protocol.v1 import (
+from uow.magazine.deployment import DeploymentMode, MagazineDeploymentEngine
+from uow.protocol.v1 import (
     CapabilityKind,
     CapabilityProposal,
     CommitDisposition,

@@ -4,15 +4,15 @@ from __future__ import annotations
 import time
 from typing import Any, Dict, Optional
 
-from src.uow.inference.request_context import (
+from uow.inference.request_context import (
     InferenceRequest,
     InferenceResponse,
     TypedProposal,
 )
-from src.uow.inference.routing import CapabilityRouter, RoutingResolutionError
-from src.uow.inference.output_validation import ProposalOutputValidator
-from src.uow.inference.model_backend import ModelBackend
-from src.uow.magazine.manager import MagazineManager
+from uow.inference.routing import CapabilityRouter, RoutingResolutionError
+from uow.inference.output_validation import ProposalOutputValidator
+from uow.inference.model_backend import ModelBackend
+from uow.magazine.manager import MagazineManager
 
 
 class InferenceGateway:

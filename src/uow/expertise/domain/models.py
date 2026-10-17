@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
 
-from src.uow.protocol.v1 import canonical_json, compute_digest
+from uow.protocol.v1 import canonical_json, compute_digest
 
 
 @dataclass(frozen=True)

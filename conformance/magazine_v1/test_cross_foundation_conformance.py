@@ -4,10 +4,10 @@ from __future__ import annotations
 import pytest
 from pathlib import Path
 
-from src.uow.magazine.schema import CapabilityManifest, AdapterLifecycleState
-from src.uow.magazine.compatibility import CompatibilityChecker
-from src.uow.magazine.manager import MagazineManager
-from src.uow.magazine.registry import CapabilityRegistry
+from uow.magazine.schema import CapabilityManifest, AdapterLifecycleState
+from uow.magazine.compatibility import CompatibilityChecker
+from uow.magazine.manager import MagazineManager
+from uow.magazine.registry import CapabilityRegistry
 from experiments.uow_magazine_p3.foundations import FOUNDATION_ROSTER
 
 

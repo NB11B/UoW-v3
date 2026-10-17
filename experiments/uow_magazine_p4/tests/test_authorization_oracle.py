@@ -1,10 +1,10 @@
 """Unit tests for AuthorizationOracle (Milestone P4)."""
 import pytest
 
-from src.uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger
-from src.uow.inference.request_context import InferenceResponse, TypedProposal
+from uow.contracts import make_uow, Route, Guard, GuardOp, Mutation, MutationOp, Successor, SuccessorKind
+from uow.state import WorldState
+from uow.engine import EvidenceLedger
+from uow.inference.request_context import InferenceResponse, TypedProposal
 from experiments.uow_magazine_p4.scoring.authorization_oracle import AuthorizationOracle
 
 

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Tuple
-from src.uow.magazine.schema import CapabilityManifest
+from uow.magazine.schema import CapabilityManifest
 
 
 class CompatibilityChecker:

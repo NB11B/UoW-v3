@@ -8,7 +8,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     CapabilityDescriptor,
     CapabilityKind,
     CapabilityPackageManifest,

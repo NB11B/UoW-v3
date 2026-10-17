@@ -1,15 +1,15 @@
 """Unit and conformance tests for Magazine Deployment & Domain Engine (WP03, WP04)."""
 import pytest
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     CapabilityDescriptor,
     CapabilityKind,
     CapabilityProposal,
     QualificationStatus,
     WorkRequest,
 )
-from src.uow.capabilities import UniversalCapabilityRegistry
-from src.uow.magazine.deployment import DeploymentMode, MagazineDeploymentEngine
-from src.uow.expertise.domain import (
+from uow.capabilities import UniversalCapabilityRegistry
+from uow.magazine.deployment import DeploymentMode, MagazineDeploymentEngine
+from uow.expertise.domain import (
     DomainContextCompiler,
     DomainGroundingValidator,
     build_industrial_domain_package,

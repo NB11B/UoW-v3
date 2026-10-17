@@ -11,22 +11,22 @@ from pathlib import Path
 import pytest
 import tempfile
 
-from src.uow.magazine.schema import (
+from uow.magazine.schema import (
     CapabilityManifest,
     AdapterLifecycleState,
 )
-from src.uow.magazine.registry import CapabilityRegistry
-from src.uow.magazine.manager import MagazineManager, MagazineRuntimeError
-from src.uow.inference.request_context import (
+from uow.magazine.registry import CapabilityRegistry
+from uow.magazine.manager import MagazineManager, MagazineRuntimeError
+from uow.inference.request_context import (
     InferenceRequest,
     InferenceResponse,
     CapabilityTarget,
     TypedProposal,
 )
-from src.uow.inference.gateway import InferenceGateway
-from src.uow.inference.model_backend import MockModelBackend, PyTorchPeftBackend
-from src.uow.inference.authority_bridge import AuthorityBridge
-from src.uow.contracts import (
+from uow.inference.gateway import InferenceGateway
+from uow.inference.model_backend import MockModelBackend, PyTorchPeftBackend
+from uow.inference.authority_bridge import AuthorityBridge
+from uow.contracts import (
     UoW,
     make_uow,
     Route,
@@ -37,8 +37,8 @@ from src.uow.contracts import (
     Successor,
     SuccessorKind,
 )
-from src.uow.state import WorldState
-from src.uow.engine import EvidenceLedger
+from uow.state import WorldState
+from uow.engine import EvidenceLedger
 
 
 def create_dummy_adapter_dir(tmp_path: Path, name: str, size: int = 1024) -> tuple[Path, str]:

@@ -5,7 +5,7 @@ import hashlib
 from pathlib import Path
 from typing import Tuple, Optional
 
-from src.uow.magazine.schema import CapabilityManifest
+from uow.magazine.schema import CapabilityManifest
 
 
 class VerificationError(Exception):

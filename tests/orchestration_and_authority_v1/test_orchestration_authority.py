@@ -1,16 +1,16 @@
 """Unit and conformance tests for Execution Planner, Authority Kernel, and Transport (WP06, WP07, WP08)."""
 import pytest
 
-from src.uow.capabilities import UniversalCapabilityRegistry
-from src.uow.expertise.domain import build_industrial_domain_package
-from src.uow.magazine.deployment import MagazineDeploymentEngine
-from src.uow.orchestration.planner import ExecutionPlanner
-from src.uow.authority.platform_authority import (
+from uow.capabilities import UniversalCapabilityRegistry
+from uow.expertise.domain import build_industrial_domain_package
+from uow.magazine.deployment import MagazineDeploymentEngine
+from uow.orchestration.planner import ExecutionPlanner
+from uow.authority.platform_authority import (
     PlatformAuthorityKernel,
     PlatformEvidenceLedger,
     PlatformRecoveryManager,
 )
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     CapabilityDescriptor,
     CapabilityKind,
     CapabilityProposal,
@@ -20,7 +20,7 @@ from src.uow.protocol.v1 import (
     WorkEvent,
     WorkRequest,
 )
-from src.uow.transport import (
+from uow.transport import (
     ArduinoUnoSerialLink,
     FramedTransportSession,
     NodeType,

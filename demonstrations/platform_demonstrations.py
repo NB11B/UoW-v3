@@ -14,12 +14,12 @@ from pathlib import Path
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
-from src.uow.capabilities import (
+from uow.capabilities import (
     CapabilityLifecycleState,
     CapabilityQuarantinedError,
     UniversalCapabilityRegistry,
 )
-from src.uow.expertise.domain import (
+from uow.expertise.domain import (
     ActionDefinition,
     DomainContextCompiler,
     DomainGroundingValidator,
@@ -28,13 +28,13 @@ from src.uow.expertise.domain import (
     SafetyGuard,
     build_industrial_domain_package,
 )
-from src.uow.magazine.deployment import DeploymentMode, MagazineDeploymentEngine
-from src.uow.orchestration.planner import ExecutionPlanner
-from src.uow.authority.platform_authority import (
+from uow.magazine.deployment import DeploymentMode, MagazineDeploymentEngine
+from uow.orchestration.planner import ExecutionPlanner
+from uow.authority.platform_authority import (
     PlatformAuthorityKernel,
     PlatformEvidenceLedger,
 )
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     CapabilityDescriptor,
     CapabilityKind,
     CapabilityPackageManifest,
@@ -45,7 +45,7 @@ from src.uow.protocol.v1 import (
     canonical_json,
     compute_digest,
 )
-from src.uow.transport import (
+from uow.transport import (
     ArduinoUnoSerialLink,
     FramedTransportSession,
     NodeType,

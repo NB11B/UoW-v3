@@ -14,9 +14,9 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 
-from src.uow.inference.model_backend import PyTorchPeftBackend
-from src.uow.magazine.manager import MagazineManager
-from src.uow.magazine.schema import CapabilityManifest
+from uow.inference.model_backend import PyTorchPeftBackend
+from uow.magazine.manager import MagazineManager
+from uow.magazine.schema import CapabilityManifest
 
 CANDIDATES = {
     "cerebras_111m": {

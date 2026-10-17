@@ -9,28 +9,28 @@ import threading
 import time
 import pytest
 
-from src.uow.magazine.schema import (
+from uow.magazine.schema import (
     CapabilityManifest,
     AdapterLifecycleState,
     TrainingLineage,
 )
-from src.uow.magazine.verification import ManifestVerifier
-from src.uow.magazine.compatibility import CompatibilityChecker
-from src.uow.magazine.registry import CapabilityRegistry
-from src.uow.magazine.residency import ResidencyPool
-from src.uow.magazine.scheduler import SerializedWorkerQueue
-from src.uow.magazine.rollback import AdapterTransactionGuard, RollbackError
-from src.uow.magazine.manager import MagazineManager, MagazineRuntimeError
-from src.uow.inference.request_context import (
+from uow.magazine.verification import ManifestVerifier
+from uow.magazine.compatibility import CompatibilityChecker
+from uow.magazine.registry import CapabilityRegistry
+from uow.magazine.residency import ResidencyPool
+from uow.magazine.scheduler import SerializedWorkerQueue
+from uow.magazine.rollback import AdapterTransactionGuard, RollbackError
+from uow.magazine.manager import MagazineManager, MagazineRuntimeError
+from uow.inference.request_context import (
     InferenceRequest,
     InferenceResponse,
     CapabilityTarget,
     StateReference,
 )
-from src.uow.inference.model_backend import MockModelBackend
-from src.uow.inference.output_validation import ProposalOutputValidator
-from src.uow.inference.routing import CapabilityRouter, RoutingResolutionError
-from src.uow.inference.gateway import InferenceGateway
+from uow.inference.model_backend import MockModelBackend
+from uow.inference.output_validation import ProposalOutputValidator
+from uow.inference.routing import CapabilityRouter, RoutingResolutionError
+from uow.inference.gateway import InferenceGateway
 
 
 @pytest.fixture

@@ -3,13 +3,13 @@ import hashlib
 from pathlib import Path
 import pytest
 
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     CapabilityDescriptor,
     CapabilityKind,
     CapabilityPackageManifest,
     QualificationStatus,
 )
-from src.uow.capabilities import (
+from uow.capabilities import (
     CapabilityLifecycleState,
     CapabilityNotFoundError,
     CapabilityQuarantinedError,

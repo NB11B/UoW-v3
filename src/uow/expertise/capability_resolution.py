@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
-from src.uow.expertise.specification import ExpertiseSpecification
+from uow.expertise.specification import ExpertiseSpecification
 
 
 class CapabilityResolver:

@@ -1,6 +1,6 @@
 """Conformance suite for UoW Canonical Protocol v1."""
 import pytest
-from src.uow.protocol.v1 import (
+from uow.protocol.v1 import (
     canonical_json,
     compute_digest,
     CapabilityDescriptor,

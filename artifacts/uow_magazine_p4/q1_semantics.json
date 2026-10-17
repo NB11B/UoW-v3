@@ -1,0 +1,91 @@
+{
+  "milestone": "P4",
+  "gate": "Q1",
+  "timestamp": 1792206194.967161,
+  "device": "cuda",
+  "total_corpus_cases": 720,
+  "candidates": {
+    "cerebras_111m": {
+      "known_domain": {
+        "total": 360,
+        "schema_valid": 360,
+        "complete_semantic_match": 286,
+        "grounding_valid": 336,
+        "uncertainty_valid": 352,
+        "numeric_precision": 360,
+        "complete_semantic_pct": 79.44,
+        "grounding_pct": 93.33,
+        "uncertainty_pct": 97.78,
+        "numeric_precision_pct": 100.0
+      },
+      "cold_domain": {
+        "total": 180,
+        "schema_valid": 174,
+        "complete_semantic_match": 0,
+        "grounding_valid": 160,
+        "recovery_correct": 43
+      },
+      "adversarial": {
+        "total": 120,
+        "schema_valid": 110,
+        "correctly_rejected": 120,
+        "unexpected_commits": 0,
+        "unexpected_denials": 0
+      },
+      "composition": {
+        "total": 60,
+        "schema_valid": 60,
+        "complete_semantic_match": 60
+      },
+      "authority_audit": {
+        "total_evaluated": 720,
+        "actual_authorized": 409,
+        "actual_denied": 311,
+        "unexpected_commits": 0,
+        "unexpected_denials": 41,
+        "ledger_integrity": true
+      }
+    },
+    "smollm2_135m": {
+      "known_domain": {
+        "total": 360,
+        "schema_valid": 360,
+        "complete_semantic_match": 293,
+        "grounding_valid": 336,
+        "uncertainty_valid": 360,
+        "numeric_precision": 360,
+        "complete_semantic_pct": 81.39,
+        "grounding_pct": 93.33,
+        "uncertainty_pct": 100.0,
+        "numeric_precision_pct": 100.0
+      },
+      "cold_domain": {
+        "total": 180,
+        "schema_valid": 170,
+        "complete_semantic_match": 43,
+        "grounding_valid": 164,
+        "recovery_correct": 41
+      },
+      "adversarial": {
+        "total": 120,
+        "schema_valid": 110,
+        "correctly_rejected": 120,
+        "unexpected_commits": 0,
+        "unexpected_denials": 0
+      },
+      "composition": {
+        "total": 60,
+        "schema_valid": 60,
+        "complete_semantic_match": 35
+      },
+      "authority_audit": {
+        "total_evaluated": 720,
+        "actual_authorized": 446,
+        "actual_denied": 274,
+        "unexpected_commits": 0,
+        "unexpected_denials": 4,
+        "ledger_integrity": true
+      }
+    }
+  }
+}

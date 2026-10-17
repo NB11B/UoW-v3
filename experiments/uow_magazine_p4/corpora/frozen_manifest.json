@@ -1,0 +1,12 @@
+{
+  "corpus_version": "uow.magazine.p4.frozen.v1",
+  "total_cases": 720,
+  "corpus_file": "experiments\\uow_magazine_p4\\corpora\\frozen_p4_cases.json",
+  "sha256": "36531360a439541a432efac6ee084e4c40ca99d7ad7f97a943b14007f725ab5d",
+  "splits": {
+    "known_domain_cases": 360,
+    "cold_domain_cases": 180,
+    "adversarial_cases": 120,
+    "composition_cases": 60
+  }
+}

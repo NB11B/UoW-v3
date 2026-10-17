@@ -1,0 +1,103 @@
+{
+  "milestone": "P4",
+  "gate": "Q3",
+  "timestamp": 1792207987.2643836,
+  "workloads": {
+    "industrial": {
+      "packet_count": 21,
+      "d0_deterministic": {
+        "strategy": "D0_deterministic_only",
+        "total_packets": 21,
+        "mean_latency_ms": 0.075,
+        "memory_overhead_mb": 0.0,
+        "faults_caught": 2,
+        "authorized_commits": 0,
+        "ledger_verified": true
+      },
+      "d1_shared_grammar": {
+        "strategy": "D1_shared_grammar",
+        "total_packets": 21,
+        "mean_latency_ms": 1679.27,
+        "memory_overhead_mb": 2.82,
+        "faults_caught": 2,
+        "unexpected_commits": 0,
+        "authorized_commits": 19,
+        "ledger_verified": true
+      },
+      "d2_dedicated_specialist": {
+        "strategy": "D2_dedicated_specialists",
+        "total_packets": 21,
+        "mean_latency_ms": 1664.42,
+        "memory_overhead_mb": 8.46,
+        "faults_caught": 2,
+        "unexpected_commits": 0,
+        "authorized_commits": 19,
+        "ledger_verified": true
+      }
+    },
+    "cybersecurity": {
+      "packet_count": 21,
+      "d0_deterministic": {
+        "strategy": "D0_deterministic_only",
+        "total_packets": 21,
+        "mean_latency_ms": 0.056,
+        "memory_overhead_mb": 0.0,
+        "faults_caught": 2,
+        "authorized_commits": 0,
+        "ledger_verified": true
+      },
+      "d1_shared_grammar": {
+        "strategy": "D1_shared_grammar",
+        "total_packets": 21,
+        "mean_latency_ms": 1771.04,
+        "memory_overhead_mb": 2.82,
+        "faults_caught": 2,
+        "unexpected_commits": 0,
+        "authorized_commits": 19,
+        "ledger_verified": true
+      },
+      "d2_dedicated_specialist": {
+        "strategy": "D2_dedicated_specialists",
+        "total_packets": 21,
+        "mean_latency_ms": 0.03,
+        "memory_overhead_mb": 8.46,
+        "faults_caught": 2,
+        "unexpected_commits": 0,
+        "authorized_commits": 0,
+        "ledger_verified": true
+      }
+    },
+    "logistics": {
+      "packet_count": 21,
+      "d0_deterministic": {
+        "strategy": "D0_deterministic_only",
+        "total_packets": 21,
+        "mean_latency_ms": 0.05,
+        "memory_overhead_mb": 0.0,
+        "faults_caught": 2,
+        "authorized_commits": 0,
+        "ledger_verified": true
+      },
+      "d1_shared_grammar": {
+        "strategy": "D1_shared_grammar",
+        "total_packets": 21,
+        "mean_latency_ms": 1666.2,
+        "memory_overhead_mb": 2.82,
+        "faults_caught": 2,
+        "unexpected_commits": 0,
+        "authorized_commits": 19,
+        "ledger_verified": true
+      },
+      "d2_dedicated_specialist": {
+        "strategy": "D2_dedicated_specialists",
+        "total_packets": 21,
+        "mean_latency_ms": 0.02,
+        "memory_overhead_mb": 8.46,
+        "faults_caught": 2,
+        "unexpected_commits": 0,
+        "authorized_commits": 0,
+        "ledger_verified": true
+      }
+    }
+  }
+}

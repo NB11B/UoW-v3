@@ -111,21 +111,44 @@ class PyTorchPeftBackend(ModelBackend):
 
     def generate(self, prompt: str, max_tokens: int = 200) -> str:
         import torch
+        from transformers import StoppingCriteria, StoppingCriteriaList
 
         if self.peft_model is None or self.tokenizer is None:
             raise RuntimeError("Backend not initialized for generation")
 
+        class JsonBalancedStoppingCriteria(StoppingCriteria):
+            def __init__(self, tokenizer, prompt_len):
+                self.tokenizer = tokenizer
+                self.prompt_len = prompt_len
+
+            def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
+                new_tokens = input_ids[0][self.prompt_len:]
+                if len(new_tokens) < 15:
+                    return False
+                last_str = self.tokenizer.decode(new_tokens[-1:])
+                if "}" in last_str:
+                    text = self.tokenizer.decode(new_tokens)
+                    first_brace = text.find("{")
+                    if first_brace != -1:
+                        if text[first_brace:].count("{") == text[first_brace:].count("}"):
+                            return True
+                return False
+
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        prompt_len = inputs["input_ids"].shape[1]
+        stopping_criteria = StoppingCriteriaList([JsonBalancedStoppingCriteria(self.tokenizer, prompt_len)])
+
         with torch.no_grad():
             output_tokens = self.peft_model.generate(
                 **inputs,
                 max_new_tokens=max_tokens,
+                stopping_criteria=stopping_criteria,
                 do_sample=False,
                 use_cache=False,
                 pad_token_id=self.tokenizer.pad_token_id,
                 eos_token_id=self.tokenizer.eos_token_id,
             )
-        gen_tokens = output_tokens[0][inputs["input_ids"].shape[1]:]
+        gen_tokens = output_tokens[0][prompt_len:]
         return self.tokenizer.decode(gen_tokens, skip_special_tokens=True)
 
 

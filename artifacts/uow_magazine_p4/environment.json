@@ -1,0 +1,89 @@
+{
+  "timestamp": 1792205524.82982,
+  "date_iso": "2026-10-17 02:52:04 UTC",
+  "os": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel"
+  },
+  "python": {
+    "version": "3.13.11 (tags/v3.13.11:6278944, Dec  5 2025, 16:26:58) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Users\\nateb\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+  },
+  "git": {
+    "branch": "qualification/uow-magazine-p4-local",
+    "commit": "d4b15d143907a02c89d0d5e065f37a026c85082c",
+    "dirty": "True"
+  },
+  "runtime_libraries": {
+    "torch": "2.11.0.dev20260127+cu128",
+    "cuda_available": true,
+    "cuda_version": "12.8",
+    "gpu_device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "transformers": "5.16.1",
+    "peft": "0.18.1",
+    "onnx": "1.20.1",
+    "onnxruntime": "1.24.4"
+  },
+  "frozen_candidates": {
+    "cerebras_111m": {
+      "model_id": "cerebras-archive/Cerebras-GPT-111M",
+      "pinned_revision": "b927d75e656e18f2d593fa883d6a5c1bbd9c1598",
+      "role": "Efficiency candidate",
+      "base_parameters": 111296256,
+      "adapters": {
+        "shared.operational": {
+          "adapter_dir": "checkpoints\\uow_magazine_p3\\cerebras_111m\\shared.operational",
+          "weights_sha256": "0aab99eac6654165b1a253828515be17a39824ac07dc91c747a76c9cf0c18401",
+          "config_sha256": "a8afbc2ab65a62f532cef552d4e9f042e61997b0fcbd3ab68413e9efa92e0fc6",
+          "weight_size_bytes": 985568
+        },
+        "shared.temporal": {
+          "adapter_dir": "checkpoints\\uow_magazine_p3\\cerebras_111m\\shared.temporal",
+          "weights_sha256": "cef5edac6e66a801f85c91c3c78cb3e8a87f6f552ebf8e908afae8e1e1e06188",
+          "config_sha256": "a8afbc2ab65a62f532cef552d4e9f042e61997b0fcbd3ab68413e9efa92e0fc6",
+          "weight_size_bytes": 985568
+        },
+        "shared.recovery": {
+          "adapter_dir": "checkpoints\\uow_magazine_p3\\cerebras_111m\\shared.recovery",
+          "weights_sha256": "4d90601152ddbe4bad49250fd36bd050f23c6b1fc8a08a5bfa467683ef4a3b6c",
+          "config_sha256": "a8afbc2ab65a62f532cef552d4e9f042e61997b0fcbd3ab68413e9efa92e0fc6",
+          "weight_size_bytes": 985568
+        }
+      }
+    },
+    "smollm2_135m": {
+      "model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+      "pinned_revision": "12fd25f773448f4305bc851493b8cae6d15a5f1e",
+      "role": "Behavioral reference",
+      "base_parameters": 134516736,
+      "adapters": {
+        "shared.operational": {
+          "adapter_dir": "checkpoints\\uow_magazine_p3\\smollm2_135m\\shared.operational",
+          "weights_sha256": "3aa864f79f115837ac82380f4e6d6ef3672c26a3dad303000a395a7c16735cdb",
+          "config_sha256": "2f8f59c2f237c97e14db1044e345e76c213a99820d1a6af5b2d0155c882b4806",
+          "weight_size_bytes": 1858776
+        },
+        "shared.temporal": {
+          "adapter_dir": "checkpoints\\uow_magazine_p3\\smollm2_135m\\shared.temporal",
+          "weights_sha256": "e242e30d3a2ed939c888a1032605c0c6c787fc4f5a2386519f76f2d356edd775",
+          "config_sha256": "2f8f59c2f237c97e14db1044e345e76c213a99820d1a6af5b2d0155c882b4806",
+          "weight_size_bytes": 1858776
+        },
+        "shared.recovery": {
+          "adapter_dir": "checkpoints\\uow_magazine_p3\\smollm2_135m\\shared.recovery",
+          "weights_sha256": "c63252972aeb87b28f8ec84cb5855e3efac1397f703ddedac302877055ed7870",
+          "config_sha256": "2f8f59c2f237c97e14db1044e345e76c213a99820d1a6af5b2d0155c882b4806",
+          "weight_size_bytes": 1858776
+        }
+      }
+    }
+  },
+  "archived_controls": {
+    "gpt_neo_125m": "EleutherAI/gpt-neo-125m",
+    "pythia_160m": "EleutherAI/pythia-160m",
+    "mamba_130m": "state-spaces/mamba-130m-hf (DISQUALIFIED_EDGE_AUTOGRAD_OOM)"
+  }
+}

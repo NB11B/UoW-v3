@@ -1,0 +1,47 @@
+{
+  "milestone": "P4",
+  "gate": "Q4",
+  "timestamp": 1792207582.4747849,
+  "profiles": {
+    "E1_workstation": {
+      "profile": "E1_workstation_sustained",
+      "total_cycles": 150,
+      "successful_commits": 145,
+      "faults_injected": 5,
+      "faults_recovered": 5,
+      "unexpected_commits": 0,
+      "elapsed_seconds": 0.015,
+      "mean_cycle_latency_ms": 0.1,
+      "initial_ram_mb": 518.98,
+      "final_ram_mb": 519.12,
+      "ram_drift_mb": 0.15,
+      "ledger_records": 145,
+      "ledger_hash_integrity": true,
+      "disposition": "QUALIFIED"
+    },
+    "E2_nano": {
+      "profile": "E2_nano_constrained_memory",
+      "total_cycles": 100,
+      "adapter_swaps_completed": 400,
+      "elapsed_seconds": 0.0,
+      "simulated_peak_ram_mb": 1009.12,
+      "max_allowable_budget_mb": 1600.0,
+      "headroom_mb": 590.88,
+      "zero_oom_verified": true,
+      "disposition": "QUALIFIED"
+    },
+    "E3_distributed": {
+      "profile": "E3_distributed_fault_recovery",
+      "total_cycles": 80,
+      "partitions_simulated": 5,
+      "replays_blocked": 5,
+      "unexpected_commits": 0,
+      "authorized_commits": 75,
+      "elapsed_seconds": 0.005,
+      "ledger_records": 75,
+      "ledger_hash_integrity": true,
+      "disposition": "QUALIFIED"
+    }
+  },
+  "overall_disposition": "QUALIFIED"
+}

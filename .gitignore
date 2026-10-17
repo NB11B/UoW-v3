@@ -18,6 +18,7 @@ artifacts/uow_magazine_1/corpora/
 !/artifacts/uow_magazine_p2/
 artifacts/uow_magazine_p2/corpora/
 !/artifacts/uow_magazine_p3/
+!/artifacts/uow_magazine_p4/
 .artifacts/
 *.onnx
 *.safetensors

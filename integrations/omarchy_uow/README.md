@@ -99,3 +99,33 @@ the plugin and gateway after qualification, run
 `PYTHONPATH=src:. python -m integrations.omarchy_uow.install_audio_plugin --uninstall`.
 It stops the widget and gateway, refuses to delete edited files, and retains
 the UoW receipt database and credentials in the state directory for review.
+
+## MAPEOGEOv2 and Obsidian local view
+
+The optional, one-shot exporter in `mapeogeo_journal.py`,
+`mapeogeo_mapping.py`, and `obsidian_export.py` reads a consistent copy of the
+existing UoW SQLite journal and replays every row before publishing notes.
+It uses the canonical `mapeogeo.psmsl.Observation` type for committed numeric
+sensor and audio telemetry claims. Authority decisions and effect outcomes are
+rendered separately. An accepted UoW receipt does not prove a physical sensor
+reading; exported observations retain `UNVERIFIED_CLAIM` and unknown measurement
+time. The exporter has no token, gateway request, or hardware capability.
+
+From this repository root, with MAPEOGEOv2 installed or available to the
+chosen Python interpreter:
+
+```sh
+python -m integrations.omarchy_uow.obsidian_export \
+  --db /path/to/private/uow.db \
+  --vault /path/to/private/mapeogeo-obsidian-vault \
+  --mapeogeo-commit <exact-40-character-v2-commit>
+```
+
+The vault contains `Generated/Index.md`, up to 100 recent observation notes
+and JSON sidecars, and up to 100 recent decision/effect notes. A manifest
+detects edits or added files under `Generated/` and refuses to overwrite them.
+Personal notes outside `Generated/` are untouched. The vault and generated
+files are owner-only. Open the vault folder in Obsidian using its **Open folder
+as vault** action. Markdown edits are never imported into UoW or MAPEOGEOv2.
+There is no background refresh or cloud synchronization configured by this
+integration.

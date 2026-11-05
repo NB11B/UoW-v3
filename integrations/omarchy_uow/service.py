@@ -18,7 +18,9 @@ from uow.engine import EvidenceLedger, propose, certify, commit
 from uow.state import canonical_json
 
 ID = re.compile(r"[A-Za-z0-9_-]{1,80}\Z")
-KINDS = {"observation.ingest", "observation.summarize"}
+KINDS = {"observation.ingest", "observation.summarize", "audio.stream.start", "audio.stream.stop", "audio.effect.record", "audio.telemetry.ingest", "audio.dsp.crossover.set"}
+AUDIO_PROFILE = {"source": "default-output-monitor", "destination": "192.168.254.75:4000", "sample_rate": 48000, "channels": 2, "sample_format": "s16le", "frames_per_packet": 256}
+AUDIO_OUTCOMES = {"STARTED", "STOPPED", "FAILED_PREFLIGHT", "TELEMETRY_LOST", "INTERRUPTED"}
 
 def digest(value):
     return hashlib.sha256(canonical_json(value).encode()).hexdigest()
@@ -43,6 +45,14 @@ def validate_observation(obs):
     for value, lower, upper in [(reading["value"], lower, upper), (obs["confidence"], 0, 1)]:
         if type(value) not in (int, float) or not lower <= value <= upper or not math.isfinite(value):
             raise ValueError("READING_RANGE")
+
+def audio_session(payload, fields):
+    if not isinstance(payload, dict) or set(payload) != fields or not valid_id(payload.get("session_id")):
+        raise ValueError("AUDIO_SCHEMA")
+    return "audio.session." + payload["session_id"]
+
+def finite_number(value, lower, upper):
+    return type(value) in (int, float) and math.isfinite(value) and lower <= value <= upper
 
 class Service:
     def __init__(self, db, policy, tokens):
@@ -86,6 +96,49 @@ class Service:
                 raise ValueError("OBSERVATION_MISSING")
             guard = Guard(GuardOp.EXISTS, key)
             mutations = (Mutation(MutationOp.SET, "summary", {"observation_id": payload["observation_id"], "value": obs["reading"]["value"], "unit": obs["reading"]["unit"], "trust": "UNVERIFIED_CLAIM"}),)
+        elif kind == "audio.stream.start":
+            key = audio_session(payload, set(AUDIO_PROFILE) | {"session_id"})
+            if any(type(payload[name]) is not type(value) or payload[name] != value for name, value in AUDIO_PROFILE.items()):
+                raise ValueError("AUDIO_PROFILE")
+            guard = Guard(GuardOp.NOT_EXISTS, key)
+            mutations = (Mutation(MutationOp.SET, key, {"intent": "START", "outcome": "UNCERTAIN", "profile": AUDIO_PROFILE}),)
+        elif kind == "audio.stream.stop":
+            key = audio_session(payload, {"session_id"})
+            prior = state.get(key)
+            if prior is None:
+                raise ValueError("AUDIO_SESSION_MISSING")
+            guard = Guard(GuardOp.EXISTS, key)
+            mutations = (Mutation(MutationOp.SET, key, {**prior, "intent": "STOP", "outcome": "UNCERTAIN"}),)
+        elif kind == "audio.effect.record":
+            key = audio_session(payload, {"session_id", "outcome"})
+            prior = state.get(key)
+            if prior is None or payload["outcome"] not in AUDIO_OUTCOMES:
+                raise ValueError("AUDIO_OUTCOME")
+            if payload["outcome"] == "STARTED" and prior["intent"] != "START":
+                raise ValueError("AUDIO_OUTCOME_ORDER")
+            if payload["outcome"] == "STOPPED" and prior["intent"] != "STOP":
+                raise ValueError("AUDIO_OUTCOME_ORDER")
+            guard = Guard(GuardOp.EXISTS, key)
+            mutations = (Mutation(MutationOp.SET, key, {**prior, "outcome": payload["outcome"]}),)
+        elif kind == "audio.telemetry.ingest":
+            fields = {"session_id", "receiver_sequence", "packet_rate", "drops", "underruns", "crossover_low_hz", "crossover_high_hz"}
+            key = audio_session(payload, fields)
+            if state.get(key) is None:
+                raise ValueError("AUDIO_SESSION_MISSING")
+            for name in ("receiver_sequence", "drops", "underruns"):
+                if type(payload[name]) is not int or not 0 <= payload[name] <= 2**64 - 1:
+                    raise ValueError("AUDIO_TELEMETRY_RANGE")
+            for name, lo, hi in (("packet_rate", 0, 1000), ("crossover_low_hz", 0, 24000), ("crossover_high_hz", 0, 24000)):
+                if not finite_number(payload[name], lo, hi):
+                    raise ValueError("AUDIO_TELEMETRY_RANGE")
+            obs_key = "audio.telemetry." + payload["session_id"]
+            old = state.get(obs_key)
+            if old is not None and payload["receiver_sequence"] <= old["receiver_sequence"]:
+                raise ValueError("AUDIO_TELEMETRY_STALE")
+            guard = Guard(GuardOp.EXISTS, key)
+            mutations = (Mutation(MutationOp.SET, obs_key, {**payload, "trust": "UNVERIFIED_CLAIM"}),)
+        elif kind == "audio.dsp.crossover.set":
+            raise ValueError("HARDWARE_LIMITS_UNSPECIFIED")
         else:
             raise ValueError("UNKNOWN_CAPABILITY")
         return make_uow(kind, [Route(guard, mutations, Successor.preserve())])

@@ -90,6 +90,10 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(self.s.handle(self.req(token="\ud800"))["decision"], "DENIED")
         obs = copy.deepcopy(OBS); obs["reading"]["value"] = 10**400
         self.assertEqual(self.s.handle(self.req(payload=obs))["decision"], "DENIED")
+        obs = copy.deepcopy(OBS); obs["sensor_id"] = "\ud800"
+        self.assertEqual(self.s.handle(self.req(payload=obs))["decision"], "DENIED")
+        obs = copy.deepcopy(OBS); obs["extra"] = "\ud800"
+        self.assertEqual(self.s.handle(self.req("extra", payload=obs))["decision"], "DENIED")
     def test_celsius_observation_summary(self):
         obs = copy.deepcopy(OBS)
         obs["reading"] = {"value": 51.25, "unit": "C"}
@@ -97,8 +101,6 @@ class ServiceTests(unittest.TestCase):
         result = self.s.handle(self.req("r2", "operator-secret", "observation.summarize", {"observation_id": "o1"}))
         self.assertEqual(result["decision"], "COMMITTED")
         self.assertEqual(self.s.state.get("summary")["unit"], "C")
-        obs = copy.deepcopy(OBS); obs["sensor_id"] = "\ud800"
-        self.assertEqual(self.s.handle(self.req(payload=obs))["decision"], "DENIED")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

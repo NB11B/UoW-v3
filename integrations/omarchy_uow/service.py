@@ -135,7 +135,8 @@ class Service:
         req["principal"] = principal
         try:
             raw_req = canonical_json(req)
-        except (TypeError, ValueError, OverflowError):
+            raw_req.encode("utf-8")
+        except (TypeError, ValueError, OverflowError, UnicodeError):
             return denied("NONCANONICAL_INPUT")
         self.db.execute("BEGIN IMMEDIATE")
         try:

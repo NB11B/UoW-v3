@@ -11,6 +11,20 @@ The latter writes a bounded summary to local UoW state; it does not operate
 hardware. Each committed request, state, and receipt is stored in one SQLite
 transaction. Startup replays and verifies the hash-linked journal.
 
+The optional Unix socket gateway accepts the same JSON-lines requests locally:
+
+```sh
+PYTHONPATH=src:. python -m integrations.omarchy_uow.gateway \
+  --socket /path/to/private/uow.sock --db /path/to/state.db \
+  --policy /path/to/policy.json --tokens /path/to/tokens.json
+```
+
+The socket is created with owner-only permissions and the gateway refuses an
+occupied path. A bearer token still determines the principal and capabilities;
+the socket itself does not authorize an operation. Keep the socket directory
+private. The gateway serves one request at a time to preserve SQLite's
+single-threaded state and receipt sequence.
+
 To run from the repository root:
 
 ```sh
@@ -27,6 +41,8 @@ principal has `observation.ingest`. It reads a real temperature and prints a
 receipt. Keep token values private; they are not written to the journal.
 
 This proves authority at the service interface. Programs with the same OS
-user identity can still access its configuration and database. Physical
-effects, sensor calibration, and OS-enforced isolation are outside this
-integration's qualification scope.
+user identity can still access its configuration and database or bypass this
+gateway. Bubblewrap works on the host and can hide the user's home from a
+child process, but no real agent has been launched or qualified in such a
+profile. Physical effects, sensor calibration, and OS-enforced isolation are
+outside this integration's qualification scope.

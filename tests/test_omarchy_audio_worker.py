@@ -72,12 +72,35 @@ class WorkerTests(unittest.TestCase):
         self.worker.step(0.1)
         self.assertEqual(len(self.transport.sent), 2)
 
+    def test_queued_telemetry_cannot_skip_silent_preflight(self):
+        self.transport.received.append((tm(1), ("192.168.254.75", 54321)))
+        self.worker.heartbeat(0)
+        self.worker.step(0)
+        self.assertEqual(len(self.capture), 0)
+        self.assertEqual(len(self.transport.sent), 1)
+        self.assertEqual(self.worker.status()["state"], "preflight")
+        self.transport.received.append((tm(2), ("192.168.254.75", 54321)))
+        self.worker.step(0.1)
+        self.assertEqual(len(self.capture), 1)
+
     def test_off_stops_even_when_uow_unavailable(self):
         self.preflight()
         self.worker.uow = lambda *args: (_ for _ in ()).throw(ConnectionError())
         self.worker.off()
         self.assertTrue(self.capture[0].closed)
         self.assertEqual(self.worker.status()["state"], "off")
+
+    def test_gateway_loss_during_stream_closes_capture(self):
+        self.preflight()
+        self.capture[0].frames = [bytes(1024)]
+        self.transport.received.append((tm(2), ("192.168.254.75", 54321)))
+        self.worker.uow = lambda *args: (_ for _ in ()).throw(ConnectionError())
+        before = len(self.transport.sent)
+        self.worker.heartbeat(1.2)
+        self.worker.step(1.2)
+        self.assertTrue(self.capture[0].closed)
+        self.assertNotEqual(self.worker.status()["state"], "streaming")
+        self.assertEqual(len(self.transport.sent), before)
 
     def test_stale_telemetry_and_heartbeat_stop_capture(self):
         self.preflight()

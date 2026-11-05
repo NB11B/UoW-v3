@@ -27,7 +27,7 @@ BarWidget {
     try {
       if (raw.length > 4096) return
       var value = JSON.parse(raw)
-      var allowed = ["waiting", "off", "preflight", "streaming", "receiver-wait", "denied", "no-monitor", "capture-error", "error"]
+      var allowed = ["waiting", "off", "preflight", "streaming", "receiver-wait", "gateway-wait", "denied", "no-monitor", "capture-error", "state-error", "error"]
       if (!value || allowed.indexOf(value.state) < 0 || typeof value.enabled !== "boolean") return
       if (value.source !== null && value.source !== undefined && (typeof value.source !== "string" || value.source.length > 160)) return
       root.audioStatus = value
@@ -83,7 +83,7 @@ BarWidget {
     id: button
     anchors.fill: parent
     bar: root.bar
-    text: root.audioStatus.state === "streaming" ? "♫" : root.audioStatus.state === "off" ? "◼" : "♪"
+    text: root.audioStatus.state === "streaming" ? "♫" : root.audioStatus.state === "off" ? "◼" : ["waiting", "preflight", "receiver-wait"].indexOf(root.audioStatus.state) >= 0 ? "♪" : "!"
     slotSize: Style.bar.statusSlot
     tooltipText: "Adaptive Audio: " + root.audioStatus.state
     onPressed: function(b) { root.toggle() }

@@ -9,8 +9,9 @@ from .service import AUDIO_PROFILE
 
 
 class AudioWorker:
-    def __init__(self, monitor=default_monitor, capture=None, transport=None, uow=None):
+    def __init__(self, monitor=default_monitor, capture=None, transport=None, uow=None, session_store=None):
         self.monitor, self.capture_factory, self.transport, self.uow = monitor, capture, transport, uow
+        self.session_store = session_store
         self.desired = True
         self.last_heartbeat = None
         self.session_id = None
@@ -55,7 +56,9 @@ class AudioWorker:
         if self.session_id is not None:
             if stop_intent:
                 self._request("audio.stream.stop", {"session_id": self.session_id})
-            self._request("audio.effect.record", {"session_id": self.session_id, "outcome": outcome})
+            recorded = self._request("audio.effect.record", {"session_id": self.session_id, "outcome": outcome})
+            if recorded and self.session_store is not None:
+                self.session_store.remove(self.session_id)
         self.session_id = None
         self.source = None
         self.telemetry = None
@@ -78,6 +81,10 @@ class AudioWorker:
         if now < self.retry_after:
             return
         if self.session_id is None:
+            if self.session_store is not None and not self.session_store.reconcile(self.uow):
+                self.mode = "gateway-wait"
+                self.retry_after = now + 1
+                return
             try:
                 source = self.monitor()
             except (OSError, ValueError, TimeoutError):
@@ -85,6 +92,12 @@ class AudioWorker:
                 self.retry_after = now + 1
                 return
             session_id = uuid.uuid4().hex
+            if self.session_store is not None:
+                try:
+                    self.session_store.add(session_id)
+                except (OSError, ValueError):
+                    self.mode = "state-error"
+                    return
             if not self._request("audio.stream.start", {"session_id": session_id, **AUDIO_PROFILE}):
                 self.mode = "denied"
                 self.retry_after = now + 1
@@ -94,6 +107,16 @@ class AudioWorker:
             self.last_observation = now
             self.next_preflight = now
             self.mode = "preflight"
+            # Ignore datagrams queued before this new session sent anything.
+            # If the queue is flooded, stay closed and retry draining later.
+            for _ in range(64):
+                if self.transport.receive() is None:
+                    break
+            else:
+                return
+            self._send(bytes(1024))
+            self.next_preflight = now + 0.1
+            return
         elif self.capture is not None:
             try:
                 source = self.monitor()
@@ -139,6 +162,15 @@ class AudioWorker:
             self.mode = "receiver-wait"
             self.retry_after = now + 1
             return
+        if self.telemetry is not None and self.telemetry.sequence != self.last_observed_sequence and now - self.last_observation >= 1:
+            tm = self.telemetry
+            if not self._request("audio.telemetry.ingest", {"session_id": self.session_id, "receiver_sequence": tm.sequence, "packet_rate": self.packet_rate, "drops": tm.drops, "underruns": tm.underruns, "crossover_low_hz": tm.low_hz, "crossover_high_hz": tm.high_hz}):
+                self._close("INTERRUPTED", stop_intent=True)
+                self.mode = "gateway-wait"
+                self.retry_after = now + 1
+                return
+            self.last_observed_sequence = tm.sequence
+            self.last_observation = now
         pcm = self.capture.read() if now >= self.next_send else None
         if pcm is not None:
             if len(pcm) != 1024:
@@ -153,11 +185,6 @@ class AudioWorker:
             if now - self.rate_start >= 1:
                 self.packet_rate = self.packets / (now - self.rate_start)
                 self.rate_start, self.packets = now, 0
-        if self.telemetry is not None and self.telemetry.sequence != self.last_observed_sequence and now - self.last_observation >= 1:
-            tm = self.telemetry
-            if self._request("audio.telemetry.ingest", {"session_id": self.session_id, "receiver_sequence": tm.sequence, "packet_rate": self.packet_rate, "drops": tm.drops, "underruns": tm.underruns, "crossover_low_hz": tm.low_hz, "crossover_high_hz": tm.high_hz}):
-                self.last_observed_sequence = tm.sequence
-            self.last_observation = now
 
     def status(self):
         tm = self.telemetry

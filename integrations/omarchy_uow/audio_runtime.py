@@ -14,6 +14,7 @@ import uuid
 
 from .audio_protocol import TARGET, AUDIO_PORT, TELEMETRY_PORT, default_monitor
 from .audio_worker import AudioWorker
+from .service import valid_id
 
 
 class SocketUoW:
@@ -56,6 +57,58 @@ def save_preference(path: Path, enabled: bool):
         temp.replace(path)
     finally:
         temp.unlink(missing_ok=True)
+
+
+class PendingSessions:
+    """Durable unresolved intents; restart reconciles before a new stream."""
+    def __init__(self, path: Path):
+        self.path = Path(path)
+
+    def pending(self):
+        if not self.path.exists():
+            return []
+        value = json.loads(self.path.read_text())
+        if not isinstance(value, list) or len(value) > 32 or any(not valid_id(item) for item in value) or len(set(value)) != len(value):
+            raise ValueError("PENDING_SESSIONS")
+        return value
+
+    def _write(self, sessions):
+        self.path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        temp = self.path.with_name(self.path.name + "." + uuid.uuid4().hex + ".tmp")
+        try:
+            with temp.open("x") as file:
+                os.fchmod(file.fileno(), 0o600)
+                json.dump(sessions, file)
+                file.flush(); os.fsync(file.fileno())
+            temp.replace(self.path)
+        finally:
+            temp.unlink(missing_ok=True)
+
+    def add(self, session_id):
+        sessions = self.pending()
+        if not valid_id(session_id) or session_id in sessions or len(sessions) >= 32:
+            raise ValueError("PENDING_SESSION_ADD")
+        self._write(sessions + [session_id])
+
+    def remove(self, session_id):
+        self._write([item for item in self.pending() if item != session_id])
+
+    def reconcile(self, uow):
+        for session_id in self.pending():
+            try:
+                stopped = uow("audio.stream.stop", {"session_id": session_id})
+                if stopped.get("reason") == "AUDIO_SESSION_MISSING":
+                    self.remove(session_id)
+                    continue
+                if stopped.get("decision") != "COMMITTED":
+                    return False
+                outcome = uow("audio.effect.record", {"session_id": session_id, "outcome": "INTERRUPTED"})
+                if outcome.get("decision") != "COMMITTED":
+                    return False
+                self.remove(session_id)
+            except (OSError, ValueError, ConnectionError, TimeoutError):
+                return False
+        return True
 
 
 class UDPTransport:
@@ -143,7 +196,7 @@ def serve(args):
             monitor_cache["name"] = default_monitor()
             monitor_cache["checked"] = now
         return monitor_cache["name"]
-    worker = AudioWorker(current_monitor, ParecCapture, transport, uow)
+    worker = AudioWorker(current_monitor, ParecCapture, transport, uow, PendingSessions(state / "sessions.json"))
     worker.desired = load_preference(preference)
     with socket.socket(socket.AF_UNIX) as server:
         old_umask = os.umask(0o077)

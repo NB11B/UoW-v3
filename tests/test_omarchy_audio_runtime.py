@@ -3,13 +3,38 @@ import tempfile
 import threading
 import unittest
 from unittest.mock import Mock, patch
+import uuid
 
-from integrations.omarchy_uow.audio_runtime import ParecCapture, SocketUoW, load_preference, save_preference
+from integrations.omarchy_uow.audio_runtime import ParecCapture, PendingSessions, SocketUoW, load_preference, save_preference
+from integrations.omarchy_uow.audio_worker import AudioWorker
 from integrations.omarchy_uow.gateway import Gateway
-from integrations.omarchy_uow.service import AUDIO_PROFILE
+from integrations.omarchy_uow.service import AUDIO_PROFILE, Service
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_restart_reconciles_unfinished_session_before_new_start(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            store = PendingSessions(root / "sessions.json")
+            service = Service(root / "uow.db", {"operator": ["audio.stream.start", "audio.stream.stop"], "audio_worker": ["audio.effect.record"]}, {"operator-token": "operator", "worker-token": "audio_worker"})
+            def uow(kind, payload):
+                token = "worker-token" if kind == "audio.effect.record" else "operator-token"
+                return service.handle({"request_id": uuid.uuid4().hex, "token": token, "kind": kind, "payload": payload})
+            class Transport:
+                def __init__(self): self.received = []
+                def send(self, packet): pass
+                def receive(self): return self.received.pop(0) if self.received else None
+            net = Transport()
+            first = AudioWorker(lambda: "speaker.monitor", lambda _: Mock(read=lambda: None), net, uow, store)
+            first.heartbeat(0); first.step(0)
+            old_session = first.session_id
+            self.assertIn(old_session, store.pending())
+            second = AudioWorker(lambda: "speaker.monitor", lambda _: Mock(read=lambda: None), Transport(), uow, store)
+            second.heartbeat(1); second.step(1)
+            self.assertEqual(service.state.get("audio.session." + old_session)["outcome"], "INTERRUPTED")
+            self.assertNotIn(old_session, store.pending())
+            service.close()
+
     def test_capture_never_accumulates_unbounded_audio(self):
         capture = ParecCapture.__new__(ParecCapture)
         capture.process = Mock()

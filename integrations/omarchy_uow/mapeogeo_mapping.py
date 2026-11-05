@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
+import re
 
 from mapeogeo.psmsl.latent import Observation
 
 from .mapeogeo_journal import JournalRow
-from .service import validate_observation
+from .service import KINDS, validate_observation
 
 
 AUDIO_FIELDS = (
@@ -103,7 +104,14 @@ def map_decision(row: JournalRow) -> DecisionView | None:
     if decision not in {"COMMITTED", "DENIED"}:
         raise ValueError("DECISION_MAPPING")
     payload = row.request.get("payload")
-    session_id = payload.get("session_id") if isinstance(payload, dict) else None
+    safe_kind = kind if isinstance(kind, str) and kind in KINDS else "UNKNOWN_CAPABILITY"
+    safe_principal = row.request.get("principal")
+    if not isinstance(safe_principal, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", safe_principal):
+        safe_principal = "UNKNOWN_PRINCIPAL"
+    safe_reason = row.response.get("reason")
+    if not isinstance(safe_reason, str) or not re.fullmatch(r"[A-Z0-9_]{1,80}", safe_reason):
+        safe_reason = "REJECTED_INPUT"
+    session_id = payload.get("session_id") if decision == "COMMITTED" and isinstance(payload, dict) else None
     outcome = None
     if decision == "COMMITTED":
         if kind in {"audio.stream.start", "audio.stream.stop"}:
@@ -116,11 +124,11 @@ def map_decision(row: JournalRow) -> DecisionView | None:
         sequence=row.sequence,
         entry_hash=row.entry_hash,
         request_id=str(row.request.get("request_id", "")),
-        kind=str(kind),
+        kind=safe_kind,
         decision=decision,
-        reason=str(row.response.get("reason", "")),
-        principal=str(row.request.get("principal", "")),
-        session_id=session_id if isinstance(session_id, str) else None,
+        reason=safe_reason,
+        principal=safe_principal,
+        session_id=session_id if isinstance(session_id, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,80}", session_id) else None,
         outcome=outcome if isinstance(outcome, str) else None,
         pre_state_hash=receipt.get("pre_state_hash"),
         post_state_hash=receipt.get("post_state_hash"),

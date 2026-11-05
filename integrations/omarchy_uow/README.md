@@ -125,7 +125,19 @@ The vault contains `Generated/Index.md`, up to 100 recent observation notes
 and JSON sidecars, and up to 100 recent decision/effect notes. A manifest
 detects edits or added files under `Generated/` and refuses to overwrite them.
 Personal notes outside `Generated/` are untouched. The vault and generated
-files are owner-only. Open the vault folder in Obsidian using its **Open folder
+files are owner-only. Older generated trees are retained under the private
+`.mapeogeo-history/` folder, so an edit racing with refresh is not discarded;
+periodic pruning is not automatic. A refresh rejects a journal whose previous
+published root is not a prefix of the current verified journal. Open the vault
+folder in Obsidian using its **Open folder
 as vault** action. Markdown edits are never imported into UoW or MAPEOGEOv2.
 There is no background refresh or cloud synchronization configured by this
 integration.
+
+The MAPEOGEOv2-dependent tests skip when that private package is unavailable,
+so the core UoW CI job does not need cross-repository credentials. Run them
+locally with the pinned MAPEOGEOv2 checkout in the Python environment:
+
+```sh
+python -m pytest -q tests/test_omarchy_mapeogeo_mapping.py tests/test_omarchy_obsidian_export.py
+```

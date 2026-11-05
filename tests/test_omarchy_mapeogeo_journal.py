@@ -99,3 +99,10 @@ def test_snapshot_is_consistent_during_append(tmp_path):
     assert len(rows) >= 1
     assert root == rows[-1].entry_hash
     assert [row.sequence for row in rows] == list(range(1, len(rows) + 1))
+
+
+def test_wrong_sqlite_file_is_not_an_empty_verified_journal(tmp_path):
+    db = tmp_path / "empty.db"
+    db.touch()
+    with pytest.raises(ValueError, match="JOURNAL_SCHEMA"):
+        snapshot_and_verify(db)

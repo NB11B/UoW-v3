@@ -4,6 +4,8 @@ import sqlite3
 
 import pytest
 
+pytest.importorskip("mapeogeo")
+
 from integrations.omarchy_uow.obsidian_export import refresh
 from integrations.omarchy_uow.service import Service
 
@@ -33,6 +35,7 @@ def test_export_creates_linked_private_vault_with_no_reverse_input(tmp_path):
     assert "journal sequence" in note.lower()
     sidecar = json.loads((vault / "Generated" / "Observations" / "uow-obs0.json").read_text())
     assert sidecar["schema"] == "mapeogeo.psmsl.observation"
+    assert sidecar["metadata"]["mapeogeo_commit"] == "1346330"
     assert "token" not in index.lower() + note.lower()
     assert os.stat(vault).st_mode & 0o777 == 0o700
     assert os.stat(vault / "Generated" / "Index.md").st_mode & 0o777 == 0o600
@@ -83,3 +86,82 @@ def test_corrupt_journal_leaves_previous_export_untouched(tmp_path):
     with pytest.raises(ValueError, match="JOURNAL_INTEGRITY"):
         refresh(db, vault, "1346330")
     assert (vault / "Generated" / "Index.md").read_bytes() == before
+
+
+def test_wrong_database_and_truncated_prefix_cannot_replace_export(tmp_path):
+    db, vault = tmp_path / "uow.db", tmp_path / "vault"
+    make_journal(db, observations=2)
+    refresh(db, vault, "1346330")
+    before = (vault / "Generated" / "Index.md").read_bytes()
+    with pytest.raises(ValueError, match="JOURNAL_SCHEMA"):
+        refresh(tmp_path / "wrong.db", vault, "1346330")
+    with sqlite3.connect(db) as connection:
+        connection.execute("DELETE FROM journal WHERE n>1")
+    with pytest.raises(ValueError, match="JOURNAL_REGRESSION"):
+        refresh(db, vault, "1346330")
+    assert (vault / "Generated" / "Index.md").read_bytes() == before
+
+
+def test_edit_during_staging_is_preserved(tmp_path, monkeypatch):
+    from integrations.omarchy_uow import obsidian_export
+    db, vault = tmp_path / "uow.db", tmp_path / "vault"
+    make_journal(db)
+    refresh(db, vault, "1346330")
+    note = vault / "Generated" / "Observations" / "uow-obs0.md"
+    original = obsidian_export._write_private
+    edited = False
+
+    def edit_during_write(root, name, data):
+        nonlocal edited
+        if not edited:
+            note.write_text(note.read_text() + "\nconcurrent edit\n")
+            edited = True
+        return original(root, name, data)
+
+    monkeypatch.setattr(obsidian_export, "_write_private", edit_during_write)
+    with pytest.raises(ValueError, match="GENERATED_CONFLICT"):
+        refresh(db, vault, "1346330")
+    assert "concurrent edit" in note.read_text()
+
+
+def test_edit_after_last_check_survives_in_private_history(tmp_path, monkeypatch):
+    db, vault = tmp_path / "uow.db", tmp_path / "vault"
+    make_journal(db)
+    refresh(db, vault, "1346330")
+    note = vault / "Generated" / "Observations" / "uow-obs0.md"
+    generated = vault / "Generated"
+    original_rename = type(generated).rename
+
+    def edit_at_swap(path, target):
+        if path == generated and target.name.startswith(".mapeogeo-backup-"):
+            note.write_text(note.read_text() + "\nlate edit\n")
+        return original_rename(path, target)
+
+    monkeypatch.setattr(type(generated), "rename", edit_at_swap)
+    refresh(db, vault, "1346330")
+    history = list((vault / ".mapeogeo-history").iterdir())
+    assert len(history) == 1
+    assert "late edit" in (history[0] / "Observations" / "uow-obs0.md").read_text()
+
+
+def test_maximum_valid_request_id_exports(tmp_path):
+    db, vault = tmp_path / "uow.db", tmp_path / "vault"
+    service = Service(db, {"sensor": ["observation.ingest"]}, {"secret": "sensor"})
+    request_id = "r" * 80
+    payload = {"observation_id": "o", "sensor_id": "s", "sensor_type": "ENVIRONMENTAL_PROBE", "causal_epoch": 1, "modality": "NUMERIC_GAUGE", "reading": {"value": 1, "unit": "C"}, "confidence": 0.5}
+    assert service.handle({"request_id": request_id, "token": "secret", "kind": "observation.ingest", "payload": payload})["decision"] == "COMMITTED"
+    service.close()
+    refresh(db, vault, "1346330")
+    assert (vault / "Generated" / "Observations" / ("uow-" + request_id + ".md")).is_file()
+
+
+def test_symlink_lock_refused_without_touching_target(tmp_path):
+    db, vault = tmp_path / "uow.db", tmp_path / "vault"
+    make_journal(db)
+    vault.mkdir()
+    target = tmp_path / "private"
+    target.write_text("keep")
+    (vault / ".mapeogeo-export.lock").symlink_to(target)
+    with pytest.raises(ValueError, match="INVALID_LOCK"):
+        refresh(db, vault, "1346330")
+    assert target.read_text() == "keep"

@@ -2,6 +2,8 @@ import json
 
 import pytest
 
+pytest.importorskip("mapeogeo")
+
 from integrations.omarchy_uow.mapeogeo_journal import JournalRow
 from integrations.omarchy_uow.mapeogeo_mapping import map_decision, map_observation
 from mapeogeo.psmsl.serialization import serialize_observation
@@ -75,3 +77,11 @@ def test_unexpected_trust_state_fails_closed():
     item = row("observation.ingest", payload)
     with pytest.raises(ValueError, match="OBSERVATION_MAPPING"):
         map_observation(item)
+
+
+def test_denied_unknown_kind_never_exports_unvalidated_request_content():
+    item = row("PASSWORD_FROM_REQUEST", {"session_id": "SECRET_SESSION_VALUE"}, decision="DENIED", reason="CAPABILITY_DENIED")
+    decision = map_decision(item)
+    assert decision.kind == "UNKNOWN_CAPABILITY"
+    assert decision.session_id is None
+    assert decision.outcome is None

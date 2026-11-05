@@ -22,12 +22,20 @@ class JournalRow:
 
 def snapshot_and_verify(db: Path) -> tuple[list[JournalRow], str]:
     """Return rows only after a consistent copy passes full service replay."""
-    db = Path(db).resolve(strict=True)
+    try:
+        db = Path(db).resolve(strict=True)
+    except FileNotFoundError as exc:
+        raise ValueError("JOURNAL_SCHEMA: missing database") from exc
     with tempfile.TemporaryDirectory(prefix="uow-mapeogeo-") as directory:
         copied = Path(directory) / "journal.db"
         with sqlite3.connect(db.as_uri() + "?mode=ro", uri=True) as source:
             with sqlite3.connect(copied) as destination:
                 source.backup(destination)
+        with sqlite3.connect(copied) as snapshot:
+            table = snapshot.execute("SELECT type FROM sqlite_master WHERE name='journal'").fetchone()
+            columns = {row[1] for row in snapshot.execute("PRAGMA table_info(journal)")}
+            if table != ("table",) or columns != {"n", "request_id", "request", "response", "prev_hash", "entry_hash"}:
+                raise ValueError("JOURNAL_SCHEMA: expected UoW journal")
         service = Service(copied, {}, {})
         try:
             root = service.root

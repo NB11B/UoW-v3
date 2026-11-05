@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import fcntl
 import hashlib
@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import tempfile
 import uuid
 
@@ -22,6 +23,7 @@ from .mapeogeo_mapping import DecisionView, map_decision, map_observation
 
 
 SAFE_ID = re.compile(r"[A-Za-z0-9_-]{1,80}\Z")
+SAFE_OBSERVATION_ID = re.compile(r"[A-Za-z0-9_-]{1,84}\Z")
 SAFE_COMMIT = re.compile(r"[0-9a-f]{7,40}\Z")
 
 
@@ -117,11 +119,46 @@ def _write_private(root: Path, name: str, data: str) -> None:
     path.chmod(0o600)
 
 
-def refresh(db: Path, vault: Path, mapeogeo_commit: str) -> ExportResult:
-    """Verify, map, and publish a bounded private vault snapshot."""
-    if not SAFE_COMMIT.fullmatch(mapeogeo_commit):
-        raise ValueError("INVALID_MAPEOGEO_COMMIT")
+def _recover_backups(vault: Path) -> None:
+    generated = vault / "Generated"
+    backups = list(vault.glob(".mapeogeo-backup-*"))
+    if not backups:
+        return
+    for backup in backups:
+        _manifest_check(backup)
+    if not generated.exists() and len(backups) == 1:
+        backups[0].rename(generated)
+        return
+    if not generated.exists():
+        raise ValueError("GENERATED_CONFLICT: ambiguous backup")
+    history = vault / ".mapeogeo-history"
+    if history.is_symlink():
+        raise ValueError("GENERATED_CONFLICT: symlink history")
+    history.mkdir(mode=0o700, exist_ok=True)
+    for backup in backups:
+        backup.rename(history / backup.name)
+
+
+def _check_continuity(generated: Path, rows) -> None:
+    if not generated.exists() or not (generated / "Index.md").exists():
+        return
+    index = (generated / "Index.md").read_text()
+    sequence_match = re.search(r"^- Last verified journal sequence: (\d+)$", index, re.MULTILINE)
+    root_match = re.search(r"^- Last verified journal root: `([0-9a-f]{64})`$", index, re.MULTILINE)
+    if not sequence_match or not root_match:
+        raise ValueError("GENERATED_CONFLICT: missing provenance")
+    sequence = int(sequence_match.group(1))
+    previous_root = root_match.group(1)
+    if sequence > len(rows) or (rows[sequence - 1].entry_hash if sequence else "0" * 64) != previous_root:
+        raise ValueError("JOURNAL_REGRESSION: published root is not a prefix")
+
+
+def _refresh_locked(db: Path, vault: Path, mapeogeo_commit: str) -> ExportResult:
+    generated = vault / "Generated"
+    _recover_backups(vault)
+    _manifest_check(generated)
     rows, root = snapshot_and_verify(db)
+    _check_continuity(generated, rows)
     observations = []
     decisions = []
     for row in rows:
@@ -134,11 +171,12 @@ def refresh(db: Path, vault: Path, mapeogeo_commit: str) -> ExportResult:
 
     files = {}
     for observation in observations[-100:]:
-        if not SAFE_ID.fullmatch(observation.observation_id):
+        if not SAFE_OBSERVATION_ID.fullmatch(observation.observation_id):
             raise ValueError("INVALID_OBSERVATION_ID")
         base = f"Observations/{observation.observation_id}"
         files[base + ".md"] = _observation_note(observation, mapeogeo_commit)
-        files[base + ".json"] = serialize_observation(observation)
+        pinned = replace(observation, metadata={**observation.metadata, "mapeogeo_commit": mapeogeo_commit})
+        files[base + ".json"] = serialize_observation(pinned)
     for decision in decisions[-100:]:
         if not SAFE_ID.fullmatch(decision.request_id):
             raise ValueError("INVALID_DECISION_ID")
@@ -163,43 +201,55 @@ def refresh(db: Path, vault: Path, mapeogeo_commit: str) -> ExportResult:
         index.append(f"- [[Generated/Decisions/{decision.sequence:08d}-{decision.request_id}|{decision.sequence}: {_escape(decision.kind)} — {_escape(decision.decision)}]]")
     files["Index.md"] = "\n".join([*index, ""])
 
+    stage = Path(tempfile.mkdtemp(prefix=".mapeogeo-stage-", dir=vault))
+    backup = vault / (".mapeogeo-backup-" + uuid.uuid4().hex)
+    try:
+        manifest = {name: hashlib.sha256(data.encode()).hexdigest() for name, data in files.items()}
+        for name, data in files.items():
+            _write_private(stage, name, data)
+        _write_private(stage, ".manifest.json", json.dumps({"files": manifest}, sort_keys=True) + "\n")
+        _manifest_check(generated)
+        if generated.exists():
+            generated.rename(backup)
+        try:
+            stage.rename(generated)
+        except Exception:
+            if backup.exists():
+                backup.rename(generated)
+            raise
+        if backup.exists():
+            history = vault / ".mapeogeo-history"
+            if history.is_symlink():
+                raise ValueError("GENERATED_CONFLICT: symlink history")
+            history.mkdir(mode=0o700, exist_ok=True)
+            backup.rename(history / backup.name)
+    finally:
+        if stage.exists():
+            shutil.rmtree(stage)
+    return ExportResult(len(observations), len(decisions), rows[-1].sequence if rows else 0, root, vault)
+
+
+def refresh(db: Path, vault: Path, mapeogeo_commit: str) -> ExportResult:
+    """Verify, map, and publish a bounded private vault snapshot."""
+    if not SAFE_COMMIT.fullmatch(mapeogeo_commit):
+        raise ValueError("INVALID_MAPEOGEO_COMMIT")
     vault = Path(vault)
     if vault.is_symlink() or (vault.exists() and not vault.is_dir()):
         raise ValueError("INVALID_VAULT")
     vault.mkdir(parents=True, exist_ok=True, mode=0o700)
     vault.chmod(0o700)
-    generated = vault / "Generated"
     lock_path = vault / ".mapeogeo-export.lock"
-    with lock_path.open("a+b") as lock:
-        lock_path.chmod(0o600)
+    try:
+        descriptor = os.open(lock_path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    except OSError as exc:
+        raise ValueError("INVALID_LOCK") from exc
+    with os.fdopen(descriptor, "r+b") as lock:
+        info = os.fstat(lock.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+            raise ValueError("INVALID_LOCK")
+        os.fchmod(lock.fileno(), 0o600)
         fcntl.flock(lock, fcntl.LOCK_EX)
-        backups = list(vault.glob(".mapeogeo-backup-*"))
-        if not generated.exists() and len(backups) == 1:
-            backups[0].rename(generated)
-        elif backups:
-            raise ValueError("GENERATED_CONFLICT: unresolved backup")
-        _manifest_check(generated)
-        stage = Path(tempfile.mkdtemp(prefix=".mapeogeo-stage-", dir=vault))
-        backup = vault / (".mapeogeo-backup-" + uuid.uuid4().hex)
-        try:
-            manifest = {name: hashlib.sha256(data.encode()).hexdigest() for name, data in files.items()}
-            for name, data in files.items():
-                _write_private(stage, name, data)
-            _write_private(stage, ".manifest.json", json.dumps({"files": manifest}, sort_keys=True) + "\n")
-            if generated.exists():
-                generated.rename(backup)
-            try:
-                stage.rename(generated)
-            except Exception:
-                if backup.exists():
-                    backup.rename(generated)
-                raise
-            if backup.exists():
-                shutil.rmtree(backup)
-        finally:
-            if stage.exists():
-                shutil.rmtree(stage)
-    return ExportResult(len(observations), len(decisions), rows[-1].sequence if rows else 0, root, vault)
+        return _refresh_locked(db, vault, mapeogeo_commit)
 
 
 def main() -> None:

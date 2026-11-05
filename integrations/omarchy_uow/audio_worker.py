@@ -26,6 +26,7 @@ class AudioWorker:
         self.packet_rate = 0.0
         self.next_send = 0.0
         self.next_preflight = 0.0
+        self.probe_sent = False
         self.mode = "waiting"
         self.retry_after = 0.0
         self.last_observation = None
@@ -66,6 +67,7 @@ class AudioWorker:
         self.receiver_epoch.reset()
         self.packet_rate = 0.0
         self.last_observed_sequence = None
+        self.probe_sent = False
 
     def _send(self, pcm):
         self.transport.send(encode_audio(self.sequence, time.monotonic_ns(), pcm))
@@ -106,17 +108,8 @@ class AudioWorker:
             self.rate_start, self.packets = now, 0
             self.last_observation = now
             self.next_preflight = now
+            self.probe_sent = False
             self.mode = "preflight"
-            # Ignore datagrams queued before this new session sent anything.
-            # If the queue is flooded, stay closed and retry draining later.
-            for _ in range(64):
-                if self.transport.receive() is None:
-                    break
-            else:
-                return
-            self._send(bytes(1024))
-            self.next_preflight = now + 0.1
-            return
         elif self.capture is not None:
             try:
                 source = self.monitor()
@@ -126,6 +119,16 @@ class AudioWorker:
                 self._close("INTERRUPTED", stop_intent=True)
                 self.mode = "waiting"
                 return
+        if not self.probe_sent:
+            # Drain stale datagrams over as many loops as needed. A flooded
+            # queue must never let capture open before this session sends.
+            for _ in range(64):
+                if self.transport.receive() is None:
+                    self._send(bytes(1024))
+                    self.probe_sent = True
+                    self.next_preflight = now + 0.1
+                    return
+            return
         received = self.transport.receive()
         if received is not None:
             telemetry = parse_telemetry(received[0], received[1], self.receiver_epoch)

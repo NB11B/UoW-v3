@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -23,7 +24,7 @@ class SocketUoW:
 
     def __call__(self, kind, payload):
         token = self.worker_token if kind in {"audio.effect.record", "audio.telemetry.ingest"} else self.operator_token
-        request = {"request_id": uuid.uuid4().hex, "token": token, "kind": kind, "payload": payload}
+        request = {"request_id": self.request_id(kind, payload), "token": token, "kind": kind, "payload": payload}
         with socket.socket(socket.AF_UNIX) as conn:
             conn.settimeout(2)
             conn.connect(str(self.path))
@@ -35,6 +36,11 @@ class SocketUoW:
                     raise ValueError("UOW_RESPONSE")
                 data.extend(chunk)
         return json.loads(data)
+
+    @staticmethod
+    def request_id(kind, payload):
+        canonical = json.dumps([kind, payload], sort_keys=True, allow_nan=False, separators=(",", ":"))
+        return "audio-" + hashlib.sha256(canonical.encode()).hexdigest()
 
 
 def load_preference(path: Path) -> bool:

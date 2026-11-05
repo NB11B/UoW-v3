@@ -83,6 +83,14 @@ class WorkerTests(unittest.TestCase):
         self.worker.step(0.1)
         self.assertEqual(len(self.capture), 1)
 
+    def test_flooded_queue_cannot_bypass_silence_gate(self):
+        self.transport.received.extend((tm(i), ("192.168.254.75", 54321)) for i in range(65))
+        self.worker.heartbeat(0)
+        self.worker.step(0)
+        self.worker.step(0.01)
+        self.assertEqual(len(self.capture), 0)
+        self.assertGreaterEqual(len(self.transport.sent), 1)
+
     def test_off_stops_even_when_uow_unavailable(self):
         self.preflight()
         self.worker.uow = lambda *args: (_ for _ in ()).throw(ConnectionError())

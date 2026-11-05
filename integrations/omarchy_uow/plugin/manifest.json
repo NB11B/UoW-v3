@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "nb11b.adaptive-audio",
+  "name": "Adaptive Audio",
+  "version": "0.1.0",
+  "author": "NB11B",
+  "description": "Governed playback stream status and control for the local ESP32",
+  "kinds": ["bar-widget"],
+  "entryPoints": {"barWidget": "BarWidget.qml"},
+  "barWidget": {
+    "displayName": "Adaptive Audio",
+    "description": "Playback stream status and on/off control",
+    "category": "Audio",
+    "allowMultiple": false
+  }
+}

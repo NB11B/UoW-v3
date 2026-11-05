@@ -5,7 +5,9 @@ import argparse
 import json
 import os
 from pathlib import Path
+import socket
 import socketserver
+import stat
 
 from .service import Service
 from uow.state import canonical_json
@@ -31,7 +33,17 @@ class Gateway(socketserver.UnixStreamServer):
         self.path = Path(path)
         self.db, self.policy, self.tokens = db, policy, tokens
         if self.path.exists() or self.path.is_symlink():
-            raise FileExistsError(self.path)
+            info = self.path.lstat()
+            if not stat.S_ISSOCK(info.st_mode) or info.st_uid != os.getuid():
+                raise FileExistsError(self.path)
+            with socket.socket(socket.AF_UNIX) as probe:
+                probe.settimeout(0.2)
+                try:
+                    probe.connect(str(self.path))
+                except ConnectionRefusedError:
+                    self.path.unlink()
+                else:
+                    raise FileExistsError(self.path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         old_umask = os.umask(0o077)
         try:

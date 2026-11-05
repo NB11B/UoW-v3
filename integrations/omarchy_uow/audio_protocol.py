@@ -40,7 +40,8 @@ class ReceiverEpoch:
 
 
 def parse_telemetry(packet: bytes, sender: tuple[str, int], epoch: ReceiverEpoch) -> Telemetry | None:
-    if sender[0] != TARGET or sender[1] != TELEMETRY_PORT or len(packet) != 184:
+    # Firmware creates a new UDP socket for each report, so its source port is ephemeral.
+    if sender[0] != TARGET or len(packet) != 184:
         return None
     magic, version, size, sequence, timestamp = struct.unpack_from("<IHHII", packet)
     if (magic, version, size) != (0x4D544352, 1, 184):

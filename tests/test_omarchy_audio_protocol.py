@@ -29,7 +29,7 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual((first.low_hz, first.high_hz, first.drops, first.underruns), (100, 2500, 2, 4))
         self.assertIsNone(parse_telemetry(packet(), ("192.168.254.75", 4002), epoch))
         epoch.reset()
-        self.assertIsNotNone(parse_telemetry(packet(1), ("192.168.254.75", 4002), epoch))
+        self.assertIsNotNone(parse_telemetry(packet(1), ("192.168.254.75", 55321), epoch))
 
     def test_default_monitor_never_microphone(self):
         calls = []

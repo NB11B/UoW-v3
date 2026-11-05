@@ -69,6 +69,7 @@ class Service:
             self.db.execute("PRAGMA synchronous=FULL")
             self.db.execute("CREATE TABLE IF NOT EXISTS journal (n INTEGER PRIMARY KEY, request_id TEXT UNIQUE, request TEXT, response TEXT, prev_hash TEXT, entry_hash TEXT)")
             self._recover()
+            self.data_version = self.db.execute("PRAGMA data_version").fetchone()[0]
         except Exception:
             self.db.close()
             raise
@@ -193,7 +194,13 @@ class Service:
             return denied("NONCANONICAL_INPUT")
         self.db.execute("BEGIN IMMEDIATE")
         try:
-            self._recover()  # Includes other writers; stale state is never authoritative.
+            # SQLite changes data_version when another connection commits.
+            # Replay on startup or external change; replaying this growing
+            # journal for every local telemetry sample blocks real-time audio.
+            data_version = self.db.execute("PRAGMA data_version").fetchone()[0]
+            if data_version != self.data_version:
+                self._recover()
+                self.data_version = data_version
             old = self.db.execute("SELECT request,response FROM journal WHERE request_id=?", (request["request_id"],)).fetchone()
             if old:
                 self.db.execute("ROLLBACK")

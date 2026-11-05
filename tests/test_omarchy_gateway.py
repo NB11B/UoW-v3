@@ -58,3 +58,19 @@ def test_gateway_rejects_occupied_path(tmp_path):
     finally:
         pass
     assert path.read_text() == "not a socket"
+
+
+def test_gateway_recovers_stale_socket_but_rejects_live_socket(tmp_path):
+    path = tmp_path / "gateway.sock"
+    with socket.socket(socket.AF_UNIX) as old:
+        old.bind(str(path))
+    gateway = Gateway(path, tmp_path / "state.db", {}, {})
+    try:
+        try:
+            Gateway(path, tmp_path / "state2.db", {}, {})
+        except FileExistsError:
+            pass
+        else:
+            assert False, "live socket must remain owned"
+    finally:
+        gateway.server_close()

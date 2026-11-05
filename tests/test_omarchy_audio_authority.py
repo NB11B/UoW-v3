@@ -1,6 +1,8 @@
 import pathlib
+import sqlite3
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from integrations.omarchy_uow.service import Service
 
@@ -51,6 +53,29 @@ class AudioAuthorityTests(unittest.TestCase):
         self.assertEqual(self.ask("telemetry", "audio.telemetry.ingest", sample, "worker-token")["decision"], "COMMITTED")
         self.assertEqual(self.service.state.get("audio.telemetry.s1")["trust"], "UNVERIFIED_CLAIM")
         self.assertEqual(self.ask("stale", "audio.telemetry.ingest", sample, "worker-token")["decision"], "DENIED")
+
+    def test_unmodified_journal_does_not_replay_on_each_request(self):
+        self.ask("start", "audio.stream.start", PROFILE)
+        with patch.object(self.service, "_recover", side_effect=AssertionError("full replay during unchanged request")):
+            result = self.ask("stop", "audio.stream.stop", {"session_id": "s1"})
+        self.assertEqual(result["decision"], "COMMITTED")
+
+    def test_external_journal_change_is_detected_before_next_request(self):
+        self.ask("start", "audio.stream.start", PROFILE)
+        with sqlite3.connect(self.db) as db:
+            db.execute("update journal set entry_hash=? where n=1", ("0" * 64,))
+        with self.assertRaises(ValueError):
+            self.ask("stop", "audio.stream.stop", {"session_id": "s1"})
+
+    def test_other_service_writer_is_seen_before_next_request(self):
+        other = Service(self.db, self.policy, self.tokens)
+        try:
+            self.ask("start", "audio.stream.start", PROFILE)
+            result = other.handle({"request_id": "stop-other", "token": "operator-token", "kind": "audio.stream.stop", "payload": {"session_id": "s1"}})
+            self.assertEqual(result["decision"], "COMMITTED")
+            self.assertEqual(self.service.handle({"request_id": "outcome-self", "token": "worker-token", "kind": "audio.effect.record", "payload": {"session_id": "s1", "outcome": "STOPPED"}})["decision"], "COMMITTED")
+        finally:
+            other.close()
 
 
 if __name__ == "__main__":

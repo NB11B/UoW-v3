@@ -165,3 +165,19 @@ def test_symlink_lock_refused_without_touching_target(tmp_path):
     with pytest.raises(ValueError, match="INVALID_LOCK"):
         refresh(db, vault, "1346330")
     assert target.read_text() == "keep"
+
+
+def test_real_denied_request_does_not_publish_unvalidated_fields(tmp_path):
+    db, vault = tmp_path / "uow.db", tmp_path / "vault"
+    service = Service(db, {"sensor": []}, {"secret": "sensor"})
+    response = service.handle({
+        "request_id": "unsafe", "token": "secret", "kind": "SECRET_KIND",
+        "payload": {"session_id": "SECRET_SESSION_VALUE"},
+    })
+    assert response["decision"] == "DENIED"
+    service.close()
+    refresh(db, vault, "1346330")
+    text = "\n".join(p.read_text() for p in (vault / "Generated").rglob("*.md"))
+    assert "SECRET_KIND" not in text
+    assert "SECRET_SESSION_VALUE" not in text
+    assert "UNKNOWN_CAPABILITY" in text

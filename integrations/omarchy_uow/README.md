@@ -40,9 +40,17 @@ The one-shot `coretemp` command requires exactly one configured token whose
 principal has `observation.ingest`. It reads a real temperature and prints a
 receipt. Keep token values private; they are not written to the journal.
 
-This proves authority at the service interface. Programs with the same OS
-user identity can still access its configuration and database or bypass this
-gateway. Bubblewrap works on the host and can hide the user's home from a
-child process, but no real agent has been launched or qualified in such a
-profile. Physical effects, sensor calibration, and OS-enforced isolation are
-outside this integration's qualification scope.
+This proves authority at the service interface. An opt-in host test launches
+a Bubblewrap client with only the gateway socket mounted; it confirms the
+client can commit a scoped observation while the user's home and service
+database are absent. An unrestricted same-user process can still access the
+database or bypass this gateway. No real agent has been launched or qualified
+in the restricted profile. Physical effects, sensor calibration, and full
+agent isolation are outside this integration's qualification scope.
+
+Run the host containment check only on a machine with working Bubblewrap and
+Unix socket support:
+
+```sh
+UOW_RUN_HOST_SANDBOX_TEST=1 PYTHONPATH=src:. python -m pytest -q tests/test_omarchy_containment.py
+```

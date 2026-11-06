@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+bash bin/build
+shot="${1:-/tmp/adaptive-audio-ui.png}"
+QT_QPA_PLATFORM=offscreen QT_QPA_PLATFORMTHEME=generic QT_FORCE_STDERR_LOGGING=1 build/app/adaptive-audio --ui-shot "$shot"
+test -s "$shot"

@@ -50,6 +50,13 @@ Panel {
           font.bold: true
           MouseArea { anchors.fill: parent; onClicked: if (root.hostWidget) root.hostWidget.toggleAudio() }
         }
+        Text {
+          textFormat: Text.PlainText
+          text: "Open Adaptive Audio"
+          color: root.bar ? root.bar.foreground : Color.foreground
+          font.bold: true
+          MouseArea { anchors.fill: parent; onClicked: if (root.hostWidget) root.hostWidget.openApp() }
+        }
       }
     }
   }

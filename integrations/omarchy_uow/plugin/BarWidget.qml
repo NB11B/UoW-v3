@@ -23,6 +23,7 @@ BarWidget {
     if (audioStatus.enabled === false) { if (!onProcess.running) onProcess.running = true }
     else { if (!offProcess.running) offProcess.running = true }
   }
+  function openApp() { if (!appProcess.running) appProcess.running = true }
   function acceptStatus(raw) {
     try {
       if (raw.length > 4096) return
@@ -61,6 +62,7 @@ BarWidget {
   }
   Process { id: onProcess; command: [root.cli, "on"] }
   Process { id: offProcess; command: [root.cli, "off"] }
+  Process { id: appProcess; command: [Quickshell.env("HOME") + "/.local/bin/adaptive-audio", "open"] }
   Timer {
     interval: 1000
     running: true

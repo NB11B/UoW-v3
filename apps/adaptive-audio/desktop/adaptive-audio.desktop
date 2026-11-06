@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Adaptive Audio
+Comment=Stream playback and adjust ESP32 crossover settings
+Exec=adaptive-audio open
+Icon=adaptive-audio
+Terminal=false
+Categories=AudioVideo;Audio;

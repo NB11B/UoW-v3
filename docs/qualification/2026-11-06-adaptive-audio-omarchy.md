@@ -18,6 +18,46 @@ service remained disabled and inactive.
 | `desktop-file-validate ~/.local/share/applications/adaptive-audio.desktop` | Exit 0 |
 | `git diff --check` | Exit 0 |
 
+## Final review repairs and requalification
+
+The final review found edge cases in crossover rounding, partial socket
+commands, stale receiver reports, status-client disconnects, invalid journal
+payloads, response growth, and rollback after new receipt kinds. Tests were
+added for those paths. The app now keeps unsent edits across status polls,
+clears stale success, and shows packet rate and confirmed frequencies.
+
+| Command | Observed result |
+| --- | --- |
+| `PYTHONPATH=src:. .venv/bin/python -m pytest -q tests/test_omarchy_*.py` | 74 passed, 3 skipped in 18.02 s, with local Unix socket access |
+| `bash apps/adaptive-audio/bin/test` | 9 passed, 0 failed |
+| `bash apps/adaptive-audio/bin/ui-smoke` | Exit 0 |
+| `omarchy plugin validate integrations/omarchy_uow/plugin` | Exit 0 |
+| `desktop-file-validate ~/.local/share/applications/adaptive-audio.desktop` | Exit 0 |
+| `python -m integrations.omarchy_uow.install_audio_plugin --check-upgrade` | Ready, 9 files, current policy |
+
+The final worker/plugin update used `omarchy plugin disable`,
+`python -m integrations.omarchy_uow.install_audio_plugin --upgrade`,
+`systemctl --user restart omarchy-uow-audio-gateway.service`, and
+`omarchy plugin enable`. Its separate backup is
+`~/.local/state/omarchy-uow-audio/upgrade-backup-06adc250b61f4611992a567dd60d3608`.
+The Qt binary was copied atomically after backing up the prior binary to
+`~/.local/state/omarchy-uow-audio/adaptive-audio.pre-review-20261106`.
+The installed and built binary hashes matched:
+`4f933a8670a3c06aea44f3113807f3f3d8f2b7b527f611a53ab5d0a3bc08a311`.
+
+The gateway took about 19 seconds of CPU time to replay roughly 1,300 journal
+rows after restart. One early worker status request timed out; a later request
+returned a live stream. This recovery delay remains a performance limitation.
+The gateway was active and `omarchy-streamer.service` was disabled.
+
+| Final command | Receiver report | Committed UoW rows |
+| --- | --- | --- |
+| `omarchy-audio-worker crossover 90 3100` | 90 / 3100 Hz, sequence 122, ~181.9 packets/s | Intent 1370 and `REPORTED_MATCH` effect 1371 |
+| `omarchy-audio-worker crossover 100 2500` | 100 / 2500 Hz, sequence 187, ~181.2 packets/s | Intent 1385 and `REPORTED_MATCH` effect 1386 |
+
+Each of those four rows had a receipt and a response under 812 bytes. The
+final live preview is in `outputs/adaptive-audio-app.png` in the task folder.
+
 The full repository `pytest -q` did not collect because unrelated campaigns
 need `numpy` and `openvino`, which are absent from this task's virtual
 environment. The Omarchy integration suite above ran completely. `pytest`

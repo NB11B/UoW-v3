@@ -9,6 +9,7 @@ class AudioBackend : public QObject {
     Q_PROPERTY(QString state READ state NOTIFY changed)
     Q_PROPERTY(QString source READ source NOTIFY changed)
     Q_PROPERTY(double receiverAge READ receiverAge NOTIFY changed)
+    Q_PROPERTY(double packetRate READ packetRate NOTIFY changed)
     Q_PROPERTY(double currentLow READ currentLow NOTIFY changed)
     Q_PROPERTY(double currentHigh READ currentHigh NOTIFY changed)
     Q_PROPERTY(double editLow READ editLow WRITE setEditLow NOTIFY changed)
@@ -22,6 +23,7 @@ public:
     QString state() const { return m_state; }
     QString source() const { return m_source; }
     double receiverAge() const { return m_receiverAge; }
+    double packetRate() const { return m_packetRate; }
     double currentLow() const { return m_currentLow; }
     double currentHigh() const { return m_currentHigh; }
     double editLow() const { return m_editLow; }
@@ -45,6 +47,7 @@ private:
     QString m_source;
     QString m_changeState = "idle";
     double m_receiverAge = -1;
+    double m_packetRate = -1;
     double m_currentLow = -1;
     double m_currentHigh = -1;
     double m_editLow = -1;

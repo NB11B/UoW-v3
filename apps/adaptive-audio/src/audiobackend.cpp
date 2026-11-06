@@ -21,8 +21,9 @@ QByteArray AudioBackend::requestLocal(const QByteArray &command)
     QElapsedTimer timer;
     timer.start();
     QByteArray result;
+    const int deadlineMs = command.startsWith("crossover ") ? 2500 : 500;
     while (!result.endsWith('\n') && result.size() <= 4096) {
-        const int remaining = 500 - int(timer.elapsed());
+        const int remaining = deadlineMs - int(timer.elapsed());
         if (remaining <= 0 || (socket.bytesAvailable() == 0 && !socket.waitForReadyRead(remaining))) return {};
         result += socket.readAll();
     }
@@ -69,6 +70,8 @@ bool AudioBackend::updateFromStatus(const QByteArray &response)
     m_source = source.isString() ? source.toString() : QString();
     const QJsonValue age = value.value("receiver_age_s");
     m_receiverAge = age.isDouble() && qIsFinite(age.toDouble()) && age.toDouble() >= 0 ? age.toDouble() : -1;
+    const QJsonValue rate = value.value("packet_rate");
+    m_packetRate = rate.isDouble() && qIsFinite(rate.toDouble()) && rate.toDouble() >= 0 ? rate.toDouble() : -1;
     const QJsonValue low = value.value("crossover_low_hz");
     const QJsonValue high = value.value("crossover_high_hz");
     m_currentLow = low.isDouble() && qIsFinite(low.toDouble()) && low.toDouble() > 0 ? low.toDouble() : -1;
@@ -76,10 +79,18 @@ bool AudioBackend::updateFromStatus(const QByteArray &response)
     const QJsonValue change = value.value("crossover_change");
     if (change.isObject() && change.toObject().value("state").isString()) {
         const QString next = change.toObject().value("state").toString();
-        if (QStringList{"idle", "pending", "receiver-reported", "unconfirmed", "interrupted", "denied"}.contains(next))
+        if (QStringList{"idle", "pending", "receiver-reported", "unconfirmed", "interrupted", "denied", "busy", "reconciliation-pending", "receiver-unavailable"}.contains(next))
             m_changeState = next;
     }
-    if (!m_dirty || m_changeState == "receiver-reported") {
+    if (m_changeState == "receiver-reported" &&
+        (m_state != "streaming" || m_receiverAge < 0 || m_receiverAge > 3 ||
+         m_currentLow <= 0 || m_currentHigh <= 0 ||
+         (change.isObject() && change.toObject().value("low_hz").isDouble() &&
+          qAbs(change.toObject().value("low_hz").toDouble() - m_currentLow) > 0.05) ||
+         (change.isObject() && change.toObject().value("high_hz").isDouble() &&
+          qAbs(change.toObject().value("high_hz").toDouble() - m_currentHigh) > 0.05)))
+        m_changeState = "unconfirmed";
+    if (!m_dirty) {
         m_editLow = m_currentLow;
         m_editHigh = m_currentHigh;
         m_dirty = false;
@@ -94,9 +105,10 @@ bool AudioBackend::refresh()
     m_state = "unavailable";
     m_enabled = false;
     m_receiverAge = -1;
+    m_packetRate = -1;
     m_currentLow = -1;
     m_currentHigh = -1;
-    if (m_changeState == "pending") m_changeState = "unconfirmed";
+    if (m_changeState == "pending" || m_changeState == "receiver-reported") m_changeState = "unconfirmed";
     emit changed();
     return false;
 }

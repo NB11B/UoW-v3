@@ -4,6 +4,7 @@ import tempfile
 import unittest
 
 from integrations.omarchy_uow.install_audio_plugin import install, uninstall, upgrade, rollback_upgrade
+from integrations.omarchy_uow.service import Service, AUDIO_PROFILE
 
 
 class InstallTests(unittest.TestCase):
@@ -61,7 +62,8 @@ class InstallTests(unittest.TestCase):
             home = pathlib.Path(td)
             install(repo, home)
             state = home / ".local/state/omarchy-uow-audio"
-            (state / "uow.db").write_text("kept receipts")
+            Service(state / "uow.db", {}, {}).close()
+            prior_db = (state / "uow.db").read_bytes()
             panel = home / ".config/omarchy/plugins/nb11b.adaptive-audio/Panel.qml"
             panel.write_text("prior panel\n")
             manifest = state / "installed-files.json"
@@ -74,7 +76,35 @@ class InstallTests(unittest.TestCase):
             rollback_upgrade(pathlib.Path(result["backup"]), home)
             self.assertEqual(panel.read_text(), "prior panel\n")
             self.assertEqual(manifest.read_bytes(), prior_manifest)
-            self.assertEqual((state / "uow.db").read_text(), "kept receipts")
+            self.assertEqual((state / "uow.db").read_bytes(), prior_db)
+
+    def test_rollback_keeps_replay_code_after_crossover_receipt(self):
+        repo = pathlib.Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as td:
+            home = pathlib.Path(td)
+            install(repo, home)
+            state = home / ".local/state/omarchy-uow-audio"
+            service_file = home / ".local/share/omarchy-uow-audio/integrations/omarchy_uow/service.py"
+            service_file.write_text("# previous service without crossover support\n")
+            manifest = state / "installed-files.json"
+            inventory = json.loads(manifest.read_text())
+            import hashlib
+            inventory[str(service_file)] = hashlib.sha256(service_file.read_bytes()).hexdigest()
+            manifest.write_text(json.dumps(inventory))
+            backup = pathlib.Path(upgrade(repo, home)["backup"])
+            tokens = {"operator-token": "operator"}
+            service = Service(state / "uow.db", {"operator": ["audio.stream.start", "audio.dsp.crossover.set"]}, tokens)
+            for rid, kind, payload in (("start", "audio.stream.start", {"session_id": "s1", **AUDIO_PROFILE}),
+                                       ("set", "audio.dsp.crossover.set", {"command_id": "c1", "session_id": "s1", "low_hz": 90, "high_hz": 3100})):
+                self.assertEqual(service.handle({"request_id": rid, "token": "operator-token", "kind": kind, "payload": payload})["decision"], "COMMITTED")
+            service.close()
+            rollback_upgrade(backup, home)
+            self.assertEqual(service_file.read_bytes(), (repo / "integrations/omarchy_uow/service.py").read_bytes())
+            self.assertNotIn("audio.dsp.crossover.set", json.loads((state / "policy.json").read_text())["operator"])
+            self.assertEqual(json.loads(manifest.read_text())[str(service_file)], hashlib.sha256(service_file.read_bytes()).hexdigest())
+            reopened = Service(state / "uow.db", {"operator": ["audio.stream.start", "audio.stream.stop"]}, tokens)
+            self.assertEqual(reopened.state.get("audio.crossover.c1")["low_hz"], 90)
+            reopened.close()
 
     def test_local_install_refuses_conflicts_and_keeps_tokens_private(self):
         repo = pathlib.Path(__file__).resolve().parents[1]

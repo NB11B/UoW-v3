@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import secrets
 import shutil
+import sqlite3
 import sys
 import subprocess
 import uuid
@@ -157,6 +158,23 @@ def rollback_upgrade(backup: Path, home: Path, repo: Path | None = None) -> dict
     expected = [*current["mapping"], current["policy_path"], current["inventory_path"]]
     if destinations != expected or any(not (backup / str(i)).is_file() or (backup / str(i)).is_symlink() for i in range(len(destinations))):
         raise ValueError("UPGRADE_BACKUP_CONTENTS")
+    retain_service = False
+    db_path = state / "uow.db"
+    if db_path.exists():
+        # Older service code cannot replay committed crossover rows. Inspect
+        # the journal read-only before changing any installed file.
+        try:
+            with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as db:
+                for raw_request, raw_response in db.execute("SELECT request,response FROM journal"):
+                    request, response = json.loads(raw_request), json.loads(raw_response)
+                    if request.get("kind") in {"audio.dsp.crossover.set", "audio.dsp.crossover.effect"} and response.get("decision") == "COMMITTED":
+                        retain_service = True
+                        break
+        except (sqlite3.DatabaseError, ValueError, KeyError) as exc:
+            raise ValueError("ROLLBACK_JOURNAL_UNREADABLE") from exc
+    service_path = share / "integrations/omarchy_uow/service.py"
+    if retain_service and service_path not in destinations:
+        raise ValueError("ROLLBACK_SERVICE_MISSING")
     stage = state / ("rollback-stage-" + uuid.uuid4().hex)
     stage.mkdir(mode=0o700)
     for index, destination in enumerate(destinations):
@@ -164,11 +182,32 @@ def rollback_upgrade(backup: Path, home: Path, repo: Path | None = None) -> dict
     modified = []
     try:
         for index, destination in enumerate(destinations):
+            if retain_service and destination == service_path:
+                continue
             temp = destination.with_name(destination.name + ".rollback-" + uuid.uuid4().hex)
             try:
                 shutil.copy2(backup / str(index), temp)
                 os.replace(temp, destination)
                 modified.append(index)
+            finally:
+                temp.unlink(missing_ok=True)
+        if retain_service:
+            policy_path = current["policy_path"]
+            temp = policy_path.with_name(policy_path.name + ".rollback-" + uuid.uuid4().hex)
+            try:
+                temp.write_text(json.dumps(LEGACY_POLICY) + "\n")
+                temp.chmod(0o600)
+                os.replace(temp, policy_path)
+            finally:
+                temp.unlink(missing_ok=True)
+            manifest = current["inventory_path"]
+            restored_inventory = json.loads(manifest.read_text())
+            restored_inventory[str(service_path)] = sha(service_path)
+            temp = manifest.with_name(manifest.name + ".rollback-" + uuid.uuid4().hex)
+            try:
+                temp.write_text(json.dumps(restored_inventory, sort_keys=True) + "\n")
+                temp.chmod(0o600)
+                os.replace(temp, manifest)
             finally:
                 temp.unlink(missing_ok=True)
     except Exception:
@@ -177,7 +216,7 @@ def rollback_upgrade(backup: Path, home: Path, repo: Path | None = None) -> dict
         raise
     finally:
         shutil.rmtree(stage)
-    return {"restored_files": len(destinations), "backup": str(backup)}
+    return {"restored_files": len(destinations) - int(retain_service), "retained_replay_service": retain_service, "backup": str(backup)}
 
 
 def uninstall(home: Path, stop):

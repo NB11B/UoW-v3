@@ -123,6 +123,9 @@ If the user-owned upgrade needs to be reversed, disable the bar, run
 `python -m integrations.omarchy_uow.install_audio_plugin --rollback BACKUP_PATH`
 from the same source revision, restart the gateway, and re-enable the bar.
 Rollback refuses to overwrite installed files that changed after the upgrade.
+If the journal contains a committed crossover command, rollback retains the
+newer service replay code and restores the legacy policy so older worker files
+cannot issue another crossover command. The receipt database is never removed.
 
 The installer writes hashes of its own files to a private inventory. To remove
 the plugin and gateway after qualification, run

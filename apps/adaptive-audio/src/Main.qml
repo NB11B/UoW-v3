@@ -25,11 +25,14 @@ ApplicationWindow {
         return backend.state
     }
     function changeText() {
-        if (backend.changeState === "receiver-reported") return qsTr("Receiver reports the requested settings")
+        if (backend.changeState === "receiver-reported") return qsTr("Receiver reports %1 / %2").arg(root.hz(backend.currentLow)).arg(root.hz(backend.currentHigh))
         if (backend.changeState === "pending") return qsTr("Sent; waiting for receiver report")
         if (backend.changeState === "unconfirmed") return qsTr("Sent; receiver confirmation missing")
         if (backend.changeState === "denied") return qsTr("Change denied by local authority")
         if (backend.changeState === "interrupted") return qsTr("Change interrupted")
+        if (backend.changeState === "busy") return qsTr("A change is already in progress")
+        if (backend.changeState === "reconciliation-pending") return qsTr("Waiting to reconcile the prior change")
+        if (backend.changeState === "receiver-unavailable") return qsTr("Receiver unavailable")
         return ""
     }
 
@@ -67,6 +70,11 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Label { text: qsTr("Receiver"); color: "#b9c1cf" }
                     Label { Layout.fillWidth: true; horizontalAlignment: Text.AlignRight; text: backend.receiverAge >= 0 ? qsTr("Reported %1 s ago").arg(backend.receiverAge.toFixed(1)) : qsTr("No recent report"); textFormat: Text.PlainText }
+                }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label { text: qsTr("Packet rate"); color: "#b9c1cf" }
+                    Label { Layout.fillWidth: true; horizontalAlignment: Text.AlignRight; text: backend.packetRate >= 0 ? qsTr("%1 packets/s").arg(backend.packetRate.toFixed(1)) : qsTr("Unavailable"); textFormat: Text.PlainText }
                 }
             }
         }

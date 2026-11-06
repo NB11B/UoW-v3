@@ -13,12 +13,20 @@ FRAMES = 256
 PAYLOAD_BYTES = FRAMES * 2 * 2
 
 
-def encode_crossover(low_hz: float, high_hz: float) -> bytes:
+def crossover_wire_values(low_hz: float, high_hz: float) -> tuple[float, float]:
     if (type(low_hz) not in (int, float) or type(high_hz) not in (int, float)
             or not 0 < low_hz < high_hz < 24000
             or not math.isfinite(low_hz) or not math.isfinite(high_hz)):
         raise ValueError("CROSSOVER_RANGE")
-    return f"SET_CROSS_LOW:{low_hz:.3f}\nSET_CROSS_HIGH:{high_hz:.3f}\n".encode("ascii")
+    low, high = float(f"{low_hz:.3f}"), float(f"{high_hz:.3f}")
+    if not 0 < low < high < 24000:
+        raise ValueError("CROSSOVER_RANGE")
+    return low, high
+
+
+def encode_crossover(low_hz: float, high_hz: float) -> bytes:
+    low, high = crossover_wire_values(low_hz, high_hz)
+    return f"SET_CROSS_LOW:{low:.3f}\nSET_CROSS_HIGH:{high:.3f}\n".encode("ascii")
 
 
 def encode_audio(sequence: int, timestamp: int, pcm: bytes) -> bytes:

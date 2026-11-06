@@ -155,6 +155,22 @@ class CrossoverServiceTests(unittest.TestCase):
         self.assertEqual(self.s.handle(self.intent("missing", {**base, "session_id": "other"}))["decision"], "DENIED")
         self.assertIsNone(self.s.state.get("audio.crossover.cmd1"))
 
+    def test_malformed_crossover_payload_is_not_journaled(self):
+        before = self.s.db.execute("SELECT count(*) FROM journal").fetchone()[0]
+        result = self.s.handle(self.intent("malformed", {"command_id": "cmd2", "session_id": "s1", "low_hz": "oops", "high_hz": 2500}))
+        self.assertEqual(result["decision"], "DENIED")
+        self.assertEqual(self.s.db.execute("SELECT count(*) FROM journal").fetchone()[0], before)
+        self.assertNotIn(b"oops", self.db.read_bytes())
+
+    def test_audio_responses_remain_bounded_as_journal_grows(self):
+        for i in range(440):
+            payload = {"command_id": f"cmd-{i}", "session_id": "s1", "low_hz": 90, "high_hz": 3100}
+            response = self.s.handle(self.intent(f"intent-{i}", payload))
+            self.assertEqual(response["decision"], "COMMITTED")
+            self.assertLess(len(json.dumps(response)), 4096)
+        self.s.close(); self.s = Service(self.db, self.policy, self.tokens)
+        self.assertEqual(self.s.state.sequence, 441)
+
     def test_duplicate_command_and_outcome_order(self):
         self.assertEqual(self.s.handle(self.effect())["decision"], "DENIED")
         self.assertEqual(self.s.handle(self.intent())["decision"], "COMMITTED")

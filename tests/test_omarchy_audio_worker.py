@@ -179,9 +179,26 @@ class WorkerTests(unittest.TestCase):
         self.assertEqual(self.worker.status()["crossover_change"]["state"], "pending")
         self.transport.received.append((tm(3, 120, 2200), ("192.168.254.75", 4002)))
         self.worker.step(0.5)
-        self.assertEqual(self.worker.status()["crossover_change"]["state"], "receiver-reported")
+        self.assertEqual(self.worker.status(now=0.5)["crossover_change"]["state"], "receiver-reported")
         self.assertEqual(self.requests[-1][0], "audio.dsp.crossover.effect")
         self.assertEqual(self.requests[-1][1]["receiver_sequence"], 3)
+
+    def test_queued_or_late_matching_telemetry_does_not_confirm(self):
+        self.preflight()
+        self.transport.received.append((tm(2, 120, 2200), ("192.168.254.75", 4002)))
+        self.worker.set_crossover(120, 2200, 0.2)
+        self.worker.step(0.3)
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "pending")
+        self.transport.received.append((tm(3, 120, 2200), ("192.168.254.75", 4002)))
+        self.worker.heartbeat(2.3)
+        self.worker.step(2.3)
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "unconfirmed")
+
+    def test_journal_uses_wire_rounded_crossover_values(self):
+        self.preflight()
+        self.worker.set_crossover(100.0004, 2500.0004, 0.2)
+        payload = [p for kind, p in self.requests if kind == "audio.dsp.crossover.set"][-1]
+        self.assertEqual((payload["low_hz"], payload["high_hz"]), (100.0, 2500.0))
 
     def test_crossover_timeout_and_stream_interruption(self):
         self.preflight()

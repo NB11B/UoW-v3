@@ -187,7 +187,9 @@ class Service:
                 raise ValueError("JOURNAL_INTEGRITY")
             if res["decision"] == "COMMITTED":
                 state, evidence = self._transition(req)
-                if state.to_dict() != res["state"] or asdict(evidence) != res["receipt"]:
+                state_matches = (state.state_hash == res["state_hash"] if "state_hash" in res
+                                 else state.to_dict() == res.get("state"))
+                if not state_matches or asdict(evidence) != res["receipt"]:
                     raise ValueError("REPLAY_DIVERGENCE")
                 self.state = state
                 self.ledger.append(evidence)
@@ -212,6 +214,14 @@ class Service:
             reason = "CAPABILITY_DENIED"
         else:
             reason = None
+        if reason is None and kind == "audio.dsp.crossover.set":
+            payload = request["payload"]
+            if (not isinstance(payload, dict) or set(payload) != {"command_id", "session_id", "low_hz", "high_hz"}
+                    or not valid_id(payload.get("command_id")) or not valid_id(payload.get("session_id"))):
+                return denied("CROSSOVER_SCHEMA")
+            low, high = payload["low_hz"], payload["high_hz"]
+            if not finite_number(low, 0, 24000) or not finite_number(high, 0, 24000) or not 0 < low < high < 24000:
+                return denied("CROSSOVER_RANGE")
         req = {k: request[k] for k in ("request_id", "kind", "payload")}
         req["principal"] = principal
         try:
@@ -240,7 +250,12 @@ class Service:
                     state, evidence = self._transition(req)
                 except (ValueError, TypeError, KeyError, RuntimeError) as exc:
                     reason = str(exc)
-            res = denied(reason) if reason else {"decision": "COMMITTED", "reason": "CERTIFIED", "receipt": asdict(evidence), "state": state.to_dict()}
+            res = denied(reason) if reason else {"decision": "COMMITTED", "reason": "CERTIFIED", "receipt": asdict(evidence)}
+            if not reason:
+                if kind.startswith("audio."):
+                    res["state_hash"] = state.state_hash
+                else:
+                    res["state"] = state.to_dict()
             n = self.db.execute("SELECT count(*) FROM journal").fetchone()[0] + 1
             entry_hash = digest({"n": n, "request": req, "response": res, "prev_hash": self.root})
             self.db.execute("INSERT INTO journal VALUES (?,?,?,?,?,?)", (n, req["request_id"], raw_req, canonical_json(res), self.root, entry_hash))

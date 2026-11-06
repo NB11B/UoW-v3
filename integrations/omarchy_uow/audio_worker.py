@@ -4,7 +4,7 @@ from __future__ import annotations
 import time
 import uuid
 
-from .audio_protocol import AUDIO_PORT, TARGET, ReceiverEpoch, default_monitor, encode_audio, encode_crossover, parse_telemetry
+from .audio_protocol import AUDIO_PORT, TARGET, ReceiverEpoch, default_monitor, encode_audio, encode_crossover, crossover_wire_values, parse_telemetry
 from .service import AUDIO_PROFILE
 
 
@@ -55,6 +55,7 @@ class AudioWorker:
 
     def set_crossover(self, low_hz, high_hz, now=None):
         now = time.monotonic() if now is None else now
+        low_hz, high_hz = crossover_wire_values(low_hz, high_hz)
         wire = encode_crossover(low_hz, high_hz)
         if self.mode != "streaming" or self.telemetry is None or self.last_telemetry is None or now - self.last_telemetry > 3:
             return {"state": "receiver-unavailable"}
@@ -62,6 +63,13 @@ class AudioWorker:
             return {"state": "busy"}
         if self.command_store is not None and self.command_store.pending():
             return {"state": "reconciliation-pending"}
+        # Reports queued before the command cannot confirm it. A flooded queue
+        # leaves the receiver unqualified for this command.
+        for _ in range(64):
+            if self.transport.receive() is None:
+                break
+        else:
+            return {"state": "receiver-unavailable"}
         command_id = uuid.uuid4().hex
         if self.command_store is not None:
             self.command_store.add(command_id)
@@ -112,6 +120,8 @@ class AudioWorker:
         self.packet_rate = 0.0
         self.last_observed_sequence = None
         self.probe_sent = False
+        if self.crossover_change["state"] == "receiver-reported":
+            self.crossover_change = {"state": "unconfirmed", **{k: self.crossover_change[k] for k in ("low_hz", "high_hz")}}
 
     def _send(self, pcm):
         self.transport.send(encode_audio(self.sequence, time.monotonic_ns(), pcm))
@@ -183,7 +193,7 @@ class AudioWorker:
             if telemetry is not None:
                 self.telemetry, self.last_telemetry = telemetry, now
                 pending = self.pending_crossover
-                if (pending is not None and telemetry.sequence > pending["baseline_sequence"]
+                if (pending is not None and now < pending["deadline"] and telemetry.sequence > pending["baseline_sequence"]
                         and abs(telemetry.low_hz - pending["low_hz"]) <= 0.05
                         and abs(telemetry.high_hz - pending["high_hz"]) <= 0.05):
                     self._finish_crossover("REPORTED_MATCH", telemetry.sequence)
@@ -244,7 +254,13 @@ class AudioWorker:
                 self.packet_rate = self.packets / (now - self.rate_start)
                 self.rate_start, self.packets = now, 0
 
-    def status(self):
+    def status(self, now=None):
         tm = self.telemetry
-        age = max(0, time.monotonic() - self.last_telemetry) if self.last_telemetry is not None else None
-        return {"state": self.mode, "source": self.source, "destination": f"{TARGET}:{AUDIO_PORT}", "packet_rate": round(self.packet_rate, 1), "receiver_age_s": round(age, 1) if age is not None else None, "receiver_sequence": tm.sequence if tm else None, "crossover_low_hz": tm.low_hz if tm else None, "crossover_high_hz": tm.high_hz if tm else None, "drops": tm.drops if tm else None, "underruns": tm.underruns if tm else None, "crossover_change": self.crossover_change.copy()}
+        now = time.monotonic() if now is None else now
+        age = max(0, now - self.last_telemetry) if self.last_telemetry is not None else None
+        change = self.crossover_change.copy()
+        if (change["state"] == "receiver-reported" and
+                (self.mode != "streaming" or tm is None or age is None or age > 3 or
+                 abs(tm.low_hz - change["low_hz"]) > 0.05 or abs(tm.high_hz - change["high_hz"]) > 0.05)):
+            change["state"] = "unconfirmed"
+        return {"state": self.mode, "source": self.source, "destination": f"{TARGET}:{AUDIO_PORT}", "packet_rate": round(self.packet_rate, 1), "receiver_age_s": round(age, 1) if age is not None else None, "receiver_sequence": tm.sequence if tm else None, "crossover_low_hz": tm.low_hz if tm else None, "crossover_high_hz": tm.high_hz if tm else None, "drops": tm.drops if tm else None, "underruns": tm.underruns if tm else None, "crossover_change": change}

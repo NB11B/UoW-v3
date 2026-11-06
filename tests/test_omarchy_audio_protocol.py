@@ -15,6 +15,9 @@ def packet(seq=7, low=100.0, high=2500.0):
 class ProtocolTests(unittest.TestCase):
     def test_crossover_wire_and_invalid_pairs(self):
         self.assertEqual(encode_crossover(100, 2500), b"SET_CROSS_LOW:100.000\nSET_CROSS_HIGH:2500.000\n")
+        for low, high in ((0.0001, 0.0002), (1.0001, 1.0002), (23999.9998, 23999.9999)):
+            with self.assertRaises(ValueError):
+                encode_crossover(low, high)
         for low, high in ((0, 2500), (2500, 100), (100, 24000), (float("nan"), 2500),
                           (100, float("inf")), (True, 2500), (10**400, 2500)):
             with self.assertRaises(ValueError):

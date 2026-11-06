@@ -195,6 +195,33 @@ def runtime_paths():
     return runtime, state
 
 
+def read_control(conn: socket.socket) -> str:
+    raw = bytearray()
+    while b"\n" not in raw:
+        chunk = conn.recv(129 - len(raw))
+        if not chunk:
+            raise ValueError("CONTROL_INCOMPLETE")
+        raw.extend(chunk)
+        if len(raw) > 128:
+            raise ValueError("CONTROL_TOO_LARGE")
+    if raw.count(b"\n") != 1 or raw[-1] != 10:
+        raise ValueError("CONTROL_TRAILING_DATA")
+    return raw[:-1].decode("utf-8")
+
+
+def serve_connection(conn: socket.socket, worker: AudioWorker, preference: Path) -> None:
+    conn.settimeout(0.2)
+    try:
+        result = dispatch_control(read_control(conn), worker, preference)
+    except (ValueError, UnicodeError, OSError):
+        result = {"state": "error"}
+    try:
+        conn.sendall((json.dumps(result) + "\n").encode())
+    except (BrokenPipeError, ConnectionResetError, OSError):
+        # A slow or disconnected status client cannot tear down the sender.
+        pass
+
+
 def serve(args):
     runtime, state = runtime_paths()
     runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -237,15 +264,7 @@ def serve(args):
                     conn = None
                 if conn is not None:
                     with conn:
-                        conn.settimeout(0.2)
-                        try:
-                            raw = conn.recv(129)
-                            if len(raw) > 128:
-                                raise ValueError("CONTROL_TOO_LARGE")
-                            result = dispatch_control(raw.decode().strip(), worker, preference)
-                        except (ValueError, UnicodeError, OSError):
-                            result = {"state": "error"}
-                        conn.sendall((json.dumps(result) + "\n").encode())
+                        serve_connection(conn, worker, preference)
                 try:
                     worker.step()
                 except (OSError, ValueError):

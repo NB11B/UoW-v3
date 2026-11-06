@@ -1,4 +1,5 @@
 import pathlib
+import socket
 import sqlite3
 import tempfile
 import threading
@@ -6,13 +7,38 @@ import unittest
 from unittest.mock import Mock, patch
 import uuid
 
-from integrations.omarchy_uow.audio_runtime import ParecCapture, PendingSessions, PendingCommands, SocketUoW, dispatch_control, load_preference, save_preference
+from integrations.omarchy_uow.audio_runtime import ParecCapture, PendingSessions, PendingCommands, SocketUoW, dispatch_control, load_preference, save_preference, read_control, serve_connection
 from integrations.omarchy_uow.audio_worker import AudioWorker
 from integrations.omarchy_uow.gateway import Gateway
 from integrations.omarchy_uow.service import AUDIO_PROFILE, Service
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_control_waits_for_complete_line_and_rejects_trailing_data(self):
+        left, right = socket.socketpair()
+        try:
+            left.settimeout(0.05)
+            right.sendall(b"crossover 100 2500")
+            with self.assertRaises(socket.timeout):
+                read_control(left)
+            right.sendall(b"\nextra")
+            with self.assertRaises(ValueError):
+                read_control(left)
+        finally:
+            left.close(); right.close()
+
+    def test_disconnected_control_client_does_not_stop_worker(self):
+        left, right = socket.socketpair()
+        worker = Mock()
+        worker.status.return_value = {"state": "streaming"}
+        worker.desired = True
+        try:
+            right.sendall(b"status\n")
+            right.close()
+            serve_connection(left, worker, pathlib.Path("/unused"))
+            worker.off.assert_not_called()
+        finally:
+            left.close()
     def test_crossover_control_parser_rejects_malformed_input(self):
         with tempfile.TemporaryDirectory() as td:
             worker = Mock()

@@ -15,6 +15,8 @@ private slots:
     void streamToggleAndDestructionDoNotSendExtraCommands();
     void workerLossClearsVisibleState();
     void readsFragmentedSocketResponse();
+    void preservesNewEditsAfterReceiverReport();
+    void clearsSuccessWhenReceiverLost();
 };
 
 static QByteArray status(double age = 0.2)
@@ -79,6 +81,35 @@ void AudioTests::workerLossClearsVisibleState()
     QCOMPARE(backend.state(), QString("unavailable"));
     QVERIFY(!backend.enabled());
     QVERIFY(!backend.canApply());
+}
+
+void AudioTests::preservesNewEditsAfterReceiverReport()
+{
+    QByteArray live = status();
+    AudioBackend backend([&](const QByteArray &command) {
+        return command.startsWith("crossover ") ? QByteArray("{\"state\":\"pending\"}\n") : live;
+    });
+    backend.refresh();
+    backend.setEditLow(120);
+    backend.setEditHigh(2200);
+    QVERIFY(backend.apply());
+    live = "{\"state\":\"streaming\",\"source\":\"speaker.monitor\",\"receiver_age_s\":0.2,\"crossover_low_hz\":120,\"crossover_high_hz\":2200,\"enabled\":true,\"crossover_change\":{\"state\":\"receiver-reported\"}}\n";
+    backend.refresh();
+    backend.setEditLow(130);
+    backend.refresh();
+    QCOMPARE(backend.editLow(), 130.0);
+    QCOMPARE(backend.changeState(), QString("receiver-reported"));
+}
+
+void AudioTests::clearsSuccessWhenReceiverLost()
+{
+    QByteArray live = "{\"state\":\"streaming\",\"source\":\"speaker.monitor\",\"receiver_age_s\":0.2,\"crossover_low_hz\":120,\"crossover_high_hz\":2200,\"enabled\":true,\"crossover_change\":{\"state\":\"receiver-reported\"}}\n";
+    AudioBackend backend([&](const QByteArray &) { return live; });
+    backend.refresh();
+    QCOMPARE(backend.changeState(), QString("receiver-reported"));
+    live = "{\"state\":\"receiver-wait\",\"source\":null,\"receiver_age_s\":null,\"crossover_low_hz\":null,\"crossover_high_hz\":null,\"enabled\":true,\"crossover_change\":{\"state\":\"receiver-reported\"}}\n";
+    backend.refresh();
+    QCOMPARE(backend.changeState(), QString("unconfirmed"));
 }
 
 void AudioTests::readsFragmentedSocketResponse()

@@ -8,7 +8,8 @@ from `/sys/class/hwmon` and submits it as an `UNVERIFIED_CLAIM`.
 The service is a foreground JSON-lines process over standard input/output.
 It supports environmental observations and fixed-profile audio intents,
 worker outcomes, and typed receiver telemetry. The audio crossover capability
-is disabled until hardware-safe limits are specified.
+accepts an explicit operator-selected pair with structural validation and a
+separate receiver-reported outcome. It does not certify driver safety.
 The latter writes a bounded summary to local UoW state; it does not operate
 hardware. Each committed request, state, and receipt is stored in one SQLite
 transaction. Startup replays and verifies the hash-linked journal.
@@ -93,6 +94,35 @@ supplies the heartbeat and a visible on/off control. `off` stops local capture
 even if the UoW gateway is down. An agent principal is absent from the live
 start/stop policy. This remains a same-user audit boundary, not independent
 OS-enforced governance against processes running as the desktop user.
+
+The Adaptive Audio Qt window in `apps/adaptive-audio/` also uses this worker.
+`omarchy-audio-worker crossover LOW HIGH` requests a UoW intent before sending
+the fixed UDP-4001 control datagram. It accepts finite `0 < LOW < HIGH < 24000`
+Hz and reports success only after a newer telemetry packet reports both
+requested values. The app does not change settings at startup. Keep the bar
+enabled to keep its heartbeat lease; disabling the bar stops streaming.
+
+For an existing unmodified local installation, check the recorded file hashes
+before upgrading. The upgrade preserves the journal, tokens, and on/off
+preference, and leaves a backup of replaced user-owned files:
+
+```sh
+PYTHONPATH=src:. python -m integrations.omarchy_uow.install_audio_plugin --check-upgrade
+omarchy plugin disable nb11b.adaptive-audio
+PYTHONPATH=src:. python -m integrations.omarchy_uow.install_audio_plugin --upgrade
+systemctl --user restart omarchy-uow-audio-gateway.service
+omarchy plugin enable nb11b.adaptive-audio
+```
+
+Build and install the Qt window with `bash apps/adaptive-audio/bin/install-local`.
+The legacy `omarchy-streamer` user service should remain disabled so it cannot
+become a second sender. A live crossover change needs a pair chosen for the
+attached drivers; simulated tests do not need one.
+
+If the user-owned upgrade needs to be reversed, disable the bar, run
+`python -m integrations.omarchy_uow.install_audio_plugin --rollback BACKUP_PATH`
+from the same source revision, restart the gateway, and re-enable the bar.
+Rollback refuses to overwrite installed files that changed after the upgrade.
 
 The installer writes hashes of its own files to a private inventory. To remove
 the plugin and gateway after qualification, run

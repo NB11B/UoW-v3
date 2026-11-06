@@ -4,10 +4,10 @@ import unittest
 from integrations.omarchy_uow.audio_worker import AudioWorker
 
 
-def tm(seq):
+def tm(seq, low=100.0, high=2500.0):
     b = bytearray(184)
     struct.pack_into("<IHHII", b, 0, 0x4D544352, 1, 184, seq, 100)
-    struct.pack_into("<ff", b, 44, 100.0, 2500.0)
+    struct.pack_into("<ff", b, 44, low, high)
     return bytes(b)
 
 
@@ -25,10 +25,13 @@ class FakeTransport:
     def __init__(self):
         self.sent = []
         self.received = []
+        self.controls = []
     def send(self, data):
         self.sent.append(data)
     def receive(self):
         return self.received.pop(0) if self.received else None
+    def send_control(self, data):
+        self.controls.append(data)
 
 
 class WorkerTests(unittest.TestCase):
@@ -156,6 +159,52 @@ class WorkerTests(unittest.TestCase):
         self.assertEqual(len(self.transport.sent), count + 1)
         self.worker.step(0.113)
         self.assertEqual(len(self.transport.sent), count + 2)
+
+    def test_crossover_requires_authority_before_udp(self):
+        self.preflight()
+        self.worker.uow = lambda kind, payload: {"decision": "DENIED"}
+        self.assertEqual(self.worker.set_crossover(100, 2500, 0.2)["state"], "denied")
+        self.assertEqual(self.transport.controls, [])
+
+    def test_crossover_confirms_only_newer_matching_telemetry(self):
+        self.preflight()
+        result = self.worker.set_crossover(120, 2200, 0.2)
+        self.assertEqual(result["state"], "pending")
+        self.assertEqual(self.transport.controls, [b"SET_CROSS_LOW:120.000\nSET_CROSS_HIGH:2200.000\n"])
+        self.transport.received.append((tm(1), ("192.168.254.75", 4002)))
+        self.worker.step(0.3)
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "pending")
+        self.transport.received.append((tm(2), ("192.168.254.75", 4002)))
+        self.worker.step(0.4)
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "pending")
+        self.transport.received.append((tm(3, 120, 2200), ("192.168.254.75", 4002)))
+        self.worker.step(0.5)
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "receiver-reported")
+        self.assertEqual(self.requests[-1][0], "audio.dsp.crossover.effect")
+        self.assertEqual(self.requests[-1][1]["receiver_sequence"], 3)
+
+    def test_crossover_timeout_and_stream_interruption(self):
+        self.preflight()
+        self.worker.set_crossover(120, 2200, 0.2)
+        self.worker.heartbeat(2.3)
+        self.worker.step(2.3)
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "unconfirmed")
+        self.assertEqual([p for k, p in self.requests if k == "audio.dsp.crossover.effect"][-1]["outcome"], "TIMEOUT")
+        self.worker.set_crossover(130, 2300, 2.4)
+        self.worker.off()
+        self.assertEqual(self.worker.status()["crossover_change"]["state"], "interrupted")
+        self.assertEqual([p for k, p in self.requests if k == "audio.dsp.crossover.effect"][-1]["outcome"], "INTERRUPTED")
+
+    def test_off_closes_capture_before_recording_interrupted_crossover(self):
+        self.preflight()
+        self.worker.set_crossover(120, 2200, 0.2)
+        original = self.worker.uow
+        def uow(kind, payload):
+            if kind == "audio.dsp.crossover.effect":
+                self.assertTrue(self.capture[0].closed)
+            return original(kind, payload)
+        self.worker.uow = uow
+        self.worker.off()
 
 
 if __name__ == "__main__":

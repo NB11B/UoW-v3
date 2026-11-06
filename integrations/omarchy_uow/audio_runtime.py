@@ -13,7 +13,7 @@ import subprocess
 import time
 import uuid
 
-from .audio_protocol import TARGET, AUDIO_PORT, TELEMETRY_PORT, default_monitor
+from .audio_protocol import TARGET, AUDIO_PORT, TELEMETRY_PORT, default_monitor, encode_crossover
 from .audio_worker import AudioWorker
 from .service import valid_id
 
@@ -23,7 +23,7 @@ class SocketUoW:
         self.path, self.operator_token, self.worker_token = path, operator_token, worker_token
 
     def __call__(self, kind, payload):
-        token = self.worker_token if kind in {"audio.effect.record", "audio.telemetry.ingest"} else self.operator_token
+        token = self.worker_token if kind in {"audio.effect.record", "audio.telemetry.ingest", "audio.dsp.crossover.effect"} else self.operator_token
         request = {"request_id": self.request_id(kind, payload), "token": token, "kind": kind, "payload": payload}
         with socket.socket(socket.AF_UNIX) as conn:
             conn.settimeout(2)
@@ -117,6 +117,20 @@ class PendingSessions:
         return True
 
 
+class PendingCommands(PendingSessions):
+    """Recover a lost crossover outcome without replaying a hardware command."""
+    def reconcile(self, uow):
+        for command_id in self.pending():
+            try:
+                result = uow("audio.dsp.crossover.effect", {"command_id": command_id, "outcome": "INTERRUPTED", "receiver_sequence": None})
+                if result.get("decision") != "COMMITTED" and result.get("reason") != "CROSSOVER_EFFECT_ORDER":
+                    return False
+                self.remove(command_id)
+            except (OSError, ValueError, ConnectionError, TimeoutError):
+                return False
+        return True
+
+
 class UDPTransport:
     def __init__(self):
         self.tx = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -126,6 +140,9 @@ class UDPTransport:
 
     def send(self, data):
         self.tx.sendto(data, (TARGET, AUDIO_PORT))
+
+    def send_control(self, data):
+        self.tx.sendto(data, (TARGET, 4001))
 
     def receive(self):
         try:
@@ -202,7 +219,7 @@ def serve(args):
             monitor_cache["name"] = default_monitor()
             monitor_cache["checked"] = now
         return monitor_cache["name"]
-    worker = AudioWorker(current_monitor, ParecCapture, transport, uow, PendingSessions(state / "sessions.json"))
+    worker = AudioWorker(current_monitor, ParecCapture, transport, uow, PendingSessions(state / "sessions.json"), PendingCommands(state / "commands.json"))
     worker.desired = load_preference(preference)
     with socket.socket(socket.AF_UNIX) as server:
         old_umask = os.umask(0o077)
@@ -222,16 +239,10 @@ def serve(args):
                     with conn:
                         conn.settimeout(0.2)
                         try:
-                            command = conn.recv(128).decode().strip()
-                            if command == "heartbeat":
-                                worker.heartbeat()
-                            elif command == "on":
-                                save_preference(preference, True); worker.on(); worker.heartbeat()
-                            elif command == "off":
-                                save_preference(preference, False); worker.off()
-                            elif command != "status":
-                                raise ValueError("CONTROL_COMMAND")
-                            result = worker.status() | {"enabled": worker.desired}
+                            raw = conn.recv(129)
+                            if len(raw) > 128:
+                                raise ValueError("CONTROL_TOO_LARGE")
+                            result = dispatch_control(raw.decode().strip(), worker, preference)
                         except (ValueError, UnicodeError, OSError):
                             result = {"state": "error"}
                         conn.sendall((json.dumps(result) + "\n").encode())
@@ -257,6 +268,30 @@ def control(command):
     print(data.decode().strip())
 
 
+def dispatch_control(command: str, worker: AudioWorker, preference: Path) -> dict:
+    if not isinstance(command, str) or len(command.encode("utf-8")) > 128:
+        raise ValueError("CONTROL_TOO_LARGE")
+    fields = command.split()
+    if fields == ["heartbeat"]:
+        worker.heartbeat()
+    elif fields == ["on"]:
+        save_preference(preference, True); worker.on(); worker.heartbeat()
+    elif fields == ["off"]:
+        save_preference(preference, False); worker.off()
+    elif fields == ["status"]:
+        pass
+    elif len(fields) == 3 and fields[0] == "crossover":
+        try:
+            low, high = float(fields[1]), float(fields[2])
+        except ValueError as exc:
+            raise ValueError("CROSSOVER_RANGE") from exc
+        encode_crossover(low, high)
+        return worker.set_crossover(low, high)
+    else:
+        raise ValueError("CONTROL_COMMAND")
+    return worker.status() | {"enabled": worker.desired}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -266,13 +301,16 @@ def main():
     server.add_argument("--worker-token", type=Path, required=True)
     for name in ("heartbeat", "status", "on", "off"):
         sub.add_parser(name)
+    crossover = sub.add_parser("crossover")
+    crossover.add_argument("low")
+    crossover.add_argument("high")
     args = parser.parse_args()
     if args.command == "serve":
         for file in (args.operator_token, args.worker_token):
             if file.stat().st_mode & 0o077:
                 parser.error("token files must have mode 0600")
         return serve(args)
-    control(args.command)
+    control(f"crossover {args.low} {args.high}" if args.command == "crossover" else args.command)
     return 0
 
 

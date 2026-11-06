@@ -4,14 +4,15 @@ from __future__ import annotations
 import time
 import uuid
 
-from .audio_protocol import AUDIO_PORT, TARGET, ReceiverEpoch, default_monitor, encode_audio, parse_telemetry
+from .audio_protocol import AUDIO_PORT, TARGET, ReceiverEpoch, default_monitor, encode_audio, encode_crossover, parse_telemetry
 from .service import AUDIO_PROFILE
 
 
 class AudioWorker:
-    def __init__(self, monitor=default_monitor, capture=None, transport=None, uow=None, session_store=None):
+    def __init__(self, monitor=default_monitor, capture=None, transport=None, uow=None, session_store=None, command_store=None):
         self.monitor, self.capture_factory, self.transport, self.uow = monitor, capture, transport, uow
         self.session_store = session_store
+        self.command_store = command_store
         self.desired = True
         self.last_heartbeat = None
         self.session_id = None
@@ -31,6 +32,8 @@ class AudioWorker:
         self.retry_after = 0.0
         self.last_observation = None
         self.last_observed_sequence = None
+        self.pending_crossover = None
+        self.crossover_change = {"state": "idle"}
 
     def heartbeat(self, now=None):
         self.last_heartbeat = time.monotonic() if now is None else now
@@ -50,10 +53,51 @@ class AudioWorker:
         except (OSError, ValueError, ConnectionError, TimeoutError):
             return False
 
+    def set_crossover(self, low_hz, high_hz, now=None):
+        now = time.monotonic() if now is None else now
+        wire = encode_crossover(low_hz, high_hz)
+        if self.mode != "streaming" or self.telemetry is None or self.last_telemetry is None or now - self.last_telemetry > 3:
+            return {"state": "receiver-unavailable"}
+        if self.pending_crossover is not None:
+            return {"state": "busy"}
+        if self.command_store is not None and self.command_store.pending():
+            return {"state": "reconciliation-pending"}
+        command_id = uuid.uuid4().hex
+        if self.command_store is not None:
+            self.command_store.add(command_id)
+        payload = {"command_id": command_id, "session_id": self.session_id, "low_hz": low_hz, "high_hz": high_hz}
+        if not self._request("audio.dsp.crossover.set", payload):
+            if self.command_store is not None:
+                self.command_store.reconcile(self.uow)
+            self.crossover_change = {"state": "denied"}
+            return self.crossover_change.copy()
+        self.pending_crossover = {"command_id": command_id, "low_hz": low_hz, "high_hz": high_hz,
+                                  "baseline_sequence": self.telemetry.sequence, "deadline": now + 2}
+        self.crossover_change = {"state": "pending", "low_hz": low_hz, "high_hz": high_hz}
+        try:
+            self.transport.send_control(wire)
+        except OSError:
+            self._finish_crossover("INTERRUPTED")
+        return self.crossover_change.copy()
+
+    def _finish_crossover(self, outcome, sequence=None):
+        pending = self.pending_crossover
+        if pending is None:
+            return
+        recorded = self._request("audio.dsp.crossover.effect", {"command_id": pending["command_id"],
+                                 "outcome": outcome, "receiver_sequence": sequence})
+        if recorded and self.command_store is not None:
+            self.command_store.remove(pending["command_id"])
+        state = {"REPORTED_MATCH": "receiver-reported", "TIMEOUT": "unconfirmed", "INTERRUPTED": "interrupted"}[outcome]
+        self.crossover_change = {"state": state if recorded else "unconfirmed",
+                                 "low_hz": pending["low_hz"], "high_hz": pending["high_hz"]}
+        self.pending_crossover = None
+
     def _close(self, outcome, stop_intent=False):
         if self.capture is not None:
             self.capture.close()
             self.capture = None
+        self._finish_crossover("INTERRUPTED")
         if self.session_id is not None:
             if stop_intent:
                 self._request("audio.stream.stop", {"session_id": self.session_id})
@@ -83,6 +127,10 @@ class AudioWorker:
         if now < self.retry_after:
             return
         if self.session_id is None:
+            if self.command_store is not None and not self.command_store.reconcile(self.uow):
+                self.mode = "gateway-wait"
+                self.retry_after = now + 1
+                return
             if self.session_store is not None and not self.session_store.reconcile(self.uow):
                 self.mode = "gateway-wait"
                 self.retry_after = now + 1
@@ -134,6 +182,13 @@ class AudioWorker:
             telemetry = parse_telemetry(received[0], received[1], self.receiver_epoch)
             if telemetry is not None:
                 self.telemetry, self.last_telemetry = telemetry, now
+                pending = self.pending_crossover
+                if (pending is not None and telemetry.sequence > pending["baseline_sequence"]
+                        and abs(telemetry.low_hz - pending["low_hz"]) <= 0.05
+                        and abs(telemetry.high_hz - pending["high_hz"]) <= 0.05):
+                    self._finish_crossover("REPORTED_MATCH", telemetry.sequence)
+        if self.pending_crossover is not None and now >= self.pending_crossover["deadline"]:
+            self._finish_crossover("TIMEOUT")
         if self.capture is None:
             if self.telemetry is None:
                 if now >= self.next_preflight:
@@ -192,4 +247,4 @@ class AudioWorker:
     def status(self):
         tm = self.telemetry
         age = max(0, time.monotonic() - self.last_telemetry) if self.last_telemetry is not None else None
-        return {"state": self.mode, "source": self.source, "destination": f"{TARGET}:{AUDIO_PORT}", "packet_rate": round(self.packet_rate, 1), "receiver_age_s": round(age, 1) if age is not None else None, "receiver_sequence": tm.sequence if tm else None, "crossover_low_hz": tm.low_hz if tm else None, "crossover_high_hz": tm.high_hz if tm else None, "drops": tm.drops if tm else None, "underruns": tm.underruns if tm else None}
+        return {"state": self.mode, "source": self.source, "destination": f"{TARGET}:{AUDIO_PORT}", "packet_rate": round(self.packet_rate, 1), "receiver_age_s": round(age, 1) if age is not None else None, "receiver_sequence": tm.sequence if tm else None, "crossover_low_hz": tm.low_hz if tm else None, "crossover_high_hz": tm.high_hz if tm else None, "drops": tm.drops if tm else None, "underruns": tm.underruns if tm else None, "crossover_change": self.crossover_change.copy()}

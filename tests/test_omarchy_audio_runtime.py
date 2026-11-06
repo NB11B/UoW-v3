@@ -6,13 +6,44 @@ import unittest
 from unittest.mock import Mock, patch
 import uuid
 
-from integrations.omarchy_uow.audio_runtime import ParecCapture, PendingSessions, SocketUoW, load_preference, save_preference
+from integrations.omarchy_uow.audio_runtime import ParecCapture, PendingSessions, PendingCommands, SocketUoW, dispatch_control, load_preference, save_preference
 from integrations.omarchy_uow.audio_worker import AudioWorker
 from integrations.omarchy_uow.gateway import Gateway
 from integrations.omarchy_uow.service import AUDIO_PROFILE, Service
 
 
 class RuntimeTests(unittest.TestCase):
+    def test_crossover_control_parser_rejects_malformed_input(self):
+        with tempfile.TemporaryDirectory() as td:
+            worker = Mock()
+            worker.status.return_value = {"state": "streaming", "crossover_change": {"state": "idle"}}
+            worker.set_crossover.return_value = {"state": "pending"}
+            preference = pathlib.Path(td) / "enabled.json"
+            self.assertEqual(dispatch_control("crossover 120 2200", worker, preference)["state"], "pending")
+            worker.set_crossover.assert_called_once_with(120.0, 2200.0)
+            for command in ("crossover NaN 2200", "crossover 2200 120", "crossover 120", "crossover 120 2200 extra", "x" * 129):
+                with self.assertRaises(ValueError):
+                    dispatch_control(command, worker, preference)
+            self.assertEqual(worker.set_crossover.call_count, 1)
+
+    def test_pending_command_reconciles_without_resending(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            store = PendingCommands(root / "commands.json")
+            service = Service(root / "uow.db", {"operator": ["audio.stream.start", "audio.dsp.crossover.set"],
+                                                  "audio_worker": ["audio.dsp.crossover.effect"]},
+                              {"operator-token": "operator", "worker-token": "audio_worker"})
+            def uow(kind, payload):
+                token = "worker-token" if kind == "audio.dsp.crossover.effect" else "operator-token"
+                return service.handle({"request_id": SocketUoW.request_id(kind, payload), "token": token,
+                                       "kind": kind, "payload": payload})
+            self.assertEqual(uow("audio.stream.start", {"session_id": "s1", **AUDIO_PROFILE})["decision"], "COMMITTED")
+            self.assertEqual(uow("audio.dsp.crossover.set", {"command_id": "cmd1", "session_id": "s1", "low_hz": 120, "high_hz": 2200})["decision"], "COMMITTED")
+            store.add("cmd1")
+            self.assertTrue(store.reconcile(uow))
+            self.assertEqual(store.pending(), [])
+            self.assertEqual(service.state.get("audio.crossover.cmd1")["outcome"], "INTERRUPTED")
+            service.close()
     def test_restart_reconciles_unfinished_session_before_new_start(self):
         with tempfile.TemporaryDirectory() as td:
             root = pathlib.Path(td)

@@ -1,7 +1,7 @@
 import struct
 import unittest
 
-from integrations.omarchy_uow.audio_protocol import encode_audio, parse_telemetry, ReceiverEpoch, default_monitor
+from integrations.omarchy_uow.audio_protocol import encode_audio, encode_crossover, parse_telemetry, ReceiverEpoch, default_monitor
 
 
 def packet(seq=7, low=100.0, high=2500.0):
@@ -13,6 +13,13 @@ def packet(seq=7, low=100.0, high=2500.0):
 
 
 class ProtocolTests(unittest.TestCase):
+    def test_crossover_wire_and_invalid_pairs(self):
+        self.assertEqual(encode_crossover(100, 2500), b"SET_CROSS_LOW:100.000\nSET_CROSS_HIGH:2500.000\n")
+        for low, high in ((0, 2500), (2500, 100), (100, 24000), (float("nan"), 2500),
+                          (100, float("inf")), (True, 2500), (10**400, 2500)):
+            with self.assertRaises(ValueError):
+                encode_crossover(low, high)
+
     def test_audio_packet_exact_wire_format(self):
         payload = bytes(1024)
         wire = encode_audio(5, 123, payload)

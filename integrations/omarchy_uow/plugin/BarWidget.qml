@@ -23,7 +23,7 @@ BarWidget {
     if (audioStatus.enabled === false) { if (!onProcess.running) onProcess.running = true }
     else { if (!offProcess.running) offProcess.running = true }
   }
-  function openApp() { if (!appProcess.running) appProcess.running = true }
+  function openApp() { Quickshell.execDetached([Quickshell.env("HOME") + "/.local/bin/adaptive-audio", "open"]) }
   function acceptStatus(raw) {
     try {
       if (raw.length > 4096) return
@@ -62,7 +62,6 @@ BarWidget {
   }
   Process { id: onProcess; command: [root.cli, "on"] }
   Process { id: offProcess; command: [root.cli, "off"] }
-  Process { id: appProcess; command: [Quickshell.env("HOME") + "/.local/bin/adaptive-audio", "open"] }
   Timer {
     interval: 1000
     running: true
@@ -87,7 +86,10 @@ BarWidget {
     bar: root.bar
     text: root.audioStatus.state === "streaming" ? "♫" : root.audioStatus.state === "off" ? "◼" : ["waiting", "preflight", "receiver-wait"].indexOf(root.audioStatus.state) >= 0 ? "♪" : "!"
     slotSize: Style.bar.statusSlot
-    tooltipText: "Adaptive Audio: " + root.audioStatus.state
-    onPressed: function(b) { root.toggle() }
+    tooltipText: "Adaptive Audio: " + root.audioStatus.state + " (right click for status)"
+    onPressed: function(b) {
+      if (b === Qt.RightButton) root.toggle()
+      else { root.close(); root.openApp() }
+    }
   }
 }

@@ -15,8 +15,9 @@ python -m unittest discover -s tests -p 'test_install.py' -q
 ```
 
 Install the window to user-owned bin, applications, and icon paths with
-`bash bin/install-local`. The existing bar icon's **Open Adaptive Audio**
-action launches this window; the app launcher does too. The UoW audio worker
+`bash bin/install-local`. A normal click on the Adaptive Audio bar icon
+launches this window; right click opens the compact status panel. The Omarchy
+app launcher can also open it. The UoW audio worker
 upgrade is described in `../../integrations/omarchy_uow/README.md`.
 
 The first version exposes the current two crossover frequencies only. Apply

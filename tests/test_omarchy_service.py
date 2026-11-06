@@ -102,5 +102,67 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(result["decision"], "COMMITTED")
         self.assertEqual(self.s.state.get("summary")["unit"], "C")
 
+
+class CrossoverServiceTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.db = pathlib.Path(self.tmp.name) / "state.db"
+        self.policy = {"operator": ["audio.stream.start", "audio.dsp.crossover.set"],
+                       "audio_worker": ["audio.dsp.crossover.effect"]}
+        self.tokens = {"operator-token": "operator", "worker-token": "audio_worker"}
+        self.s = Service(self.db, self.policy, self.tokens)
+        from integrations.omarchy_uow.service import AUDIO_PROFILE
+        start = self.request("start", "operator-token", "audio.stream.start", {"session_id": "s1", **AUDIO_PROFILE})
+        self.assertEqual(self.s.handle(start)["decision"], "COMMITTED")
+
+    def tearDown(self):
+        self.s.close()
+        self.tmp.cleanup()
+
+    @staticmethod
+    def request(rid, token, kind, payload):
+        return {"request_id": rid, "token": token, "kind": kind, "payload": payload}
+
+    def intent(self, rid="cross-1", payload=None):
+        return self.request(rid, "operator-token", "audio.dsp.crossover.set",
+                            {"command_id": "cmd1", "session_id": "s1", "low_hz": 100.0, "high_hz": 2500.0} if payload is None else payload)
+
+    def effect(self, rid="effect-1", outcome="REPORTED_MATCH", sequence=4):
+        return self.request(rid, "worker-token", "audio.dsp.crossover.effect",
+                            {"command_id": "cmd1", "outcome": outcome, "receiver_sequence": sequence})
+
+    def test_intent_receipt_then_reported_match_replays(self):
+        intent = self.s.handle(self.intent())
+        self.assertEqual(intent["decision"], "COMMITTED")
+        self.assertEqual(self.s.state.get("audio.crossover.cmd1")["outcome"], "UNCERTAIN")
+        self.assertEqual(self.s.handle(self.effect())["decision"], "COMMITTED")
+        self.assertEqual(self.s.state.get("audio.crossover.cmd1")["receiver_sequence"], 4)
+        self.assertTrue(self.s.ledger.verify_integrity())
+        state_hash = self.s.state.state_hash
+        self.s.close(); self.s = Service(self.db, self.policy, self.tokens)
+        self.assertEqual(self.s.state.state_hash, state_hash)
+        self.assertEqual(self.s.handle(self.intent()), intent)
+
+    def test_denial_and_invalid_pairs_never_create_intent(self):
+        self.s.policy = {}
+        self.assertEqual(self.s.handle(self.intent())["decision"], "DENIED")
+        self.s.policy = self.policy
+        base = self.intent()["payload"]
+        for n, pair in enumerate([(0, 2500), (2500, 100), (100, 24000), (float("nan"), 2500),
+                                  (True, 2500), (100, float("inf")), ("100", 2500), (10**400, 2500)]):
+            payload = {**base, "low_hz": pair[0], "high_hz": pair[1]}
+            self.assertEqual(self.s.handle(self.intent(f"bad-{n}", payload))["decision"], "DENIED")
+        self.assertEqual(self.s.handle(self.intent("missing", {**base, "session_id": "other"}))["decision"], "DENIED")
+        self.assertIsNone(self.s.state.get("audio.crossover.cmd1"))
+
+    def test_duplicate_command_and_outcome_order(self):
+        self.assertEqual(self.s.handle(self.effect())["decision"], "DENIED")
+        self.assertEqual(self.s.handle(self.intent())["decision"], "COMMITTED")
+        self.assertEqual(self.s.handle(self.intent("cross-2"))["decision"], "DENIED")
+        self.assertEqual(self.s.handle(self.effect("wrong-token", sequence=5) | {"token": "operator-token"})["decision"], "DENIED")
+        self.assertEqual(self.s.handle(self.effect("bad-timeout", "TIMEOUT", 3))["decision"], "DENIED")
+        self.assertEqual(self.s.handle(self.effect("timeout", "TIMEOUT", None))["decision"], "COMMITTED")
+        self.assertEqual(self.s.handle(self.effect("late-match"))["decision"], "DENIED")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

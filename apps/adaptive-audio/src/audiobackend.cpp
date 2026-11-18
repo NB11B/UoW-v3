@@ -14,8 +14,10 @@ QByteArray AudioBackend::requestLocal(const QByteArray &command)
 {
     const QString runtime = qEnvironmentVariable("XDG_RUNTIME_DIR", QString("/run/user/%1").arg(getuid()));
     QLocalSocket socket;
+    qDebug() << "Connecting to socket:" << QDir(runtime).filePath("omarchy-uow-audio/worker.sock");
     socket.connectToServer(QDir(runtime).filePath("omarchy-uow-audio/worker.sock"));
     if (!socket.waitForConnected(300)) return {};
+    qDebug() << "Sending command:" << command;
     socket.write(command);
     if (!socket.waitForBytesWritten(300) && socket.bytesToWrite()) return {};
     QElapsedTimer timer;
